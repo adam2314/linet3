@@ -1,0 +1,166 @@
+<?php
+
+/**
+ * This is the model class for table "items".
+ *
+ * The followings are the available columns in table 'items':
+ * @property string $id
+ * @property string $account_id
+ * @property string $name
+ * @property integer $category_id
+ * @property integer $parent_item_id
+ * @property integer $isProduct
+ * @property integer $profit
+ * @property integer $unit_id
+ * @property string $purchaseprice
+ * @property string $saleprice
+ * @property integer $currency_id
+ * @property string $pic
+ * @property integer $owner
+ */
+class Item extends CActiveRecord
+{
+	
+	function behaviors() {
+		return array(
+				///*
+				  
+				'eavAttr' => array(
+						//'class' => 'ext.eav.EEavBehavior',
+						'class' => 'application.modules.eav.extensions.EEavBehavior',
+						// Table that stores attributes (required)
+						'tableName' => 'eavAttr',
+						// model id column
+						// Default is 'entity'
+						'entityField' => 'entity',
+						// attribute name column
+						// Default is 'attribute'
+						'attributeField' => 'attribute',
+						// attribute value column
+						// Default is 'value'
+						'valueField' => 'value',
+						// Model FK name
+						// By default taken from primaryKey
+						'modelTableFk' => 'primaryKey',
+						// Array of allowed attributes
+						// All attributes are allowed if not specified
+						// Empty by default
+						'safeAttributes' => array(),
+						// Attribute prefix. Useful when storing attributes for multiple models in a single table
+						// Empty by default
+						'attributesPrefix' => '',
+				)//*/
+		);
+	}
+	//*/
+	/**
+	 * Returns the static model of the specified AR class.
+	 * @param string $className active record class name.
+	 * @return Item the static model class
+	 */
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
+	}
+
+	/**
+	 * @return string the associated database table name
+	 */
+	public function tableName()
+	{
+		return 'items';
+	}
+
+	/**
+	 * @return array validation rules for model attributes.
+	 */
+	public function rules()
+	{
+		// NOTE: you should only define rules for those attributes that
+		// will receive user inputs.
+		return array(
+			array('category_id, parent_item_id, isProduct, profit', 'required'),
+			array('category_id, parent_item_id, isProduct, profit, unit_id, owner', 'numerical', 'integerOnly'=>true),
+			array('account_id', 'length', 'max'=>10),
+			array('name', 'length', 'max'=>100),
+			array('purchaseprice, saleprice', 'length', 'max'=>8),
+			array('currency_id', 'length', 'max'=>3),
+			array('description', 'safe'),
+			array('src_tax', 'length', 'max'=>5),
+			array('pic', 'file', 'types' => 'jpg, gif, png','allowEmpty'=>true),
+			// The following rule is used by search().
+			// Please remove those attributes that should not be searched.
+			array('id, account_id, name,description, category_id, parent_item_id, isProduct, profit, unit_id, purchaseprice, saleprice, currency_id, src_tax, pic, owner', 'safe', 'on'=>'search'),
+		);
+	}
+
+	/**
+	 * @return array relational rules.
+	 */
+	public function relations()
+	{
+		// NOTE: you may need to adjust the relation name and the related
+		// class name for the relations automatically generated below.
+		return array(
+			//'author'=>array(self::BELONGS_TO, 'User', 'author_id'),
+            'unit_id'=>array(self::BELONGS_TO, 'Itemunit','unit_id'),
+			'category_id'=>array(self::BELONGS_TO, 'Itemcategory','category_id'),
+		);
+	}
+
+	/**
+	 * @return array customized attribute labels (name=>label)
+	 */
+	public function attributeLabels()
+	{
+		return array(
+			'id' => 'ID',
+			'account_id' => 'Account',
+			'name' => 'Name',
+			'description'=>'Description',
+			'category_id' => 'Category',
+			'parent_item_id' => 'Parent Item',
+			'isProduct' => 'Is Product',
+			'profit' => 'Profit',
+			'unit_id' => 'Unit',
+			'purchaseprice' => 'Purchaseprice',
+			'saleprice' => 'Saleprice',
+			'currency_id' => 'Currency',
+			'src_tax'=> 'Source Tax',
+			'pic' => 'Pic',
+			'owner' => 'Owner',
+		);
+	}
+
+	/**
+	 * Retrieves a list of models based on the current search/filter conditions.
+	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+	 */
+	public function search()
+	{
+		// Warning: Please modify the following code to remove attributes that
+		// should not be searched.
+
+		$criteria=new CDbCriteria;
+
+		$criteria->compare('id',$this->id,true);
+		$criteria->compare('account_id',$this->account_id,true);
+		$criteria->compare('name',$this->name,true);
+		$criteria->compare('description',$this->description,true);
+		$criteria->compare('category_id',$this->category_id);
+		$criteria->compare('parent_item_id',$this->parent_item_id);
+		$criteria->compare('isProduct',$this->isProduct);
+		$criteria->compare('profit',$this->profit);
+		$criteria->compare('unit_id',$this->unit_id);
+		$criteria->compare('purchaseprice',$this->purchaseprice,true);
+		$criteria->compare('saleprice',$this->saleprice,true);
+		$criteria->compare('currency_id',$this->currency_id);
+		$criteria->compare('src_tax',$this->src_tax);
+		$criteria->compare('pic',$this->pic,true);
+		$criteria->compare('owner',$this->owner);
+
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+		));
+	}
+}
