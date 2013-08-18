@@ -3,22 +3,28 @@
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'docs-form',
 	'enableAjaxValidation'=>false,
-)); ?>
+)); 
+
+Currates::model()->GetRateList();
+
+?>
 <div class="form">
 	<!-- <p class="note">Fields with <span class="required">*</span> are required.</p>-->
 
 	<?php echo $form->errorSummary($model); ?>
-
-
-	<div class="row">
+	<?php echo $form->hiddenField($model,"doctype"); ?>
+	
+<div class="span4"><!--block-->
+	<p>
 		<?php echo $form->labelEx($model,'account_id'); ?>
-		<?php  echo 'adam:'.Acctype::model()->getType('outcomes');
+		<?php 
 		
 		$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 	    'name'=>'Docs[account_id]',
 		'id'=>'Docs_account_id',
 	    'value'=>"$model->account_id",
-	    'source'=>$this->createUrl('accounts/autocomplete&type='.Acctype::model()->getType('outcomes')),
+	    'source'=>$this->createUrl('/accounts/autocomplete',array('type'=>Acctype::model()->getType('customers'))),
+		//'source'=>'/accounts/autocomplete&type='.Acctype::model()->getType('outcomes'),
 	    // additional javascript options for the autocomplete plugin
 	    'options'=>array(
 	            'showAnim'=>'fold',
@@ -27,14 +33,22 @@
 		
 		?>
 		<?php echo $form->error($model,'account'); ?>
-	</div>
+	</p>
 
-	<div class="row">
+	<p>
 		<?php echo $form->labelEx($model,'company'); ?>
 		<?php echo $form->textField($model,'company',array('size'=>30,'maxlength'=>80)); ?>
 		<?php echo $form->error($model,'company'); ?>
-	</div>
-
+	</p>
+    
+        <p>
+            <?php echo $form->labelEx($model,'status'); ?>
+            <?php echo $form->dropDownList($model,'status',$docStatuss);?>
+            <?php //echo $form->textField($model,'status'); ?>
+            <?php echo $form->error($model,'status'); ?>
+        </p>
+</div><!--block-->
+<div class="span3"><!--block-->
 	<div class="row">
 		<?php echo $form->labelEx($model,'address'); ?>
 		<?php echo $form->textField($model,'address',array('size'=>30,'maxlength'=>80)); ?>
@@ -52,7 +66,14 @@
 		<?php echo $form->textField($model,'zip',array('size'=>10,'maxlength'=>10)); ?>
 		<?php echo $form->error($model,'zip'); ?>
 	</div>
-
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'currency_id'); ?>
+		<?php echo $form->dropDownList($model,'currency_id',CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name'));//currency ?>
+		<?php echo $form->error($model,'currency_id'); ?>
+	</div>
+</div><!--block-->
+<div class="span4"><!--block-->
 	<div class="row">
 		<?php echo $form->labelEx($model,'vatnum'); ?>
 		<?php echo $form->textField($model,'vatnum',array('size'=>10,'maxlength'=>10)); ?>
@@ -82,52 +103,103 @@
 	        );?>
 		<?php echo $form->error($model,'due_date'); ?>
 	</div>
+    </div>
 </div><!-- form -->
 	
-<div class="templateFrame grid" ><!-- docdetalies -->
+<table  data-role="table" class="formtable" ><!-- docdetalies -->
 	<?php 
 		if($type->isdoc){
 			
 			?>
 	<!--<div class="row">-->
-		
-            	<div  class="templateHead">
-                	<?php //echo $form->labelEx($model,'doc_id'); ?>
-					<div style="width: 200px;"><?php echo $form->labelEx($model,'item_id'); ?></div>
-					<div style="width: 110px;"><?php echo $form->labelEx($model,'name'); ?></div>
-					<div style="width: 120px;"><?php echo $form->labelEx($model,'description'); ?></div>
-					<div style="width: 65px;"><?php echo $form->labelEx($model,'qty'); ?></div>
-					<div style="width: 90px;"><?php echo $form->labelEx($model,'unit_price'); ?></div>
-					<div style="width: 110px;"><?php echo $form->labelEx($model,'currency'); ?></div>
-					<div style="width: 90px;"><?php echo $form->labelEx($model,'price'); ?></div>
-					<div style="width: 90px;"><?php echo $form->labelEx($model,'nisprice'); ?></div>
-					<div>action</div>
-                </div>
-			
-			
-            	
-	         
-		<div class="templateTarget">
-		
-			<?php $i=0;
-			if(count($docdetails)==0)
-				$docdetails=array(new Docdetails);
-			
-			foreach ($docdetails as $docdetail){
-				echo $this->renderPartial('docdetial', array('model'=>$docdetail,'type'=>$type,'form'=>$form,'i'=>"{$i}")); 
-				$i++;
-			}		 ?>
-        </div>
-			
-		<div>
-			<div class="add"><?php echo Yii::t('ui','New');?></div>
-        		<div id="template" style='display:none;'>
+		<thead>
+                    <tr  class="head1">
+                            <?php //echo $form->labelEx($model,'doc_id'); ?>
+                                            <th><?php echo $form->labelEx($model,'item_id'); ?></th>
+                                            <th><?php echo $form->labelEx($model,'name'); ?></th>
+                                            <th><?php echo $form->labelEx($model,'description'); ?></th>
+                                            <th><?php echo $form->labelEx($model,'qty'); ?></th>
+                                            <th><?php echo $form->labelEx($model,'unit_price'); ?></th>
+                                            <th><?php echo $form->labelEx($model,'currency'); ?></th>
+                                            <th><?php echo $form->labelEx($model,'price'); ?></th>
+                                            <th style="width: 90px;"><?php echo $form->labelEx($model,'nisprice'); ?></th>
+                                            <th>action</th>
+                    </tr>
+		</thead>	
+		<tfoot>
+                    <tr>
+			<td colspan='6' class="add"><?php echo Yii::t('ui','New');?>
+        		<textarea id="template" style='display:none;'>       
 	                      	<?php 
                         	echo $this->renderPartial('docdetial', array('model'=>new Docdetails,'type'=>$type,'form'=>$form,'i'=>'ABC')); 
                         	?>
-                </div>
-           	</div>
-</div><!-- doc detiales -->
+                        </textarea>      
+                        </td>
+                        <td>
+                                    <?php echo $form->labelEx($model,'sub_total'); ?>
+                                    <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8)); ?>
+                                    <?php echo $form->error($model,'sub_total'); ?>
+                       </td>
+                        <td>
+                                    <?php echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8)); ?>
+                        </td>
+                    </tr>
+                    <tr>
+			<td colspan='6' ></td>
+                        <td>
+                                    <?php echo $form->labelEx($model,'novat_total'); ?>
+                                    <?php echo $form->error($model,'novat_total'); ?>
+                       </td>
+                        <td>
+                                    <?php echo $form->textField($model,'novat_total',array('size'=>8,'maxlength'=>8)); ?>
+                        </td>
+                    </tr>
+                     <tr>
+			<td colspan='6' ></td>
+                        <td>
+                                    <?php echo $form->labelEx($model,'vat'); ?>
+                                    <?php echo $form->error($model,'vat'); ?>
+                       </td>
+                        <td>
+                                    <?php echo $form->textField($model,'vat',array('size'=>8,'maxlength'=>8)); ?>
+                        </td>
+                    </tr>
+                    <tr>
+			<td colspan='6' ></td>
+                        <td>
+                                    <?php echo $form->labelEx($model,'total'); ?>
+                                    <?php echo $form->error($model,'total'); ?>
+                       </td>
+                        <td>
+                                    <?php echo $form->textField($model,'total',array('size'=>8,'maxlength'=>8)); ?>
+                        </td>
+                    </tr>
+                    <tr>
+			<td colspan='6' ></td>
+                        <td>
+                                    <?php echo $form->labelEx($model,'src_tax'); ?>
+                                    <?php echo $form->error($model,'src_tax'); ?>
+                       </td>
+                        <td>
+                                    <?php echo $form->textField($model,'src_tax',array('size'=>8,'maxlength'=>8)); ?>
+                        </td>
+                    </tr>
+           	</tfoot>	
+            	     
+		<tbody class="templateTarget">
+		
+			<?php $i=0;
+			if(count($model->docDetailes)!=0)
+				//$docdetails=array(new Docdetails);
+			
+			foreach ($model->docDetailes as $docdetail){
+				echo $this->renderPartial('docdetial', array('model'=>$docdetail,'type'=>$type,'form'=>$form,'i'=>"{$i}")); 
+				$i++;
+			}		 ?>
+                </tbody>
+			
+		
+</table><!-- doc detiales -->
 	       
 			
 	<?php		
@@ -183,9 +255,11 @@
 		//hideEmptyHeaders();
 		$(".add").click(function(){
 
-			var template = $('#template').html();
-			var place = $(this).parents(".templateFrame:first").children(".templateTarget");
-			var i = place.find(".rowIndex").length>0 ? place.find(".rowIndex").max()+1 : 0;
+			var template = $('#template').val();
+			//var place = $(this).parents(".templateFrame:first").children(".templateTarget");
+                        //alert($(".templateTarget tr").length);
+			//var i = place.find(".templateContent").length>0 ? place.find(".templateContent").max()+1 : 0;
+                        var i=$(".templateTarget tr").length;
 			template=template.replace(/ABC/g, i);
 
 			
@@ -207,55 +281,15 @@
 	//}
 	
 	</script>
-	</div><!-- table -->
+
 	<div class="form">
+            <p>
+                                    <?php echo $form->labelEx($model,'comments'); ?>
+                                    <?php echo $form->textArea($model,'comments',array('rows'=>6, 'cols'=>50)); ?>
+                                    <?php echo $form->error($model,'comments'); ?>
+                            </p>
+            
 	<p>
-	<!--<div class="row">-->
-		<?php echo $form->labelEx($model,'sub_total'); ?>
-		<?php echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8)); ?>
-		<?php echo $form->error($model,'sub_total'); ?>
-	</p><p>
-	<!--</div>
-	<div class="row">-->
-		<?php echo $form->labelEx($model,'novat_total'); ?>
-		<?php echo $form->textField($model,'novat_total',array('size'=>8,'maxlength'=>8)); ?>
-		<?php echo $form->error($model,'novat_total'); ?>
-	</p><p>
-	<!--</div>
-
-	<div class="row">-->
-		<?php echo $form->labelEx($model,'vat'); ?>
-		<?php echo $form->textField($model,'vat',array('size'=>8,'maxlength'=>8)); ?>
-		<?php echo $form->error($model,'vat'); ?>
-	</p><p>
-	<!--</div>
-
-	<div class="row">-->
-		<?php echo $form->labelEx($model,'total'); ?>
-		<?php echo $form->textField($model,'total',array('size'=>8,'maxlength'=>8)); ?>
-		<?php echo $form->error($model,'total'); ?>
-	</p><p>
-	<!--</div>
-
-	<div class="row">-->
-		<?php echo $form->labelEx($model,'src_tax'); ?>
-		<?php echo $form->textField($model,'src_tax',array('size'=>8,'maxlength'=>8)); ?>
-		<?php echo $form->error($model,'src_tax'); ?>
-	</p><p>
-	<!--</div>
-
-	<div class="row">-->
-		<?php echo $form->labelEx($model,'status'); ?>
-		<?php echo $form->textField($model,'status'); ?>
-		<?php echo $form->error($model,'status'); ?>
-	</p><p>
-	<!--</div>
-
-	<div class="row">-->
-		<?php echo $form->labelEx($model,'comments'); ?>
-		<?php echo $form->textArea($model,'comments',array('rows'=>6, 'cols'=>50)); ?>
-		<?php echo $form->error($model,'comments'); ?>
-	</p><p>
 	<!--</div>
 
 	<div class="row buttons">-->
@@ -263,19 +297,24 @@
 	<!--</div>-->
 </p>
 <script type="text/javascript">
-
+var curMain=1;
+var curDoc=1;
+var curAcc=1;
 
 $('input').live('blur', function($this){
 	console.log(this.id);
 	if(this.id=='Docs_account_id'){
 		var idate = $('#Docs_issue_date').val();
-		$.get("index.php", {"r": "accounts/JSON" ,"id": $("#Docs_account_id").val()},
+		$.get("<?php echo $this->createUrl('/');?>/index.php", {"r": "/accounts/JSON" ,"id": $("#Docs_account_id").val()},
 			function(data) {
-				$("#Docs_company").val(data.company);
+				$("#Docs_company").val(data.name);
 				$("#Docs_address").val(data.address);
 				$("#Docs_city").val(data.city);
 				$("#Docs_zip").val(data.zip);
 				$("#Docs_vatnum").val(data.vatnum);
+                                $("#Docs_currency_id").val(data.currency_id);
+                                $("#Docs_currency_id").trigger("liszt:updated");
+
 				var pay_terms=data.pay_terms;
 				CalcDueDate(idate, pay_terms);
 			}, "json")
@@ -283,23 +322,29 @@ $('input').live('blur', function($this){
 	}//end account_id
 	var index=this.id.replace(/Docdetails_\d+_item_id/gi,'godet');
 	if(index=='godet'){
+                
+                //return;
 		index=this.id.replace("Docdetails_",'').replace("_item_id",'');
+                //alert( this.id);
 		var part = $('#Docdetails_'+ index +'_item_id').val();
-		$.get("index.php",  {"r": "item/JSON" ,"id" : part},
+		$.get("<?php echo $this->createUrl('/');?>/index.php",  {"r": "item/JSON" ,"id" : part},
 				function(data) {
 					index=index.replace("Docdetails_",'').replace("_item_id",'');
 					$('#Docdetails_'+index+'_name').val(data.name);
 					$('#Docdetails_'+index+'_description').val(data.description);
 					$('#Docdetails_'+index+'_unit_price').val(data.saleprice);
-					$('#Docdetails_'+index+'_currency').val(data.currency_id);
-
-					$('#Docdetails_'+index+'_src_tax').val(date.src_tax);
+                                        
+					$('#Docdetails_'+index+'_currency_id').val(data.currency_id);
+                                        $('#Docdetails_'+index+'_currency_id').trigger("liszt:updated");
+                                        
+					$('#Docdetails_'+index+'_src_tax').val(data.src_tax);
 					$('#Docdetails_'+index+'_rate').val("1");
 					//$('#Docdetails_'+index+'_price').val(unit_price*qty);
 					//$('#Docdetails_'+index+'_nisprice').val(price*currate);
 					$('#Docdetails_'+index+'_qty').focus();
 				}, "json")
 				.error(function() { });
+
 
 
 	}
@@ -337,7 +382,7 @@ function CalcPriceSum() {
 	var vattotal=0;
 	var subtotal=0;
 	var novat_total=0;
-	var vat=<?php print 16; ?>;
+	var vat=<?php echo Config::model()->findByPk('vat')->value;?>;
 	for (var i=0; i<elements.length; i++) {
 		var itemtotal=parseFloat($('#'+elements[i].id).val());
 		var vatper= parseFloat($('#'+selements[i].id).val());
