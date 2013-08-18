@@ -17,10 +17,11 @@
  * @property integer $currency_id
  * @property string $pic
  * @property integer $owner
+ * @property integer $stockType
  */
 class Item extends CActiveRecord
 {
-	
+	const table='items';
 	function behaviors() {
 		return array(
 				///*
@@ -29,7 +30,7 @@ class Item extends CActiveRecord
 						//'class' => 'ext.eav.EEavBehavior',
 						'class' => 'application.modules.eav.extensions.EEavBehavior',
 						// Table that stores attributes (required)
-						'tableName' => 'eavAttr',
+						'tableName' => 'itemEav',
 						// model id column
 						// Default is 'entity'
 						'entityField' => 'entity',
@@ -68,7 +69,7 @@ class Item extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'items';
+		return Item::table;
 	}
 
 	/**
@@ -79,8 +80,8 @@ class Item extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('category_id, parent_item_id, isProduct, profit', 'required'),
-			array('category_id, parent_item_id, isProduct, profit, unit_id, owner', 'numerical', 'integerOnly'=>true),
+			array('category_id, parent_item_id, isProduct, profit, stockType', 'required'),
+			array('category_id, parent_item_id, isProduct, profit, unit_id, owner, stockType', 'numerical', 'integerOnly'=>true),
 			array('account_id', 'length', 'max'=>10),
 			array('name', 'length', 'max'=>100),
 			array('purchaseprice, saleprice', 'length', 'max'=>8),
@@ -90,7 +91,7 @@ class Item extends CActiveRecord
 			array('pic', 'file', 'types' => 'jpg, gif, png','allowEmpty'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, account_id, name,description, category_id, parent_item_id, isProduct, profit, unit_id, purchaseprice, saleprice, currency_id, src_tax, pic, owner', 'safe', 'on'=>'search'),
+			array('id, account_id, name,description, category_id, parent_item_id, isProduct, profit, unit_id, purchaseprice, saleprice, currency_id, src_tax, pic, owner, stockType', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -103,8 +104,10 @@ class Item extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			//'author'=>array(self::BELONGS_TO, 'User', 'author_id'),
-            'unit_id'=>array(self::BELONGS_TO, 'Itemunit','unit_id'),
-			'category_id'=>array(self::BELONGS_TO, 'Itemcategory','category_id'),
+                        'Unit'=>array(self::BELONGS_TO, 'Itemunit','unit_id'),
+			'Category'=>array(self::BELONGS_TO, 'Itemcategory','category_id'),
+                        'Account'=>array(self::BELONGS_TO, 'Accounts','account_id'),
+                        'Owner'=>array(self::BELONGS_TO, 'Users','owner'),
 		);
 	}
 
@@ -118,7 +121,7 @@ class Item extends CActiveRecord
 			'account_id' => 'Account',
 			'name' => 'Name',
 			'description'=>'Description',
-			'category_id' => 'Category',
+			'category_ids' => 'Category',
 			'parent_item_id' => 'Parent Item',
 			'isProduct' => 'Is Product',
 			'profit' => 'Profit',
@@ -129,6 +132,7 @@ class Item extends CActiveRecord
 			'src_tax'=> 'Source Tax',
 			'pic' => 'Pic',
 			'owner' => 'Owner',
+                        'stockType' => 'Stock Type',
 		);
 	}
 
@@ -136,8 +140,7 @@ class Item extends CActiveRecord
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
-	public function search()
-	{
+	public function search(){
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
 
@@ -158,9 +161,15 @@ class Item extends CActiveRecord
 		$criteria->compare('src_tax',$this->src_tax);
 		$criteria->compare('pic',$this->pic,true);
 		$criteria->compare('owner',$this->owner);
-
+                $criteria->compare('stockType',$this->stockType);
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+	
+	public static function AutoComplete($name='') {
+		$sql= 'SELECT id as value, name AS label FROM '.Item::table.' WHERE name LIKE :name';
+		$name = $name.'%';
+		return Yii::app()->db->createCommand($sql)->queryAll(true,array(':name'=>$name));
 	}
 }

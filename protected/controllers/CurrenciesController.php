@@ -8,22 +8,16 @@ class CurrenciesController extends RightsController
 		$this->render('index');
 	}
 
-	public function actionAutocomplete($term='') {
-	    $res =array();
-	 
-	    
-        $qtxt ="SELECT id as value,name as label FROM {{currencies}} WHERE name LIKE :term";
-        $command =Yii::app()->db->createCommand($qtxt);
-        $command->bindValue(":term", '%'.$term.'%', PDO::PARAM_STR);
-        //$command->bindValue(":prefix", $this->prefix, PDO::PARAM_STR);
-       // $command->bindValue(":type", $type, PDO::PARAM_STR);
-        
-        $res =$command->queryAll();
-	    
-	 
-	    echo CJSON::encode($res);
-	    Yii::app()->end();//*/
-	}
+        public function actionAutocomplete() {
+            $term = trim($_GET['term']) ;
+
+            if($term !='') {
+                // Note: Users::usersAutoComplete is the function you created in Step 2
+                $cur = Currecies::AutoComplete($term);
+                echo CJSON::encode($cur);
+                Yii::app()->end();
+            }
+        }
 	// Uncomment the following methods and override them if needed
 	/*
 	public function filters()

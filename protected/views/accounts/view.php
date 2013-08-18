@@ -30,7 +30,7 @@ $this->widget('zii.widgets.CDetailView', array(
 		'src_tax',
 		'src_date',
 		//'grp',
-		'company',
+		'name',
 		'contact',
 		'department',
 		'vatnum',

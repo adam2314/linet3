@@ -23,10 +23,14 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'isdoc'); ?>
-		<?php echo $form->textField($model,'isdoc'); ?>
-		<?php echo $form->error($model,'isdoc'); ?>
-	</div>
+            
 
+		<?php //echo $form->textField($model,'isdoc'); ?>
+               <?php //$this->widget('toggleButton',array('model'=>$model,'field'=>'isdoc')); ?>
+
+		<?php //echo $form->error($model,'isdoc'); ?>
+	</div>
+ 
 	<div class="row">
 		<?php echo $form->labelEx($model,'isrecipet'); ?>
 		<?php echo $form->textField($model,'isrecipet'); ?>
@@ -45,7 +49,7 @@
 		<?php echo $form->error($model,'stockAction'); ?>
 	</div>
 
-	<div class="row">
+	<div clasrow">
 		<?php echo $form->labelEx($model,'account_type'); ?>
 		<?php echo $form->textField($model,'account_type'); ?>
 		<?php echo $form->error($model,'account_type'); ?>

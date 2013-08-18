@@ -7,15 +7,24 @@
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'accounts-grid',
 	'dataProvider'=>$model->search(),
-	//'filter'=>$model,
+	'filter'=>$model,
+     /*'pager' => array('class' => 'CLinkPager', 'header' => '',
+         'firstPageLabel' => '&lt;&lt;',
+        'prevPageLabel'  => '<img src="images/pagination/left.png">',
+        'nextPageLabel'  => '<img src="images/pagination/right.png">',
+        'lastPageLabel'  => '&gt;&gt;',
+         'pageSize'=>100,
+         
+         ),
+    'template'=>'{pager}{items}{pager}',*/
 	'columns'=>array(
 		'id',
 		//'prefix',
 		//'company',
 		array(
-	            'name' => 'company',
+	            'name' => 'name',
 	            'type' => 'raw',
-	            'value' => 'CHtml::link(CHtml::encode($data->company), "index.php?r=accounts/update&id=".CHtml::encode($data->id))',
+	            'value' => 'CHtml::link(CHtml::encode($data->name), "index.php?r=accounts/update&id=".CHtml::encode($data->id))',
 	        ),
 		//'type',
 		'id6111',
@@ -42,26 +51,26 @@
 		*/
 		array(
 			'class'=>'CButtonColumn',
-			'template'=>'{update}{delete}{view}',
+			'template'=>'{edit}{remove}{display}',
 			'buttons'=>array
 		    (
-		        'update' => array
+		        'edit' => array
 		        (
-		            'label'=>'edit',
+                            'label'=>'<i class="icon-edit"></i>',
 		            //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
 		            'url'=>'Yii::app()->createUrl("accounts/update", array("id"=>$data->id))',
 		        	
 		        ),
-		        'delete' => array
+		        'remove' => array
 		        (
-		            'label'=>'delete',
+		            'label'=>'<i class="icon-remove"></i>',
 		            //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
 		        	'url'=>'Yii::app()->createUrl("accounts/delete", array("id"=>$data->id))',
 		            //'url'=>'Yii::app()->createUrl("users/email", array("id"=>$data->id))',
 		        ),
-		        'view' => array
+		        'display' => array
 		        (
-		            'label'=>'transactions',
+		            'label'=>'<i class="icon-search"></i>',
 		            'url'=>'Yii::app()->createUrl("accounts/transaction", array("id"=>$data->id))',
 		            //'visible'=>'$data->score > 0',
 		            'click'=>'function(){alert("Going down!");}',

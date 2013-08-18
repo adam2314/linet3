@@ -11,6 +11,13 @@ $this->menu=array(
 	//array('label'=>'Delete Item', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage Item', 'url'=>array('admin')),
 );
+
+
+$this->beginWidget('MiniForm',array(
+    'haeder' => "Manage Items",
+    //'width' => '800',
+)); 
+
 ?>
 
 <h1>View Item <?php echo $model->id; ?></h1>
@@ -19,17 +26,34 @@ $this->menu=array(
 	'data'=>$model,
 	'attributes'=>array(
 		//'id',
-		'account_id',
+		
+                array(
+                    'name'=>'account_id',
+                    'value'=>$model->Account->name,
+                ),
 		'name',
-		'category_id',
+		
+                array(
+                    'name'=>'category_id',
+                    'value'=>isset($model->Category)?$model->Category->name:null,
+                ),
 		'parent_item_id',
 		'isProduct',
 		'profit',
-		'unit_id',
+                array(
+                    'name'=>'unit_id',
+                    'value'=>$model->Unit->name,
+                ),
 		'purchaseprice',
 		'saleprice',
 		'currency_id',
+            
+		
 		'pic',
 		//'owner',
 	),
-)); ?>
+)); 
+
+
+ $this->endWidget();
+?>

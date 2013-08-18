@@ -22,9 +22,9 @@ class AccountsController extends RightsController
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate()
+	public function actionCreate($type=0)
 	{
-		$model=new Accounts;
+		$model=new Accounts($type);
 		
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -33,7 +33,7 @@ class AccountsController extends RightsController
 		{
 			$model->attributes=$_POST['Accounts'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->num));
+				$this->redirect(array('view','id'=>$model->id));
 		}
 
 		$this->render('create',array(
@@ -49,6 +49,13 @@ class AccountsController extends RightsController
 	public function actionUpdate($id)//$prefix
 	{
 		//print 'in action';
+            //Yii::app()->user->setFlash('error', 'unable to change sys account');
+            //Yii::app()->user->setFlash('success', '<strong>Well done!</strong> You successfully read this important alert message.');
+            //Yii::app()->user->setFlash('info', '<strong>Heads up!</strong> This alert needs your attention, but it\'s not super important.');
+            //Yii::app()->user->setFlash('warning', '<strong>Warning!</strong> Best check yo self, you\'re not looking too good.');
+            //Yii::app()->user->setFlash('error', '<strong>Oh snap!</strong> Change a few things up and try submitting again.');
+            
+            
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
@@ -57,8 +64,10 @@ class AccountsController extends RightsController
 		if(isset($_POST['Accounts']))
 		{
 			$model->attributes=$_POST['Accounts'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->num));
+                        if($model->system_acc==1)
+                            Yii::app()->user->setFlash('error', 'unable to change sys account');
+                        elseif($model->save())
+                            $this->redirect(array('view','id'=>$model->id));
 		}
 
 		$this->render('update',array(
@@ -72,10 +81,16 @@ class AccountsController extends RightsController
 	 * @param integer $id the ID of the model to be deleted
 	 */
 	public function actionDelete($id){
-		if(Yii::app()->request->isPostRequest)
+                $model=$this->loadModel($id);
+                //echo $model->system_acc;
+                if($model->system_acc==1){
+                            Yii::app()->user->setFlash('error', "unable to delete sys account");
+                            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+                }
+		elseif(Yii::app()->request->isPostRequest)
 		{
 			// we only allow deletion via POST request
-			//$this->loadModel($id)->delete();
+			$this->loadModel($id)->delete();
 
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 			if(!isset($_GET['ajax']))
@@ -83,21 +98,11 @@ class AccountsController extends RightsController
 		}
 		else
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+                
 	}
 	
 	public function actionAutocomplete($type=0,$term='') {
-	    $res =array();
-	 
-	    
-	        $qtxt ="SELECT id as value,company as label FROM {{accounts}} WHERE company LIKE :term AND type=:type";
-	        $command =Yii::app()->db->createCommand($qtxt);
-	        $command->bindValue(":term", '%'.$term.'%', PDO::PARAM_STR);
-	        //$command->bindValue(":prefix", $this->prefix, PDO::PARAM_STR);
-	        $command->bindValue(":type", $type, PDO::PARAM_STR);
-	        
-	        $res =$command->queryAll();
-	    
-	 
+	    $res =  Accounts::AutoComplete($term,$type);
 	    echo CJSON::encode($res);
 	    Yii::app()->end();//*/
 	}

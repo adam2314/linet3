@@ -73,10 +73,11 @@ $this->menu=array(
 	         </tfoot>
             <tbody class="templateTarget">
                 <?php $i=0;
-				if(count($docdetails)==0)
-					$docdetails=array(new Docdetails);
+				//if(count($model->docdetailes)==0)
+					//$docdetails=array(new Docdetails);
 				
-				foreach ($docdetails as $docdetail){
+				foreach ($model->docdetailes as $docdetail){
+                                        //print_r($docdetail);
 					echo $this->renderPartial('docdetialview', array('model'=>$docdetail,'type'=>$type,)); 
 					$i++;
 				}

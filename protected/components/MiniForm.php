@@ -47,6 +47,7 @@ class MiniForm extends CWidget
      */
     public function run(){//style="width:'.($this->width-$this->titlewidth-28).'px;"
     	$content = ob_get_clean();
+        /*
 		$newform='
 		<table id="resizable" class="form '.$this->name.'">
 			<tr>
@@ -70,7 +71,59 @@ class MiniForm extends CWidget
 		
 		
 		';
-	
+                */
+                $newform='
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="box">
+                <header>
+                    <div class="icons">
+                    <i class="icon-th-large"></i>
+                    </div>
+                    <h5>'.$this->haeder.'</h5>
+                    <ul class="nav pull-right">
+                        <li>
+                            <a href="'.$this->help.'">Help</a>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                <i class="icon-th-large"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="">q</a>
+                                </li>
+                                <li>
+                                    <a href="">a</a>
+                                </li>
+                                <li>
+                                    <a href="">b</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="accordion-toggle minimize-box" href="#div-2" data-toggle="collapse">
+                                <i class="icon-chevron-up"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </header>
+                <div id="div-2" class="accordion-body collapse in body">
+                    '.$content.'
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+';
+                
+                
 		echo $newform;
     }
 }

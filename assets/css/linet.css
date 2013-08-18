@@ -1,0 +1,174 @@
+.form div.row{
+    
+    
+    margin-left: 0px;
+    
+    
+    
+}
+
+.ui-tabs .ui-tabs-panel {
+    overflow: auto;
+}
+.ui-tabs .ui-tabs-panel {
+    border: 1px solid #DDDDDD;
+    border-radius: 5px 5px 5px 5px;
+    margin: 0;
+    padding: 20px;
+   /* background: none;*/
+}
+.ui-tabs-nav{
+    background: none; 
+    border: medium none;
+}
+
+
+
+.ui-tabs-nav > li {
+    margin-bottom: -1px;
+}
+.ui-tabs-nav > li > a {
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+    line-height: 20px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+}
+.ui-tabs-nav > li > a, .nav-pills > li > a {
+    line-height: 14px;
+    margin-right: 2px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+.ui-tabs-nav > li > a {
+    display: block;
+    color: #0088CC;
+    text-decoration: none;
+}
+
+
+.ui-tabs {
+     background: none; 
+     border: medium none;
+ /*   border: none;
+    color: #222222;
+    
+    */
+    
+}
+
+.headerA{
+    height:40px;
+    
+}
+
+
+.items tbody > tr:nth-child(2n+1) > td, 
+.items tbody > tr:nth-child(2n+1) > th {
+    background-color: #F9F9F9;
+}
+
+.items th, .items td {
+    border-top: 1px solid #DDDDDD;
+    line-height: 20px;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+}
+
+
+.btn-group > .btn + .dropdown-toggle{
+    height: 30px;
+    
+    
+}
+
+
+.form-actions{
+    text-align: center;
+    
+}
+
+#left{
+   /* position:fixed;*/
+    
+    
+}
+.shdowleft{
+    
+}
+
+#menu > li > a {                
+        font-size: 15px;        
+}
+.formtable{
+    /*display:  table;
+    width:auto;*/
+    
+}
+
+
+/*.formtable > .head1,*/
+.formtable > .templateTarget> .templateContent {
+    /*display: table-row;*/
+    
+}
+.formtable > .head1 > div,
+.formtable > .templateTarget >.templateContent > div{
+   /* display: table-cell;*/
+    
+}
+
+
+@media only all {
+    .formtable thead td, 
+	.formtable thead th {
+		display: none;
+	}
+    .formtable td,
+	.formtable th { 
+		text-align: left;
+		display: block;
+	}
+    
+    .formtable tbody th {
+		margin-top: 3em;
+	}
+	/* Make the label elements a percentage width */ 
+	.formtable td .ui-table-cell-label,
+	.formtable th .ui-table-cell-label { 
+		padding: .4em; 
+		min-width: 30%; 
+		display: inline-block;
+		margin: -.4em 1em -.4em -.4em;
+	}
+	/* For grouped headers, have a different style to visually separate the levels by classing the first label in each col group */ 
+	.formtable th .ui-table-cell-label-top,
+	.formtable td .ui-table-cell-label-top {
+		display: block;
+		padding: .4em 0;
+		margin: .4em 0;
+		text-transform: uppercase;
+		font-size: .9em;
+		font-weight: normal;
+	}
+}
+
+@media ( min-width: 1000px ) {
+	/* Show the table header rows and set all cells to display: table-cell */ 
+	.formtable td,
+	.formtable th,
+	.formtable tbody th,
+	.formtable tbody td,
+	.formtable thead td,
+	.formtable thead th {
+		display: table-cell;
+		margin: 0;
+	}
+	/* Hide the labels in each cell */ 
+	.formtable td .ui-table-cell-label,
+	.formtable th .ui-table-cell-label,
+        .formtable td b{ 
+		display: none;
+	}
+}

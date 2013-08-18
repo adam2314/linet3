@@ -10,9 +10,9 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php //echo $form->labelEx($model,'num'); ?>
-		<?php //echo $form->textField($model,'num',array('size'=>10,'maxlength'=>10)); ?>
-		<?php //echo $form->error($model,'num'); ?>
+		<?php //echo $form->labelEx($model,'id'); ?>
+		<?php //echo $form->textField($model,'id',array('size'=>10,'maxlength'=>10)); ?>
+		<?php //echo $form->error($model,'id'); ?>
 	</div>
 
 	<div class="row">
@@ -26,10 +26,14 @@
 		<?php //echo $form->textField($model,'type'); ?>
 		<?php //echo $form->error($model,'type'); ?>
 	</div>
-
+        <div class="row">
+		<?php echo $form->labelEx($model,'currency_id'); ?>
+		<?php echo $form->dropDownList($model,'currency_id',CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name'));//currency ?>
+		<?php echo $form->error($model,'currency_id'); ?>
+	</div>
 	<div class="row">
 		<?php echo $form->labelEx($model,'id6111'); ?>
-		<?php echo $form->textField($model,'id6111',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->dropDownList($model,'id6111',CHtml::listData(AccId6111::model()->findAll(), 'id', 'name'));//currency ?>
 		<?php echo $form->error($model,'id6111'); ?>
 	</div>
 
@@ -73,9 +77,9 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'company'); ?>
-		<?php echo $form->textField($model,'company',array('size'=>60,'maxlength'=>80)); ?>
-		<?php echo $form->error($model,'company'); ?>
+		<?php echo $form->labelEx($model,'name'); ?>
+		<?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>80)); ?>
+		<?php echo $form->error($model,'name'); ?>
 	</div>
 
 	<div class="row">

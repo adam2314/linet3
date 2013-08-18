@@ -11,8 +11,13 @@ $this->menu=array(
 	array('label'=>'View Doctype', 'url'=>array('view', 'id'=>$model->id)),
 	array('label'=>'Manage Doctype', 'url'=>array('admin')),
 );
+
+ $this->beginWidget('MiniForm',array('haeder' => "Manage Currates",)); 
 ?>
 
 <h1>Update Doctype <?php echo $model->id; ?></h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_form', array('model'=>$model)); 
+
+ $this->endWidget(); 
+?>

@@ -22,12 +22,14 @@
  * @property string $total
  * @property string $src_tax
  * @property integer $status
+ * @property integer $currency_id
  * @property integer $printed
  * @property string $comments
  * @property integer $owner
  */
 class Docs extends CActiveRecord
 {
+    public $lang;
 	public function primaryKey()
 	{
 	    return 'id';
@@ -64,12 +66,13 @@ class Docs extends CActiveRecord
 			array('city', 'length', 'max'=>40),
 			array('doctype, docnum, account_id, zip, vatnum', 'length', 'max'=>10),
 			array('company, address', 'length', 'max'=>80),
+                        array('currency_id', 'length', 'max'=>3),
 			array('refnum', 'length', 'max'=>20),
 			array('sub_total, novat_total, vat, total, src_tax', 'length', 'max'=>8),
 			array('issue_date, due_date, comments', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, printed, comments, owner', 'safe', 'on'=>'search'),
+			array('id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, owner', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -81,10 +84,14 @@ class Docs extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'account_id'=>array(self::BELONGS_TO, 'Account', 'id'),
-			'id'=>array(self::HAS_MANY, 'Cheques', 'doc_id'),
-			'id'=>array(self::HAS_MANY, 'Docdetailes', 'doc_id'),
-		
+			'docAccount_id'=>array(self::BELONGS_TO, 'Account', 'id'),
+			'docCheques'=>array(self::HAS_MANY, 'Cheques', 'doc_id'),
+			'docDetailes'=>array(self::HAS_MANY, 'Docdetails', 'doc_id'),
+			'docType'=>array(self::BELONGS_TO, 'Doctype', 'doctype'),
+			'docStatus'=>array(self::BELONGS_TO, 'Docstatus', 'status'),
+			'docOwner' => array(self::BELONGS_TO, 'Users', 'owner'),
+                        'Currency' => array(self::BELONGS_TO, 'Currecies', 'currency_id'),
+                        //
 		);
 	}
 
@@ -113,6 +120,7 @@ class Docs extends CActiveRecord
 			'src_tax' => 'Src Tax',
 			'status' => 'Status',
 			'printed' => 'Printed',
+                        'currency_id' => 'Currency',
 			'comments' => 'Comments',
 			'owner' => 'Owner',
 		);
@@ -149,6 +157,7 @@ class Docs extends CActiveRecord
 		$criteria->compare('src_tax',$this->src_tax,true);
 		$criteria->compare('status',$this->status);
 		$criteria->compare('printed',$this->printed);
+                $criteria->compare('currency_id',$this->currency_id);
 		$criteria->compare('comments',$this->comments,true);
 		$criteria->compare('owner',$this->owner);
 

@@ -44,7 +44,12 @@ return array(
 		 	// If removed, Gii defaults to localhost only. Edit carefully to taste.
 			//'ipFilters'=>array('127.0.0.1','::1'),
 			//'ipFilters'=>array('192.168.25.134','::1'),
-			'ipFilters'=>array('172.22.102.16','::24'),
+			//'ipFilters'=>array('172.22.102.16','::24'),
+						'ipFilters'=>array('172.22.102.12','::24'),
+                        //'ipFilters'=>array('62.219.135.89','::24'),
+						//'ipFilters'=>array('85.250.92.183','::24'),
+				
+				
 			'generatorPaths'=>array(
 					'bootstrap.gii',
 			),
@@ -54,6 +59,12 @@ return array(
 
 	// application components
 	'components'=>array(
+		'session' => array (
+				'autoStart' => True,
+				'class' => 'system.web.CDbHttpSession',
+				'connectionID' => 'db',
+				'sessionTableName' => 'sessionStore',
+		),
 		'bootstrap'=>array(
 				'class'=>'bootstrap.components.Bootstrap',
 		),
@@ -97,14 +108,21 @@ return array(
 		// uncomment the following to enable URLs in path-format
 		'urlManager' => array(
 				'urlFormat'=>'path',
+                                'showScriptName'=>false,
 				'rules' => array(
 						'' => 'controller/action',
-						'post/<id:\d+>/<title:.*?>'=>'post/view',
-						'posts/<tag:.*?>'=>'post/index',
-						'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',//*/
+                        'minify/<group:[^\/]+>'=>'minify/index',
+						/*'post/<id:\d+>/<title:.*?>'=>'post/view',
+						'posts/<tag:.*?>'=>'post/index',//*/
+						'<controller:\w+>/<id:\d+>'=>'<controller>/view',
+						'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+						'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 				),
 		),
-				
+		//'clientScript'=>array(
+                //    'class'=>'application.extensions.CClientScriptMinify',
+                //    'minifyController'=>'../minify',
+                //),		
 		/*
 		'urlManager'=>array(
 			'urlFormat'=>'path',
@@ -158,7 +176,7 @@ return array(
             ),
         ),
 	),
-
+		
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
 	'params'=>array(

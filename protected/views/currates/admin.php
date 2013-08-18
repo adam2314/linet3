@@ -8,7 +8,11 @@ $this->menu=array(
 	array('label'=>'List Currates', 'url'=>array('index')),
 	array('label'=>'Create Currates', 'url'=>array('create')),
 );
+?>
 
+
+<?php 
+ $this->beginWidget('MiniForm',array('haeder' => "Manage Currates",)); 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
@@ -36,18 +40,27 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'model'=>$model,
 )); ?>
 </div><!-- search-form -->
-
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php 
+$this->widget('bootstrap.widgets.TbGridView', array(
 	'id'=>'currates-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
-		'currency_id',
+		//'id',
+		
+                array(
+                    'name' => 'currency_id',
+                     'value' => 'isset($data->Currency)?$data->Currency->name:0',   //where name is Client model attribute 
+                   ),
 		'date',
 		'nisvalue',
 		array(
-			'class'=>'CButtonColumn',
+			'class'=>'bootstrap.widgets.TbButtonColumn',
 		),
 	),
-)); ?>
+)); 
+
+
+ $this->endWidget(); 
+
+?>

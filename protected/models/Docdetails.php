@@ -11,9 +11,9 @@
  * @property string $description
  * @property string $qty
  * @property string $unit_price
- * @property string $currency
+ * @property string $currency_id
  * @property string $price
- * @property string $nisprice
+ * @property string $invprice
  * @property integer $line
  */
 class Docdetails extends CActiveRecord
@@ -46,14 +46,14 @@ class Docdetails extends CActiveRecord
 		return array(
 			array('name, line', 'required'),
 			array('line', 'numerical', 'integerOnly'=>true),
-			array('doc_id, item_id, currency', 'length', 'max'=>10),
+			array('doc_id, item_id, currency_id', 'length', 'max'=>10),
 			array('name', 'length', 'max'=>255),
 			array('qty', 'length', 'max'=>5),
-			array('unit_price, price, nisprice', 'length', 'max'=>8),
+			array('unit_price, price, invprice', 'length', 'max'=>8),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, doc_id, item_id, name, description, qty, unit_price, currency, price, nisprice, line', 'safe', 'on'=>'search'),
+			array('id, doc_id, item_id, name, description, qty, unit_price, currency_id, price, invprice, line', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -81,9 +81,9 @@ class Docdetails extends CActiveRecord
 			'description' => 'Description',
 			'qty' => 'Qty',
 			'unit_price' => 'Unit Price',
-			'currency' => 'Currency',
+			'currency_id' => 'Currency',
 			'price' => 'Price',
-			'nisprice' => 'Nisprice',
+			'invprice' => 'invoice Price',
 			'line' => 'Line',
 		);
 	}
@@ -106,9 +106,9 @@ class Docdetails extends CActiveRecord
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('qty',$this->qty,true);
 		$criteria->compare('unit_price',$this->unit_price,true);
-		$criteria->compare('currency',$this->currency,true);
+		$criteria->compare('currency_id',$this->currency_id,true);
 		$criteria->compare('price',$this->price,true);
-		$criteria->compare('nisprice',$this->nisprice,true);
+		$criteria->compare('invprice',$this->invprice,true);
 		$criteria->compare('line',$this->line);
 
 		return new CActiveDataProvider($this, array(

@@ -14,7 +14,7 @@ $this->menu=array(
 <?php 
  $this->beginWidget('MiniForm',array(
     'haeder' => "Create Accounts",
-    'width' => '800',
+   // 'width' => '800',
 )); 
 echo $this->renderPartial('_form', array('model'=>$model)); 
  $this->endWidget(); 

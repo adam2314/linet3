@@ -32,6 +32,8 @@ class CurratesController extends RightsController
 
 		if(isset($_POST['Currates']))
 		{
+                        //$_POST['Currates']["date"]="CURRENT_TIMESTAMP";
+                        unset($_POST['Currates']["date"]);
 			$model->attributes=$_POST['Currates'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
@@ -112,6 +114,11 @@ class CurratesController extends RightsController
 		));
 	}
 
+        public function actionGetrate($id)
+	{
+		print_r(Currates::model()->GetRate($id));
+                exit;
+	}
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.

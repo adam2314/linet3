@@ -21,6 +21,12 @@ $('.search-form form').submit(function(){
 	return false;
 });
 ");
+
+ $this->beginWidget('MiniForm',array(
+    'haeder' => "Accounts",
+    //'width' => '800',
+)); 
+
 ?>
 
 <h1>Manage Itemunits</h1>
@@ -42,11 +48,16 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
+		//'id',
 		'name',
 		'precision',
 		array(
 			'class'=>'CButtonColumn',
 		),
 	),
-)); ?>
+)); 
+
+ $this->endWidget(); 
+
+
+?>

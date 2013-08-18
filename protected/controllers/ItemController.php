@@ -9,7 +9,7 @@ class ItemController extends RightsController
 	public function actionView($id)
 	{
 		//print_r(Item::model()->with('category_id')->findAll());
-		$bla= Item::model()->with('category_id')->findAllByPk($id);
+		$bla= Item::model()->findAllByPk($id);
 		//print_r($bla);
 		//print("a:". $bla->name.",id:$id");
 		//die;
@@ -47,18 +47,7 @@ class ItemController extends RightsController
 	
 	
 	public function actionAutocomplete($term='') {
-	    //$res =array();
-	 
-	    
-            $qtxt ="SELECT id as value,name as label FROM {{items}} WHERE name LIKE :term";
-            $command =Yii::app()->db->createCommand($qtxt);
-            $command->bindValue(":term", '%'.$term.'%', PDO::PARAM_STR);
-            //$command->bindValue(":prefix", $this->prefix, PDO::PARAM_STR);
-           // $command->bindValue(":type", $type, PDO::PARAM_STR);
-
-            $res =$command->queryAll();
-	    
-	 
+	    $res =  Item::AutoComplete($term);
 	    echo CJSON::encode($res);
 	    Yii::app()->end();//*/
 	}

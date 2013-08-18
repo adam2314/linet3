@@ -16,7 +16,7 @@
 		$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 	    'name'=>'Item[account_id]',
 	    'value'=>"$model->account_id",
-	    'source'=>$this->createUrl('accounts/autocomplete&type=3'),//income
+	    'source'=>$this->createUrl('?r=accounts/Autocomplete&type=3'),//income
 	    // additional javascript options for the autocomplete plugin
 	    'options'=>array(
 	            'showAnim'=>'fold',
@@ -88,19 +88,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'currency_id'); ?>
-		<?php //echo $form->dropDownList($model,'currency_id',$cur); 
-		$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
-		    'name'=>'Item[currency_id]',
-		    'value'=>"$model->currency_id",
-		    'source'=>$this->createUrl('currencies/autocomplete'),//costumer
-		    // additional javascript options for the autocomplete plugin
-		    'options'=>array(
-		            'showAnim'=>'fold',
-		    ),
-		));
-		
-		
-		?>
+		<?php echo $form->dropDownList($model,'currency_id',CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name'));?>
 		<?php echo $form->error($model,'currency_id'); ?>
 	</div>
 
@@ -109,7 +97,13 @@
 		<?php echo $form->fileField($model,'pic',array('size'=>60,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'pic'); ?>
 	</div>
-
+        
+	<div class="row">
+		<?php echo $form->labelEx($model,'stockType'); ?>
+		<?php echo $form->dropDownList($model,'stockType',array(0=>'no stock',1=>'qty',2=>'instanse'));?>
+		<?php echo $form->error($model,'stockType'); ?>
+	</div>
+        
 	<div class="row">
 	
 		<?php $this->beginWidget('application.modules.eav.components.eavProp',array(

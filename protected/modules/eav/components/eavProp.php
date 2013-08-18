@@ -18,6 +18,12 @@ class eavProp extends CWidget
      */
     public function run(){//style="width:'.($this->width-$this->titlewidth-28).'px;"
     	//$content = ob_get_clean();
+        $models = EavFields::model()->findAll(array('order' => 'name'));
+        $list = CHtml::listData($models, 'id', 'name');
+        $htmlOptions=array ( );
+        $select=CHtml::dropDownList($this->name.'_E_', 0, $list, $htmlOptions );
+        $select=str_replace("\n","",$select);
+        $select=str_replace($this->name.'_E_',$this->name."eavE['+uid+']",$select);
     	echo "
     <script>
    		function deleteEav(str){
@@ -29,8 +35,10 @@ class eavProp extends CWidget
     	function newEav(){
     		var uid = $('#{$this->name}_eav_I').val();
     		//alert(uid);
-    		var input1 = '<input id=\"{$this->name}_E_'+uid+'\" type=\"text\" value=\"\" name=\"{$this->name}eavE['+uid+']\" />';
-    		var input2 = '<input id=\"{$this->name}_V_'+uid+'\" type=\"text\" value=\"\" name=\"{$this->name}eavV['+uid+']\" />';
+    		//var input1 = '<input id=\"{$this->name}_E_'+uid+'\" type=\"text\" value=\"\" name=\"{$this->name}eavE['+uid+']\" />';
+    		//var input1 = '<select name=\"{$this->name}_E_'+uid+'\" id=\"{$this->name}_E_'+uid+'\"></select>';
+                var input1 = '$select';
+                var input2 = '<input id=\"{$this->name}_V_'+uid+'\" type=\"text\" value=\"\" name=\"{$this->name}eavV['+uid+']\" />';
     		var template = '<tr><td>'+input1+'</td><td>'+input2+'</td><td>remove</td></tr>';
 			//var place = $(this).parents('.templateFrame:first').children('.templateTarget');
 			//var i = place.find('.rowIndex').length>0 ? place.find('.rowIndex').max()+1 : 0;

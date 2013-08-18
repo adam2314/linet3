@@ -21,6 +21,13 @@ $('.search-form form').submit(function(){
 	return false;
 });
 ");
+$this->beginWidget('MiniForm',array(
+    'haeder' => "Manage Doctypes",
+    //'width' => '800',
+)); 
+
+
+
 ?>
 
 <h1>Manage Doctypes</h1>
@@ -37,7 +44,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 )); ?>
 </div><!-- search-form -->
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php $this->widget('bootstrap.widgets.TbGridView', array(
 	'id'=>'doctype-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
@@ -55,7 +62,9 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'last_docnum',
 		
 		array(
-			'class'=>'CButtonColumn',
+			'class'=>'bootstrap.widgets.TbButtonColumn',
 		),
 	),
-)); ?>
+)); 
+ $this->endWidget();
+?>
