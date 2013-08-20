@@ -13,7 +13,9 @@ Currates::model()->GetRateList();
 
 	<?php echo $form->errorSummary($model); ?>
 	<?php echo $form->hiddenField($model,"doctype"); ?>
-	
+        <?php echo CHTML::hiddenField("cur_rate","1"); ?>
+        <?php echo CHTML::hiddenField("doc_rate","1"); ?>
+	<?php echo CHTML::hiddenField("doc_items","0"); ?>
 <div class="span4"><!--block-->
 	<p>
 		<?php echo $form->labelEx($model,'account_id'); ?>
@@ -105,7 +107,7 @@ Currates::model()->GetRateList();
 	</div>
     </div>
 </div><!-- form -->
-	
+<div class="form">	
 <table  data-role="table" class="formtable" ><!-- docdetalies -->
 	<?php 
 		if($type->isdoc){
@@ -122,7 +124,7 @@ Currates::model()->GetRateList();
                                             <th><?php echo $form->labelEx($model,'unit_price'); ?></th>
                                             <th><?php echo $form->labelEx($model,'currency'); ?></th>
                                             <th><?php echo $form->labelEx($model,'price'); ?></th>
-                                            <th style="width: 90px;"><?php echo $form->labelEx($model,'nisprice'); ?></th>
+                                            <th style="width: 90px;"><?php echo $form->labelEx($model,'invprice'); ?></th>
                                             <th>action</th>
                     </tr>
 		</thead>	
@@ -200,8 +202,8 @@ Currates::model()->GetRateList();
 			
 		
 </table><!-- doc detiales -->
-	       
-			
+   
+</div><!-- form -->			
 	<?php		
 			
 		}
@@ -256,24 +258,20 @@ Currates::model()->GetRateList();
 		$(".add").click(function(){
 
 			var template = $('#template').val();
-			//var place = $(this).parents(".templateFrame:first").children(".templateTarget");
-                        //alert($(".templateTarget tr").length);
-			//var i = place.find(".templateContent").length>0 ? place.find(".templateContent").max()+1 : 0;
-                        var i=$(".templateTarget tr").length;
+
+                        //var i=$(".templateTarget tr").length;
+                        var i=$('#doc_items').val()*1;
 			template=template.replace(/ABC/g, i);
 
 			
 			$('.templateTarget').append(template);
-			
+			$('#doc_items').val(i+1);
 			// start specific commands
 
 			// end specific commands
 		});
 
-		$(".remove").live("click", function() {
-			$(this).parents(".templateContent:first").remove();
-			//hideEmptyHeaders();
-		});
+		
 		
 	});
 	//function hideEmptyHeaders(){
@@ -297,106 +295,130 @@ Currates::model()->GetRateList();
 	<!--</div>-->
 </p>
 <script type="text/javascript">
-var curMain=1;
-var curDoc=1;
-var curAcc=1;
-
-$('input').live('blur', function($this){
-	console.log(this.id);
-	if(this.id=='Docs_account_id'){
-		var idate = $('#Docs_issue_date').val();
-		$.get("<?php echo $this->createUrl('/');?>/index.php", {"r": "/accounts/JSON" ,"id": $("#Docs_account_id").val()},
-			function(data) {
-				$("#Docs_company").val(data.name);
-				$("#Docs_address").val(data.address);
-				$("#Docs_city").val(data.city);
-				$("#Docs_zip").val(data.zip);
-				$("#Docs_vatnum").val(data.vatnum);
-                                $("#Docs_currency_id").val(data.currency_id);
-                                $("#Docs_currency_id").trigger("liszt:updated");
-
-				var pay_terms=data.pay_terms;
-				CalcDueDate(idate, pay_terms);
-			}, "json")
-			.error(function() { });
-	}//end account_id
-	var index=this.id.replace(/Docdetails_\d+_item_id/gi,'godet');
-	if(index=='godet'){
-                
-                //return;
-		index=this.id.replace("Docdetails_",'').replace("_item_id",'');
-                //alert( this.id);
-		var part = $('#Docdetails_'+ index +'_item_id').val();
-		$.get("<?php echo $this->createUrl('/');?>/index.php",  {"r": "item/JSON" ,"id" : part},
+$('#Docs_currency_id').change(function(){
+        
+    var currency = $('#Docs_currency_id').val();
+    
+    $.get("<?php echo $this->createUrl('/');?>/index.php",  {"r": "Currates/Getrate" ,"id" : currency},
 				function(data) {
-					index=index.replace("Docdetails_",'').replace("_item_id",'');
-					$('#Docdetails_'+index+'_name').val(data.name);
-					$('#Docdetails_'+index+'_description').val(data.description);
-					$('#Docdetails_'+index+'_unit_price').val(data.saleprice);
-                                        
-					$('#Docdetails_'+index+'_currency_id').val(data.currency_id);
-                                        $('#Docdetails_'+index+'_currency_id').trigger("liszt:updated");
-                                        
-					$('#Docdetails_'+index+'_src_tax').val(data.src_tax);
-					$('#Docdetails_'+index+'_rate').val("1");
-					//$('#Docdetails_'+index+'_price').val(unit_price*qty);
-					//$('#Docdetails_'+index+'_nisprice').val(price*currate);
-					$('#Docdetails_'+index+'_qty').focus();
+                                         $('#doc_rate').val(data);
+                                         var elements = $('.currSelect');
+                                         for (var i=0; i<elements.length; i++) {
+                                             index=elements[i].id.replace("Docdetails_",'').replace("_currency_id",'');
+                                             CalcPrice(index);
+                                         }
+                                         
 				}, "json")
 				.error(function() { });
+                        
+    
+    
+});
+function currChange(index) {
+    var currency = $('#Docdetails_'+index+'_currency_id').val();
+    //console.log(currency);
+    $.get("<?php echo $this->createUrl('/');?>/index.php",  {"r": "Currates/Getrate" ,"id" : currency},
+        function(data) {
+            $('#Docdetails_'+index+'_rate').val(data);
+            CalcPrice(index);
+        }, "json")
+        .error(function() { });
+        
+        
+}
+
+function itemChange(index){
+    var part = $('#Docdetails_'+ index +'_item_id').val();
+    $.get("<?php echo $this->createUrl('/');?>/index.php",  {"r": "item/JSON" ,"id" : part},
+    function(data) {
+        $('#Docdetails_'+index+'_name').val(data.name);
+        $('#Docdetails_'+index+'_description').val(data.description);
+        $('#Docdetails_'+index+'_unit_price').val(data.saleprice);
+
+        $('#Docdetails_'+index+'_currency_id').val(data.currency_id);
+        $('#Docdetails_'+index+'_currency_id').trigger("liszt:updated");
+        currChange(index);
+
+        $('#Docdetails_'+index+'_src_tax').val(data.src_tax);
+        $('#Docdetails_'+index+'_rate').val("1");
+        $('#Docdetails_'+index+'_qty').focus();
+    }, "json")
+    .error(function() { });
+}
 
 
+function detChange(index){
+    CalcPrice(index);
+}
 
-	}
-	index=this.id.replace(/Docdetails_\d+_qty/gi,'calc');
-	if(index=='calc'){
-		index=this.id.replace("Docdetails_",'').replace("_qty",'');
-		CalcPrice(index);
 
-	}
-	/*index=this.id.replace(/Docdetails_\d+_currency/gi,'calc');
-	if(index=='calc'){
-		index=this.id.replace("Docdetails_",'').replace("_currency",'');
-		CalcPrice(index);
+$('input').blur(function(){
+    //console.log(this.id);
+    //console.log($("#Docdetails_0_currency_id").length);
+    //console.log(this.id);
+    if(this.id=='Docs_account_id'){
+        var idate = $('#Docs_issue_date').val();
+        $.get("<?php echo $this->createUrl('/');?>/index.php", {"r": "/accounts/JSON" ,"id": $("#Docs_account_id").val()},
+            function(data) {
+                $("#Docs_company").val(data.name);
+                $("#Docs_address").val(data.address);
+                $("#Docs_city").val(data.city);
+                $("#Docs_zip").val(data.zip);
+                $("#Docs_vatnum").val(data.vatnum);
+                $("#Docs_currency_id").val(data.currency_id);
+                $("#Docs_currency_id").trigger("liszt:updated");
 
-	}*/
-	index=this.id.replace(/Docdetails_\d+_unit_price/gi,'calc');
-	if(index=='calc'){
-		index=this.id.replace("Docdetails_",'').replace("_unit_price",'');
-		CalcPrice(index);
-
-	}
+                var pay_terms=data.pay_terms;
+                CalcDueDate(idate, pay_terms);
+            }, "json")
+            .error(function() { });
+    }//end account_id
+	
 } );
+
 function CalcPrice(index) {
-	var qty = $('#Docdetails_'+index+'_qty').val();
-	var uprice = $('#Docdetails_'+index+'_unit_price').val();
-	var rate = $('#Docdetails_'+index+'_rate').val();
-	var price = (uprice * qty).toFixed(2);
-	$('#Docdetails_'+index+'_price').val(price);
-	$('#Docdetails_'+index+'_nisprice').val((price * rate).toFixed(2));
-	CalcPriceSum();
+    var qty = $('#Docdetails_'+index+'_qty').val();
+    var uprice = $('#Docdetails_'+index+'_unit_price').val();
+    var rate = $('#Docdetails_'+index+'_rate').val();
+    var doc_rate = $('#doc_rate').val();
+
+    //console.log(doc_rate);
+    //console.log(rate);
+    //console.log(currency);
+    //console.log(currency);
+    //var cur_rate = $('#cur_rate').val();
+    var price = (uprice * qty).toFixed(2);
+    $('#Docdetails_'+index+'_price').val(price);
+
+    if(rate!=doc_rate)
+        $('#Docdetails_'+index+'_invprice').val((price * rate).toFixed(2)/doc_rate);
+    else
+        $('#Docdetails_'+index+'_invprice').val((price*1).toFixed(2));
+
+    CalcPriceSum();
 }
 function CalcPriceSum() {
-	var elements = $('[id^=Docdetails]');
-	var selements = $('[id^=Docdetails]');
-	var vattotal=0;
-	var subtotal=0;
-	var novat_total=0;
-	var vat=<?php echo Config::model()->findByPk('vat')->value;?>;
-	for (var i=0; i<elements.length; i++) {
-		var itemtotal=parseFloat($('#'+elements[i].id).val());
-		var vatper= parseFloat($('#'+selements[i].id).val());
-		if(vatper!=0){
-			subtotal+=itemtotal;
-			vattotal+=itemtotal*(vat/100);
-		}else{
-			novat_total+=itemtotal;
-		}
-	}
-	$('#Docs_vat').val(vattotal.toFixed(2));
-	$('#Docs_sub_total').val(subtotal.toFixed(2));
-	$('#Docs_novat_total').val(novat_total.toFixed(2));
-	$('#Docs_total').val((subtotal+novat_total+vattotal).toFixed(2));
+    var elements = $('[id$=invprice]');
+    var selements = $('[id$=invprice]');
+    var vattotal=0;
+    var subtotal=0;
+    var novat_total=0;
+    var vat=<?php echo Config::model()->findByPk('vat')->value;?>;
+    for (var i=0; i<elements.length; i++) {
+        //console.log(elements[i].id);
+        var itemtotal=parseFloat($('#'+elements[i].id).val());
+        var vatper= parseFloat($('#'+selements[i].id).val());
+        if(vatper!=0){
+            subtotal+=itemtotal;
+            vattotal+=itemtotal*(vat/100);
+        }else{
+            novat_total+=itemtotal;
+        }
+    }
+    $('#Docs_vat').val(vattotal.toFixed(2));
+    $('#Docs_sub_total').val(subtotal.toFixed(2));
+    $('#Docs_novat_total').val(novat_total.toFixed(2));
+    $('#Docs_total').val((subtotal+novat_total+vattotal).toFixed(2));
 }
 function CalcDueDate(valdate, pay_terms) {
 	var em=0;

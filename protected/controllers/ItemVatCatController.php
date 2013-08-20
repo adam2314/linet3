@@ -1,85 +1,80 @@
 <?php
 
-class ItemController extends RightsController
+class ItemVatCatController extends Controller
 {
+	/**
+	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
+	 * using two-column layout. See 'protected/views/layouts/column2.php'.
+	 */
+	public $layout='//layouts/column2';
+
+	/**
+	 * @return array action filters
+	 */
+	public function filters()
+	{
+		return array(
+			'accessControl', // perform access control for CRUD operations
+		);
+	}
+
+	/**
+	 * Specifies the access control rules.
+	 * This method is used by the 'accessControl' filter.
+	 * @return array access control rules
+	 */
+	public function accessRules()
+	{
+		return array(
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('index','view'),
+				'users'=>array('*'),
+			),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('create','update'),
+				'users'=>array('@'),
+			),
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete'),
+				'users'=>array('admin'),
+			),
+			array('deny',  // deny all users
+				'users'=>array('*'),
+			),
+		);
+	}
+
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
 	public function actionView($id)
 	{
-		//print_r(Item::model()->with('category_id')->findAll());
-		$bla= Item::model()->findAllByPk($id);
-		//print_r($bla);
-		//print("a:". $bla->name.",id:$id");
-		//die;
 		$this->render('view',array(
-			//'model'=>$bla,
-			//'model'=>$this->loadModel($id),
-		
-			//'model'=>Item::model()->findAllByPk($id),
-			'model'=>$bla[0],//Item::model()->findAllByPk($id),
-			//'model'=>Item::model()->with('Itemcategory')->findAll(),
-			//
-			//$posts=Post::model()->with('author','categories')->findAll();
+			'model'=>$this->loadModel($id),
 		));
 	}
-        public function actionTemplate(){
-            $model=new Item;
-            
-            $cat=CHtml::listData(Itemcategory::model()->findAll(), 'id', 'name');
-            $units=CHtml::listData(Itemunit::model()->findAll(), 'id', 'name');
-            $this->render('create',array(
-			'model'=>$model,
-			'cat'=>$cat,
-			'units'=>$units,
-		));
-        }
 
-
-        public function actionJSON($id=0){
-		$model=Item::model()->findByPk($id);
-		//if($model->src_tax==null);
-		//	$model->src_tax=0;
-		echo CJSON::encode($model);
-	    Yii::app()->end();//*/
-	}
-	
-	
-	public function actionAutocomplete($term='') {
-	    $res =  Item::AutoComplete($term);
-	    echo CJSON::encode($res);
-	    Yii::app()->end();//*/
-	}
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionCreate()
 	{
-		$model=new Item;
+		$model=new ItemVatCat;
 
-				//print Yii::app()->user->getState('company');
-				//die;
-		
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Item']))
+		if(isset($_POST['ItemVatCat']))
 		{
-			$model->attributes=$_POST['Item'];
+			$model->attributes=$_POST['ItemVatCat'];
 			if($model->save())
-				//$model->pic->saveAs('/to/localFile');
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$cat=CHtml::listData(Itemcategory::model()->findAll(), 'id', 'name');
-		$units=CHtml::listData(Itemunit::model()->findAll(), 'id', 'name');
-		
 		$this->render('create',array(
 			'model'=>$model,
-			'cat'=>$cat,
-			'units'=>$units,
 		));
 	}
 
@@ -94,24 +89,16 @@ class ItemController extends RightsController
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-		//$model->setEavAttributes(array('attribute1' => 'value1', 'attribute2' => 'value2'));
 
-		if(isset($_POST['Item']))
+		if(isset($_POST['ItemVatCat']))
 		{
-			$model->attributes=$_POST['Item'];
-			$model->deleteEavAttributes();
-			$model->setEavAttributes(array_combine($_POST['ItemeavE'],$_POST['ItemeavV']));////saveEavAttributes
+			$model->attributes=$_POST['ItemVatCat'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
-		
-		$cat=CHtml::listData(Itemcategory::model()->findAll(), 'id', 'name');
-		$units=CHtml::listData(Itemunit::model()->findAll(), 'id', 'name');
-		
+
 		$this->render('update',array(
 			'model'=>$model,
-			'cat'=>$cat,
-			'units'=>$units,
 		));
 	}
 
@@ -140,7 +127,7 @@ class ItemController extends RightsController
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Item');
+		$dataProvider=new CActiveDataProvider('ItemVatCat');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -151,10 +138,10 @@ class ItemController extends RightsController
 	 */
 	public function actionAdmin()
 	{
-		$model=new Item('search');
+		$model=new ItemVatCat('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Item']))
-			$model->attributes=$_GET['Item'];
+		if(isset($_GET['ItemVatCat']))
+			$model->attributes=$_GET['ItemVatCat'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -168,7 +155,7 @@ class ItemController extends RightsController
 	 */
 	public function loadModel($id)
 	{
-		$model=Item::model()->findByPk($id);
+		$model=ItemVatCat::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -180,7 +167,7 @@ class ItemController extends RightsController
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='item-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='item-vat-cat-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

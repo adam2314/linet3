@@ -87,11 +87,11 @@ class Item extends CActiveRecord
 			array('purchaseprice, saleprice', 'length', 'max'=>8),
 			array('currency_id', 'length', 'max'=>3),
 			array('description', 'safe'),
-			array('src_tax', 'length', 'max'=>5),
+			//array('src_tax', 'length', 'max'=>5),
 			array('pic', 'file', 'types' => 'jpg, gif, png','allowEmpty'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, account_id, name,description, category_id, parent_item_id, isProduct, profit, unit_id, purchaseprice, saleprice, currency_id, src_tax, pic, owner, stockType', 'safe', 'on'=>'search'),
+			array('id, account_id, name,description, category_id, parent_item_id, isProduct, profit, unit_id, purchaseprice, saleprice, currency_id, pic, owner, stockType', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -129,7 +129,7 @@ class Item extends CActiveRecord
 			'purchaseprice' => 'Purchaseprice',
 			'saleprice' => 'Saleprice',
 			'currency_id' => 'Currency',
-			'src_tax'=> 'Source Tax',
+			//'src_tax'=> 'Source Tax',
 			'pic' => 'Pic',
 			'owner' => 'Owner',
                         'stockType' => 'Stock Type',
@@ -158,7 +158,7 @@ class Item extends CActiveRecord
 		$criteria->compare('purchaseprice',$this->purchaseprice,true);
 		$criteria->compare('saleprice',$this->saleprice,true);
 		$criteria->compare('currency_id',$this->currency_id);
-		$criteria->compare('src_tax',$this->src_tax);
+		//$criteria->compare('src_tax',$this->src_tax);
 		$criteria->compare('pic',$this->pic,true);
 		$criteria->compare('owner',$this->owner);
                 $criteria->compare('stockType',$this->stockType);

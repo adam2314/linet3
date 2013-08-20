@@ -1,8 +1,8 @@
 <?php
 
-class DocsController extends RightsController
+class UsersController extends RightsController
 {
-
+	
 
 	/**
 	 * Displays a particular model.
@@ -10,18 +10,8 @@ class DocsController extends RightsController
 	 */
 	public function actionView($id)
 	{
-		$model = Docs::model()->findByPk($id);
-		
-		
-		$docdetails =$model->docDetailes;
-		$doctype =$model->docType;
-		
-		
-		
-		
-		
 		$this->render('view',array(
-			'model'=>$model,'type'=>$doctype,'docdetails'=>$docdetails,
+			'model'=>$this->loadModel($id),
 		));
 	}
 
@@ -29,29 +19,23 @@ class DocsController extends RightsController
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate($type=1)
+	public function actionCreate()
 	{
-		
-		$model=new Docs;
-		$type=($type==0)? (int)$_POST['Docs']['doctype']:$type;
-		
-		$doctype =Doctype::model()->findByPk($type);
-		$docdetails =$model->docDetailes();
-		$docstatus=CHtml::listData(Docstatus::model()->findAll(), 'id', 'name');
+		$model=new User;
+                $userincomemap =$model->userIncomeMaps;
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Docs']))
-		{
-			$model->attributes=$_POST['Docs'];
+		if(isset($_POST['User'])){
+			$model->attributes=$_POST['User'];
                         
-                        foreach($_POST['Docdetails'] as $key=>$detial){
+                        foreach($_POST['UserIncomeMap'] as $key=>$detial){
 				$saved=false;
-				foreach($docdetails as $num=>$submodel){
-					if($submodel->id==$detial['id']){//update lines
-						unset($docdetails[$num]);
+				foreach($userincomemap as $num=>$submodel){
+					if($submodel->itemVatCat_id==$detial['itemVatCat_id']){//update lines
+						unset($userincomemap[$num]);
 						$submodel->attributes=$detial;
-						$submodel->doc_id=$model->id;
+						$submodel->user_id=$model->id;//adam:
 						if(!$submodel->save()){
 							echo "fatel error cant save doc detial";
 						}else{
@@ -61,8 +45,8 @@ class DocsController extends RightsController
 					}
 				}//*/
 				if(!$saved){//new line
-					unset($detial['id']);
-					$detial['doc_id']=$model->id;
+					//unset($detial['id']);
+					$detial['user_id']=$model->id;
 					
 					
 					$submodel=new Docdetails;	
@@ -77,26 +61,20 @@ class DocsController extends RightsController
 				}
 				
 			}
-			if(count($docdetails)!=0)//if more items in $docdetails delete them
-				foreach ($docdetails as $docdetail)
-					$docdetail->delete();
-                        
-                        
+			if(count($userincomemap)!=0)//if more items in $docdetails delete them
+				foreach ($userincomemap as $userincome)
+					$userincome->delete();
+			
                         
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
-		
-		
+
 		$this->render('create',array(
-			'model'=>$model,'type'=>$doctype,'docStatuss'=>$docstatus,//'docdetails'=>$docdetails,
+			'model'=>$model,
 		));
 	}
 
-	
-	public function actionStatus($id,$newstatus){
-		
-	}
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
@@ -104,31 +82,22 @@ class DocsController extends RightsController
 	 */
 	public function actionUpdate($id)
 	{
-		$id=(int)$id;
 		$model=$this->loadModel($id);
-
-			
-		$docdetails =$model->docDetailes;
-		$doctype =$model->docType;
-		$docstatus=CHtml::listData(Docstatus::model()->findAll(), 'id', 'name');
-		//$docstatus =Docstatus::model()->findByPk($model->status);
+                $userincomemap =$model->userIncomeMaps;
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-		if(isset($model->docStatus))
-		if($model->docStatus->looked){
-			$this->redirect(array('view','id'=>$model->id));
-		}
-		if(isset($_POST['Docs'])){
-			$model->attributes=$_POST['Docs'];
-			
-			
-			foreach($_POST['Docdetails'] as $key=>$detial){
+
+		if(isset($_POST['User']))
+		{
+			$model->attributes=$_POST['User'];
+                        
+                         foreach($_POST['UserIncomeMap'] as $key=>$detial){
 				$saved=false;
-				foreach($docdetails as $num=>$submodel){
-					if($submodel->id==$detial['id']){//update lines
-						unset($docdetails[$num]);
+				foreach($userincomemap as $num=>$submodel){
+					if($submodel->itemVatCat_id==$detial['itemVatCat_id']){//update lines
+						unset($userincomemap[$num]);
 						$submodel->attributes=$detial;
-						$submodel->doc_id=$model->id;
+						$submodel->user_id=$model->id;//adam:
 						if(!$submodel->save()){
 							echo "fatel error cant save doc detial";
 						}else{
@@ -138,8 +107,8 @@ class DocsController extends RightsController
 					}
 				}//*/
 				if(!$saved){//new line
-					unset($detial['id']);
-					$detial['doc_id']=$model->id;
+					//unset($detial['id']);
+					$detial['user_id']=$model->id;
 					
 					
 					$submodel=new Docdetails;	
@@ -154,57 +123,29 @@ class DocsController extends RightsController
 				}
 				
 			}
-			if(count($docdetails)!=0)//if more items in $docdetails delete them
-				foreach ($docdetails as $docdetail)
-					$docdetail->delete();
+			if(count($userincomemap)!=0)//if more items in $docdetails delete them
+				foreach ($userincomemap as $userincome)
+					$userincome->delete();
 			
-			if($model->save()){
+                        
+                        
+                        
+                        
+			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
-			}
 		}
-		
 
-		
 		$this->render('update',array(
-			'model'=>$model,'type'=>$doctype,'docdetails'=>$docdetails,
+			'model'=>$model,
 		));
 	}
 
-        
-    public function actionDuplicate($id,$type=0){
-		$id=(int)$id;
-		$model1=$this->loadModel($id);
-
-		
-		//$criteria=new CDbCriteria;
-		//$criteria->condition='doc_id=:docid';
-		//$criteria->params=array(':docid'=>$id);
-		$docdetails =$model1->docdetailes();
-		$doctype =$model1->docType();
-		$docstatus =Docstatus::model()->findByPk($model1->status);
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-		if(isset($docstatus))
-		if($docstatus->looked){
-			$this->redirect(array('view','id'=>$model->id));
-		}
-		if(isset($_POST['Docs'])){
-			
-			$this->actionCreate(0);
-		}
-		
-
-		
-		$this->render('create',array(
-			'model'=>$model1,'type'=>$doctype,'docdetails'=>$docdetails,
-		));
-	}
 	/**
 	 * Deletes a particular model.
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
-	/*public function actionDelete($id)
+	public function actionDelete($id)
 	{
 		if(Yii::app()->request->isPostRequest)
 		{
@@ -217,14 +158,14 @@ class DocsController extends RightsController
 		}
 		else
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
-	}*/
+	}
 
 	/**
 	 * Lists all models.
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Docs');
+		$dataProvider=new CActiveDataProvider('User');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -235,10 +176,10 @@ class DocsController extends RightsController
 	 */
 	public function actionAdmin()
 	{
-		$model=new Docs('search');
+		$model=new User('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Docs']))
-			$model->attributes=$_GET['Docs'];
+		if(isset($_GET['User']))
+			$model->attributes=$_GET['User'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -252,7 +193,7 @@ class DocsController extends RightsController
 	 */
 	public function loadModel($id)
 	{
-		$model=Docs::model()->findByPk($id);
+		$model=User::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -264,7 +205,7 @@ class DocsController extends RightsController
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='docs-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='user-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

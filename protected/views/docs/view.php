@@ -11,9 +11,8 @@ $this->menu=array(
 	//array('label'=>'Delete Docs', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage Docs', 'url'=>array('admin')),
 );
+$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View Document ") ." " .$model->id,));
 ?>
-
-<h1>View Docs #<?php echo $model->id; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
@@ -76,7 +75,7 @@ $this->menu=array(
 				//if(count($model->docdetailes)==0)
 					//$docdetails=array(new Docdetails);
 				
-				foreach ($model->docdetailes as $docdetail){
+				foreach ($model->docDetailes as $docdetail){
                                         //print_r($docdetail);
 					echo $this->renderPartial('docdetialview', array('model'=>$docdetail,'type'=>$type,)); 
 					$i++;
@@ -88,4 +87,7 @@ $this->menu=array(
 	<?php		
 			
 		}
+                
+                
+                $this->endWidget(); 
 		?>

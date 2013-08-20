@@ -10,10 +10,7 @@ $this->menu=array(
 
 
 <?php 
-$this->beginWidget('MiniForm',array(
-    'haeder' => "Create $type->name",
-    'width' => '800',
-)); 
+$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Create") ." " .$type->name,)); 
 echo $this->renderPartial('_form', array('model'=>$model,'type'=>$type,'docStatuss'=>$docStatuss)); 
 $this->endWidget(); 
 ?>

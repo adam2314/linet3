@@ -129,8 +129,9 @@ Yii::app()->clientScript->registerScriptFile($baseUrl.'/assets/js/main.js');
             array('label'=>Yii::t('app','Currency rates'), 'url'=>array('currates/admin')),
             array('label'=>Yii::t('app','Openning balances'), 'url'=>array('opbalance/index')),
             array('label'=>Yii::t('app','Contact Item'), 'url'=>array('condate/index')),
+             array('label'=>Yii::t('app','Tax Catagory For Items'), 'url'=>array('ItemVatCat/admin')),
            //  '---',
-            array('label'=>Yii::t('app','Manage Users'), 'url'=>array('user/index')),
+            array('label'=>Yii::t('app','Manage Users'), 'url'=>array('users/admin')),
             array('label'=>Yii::t('app','Manage Groups'), 'url'=>array('rights/authItem/roles')),
         )),
                 array('label'=>Yii::t('app','Accounts'), 'icon'=>'folder-open','items'=>array(            

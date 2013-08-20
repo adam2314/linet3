@@ -6,17 +6,24 @@
 
 		<?php if( $this->id!=='install' ): ?>
 
-			<div id="menu">
+			
 
 				<?php $this->renderPartial('/_menu'); ?>
 
-			</div>
+			
 
 		<?php endif; ?>
 
 		<?php $this->renderPartial('/_flash'); ?>
 
-		<?php echo $content; ?>
+		<?php 
+                
+                $this->beginWidget('MiniForm',array('haeder' => "Manage Items",)); 
+                
+                echo $content; 
+                
+                $this->endWidget();
+                ?>
 
 	</div><!-- content -->
 

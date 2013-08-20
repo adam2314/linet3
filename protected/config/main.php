@@ -111,7 +111,7 @@ return array(
                                 'showScriptName'=>false,
 				'rules' => array(
 						'' => 'controller/action',
-                        'minify/<group:[^\/]+>'=>'minify/index',
+                                                'minify/<group:[^\/]+>'=>'minify/index',
 						/*'post/<id:\d+>/<title:.*?>'=>'post/view',
 						'posts/<tag:.*?>'=>'post/index',//*/
 						'<controller:\w+>/<id:\d+>'=>'<controller>/view',

@@ -1,7 +1,8 @@
-<?php $this->breadcrumbs = array(
-	'Rights'=>Rights::getBaseUrl(),
-	Rights::t('core', 'Roles'),
-); ?>
+<?php //$this->breadcrumbs = array('Rights'=>Rights::getBaseUrl(),	Rights::t('core', 'Roles'),); 
+
+
+
+?>
 
 <div id="roles">
 

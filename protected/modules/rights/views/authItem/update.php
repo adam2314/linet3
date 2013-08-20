@@ -2,7 +2,10 @@
 	'Rights'=>Rights::getBaseUrl(),
 	Rights::getAuthItemTypeNamePlural($model->type)=>Rights::getAuthItemRoute($model->type),
 	$model->name,
-); ?>
+); 
+
+
+?>
 
 <div id="updatedAuthItem">
 
@@ -122,3 +125,5 @@
 	</div>
 
 </div>
+
+
