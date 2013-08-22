@@ -17,7 +17,7 @@ $this->beginWidget('MiniForm',array(
     'haeder' => "Update $type->name",
     'width' => '800',
 )); 
- echo $this->renderPartial('_form', array('model'=>$model,'docdetails'=>$docdetails,'type'=>$type,'docStatuss'=>$docStatuss)); 
+ echo $this->renderPartial('_form', array('model'=>$model,'type'=>$type)); 
 
 $this->endWidget(); 
 ?>

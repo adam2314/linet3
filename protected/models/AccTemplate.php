@@ -64,9 +64,9 @@ class AccTemplate extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'name' => 'Name',
-			'AccType_id' => 'Acc Type',
+			'id' => Yii::t('labels', 'ID'),
+			'name' => Yii::t('labels', 'Name'),
+			'AccType_id' => Yii::t('labels', 'Account Type'),
 		);
 	}
 

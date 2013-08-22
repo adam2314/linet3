@@ -11,8 +11,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'account_id'); ?>
-		<?php echo $form->textField($model,'account_id',array('size'=>10,'maxlength'=>10)); ?>
+		<?php //echo $form->label($model,'account_id'); ?>
+		<?php //echo $form->textField($model,'account_id',array('size'=>10,'maxlength'=>10)); ?>
 	</div>
 
 	<div class="row">

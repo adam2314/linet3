@@ -63,9 +63,9 @@ class AccTemplateItem extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'AccTemplate_id' => 'Acc Template',
-			'eavFields_id' => 'Eav Fields',
+			'id' => Yii::t('labels', 'ID'),
+			'AccTemplate_id' => Yii::t('labels', 'Account Template'),
+			'eavFields_id' => Yii::t('labels', 'Eav Fields'),
 		);
 	}
 

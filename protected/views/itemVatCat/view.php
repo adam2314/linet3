@@ -5,15 +5,16 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List ItemVatCat','url'=>array('index')),
-	array('label'=>'Create ItemVatCat','url'=>array('create')),
-	array('label'=>'Update ItemVatCat','url'=>array('update','id'=>$model->id)),
-	array('label'=>'Delete ItemVatCat','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage ItemVatCat','url'=>array('admin')),
+	//array('label'=>'List ItemVatCat','url'=>array('index')),
+	array('label'=>'Create Item Tax Catagory','url'=>array('create')),
+	array('label'=>'Update Item Tax Catagory','url'=>array('update','id'=>$model->id)),
+	array('label'=>'Delete Item Tax Catagory','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	array('label'=>'Manage Item Tax Catagories','url'=>array('admin')),
 );
+$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View Item Tax Catagory #").$model->id,)); 
 ?>
 
-<h1>View ItemVatCat #<?php echo $model->id; ?></h1>
+
 
 <?php $this->widget('bootstrap.widgets.TbDetailView',array(
 	'data'=>$model,
@@ -21,4 +22,6 @@ $this->menu=array(
 		'id',
 		'name',
 	),
-)); ?>
+)); 
+$this->endWidget(); 
+?>

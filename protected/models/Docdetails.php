@@ -4,7 +4,6 @@
  * This is the model class for table "docDetails".
  *
  * The followings are the available columns in table 'docDetails':
- * @property integer $id
  * @property string $doc_id
  * @property string $item_id
  * @property string $name
@@ -28,6 +27,12 @@ class Docdetails extends CActiveRecord
 		return parent::model($className);
 	}
 
+        
+        public function primaryKey()
+	{
+	    return array('doc_id','line');
+	}
+        
 	/**
 	 * @return string the associated database table name
 	 */
@@ -53,7 +58,7 @@ class Docdetails extends CActiveRecord
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, doc_id, item_id, name, description, qty, unit_price, currency_id, price, invprice, line', 'safe', 'on'=>'search'),
+			array('doc_id, item_id, name, description, qty, unit_price, currency_id, price, invprice, line', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,7 +79,6 @@ class Docdetails extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
 			'doc_id' => 'Doc',
 			'item_id' => 'Item',
 			'name' => 'Name',
@@ -99,7 +103,6 @@ class Docdetails extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
 		$criteria->compare('doc_id',$this->doc_id,true);
 		$criteria->compare('item_id',$this->item_id,true);
 		$criteria->compare('name',$this->name,true);

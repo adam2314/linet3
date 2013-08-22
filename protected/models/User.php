@@ -6,7 +6,8 @@
  * The followings are the available columns in table 'user':
  * @property integer $id
  * @property string $username
- * @property string $fullname
+ * @property string $fname
+ * @property string $lname
  * @property string $password
  * @property string $lastlogin
  * @property string $cookie
@@ -24,7 +25,7 @@ class User extends CActiveRecord
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Users the static model class
+	 * @return User the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -47,16 +48,16 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, certpasswd, salt, email', 'required'),
+			array('username, lname, certpasswd, salt, email', 'required'),
 			array('username', 'length', 'max'=>100),
-			array('fullname', 'length', 'max'=>80),
+			array('fname, lname, certpasswd, salt, email', 'length', 'max'=>255),
 			array('password', 'length', 'max'=>41),
 			array('cookie, hash', 'length', 'max'=>32),
 			array('certpasswd, salt, email', 'length', 'max'=>255),
 			array('lastlogin', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, username, fullname, password, lastlogin, cookie, hash, certpasswd, salt, email', 'safe', 'on'=>'search'),
+			array('id, username, fname, lname, password, lastlogin, cookie, hash, certpasswd, salt, email', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -73,22 +74,52 @@ class User extends CActiveRecord
 		);
 	}
 
+        public function save($runValidation = true, $attributes = NULL) {
+            $catagories=ItemVatCat::model()->findAll();
+            parent::save($runValidation,$attributes);
+            foreach ($catagories as $catagory){
+                if(!UserIncomeMap::model()->findByPk(array('user_id'=>$this->id, 'itemVatCat_id'=>$catagory->id))){//'user_id', 'itemVatCat_id'
+                    $model=new UserIncomeMap;
+                    $attr=array("user_id"=>$this->id,"itemVatCat_id"=>$catagory->id,"account_id"=>100);
+                    $model->attributes=$attr;
+                    if(!$model->save())
+                        return false;
+                }
+                
+            }
+        }
+        
+        public function delete() {
+            /*
+            $users=User::model()->findAll();
+            
+            foreach ($users as $user){
+                $IncomeMap=UserIncomeMap::model()->findByPk(array('user_id'=>$user->id, 'itemVatCat_id'=>$this->id));
+                if($IncomeMap){//'user_id', 'itemVatCat_id'
+                   $IncomeMap->delete();
+                }
+                
+            }*/
+            //no user delete only disable
+            //parent::delete();
+        }
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'username' => 'Username',
-			'fullname' => 'Fullname',
-			'password' => 'Password',
-			'lastlogin' => 'Lastlogin',
-			'cookie' => 'Cookie',
-			'hash' => 'Hash',
-			'certpasswd' => 'Certpasswd',
-			'salt' => 'Salt',
-			'email' => 'Email',
+			'id'=>Yii::t('label','ID'),
+                        'username'=>Yii::t('label','User Name'),
+                        'fname'=>Yii::t('label','First Name'),
+                        'lname'=>Yii::t('label','Last Name'),
+                        'password'=>Yii::t('label','Password'),
+                        'lastlogin'=>Yii::t('label','Last Login'),
+                        'cookie'=>Yii::t('label','Cookie'),
+                        'hash'=>Yii::t('label','Hash'),
+                        'certpasswd'=>Yii::t('label','Certifcate Password'),
+                        'salt'=>Yii::t('label','Salt'),
+                        'email'=>Yii::t('label','Email'),
 		);
 	}
 
@@ -105,7 +136,8 @@ class User extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('username',$this->username,true);
-		$criteria->compare('fullname',$this->fullname,true);
+		$criteria->compare('fname',$this->fname,true);
+		$criteria->compare('lname',$this->lname,true);
 		$criteria->compare('password',$this->password,true);
 		$criteria->compare('lastlogin',$this->lastlogin,true);
 		$criteria->compare('cookie',$this->cookie,true);

@@ -69,10 +69,10 @@ class Acctype extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'name' => 'Name',
-			'desc' => 'Desc',
-			'openformat' => 'Openformat',
+                    'id'=>Yii::t('label','ID'),
+                    'name'=>Yii::t('label','Name'),
+                    'desc'=>Yii::t('label','Description'),
+                    'openformat'=>Yii::t('label','Open Format'),
 		);
 	}
 

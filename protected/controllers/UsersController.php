@@ -28,8 +28,8 @@ class UsersController extends RightsController
 
 		if(isset($_POST['User'])){
 			$model->attributes=$_POST['User'];
-                        
-                        foreach($_POST['UserIncomeMap'] as $key=>$detial){
+                        if(isset($_POST['UserIncomeMap'])){
+                            foreach($_POST['UserIncomeMap'] as $key=>$detial){
 				$saved=false;
 				foreach($userincomemap as $num=>$submodel){
 					if($submodel->itemVatCat_id==$detial['itemVatCat_id']){//update lines
@@ -61,6 +61,8 @@ class UsersController extends RightsController
 				}
 				
 			}
+                        }
+                        
 			if(count($userincomemap)!=0)//if more items in $docdetails delete them
 				foreach ($userincomemap as $userincome)
 					$userincome->delete();
@@ -90,39 +92,40 @@ class UsersController extends RightsController
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-                        
-                         foreach($_POST['UserIncomeMap'] as $key=>$detial){
-				$saved=false;
-				foreach($userincomemap as $num=>$submodel){
-					if($submodel->itemVatCat_id==$detial['itemVatCat_id']){//update lines
-						unset($userincomemap[$num]);
-						$submodel->attributes=$detial;
-						$submodel->user_id=$model->id;//adam:
-						if(!$submodel->save()){
-							echo "fatel error cant save doc detial";
-						}else{
-							$saved=true;
+                        if(isset($_POST['UserIncomeMap'])){
+                            foreach($_POST['UserIncomeMap'] as $key=>$detial){
+                                   $saved=false;
+                                   foreach($userincomemap as $num=>$submodel){
+                                           if($submodel->itemVatCat_id==$detial['itemVatCat_id']){//update lines
+                                                   unset($userincomemap[$num]);
+                                                   $submodel->attributes=$detial;
+                                                   $submodel->user_id=$model->id;//adam:
+                                                   if(!$submodel->save()){
+                                                           echo "fatel error cant save doc detial";
+                                                   }else{
+                                                           $saved=true;
 
-						}
-					}
-				}//*/
-				if(!$saved){//new line
-					//unset($detial['id']);
-					$detial['user_id']=$model->id;
-					
-					
-					$submodel=new Docdetails;	
-					$submodel->attributes=$detial;
-					
-					if($submodel->save()){
-						$saved=true;
-					}else{
-						echo "fatel error cant save doc detial";
-					}
-						
-				}
-				
-			}
+                                                   }
+                                           }
+                                   }//*/
+                                   if(!$saved){//new line
+                                           //unset($detial['id']);
+                                           $detial['user_id']=$model->id;
+
+
+                                           $submodel=new Docdetails;	
+                                           $submodel->attributes=$detial;
+
+                                           if($submodel->save()){
+                                                   $saved=true;
+                                           }else{
+                                                   echo "fatel error cant save doc detial";
+                                           }
+
+                                   }
+
+                           }
+                        }
 			if(count($userincomemap)!=0)//if more items in $docdetails delete them
 				foreach ($userincomemap as $userincome)
 					$userincome->delete();

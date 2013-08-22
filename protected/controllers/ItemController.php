@@ -8,20 +8,10 @@ class ItemController extends RightsController
 	 */
 	public function actionView($id)
 	{
-		//print_r(Item::model()->with('category_id')->findAll());
-		$bla= Item::model()->findAllByPk($id);
-		//print_r($bla);
-		//print("a:". $bla->name.",id:$id");
-		//die;
+		$model= Item::model()->findByPk($id);
+
 		$this->render('view',array(
-			//'model'=>$bla,
-			//'model'=>$this->loadModel($id),
-		
-			//'model'=>Item::model()->findAllByPk($id),
-			'model'=>$bla[0],//Item::model()->findAllByPk($id),
-			//'model'=>Item::model()->with('Itemcategory')->findAll(),
-			//
-			//$posts=Post::model()->with('author','categories')->findAll();
+			'model'=>$model,
 		));
 	}
         public function actionTemplate(){
@@ -39,9 +29,10 @@ class ItemController extends RightsController
 
         public function actionJSON($id=0){
 		$model=Item::model()->findByPk($id);
-		//if($model->src_tax==null);
-		//	$model->src_tax=0;
-		echo CJSON::encode($model);
+
+                 //adam: there is a bug with the public property vat in the framework  Issue 1385 (WontFix)
+                
+                echo CJSON::encode(array(CJSON::encode($model),     json_encode($model)));
 	    Yii::app()->end();//*/
 	}
 	
@@ -100,7 +91,10 @@ class ItemController extends RightsController
 		{
 			$model->attributes=$_POST['Item'];
 			$model->deleteEavAttributes();
-			$model->setEavAttributes(array_combine($_POST['ItemeavE'],$_POST['ItemeavV']));////saveEavAttributes
+                        if(isset($_POST['ItemeavE'])&&isset($_POST['ItemeavE'])){
+                            $model->setEavAttributes(array_combine($_POST['ItemeavE'],$_POST['ItemeavV']));////saveEavAttributes
+                        }
+			
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}

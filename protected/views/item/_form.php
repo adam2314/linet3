@@ -10,20 +10,9 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'account_id'); ?>
-		<?php 
-				
-		$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
-	    'name'=>'Item[account_id]',
-	    'value'=>"$model->account_id",
-	    'source'=>$this->createUrl('?r=accounts/Autocomplete&type=3'),//income
-	    // additional javascript options for the autocomplete plugin
-	    'options'=>array(
-	            'showAnim'=>'fold',
-	    ),
-	));
-		 ?>
-		<?php echo $form->error($model,'account_id'); ?>
+		<?php echo $form->labelEx($model,'itemVatCat_id'); ?>
+		<?php echo $form->dropDownList($model,'itemVatCat_id',CHtml::listData(ItemVatCat::model()->findAll(), 'id', 'name')); ?>
+		<?php echo $form->error($model,'itemVatCat_id'); ?>
 	</div>
 
 	<div class="row">

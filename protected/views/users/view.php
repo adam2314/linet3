@@ -5,14 +5,14 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List User','url'=>array('index')),
-	array('label'=>'Create User','url'=>array('create')),
-	array('label'=>'Update User','url'=>array('update','id'=>$model->id)),
-	array('label'=>'Delete User','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage User','url'=>array('admin')),
+	//array('label'=>Yii::t("app","List Users"),'url'=>array('index')),
+	array('label'=>Yii::t("app","Create User"),'url'=>array('create')),
+	array('label'=>Yii::t("app","Update User"),'url'=>array('update','id'=>$model->id)),
+	array('label'=>Yii::t("app","Delete User"),'url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	array('label'=>Yii::t("app","Manage Users"),'url'=>array('admin')),
 );
 
-$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View User ") ." " .$model->fullname,));
+$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View User ") ." " .$model->username,));
 ?>
 
 
@@ -21,17 +21,48 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View User ") ." " 
 	'attributes'=>array(
 		'id',
 		'username',
-		'fullname',
-		'password',
+		'fname',
+                'lname',
+		//'password',
 		'lastlogin',
-		'cookie',
-		'hash',
-		'certpasswd',
-		'salt',
+		//'cookie',
+		//'hash',
+		//'certpasswd',
+		//'salt',
 		'email',
 	),
 )); 
 
 
+			?>
+
+        <table class="templateFrame grid" cellspacing="0">
+            <thead class="templateHead">
+                <tr>
+
+                    <td><?php echo Yii::t("app","Tax Catagory") ?></td>
+                    <td><?php echo Yii::t("app","Account Name") ?></td>
+
+
+                </tr>
+            </thead>
+            <tfoot>
+                    <tr>
+                        <td colspan="2">     	</td>
+                    </tr>
+             </tfoot>
+            <tbody class="templateTarget">
+                <?php $i=0;
+                                foreach ($model->userIncomeMaps as $userIncome){
+                                        echo $this->renderPartial('userIncomeMapview', array('model'=>$userIncome,'i'=>$i,)); 
+                                        $i++;
+                                }
+                 ?>
+            </tbody>
+        </table>
+
+	<?php		
+			
+	
 $this->endWidget(); 
 ?>

@@ -4,9 +4,7 @@
 	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('account_id')); ?>:</b>
-	<?php echo CHtml::encode($data->account_id); ?>
-	<br />
+	
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('name')); ?>:</b>
 	<?php echo CHtml::encode($data->name); ?>
@@ -29,6 +27,11 @@
 	<br />
 
 	<?php /*
+         
+        <b><?php echo CHtml::encode($data->getAttributeLabel('account_id')); ?>:</b>
+	<?php echo CHtml::encode($data->account_id); ?>
+	<br />
+         
 	<b><?php echo CHtml::encode($data->getAttributeLabel('unit_id')); ?>:</b>
 	<?php echo CHtml::encode($data->unit_id); ?>
 	<br />

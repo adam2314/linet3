@@ -27,6 +27,37 @@ class ItemVatCat extends CActiveRecord
 		return 'itemVatCat';
 	}
 
+        
+        public function save($runValidation = true, $attributes = NULL) {
+            $users=User::model()->findAll();
+            parent::save($runValidation,$attributes);
+            foreach ($users as $user){
+                if(!UserIncomeMap::model()->findByPk(array('user_id'=>$user->id, 'itemVatCat_id'=>$this->id))){//'user_id', 'itemVatCat_id'
+                    $model=new UserIncomeMap;
+                    $attr=array("user_id"=>$user->id,"itemVatCat_id"=>$this->id,"account_id"=>100);
+                    $model->attributes=$attr;
+                    if(!$model->save())
+                        return false;
+                }
+                
+            }
+        }
+
+        public function delete() {
+            $users=User::model()->findAll();
+            
+            foreach ($users as $user){
+                $IncomeMap=UserIncomeMap::model()->findByPk(array('user_id'=>$user->id, 'itemVatCat_id'=>$this->id));
+                if($IncomeMap){//'user_id', 'itemVatCat_id'
+                   $IncomeMap->delete();
+                }
+                
+            }
+            parent::delete();
+        }
+        
+        
+        
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -60,8 +91,8 @@ class ItemVatCat extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'name' => 'Name',
+			'id' => Yii::t('labels', 'ID'),
+			'name' => Yii::t('labels', 'Name'),
 		);
 	}
 

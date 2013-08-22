@@ -68,10 +68,10 @@ class Currates extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'currency_id' => 'Currency',
-			'date' => 'Date',
-			'value' => 'Value',
+			'id'=>Yii::t('label','ID'),
+                        'currency_id'=>Yii::t('label','Currency'),
+                        'date'=>Yii::t('label','Date'),
+                        'value'=>Yii::t('label','Value'),
 		);
 	}
 

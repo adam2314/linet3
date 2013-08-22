@@ -5,7 +5,7 @@
 	'enableAjaxValidation'=>false,
 )); 
 
-Currates::model()->GetRateList();
+//Currates::model()->GetRateList();
 
 ?>
 <div class="form">
@@ -45,7 +45,7 @@ Currates::model()->GetRateList();
     
         <p>
             <?php echo $form->labelEx($model,'status'); ?>
-            <?php echo $form->dropDownList($model,'status',$docStatuss);?>
+            <?php echo $form->dropDownList($model,'status',CHtml::listData(Docstatus::model()->findAll(), 'id', 'name'));?>
             <?php //echo $form->textField($model,'status'); ?>
             <?php echo $form->error($model,'status'); ?>
         </p>
@@ -110,7 +110,7 @@ Currates::model()->GetRateList();
 <div class="form">	
 <table  data-role="table" class="formtable" ><!-- docdetalies -->
 	<?php 
-		if($type->isdoc){
+		if($model->docType->isdoc){
 			
 			?>
 	<!--<div class="row">-->
@@ -125,6 +125,7 @@ Currates::model()->GetRateList();
                                             <th><?php echo $form->labelEx($model,'currency'); ?></th>
                                             <th><?php echo $form->labelEx($model,'price'); ?></th>
                                             <th style="width: 90px;"><?php echo $form->labelEx($model,'invprice'); ?></th>
+                                            <th style="width: 90px;"><?php echo $form->labelEx($model,'VAT'); ?></th>
                                             <th>action</th>
                     </tr>
 		</thead>	
@@ -133,7 +134,7 @@ Currates::model()->GetRateList();
 			<td colspan='6' class="add"><?php echo Yii::t('ui','New');?>
         		<textarea id="template" style='display:none;'>       
 	                      	<?php 
-                        	echo $this->renderPartial('docdetial', array('model'=>new Docdetails,'type'=>$type,'form'=>$form,'i'=>'ABC')); 
+                        	echo $this->renderPartial('docdetial', array('model'=>new Docdetails,'form'=>$form,'i'=>'ABC')); 
                         	?>
                         </textarea>      
                         </td>
@@ -143,29 +144,23 @@ Currates::model()->GetRateList();
                                     <?php echo $form->error($model,'sub_total'); ?>
                        </td>
                         <td>
-                                    <?php echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8)); ?>
+                                    <?php echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
+                        </td>
+                        <td>
+                                    <?php echo $form->textField($model,'vat',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
                         </td>
                     </tr>
                     <tr>
 			<td colspan='6' ></td>
                         <td>
-                                    <?php echo $form->labelEx($model,'novat_total'); ?>
-                                    <?php echo $form->error($model,'novat_total'); ?>
+                                    <?php //echo $form->labelEx($model,'novat_total'); ?>
+                                    <?php //echo $form->error($model,'novat_total'); ?>
                        </td>
                         <td>
-                                    <?php echo $form->textField($model,'novat_total',array('size'=>8,'maxlength'=>8)); ?>
+                                    <?php //echo $form->textField($model,'novat_total',array('size'=>4,'maxlength'=>8,'style' => "width: 90px;")); ?>
                         </td>
                     </tr>
-                     <tr>
-			<td colspan='6' ></td>
-                        <td>
-                                    <?php echo $form->labelEx($model,'vat'); ?>
-                                    <?php echo $form->error($model,'vat'); ?>
-                       </td>
-                        <td>
-                                    <?php echo $form->textField($model,'vat',array('size'=>8,'maxlength'=>8)); ?>
-                        </td>
-                    </tr>
+                     
                     <tr>
 			<td colspan='6' ></td>
                         <td>
@@ -173,7 +168,7 @@ Currates::model()->GetRateList();
                                     <?php echo $form->error($model,'total'); ?>
                        </td>
                         <td>
-                                    <?php echo $form->textField($model,'total',array('size'=>8,'maxlength'=>8)); ?>
+                                    <?php echo $form->textField($model,'total',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
                         </td>
                     </tr>
                     <tr>
@@ -183,7 +178,7 @@ Currates::model()->GetRateList();
                                     <?php echo $form->error($model,'src_tax'); ?>
                        </td>
                         <td>
-                                    <?php echo $form->textField($model,'src_tax',array('size'=>8,'maxlength'=>8)); ?>
+                                    <?php echo $form->textField($model,'src_tax',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
                         </td>
                     </tr>
            	</tfoot>	
@@ -195,7 +190,7 @@ Currates::model()->GetRateList();
 				//$docdetails=array(new Docdetails);
 			
 			foreach ($model->docDetailes as $docdetail){
-				echo $this->renderPartial('docdetial', array('model'=>$docdetail,'type'=>$type,'form'=>$form,'i'=>"{$i}")); 
+				echo $this->renderPartial('docdetial', array('model'=>$docdetail,'form'=>$form,'i'=>"{$i}")); 
 				$i++;
 			}		 ?>
                 </tbody>
@@ -208,10 +203,10 @@ Currates::model()->GetRateList();
 			
 		}
 		
-		if($type->isrecipet){
+		if($model->docType->isrecipet){
 			echo 'recipet';
 		}
-		if($type->iscontract){
+		if($model->docType->iscontract){
 			echo 'contract';
 		}
 	?>
@@ -267,7 +262,7 @@ Currates::model()->GetRateList();
 			$('.templateTarget').append(template);
 			$('#doc_items').val(i+1);
 			// start specific commands
-
+                        calcLines();
 			// end specific commands
 		});
 
@@ -295,8 +290,7 @@ Currates::model()->GetRateList();
 	<!--</div>-->
 </p>
 <script type="text/javascript">
-$('#Docs_currency_id').change(function(){
-        
+$('#Docs_currency_id').change(function(){    
     var currency = $('#Docs_currency_id').val();
     
     $.get("<?php echo $this->createUrl('/');?>/index.php",  {"r": "Currates/Getrate" ,"id" : currency},
@@ -327,19 +321,31 @@ function currChange(index) {
         
 }
 
+function nameChange(index) {
+    var item_id = $('#Docdetails_'+index+'_name').val();
+    $('#Docdetails_'+index+'_item_id').val(item_id);
+    itemChange(index);      
+}
+
 function itemChange(index){
     var part = $('#Docdetails_'+ index +'_item_id').val();
     $.get("<?php echo $this->createUrl('/');?>/index.php",  {"r": "item/JSON" ,"id" : part},
     function(data) {
-        $('#Docdetails_'+index+'_name').val(data.name);
-        $('#Docdetails_'+index+'_description').val(data.description);
-        $('#Docdetails_'+index+'_unit_price').val(data.saleprice);
+        //console.log(data[0]);
+        data[0]=jQuery.parseJSON(data[0]);
+        data[1]=jQuery.parseJSON(data[1]);
+        $('#Docdetails_'+index+'_name').val(data[0].id);
+        $('#Docdetails_'+index+'_name').trigger("liszt:updated");
+        
+        $('#Docdetails_'+index+'_description').val(data[0].description);
+        $('#Docdetails_'+index+'_unit_price').val(data[0].saleprice);
 
-        $('#Docdetails_'+index+'_currency_id').val(data.currency_id);
+        $('#Docdetails_'+index+'_currency_id').val(data[0].currency_id);
         $('#Docdetails_'+index+'_currency_id').trigger("liszt:updated");
         currChange(index);
 
-        $('#Docdetails_'+index+'_src_tax').val(data.src_tax);
+        $('#Docdetails_'+index+'_accvat').val(data[1].vat);
+        
         $('#Docdetails_'+index+'_rate').val("1");
         $('#Docdetails_'+index+'_qty').focus();
     }, "json")
@@ -381,7 +387,7 @@ function CalcPrice(index) {
     var uprice = $('#Docdetails_'+index+'_unit_price').val();
     var rate = $('#Docdetails_'+index+'_rate').val();
     var doc_rate = $('#doc_rate').val();
-
+    var vat=$('#Docdetails_'+index+'_accvat').val();
     //console.log(doc_rate);
     //console.log(rate);
     //console.log(currency);
@@ -389,36 +395,64 @@ function CalcPrice(index) {
     //var cur_rate = $('#cur_rate').val();
     var price = (uprice * qty).toFixed(2);
     $('#Docdetails_'+index+'_price').val(price);
+    
+    
+    if(rate!=doc_rate){
+        itemtotal=price * (rate/doc_rate);
+        
+    }else{
+        itemtotal=price*1;
+        
+    }
 
-    if(rate!=doc_rate)
-        $('#Docdetails_'+index+'_invprice').val((price * rate).toFixed(2)/doc_rate);
-    else
-        $('#Docdetails_'+index+'_invprice').val((price*1).toFixed(2));
-
+    
+    $('#Docdetails_'+index+'_vat').val((itemtotal*(vat/100)).toFixed(2));
+    $('#Docdetails_'+index+'_invprice').val(itemtotal.toFixed(2));
     CalcPriceSum();
 }
+
+function calcLines(){
+    var elements = $('[id^=Docdetails][id$=line]');
+    //var i=1;
+    console.clear();
+    for (var i=0; i<elements.length; i++){
+        
+        console.log(elements[i]);
+        //$('#'+elements[line].id).val(i);
+        i++;
+  }
+    
+    //var i=0;
+    //for (var i=0; i<elements.length; i++) {
+        //console.log(elements[i].id);
+        //$('#'+elements[i].id).val(i+1);
+    //}
+    
+}
 function CalcPriceSum() {
-    var elements = $('[id$=invprice]');
-    var selements = $('[id$=invprice]');
+    var elements = $('[id^=Docdetails][id$=invprice]');
+    var selements = $('[id^=Docdetails][id$=_vat]');
     var vattotal=0;
     var subtotal=0;
     var novat_total=0;
-    var vat=<?php echo Config::model()->findByPk('vat')->value;?>;
+    //adam out:  var vat=<?php echo Config::model()->findByPk('vat')->value;?>;
     for (var i=0; i<elements.length; i++) {
         //console.log(elements[i].id);
         var itemtotal=parseFloat($('#'+elements[i].id).val());
-        var vatper= parseFloat($('#'+selements[i].id).val());
-        if(vatper!=0){
-            subtotal+=itemtotal;
-            vattotal+=itemtotal*(vat/100);
-        }else{
-            novat_total+=itemtotal;
-        }
+        var vat= parseFloat($('#'+selements[i].id).val());
+        //console.log(vat);
+        //console.log(selements[i].id);
+        //if(vatper!=0){
+        subtotal+=itemtotal;
+        vattotal+=vat;
+        //}else{
+            //novat_total+=itemtotal;
+        //}
     }
     $('#Docs_vat').val(vattotal.toFixed(2));
     $('#Docs_sub_total').val(subtotal.toFixed(2));
-    $('#Docs_novat_total').val(novat_total.toFixed(2));
-    $('#Docs_total').val((subtotal+novat_total+vattotal).toFixed(2));
+    //$('#Docs_novat_total').val(novat_total.toFixed(2));
+    $('#Docs_total').val((subtotal+vattotal).toFixed(2));//novat_total
 }
 function CalcDueDate(valdate, pay_terms) {
 	var em=0;
@@ -460,6 +494,7 @@ function CalcDueDate(valdate, pay_terms) {
 }
 $(function() {
 	$( "#resizable" ).resizable();
+        $('.add').trigger('click');
 });
 </script>
 

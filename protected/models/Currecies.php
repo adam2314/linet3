@@ -5,7 +5,7 @@
  *
  * The followings are the available columns in table 'currencies':
  * @property string $id
- * @property string $num
+ * @property string $code
  * @property string $name
  * @property string $symbol
  */
@@ -81,10 +81,10 @@ class Currecies extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'code' => 'Code',
-			'name' => 'Name',
-			'symbol' => 'Symbol',
+			'id'=>Yii::t('label','ID'),
+                        'code'=>Yii::t('label','Code'),
+                        'name'=>Yii::t('label','Name'),
+                        'symbol'=>Yii::t('label','Symbol'),
 		);
 	}
 

@@ -33,8 +33,9 @@ class DocsController extends RightsController
 	{
 		
 		$model=new Docs;
-		$type=($type==0)? (int)$_POST['Docs']['doctype']:$type;
-		
+		$type=(isset($_POST['Docs']['doctype']))? (int)$_POST['Docs']['doctype']:$type;
+		$model->doctype=$type;
+                
 		$doctype =Doctype::model()->findByPk($type);
 		$docdetails =$model->docDetailes();
 		$docstatus=CHtml::listData(Docstatus::model()->findAll(), 'id', 'name');
@@ -84,12 +85,13 @@ class DocsController extends RightsController
                         
                         
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+                                print 'saved';
+				//$this->redirect(array('view','id'=>$model->id));
 		}
 		
 		
 		$this->render('create',array(
-			'model'=>$model,'type'=>$doctype,'docStatuss'=>$docstatus,//'docdetails'=>$docdetails,
+			'model'=>$model,'type'=>$doctype,
 		));
 	}
 
@@ -110,7 +112,7 @@ class DocsController extends RightsController
 			
 		$docdetails =$model->docDetailes;
 		$doctype =$model->docType;
-		$docstatus=CHtml::listData(Docstatus::model()->findAll(), 'id', 'name');
+		//$docstatus=CHtml::listData(Docstatus::model()->findAll(), 'id', 'name');
 		//$docstatus =Docstatus::model()->findByPk($model->status);
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -121,52 +123,44 @@ class DocsController extends RightsController
 		if(isset($_POST['Docs'])){
 			$model->attributes=$_POST['Docs'];
 			
-			
+			print_r($_POST['Docdetails']);
 			foreach($_POST['Docdetails'] as $key=>$detial){
 				$saved=false;
-				foreach($docdetails as $num=>$submodel){
-					if($submodel->id==$detial['id']){//update lines
-						unset($docdetails[$num]);
-						$submodel->attributes=$detial;
-						$submodel->doc_id=$model->id;
-						if(!$submodel->save()){
-							echo "fatel error cant save doc detial";
-						}else{
-							$saved=true;
+                                $submodel=  Docdetails::model()->findByPk(array('doc_id'=>$model->id,'line'=>$detial['line']));
+                                if($submodel){
+                                    $submodel->attributes=$detial;
+                                    if(!$submodel->save())
+					echo "fatel error cant save doc detial";
+                                    else
+                                        $saved=true;
+                                }else{//new line
 
-						}
-					}
-				}//*/
-				if(!$saved){//new line
-					unset($detial['id']);
-					$detial['doc_id']=$model->id;
-					
-					
-					$submodel=new Docdetails;	
-					$submodel->attributes=$detial;
-					
-					if($submodel->save()){
-						$saved=true;
-					}else{
-						echo "fatel error cant save doc detial";
-					}
+                                    $submodel=new Docdetails;	
+                                    $submodel->attributes=$detial;
+                                    $submodel->doc_id=$model->id;
+                                    if($submodel->save()){
+                                            $saved=true;
+                                    }else{
+                                            echo "fatel error cant save doc detial";
+                                    }
 						
 				}
 				
 			}
-			if(count($docdetails)!=0)//if more items in $docdetails delete them
-				foreach ($docdetails as $docdetail)
+			if(count($model->docDetailes)!=0)//if more items in $docdetails delete them
+				foreach ($model->docDetailes as $docdetail)
 					$docdetail->delete();
 			
 			if($model->save()){
-				$this->redirect(array('view','id'=>$model->id));
+                                print "<br><hr><br>";
+				//$this->redirect(array('view','id'=>$model->id));
 			}
 		}
 		
 
 		
 		$this->render('update',array(
-			'model'=>$model,'type'=>$doctype,'docdetails'=>$docdetails,
+			'model'=>$model,'type'=>$doctype,
 		));
 	}
 

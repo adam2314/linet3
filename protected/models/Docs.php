@@ -29,7 +29,7 @@
  */
 class Docs extends CActiveRecord
 {
-    public $lang;
+    //public $lang;
 	public function primaryKey()
 	{
 	    return 'id';
@@ -101,28 +101,28 @@ class Docs extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'Id',
-			'doctype' => 'Doctype',
-			'docnum' => 'Docnum',
-			'account_id' => 'Account',
-			'company' => 'Company',
-			'address' => 'Address',
-			'city' => 'City',
-			'zip' => 'Zip',
-			'vatnum' => 'Vatnum',
-			'refnum' => 'Refnum',
-			'issue_date' => 'Issue Date',
-			'due_date' => 'Due Date',
-			'sub_total' => 'Sub Total',
-			'novat_total' => 'Novat Total',
-			'vat' => 'Vat',
-			'total' => 'Total',
-			'src_tax' => 'Src Tax',
-			'status' => 'Status',
-			'printed' => 'Printed',
-                        'currency_id' => 'Currency',
-			'comments' => 'Comments',
-			'owner' => 'Owner',
+			'id'=>Yii::t('label','ID'),
+                        'doctype'=>Yii::t('label','Documenet Type'),
+                        'docnum'=>Yii::t('label','Documenet No.'),
+                        'account_id'=>Yii::t('label','Account'),
+                        'company'=>Yii::t('label','Company'),
+                        'address'=>Yii::t('label','Address'),
+                        'city'=>Yii::t('label','City'),
+                        'zip'=>Yii::t('label','Zip'),
+                        'vatnum'=>Yii::t('label','VAT No.'),
+                        'refnum'=>Yii::t('label','Refernce No.'),
+                        'issue_date'=>Yii::t('label','Issue Date'),
+                        'due_date'=>Yii::t('label','Due Date'),
+                        'sub_total'=>Yii::t('label','Sub Total'),
+                        'novat_total'=>Yii::t('label','No VAT Total'),
+                        'vat'=>Yii::t('label','VAT'),
+                        'total'=>Yii::t('label','Total'),
+                        'currency_id'=>Yii::t('label','Currency'),
+                        'src_tax'=>Yii::t('label','Src Tax'),
+                        'status'=>Yii::t('label','Status'),
+                        'printed'=>Yii::t('label','Printed'),
+                        'comments'=>Yii::t('label','Comments'),
+                        'owner'=>Yii::t('label','Owner'),
 		);
 	}
 

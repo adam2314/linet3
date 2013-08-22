@@ -62,9 +62,9 @@ class AccId6111 extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'name' => 'Name',
-			'percentage' => 'Percentage',
+			'id' => Yii::t('labels', 'ID'),
+			'name' => Yii::t('labels', 'Name'),
+			'percentage' => Yii::t('labels', 'Percentage'),
 		);
 	}
 

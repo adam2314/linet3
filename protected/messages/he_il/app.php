@@ -76,6 +76,6 @@ return array (
 			'About'=>'אודות',
 			'Bag Report'=>'דווח על באג',
 
-
+                  
 );
 ?>

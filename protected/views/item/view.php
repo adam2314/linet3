@@ -27,11 +27,8 @@ $this->beginWidget('MiniForm',array(
 	'attributes'=>array(
 		//'id',
 		
-                array(
-                    'name'=>'account_id',
-                    'value'=>$model->Account->name,
-                ),
-		'name',
+                //array('name'=>'account_id','value'=>$model->Account->name,),
+                'name',
 		
                 array(
                     'name'=>'category_id',

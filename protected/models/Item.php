@@ -5,7 +5,7 @@
  *
  * The followings are the available columns in table 'items':
  * @property string $id
- * @property string $account_id
+ * @property string $itemVatCat_id
  * @property string $name
  * @property integer $category_id
  * @property integer $parent_item_id
@@ -18,10 +18,20 @@
  * @property string $pic
  * @property integer $owner
  * @property integer $stockType
+ * @property integer $vat
  */
 class Item extends CActiveRecord
 {
 	const table='items';
+        public $vat; //loads vat from user by cat
+        
+        public function findByPk($id, $condition = '', $params = Array()){
+            $model = parent::findByPk($id, $condition = '', $params = Array());
+            $incomeMap=UserIncomeMap::model()->findByPk(array('user_id'=>Yii::app()->user->getId(), 'itemVatCat_id'=>$model->itemVatCat_id));
+            $model->vat=  Accounts::model()->findByPk($incomeMap->account_id)->src_tax;
+            return $model;
+        }
+        
 	function behaviors() {
 		return array(
 				///*
@@ -82,7 +92,7 @@ class Item extends CActiveRecord
 		return array(
 			array('category_id, parent_item_id, isProduct, profit, stockType', 'required'),
 			array('category_id, parent_item_id, isProduct, profit, unit_id, owner, stockType', 'numerical', 'integerOnly'=>true),
-			array('account_id', 'length', 'max'=>10),
+			array('itemVatCat_id', 'length', 'max'=>10),
 			array('name', 'length', 'max'=>100),
 			array('purchaseprice, saleprice', 'length', 'max'=>8),
 			array('currency_id', 'length', 'max'=>3),
@@ -91,7 +101,7 @@ class Item extends CActiveRecord
 			array('pic', 'file', 'types' => 'jpg, gif, png','allowEmpty'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, account_id, name,description, category_id, parent_item_id, isProduct, profit, unit_id, purchaseprice, saleprice, currency_id, pic, owner, stockType', 'safe', 'on'=>'search'),
+			array('id, itemVatCat_id, name,description, category_id, parent_item_id, isProduct, profit, unit_id, purchaseprice, saleprice, currency_id, pic, owner, stockType', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -108,6 +118,8 @@ class Item extends CActiveRecord
 			'Category'=>array(self::BELONGS_TO, 'Itemcategory','category_id'),
                         'Account'=>array(self::BELONGS_TO, 'Accounts','account_id'),
                         'Owner'=>array(self::BELONGS_TO, 'Users','owner'),
+                        'ItemVatCat'=>array(self::BELONGS_TO, 'ItemVatCat','itemVatCat_id'),
+                        
 		);
 	}
 
@@ -117,22 +129,24 @@ class Item extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'account_id' => 'Account',
-			'name' => 'Name',
-			'description'=>'Description',
-			'category_ids' => 'Category',
-			'parent_item_id' => 'Parent Item',
-			'isProduct' => 'Is Product',
-			'profit' => 'Profit',
-			'unit_id' => 'Unit',
-			'purchaseprice' => 'Purchaseprice',
-			'saleprice' => 'Saleprice',
-			'currency_id' => 'Currency',
-			//'src_tax'=> 'Source Tax',
-			'pic' => 'Pic',
-			'owner' => 'Owner',
-                        'stockType' => 'Stock Type',
+			'id'=>Yii::t('label','ID'),
+                        'itemVatCat_id'=>Yii::t('label','Item VAT Catagory'),
+                        'name'=>Yii::t('label','Name'),
+                        'unit_id'=>Yii::t('label','Unit'),
+                        'extcatnum'=>Yii::t('label','Extrnal No.'),
+                        'manufacturer'=>Yii::t('label','Manufacturer'),
+                        'saleprice'=>Yii::t('label','Sale Price'),
+                        'currency_id'=>Yii::t('label','Currency'),
+                        'ammount'=>Yii::t('label','Ammount'),
+                        'owner'=>Yii::t('label','Owner'),
+                        'category_id'=>Yii::t('label','Category'),
+                        'parent_item_id'=>Yii::t('label','Parent Item'),
+                        'isProduct'=>Yii::t('label','Is Product'),
+                        'profit'=>Yii::t('label','Profit'),
+                        'purchaseprice'=>Yii::t('label','Purchase Price'),
+                        'pic'=>Yii::t('label','Picture'),
+                        'description'=>Yii::t('label','Sescription'),
+                        'stockType'=>Yii::t('label','Stock Type'),
 		);
 	}
 
@@ -147,7 +161,7 @@ class Item extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
-		$criteria->compare('account_id',$this->account_id,true);
+		$criteria->compare('itemVatCat_id',$this->itemVatCat_id,true);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('category_id',$this->category_id);

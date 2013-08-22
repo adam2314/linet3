@@ -22,9 +22,9 @@
 	</div>
 
 	<div class="row">
-		<?php //echo $form->labelEx($model,'type'); ?>
-		<?php //echo $form->textField($model,'type'); ?>
-		<?php //echo $form->error($model,'type'); ?>
+		<?php echo $form->labelEx($model,'type'); ?>
+		<?php echo $form->dropDownList($model,'type',CHtml::listData(Acctype::model()->findAll(), 'id', 'name'));//currency ?>
+		<?php echo $form->error($model,'type'); ?>
 	</div>
         <div class="row">
 		<?php echo $form->labelEx($model,'currency_id'); ?>

@@ -5,8 +5,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List ItemVatCat','url'=>array('index')),
-	array('label'=>'Manage ItemVatCat','url'=>array('admin')),
+	//array('label'=>'List ItemVatCat','url'=>array('index')),
+	array('label'=>'Manage Item Tax Catagories','url'=>array('admin')),
 );
 
 $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Create Item Tax Catagory"),)); 
