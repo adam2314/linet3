@@ -54,7 +54,7 @@ class Docdetails extends CActiveRecord
 			array('doc_id, item_id, currency_id', 'length', 'max'=>10),
 			array('name', 'length', 'max'=>255),
 			array('qty', 'length', 'max'=>5),
-			array('unit_price, price, invprice', 'length', 'max'=>8),
+			array('unit_price, price, invprice', 'length', 'max'=>20),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

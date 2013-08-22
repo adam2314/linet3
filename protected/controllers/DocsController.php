@@ -112,8 +112,7 @@ class DocsController extends RightsController
 			
 		$docdetails =$model->docDetailes;
 		$doctype =$model->docType;
-		//$docstatus=CHtml::listData(Docstatus::model()->findAll(), 'id', 'name');
-		//$docstatus =Docstatus::model()->findByPk($model->status);
+
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 		if(isset($model->docStatus))
@@ -121,38 +120,46 @@ class DocsController extends RightsController
 			$this->redirect(array('view','id'=>$model->id));
 		}
 		if(isset($_POST['Docs'])){
+                        //adam: needs to add get max (for id)
+                        //adam: needs to add getMax for docnum
+                    
 			$model->attributes=$_POST['Docs'];
 			
 			print_r($_POST['Docdetails']);
+                        $line=0;
 			foreach($_POST['Docdetails'] as $key=>$detial){
-				$saved=false;
+                            
+				//$saved=false;
                                 $submodel=  Docdetails::model()->findByPk(array('doc_id'=>$model->id,'line'=>$detial['line']));
-                                if($submodel){
-                                    $submodel->attributes=$detial;
-                                    if(!$submodel->save())
-					echo "fatel error cant save doc detial";
-                                    else
-                                        $saved=true;
-                                }else{//new line
-
-                                    $submodel=new Docdetails;	
-                                    $submodel->attributes=$detial;
-                                    $submodel->doc_id=$model->id;
+                                if(!$submodel){//new line
+                                   $submodel=new Docdetails; 
+                                }
+                                
+                                $submodel->attributes=$detial;
+                                $submodel->doc_id=$model->id;
+                                
+                                if((int)$detial["item_id"]!=0){
                                     if($submodel->save()){
-                                            $saved=true;
+                                        $saved=true;
+                                        $line++;
                                     }else{
-                                            echo "fatel error cant save doc detial";
+                                        echo "fatel error cant save doc detial";
                                     }
-						
-				}
+                                }else{
+                                    
+                                }	
+				
+                                //
 				
 			}
-			if(count($model->docDetailes)!=0)//if more items in $docdetails delete them
-				foreach ($model->docDetailes as $docdetail)
-					$docdetail->delete();
-			
+			if(count($model->docDetailes)!=$line){//if more items in $docdetails delete them
+                                //exit;
+				for ($curLine=$line;$curLine< count($model->docDetailes);$curLine++)
+					$model->docDetailes[$curLine]->delete();
+                        }
 			if($model->save()){
                                 print "<br><hr><br>";
+                                $this->redirect(array('update','id'=>$model->id));
 				//$this->redirect(array('view','id'=>$model->id));
 			}
 		}
@@ -173,7 +180,7 @@ class DocsController extends RightsController
 		//$criteria=new CDbCriteria;
 		//$criteria->condition='doc_id=:docid';
 		//$criteria->params=array(':docid'=>$id);
-		$docdetails =$model1->docdetailes();
+		//$docdetails =$model1->docdetailes();
 		$doctype =$model1->docType();
 		$docstatus =Docstatus::model()->findByPk($model1->status);
 		// Uncomment the following line if AJAX validation is needed
@@ -190,7 +197,7 @@ class DocsController extends RightsController
 
 		
 		$this->render('create',array(
-			'model'=>$model1,'type'=>$doctype,'docdetails'=>$docdetails,
+			'model'=>$model1,'type'=>$doctype,
 		));
 	}
 	/**

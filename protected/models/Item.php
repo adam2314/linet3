@@ -94,7 +94,7 @@ class Item extends CActiveRecord
 			array('category_id, parent_item_id, isProduct, profit, unit_id, owner, stockType', 'numerical', 'integerOnly'=>true),
 			array('itemVatCat_id', 'length', 'max'=>10),
 			array('name', 'length', 'max'=>100),
-			array('purchaseprice, saleprice', 'length', 'max'=>8),
+			array('purchaseprice, saleprice', 'length', 'max'=>20),
 			array('currency_id', 'length', 'max'=>3),
 			array('description', 'safe'),
 			//array('src_tax', 'length', 'max'=>5),

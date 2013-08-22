@@ -68,7 +68,7 @@ class Docs extends CActiveRecord
 			array('company, address', 'length', 'max'=>80),
                         array('currency_id', 'length', 'max'=>3),
 			array('refnum', 'length', 'max'=>20),
-			array('sub_total, novat_total, vat, total, src_tax', 'length', 'max'=>8),
+			array('sub_total, novat_total, vat, total, src_tax', 'length', 'max'=>20),
 			array('issue_date, due_date, comments', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

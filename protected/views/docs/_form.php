@@ -15,7 +15,7 @@
 	<?php echo $form->hiddenField($model,"doctype"); ?>
         <?php echo CHTML::hiddenField("cur_rate","1"); ?>
         <?php echo CHTML::hiddenField("doc_rate","1"); ?>
-	<?php echo CHTML::hiddenField("doc_items","0"); ?>
+	<?php echo CHTML::hiddenField("doc_items",count($model->docDetailes)); ?>
 <div class="span4"><!--block-->
 	<p>
 		<?php echo $form->labelEx($model,'account_id'); ?>
@@ -251,7 +251,7 @@
 	jQuery(document).ready(function(){
 		//hideEmptyHeaders();
 		$(".add").click(function(){
-
+                        
 			var template = $('#template').val();
 
                         //var i=$(".templateTarget tr").length;
@@ -262,12 +262,18 @@
 			$('.templateTarget').append(template);
 			$('#doc_items').val(i+1);
 			// start specific commands
+                        
+                        console.clear();
+                        console.log('lets Build');
+                        console.log($('#doc_items').val());
                         calcLines();
 			// end specific commands
 		});
 
-		
-		
+
+                $( "#resizable" ).resizable();
+                $('.add').trigger('click');
+
 	});
 	//function hideEmptyHeaders(){
 	//	$('.templateTarget').filter(function(){return $.trim($(this).text())===''}).siblings('.templateHead').hide();
@@ -356,8 +362,82 @@ function itemChange(index){
 function detChange(index){
     CalcPrice(index);
 }
+function vatChange(index){
+    var qty = $('#Docdetails_'+index+'_qty').val();
+    var uprice = $('#Docdetails_'+index+'_unit_price').val();
+    var rate = $('#Docdetails_'+index+'_rate').val();
+    var doc_rate = $('#doc_rate').val();
+    var vatrate=$('#Docdetails_'+index+'_accvat').val();
+    
+    var linesum=$('#Docdetails_'+index+'_invprice').val()*1;
+    var vat=$('#Docdetails_'+index+'_vat').val()*1;
+    //var max=;
+    //$('#Docdetails_'+index+'_vat').val((itemtotal*(vat/100)).toFixed(2));
+    //$('#Docdetails_'+index+'_vatlabel').html((itemtotal*(vat/100)).toFixed(2)+" (%"+vat+")");
+    
+    if($('#Docdetails_'+index+'_inclodeVat').attr('checked')){
+        $('#Docdetails_'+index+'_invprice').val(linesum+vat);
+    }else{
+        CalcPrice(index);
+    }
+           
+    
+}
+function sumChange(index){
+    var qty = $('#Docdetails_'+index+'_qty').val()*1;
+    var uprice = $('#Docdetails_'+index+'_unit_price').val()*1;
+    var price = $('#Docdetails_'+index+'_price').val()*1;
+    var rate = $('#Docdetails_'+index+'_rate').val()*1;
+    var doc_rate = $('#doc_rate').val()*1;
+    var vatrate=$('#Docdetails_'+index+'_accvat').val()*1;
+    var linesum=$('#Docdetails_'+index+'_invprice').val()*1;
+    var vat=$('#Docdetails_'+index+'_vat').val()*1;
+    
+    if($('#Docdetails_'+index+'_inclodeVat').attr('checked')){
+        //console.log($('#Docdetails_'+index+'_inclodeVat'));
+        vat=linesum*(vatrate/100);
+        price=(linesum-vat)/(doc_rate*rate);
+        uprice=price/qty;
+        console.log(uprice);
+    }else{
+        vat=linesum*(vatrate/100);
+        price=(linesum)/(doc_rate*rate);
+        uprice=price/qty;
+        
+    }
+    
+    $('#Docdetails_'+index+'_vat').val(vat);
+    $('#Docdetails_'+index+'_vatlabel').html((linesum*(vat/100)).toFixed(2)+" (%"+vatrate+")");
+    $('#Docdetails_'+index+'_price').val(price);
+    $('#Docdetails_'+index+'_unit_price').val(uprice);
+}
 
-
+function priceChange(index){
+    var qty = Number($('#Docdetails_'+index+'_qty').val());
+    var uprice = Number($('#Docdetails_'+index+'_unit_price').val());
+    var price = Number($('#Docdetails_'+index+'_price').val());
+    var rate = Number($('#Docdetails_'+index+'_rate').val());
+    var doc_rate = Number($('#doc_rate').val());
+    var vatrate=Number($('#Docdetails_'+index+'_accvat').val());
+    var linesum=Number($('#Docdetails_'+index+'_invprice').val());
+    var vat=Number($('#Docdetails_'+index+'_vat').val());
+    
+    //if($('#Docdetails_'+index+'_inclodeVat').attr('checked')){
+        //console.log($('#Docdetails_'+index+'_inclodeVat'));
+        linesum=price * (rate/doc_rate);
+        vat=(price*(rate/doc_rate))*(vatrate/100);
+        //price=(linesum-vat)/doc_rate*rate;
+        uprice=price/qty;
+        
+        //linesum=price+vat;
+        console.log(uprice);
+    //}
+    
+    $('#Docdetails_'+index+'_vat').val(vat);
+    $('#Docdetails_'+index+'_vatlabel').html((linesum*(vat/100)).toFixed(2)+" (%"+vatrate+")");
+    $('#Docdetails_'+index+'_invprice').val(linesum);
+    $('#Docdetails_'+index+'_unit_price').val(uprice);
+}
 $('input').blur(function(){
     //console.log(this.id);
     //console.log($("#Docdetails_0_currency_id").length);
@@ -388,6 +468,7 @@ function CalcPrice(index) {
     var rate = $('#Docdetails_'+index+'_rate').val();
     var doc_rate = $('#doc_rate').val();
     var vat=$('#Docdetails_'+index+'_accvat').val();
+    var itemtotal;
     //console.log(doc_rate);
     //console.log(rate);
     //console.log(currency);
@@ -401,25 +482,26 @@ function CalcPrice(index) {
         itemtotal=price * (rate/doc_rate);
         
     }else{
-        itemtotal=price*1;
+        itemtotal=price;
         
     }
 
     
     $('#Docdetails_'+index+'_vat').val((itemtotal*(vat/100)).toFixed(2));
-    $('#Docdetails_'+index+'_invprice').val(itemtotal.toFixed(2));
+    $('#Docdetails_'+index+'_vatlabel').html((itemtotal*(vat/100)).toFixed(2)+" (%"+vat+")");
+    $('#Docdetails_'+index+'_invprice').val(itemtotal);
     CalcPriceSum();
 }
 
 function calcLines(){
     var elements = $('[id^=Docdetails][id$=line]');
     //var i=1;
-    console.clear();
+    
     for (var i=0; i<elements.length; i++){
         
-        console.log(elements[i]);
-        //$('#'+elements[line].id).val(i);
-        i++;
+        console.log(elements[i].id);
+        $('#'+elements[i].id).val(i+1);
+        //i++;
   }
     
     //var i=0;
@@ -438,8 +520,8 @@ function CalcPriceSum() {
     //adam out:  var vat=<?php echo Config::model()->findByPk('vat')->value;?>;
     for (var i=0; i<elements.length; i++) {
         //console.log(elements[i].id);
-        var itemtotal=parseFloat($('#'+elements[i].id).val());
-        var vat= parseFloat($('#'+selements[i].id).val());
+        var itemtotal=Number($('#'+elements[i].id).val());
+        var vat= Number($('#'+selements[i].id).val());
         //console.log(vat);
         //console.log(selements[i].id);
         //if(vatper!=0){
@@ -492,10 +574,7 @@ function CalcDueDate(valdate, pay_terms) {
 	//aler
 	$('#Docs_due_date').val(day + "-" + month + "-" + year);
 }
-$(function() {
-	$( "#resizable" ).resizable();
-        $('.add').trigger('click');
-});
+
 </script>
 
 </div><!-- form -->
