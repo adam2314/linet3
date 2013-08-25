@@ -45,11 +45,11 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View Document ") .
 
 
 
-	if($type->isdoc){
+	if($model->docType->isdoc){
 			//echo 'doc';
 			$detials=new Docdetails;
 			?>
-	<div class="row">
+	<div>
 		<table class="templateFrame grid" cellspacing="0">
         	<thead class="templateHead">
             	<tr>
@@ -77,13 +77,13 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View Document ") .
 				
 				foreach ($model->docDetailes as $docdetail){
                                         //print_r($docdetail);
-					echo $this->renderPartial('docdetialview', array('model'=>$docdetail,'type'=>$type,)); 
+					echo $this->renderPartial('docdetialview', array('model'=>$docdetail,)); 
 					$i++;
 				}
 		 ?>
             </tbody>
 		</table>
-			
+		</div>	
 	<?php		
 			
 		}

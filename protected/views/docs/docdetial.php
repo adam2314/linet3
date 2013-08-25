@@ -1,13 +1,22 @@
-<tr class="templateContent">
+<tr class="docContent">
     <td><b><?php echo $form->labelEx($model, 'item_id'); ?></b>
         <?php //echo $form->hiddenField($model, "[$i]id"); ?>
         <?php echo $form->hiddenField($model, "[$i]doc_id"); ?>
         <?php echo $form->hiddenField($model, "[$i]line"); ?>
-        <?php echo CHTML::hiddenField("Docdetails_${i}_rate","1");?>
-        <?php echo CHTML::hiddenField("Docdetails_${i}_accvat","1");
+        <?php 
+        if($model->currency_id=='')
+            $cur=1;
+        else 
+            $cur=Currates::model()->GetRate($model->currency_id);
+        echo CHTML::hiddenField("Docdetails_${i}_rate",$cur);?>
+        <?php 
+        if($model->item_id=='')
+            $vat=0;
+        else 
+            $vat=Item::model()->findByPk($model->item_id)->vat;
+        echo CHTML::hiddenField("Docdetails_${i}_accvat",$vat);
+        //echo ";$model->currency_id;$cur;$model->item_id;$vat;";
         echo $form->textField($model,"[$i]item_id",array('size'=>10,'maxlength'=>10, 'style' => "width: 60px;"));
-            //needs to load accvat
-            //needs to load rate
 /*
         $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
             'value' => $model->item_id,
@@ -54,7 +63,10 @@
     
     jQuery(function($) {
         jQuery("#Docdetails_<?php echo $i; ?>_item_id").autocomplete({"showAnim": "fold", "source": "/yii/demos/new/index.php?r=item/autocomplete"});
+        CalcPrice(<?php echo $i; ?>);
     });
+    
+
     $("#Docdetails_<?php echo $i; ?>_currency_id").change(function(){
         currChange(<?php echo $i; ?>);  
     });
@@ -87,7 +99,7 @@
     });
     $(".remove").click(function() {
             
-            $(this).parents(".templateContent:first").remove();
+            $(this).parents(".docContent:first").remove();
             CalcPriceSum();
             calcLines();
     });

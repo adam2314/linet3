@@ -1,11 +1,11 @@
 <?php
 
 /**
- * This is the model class for table "cheques".
+ * This is the model class for table "docCheques".
  *
- * The followings are the available columns in table 'cheques':
- * @property string $prefix
- * @property string $refnum
+ * The followings are the available columns in table 'docCheques':
+ * @property integer $id
+ * @property string $doc_id
  * @property integer $type
  * @property integer $creditcompany
  * @property string $cheque_num
@@ -16,14 +16,14 @@
  * @property string $sum
  * @property string $bank_refnum
  * @property string $dep_date
- * @property integer $id
+ * @property integer $line
  */
-class Doccheque extends CActiveRecord
+class Doccheques extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Cheques the static model class
+	 * @return Doccheques the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -46,7 +46,7 @@ class Doccheque extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('type, creditcompany, id, line', 'numerical', 'integerOnly'=>true),
+			array('type, creditcompany, line', 'numerical', 'integerOnly'=>true),
 			array('doc_id, cheque_num, bank_refnum', 'length', 'max'=>10),
 			array('bank, branch', 'length', 'max'=>3),
 			array('cheque_acct', 'length', 'max'=>20),
@@ -76,7 +76,7 @@ class Doccheque extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'doc_id' => 'Refnum',
+			'doc_id' => 'Doc',
 			'type' => 'Type',
 			'creditcompany' => 'Creditcompany',
 			'cheque_num' => 'Cheque Num',
@@ -102,8 +102,8 @@ class Doccheque extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('doc_id',$this->refnum,true);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('doc_id',$this->doc_id,true);
 		$criteria->compare('type',$this->type);
 		$criteria->compare('creditcompany',$this->creditcompany);
 		$criteria->compare('cheque_num',$this->cheque_num,true);

@@ -30,6 +30,53 @@
 class Docs extends CActiveRecord
 {
     //public $lang;
+        public $docDet=NULL;
+        public $docCheq=NULL;
+    
+    
+        
+        public function save($runValidation = true, $attributes = NULL) {
+            
+            $this->docnum=$this->newNum();
+            //$catagories=ItemVatCat::model()->findAll();
+            $a=parent::save($runValidation,$attributes);
+            
+            
+            if(!is_null($this->docDet)){
+                $line=0;
+                foreach($this->docDet as $key=>$detial){
+                        $submodel=  Docdetails::model()->findByPk(array('doc_id'=>$this->id,'line'=>$detial['line']));
+                        if(!$submodel){//new line
+                           $submodel=new Docdetails; 
+                        }
+
+                        $submodel->attributes=$detial;
+                        $submodel->doc_id=$this->id;
+
+                        if((int)$detial["item_id"]!=0){
+                            if($submodel->save()){
+                                $saved=true;
+                                $line++;
+                            }else{
+                                echo "fatel error cant save doc detial";
+                            }
+                        }else{
+
+                        }	
+
+                        //
+
+                }
+                if(count($this->docDetailes)!=$line){//if more items in $docdetails delete them
+                        //exit;
+                        for ($curLine=$line;$curLine< count($this->docDetailes);$curLine++)
+                                $this->docDetailes[$curLine]->delete();
+                }
+            }
+            return $a;
+        }
+        
+        
 	public function primaryKey()
 	{
 	    return 'id';
@@ -46,6 +93,17 @@ class Docs extends CActiveRecord
 		return parent::model($className);
 	}
 
+        
+        private function newNum(){
+            if($this->docnum==0){            
+                $this->docType->last_docnum=$this->docType->last_docnum+1;
+                $this->docType->save();
+                return $this->docType->last_docnum;
+            }else{
+                return $this->docnum;
+            }
+            
+	}
 	/**
 	 * @return string the associated database table name
 	 */
@@ -85,7 +143,7 @@ class Docs extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'docAccount_id'=>array(self::BELONGS_TO, 'Account', 'id'),
-			'docCheques'=>array(self::HAS_MANY, 'Cheques', 'doc_id'),
+			'docCheques'=>array(self::HAS_MANY, 'Doccheques', 'doc_id'),
 			'docDetailes'=>array(self::HAS_MANY, 'Docdetails', 'doc_id'),
 			'docType'=>array(self::BELONGS_TO, 'Doctype', 'doctype'),
 			'docStatus'=>array(self::BELONGS_TO, 'Docstatus', 'status'),

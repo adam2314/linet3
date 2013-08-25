@@ -70,6 +70,7 @@ class Docdetails extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'Docs'=>array(self::BELONGS_TO, 'Docs', 'doc_id'),
 		);
 	}
 
@@ -79,16 +80,16 @@ class Docdetails extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'doc_id' => 'Doc',
-			'item_id' => 'Item',
-			'name' => 'Name',
-			'description' => 'Description',
-			'qty' => 'Qty',
-			'unit_price' => 'Unit Price',
-			'currency_id' => 'Currency',
-			'price' => 'Price',
-			'invprice' => 'invoice Price',
-			'line' => 'Line',
+			'doc_id' => Yii::t('label','Doc'),
+			'item_id' => Yii::t('label','Item'),
+			'name' => Yii::t('label','Name'),
+			'description' => Yii::t('label','Description'),
+			'qty' => Yii::t('label','Qty'),
+			'unit_price' => Yii::t('label','Unit Price'),
+			'currency_id' => Yii::t('label','Currency'),
+			'price' => Yii::t('label','Price'),
+			'invprice' => Yii::t('label','invoice Price'),
+			'line' => Yii::t('label','Line'),
 		);
 	}
 

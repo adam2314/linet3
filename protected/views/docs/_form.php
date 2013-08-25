@@ -16,6 +16,7 @@
         <?php echo CHTML::hiddenField("cur_rate","1"); ?>
         <?php echo CHTML::hiddenField("doc_rate","1"); ?>
 	<?php echo CHTML::hiddenField("doc_items",count($model->docDetailes)); ?>
+        <?php echo CHTML::hiddenField("rcpt_items",count($model->docCheques)); ?>
 <div class="span4"><!--block-->
 	<p>
 		<?php echo $form->labelEx($model,'account_id'); ?>
@@ -107,12 +108,15 @@
 	</div>
     </div>
 </div><!-- form -->
-<div class="form">	
-<table  data-role="table" class="formtable" ><!-- docdetalies -->
-	<?php 
+
+
+<?php 
 		if($model->docType->isdoc){
 			
 			?>
+<div class="form">	
+<table  data-role="table" class="formtable" ><!-- docdetalies -->
+	
 	<!--<div class="row">-->
 		<thead>
                     <tr  class="head1">
@@ -131,8 +135,8 @@
 		</thead>	
 		<tfoot>
                     <tr>
-			<td colspan='6' class="add"><?php echo Yii::t('ui','New');?>
-        		<textarea id="template" style='display:none;'>       
+			<td colspan='6' class="docadd"><?php echo Yii::t('ui','New');?>
+        		<textarea id="doc" style='display:none;'>       
 	                      	<?php 
                         	echo $this->renderPartial('docdetial', array('model'=>new Docdetails,'form'=>$form,'i'=>'ABC')); 
                         	?>
@@ -183,7 +187,7 @@
                     </tr>
            	</tfoot>	
             	     
-		<tbody class="templateTarget">
+		<tbody class="docTarget">
 		
 			<?php $i=0;
 			if(count($model->docDetailes)!=0)
@@ -198,20 +202,92 @@
 		
 </table><!-- doc detiales -->
    
-</div><!-- form -->			
+</div><!-- form -->	
+                <?php }?>
+
+
+<?php 
+		if($model->docType->isrecipet){
+			
+			?>
+<div class="form">	
+<table  data-role="table" class="formtable" ><!-- docrecipet -->
+	
+
+    <thead>
+                    <tr  class="head1">
+                        <th><?php echo Yii::t('label','Type'); ?></th>   
+                        <th><?php echo Yii::t('label','Refnum'); ?></th>
+			
+			<th><?php echo Yii::t('label','Credit Company'); ?></th>
+			<th><?php echo Yii::t('label','Cheque No.'); ?></th>
+			<th><?php echo Yii::t('label','Bank'); ?></th>
+			<th><?php echo Yii::t('label','Branch'); ?></th>
+			<th><?php echo Yii::t('label','Cheque Account'); ?></th>
+			<th><?php echo Yii::t('label','Cheque Date'); ?></th>
+			<th><?php echo Yii::t('label','Sum'); ?></th>
+			<th><?php echo Yii::t('label','Bank Refnum'); ?></th>
+			<th><?php echo Yii::t('label','Dep Date'); ?></th>
+			
+                        
+                        
+                        
+                        
+                        
+                                            <th>action</th>
+                    </tr>
+		</thead>	
+		<tfoot>
+                    <tr>
+			<td colspan='6' class="rcptadd"><?php echo Yii::t('ui','New');?>
+        		<textarea id="rcpt" style='display:none;'>       
+	                      	<?php 
+                        	echo $this->renderPartial('rcptdetial', array('model'=>new Doccheques,'form'=>$form,'i'=>'ABC')); 
+                        	?>
+                        </textarea>      
+                        </td>
+                        <td>
+                                    <?php echo $form->labelEx($model,'sub_total'); ?>
+                                    <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8)); ?>
+                                    <?php echo $form->error($model,'sub_total'); ?>
+                       </td>
+                        <td>
+                                    <?php echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
+                        </td>
+                        <td>
+                                    <?php echo $form->textField($model,'vat',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
+                        </td>
+                    </tr>
+  
+           	</tfoot>	
+            	     
+		<tbody class="rcptTarget">
+		
+			<?php $i=0;
+			if(count($model->docCheques)!=0)		
+                            foreach ($model->docCheques as $rcptdetail){
+                                    echo $this->renderPartial('rcptdetial', array('model'=>$rcptdetail,'form'=>$form,'i'=>"{$i}")); 
+                                    $i++;
+                            }		 ?>
+                </tbody>
+    
+    
+    
+    
+</table><!-- doc recipet -->
+</div><!-- form -->	
+<?php }?>
 	<?php		
 			
-		}
+	
 		
-		if($model->docType->isrecipet){
-			echo 'recipet';
-		}
+		
 		if($model->docType->iscontract){
 			echo 'contract';
 		}
 	?>
 	<!--</div>-->
-		<script type="text/javascript">
+<script type="text/javascript">
 		/*
 		 * jQuery Calculation Plug-in
 		 *
@@ -250,16 +326,16 @@
 	
 	jQuery(document).ready(function(){
 		//hideEmptyHeaders();
-		$(".add").click(function(){
+		$(".docadd").click(function(){
                         
-			var template = $('#template').val();
+			var template = $('#doc').val();
 
                         //var i=$(".templateTarget tr").length;
                         var i=$('#doc_items').val()*1;
 			template=template.replace(/ABC/g, i);
 
 			
-			$('.templateTarget').append(template);
+			$('.docTarget').append(template);
 			$('#doc_items').val(i+1);
 			// start specific commands
                         
@@ -271,31 +347,39 @@
 		});
 
 
+                $(".rcptadd").click(function(){
+                        
+			var template = $('#rcpt').val();
+
+                        //var i=$(".templateTarget tr").length;
+                        var i=$('#rcpt_items').val()*1;
+			template=template.replace(/ABC/g, i);
+
+			
+			$('.rcptTarget').append(template);
+			$('#rcpt_items').val(i+1);
+			// start specific commands
+                        
+                        console.clear();
+                        console.log('lets Build');
+                        console.log($('#rcpt_items').val());
+                        rcptcalcLines();
+			// end specific commands
+		});
+
+
+
+
                 $( "#resizable" ).resizable();
-                $('.add').trigger('click');
+                $('.docadd').trigger('click');
+                $('.rcptadd').trigger('click');
 
 	});
 	//function hideEmptyHeaders(){
 	//	$('.templateTarget').filter(function(){return $.trim($(this).text())===''}).siblings('.templateHead').hide();
 	//}
 	
-	</script>
 
-	<div class="form">
-            <p>
-                                    <?php echo $form->labelEx($model,'comments'); ?>
-                                    <?php echo $form->textArea($model,'comments',array('rows'=>6, 'cols'=>50)); ?>
-                                    <?php echo $form->error($model,'comments'); ?>
-                            </p>
-            
-	<p>
-	<!--</div>
-
-	<div class="row buttons">-->
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
-	<!--</div>-->
-</p>
-<script type="text/javascript">
 $('#Docs_currency_id').change(function(){    
     var currency = $('#Docs_currency_id').val();
     
@@ -363,14 +447,14 @@ function detChange(index){
     CalcPrice(index);
 }
 function vatChange(index){
-    var qty = $('#Docdetails_'+index+'_qty').val();
-    var uprice = $('#Docdetails_'+index+'_unit_price').val();
-    var rate = $('#Docdetails_'+index+'_rate').val();
-    var doc_rate = $('#doc_rate').val();
-    var vatrate=$('#Docdetails_'+index+'_accvat').val();
+    //var qty = $('#Docdetails_'+index+'_qty').val();
+    //var uprice = $('#Docdetails_'+index+'_unit_price').val();
+    //var rate = $('#Docdetails_'+index+'_rate').val();
+    //var doc_rate = $('#doc_rate').val();
+    //var vatrate=$('#Docdetails_'+index+'_accvat').val();
     
-    var linesum=$('#Docdetails_'+index+'_invprice').val()*1;
-    var vat=$('#Docdetails_'+index+'_vat').val()*1;
+    var linesum=Number($('#Docdetails_'+index+'_invprice').val());
+    var vat=Number($('#Docdetails_'+index+'_vat').val());
     //var max=;
     //$('#Docdetails_'+index+'_vat').val((itemtotal*(vat/100)).toFixed(2));
     //$('#Docdetails_'+index+'_vatlabel').html((itemtotal*(vat/100)).toFixed(2)+" (%"+vat+")");
@@ -384,14 +468,14 @@ function vatChange(index){
     
 }
 function sumChange(index){
-    var qty = $('#Docdetails_'+index+'_qty').val()*1;
-    var uprice = $('#Docdetails_'+index+'_unit_price').val()*1;
-    var price = $('#Docdetails_'+index+'_price').val()*1;
-    var rate = $('#Docdetails_'+index+'_rate').val()*1;
-    var doc_rate = $('#doc_rate').val()*1;
-    var vatrate=$('#Docdetails_'+index+'_accvat').val()*1;
-    var linesum=$('#Docdetails_'+index+'_invprice').val()*1;
-    var vat=$('#Docdetails_'+index+'_vat').val()*1;
+    var qty = Number($('#Docdetails_'+index+'_qty').val());
+    var uprice = Number($('#Docdetails_'+index+'_unit_price').val());
+    var price = Number($('#Docdetails_'+index+'_price').val());
+    var rate = Number($('#Docdetails_'+index+'_rate').val());
+    var doc_rate = Number($('#doc_rate').val());
+    var vatrate=Number($('#Docdetails_'+index+'_accvat').val());
+    var linesum=Number($('#Docdetails_'+index+'_invprice').val());
+    var vat=Number($('#Docdetails_'+index+'_vat').val());
     
     if($('#Docdetails_'+index+'_inclodeVat').attr('checked')){
         //console.log($('#Docdetails_'+index+'_inclodeVat'));
@@ -574,9 +658,24 @@ function CalcDueDate(valdate, pay_terms) {
 	//aler
 	$('#Docs_due_date').val(day + "-" + month + "-" + year);
 }
+/**********************************doc end******************************/
+
 
 </script>
+<div class="form">
+            <p>
+                                    <?php echo $form->labelEx($model,'comments'); ?>
+                                    <?php echo $form->textArea($model,'comments',array('rows'=>6, 'cols'=>50)); ?>
+                                    <?php echo $form->error($model,'comments'); ?>
+                            </p>
+            
+	<p>
+	<!--</div>
 
+	<div class="row buttons">-->
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+	<!--</div>-->
+</p>
 </div><!-- form -->
 <?php $this->endWidget(); ?>
 

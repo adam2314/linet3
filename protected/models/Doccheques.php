@@ -1,11 +1,11 @@
 <?php
 
 /**
- * This is the model class for table "docCheques".
+ * This is the model class for table "cheques".
  *
- * The followings are the available columns in table 'docCheques':
- * @property integer $id
- * @property string $doc_id
+ * The followings are the available columns in table 'cheques':
+ * @property string $prefix
+ * @property string $refnum
  * @property integer $type
  * @property integer $creditcompany
  * @property string $cheque_num
@@ -16,15 +16,21 @@
  * @property string $sum
  * @property string $bank_refnum
  * @property string $dep_date
- * @property integer $line
+ * @property integer $id
  */
 class Doccheques extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Doccheques the static model class
+	 * @return Cheques the static model class
 	 */
+    
+         public function primaryKey(){
+	    return array('doc_id','line');
+	}
+    
+    
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
@@ -54,7 +60,7 @@ class Doccheques extends CActiveRecord
 			array('cheque_date, dep_date', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, doc_id, type, creditcompany, cheque_num, bank, branch, cheque_acct, cheque_date, sum, bank_refnum, dep_date, line', 'safe', 'on'=>'search'),
+			array('doc_id, type, creditcompany, cheque_num, bank, branch, cheque_acct, cheque_date, sum, bank_refnum, dep_date, line', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,6 +72,7 @@ class Doccheques extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'Docs'=>array(self::BELONGS_TO, 'Docs', 'doc_id'),
 		);
 	}
 
@@ -75,19 +82,18 @@ class Doccheques extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'doc_id' => 'Doc',
-			'type' => 'Type',
-			'creditcompany' => 'Creditcompany',
-			'cheque_num' => 'Cheque Num',
-			'bank' => 'Bank',
-			'branch' => 'Branch',
-			'cheque_acct' => 'Cheque Acct',
-			'cheque_date' => 'Cheque Date',
-			'sum' => 'Sum',
-			'bank_refnum' => 'Bank Refnum',
-			'dep_date' => 'Dep Date',
-			'line' => 'Line',
+			'doc_id' => Yii::t('label','Refnum'),
+			'type' => Yii::t('label','Type'),
+			'creditcompany' => Yii::t('label','Creditcompany'),
+			'cheque_num' => Yii::t('label','Cheque No.'),
+			'bank' => Yii::t('label','Bank'),
+			'branch' => Yii::t('label','Branch'),
+			'cheque_acct' => Yii::t('label','Cheque Account'),
+			'cheque_date' => Yii::t('label','Cheque Date'),
+			'sum' => Yii::t('label','Sum'),
+			'bank_refnum' => Yii::t('label','Bank Refnum'),
+			'dep_date' => Yii::t('label','Dep Date'),
+			'line' => Yii::t('label','Line'),
 		);
 	}
 
@@ -102,8 +108,7 @@ class Doccheques extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('doc_id',$this->doc_id,true);
+		$criteria->compare('doc_id',$this->refnum,true);
 		$criteria->compare('type',$this->type);
 		$criteria->compare('creditcompany',$this->creditcompany);
 		$criteria->compare('cheque_num',$this->cheque_num,true);
