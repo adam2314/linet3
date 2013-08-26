@@ -51,13 +51,15 @@
 
 	<div clasrow">
 		<?php echo $form->labelEx($model,'account_type'); ?>
-		<?php echo $form->textField($model,'account_type'); ?>
+		<?php echo $form->dropDownList($model,'account_type',CHtml::listData(Acctype::model()->findAll(), 'id', 'name'));
+                //echo $form->textField($model,'account_type'); ?>
 		<?php echo $form->error($model,'account_type'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'docStatus_id'); ?>
-		<?php echo $form->textField($model,'docStatus_id'); ?>
+		<?php echo $form->dropDownList($model,'docStatus_id',CHtml::listData(Docstatus::model()->findAllByAttributes(array('doc_type'=>$model->id)), 'num', 'name'));
+                //echo $form->textField($model,'docStatus_id'); ?>
 		<?php echo $form->error($model,'docStatus_id'); ?>
 	</div>
 

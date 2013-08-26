@@ -45,7 +45,8 @@ return array(
 			//'ipFilters'=>array('127.0.0.1','::1'),
 			//'ipFilters'=>array('192.168.25.134','::1'),
 			//'ipFilters'=>array('172.22.102.16','::24'),
-						'ipFilters'=>array('172.22.102.12','::24'),
+						//'ipFilters'=>array('172.22.102.12','::24'),
+                    'ipFilters'=>array('93.172.157.9','::24'),
                         //'ipFilters'=>array('62.219.135.89','::24'),
 						//'ipFilters'=>array('85.250.92.183','::24'),
 				
@@ -59,6 +60,11 @@ return array(
 
 	// application components
 	'components'=>array(
+                
+		'Paypal' => array(
+			'class'=>'application.components.Paypal',
+			
+		),
 		'session' => array (
 				'autoStart' => True,
 				'class' => 'system.web.CDbHttpSession',

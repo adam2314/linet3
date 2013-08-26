@@ -1,25 +1,19 @@
 <?php
 
 /**
- * This is the model class for table "docStatus".
+ * This is the model class for table "bankName".
  *
- * The followings are the available columns in table 'docStatus':
+ * The followings are the available columns in table 'bankName':
  * @property integer $id
- * @property integer $num
- * @property integer $doc_type
  * @property string $name
- * @property integer $looked
- * @property string $action
  */
-class Docstatus extends CActiveRecord{
+class BankName extends CActiveRecord{
+        const table='bankName';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Docstatus the static model class
+	 * @return BankName the static model class
 	 */
-        public function primaryKey(){
-	    return array('num','doc_type');
-	}
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
@@ -30,7 +24,7 @@ class Docstatus extends CActiveRecord{
 	 */
 	public function tableName()
 	{
-		return 'docStatus';
+		return BankName::table;
 	}
 
 	/**
@@ -41,12 +35,12 @@ class Docstatus extends CActiveRecord{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('num, doc_type, name, looked, action', 'required'),
-			array('num, doc_type, looked', 'numerical', 'integerOnly'=>true),
-			array('name, action', 'length', 'max'=>255),
+			array('id, name', 'required'),
+			array('id', 'numerical', 'integerOnly'=>true),
+			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, num, doc_type, name, looked, action', 'safe', 'on'=>'search'),
+			array('id, name', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,12 +61,8 @@ class Docstatus extends CActiveRecord{
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'num' => 'Num',
-			'doc_type' => 'Doc Type',
-			'name' => 'Name',
-			'looked' => 'Looked',
-			'action' => 'Action',
+						'id'=>Yii::t('label','ID'),
+						'name'=>Yii::t('label','Name'),
 		);
 	}
 
@@ -88,14 +78,16 @@ class Docstatus extends CActiveRecord{
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('num',$this->num);
-		$criteria->compare('doc_type',$this->doc_type);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('looked',$this->looked);
-		$criteria->compare('action',$this->action,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+        
+        public static function AutoComplete($name='') {
+		$sql= 'SELECT id as value, name AS label FROM '.BankName::table.' WHERE name LIKE :name';
+		$name = $name.'%';
+		return Yii::app()->db->createCommand($sql)->queryAll(true,array(':name'=>$name));
 	}
 }

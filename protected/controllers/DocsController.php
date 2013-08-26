@@ -26,27 +26,26 @@ class DocsController extends RightsController
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate($type=1)
-	{
+	public function actionCreate($type=1){
 		
 		$model=new Docs;
 		$type=(isset($_POST['Docs']['doctype']))? (int)$_POST['Docs']['doctype']:$type;
 		$model->doctype=$type;
-                
-		$doctype =Doctype::model()->findByPk($type);
+                $model->status=$model->docType->docStatus_id;
+		$doctype =$model->docType;
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Docs']))
-		{
+		if(isset($_POST['Docs'])){
 			$model->attributes=$_POST['Docs'];
-                        $model->docDet=$_POST['Docdetails'];
-                        
+                        if(isset($_POST['Docdetails'])) $model->docDet=$_POST['Docdetails'];
+                        if(isset($_POST['Doccheques'])) $model->docCheq=$_POST['Doccheques'];
                         
                         
 			if($model->save())
-                                print 'saved';
+                                //print 'saved';
 				//$this->redirect(array('view','id'=>$model->id));
+                                $this->redirect(array('update','id'=>$model->id));
 		}
 		
 		
@@ -76,13 +75,14 @@ class DocsController extends RightsController
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 		if(isset($model->docStatus))
-		if($model->docStatus->looked){
-			$this->redirect(array('view','id'=>$model->id));
-		}
+                    if($model->docStatus->looked){
+                            $this->redirect(array('view','id'=>$model->id));
+                    }
 		if(isset($_POST['Docs'])){
 			$model->attributes=$_POST['Docs'];
 			
-			$model->docDet=$_POST['Docdetails'];
+			if(isset($_POST['Docdetails'])) $model->docDet=$_POST['Docdetails'];
+                        if(isset($_POST['Doccheques'])) $model->docCheq=$_POST['Doccheques'];
                         
 			if($model->save()){
                                 $this->redirect(array('update','id'=>$model->id));
@@ -100,17 +100,20 @@ class DocsController extends RightsController
         
     public function actionDuplicate($id,$type=0){
 		$id=(int)$id;
-		$model1=$this->loadModel($id);
+		$model=$this->loadModel($id);
 
 		
-		$doctype =$model1->docType();
-		$docstatus =Docstatus::model()->findByPk($model1->status);
+		//$doctype =$model1->docType();
+                $model->refnum=$id;
+                $model->status=$model->docType->docStatus_id;//switch status back to defult for doc
+                
+		//$docstatus =Docstatus::model()->findByPk($model1->status);
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-		if(isset($docstatus))
+		/*if(isset($docstatus))
                     if($docstatus->looked){
                             $this->redirect(array('view','id'=>$model->id));
-                    }
+                    }*/
 		if(isset($_POST['Docs'])){
 			
 			$this->actionCreate(0);
@@ -119,7 +122,7 @@ class DocsController extends RightsController
 
 		
 		$this->render('create',array(
-			'model'=>$model1,'type'=>$doctype,
+			'model'=>$model,'type'=>$model->docType,
 		));
 	}
 	/**

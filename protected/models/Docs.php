@@ -27,8 +27,7 @@
  * @property string $comments
  * @property integer $owner
  */
-class Docs extends CActiveRecord
-{
+class Docs extends CActiveRecord{
     //public $lang;
         public $docDet=NULL;
         public $docCheq=NULL;
@@ -41,37 +40,59 @@ class Docs extends CActiveRecord
             //$catagories=ItemVatCat::model()->findAll();
             $a=parent::save($runValidation,$attributes);
             
-            
+            /***********************doc********************/
             if(!is_null($this->docDet)){
                 $line=0;
                 foreach($this->docDet as $key=>$detial){
-                        $submodel=  Docdetails::model()->findByPk(array('doc_id'=>$this->id,'line'=>$detial['line']));
-                        if(!$submodel){//new line
-                           $submodel=new Docdetails; 
-                        }
+                    $submodel=  Docdetails::model()->findByPk(array('doc_id'=>$this->id,'line'=>$detial['line']));
+                    if(!$submodel){//new line
+                       $submodel=new Docdetails; 
+                    }
 
-                        $submodel->attributes=$detial;
-                        $submodel->doc_id=$this->id;
+                    $submodel->attributes=$detial;
+                    $submodel->doc_id=$this->id;
 
-                        if((int)$detial["item_id"]!=0){
-                            if($submodel->save()){
-                                $saved=true;
-                                $line++;
-                            }else{
-                                echo "fatel error cant save doc detial";
-                            }
+                    if((int)$detial["item_id"]!=0){
+                        if($submodel->save()){
+                            $saved=true;
+                            $line++;
                         }else{
-
-                        }	
-
-                        //
-
+                            echo "fatel error cant save doc detial";
+                        }
+                    }
                 }
                 if(count($this->docDetailes)!=$line){//if more items in $docdetails delete them
-                        //exit;
                         for ($curLine=$line;$curLine< count($this->docDetailes);$curLine++)
                                 $this->docDetailes[$curLine]->delete();
                 }
+            }
+            /**********************rcpt********************/
+            if(!is_null($this->docCheq)){
+                $line=0;
+                foreach($this->docCheq as $key=>$rcpt){
+                    $submodel=  Doccheques::model()->findByPk(array('doc_id'=>$this->id,'line'=>$rcpt['line']));
+                    if(!$submodel){//new line
+                       $submodel=new Doccheques; 
+                    }
+
+                    $submodel->attributes=$rcpt;
+                    $submodel->doc_id=$this->id;
+
+                    if((int)$rcpt["type"]!=0){
+                        if($submodel->save()){
+                            $saved=true;
+                            $line++;
+                        }else{
+                            echo "fatel error cant save doc rcpt";
+                            //exit;
+                        }
+                    }
+                }
+                    if(count($this->docCheques)!=$line){//if more items in $docCheques delete them
+                            for ($curLine=$line;$curLine< count($this->docCheques);$curLine++)
+                                    $this->docCheques[$curLine]->delete();
+                    }
+                
             }
             return $a;
         }

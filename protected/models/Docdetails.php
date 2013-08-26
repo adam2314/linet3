@@ -28,8 +28,7 @@ class Docdetails extends CActiveRecord
 	}
 
         
-        public function primaryKey()
-	{
+        public function primaryKey(){
 	    return array('doc_id','line');
 	}
         

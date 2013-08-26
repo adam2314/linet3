@@ -15,9 +15,9 @@
         else 
             $vat=Item::model()->findByPk($model->item_id)->vat;
         echo CHTML::hiddenField("Docdetails_${i}_accvat",$vat);
-        //echo ";$model->currency_id;$cur;$model->item_id;$vat;";
-        echo $form->textField($model,"[$i]item_id",array('size'=>10,'maxlength'=>10, 'style' => "width: 60px;"));
-/*
+
+        //echo $form->textField($model,"[$i]item_id",array('size'=>10,'maxlength'=>10, 'style' => "width: 60px;"));
+
         $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
             'value' => $model->item_id,
             'name' => "Docdetails[$i][item_id]",
@@ -27,7 +27,7 @@
             'options' => array(
                 'showAnim' => 'fold',
             ),
-        ));*/
+        ));
 
         ?>
     </td>
@@ -35,8 +35,8 @@
 
 
 
-    <td><b><?php echo $form->labelEx($model, 'name'); ?></b><?php //echo $form->textField($model, "[$i]name", array('size' => 10, 'maxlength' => 255, 'style' => "width: 110px;")); 
-                                                                    echo $form->dropDownList($model, "[$i]name", CHtml::listData(Item::model()->findAll(), 'id', 'name')); ?></td>
+    <td><b><?php echo $form->labelEx($model, 'name'); ?></b><?php echo $form->textField($model, "[$i]name", array('size' => 10, 'maxlength' => 255, 'style' => "width: 110px;")); 
+                                                                    //echo $form->dropDownList($model, "[$i]name", CHtml::listData(Item::model()->findAll(), 'id', 'name')); ?></td>
     <td><b><?php echo $form->labelEx($model, 'description'); ?></b><?php echo $form->textField($model, "[$i]description", array('rows' => 1, 'cols' => 10, 'style' => "width: 120px;")); ?></td>
     <td><b><?php echo $form->labelEx($model, 'qty'); ?></b><?php echo $form->textField($model, "[$i]qty", array('size' => 5, 'maxlength' => 5, 'style' => "width: 60px;")); ?></td>
     <td><b><?php echo $form->labelEx($model, 'unit_price'); ?></b><?php echo $form->textField($model, "[$i]unit_price", array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?></td>
@@ -59,13 +59,22 @@
 <script type="text/javascript">
     
     $("#Docdetails_<?php echo $i; ?>_currency_id").chosen();
-    $("#Docdetails_<?php echo $i; ?>_name").chosen();
+    //$("#Docdetails_<?php echo $i; ?>_name").chosen();
     
     jQuery(function($) {
-        jQuery("#Docdetails_<?php echo $i; ?>_item_id").autocomplete({"showAnim": "fold", "source": "/yii/demos/new/index.php?r=item/autocomplete"});
+        jQuery("#Docdetails_<?php echo $i; ?>_item_id").autocomplete({"minLength":0, "showAnim": "fold", "source": "/yii/demos/new/index.php?r=item/autocomplete"});
         CalcPrice(<?php echo $i; ?>);
     });
-    
+    var det=true;
+    $("#Docdetails_<?php echo $i; ?>_item_id").focus(function(){
+        if($("#Docdetails_<?php echo $i; ?>_item_id").val()=='' && det){
+            $("#Docdetails_<?php echo $i; ?>_item_id").autocomplete("search","");
+            det=false;
+        }
+    });
+
+
+
 
     $("#Docdetails_<?php echo $i; ?>_currency_id").change(function(){
         currChange(<?php echo $i; ?>);  
@@ -76,9 +85,9 @@
         vatChange(<?php echo $i; ?>);  
     });
     
-    $("#Docdetails_<?php echo $i; ?>_name").change(function(){
-        nameChange(<?php echo $i; ?>);  
-    });
+    //$("#Docdetails_<?php echo $i; ?>_name").change(function(){
+    //    nameChange(<?php echo $i; ?>);  
+    //});
     
     $("#Docdetails_<?php echo $i; ?>_item_id").blur(function(){
         itemChange(<?php echo $i; ?>);  

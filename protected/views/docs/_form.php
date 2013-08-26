@@ -5,8 +5,6 @@
 	'enableAjaxValidation'=>false,
 )); 
 
-//Currates::model()->GetRateList();
-
 ?>
 <div class="form">
 	<!-- <p class="note">Fields with <span class="required">*</span> are required.</p>-->
@@ -20,16 +18,17 @@
 <div class="span4"><!--block-->
 	<p>
 		<?php echo $form->labelEx($model,'account_id'); ?>
-		<?php 
+		<?php //echo $model->docType->account_type . ";".Acctype::model()->getType('customers');
 		
 		$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 	    'name'=>'Docs[account_id]',
 		'id'=>'Docs_account_id',
 	    'value'=>"$model->account_id",
-	    'source'=>$this->createUrl('/accounts/autocomplete',array('type'=>Acctype::model()->getType('customers'))),
+	    'source'=>$this->createUrl('/accounts/autocomplete',array('type'=>$model->docType->account_type)),
 		//'source'=>'/accounts/autocomplete&type='.Acctype::model()->getType('outcomes'),
 	    // additional javascript options for the autocomplete plugin
 	    'options'=>array(
+                    'minLength'=>0,
 	            'showAnim'=>'fold',
 	    ),
 	));
@@ -46,7 +45,7 @@
     
         <p>
             <?php echo $form->labelEx($model,'status'); ?>
-            <?php echo $form->dropDownList($model,'status',CHtml::listData(Docstatus::model()->findAll(), 'id', 'name'));?>
+            <?php echo $form->dropDownList($model,'status',CHtml::listData(Docstatus::model()->findAllByAttributes(array('doc_type'=>$model->doctype)), 'num', 'name'));//Docstatus::model()->findAll();?>
             <?php //echo $form->textField($model,'status'); ?>
             <?php echo $form->error($model,'status'); ?>
         </p>
@@ -85,7 +84,17 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'refnum'); ?>
-		<?php echo $form->textField($model,'refnum',array('size'=>20,'maxlength'=>20)); ?>
+            <div id="Docsrefnum">
+		<?php 
+                $perent=Docs::model()->findByPk($model->refnum);
+                if($perent){
+                        echo CHtml::link($perent->docType->name." #".$perent->docnum,array('docs/view',"id"=>$model->refnum));    
+                }
+                ?>
+            </div>
+                <?php echo CHtml::link('Choose Doc', '#', array('onclick'=>'$("#choseRefDoc").dialog("open"); return false;',)); ?>
+            
+                <?php echo $form->hiddenField($model,'refnum',array('size'=>20,'maxlength'=>20)); ?>
 		<?php echo $form->error($model,'refnum'); ?>
 	</div>
 
@@ -225,6 +234,7 @@
 			<th><?php echo Yii::t('label','Branch'); ?></th>
 			<th><?php echo Yii::t('label','Cheque Account'); ?></th>
 			<th><?php echo Yii::t('label','Cheque Date'); ?></th>
+                        <th><?php echo Yii::t('label','Currency'); ?></th>
 			<th><?php echo Yii::t('label','Sum'); ?></th>
 			<th><?php echo Yii::t('label','Bank Refnum'); ?></th>
 			<th><?php echo Yii::t('label','Dep Date'); ?></th>
@@ -239,7 +249,7 @@
 		</thead>	
 		<tfoot>
                     <tr>
-			<td colspan='6' class="rcptadd"><?php echo Yii::t('ui','New');?>
+			<td colspan='8' class="rcptadd"><?php echo Yii::t('ui','New');?>
         		<textarea id="rcpt" style='display:none;'>       
 	                      	<?php 
                         	echo $this->renderPartial('rcptdetial', array('model'=>new Doccheques,'form'=>$form,'i'=>'ABC')); 
@@ -251,11 +261,9 @@
                                     <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8)); ?>
                                     <?php echo $form->error($model,'sub_total'); ?>
                        </td>
+                        
                         <td>
-                                    <?php echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
-                        </td>
-                        <td>
-                                    <?php echo $form->textField($model,'vat',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
+                                    <div id="rcptSum"></div><?php echo CHTML::hiddenField('rcptsum'); ?>
                         </td>
                     </tr>
   
@@ -325,6 +333,16 @@
 	};
 	
 	jQuery(document).ready(function(){
+                $("#docs-form").submit(function() {
+                    
+                    if (($('#Docs_total').length)&&($('#rcptsum').length)) {
+                        if(Number($('#Docs_total').val())!=Number($('#rcptsum').val())){
+                          alert("sumisnot equil");
+                          return false;
+                        }
+                    }
+                });
+        
 		//hideEmptyHeaders();
 		$(".docadd").click(function(){
                         
@@ -339,9 +357,9 @@
 			$('#doc_items').val(i+1);
 			// start specific commands
                         
-                        console.clear();
-                        console.log('lets Build');
-                        console.log($('#doc_items').val());
+                        //console.clear();
+                        //console.log('lets Build');
+                        //console.log($('#doc_items').val());
                         calcLines();
 			// end specific commands
 		});
@@ -359,15 +377,24 @@
 			$('.rcptTarget').append(template);
 			$('#rcpt_items').val(i+1);
 			// start specific commands
+                        $('#Doccheques_<?php echo $i; ?>_type').val(0);
+                        $('#Doccheques_<?php echo $i; ?>_type').trigger("liszt:updated");
                         
-                        console.clear();
-                        console.log('lets Build');
-                        console.log($('#rcpt_items').val());
+                        //console.clear();
+                        //console.log('lets Build');
+                        //console.log($('#rcpt_items').val());
                         rcptcalcLines();
 			// end specific commands
 		});
-
-
+                var docacc=true;
+                //var det=new Array();
+                $("#Docs_account_id").focus(function(){
+                    if($("#Docs_account_id").val()=='' && docacc){
+                        $("#Docs_account_id").autocomplete("search","");
+                        docacc=false;
+                    }
+                });
+                
 
 
                 $( "#resizable" ).resizable();
@@ -379,24 +406,33 @@
 	//	$('.templateTarget').filter(function(){return $.trim($(this).text())===''}).siblings('.templateHead').hide();
 	//}
 	
+function refNum(id,docnum,typename){//
+    
+    console.log("fire");
+    $("#choseRefDoc").dialog("close"); 
 
+    $('#Docsrefnum').html(typename+" #"+docnum);
+    $('#Docs_refnum').val(id);
+
+    return false;
+    
+    
+}
 $('#Docs_currency_id').change(function(){    
     var currency = $('#Docs_currency_id').val();
     
     $.get("<?php echo $this->createUrl('/');?>/index.php",  {"r": "Currates/Getrate" ,"id" : currency},
-				function(data) {
-                                         $('#doc_rate').val(data);
-                                         var elements = $('.currSelect');
-                                         for (var i=0; i<elements.length; i++) {
-                                             index=elements[i].id.replace("Docdetails_",'').replace("_currency_id",'');
-                                             CalcPrice(index);
-                                         }
-                                         
-				}, "json")
-				.error(function() { });
-                        
-    
-    
+        function(data) {
+                 $('#doc_rate').val(data);
+                 var elements = $('.currSelect');
+                 for (var i=0; i<elements.length; i++) {
+                     index=elements[i].id.replace("Docdetails_",'').replace("_currency_id",'');
+                     CalcPrice(index);
+                 }
+
+        }, "json")
+        .error(function() { });
+
 });
 function currChange(index) {
     var currency = $('#Docdetails_'+index+'_currency_id').val();
@@ -410,12 +446,12 @@ function currChange(index) {
         
         
 }
-
+/*
 function nameChange(index) {
     var item_id = $('#Docdetails_'+index+'_name').val();
     $('#Docdetails_'+index+'_item_id').val(item_id);
     itemChange(index);      
-}
+}*/
 
 function itemChange(index){
     var part = $('#Docdetails_'+ index +'_item_id').val();
@@ -424,8 +460,8 @@ function itemChange(index){
         //console.log(data[0]);
         data[0]=jQuery.parseJSON(data[0]);
         data[1]=jQuery.parseJSON(data[1]);
-        $('#Docdetails_'+index+'_name').val(data[0].id);
-        $('#Docdetails_'+index+'_name').trigger("liszt:updated");
+        $('#Docdetails_'+index+'_name').val(data[0].name);
+        //$('#Docdetails_'+index+'_name').trigger("liszt:updated");
         
         $('#Docdetails_'+index+'_description').val(data[0].description);
         $('#Docdetails_'+index+'_unit_price').val(data[0].saleprice);
@@ -447,17 +483,11 @@ function detChange(index){
     CalcPrice(index);
 }
 function vatChange(index){
-    //var qty = $('#Docdetails_'+index+'_qty').val();
-    //var uprice = $('#Docdetails_'+index+'_unit_price').val();
-    //var rate = $('#Docdetails_'+index+'_rate').val();
-    //var doc_rate = $('#doc_rate').val();
-    //var vatrate=$('#Docdetails_'+index+'_accvat').val();
+
     
     var linesum=Number($('#Docdetails_'+index+'_invprice').val());
     var vat=Number($('#Docdetails_'+index+'_vat').val());
-    //var max=;
-    //$('#Docdetails_'+index+'_vat').val((itemtotal*(vat/100)).toFixed(2));
-    //$('#Docdetails_'+index+'_vatlabel').html((itemtotal*(vat/100)).toFixed(2)+" (%"+vat+")");
+
     
     if($('#Docdetails_'+index+'_inclodeVat').attr('checked')){
         $('#Docdetails_'+index+'_invprice').val(linesum+vat);
@@ -506,16 +536,13 @@ function priceChange(index){
     var linesum=Number($('#Docdetails_'+index+'_invprice').val());
     var vat=Number($('#Docdetails_'+index+'_vat').val());
     
-    //if($('#Docdetails_'+index+'_inclodeVat').attr('checked')){
-        //console.log($('#Docdetails_'+index+'_inclodeVat'));
-        linesum=price * (rate/doc_rate);
-        vat=(price*(rate/doc_rate))*(vatrate/100);
-        //price=(linesum-vat)/doc_rate*rate;
-        uprice=price/qty;
-        
-        //linesum=price+vat;
-        console.log(uprice);
-    //}
+
+    linesum=price * (rate/doc_rate);
+    vat=(price*(rate/doc_rate))*(vatrate/100);
+    uprice=price/qty;
+
+
+    //console.log(uprice);
     
     $('#Docdetails_'+index+'_vat').val(vat);
     $('#Docdetails_'+index+'_vatlabel').html((linesum*(vat/100)).toFixed(2)+" (%"+vatrate+")");
@@ -523,9 +550,7 @@ function priceChange(index){
     $('#Docdetails_'+index+'_unit_price').val(uprice);
 }
 $('input').blur(function(){
-    //console.log(this.id);
-    //console.log($("#Docdetails_0_currency_id").length);
-    //console.log(this.id);
+
     if(this.id=='Docs_account_id'){
         var idate = $('#Docs_issue_date').val();
         $.get("<?php echo $this->createUrl('/');?>/index.php", {"r": "/accounts/JSON" ,"id": $("#Docs_account_id").val()},
@@ -553,11 +578,7 @@ function CalcPrice(index) {
     var doc_rate = $('#doc_rate').val();
     var vat=$('#Docdetails_'+index+'_accvat').val();
     var itemtotal;
-    //console.log(doc_rate);
-    //console.log(rate);
-    //console.log(currency);
-    //console.log(currency);
-    //var cur_rate = $('#cur_rate').val();
+
     var price = (uprice * qty).toFixed(2);
     $('#Docdetails_'+index+'_price').val(price);
     
@@ -587,13 +608,7 @@ function calcLines(){
         $('#'+elements[i].id).val(i+1);
         //i++;
   }
-    
-    //var i=0;
-    //for (var i=0; i<elements.length; i++) {
-        //console.log(elements[i].id);
-        //$('#'+elements[i].id).val(i+1);
-    //}
-    
+       
 }
 function CalcPriceSum() {
     var elements = $('[id^=Docdetails][id$=invprice]');
@@ -660,7 +675,28 @@ function CalcDueDate(valdate, pay_terms) {
 }
 /**********************************doc end******************************/
 
+function rcptSum(){
+    var elements = $('[id^=Doccheques][id$=sum]');
+    var total=0;
+    for (var i=0; i<elements.length; i++) {
+        var item=Number($('#'+elements[i].id).val());
+        total+=item;
+    }
+    $('#rcptSum').html((total).toFixed(2));
+    $('#rcptsum').val(total);
+}
 
+function rcptcalcLines(){
+    var elements = $('[id^=Doccheques][id$=line]');
+    //var i=1;
+    
+    for (var i=0; i<elements.length; i++){
+        
+        console.log(elements[i].id);
+        $('#'+elements[i].id).val(i+1);
+        //i++;
+    }
+  }
 </script>
 <div class="form">
             <p>
@@ -679,3 +715,19 @@ function CalcDueDate(valdate, pay_terms) {
 </div><!-- form -->
 <?php $this->endWidget(); ?>
 
+
+<?php
+$this->beginWidget('zii.widgets.jui.CJuiDialog',array(
+    'id'=>'choseRefDoc',
+    // additional javascript options for the dialog plugin
+    'options'=>array(
+        'title'=>'Chose Refernce Documenet',
+        'autoOpen'=>false,
+    ),
+));
+$dataProvider=new CActiveDataProvider('Docs');
+    echo $this->renderPartial('index', array('dataProvider'=>$dataProvider,)); 
+
+$this->endWidget('zii.widgets.jui.CJuiDialog');
+
+?>

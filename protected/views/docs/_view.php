@@ -1,7 +1,10 @@
 <div class="view">
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
+	<?php 
+        echo CHtml::link(CHtml::encode($data->id),'#', array(  'onclick'=>'refNum("'.$data->id.'","'.$data->docnum.'","'.$data->docType->name.'")',));
+        //echo CHtml::link('Choose Doc', '#', array('onclick'=>'$("#choseRefDoc").dialog("open"); return false;',));
+        //echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
 	<br />
 
 	<b><?php //echo CHtml::encode($data->getAttributeLabel('prefix')); ?>:</b>
