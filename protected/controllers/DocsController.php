@@ -8,13 +8,12 @@ class DocsController extends RightsController
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
-	public function actionView($id)
-	{
+	public function actionView($id)	{
 		$model = Docs::model()->findByPk($id);
 		
 		
-		$docdetails =$model->docDetailes;
-		$doctype =$model->docType;
+		//$docdetails =$model->docDetailes;
+		//$doctype =$model->docType;
 		
 		
 		$this->render('view',array(
@@ -98,12 +97,11 @@ class DocsController extends RightsController
 	}
 
         
-    public function actionDuplicate($id,$type=0){
+    public function actionDuplicate($id,$type=null){
 		$id=(int)$id;
 		$model=$this->loadModel($id);
 
-		
-		//$doctype =$model1->docType();
+		if(!is_null($type)) $model->doctype=(int)$type;
                 $model->refnum=$id;
                 $model->status=$model->docType->docStatus_id;//switch status back to defult for doc
                 
@@ -148,8 +146,7 @@ class DocsController extends RightsController
 	/**
 	 * Lists all models.
 	 */
-	public function actionIndex()
-	{
+	public function actionIndex(){
 		$dataProvider=new CActiveDataProvider('Docs');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,

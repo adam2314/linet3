@@ -92,6 +92,7 @@
                 }
                 ?>
             </div>
+                <?php echo CHtml::link('Clear refnum', '#', array('onclick'=>'$("#Docs_refnum").val("");$("#Docsrefnum").html(""); return false;',)); ?>
                 <?php echo CHtml::link('Choose Doc', '#', array('onclick'=>'$("#choseRefDoc").dialog("open"); return false;',)); ?>
             
                 <?php echo $form->hiddenField($model,'refnum',array('size'=>20,'maxlength'=>20)); ?>
@@ -152,17 +153,40 @@
                         </textarea>      
                         </td>
                         <td>
+                                    <?php echo $form->labelEx($model,'discount'); ?>
+                                    <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8)); ?>
+                                    <?php echo $form->error($model,'discount'); ?>
+                                    <?php echo CHTML::checkBox("Docdiscount",'', array('value'=>1, 'uncheckValue'=>0)); ?>
+                       </td>
+                        <td>
+                                    <?php echo $form->textField($model,'discount',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
+                        </td>
+                        <td>
+                                    <?php //echo $form->textField($model,'vat',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
+                        </td>
+                    </tr>
+                    
+                     <tr>
+			<td colspan='6' ></td>
+                        <td>
                                     <?php echo $form->labelEx($model,'sub_total'); ?>
                                     <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8)); ?>
                                     <?php echo $form->error($model,'sub_total'); ?>
                        </td>
                         <td>
-                                    <?php echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
+                                    <div id="docsub_total"></div>
+                                    <?php echo $form->hiddenField($model,'sub_total',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
                         </td>
                         <td>
-                                    <?php echo $form->textField($model,'vat',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
+                                    <div id="docvat"></div>
+                                    <?php echo $form->hiddenField($model,'vat',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
                         </td>
                     </tr>
+                    
+                    
+                    
+                    
+                    
                     <tr>
 			<td colspan='6' ></td>
                         <td>
@@ -181,19 +205,11 @@
                                     <?php echo $form->error($model,'total'); ?>
                        </td>
                         <td>
-                                    <?php echo $form->textField($model,'total',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
+                                    <div id="doctotal"></div>
+                                    <?php echo $form->hiddenField($model,'total',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
                         </td>
                     </tr>
-                    <tr>
-			<td colspan='6' ></td>
-                        <td>
-                                    <?php echo $form->labelEx($model,'src_tax'); ?>
-                                    <?php echo $form->error($model,'src_tax'); ?>
-                       </td>
-                        <td>
-                                    <?php echo $form->textField($model,'src_tax',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
-                        </td>
-                    </tr>
+                   
            	</tfoot>	
             	     
 		<tbody class="docTarget">
@@ -257,6 +273,19 @@
                         </textarea>      
                         </td>
                         <td>
+                                   <?php echo $form->labelEx($model,'src_tax'); ?>
+                                    <?php echo $form->error($model,'src_tax'); ?>
+                       </td>
+                        
+                        <td>
+                                    <?php echo $form->textField($model,'src_tax',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
+                        </td>
+                    </tr>
+                    <tr>
+			<td colspan='8'>
+        		
+                        </td>
+                        <td>
                                     <?php echo $form->labelEx($model,'sub_total'); ?>
                                     <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8)); ?>
                                     <?php echo $form->error($model,'sub_total'); ?>
@@ -266,7 +295,6 @@
                                     <div id="rcptSum"></div><?php echo CHTML::hiddenField('rcptsum'); ?>
                         </td>
                     </tr>
-  
            	</tfoot>	
             	     
 		<tbody class="rcptTarget">
@@ -309,10 +337,11 @@
 		 * Version: 0.4.08
 		 *
 		*/
-		(function($){var defaults={reNumbers:/(-|-\$)?(\d+(,\d{3})*(\.\d{1,})?|\.\d{1,})/g,cleanseNumber:function(v){return v.replace(/[^0-9.\-]/g,"")},useFieldPlugin:(!!$.fn.getValue),onParseError:null,onParseClear:null};$.Calculation={version:"0.4.08",setDefaults:function(options){$.extend(defaults,options)}};$.fn.parseNumber=function(options){var aValues=[];options=$.extend(options,defaults);this.each(function(){var $el=$(this),sMethod=($el.is(":input")?(defaults.useFieldPlugin?"getValue":"val"):"text"),v=$.trim($el[sMethod]()).match(defaults.reNumbers,"");if(v==null){v=0;if(jQuery.isFunction(options.onParseError))options.onParseError.apply($el,[sMethod]);$.data($el[0],"calcParseError",true)}else{v=options.cleanseNumber.apply(this,[v[0]]);if($.data($el[0],"calcParseError")&&jQuery.isFunction(options.onParseClear)){options.onParseClear.apply($el,[sMethod]);$.data($el[0],"calcParseError",false)}}aValues.push(parseFloat(v,10))});return aValues};$.fn.calc=function(expr,vars,cbFormat,cbDone){var $this=this,exprValue="",precision=0,$el,parsedVars={},tmp,sMethod,_,bIsError=false;for(var k in vars){expr=expr.replace((new RegExp("("+k+")","g")),"_.$1");if(!!vars[k]&&!!vars[k].jquery){parsedVars[k]=vars[k].parseNumber()}else{parsedVars[k]=vars[k]}}this.each(function(i,el){var p,len;$el=$(this);sMethod=($el.is(":input")?(defaults.useFieldPlugin?"setValue":"val"):"text");_={};for(var k in parsedVars){if(typeof parsedVars[k]=="number"){_[k]=parsedVars[k]}else if(typeof parsedVars[k]=="string"){_[k]=parseFloat(parsedVars[k],10)}else if(!!parsedVars[k]&&(parsedVars[k]instanceof Array)){tmp=(parsedVars[k].length==$this.length)?i:0;_[k]=parsedVars[k][tmp]}if(isNaN(_[k]))_[k]=0;p=_[k].toString().match(/\.\d+$/gi);len=(p)?p[0].length-1:0;if(len>precision)precision=len}try{exprValue=eval(expr);if(precision)exprValue=Number(exprValue.toFixed(Math.max(precision,4)));if(jQuery.isFunction(cbFormat)){var tmp=cbFormat.apply(this,[exprValue]);if(!!tmp)exprValue=tmp}}catch(e){exprValue=e;bIsError=true}$el[sMethod](exprValue.toString())});if(jQuery.isFunction(cbDone))cbDone.apply(this,[this]);return this};$.each(["sum","avg","min","max"],function(i,method){$.fn[method]=function(bind,selector){if(arguments.length==0)return math[method](this.parseNumber());var bSelOpt=selector&&(selector.constructor==Object)&&!(selector instanceof jQuery);var opt=bind&&bind.constructor==Object?bind:{bind:bind||"keyup",selector:(!bSelOpt)?selector:null,oncalc:null};if(bSelOpt)opt=jQuery.extend(opt,selector);if(!!opt.selector)opt.selector=$(opt.selector);var self=this,sMethod,doCalc=function(){var value=math[method](self.parseNumber(opt));if(!!opt.selector){sMethod=(opt.selector.is(":input")?(defaults.useFieldPlugin?"setValue":"val"):"text");opt.selector[sMethod](value.toString())}if(jQuery.isFunction(opt.oncalc))opt.oncalc.apply(self,[value,opt])};doCalc();return self.bind(opt.bind,doCalc)}});var math={sum:function(a){var total=0,precision=0;$.each(a,function(i,v){var p=v.toString().match(/\.\d+$/gi),len=(p)?p[0].length-1:0;if(len>precision)precision=len;total+=v});if(precision)total=Number(total.toFixed(precision));return total},avg:function(a){return math.sum(a)/a.length},min:function(a){return Math.min.apply(Math,a)},max:function(a){return Math.max.apply(Math,a)}}})(jQuery);
+		//(function($){var defaults={reNumbers:/(-|-\$)?(\d+(,\d{3})*(\.\d{1,})?|\.\d{1,})/g,cleanseNumber:function(v){return v.replace(/[^0-9.\-]/g,"")},useFieldPlugin:(!!$.fn.getValue),onParseError:null,onParseClear:null};$.Calculation={version:"0.4.08",setDefaults:function(options){$.extend(defaults,options)}};$.fn.parseNumber=function(options){var aValues=[];options=$.extend(options,defaults);this.each(function(){var $el=$(this),sMethod=($el.is(":input")?(defaults.useFieldPlugin?"getValue":"val"):"text"),v=$.trim($el[sMethod]()).match(defaults.reNumbers,"");if(v==null){v=0;if(jQuery.isFunction(options.onParseError))options.onParseError.apply($el,[sMethod]);$.data($el[0],"calcParseError",true)}else{v=options.cleanseNumber.apply(this,[v[0]]);if($.data($el[0],"calcParseError")&&jQuery.isFunction(options.onParseClear)){options.onParseClear.apply($el,[sMethod]);$.data($el[0],"calcParseError",false)}}aValues.push(parseFloat(v,10))});return aValues};$.fn.calc=function(expr,vars,cbFormat,cbDone){var $this=this,exprValue="",precision=0,$el,parsedVars={},tmp,sMethod,_,bIsError=false;for(var k in vars){expr=expr.replace((new RegExp("("+k+")","g")),"_.$1");if(!!vars[k]&&!!vars[k].jquery){parsedVars[k]=vars[k].parseNumber()}else{parsedVars[k]=vars[k]}}this.each(function(i,el){var p,len;$el=$(this);sMethod=($el.is(":input")?(defaults.useFieldPlugin?"setValue":"val"):"text");_={};for(var k in parsedVars){if(typeof parsedVars[k]=="number"){_[k]=parsedVars[k]}else if(typeof parsedVars[k]=="string"){_[k]=parseFloat(parsedVars[k],10)}else if(!!parsedVars[k]&&(parsedVars[k]instanceof Array)){tmp=(parsedVars[k].length==$this.length)?i:0;_[k]=parsedVars[k][tmp]}if(isNaN(_[k]))_[k]=0;p=_[k].toString().match(/\.\d+$/gi);len=(p)?p[0].length-1:0;if(len>precision)precision=len}try{exprValue=eval(expr);if(precision)exprValue=Number(exprValue.toFixed(Math.max(precision,4)));if(jQuery.isFunction(cbFormat)){var tmp=cbFormat.apply(this,[exprValue]);if(!!tmp)exprValue=tmp}}catch(e){exprValue=e;bIsError=true}$el[sMethod](exprValue.toString())});if(jQuery.isFunction(cbDone))cbDone.apply(this,[this]);return this};$.each(["sum","avg","min","max"],function(i,method){$.fn[method]=function(bind,selector){if(arguments.length==0)return math[method](this.parseNumber());var bSelOpt=selector&&(selector.constructor==Object)&&!(selector instanceof jQuery);var opt=bind&&bind.constructor==Object?bind:{bind:bind||"keyup",selector:(!bSelOpt)?selector:null,oncalc:null};if(bSelOpt)opt=jQuery.extend(opt,selector);if(!!opt.selector)opt.selector=$(opt.selector);var self=this,sMethod,doCalc=function(){var value=math[method](self.parseNumber(opt));if(!!opt.selector){sMethod=(opt.selector.is(":input")?(defaults.useFieldPlugin?"setValue":"val"):"text");opt.selector[sMethod](value.toString())}if(jQuery.isFunction(opt.oncalc))opt.oncalc.apply(self,[value,opt])};doCalc();return self.bind(opt.bind,doCalc)}});var math={sum:function(a){var total=0,precision=0;$.each(a,function(i,v){var p=v.toString().match(/\.\d+$/gi),len=(p)?p[0].length-1:0;if(len>precision)precision=len;total+=v});if(precision)total=Number(total.toFixed(precision));return total},avg:function(a){return math.sum(a)/a.length},min:function(a){return Math.min.apply(Math,a)},max:function(a){return Math.max.apply(Math,a)}}})(jQuery);
 	/*
 	 * jQuery extensions for xForm
 	 */
+        /*
 	$.format = function(source, params) {
 		if ( arguments.length == 1 ) 
 			return function() {
@@ -331,7 +360,7 @@
 		});
 		return source;
 	};
-	
+	*/
 	jQuery(document).ready(function(){
                 $("#docs-form").submit(function() {
                     
@@ -400,15 +429,20 @@
                 $( "#resizable" ).resizable();
                 $('.docadd').trigger('click');
                 $('.rcptadd').trigger('click');
+                var elements = $('tr.filters > td > [name^=Docs]');
+                for (var i=0; i<elements.length; i++) {
+                    elements[i].name=elements[i].name.replace("Docs","Docsfilter");
+                    //console.log(elements[i].name);
 
-	});
+                }
+	});/*******************end ready*****************************/
 	//function hideEmptyHeaders(){
 	//	$('.templateTarget').filter(function(){return $.trim($(this).text())===''}).siblings('.templateHead').hide();
 	//}
 	
 function refNum(id,docnum,typename){//
     
-    console.log("fire");
+    //console.log("fire");
     $("#choseRefDoc").dialog("close"); 
 
     $('#Docsrefnum').html(typename+" #"+docnum);
@@ -434,6 +468,47 @@ $('#Docs_currency_id').change(function(){
         .error(function() { });
 
 });
+
+
+$('#Docs_discount').change(function(){    
+    total=$('#Docs_total').val();
+    discount=$('#Docs_discount').val();
+    
+    
+    if($('#Docdiscount').attr('checked')){
+        per=discount/100;
+    }else{
+        per=(discount/total);
+    }
+    
+    var elements = $('[id^=Docdetails][id$=invprice]');
+    //console.log(per);
+    for (var i=0; i<elements.length; i++) {
+        var linesum=Number($('#Docdetails_'+i+'_invprice').val());
+        
+        linesum=(linesum)-(linesum*per)
+        $('#Docdetails_'+i+'_invprice').val(linesum);
+        sumChange(i,false);
+    }
+    CalcPriceSum();
+});
+
+
+
+$('#Docs_total').change(function(){    
+    //console.log('go');
+    $('#doctotal').html($('#Docs_total').val());
+});
+$('#Docs_sub_total').change(function(){    
+    //console.log('go');
+    $('#docsub_total').html($('#Docs_sub_total').val());
+});
+$('#Docs_vat').change(function(){
+    //console.log('go');
+    $('#docvat').html($('#Docs_vat').val());
+});
+
+
 function currChange(index) {
     var currency = $('#Docdetails_'+index+'_currency_id').val();
     //console.log(currency);
@@ -495,9 +570,11 @@ function vatChange(index){
         CalcPrice(index);
     }
            
-    
+    //CalcPriceSum();
 }
-function sumChange(index){
+function sumChange(index,calc){
+    calc = typeof calc !== 'undefined' ? calc : true;
+
     var qty = Number($('#Docdetails_'+index+'_qty').val());
     var uprice = Number($('#Docdetails_'+index+'_unit_price').val());
     var price = Number($('#Docdetails_'+index+'_price').val());
@@ -512,7 +589,7 @@ function sumChange(index){
         vat=linesum*(vatrate/100);
         price=(linesum-vat)/(doc_rate*rate);
         uprice=price/qty;
-        console.log(uprice);
+        //console.log(uprice);
     }else{
         vat=linesum*(vatrate/100);
         price=(linesum)/(doc_rate*rate);
@@ -524,6 +601,8 @@ function sumChange(index){
     $('#Docdetails_'+index+'_vatlabel').html((linesum*(vat/100)).toFixed(2)+" (%"+vatrate+")");
     $('#Docdetails_'+index+'_price').val(price);
     $('#Docdetails_'+index+'_unit_price').val(uprice);
+    if(calc)
+        CalcPriceSum();
 }
 
 function priceChange(index){
@@ -548,6 +627,7 @@ function priceChange(index){
     $('#Docdetails_'+index+'_vatlabel').html((linesum*(vat/100)).toFixed(2)+" (%"+vatrate+")");
     $('#Docdetails_'+index+'_invprice').val(linesum);
     $('#Docdetails_'+index+'_unit_price').val(uprice);
+    CalcPriceSum();
 }
 $('input').blur(function(){
 
@@ -630,10 +710,10 @@ function CalcPriceSum() {
             //novat_total+=itemtotal;
         //}
     }
-    $('#Docs_vat').val(vattotal.toFixed(2));
-    $('#Docs_sub_total').val(subtotal.toFixed(2));
+    $('#Docs_vat').val(vattotal.toFixed(2)).trigger('change');
+    $('#Docs_sub_total').val(subtotal.toFixed(2)).trigger('change');
     //$('#Docs_novat_total').val(novat_total.toFixed(2));
-    $('#Docs_total').val((subtotal+vattotal).toFixed(2));//novat_total
+    $('#Docs_total').val((subtotal+vattotal).toFixed(2)).trigger('change');//novat_total
 }
 function CalcDueDate(valdate, pay_terms) {
 	var em=0;
@@ -699,19 +779,19 @@ function rcptcalcLines(){
   }
 </script>
 <div class="form">
-            <p>
-                                    <?php echo $form->labelEx($model,'comments'); ?>
-                                    <?php echo $form->textArea($model,'comments',array('rows'=>6, 'cols'=>50)); ?>
-                                    <?php echo $form->error($model,'comments'); ?>
-                            </p>
+    <p>
+        <?php echo $form->labelEx($model,'comments'); ?>
+        <?php echo $form->textArea($model,'comments',array('rows'=>6, 'cols'=>50)); ?>
+        <?php echo $form->error($model,'comments'); ?>
+    </p>
             
-	<p>
-	<!--</div>
+    <p>
+        <!--</div>
 
-	<div class="row buttons">-->
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
-	<!--</div>-->
-</p>
+        <div class="row buttons">-->
+        <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+        <!--</div>-->
+    </p>
 </div><!-- form -->
 <?php $this->endWidget(); ?>
 
@@ -723,6 +803,7 @@ $this->beginWidget('zii.widgets.jui.CJuiDialog',array(
     'options'=>array(
         'title'=>'Chose Refernce Documenet',
         'autoOpen'=>false,
+        'width'=>'600px',
     ),
 ));
 $dataProvider=new CActiveDataProvider('Docs');

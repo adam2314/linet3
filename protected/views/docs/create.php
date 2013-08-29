@@ -3,7 +3,7 @@
 
 $this->menu=array(
 	array('label'=>'List Docs', 'url'=>array('index')),
-	array('label'=>'Manage Docs', 'url'=>array('admin')),
+	//array('label'=>'Manage Docs', 'url'=>array('admin')),
 );
 ?>
 
