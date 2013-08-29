@@ -19,7 +19,7 @@ if($model->doctype==6){//Quote
     
     
 }
-
+$this->menu=$actions;
 
 $this->beginWidget('MiniForm',array(
     'haeder' => "Update $type->name",

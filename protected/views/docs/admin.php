@@ -21,45 +21,41 @@ $('.search-form form').submit(function(){
 	return false;
 });
 ");
+$this->beginWidget('MiniForm',array(
+    'haeder' => "Manage Docs",  )); 
 ?>
 
-<h1>Manage Docs</h1>
 
-<p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>
-
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display:none">
-<?php $this->renderPartial('_search',array(
-	'model'=>$model,
-)); ?>
-</div><!-- search-form -->
-
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridView'
 	'id'=>'docs-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		//'num',
 		//'prefix',
-		'doctype',
+		//'doctype',
+                array(
+                    'name'=>'doctype',
+                        'filter'=>CHtml::listData(Doctype::model()->findAll(), 'id', 'name'),
+                        'value'=>'$data->docType->name'
+                ),
 		'docnum',
 		'account_id',
 		'company',
+                'issue_date',
+            'total',
 		/*
 		'address',
 		'city',
 		'zip',
 		'vatnum',
 		'refnum',
-		'issue_date',
+		
 		'due_date',
 		'sub_total',
 		'novat_total',
 		'vat',
-		'total',
+		
 		'src_tax',
 		'status',
 		'printed',
@@ -68,6 +64,35 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		*/
 		array(
 			'class'=>'CButtonColumn',
+			'template'=>'{edit}{remove}{display}',
+			'buttons'=>array
+		    (
+		        'edit' => array
+		        (
+                            'label'=>'<i class="icon-edit"></i>',
+		            //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
+		            'url'=>'Yii::app()->createUrl("docs/update", array("id"=>$data->id))',
+		        	
+		        ),
+		        'remove' => array
+		        (
+		            'label'=>'<i class="icon-remove"></i>',
+		            //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
+                            'url'=>'Yii::app()->createUrl("docs/delete", array("id"=>$data->id))',
+		            //'url'=>'Yii::app()->createUrl("users/email", array("id"=>$data->id))',
+		        ),
+		        'display' => array
+		        (
+		            'label'=>'<i class="icon-search"></i>',
+		            'url'=>'Yii::app()->createUrl("docs/view", array("id"=>$data->id))',
+		            //'visible'=>'$data->score > 0',
+		            //'click'=>'function(){alert("Going down!");}',
+		        ),
+		    ),
 		),
 	),
-)); ?>
+)); 
+
+
+ $this->endWidget();
+?>

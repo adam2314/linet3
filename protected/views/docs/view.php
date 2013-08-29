@@ -8,10 +8,11 @@
 
 $actions=array();
 //$actions[]=array('label'=>'List Docs', 'url'=>array('index'));
-$actions[]=array('label'=>'Create Docs', 'url'=>array('create'));
-$actions[]=array('label'=>'Update Docs', 'url'=>array('update', 'id'=>$model->id));
+$actions[]=array('label'=>'Create Doc', 'url'=>array('create'));
+$actions[]=array('label'=>'Update Doc', 'url'=>array('update', 'id'=>$model->id));
 $actions[]=array('label'=>'Manage Docs', 'url'=>array('admin'));
-$actions[]=array('label'=>'Duplicate Docs', 'url'=>array('duplicate','id'=>$model->id));
+$actions[]=array('label'=>'Duplicate Doc', 'url'=>array('duplicate','id'=>$model->id));
+$actions[]=array('label'=>'Print Doc', 'url'=>array('print','id'=>$model->id));
 
 if($model->doctype==6){//Quote
     $actions[]=array('label'=>'Convert to Invoice', 'url'=>array('duplicate','id'=>$model->id,'type'=>3));//Invoice

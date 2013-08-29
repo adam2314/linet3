@@ -53,11 +53,11 @@ class Docdetails extends CActiveRecord
 			array('doc_id, item_id, currency_id', 'length', 'max'=>10),
 			array('name', 'length', 'max'=>255),
 			array('qty', 'length', 'max'=>5),
-			array('unit_price, price, invprice', 'length', 'max'=>20),
+			array('vat, unit_price, price, invprice', 'length', 'max'=>20),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('doc_id, item_id, name, description, qty, unit_price, currency_id, price, invprice, line', 'safe', 'on'=>'search'),
+			array('doc_id, item_id, name, description, qty, unit_price, currency_id, vat, price, invprice, line', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,7 +69,9 @@ class Docdetails extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                    'Docs'=>array(self::BELONGS_TO, 'Docs', 'doc_id'),
+                    'Doc'=>array(self::BELONGS_TO, 'Docs', 'doc_id'),
+                    'ItemUnit'=>array(self::BELONGS_TO, 'Itemunit', 'unit_id'),
+                    'Item'=>array(self::BELONGS_TO, 'Item', 'item_id'),
 		);
 	}
 

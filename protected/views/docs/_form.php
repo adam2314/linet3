@@ -695,8 +695,7 @@ function CalcPriceSum() {
     var selements = $('[id^=Docdetails][id$=_vat]');
     var vattotal=0;
     var subtotal=0;
-    var novat_total=0;
-    //adam out:  var vat=<?php echo Config::model()->findByPk('vat')->value;?>;
+    //var novat_total=0;
     for (var i=0; i<elements.length; i++) {
         //console.log(elements[i].id);
         var itemtotal=Number($('#'+elements[i].id).val());

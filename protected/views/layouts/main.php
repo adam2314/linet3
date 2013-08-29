@@ -160,7 +160,7 @@ Yii::app()->clientScript->registerScriptFile($baseUrl.'/assets/js/main.js');
 			array('label'=>Yii::t('app','Sales Order'), 'url'=>array('docs/create','type'=>'7')),
 			array('label'=>Yii::t('app','Invoice receipt'), 'url'=>array('docs/create','type'=>'9')),
 			
-			//array('label'=>Yii::t('app','Print docs.'), 'url'=>array('docs/view')),
+			array('label'=>Yii::t('app','Print docs.'), 'url'=>array('docs/admin')),
 		)),
               
 		array('label'=>Yii::t('app','Outcome'), 'icon'=>'shopping-cart','items'=>array(

@@ -21,6 +21,19 @@ class DocsController extends RightsController
 		));
 	}
 
+        
+        public function actionPrint($id)	{
+            $this->layout='print';
+//$this->render('pages/about');
+            
+            
+		$model = Docs::model()->findByPk($id);
+
+		$this->render('print',array(
+			'model'=>$model,
+		));
+	}
+        
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
