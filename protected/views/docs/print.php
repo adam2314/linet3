@@ -3,7 +3,15 @@
 
 //$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View Document ") ." " .$model->id,));
 ?>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+    preview=<?php echo $preview;?>;
+    
+    if(preview==1)
+        window.print();
+});
 
+</script>
 		
 <table>
         <tr>
@@ -55,25 +63,32 @@
                 </td>
         </tr>
 </table>
-<div class="table">
-        <div class="hrow row">
-                <div class="rhdata" style="width:60px;"><?php echo Yii::t('app','Line'); ?></div>
-                <div class="rhdata" style="width:60px;"><?php echo Yii::t('app','Item id'); ?></div>
-                <div class="rhdata" style="width:370px;"><?php echo Yii::t('app','Name'); ?></div>
-                <div class="rhdata" style="width:60px;"><?php echo Yii::t('app','Description'); ?></div>
-                <div class="rhdata" style="width:60px;"><?php echo Yii::t('app','Unt. Price'); ?></div>
-                <div class="rhdata" style="width:60px;"><?php echo Yii::t('app','Unit'); ?></div>
-                <div class="rhdata" style="width:60px;"><?php echo Yii::t('app','Qty.'); ?></div>
-                <div class="rhdata" style="width:60px;"><?php echo Yii::t('app','Price'); ?></div>
-                <div class="rhdata" style="width:60px;"><?php echo Yii::t('app','Currency'); ?></div>
+<?php
+/******************************************************************************************************************************/
+
+if(count($model->docDetailes)!=0){
+
+?>
+
+<table class="table">
+        <tr>
+                <th class='line'><?php echo Yii::t('app','Line'); ?></th>
+                <th class='Itemid'><?php echo Yii::t('app','Item id'); ?></th>
+                <th class='Name'><?php echo Yii::t('app','Name'); ?></th>
+                <th class='Description'><?php echo Yii::t('app','Description'); ?></th>
+                <th class='UntPrice'><?php echo Yii::t('app','Unt. Price'); ?></th>
+                <th class='Unit'><?php echo Yii::t('app','Unit'); ?></th>
+                <th class='Qty'><?php echo Yii::t('app','Qty.'); ?></th>
+                <th class='Price'><?php echo Yii::t('app','Price'); ?></th>
+                <th class='Currency'><?php echo Yii::t('app','Currency'); ?></th>
                 
-                <div class="rhdata" style="width:60px;"><?php echo Yii::t('app','Total'); ?></div>
-                <div class="rhdata" style="width:60px;"><?php echo Yii::t('app','VAT'); ?></div>
+                <th class='Total'><?php echo Yii::t('app','Total'); ?></th>
+                <th class='VAT'><?php echo Yii::t('app','VAT'); ?></th>
 
                 
                 
                 
-        </div>
+        </tr>
         <?php $i=0;
   
 
@@ -81,66 +96,132 @@
                 //print_r($docdetail);
                 //echo $this->renderPartial('docdetialview', array('model'=>$docdetail,)); 
                 echo "
-                <div class='row'>
-                    <div class='rdata clear'>$docdetail->line</div>
-                    <div class='rdata clear'>$docdetail->item_id</div>
-                    <div class='rdata clear'>$docdetail->name</div>
-                    <div class='rdata clear'>$docdetail->description</div>
+                <tr>
+                    <td class='line'>$docdetail->line</td>
+                    <td class='Itemid'>$docdetail->item_id</td>
+                    <td class='Name'>$docdetail->name</td>
+                    <td class='Description'>$docdetail->description</td>
                         
                     
-                    <div class='rdata clear'>$docdetail->unit_price</div>
-                    <div class='rdata clear'>".$docdetail->ItemUnit->name."</div>
-                    <div class='rdata clear'>$docdetail->qty</div>    
-                    <div class='rdata'>$docdetail->price</div>
-                    <div class='rdata'>$docdetail->currency_id</div>
-                    <div class='rdata'>$docdetail->invprice</div>
-                    <div class='rdata'>$docdetail->vat</div>
-                 </div>
+                    <td class='UntPrice'>$docdetail->unit_price</td>
+                    <td class='Unit'>".$docdetail->ItemUnit->name."</td>
+                    <td class='Qty'>$docdetail->qty</td>    
+                    <td class='Price'>$docdetail->price</td>
+                    <td class='Currency'>$docdetail->currency_id</td>
+                    <td class='Total'>$docdetail->invprice</td>
+                    <td class='VAT'>$docdetail->vat</td>
+                 </tr>
 
                 ";
                 $i++;
             }
         ?>
         
-        <div class="frow row">
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"><?php echo Yii::t('app','Subtotal tax excluded'); ?></div>
-                <div class="rdata"><?php echo $model->sub_total; ?></div>
-                <div class="rdata"><?php echo $model->vat; ?></div>
-        </div>
-        <div class="frow row">
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"><?php echo Yii::t('app','Subtotal tax exempt'); ?></div>
-                <div class="rdata"><?php echo $model->novat_total; ?></div>
-        </div>
+        <tr>
+                <td class='line'></td>
+                <td class='Itemid'></td>
+                <td class='Name'></td>
+                <td class='Description'></td>
+                <td class='UntPrice'></td>
+                <td class='Unit'></td>
+                <td class='Qty'></td>
+                <td class='Price'></td>
+                <td class='Currency'><?php echo Yii::t('app','Subtotal tax excluded'); ?></td>
+                <td class='Total'><?php echo $model->sub_total; ?></td>
+                <td class='VAT'><?php echo $model->vat; ?></td>
+        <tr>
+        <tr>
+                <td class='line'></td>
+                <td class='Itemid'></td>
+                <td class='Name'></td>
+                <td class='Description'></td>
+                <td class='UntPrice'></td>
+                <td class='Unit'></td>
+                <td class='Qty'></td>
+                <td class='Price'></td>
+                <td class='Currency'><?php echo Yii::t('app','Subtotal tax exempt'); ?></td>
+                <td class='Total'><?php echo $model->novat_total; ?></td>
+                <td class='VAT'></td>
+        </tr>
         
-        <div class="frow row">
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"></div>
-                <div class="rdata clear"><?php echo Yii::t('app','Subtotal to pay'); ?></div>
-                <div class="rdata"><?php echo $model->total; ?></div>
-        </div>		
-</div>
+        <tr>
+                <td class='line'></td>
+                <td class='Itemid'></td>
+                <td class='Name'></td>
+                <td class='Description'></td>
+                <td class='UntPrice'></td>
+                <td class='Unit'></td>
+                <td class='Qty'></td>
+                <td class='Price'></td>
+                <td class='Currency'><?php echo Yii::t('app','Subtotal to pay'); ?></td>
+                <td class='Total'><?php echo $model->total; ?></td>
+                <td class='VAT'></td>
+        </tr>		
+</table>
+<?php
+}
+
+
+/******************************************************************************************************************************/
+if(count($model->docCheques)!=0){
+
+?>
+
+                        
+<table class="table">
+        <tr>
+            <th class='Type'><?php echo Yii::t('label','Type'); ?></th>   
+            <th class='Line'><?php echo Yii::t('label','Line'); ?></th> 
+            <th class='Refnum'><?php echo Yii::t('label','Refnum'); ?></th>
+
+            <th class='CreditCompany'><?php echo Yii::t('label','Credit Company'); ?></th>
+            <th class='ChequeNo'><?php echo Yii::t('label','Cheque No.'); ?></th>
+            <th class='Bank'><?php echo Yii::t('label','Bank'); ?></th>
+            <th class='Branch'><?php echo Yii::t('label','Branch'); ?></th>
+            <th class='ChequeAccount'><?php echo Yii::t('label','Cheque Account'); ?></th>
+            <th class='ChequeDate'><?php echo Yii::t('label','Cheque Date'); ?></th>
+            <th class='Currency'><?php echo Yii::t('label','Currency'); ?></th>
+            <th class='Sum'><?php echo Yii::t('label','Sum'); ?></th>
+            <th class='BankRefnum'><?php echo Yii::t('label','Bank Refnum'); ?></th>
+            <th class='DepDate'><?php echo Yii::t('label','Dep Date'); ?></th> 
+        </tr>
+        <?php $i=0;
+  
+
+            foreach ($model->docCheques as $rcptdetail){
+ 
+                echo "
+                <tr>
+                    <td class='Type'>$rcptdetail->type</td>
+                    <td class='Line'>$rcptdetail->line</td>
+                    <td class='Refnum'>$rcptdetail->refnum</td>
+                    <td class='CreditCompany'>$rcptdetail->creditcompany</td>
+                    <td class='ChequeNo'>$rcptdetail->cheque_num</td>
+                        
+                    <td class='Bank'>".$rcptdetail->bank."</td>
+                    <td class='Branch'>$rcptdetail->branch</td>    
+                    <td class='ChequeAccount'>$rcptdetail->cheque_acct</td>
+                    <td class='ChequeDate'>$rcptdetail->cheque_date</td>
+                    <td class='Currency'>$rcptdetail->currency_id</td>
+                    <td class='Sum'>$rcptdetail->sum</td>
+                    <td class='BankRefnum'>$rcptdetail->bank_refnum</td>
+                    <td class='DepDate'>$rcptdetail->dep_date</td>
+                 </tr>
+
+                ";
+                $i++;
+            }
+        ?>
+ 
+          
+
+</table>
+
+<?php
+/******************************************************************************************************************************/
+}
+
+?>
 
 
                 <br />

@@ -33,7 +33,20 @@ class Docs extends CActiveRecord{
     public $docCheq=NULL;
 
 
-
+    public function beforeSave(){
+            //PHP dates are displayed as dd/mm/yyyy
+            //MYSQL dates are stored as yyyy-mm-dd
+            //$date=DateTime::createFromFormat(,);
+            
+            $timestamp=CDateTimeParser::parse($this->issue_date,Yii::app()->locale->getDateFormat('short'));
+            $this->issue_date=$timestamp;
+ 
+            $timestamp=CDateTimeParser::parse($this->due_date,Yii::app()->locale->getDateFormat('short'));
+            $this->due_date=$timestamp;
+ 
+            
+            return parent::beforeSave();
+        }
     public function save($runValidation = true, $attributes = NULL) {
 
         $this->docnum=$this->newNum();

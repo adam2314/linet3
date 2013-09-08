@@ -57,13 +57,14 @@
 	        'name'=>'src_date',
 	        'language' => 'en',
 	        'options' => array(
-	            'dateFormat'=>'dd-mm-yy',
-	            'changeMonth' => 'true',
-	            'changeYear' => 'true',
-	            'showButtonPanel' => 'true',
-	            'constrainInput' => 'false',
-	            'duration'=>'fast',
-	            'showAnim' =>'slide',
+	            //'dateFormat'=>'dd-mm-yy',
+                    'dateFormat' => Yii::app()->locale->getDateFormat('short'),
+	            //'changeMonth' => 'true',
+	            //'changeYear' => 'true',
+	            //'showButtonPanel' => 'true',
+	            //'constrainInput' => 'false',
+	            //'duration'=>'fast',
+	            //'showAnim' =>'slide',
 	       	 )
 	       	 )
 	        );?>

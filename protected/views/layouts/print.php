@@ -11,7 +11,7 @@ $baseUrl=Yii::app()->request->baseUrl;
 
 Yii::app()->clientScript->registerCssFile($baseUrl. "/assets/css/print.css", 'all');
 Yii::app()->clientScript->registerCSSFile($baseUrl.'/assets/Font-awesome/css/font-awesome.min.css');
-
+Yii::app()->clientScript->registerScriptFile($baseUrl.'/assets/4585c/jquery.js');
 
 ?>
         <link href="<?php echo $baseUrl; ?>/assets/css/linet.css" rel="stylesheet" type="text/css" />

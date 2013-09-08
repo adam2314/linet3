@@ -101,17 +101,45 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'issue_date'); ?>
-		<?php $model->issue_date=date('d-m-Y');
-		echo $form->textField($model,'issue_date',array('')); ?>
+		<?php //$model->issue_date=Yii::app()->locale->getDateFormat('short');
+		//echo $form->textField($model,'issue_date',array('')); ?>
+            <?php $this->widget('zii.widgets.jui.CJuiDatePicker',
+			array(
+                        'name'=>'Docs[issue_date]',
+                            'language' => 'en',
+			//'value'=>$model->issue_date,
+                        'value'=>$model->issue_date,    
+                            'defaultOptions' => array(  // (#3)
+                                    //'showOn' => 'focus', 
+                                    'dateFormat' => Yii::app()->locale->getDateFormat('short'),
+                                    //'showOtherMonths' => true,
+                                    //'selectOtherMonths' => true,
+                                    //'changeMonth' => true,
+                                    //'changeYear' => true,
+                                    //'showButtonPanel' => true,
+                                )
+	       	 )
+	        );?>
 		<?php echo $form->error($model,'issue_date'); ?>
 	</div>
-
+<?php echo Yii::app()->locale->getDateFormat('short');?>
 	<div class="row">
 		<?php echo $form->labelEx($model,'due_date'); ?>
 		<?php $this->widget('zii.widgets.jui.CJuiDatePicker',
-			array(     // you must specify name or model/attribute
-	        'name'=>'Docs[due_date]',
-			'value'=>$model->due_date,
+			array(
+                        'name'=>'Docs[due_date]',
+                            'language' => 'en',
+			//'value'=>$model->due_date,
+                        'value'=>$model->due_date,    
+                            'defaultOptions' => array(  // (#3)
+                                    //'showOn' => 'focus', 
+                                    'dateFormat' => Yii::app()->locale->getDateFormat('short'),
+                                    //'showOtherMonths' => true,
+                                    //'selectOtherMonths' => true,
+                                    //'changeMonth' => true,
+                                    //'changeYear' => true,
+                                    //'showButtonPanel' => true,
+                                )
 	       	 )
 	        );?>
 		<?php echo $form->error($model,'due_date'); ?>

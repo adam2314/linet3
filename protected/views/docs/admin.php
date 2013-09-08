@@ -23,76 +23,11 @@ $('.search-form form').submit(function(){
 ");
 $this->beginWidget('MiniForm',array(
     'haeder' => "Manage Docs",  )); 
-?>
 
+//print_r(Yii::app()->getLocale());
+echo Yii::app()->locale->getDateFormat('short');
 
-<?php $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridView'
-	'id'=>'docs-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
-	'columns'=>array(
-		//'num',
-		//'prefix',
-		//'doctype',
-                array(
-                    'name'=>'doctype',
-                        'filter'=>CHtml::listData(Doctype::model()->findAll(), 'id', 'name'),
-                        'value'=>'$data->docType->name'
-                ),
-		'docnum',
-		'account_id',
-		'company',
-                'issue_date',
-            'total',
-		/*
-		'address',
-		'city',
-		'zip',
-		'vatnum',
-		'refnum',
-		
-		'due_date',
-		'sub_total',
-		'novat_total',
-		'vat',
-		
-		'src_tax',
-		'status',
-		'printed',
-		'comments',
-		'owner',
-		*/
-		array(
-			'class'=>'CButtonColumn',
-			'template'=>'{edit}{remove}{display}',
-			'buttons'=>array
-		    (
-		        'edit' => array
-		        (
-                            'label'=>'<i class="icon-edit"></i>',
-		            //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
-		            'url'=>'Yii::app()->createUrl("docs/update", array("id"=>$data->id))',
-		        	
-		        ),
-		        'remove' => array
-		        (
-		            'label'=>'<i class="icon-remove"></i>',
-		            //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
-                            'url'=>'Yii::app()->createUrl("docs/delete", array("id"=>$data->id))',
-		            //'url'=>'Yii::app()->createUrl("users/email", array("id"=>$data->id))',
-		        ),
-		        'display' => array
-		        (
-		            'label'=>'<i class="icon-search"></i>',
-		            'url'=>'Yii::app()->createUrl("docs/view", array("id"=>$data->id))',
-		            //'visible'=>'$data->score > 0',
-		            //'click'=>'function(){alert("Going down!");}',
-		        ),
-		    ),
-		),
-	),
-)); 
-
+echo $this->renderPartial('_list', array('model' => $model));
 
  $this->endWidget();
 ?>

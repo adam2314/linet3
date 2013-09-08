@@ -4,11 +4,7 @@ class DocsController extends RightsController
 {
 
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionView($id)	{
+	public function actionView($id)	{/* used in the refnum selection*/
 		$model = Docs::model()->findByPk($id);
 		
 		
@@ -22,7 +18,7 @@ class DocsController extends RightsController
 	}
 
         
-        public function actionPrint($id)	{
+        public function actionPrint($id,$preview=1){/*usd for print*/
             $this->layout='print';
 //$this->render('pages/about');
             
@@ -30,7 +26,7 @@ class DocsController extends RightsController
 		$model = Docs::model()->findByPk($id);
 
 		$this->render('print',array(
-			'model'=>$model,
+			'model'=>$model,'preview'=>$preview,
 		));
 	}
         
@@ -50,6 +46,8 @@ class DocsController extends RightsController
 
 		if(isset($_POST['Docs'])){
 			$model->attributes=$_POST['Docs'];
+                        $model->issue_date=CDateTimeParser();
+                        
                         if(isset($_POST['Docdetails'])) $model->docDet=$_POST['Docdetails'];
                         if(isset($_POST['Doccheques'])) $model->docCheq=$_POST['Doccheques'];
                         
@@ -67,7 +65,7 @@ class DocsController extends RightsController
 	}
 
 	
-	public function actionStatus($id,$newstatus){
+	public function actionList(){/*used for ajaxList*/
 		
 	}
 	/**
@@ -169,13 +167,24 @@ class DocsController extends RightsController
 	/**
 	 * Manages all models.
 	 */
-	public function actionAdmin()
-	{
+	public function actionAdmin(){
 		$model=new Docs('search');
 		$model->unsetAttributes();  // clear any default values
+                $vl='docs-grid';
+                
 		if(isset($_GET['Docs']))
 			$model->attributes=$_GET['Docs'];
-
+                if(Yii::app()->request->isAjaxRequest && isset($_GET['ajax']) && $_GET['ajax'] === $vl) {
+                    // Render partial file created in Step 1
+                    $this->renderPartial('_list', array(
+                      //'subscriberActiveDataProvider' => $subscriberActiveDataProvider,
+                      'model' => $model,
+                    ));
+                    Yii::app()->end();
+                  }
+                
+                
+                
 		$this->render('admin',array(
 			'model'=>$model,
 		));

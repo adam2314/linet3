@@ -60,7 +60,9 @@ return array(
 
 	// application components
 	'components'=>array(
-                
+                //'localtime'=>array(
+                //    'class'=>'LocalTime',
+                //),
 		'Paypal' => array(
 			'class'=>'application.components.Paypal',
 			
