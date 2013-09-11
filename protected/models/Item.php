@@ -31,7 +31,13 @@ class Item extends CActiveRecord
             $model->vat=  Accounts::model()->findByPk($incomeMap->account_id)->src_tax;
             return $model;
         }
-        
+        public function beforeSave(){
+            if ($this->isNewRecord)
+                $this->created = new CDbExpression('NOW()');
+            else
+                $this->modified = new CDbExpression('NOW()');
+            return parent::beforeSave();
+        }
 	function behaviors() {
 		return array(
 				///*

@@ -55,7 +55,13 @@ class Accounts extends CActiveRecord
 		return Accounts::table;
 	}
 
-        
+         public function beforeSave(){
+            if ($this->isNewRecord)
+                $this->created = new CDbExpression('NOW()');
+            else
+                $this->modified = new CDbExpression('NOW()');
+            return parent::beforeSave();
+        }
         
     public function save($runValidation = true, $attributes = NULL) {
          if($this->system_acc !=1)parent::save($runValidation,$attributes);

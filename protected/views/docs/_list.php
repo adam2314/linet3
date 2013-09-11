@@ -35,7 +35,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridVie
                 //'issue_date',
                 array(
                     'name'=>'issue_date',
-                     'filter' => $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                     'filter' => '',/*$this->widget('zii.widgets.jui.CJuiDatePicker', array(
                                 'model'=>$model, 
                                 'attribute'=>'issue_date', 
                                 //'language' => 'he',
@@ -54,7 +54,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridVie
                                     //'showButtonPanel' => true,
                                 )
                             ), 
-                            true), // (#4)
+                            true), // (#4)*/
                         //),
                         //'filter'=>CHtml::listData(Docstatus::model()->findAllByAttributes(array('doc_type'=>$data->doctype)), 'num', 'name'),
                        //'value'=>'date("M j, Y", $data->issue_date)'

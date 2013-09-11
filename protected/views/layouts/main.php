@@ -166,11 +166,11 @@ Yii::app()->clientScript->registerScriptFile($baseUrl.'/assets/js/main.js');
 		array('label'=>Yii::t('app','Outcome'), 'icon'=>'shopping-cart','items'=>array(
 			array('label'=>Yii::t('app','Manage Suppliers'), 'url'=>array('accounts/contact/1')),
 			array('label'=>Yii::t('app','Parchace Order'), 'url'=>array('docs/create/10')),
-			array('label'=>Yii::t('app','inseret Buisness outcome'), 'url'=>array('outcome/index')),
-			array('label'=>Yii::t('app','insert Asstes outcome'), 'url'=>array('outcome/index/asset')),
+			array('label'=>Yii::t('app','inseret Buisness outcome'), 'url'=>array('docs/create/11')),
+			array('label'=>Yii::t('app','insert Asstes outcome'), 'url'=>array('docs/create/12')),
 		)),
 		array('label'=>Yii::t('app','Register'), 'icon'=>'money','items'=>array(
-			array('label'=>Yii::t('app','Receipt'), 'url'=>array('accounts/contact/8')),
+			array('label'=>Yii::t('app','Receipt'), 'url'=>array('docs/create/8')),
 			array('label'=>Yii::t('app','Bank deposits'), 'url'=>array('deposit&amp;type=2')),
 			array('label'=>Yii::t('app','Payment'), 'url'=>array('payment')),
 			array('label'=>Yii::t('app','VAT payment'), 'url'=>array('payment&amp;opt=vat')),

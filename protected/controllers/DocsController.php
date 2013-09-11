@@ -35,18 +35,19 @@ class DocsController extends RightsController
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionCreate($type=1){
-		
-		$model=new Docs;
 		$type=(isset($_POST['Docs']['doctype']))? (int)$_POST['Docs']['doctype']:$type;
+		$model=new Docs();
+		
 		$model->doctype=$type;
+                $model->docType=Doctype::model()->findByPk($type);
                 $model->status=$model->docType->docStatus_id;
-		$doctype =$model->docType;
+		//$doctype =$model->docType;
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Docs'])){
 			$model->attributes=$_POST['Docs'];
-                        $model->issue_date=CDateTimeParser();
+                        
                         
                         if(isset($_POST['Docdetails'])) $model->docDet=$_POST['Docdetails'];
                         if(isset($_POST['Doccheques'])) $model->docCheq=$_POST['Doccheques'];
@@ -60,7 +61,7 @@ class DocsController extends RightsController
 		
 		
 		$this->render('create',array(
-			'model'=>$model,'type'=>$doctype,
+			'model'=>$model,//'type'=>$doctype,
 		));
 	}
 
@@ -168,9 +169,28 @@ class DocsController extends RightsController
 	 * Manages all models.
 	 */
 	public function actionAdmin(){
+                //unset(Yii::app()->request->cookies['date.from']);  // first unset cookie for dates
+                //unset(Yii::app()->request->cookies['date.to']);
+            
 		$model=new Docs('search');
 		$model->unsetAttributes();  // clear any default values
                 $vl='docs-grid';
+                
+                if(!empty($_POST)){
+                    Yii::app()->request->cookies['date_from'] = new CHttpCookie('date_from', $_POST['date_from']);  // define cookie for from_date
+                    Yii::app()->request->cookies['date_to'] = new CHttpCookie('date_to', $_POST['date_to']);
+                    
+                }
+                if(!empty(Yii::app()->request->cookies['date_from']))
+                    $model->issue_from = Yii::app()->request->cookies['date_from'];
+                else {
+                    $model->issue_from =date(Yii::app()->locale->getDateFormat('phpshort'));
+                }
+                if(!empty(Yii::app()->request->cookies['date_to']))
+                    $model->issue_to = Yii::app()->request->cookies['date_to'];
+                else{
+                    $model->issue_to =date(Yii::app()->locale->getDateFormat('phpshort'));
+                }
                 
 		if(isset($_GET['Docs']))
 			$model->attributes=$_GET['Docs'];

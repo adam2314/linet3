@@ -32,21 +32,50 @@ class Docs extends CActiveRecord{
     public $docDet=NULL;
     public $docCheq=NULL;
 
-
+    
+    public $issue_from;
+    public $issue_to;
+    
+    /*
+    public function __construct($arg = NULL) {
+    //    public function __construct($type=0) {
+        parent::_construct(); 
+        //$doctype=Doctype::model()->findByPk($type);
+        //$this->docType=model;
+        //$this->doctype=$type;
+        
+    }//*/
+    
     public function beforeSave(){
-            //PHP dates are displayed as dd/mm/yyyy
-            //MYSQL dates are stored as yyyy-mm-dd
-            //$date=DateTime::createFromFormat(,);
+        
             
-            $timestamp=CDateTimeParser::parse($this->issue_date,Yii::app()->locale->getDateFormat('short'));
-            $this->issue_date=$timestamp;
- 
-            $timestamp=CDateTimeParser::parse($this->due_date,Yii::app()->locale->getDateFormat('short'));
-            $this->due_date=$timestamp;
- 
+            if ($this->isNewRecord) 
+                $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetime'));
+            $this->modified = date(Yii::app()->locale->getDateFormat('phpshort'));
+
+            $this->due_date=date("Y-m-d H:m:s",CDateTimeParser::parse($this->due_date,Yii::app()->locale->getDateFormat('yiishort')));
+            $this->issue_date=date("Y-m-d H:m:s",CDateTimeParser::parse($this->issue_date,Yii::app()->locale->getDateFormat('yiidatetime')));
+            $this->modified=date("Y-m-d H:m:s",CDateTimeParser::parse($this->modified,Yii::app()->locale->getDateFormat('yiishort')));
             
+            //return true;
             return parent::beforeSave();
         }
+        
+        public function afterSave(){
+           $this->due_date=date(Yii::app()->locale->getDateFormat('phpshort'),strtotime($this->due_date));
+           $this->issue_date=date(Yii::app()->locale->getDateFormat('phpdatetime'),strtotime($this->issue_date));
+           $this->modified=date(Yii::app()->locale->getDateFormat('phpshort'),strtotime($this->modified));
+            
+            return parent::afterSave();
+        }
+       public function  afterFind(){
+           $this->due_date=date(Yii::app()->locale->getDateFormat('phpshort'),strtotime($this->due_date));
+           $this->issue_date=date(Yii::app()->locale->getDateFormat('phpdatetime'),strtotime($this->issue_date));
+           $this->modified=date(Yii::app()->locale->getDateFormat('phpshort'),strtotime($this->modified));
+
+            return parent::afterFind();
+         }
+       
     public function save($runValidation = true, $attributes = NULL) {
 
         $this->docnum=$this->newNum();
@@ -121,8 +150,7 @@ class Docs extends CActiveRecord{
      * @param string $className active record class name.
      * @return Docs the static model class
      */
-    public static function model($className=__CLASS__)
-    {
+    public static function model($className=__CLASS__)   {
             return parent::model($className);
     }
 
@@ -161,7 +189,7 @@ class Docs extends CActiveRecord{
                     array('issue_date, due_date, comments', 'safe'),
                     // The following rule is used by search().
                     // Please remove those attributes that should not be searched.
-                    array('id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, owner', 'safe', 'on'=>'search'),
+                    array('issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, owner', 'safe', 'on'=>'search'),
             );
     }
 
@@ -186,8 +214,7 @@ class Docs extends CActiveRecord{
     /**
      * @return array customized attribute labels (name=>label)
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels()    {
             return array(
                     'id'=>Yii::t('label','ID'),
                     'doctype'=>Yii::t('label','Documenet Type'),
@@ -248,6 +275,20 @@ class Docs extends CActiveRecord{
             $criteria->compare('comments',$this->comments,true);
             $criteria->compare('owner',$this->owner);
 
+            if(!empty($this->issue_from) && empty($this->issue_to)) {
+                $this->issue_from=date("Y-m-d",CDateTimeParser::parse($this->issue_from,Yii::app()->locale->getDateFormat('yiishort')));
+                $criteria->condition = "issue_date >= '$this->issue_from'";  // date is database date column field
+            }elseif(!empty($this->issue_to) && empty($this->issue_from)){
+                $this->issue_to=date("Y-m-d",CDateTimeParser::parse($this->issue_to,Yii::app()->locale->getDateFormat('yiishort')));
+                $criteria->condition = "issue_date <= '$this->issue_to'";
+            }elseif(!empty($this->issue_to) && !empty($this->issue_from)){
+                //$this->issue_from=date("Y-m-d",CDateTimeParser::parse($this->issue_from,Yii::app()->locale->getDateFormat('yiishort')));
+                //$this->issue_to=date("Y-m-d",CDateTimeParser::parse($this->issue_to,Yii::app()->locale->getDateFormat('yiishort')));
+                //$criteria->condition = "issue_date  >= '$this->issue_from' and issue_date <= '$this->issue_to'";
+            }
+            
+            
+            
             return new CActiveDataProvider($this, array(
                     'criteria'=>$criteria,
             ));

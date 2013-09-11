@@ -18,7 +18,7 @@
 <div class="span4"><!--block-->
 	<p>
 		<?php echo $form->labelEx($model,'account_id'); ?>
-		<?php //echo $model->docType->account_type . ";".Acctype::model()->getType('customers');
+		<?php //echo $model->docType->name . ";".Acctype::model()->getType('customers');
 		
 		$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 	    'name'=>'Docs[account_id]',
