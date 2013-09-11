@@ -34,8 +34,29 @@
 	));
 		
 		?>
-		<?php echo $form->error($model,'account'); ?>
+		<?php echo $form->error($model,'account_id'); ?>
 	</p>
+        
+        <div>
+		<?php echo $form->labelEx($model,'oppt_account_id'); ?>
+		<?php //echo $model->docType->name . ";".Acctype::model()->getType('customers');
+		
+		$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+	    'name'=>'Docs[oppt_account_id]',
+		'id'=>'Docs_oppt_account_id',
+	    'value'=>"$model->oppt_account_id",
+	    'source'=>$this->createUrl('/accounts/autocomplete',array('type'=>$model->docType->oppt_account_type)),
+	    'options'=>array(
+                    'minLength'=>0,
+	            'showAnim'=>'fold',
+	    ),
+	));
+		
+		?>
+                <p></p>
+		<?php echo $form->error($model,'oppt_account_id'); ?>
+	</div>
+        
 
 	<p>
 		<?php echo $form->labelEx($model,'company'); ?>
@@ -122,7 +143,7 @@
 	        );?>
 		<?php echo $form->error($model,'issue_date'); ?>
 	</div>
-<?php echo Yii::app()->locale->getDateFormat('short');?>
+
 	<div class="row">
 		<?php echo $form->labelEx($model,'due_date'); ?>
 		<?php $this->widget('zii.widgets.jui.CJuiDatePicker',
@@ -173,13 +194,18 @@
 		</thead>	
 		<tfoot>
                     <tr>
-			<td colspan='6' class="docadd"><?php echo Yii::t('ui','New');?>
-        		<textarea id="doc" style='display:none;'>       
-	                      	<?php 
-                        	echo $this->renderPartial('docdetial', array('model'=>new Docdetails,'form'=>$form,'i'=>'ABC')); 
-                        	?>
-                        </textarea>      
+			<td class="docadd"><?php echo Yii::t('ui','New');?>
+                            <textarea id="doc" style='display:none;'>       
+                                    <?php 
+                                    echo $this->renderPartial('docdetial', array('model'=>new Docdetails,'form'=>$form,'i'=>'ABC')); 
+                                    ?>
+                            </textarea>      
                         </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         <td>
                                     <?php echo $form->labelEx($model,'discount'); ?>
                                     <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8)); ?>
@@ -195,7 +221,12 @@
                     </tr>
                     
                      <tr>
-			<td colspan='6' ></td>
+			<td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         <td>
                                     <?php echo $form->labelEx($model,'sub_total'); ?>
                                     <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8)); ?>
@@ -216,7 +247,12 @@
                     
                     
                     <tr>
-			<td colspan='6' ></td>
+			<td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         <td>
                                     <?php //echo $form->labelEx($model,'novat_total'); ?>
                                     <?php //echo $form->error($model,'novat_total'); ?>
@@ -227,7 +263,12 @@
                     </tr>
                      
                     <tr>
-			<td colspan='6' ></td>
+			<td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         <td>
                                     <?php echo $form->labelEx($model,'total'); ?>
                                     <?php echo $form->error($model,'total'); ?>
@@ -352,43 +393,7 @@
 	?>
 	<!--</div>-->
 <script type="text/javascript">
-		/*
-		 * jQuery Calculation Plug-in
-		 *
-		 * Copyright (c) 2007 Dan G. Switzer, II
-		 *
-		 * Dual licensed under the MIT and GPL licenses:
-		 *   http://www.opensource.org/licenses/mit-license.php
-		 *   http://www.gnu.org/licenses/gpl.html
-		 *
-		 * Revision: 12
-		 * Version: 0.4.08
-		 *
-		*/
-		//(function($){var defaults={reNumbers:/(-|-\$)?(\d+(,\d{3})*(\.\d{1,})?|\.\d{1,})/g,cleanseNumber:function(v){return v.replace(/[^0-9.\-]/g,"")},useFieldPlugin:(!!$.fn.getValue),onParseError:null,onParseClear:null};$.Calculation={version:"0.4.08",setDefaults:function(options){$.extend(defaults,options)}};$.fn.parseNumber=function(options){var aValues=[];options=$.extend(options,defaults);this.each(function(){var $el=$(this),sMethod=($el.is(":input")?(defaults.useFieldPlugin?"getValue":"val"):"text"),v=$.trim($el[sMethod]()).match(defaults.reNumbers,"");if(v==null){v=0;if(jQuery.isFunction(options.onParseError))options.onParseError.apply($el,[sMethod]);$.data($el[0],"calcParseError",true)}else{v=options.cleanseNumber.apply(this,[v[0]]);if($.data($el[0],"calcParseError")&&jQuery.isFunction(options.onParseClear)){options.onParseClear.apply($el,[sMethod]);$.data($el[0],"calcParseError",false)}}aValues.push(parseFloat(v,10))});return aValues};$.fn.calc=function(expr,vars,cbFormat,cbDone){var $this=this,exprValue="",precision=0,$el,parsedVars={},tmp,sMethod,_,bIsError=false;for(var k in vars){expr=expr.replace((new RegExp("("+k+")","g")),"_.$1");if(!!vars[k]&&!!vars[k].jquery){parsedVars[k]=vars[k].parseNumber()}else{parsedVars[k]=vars[k]}}this.each(function(i,el){var p,len;$el=$(this);sMethod=($el.is(":input")?(defaults.useFieldPlugin?"setValue":"val"):"text");_={};for(var k in parsedVars){if(typeof parsedVars[k]=="number"){_[k]=parsedVars[k]}else if(typeof parsedVars[k]=="string"){_[k]=parseFloat(parsedVars[k],10)}else if(!!parsedVars[k]&&(parsedVars[k]instanceof Array)){tmp=(parsedVars[k].length==$this.length)?i:0;_[k]=parsedVars[k][tmp]}if(isNaN(_[k]))_[k]=0;p=_[k].toString().match(/\.\d+$/gi);len=(p)?p[0].length-1:0;if(len>precision)precision=len}try{exprValue=eval(expr);if(precision)exprValue=Number(exprValue.toFixed(Math.max(precision,4)));if(jQuery.isFunction(cbFormat)){var tmp=cbFormat.apply(this,[exprValue]);if(!!tmp)exprValue=tmp}}catch(e){exprValue=e;bIsError=true}$el[sMethod](exprValue.toString())});if(jQuery.isFunction(cbDone))cbDone.apply(this,[this]);return this};$.each(["sum","avg","min","max"],function(i,method){$.fn[method]=function(bind,selector){if(arguments.length==0)return math[method](this.parseNumber());var bSelOpt=selector&&(selector.constructor==Object)&&!(selector instanceof jQuery);var opt=bind&&bind.constructor==Object?bind:{bind:bind||"keyup",selector:(!bSelOpt)?selector:null,oncalc:null};if(bSelOpt)opt=jQuery.extend(opt,selector);if(!!opt.selector)opt.selector=$(opt.selector);var self=this,sMethod,doCalc=function(){var value=math[method](self.parseNumber(opt));if(!!opt.selector){sMethod=(opt.selector.is(":input")?(defaults.useFieldPlugin?"setValue":"val"):"text");opt.selector[sMethod](value.toString())}if(jQuery.isFunction(opt.oncalc))opt.oncalc.apply(self,[value,opt])};doCalc();return self.bind(opt.bind,doCalc)}});var math={sum:function(a){var total=0,precision=0;$.each(a,function(i,v){var p=v.toString().match(/\.\d+$/gi),len=(p)?p[0].length-1:0;if(len>precision)precision=len;total+=v});if(precision)total=Number(total.toFixed(precision));return total},avg:function(a){return math.sum(a)/a.length},min:function(a){return Math.min.apply(Math,a)},max:function(a){return Math.max.apply(Math,a)}}})(jQuery);
-	/*
-	 * jQuery extensions for xForm
-	 */
-        /*
-	$.format = function(source, params) {
-		if ( arguments.length == 1 ) 
-			return function() {
-				var args = $.makeArray(arguments);
-				args.unshift(source);
-				return $.format.apply( this, args );
-			};
-		if ( arguments.length > 2 && params.constructor != Array  ) {
-			params = $.makeArray(arguments).slice(1);
-		}
-		if ( params.constructor != Array ) {
-			params = [ params ];
-		}
-		$.each(params, function(i, n) {
-			source = source.replace(new RegExp("\\{" + i + "\\}", "g"), n);
-		});
-		return source;
-	};
-	*/
+
 	jQuery(document).ready(function(){
                 $("#docs-form").submit(function() {
                     
@@ -452,7 +457,13 @@
                     }
                 });
                 
-
+                var docoppacc=true;
+                 $("#Docs_oppt_account_id").focus(function(){
+                    if($("#Docs_oppt_account_id").val()=='' && docacc){
+                        $("#Docs_oppt_account_id").autocomplete("search","");
+                        docoppacc=false;
+                    }
+                });
 
                 $( "#resizable" ).resizable();
                 $('.docadd').trigger('click');
@@ -463,11 +474,47 @@
                     //console.log(elements[i].name);
 
                 }
+                
+                
+                
 	});/*******************end ready*****************************/
 	//function hideEmptyHeaders(){
 	//	$('.templateTarget').filter(function(){return $.trim($(this).text())===''}).siblings('.templateHead').hide();
 	//}
-	
+
+function changeFileds(){//
+    var type = <?php echo $model->doctype; ?>;
+    if((type==11)||(type==12)){
+        $("#Docs_company").prop('disabled', true);
+        
+        
+        $("#Docs_status").parent().hide();
+        $("#Docs_address").parent().hide();
+        $("#Docs_city").parent().hide();
+        $("#Docs_zip").parent().hide();
+
+        $("#Docs_vatnum").parent().hide();
+        $("#Docs_zip").parent().hide();
+
+        $("#Docsrefnum").parent().hide();
+        $("#Docs_due_date").parent().hide();
+
+        $('#Docs_discount').hide();
+        
+        $('.formtable tr th:nth-child(3)').hide();
+        $('.formtable tr td:nth-child(3)').hide();
+
+        $('.formtable tr th:nth-child(7)').hide();
+        $('.formtable tr td:nth-child(7)').hide();
+
+        $('.formtable tr th:nth-child(9)').hide();
+        $('.formtable tr td:nth-child(9)').hide();
+    }else{
+        $('#Docs_oppt_account_id').parent().hide();
+        
+    }
+}
+
 function refNum(id,docnum,typename){//
     
     //console.log("fire");
@@ -658,7 +705,17 @@ function priceChange(index){
     CalcPriceSum();
 }
 $('input').blur(function(){
-
+    //
+    if(this.id=='Docs_oppt_account_id'){
+        $.get("<?php echo $this->createUrl('/');?>/index.php", {"r": "/accounts/JSON" ,"id": $("#Docs_oppt_account_id").val()},
+            function(data) {
+                //$("#Docs_company").val(data.name);
+                $('#Docs_oppt_account_id').parent().children('p').html(data.name);
+            }, "json")
+            .error(function() { });
+    }//end oppt_account_id
+    
+    
     if(this.id=='Docs_account_id'){
         var idate = $('#Docs_issue_date').val();
         $.get("<?php echo $this->createUrl('/');?>/index.php", {"r": "/accounts/JSON" ,"id": $("#Docs_account_id").val()},
@@ -804,6 +861,8 @@ function rcptcalcLines(){
         //i++;
     }
   }
+  
+  
 </script>
 <div class="form">
     <p>
