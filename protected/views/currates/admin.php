@@ -53,7 +53,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                      'value' => 'isset($data->Currency)?$data->Currency->name:0',   //where name is Client model attribute 
                    ),
 		'date',
-		'nisvalue',
+		'value',
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
 		),

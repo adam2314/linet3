@@ -117,13 +117,13 @@ Yii::app()->clientScript->registerScriptFile($baseUrl.'/assets/js/main.js');
 			$menu=array(
 		//Yii::t('app', 'message to be translated')
          array('label'=>Yii::t('app','Settings'),  'icon'=>'cogs','items'=>array(//'url'=>array('site/index'),
-            array('label'=>Yii::t('app','Bussines details'), 'url'=>array('companies/update&id=0')),
+            array('label'=>Yii::t('app','Bussines details'), 'url'=>array('config/admin')),
             //'---',
             //array('label'=>Yii::t('app','Accounts')),
             
              
            // '---',
-            array('label'=>Yii::t('app','Manual Journal Voucher'), 'url'=>array('voucher/index')),
+            array('label'=>Yii::t('app','Manual Journal Voucher'), 'url'=>array('transaction/create')),
             array('label'=>Yii::t('app','Business docs'), 'url'=>array('doctype/admin')),
             array('label'=>Yii::t('app','Costum Fields'), 'url'=>array('eavFields/admin')),
             array('label'=>Yii::t('app','Currency rates'), 'url'=>array('currates/admin')),

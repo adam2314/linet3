@@ -32,6 +32,10 @@ class AccountsController extends RightsController
 		if(isset($_POST['Accounts']))
 		{
 			$model->attributes=$_POST['Accounts'];
+                        $model->deleteEavAttributes();
+                        if(isset($_POST['AccounteavE'])&&isset($_POST['AccounteavE'])){
+                            $model->setEavAttributes(array_combine($_POST['AccounteavE'],$_POST['AccounteavV']));
+                        }
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -66,8 +70,15 @@ class AccountsController extends RightsController
 			$model->attributes=$_POST['Accounts'];
                         if($model->system_acc==1)
                             Yii::app()->user->setFlash('error', 'unable to change sys account');
-                        elseif($model->save())
-                            $this->redirect(array('view','id'=>$model->id));
+                        
+                        else{
+                            $model->deleteEavAttributes();
+                            if(isset($_POST['AccountseavE'])&&isset($_POST['AccountseavE'])){
+                                $model->setEavAttributes(array_combine($_POST['AccountseavE'],$_POST['AccountseavV']));
+                            }
+                            if($model->save())
+                                $this->redirect(array('view','id'=>$model->id));
+                        }
 		}
 
 		$this->render('update',array(

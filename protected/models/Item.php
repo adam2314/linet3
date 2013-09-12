@@ -27,7 +27,7 @@ class Item extends CActiveRecord
         
         public function findByPk($id, $condition = '', $params = Array()){
             $model = parent::findByPk($id, $condition = '', $params = Array());
-            $incomeMap=UserIncomeMap::model()->findByPk(array('user_id'=>Yii::app()->user->getId(), 'itemVatCat_id'=>$model->itemVatCat_id));
+            $incomeMap=UserIncomeMap::model()->findByPk(array('user_id'=>Yii::app()->user->id, 'itemVatCat_id'=>$model->itemVatCat_id));
             $model->vat=  Accounts::model()->findByPk($incomeMap->account_id)->src_tax;
             return $model;
         }

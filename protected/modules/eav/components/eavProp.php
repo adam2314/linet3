@@ -64,9 +64,10 @@ class eavProp extends CWidget
 			<tbody id="eavProp">
 		';
 		foreach($this->attr as $key=>$value) {
+                        $name=EavFields::model()->findByPk($key)->name;
 			echo "<tr>
 				
-				<td><input id=\"{$this->name}_E_$key\" type='hidden' value='$key' name=\"{$this->name}eavE[$key]\" />$key</td>
+				<td><input id=\"{$this->name}_E_$key\" type='hidden' value='$key' name=\"{$this->name}eavE[$key]\" />$name</td>
 				<td><input id=\"{$this->name}_V_$key\" type='text' value='$value' name=\"{$this->name}eavV[$key]\" /></td>
 				<td>
 					<a href='javascript:deleteEav(\"$key\");'><img src='".Yii::app()->request->baseUrl."/assets/5ac26951/gridview/delete.png'></a>

@@ -47,6 +47,24 @@ class Accounts extends CActiveRecord
 	    return 'id';
 	}
 
+        
+        function behaviors() {
+            return array(
+                'eavAttr' => array(
+                    'class' => 'application.modules.eav.extensions.EEavBehavior',
+                    'tableName' => 'accEav',
+                    'entityField' => 'entity',
+                    'attributeField' => 'attribute',
+                    'valueField' => 'value',
+                    'modelTableFk' => 'primaryKey',
+                    'safeAttributes' => array(),
+                    'attributesPrefix' => '',
+                )
+            );
+	}
+        
+        
+        
 	/**
 	 * @return string the associated database table name
 	 */

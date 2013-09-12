@@ -21,8 +21,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'nisvalue'); ?>
-		<?php echo $form->textField($model,'nisvalue',array('size'=>7,'maxlength'=>7)); ?>
+		<?php echo $form->label($model,'value'); ?>
+		<?php echo $form->textField($model,'value',array('size'=>7,'maxlength'=>7)); ?>
 	</div>
 
 	<div class="row buttons">

@@ -156,6 +156,7 @@ return array(
 			'password' => 'VBy7t6r5',
 			'charset' => 'utf8',
 			'tablePrefix' => '',
+                        'enableParamLogging'=>true,//needs to be removed some day
 		),
 		
 		'errorHandler'=>array(
@@ -165,6 +166,17 @@ return array(
 		'log'=>array(
             'class'=>'CLogRouter',
             'routes'=>array(
+                array(
+                    'class'=>'CWebLogRoute',
+                    'levels'=>'info,error,warning',//trace,
+                    'filter' => array(
+                        'class' => 'CLogFilter',
+                        'prefixSession' => true,
+                        'prefixUser' => false,
+                        'logUser' => false,
+                        'logVars' => array(),
+                    ),
+                ),
                 array(
                     'class'=>'CFileLogRoute',
                     'levels'=>'trace, info, error, warning',
@@ -182,6 +194,8 @@ return array(
                     'levels'=>'error, warning',
                     'emails'=>'adam@speedcomp.co.il',
                 ),*/
+                
+                
             ),
         ),
 	),

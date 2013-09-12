@@ -79,6 +79,7 @@ class Docs extends CActiveRecord{
     public function save($runValidation = true, $attributes = NULL) {
 
         $this->docnum=$this->newNum();
+        $this->owner=Yii::app()->user->id;
         //$catagories=ItemVatCat::model()->findAll();
         $a=parent::save($runValidation,$attributes);
         //$this->docType->stockAction;
@@ -136,9 +137,72 @@ class Docs extends CActiveRecord{
                 }
 
         }
+        if($this->docStatus->action!=0){
+            $this->transaction((int)$this->docStatus->action);
+        }
         return $a;
     }
+    private function transaction($action){
+        //income account -
+        //vat account +
+        //costmer accout +
+        $vat=new Transactions();
+        $accout=new Transactions();
+        $line=1;
+        $num=0;
+        //$valuedate=date(Yii::app()->locale->getDateFormat('phpdatetime'),strtotime($this->issue_date));
+        $valuedate=date("Y-m-d H:m:s",CDateTimeParser::parse($this->issue_date,Yii::app()->locale->getDateFormat('yiidatetime')));
+        foreach($this->docDetailes as $docdetail){
+            //item_id->ItemVatCat
+            //user->itemVatCa
+            $vatcat=  Item::model()->findByPk($docdetail->item_id)->itemVatCat_id;
+            $incomeacc= UserIncomeMap::model()->findByPk(array('user_id'=>Yii::app()->user->id,'itemVatCat_id'=>$vatcat))->account_id;
+             $income=new Transactions();
+             $income->num=$num;
+             $income->account_id=$incomeacc;
+             $income->refnum1=$this->id;
+             //refnum2
+             $income->valuedate=$valuedate;
+             
+             $income->details=$this->company;
+             $income->currency_id=$docdetail->currency_id;
+             $income->sum=$docdetail->price*$action;
+             $income->owner_id=$this->owner;
+             $income->linenum=$line;
+             $line++;
+             
+             $num=$income->save();
+             
+             $accout->sum+=($docdetail->invprice+ $docdetail->vat)*$action;
+             $vat->sum+= $docdetail->vat*$action;       
+        }
         
+        $accout->num=$num;
+        $accout->account_id=$this->account_id;
+        $accout->refnum1=$this->id;
+        $accout->valuedate=$valuedate;
+        $accout->details=$this->company;
+        $accout->currency_id=$this->currency_id;
+        $accout->owner_id=$this->owner;
+        $accout->linenum=$line;
+        $line++;
+        $accout->save();
+        
+        $vat->num=$num;
+        $vat->account_id=Config::model()->findByPk('company.vatacc')->value;
+        $vat->refnum1=$this->id;
+        $vat->valuedate=$valuedate;
+        $vat->details=$this->company;
+        $vat->currency_id=$this->currency_id;
+        $vat->owner_id=$this->owner;
+        $vat->linenum=$line;
+        $line++;
+        //print_r($vat->attributes);
+        $vat->save();
+        
+        //exit;
+        
+    }   
         
     public function primaryKey(){
         return 'id';

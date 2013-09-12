@@ -23,7 +23,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'type'); ?>
-		<?php echo $form->dropDownList($model,'type',CHtml::listData(Acctype::model()->findAll(), 'id', 'name'));//currency ?>
+		<?php echo $form->dropDownList($model,'type',CHtml::listData(Acctype::model()->findAll(), 'id', 'name')); ?>
 		<?php echo $form->error($model,'type'); ?>
 	</div>
         <div class="row">
@@ -33,7 +33,7 @@
 	</div>
 	<div class="row">
 		<?php echo $form->labelEx($model,'id6111'); ?>
-		<?php echo $form->dropDownList($model,'id6111',CHtml::listData(AccId6111::model()->findAll(), 'id', 'name'));//currency ?>
+		<?php echo $form->dropDownList($model,'id6111',CHtml::listData(AccId6111::model()->findAll(), 'id', 'name')); ?>
 		<?php echo $form->error($model,'id6111'); ?>
 	</div>
 
@@ -161,9 +161,20 @@
 		<?php echo $form->error($model,'comments'); ?>
 	</div>
 
+        <div class="row">
+	
+		<?php $this->beginWidget('application.modules.eav.components.eavProp',array(
+    'name' => get_class($model),
+    'attr' => $model->getEavAttributes(),
+)); 
+
+ $this->endWidget(); ?>
+	</div>
+        
+        
 	<div class="row">
 		<?php echo $form->labelEx($model,'owner'); ?>
-		<?php echo $form->textField($model,'owner'); ?>
+                <?php echo $form->dropDownList($model,'owner',CHtml::listData(User::model()->findAll(), 'id', 'username')); ?>
 		<?php echo $form->error($model,'owner'); ?>
 	</div>
 

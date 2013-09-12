@@ -20,24 +20,78 @@
  */
 class Transactions extends CActiveRecord
 {
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return Transactions the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
+    /**
+     * Returns the static model of the specified AR class.
+     * @param string $className active record class name.
+     * @return Transactions the static model class
+     */
+    public static function model($className=__CLASS__)    {
+        return parent::model($className);
+    }
 
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return 'transactions';
-	}
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName()	{
+        return 'transactions';
+    }
 
+    private function newNum(){
+        if($this->num==0){
+            $model=Config::model()->findByPk('company.transaction');
+            $model->value=(int)$model->value+1;
+            $model->save();
+            return (int)$model->value-1;
+        }else{
+            return (int)$this->num;
+        }
+
+    }
+   
+    public function beforeSave(){
+        $this->num=$this->newNum();
+        $this->date=date("Y-m-d H:m:s");
+        
+        
+        $acccur=  Accounts::model()->findByPk($this->account_id)->currency_id;
+        
+        //leadsum
+        $cur=Config::model()->findByPk('company.cur')->value;
+        if($cur==$this->currency_id)
+            $this->leadsum=$this->sum;
+        else{
+            $rate=  Currates::model()->GetRate($this->currency_id);
+            $this->leadsum=$this->sum*$rate;
+        }
+        
+        
+        //set sum accourding to acc
+        if($this->currency_id!=$acccur){
+            $this->currency_id=$acccur;
+            $rate=  Currates::model()->GetRate($acccur);
+            $this->sum=$this->leadsum/$rate;
+        }
+            
+        //secsum
+        $seccur=Config::model()->findByPk('company.seccur')->value;
+        if($seccur!=''){
+            if($seccur==$this->currency_id) 
+                $this->secsum=$this->sum;
+            else{   
+                $rate=  Currates::model()->GetRate($this->currency_id);
+                $this->secsum=$this->leadsum/$rate;
+            }
+        }  
+        
+        return true;
+        
+     }
+     
+    public function save($runValidation = false, $attributes = NULL) {
+        
+        parent::save($runValidation,$attributes);
+        return $this->num;
+    }    
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -46,10 +100,11 @@ class Transactions extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('num, account_id, refnum1, refnum2, valuedate, details, currency_id, sum, leadsum, owner_id, linenum', 'required'),
-			array('num, account_id, currency_id, owner_id, linenum', 'numerical', 'integerOnly'=>true),
+			array('num, account_id, valuedate, currency_id, sum, owner_id, linenum', 'required'),
+			array('num, account_id, owner_id, linenum', 'numerical', 'integerOnly'=>true),
+                    
 			array('refnum1, refnum2, details', 'length', 'max'=>255),
-			array('sum, leadsum', 'length', 'max'=>8),
+			array('sum, leadsum', 'length', 'max'=>20),
 			array('date', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
