@@ -11,6 +11,7 @@
 
 	<?php echo $form->errorSummary($model); ?>
 	<?php echo $form->hiddenField($model,"doctype"); ?>
+        <?php echo CHTML::hiddenField("subType","save"); ?>
         <?php echo CHTML::hiddenField("cur_rate","1"); ?>
         <?php echo CHTML::hiddenField("doc_rate","1"); ?>
 	<?php echo CHTML::hiddenField("doc_items",count($model->docDetailes)); ?>
@@ -122,23 +123,14 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'issue_date'); ?>
-		<?php //$model->issue_date=Yii::app()->locale->getDateFormat('short');
-		//echo $form->textField($model,'issue_date',array('')); ?>
-            <?php $this->widget('zii.widgets.jui.CJuiDatePicker',
+                <?php $this->widget('zii.widgets.jui.CJuiDatePicker',
 			array(
                         'name'=>'Docs[issue_date]',
-                            'language' => 'en',
-			//'value'=>$model->issue_date,
+                        'language' => 'en',
                         'value'=>$model->issue_date,    
-                            'defaultOptions' => array(  // (#3)
-                                    //'showOn' => 'focus', 
-                                    'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-                                    //'showOtherMonths' => true,
-                                    //'selectOtherMonths' => true,
-                                    //'changeMonth' => true,
-                                    //'changeYear' => true,
-                                    //'showButtonPanel' => true,
-                                )
+                        'defaultOptions' => array(  // (#3)
+                            'dateFormat' => Yii::app()->locale->getDateFormat('short'),
+                        )
 	       	 )
 	        );?>
 		<?php echo $form->error($model,'issue_date'); ?>
@@ -149,18 +141,11 @@
 		<?php $this->widget('zii.widgets.jui.CJuiDatePicker',
 			array(
                         'name'=>'Docs[due_date]',
-                            'language' => 'en',
-			//'value'=>$model->due_date,
+                        'language' => 'en',
                         'value'=>$model->due_date,    
-                            'defaultOptions' => array(  // (#3)
-                                    //'showOn' => 'focus', 
-                                    'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-                                    //'showOtherMonths' => true,
-                                    //'selectOtherMonths' => true,
-                                    //'changeMonth' => true,
-                                    //'changeYear' => true,
-                                    //'showButtonPanel' => true,
-                                )
+                        'defaultOptions' => array(  // (#3)
+                            'dateFormat' => Yii::app()->locale->getDateFormat('short'),
+                        )
 	       	 )
 	        );?>
 		<?php echo $form->error($model,'due_date'); ?>
@@ -194,7 +179,7 @@
 		</thead>	
 		<tfoot>
                     <tr>
-			<td class="docadd"><?php echo Yii::t('ui','New');?>
+			<td class="docadd"><?php echo Yii::t('app','New');?>
                             <textarea id="doc" style='display:none;'>       
                                     <?php 
                                     echo $this->renderPartial('docdetial', array('model'=>new Docdetails,'form'=>$form,'i'=>'ABC')); 
@@ -310,19 +295,19 @@
 
     <thead>
                     <tr  class="head1">
-                        <th><?php echo Yii::t('label','Type'); ?></th>   
-                        <th><?php echo Yii::t('label','Refnum'); ?></th>
+                        <th><?php echo Yii::t('labels','Type'); ?></th>   
+                        <th><?php echo Yii::t('labels','Refnum'); ?></th>
 			
-			<th><?php echo Yii::t('label','Credit Company'); ?></th>
-			<th><?php echo Yii::t('label','Cheque No.'); ?></th>
-			<th><?php echo Yii::t('label','Bank'); ?></th>
-			<th><?php echo Yii::t('label','Branch'); ?></th>
-			<th><?php echo Yii::t('label','Cheque Account'); ?></th>
-			<th><?php echo Yii::t('label','Cheque Date'); ?></th>
-                        <th><?php echo Yii::t('label','Currency'); ?></th>
-			<th><?php echo Yii::t('label','Sum'); ?></th>
-			<th><?php echo Yii::t('label','Bank Refnum'); ?></th>
-			<th><?php echo Yii::t('label','Dep Date'); ?></th>
+			<th><?php echo Yii::t('labels','Credit Company'); ?></th>
+			<th><?php echo Yii::t('labels','Cheque No.'); ?></th>
+			<th><?php echo Yii::t('labels','Bank'); ?></th>
+			<th><?php echo Yii::t('labels','Branch'); ?></th>
+			<th><?php echo Yii::t('labels','Cheque Account'); ?></th>
+			<th><?php echo Yii::t('labels','Cheque Date'); ?></th>
+                        <th><?php echo Yii::t('labels','Currency'); ?></th>
+			<th><?php echo Yii::t('labels','Sum'); ?></th>
+			<th><?php echo Yii::t('labels','Bank Refnum'); ?></th>
+			<th><?php echo Yii::t('labels','Dep Date'); ?></th>
 			
                         
                         
@@ -334,7 +319,7 @@
 		</thead>	
 		<tfoot>
                     <tr>
-			<td colspan='8' class="rcptadd"><?php echo Yii::t('ui','New');?>
+			<td colspan='8' class="rcptadd"><?php echo Yii::t('app','New');?>
         		<textarea id="rcpt" style='display:none;'>       
 	                      	<?php 
                         	echo $this->renderPartial('rcptdetial', array('model'=>new Doccheques,'form'=>$form,'i'=>'ABC')); 
@@ -475,7 +460,7 @@
 
                 }
                 
-                
+                $('#language_chzn').hide();
                 
 	});/*******************end ready*****************************/
 	//function hideEmptyHeaders(){
@@ -862,7 +847,18 @@ function rcptcalcLines(){
     }
   }
   
+  function hideMe(){
+   $('#printLink').hide();
+   $('#language_chzn').show();
+   return false;   
+  }
   
+  
+  function sendForm(value){//preview,print,mail,pdf
+      $('#subType').val(value);
+      $('#docs-form').submit();
+      //return false;
+  }
 </script>
 <div class="form">
     <p>
@@ -871,13 +867,42 @@ function rcptcalcLines(){
         <?php echo $form->error($model,'comments'); ?>
     </p>
             
-    <p>
+    <div class="btn-toolbar">
         <!--</div>
-
+        
         <div class="row buttons">-->
-        <?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+        <?php //echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+        <?php $this->widget('bootstrap.widgets.TbButton', array(
+            'label'=>Yii::t('app','Preview'),
+            'icon'=>'file',
+                    
+            'htmlOptions'=>array('onclick'=>'return sendForm("preview");',),
+        )); ?>
+        
+       
+        <?php $this->widget('bootstrap.widgets.TbButtonGroup', array(
+            'type'=>'', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+            'buttons'=>array(
+                array('icon'=>'print','label'=>Yii::t('app','Print'),'htmlOptions'=>array('onclick'=>'return sendForm("print");'),),
+                array('items'=>array(
+                    array('icon'=>'envelope','label'=>Yii::t('app','Email'), 'url'=>'javascript:sendForm("email");',),
+                    array('icon'=>'save','label'=>Yii::t('app','PDF'), 'url'=>'javascript:sendForm("pdf");',),
+                    
+                )),
+            ),
+        )); ?>
+        
+        <?php $this->widget('bootstrap.widgets.TbButton', array(
+            'label'=>Yii::t('app','Change language'),
+            'icon'=>'globe',
+            'htmlOptions'=>array('id'=>'printLink', 'onclick'=>'return hideMe();'),
+        )); ?>
+        
+        <?php echo CHtml::dropDownList('language',Yii::app()->user->getLanguage(),CHtml::listData(Language::model()->findAll(), 'id', 'name'));//Docstatus::model()->findAll();?>
         <!--</div>-->
-    </p>
+    </div>
+    
+    <br /><br /><br /><br />
 </div><!-- form -->
 <?php $this->endWidget(); ?>
 
@@ -885,7 +910,6 @@ function rcptcalcLines(){
 <?php
 $this->beginWidget('zii.widgets.jui.CJuiDialog',array(
     'id'=>'choseRefDoc',
-    // additional javascript options for the dialog plugin
     'options'=>array(
         'title'=>'Chose Refernce Documenet',
         'autoOpen'=>false,
@@ -893,7 +917,7 @@ $this->beginWidget('zii.widgets.jui.CJuiDialog',array(
     ),
 ));
 $dataProvider=new CActiveDataProvider('Docs');
-    echo $this->renderPartial('index', array('dataProvider'=>$dataProvider,)); 
+echo $this->renderPartial('index', array('dataProvider'=>$dataProvider,)); 
 
 $this->endWidget('zii.widgets.jui.CJuiDialog');
 

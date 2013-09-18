@@ -61,9 +61,9 @@ class PaymentType extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-						'id'=>Yii::t('label','ID'),
-						'name'=>Yii::t('label','Name'),
-						'value'=>Yii::t('label','Value'),
+						'id'=>Yii::t('labels','ID'),
+						'name'=>Yii::t('labels','Name'),
+						'value'=>Yii::t('labels','Value'),
 		);
 	}
 

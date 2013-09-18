@@ -81,10 +81,10 @@ class Currecies extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id'=>Yii::t('label','ID'),
-                        'code'=>Yii::t('label','Code'),
-                        'name'=>Yii::t('label','Name'),
-                        'symbol'=>Yii::t('label','Symbol'),
+			'id'=>Yii::t('labels','ID'),
+                        'code'=>Yii::t('labels','Code'),
+                        'name'=>Yii::t('labels','Name'),
+                        'symbol'=>Yii::t('labels','Symbol'),
 		);
 	}
 

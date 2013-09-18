@@ -56,6 +56,7 @@ return array (
   'Fax No.' => '',
   'First Name' => '',
   'Hash' => '',
+  'ID' => '',
   'Id6111' => '',
   'Idcode' => '',
   'Is Product' => '',
@@ -68,6 +69,7 @@ return array (
   'Line' => '',
   'Manufacturer' => '',
   'Mobile No.' => '',
+  'Name' => '',
   'No VAT Total' => '',
   'Open Format' => '',
   'Owner' => '',
@@ -109,6 +111,4 @@ return array (
   'Website' => '',
   'Zip' => '',
   'invoice Price' => '',
-  'ID' => 'מזהה',
-  'Name' => 'שם',
 );

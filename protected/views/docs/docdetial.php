@@ -51,7 +51,7 @@
                                                                     ?>
                                                                     <div id="Docdetails_<?php echo $i; ?>_vatlabel" ></div
                                                                     </td>
-    <td class="remove"><?php echo Yii::t('ui', 'Remove'); ?>
+    <td class="remove"><?php echo Yii::t('app', 'Remove'); ?>
         <input type="hidden" class="rowIndex" value="<?php echo $i; ?>" />
         <input id="Docdetails_<?php echo $i; ?>_src_tax"type="hidden" value="" />
         <input id="Docdetails_<?php echo $i; ?>_rate"type="hidden" value="1" />

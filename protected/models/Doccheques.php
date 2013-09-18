@@ -82,18 +82,18 @@ class Doccheques extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'doc_id' => Yii::t('label','Refnum'),
-			'type' => Yii::t('label','Type'),
-			'creditcompany' => Yii::t('label','Creditcompany'),
-			'cheque_num' => Yii::t('label','Cheque No.'),
-			'bank' => Yii::t('label','Bank'),
-			'branch' => Yii::t('label','Branch'),
-			'cheque_acct' => Yii::t('label','Cheque Account'),
-			'cheque_date' => Yii::t('label','Cheque Date'),
-			'sum' => Yii::t('label','Sum'),
-			'bank_refnum' => Yii::t('label','Bank Refnum'),
-			'dep_date' => Yii::t('label','Dep Date'),
-			'line' => Yii::t('label','Line'),
+			'doc_id' => Yii::t('labels','Refnum'),
+			'type' => Yii::t('labels','Type'),
+			'creditcompany' => Yii::t('labels','Creditcompany'),
+			'cheque_num' => Yii::t('labels','Cheque No.'),
+			'bank' => Yii::t('labels','Bank'),
+			'branch' => Yii::t('labels','Branch'),
+			'cheque_acct' => Yii::t('labels','Cheque Account'),
+			'cheque_date' => Yii::t('labels','Cheque Date'),
+			'sum' => Yii::t('labels','Sum'),
+			'bank_refnum' => Yii::t('labels','Bank Refnum'),
+			'dep_date' => Yii::t('labels','Dep Date'),
+			'line' => Yii::t('labels','Line'),
 		);
 	}
 

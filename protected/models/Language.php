@@ -1,18 +1,18 @@
 <?php
 
 /**
- * This is the model class for table "bankName".
+ * This is the model class for table "language".
  *
- * The followings are the available columns in table 'bankName':
- * @property integer $id
+ * The followings are the available columns in table 'language':
+ * @property string $id
  * @property string $name
  */
-class BankName extends CActiveRecord{
-        const table='bankName';
+class Language extends CActiveRecord
+{
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return BankName the static model class
+	 * @return Language the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -24,7 +24,7 @@ class BankName extends CActiveRecord{
 	 */
 	public function tableName()
 	{
-		return BankName::table;
+		return 'language';
 	}
 
 	/**
@@ -36,7 +36,7 @@ class BankName extends CActiveRecord{
 		// will receive user inputs.
 		return array(
 			array('id, name', 'required'),
-			array('id', 'numerical', 'integerOnly'=>true),
+			array('id', 'length', 'max'=>10),
 			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -77,17 +77,11 @@ class BankName extends CActiveRecord{
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
+		$criteria->compare('id',$this->id,true);
 		$criteria->compare('name',$this->name,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
-	}
-        
-        public static function AutoComplete($name='') {
-		$sql= 'SELECT id as value, name AS label FROM '.BankName::table.' WHERE name LIKE :name';
-		$name = $name.'%';
-		return Yii::app()->db->createCommand($sql)->queryAll(true,array(':name'=>$name));
 	}
 }

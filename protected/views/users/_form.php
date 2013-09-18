@@ -27,13 +27,7 @@
 
 	<?php echo $form->textFieldRow($model,'email',array('class'=>'span5','maxlength'=>255)); ?>
 
-	<div class="form-actions">
-		<?php $this->widget('bootstrap.widgets.TbButton', array(
-			'buttonType'=>'submit',
-			'type'=>'primary',
-			'label'=>$model->isNewRecord ? 'Create' : 'Save',
-		)); ?>
-	</div>
+        <?php echo $form->dropDownListRow($model,'language',CHtml::listData(Language::model()->findAll(), 'id', 'name'));?>
 
         
     <table  data-role="table" class="formtable" ><!-- docdetalies -->
@@ -67,7 +61,15 @@
 
 
     </table><!-- doc detiales -->
-        
+    
+    
+        <div class="form-actions">
+		<?php $this->widget('bootstrap.widgets.TbButton', array(
+			'buttonType'=>'submit',
+			'type'=>'primary',
+			'label'=>$model->isNewRecord ? 'Create' : 'Save',
+		)); ?>
+	</div>
         
         
 <?php $this->endWidget(); ?>

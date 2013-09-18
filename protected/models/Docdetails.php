@@ -81,16 +81,16 @@ class Docdetails extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'doc_id' => Yii::t('label','Doc'),
-			'item_id' => Yii::t('label','Item'),
-			'name' => Yii::t('label','Name'),
-			'description' => Yii::t('label','Description'),
-			'qty' => Yii::t('label','Qty'),
-			'unit_price' => Yii::t('label','Unit Price'),
-			'currency_id' => Yii::t('label','Currency'),
-			'price' => Yii::t('label','Price'),
-			'invprice' => Yii::t('label','invoice Price'),
-			'line' => Yii::t('label','Line'),
+			'doc_id' => Yii::t('labels','Doc'),
+			'item_id' => Yii::t('labels','Item'),
+			'name' => Yii::t('labels','Name'),
+			'description' => Yii::t('labels','Description'),
+			'qty' => Yii::t('labels','Qty'),
+			'unit_price' => Yii::t('labels','Unit Price'),
+			'currency_id' => Yii::t('labels','Currency'),
+			'price' => Yii::t('labels','Price'),
+			'invprice' => Yii::t('labels','invoice Price'),
+			'line' => Yii::t('labels','Line'),
 		);
 	}
 

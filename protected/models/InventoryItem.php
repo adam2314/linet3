@@ -63,10 +63,10 @@ class InventoryItem extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-						'account_id'=>Yii::t('label','Account'),
-						'item_id'=>Yii::t('label','Item'),
-						'ammount'=>Yii::t('label','Ammount'),
-						'idcode'=>Yii::t('label','Idcode'),
+						'account_id'=>Yii::t('labels','Account'),
+						'item_id'=>Yii::t('labels','Item'),
+						'ammount'=>Yii::t('labels','Ammount'),
+						'idcode'=>Yii::t('labels','Idcode'),
 		);
 	}
 

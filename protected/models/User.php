@@ -51,13 +51,14 @@ class User extends CActiveRecord
 			array('username, lname, certpasswd, salt, email', 'required'),
 			array('username', 'length', 'max'=>100),
 			array('fname, lname, certpasswd, salt, email', 'length', 'max'=>255),
+                        array('language', 'length', 'max'=>10),
 			array('password', 'length', 'max'=>41),
 			array('cookie, hash', 'length', 'max'=>32),
 			array('certpasswd, salt, email', 'length', 'max'=>255),
 			array('lastlogin', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, username, fname, lname, password, lastlogin, cookie, hash, certpasswd, salt, email', 'safe', 'on'=>'search'),
+			array('id, username, fname, lname, password, lastlogin, cookie, hash, certpasswd, salt, email, language', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -109,17 +110,18 @@ class User extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id'=>Yii::t('label','ID'),
-                        'username'=>Yii::t('label','User Name'),
-                        'fname'=>Yii::t('label','First Name'),
-                        'lname'=>Yii::t('label','Last Name'),
-                        'password'=>Yii::t('label','Password'),
-                        'lastlogin'=>Yii::t('label','Last Login'),
-                        'cookie'=>Yii::t('label','Cookie'),
-                        'hash'=>Yii::t('label','Hash'),
-                        'certpasswd'=>Yii::t('label','Certifcate Password'),
-                        'salt'=>Yii::t('label','Salt'),
-                        'email'=>Yii::t('label','Email'),
+			'id'=>Yii::t('labels','ID'),
+                        'username'=>Yii::t('labels','User Name'),
+                        'fname'=>Yii::t('labels','First Name'),
+                        'lname'=>Yii::t('labels','Last Name'),
+                        'password'=>Yii::t('labels','Password'),
+                        'lastlogin'=>Yii::t('labels','Last Login'),
+                        'cookie'=>Yii::t('labels','Cookie'),
+                        'hash'=>Yii::t('labels','Hash'),
+                        'certpasswd'=>Yii::t('labels','Certifcate Password'),
+                        'salt'=>Yii::t('labels','Salt'),
+                        'email'=>Yii::t('labels','Email'),
+                        'language'=>Yii::t('labels','Language'),
 		);
 	}
 

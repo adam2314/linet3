@@ -142,7 +142,9 @@ class Docs extends CActiveRecord{
         }
         return $a;
     }
-    private function transaction($action){
+    private function transaction($action){//if isdoc
+    //if is recipet
+    //spical case 11,12
         //income account -
         //vat account +
         //costmer accout +
@@ -268,7 +270,7 @@ class Docs extends CActiveRecord{
                     'docCheques'=>array(self::HAS_MANY, 'Doccheques', 'doc_id'),
                     'docDetailes'=>array(self::HAS_MANY, 'Docdetails', 'doc_id'),
                     'docType'=>array(self::BELONGS_TO, 'Doctype', 'doctype'),
-                    'docStatus'=>array(self::BELONGS_TO, 'Docstatus', 'status'),
+                    'docStatus'=>array(self::BELONGS_TO, 'Docstatus', array('status','doctype')),
                     'docOwner' => array(self::BELONGS_TO, 'Users', 'owner'),
                     'Currency' => array(self::BELONGS_TO, 'Currecies', 'currency_id'),
                     //
@@ -280,28 +282,28 @@ class Docs extends CActiveRecord{
      */
     public function attributeLabels()    {
             return array(
-                    'id'=>Yii::t('label','ID'),
-                    'doctype'=>Yii::t('label','Documenet Type'),
-                    'docnum'=>Yii::t('label','Documenet No.'),
-                    'account_id'=>Yii::t('label','Account'),
-                    'company'=>Yii::t('label','Company'),
-                    'address'=>Yii::t('label','Address'),
-                    'city'=>Yii::t('label','City'),
-                    'zip'=>Yii::t('label','Zip'),
-                    'vatnum'=>Yii::t('label','VAT No.'),
-                    'refnum'=>Yii::t('label','Refernce No.'),
-                    'issue_date'=>Yii::t('label','Issue Date'),
-                    'due_date'=>Yii::t('label','Due Date'),
-                    'sub_total'=>Yii::t('label','Sub Total'),
-                    'novat_total'=>Yii::t('label','No VAT Total'),
-                    'vat'=>Yii::t('label','VAT'),
-                    'total'=>Yii::t('label','Total'),
-                    'currency_id'=>Yii::t('label','Currency'),
-                    'src_tax'=>Yii::t('label','Src Tax'),
-                    'status'=>Yii::t('label','Status'),
-                    'printed'=>Yii::t('label','Printed'),
-                    'comments'=>Yii::t('label','Comments'),
-                    'owner'=>Yii::t('label','Owner'),
+                    'id'=>Yii::t('labels','ID'),
+                    'doctype'=>Yii::t('labels','Documenet Type'),
+                    'docnum'=>Yii::t('labels','Documenet No.'),
+                    'account_id'=>Yii::t('labels','Account'),
+                    'company'=>Yii::t('labels','Company'),
+                    'address'=>Yii::t('labels','Address'),
+                    'city'=>Yii::t('labels','City'),
+                    'zip'=>Yii::t('labels','Zip'),
+                    'vatnum'=>Yii::t('labels','VAT No.'),
+                    'refnum'=>Yii::t('labels','Refernce No.'),
+                    'issue_date'=>Yii::t('labels','Issue Date'),
+                    'due_date'=>Yii::t('labels','Due Date'),
+                    'sub_total'=>Yii::t('labels','Sub Total'),
+                    'novat_total'=>Yii::t('labels','No VAT Total'),
+                    'vat'=>Yii::t('labels','VAT'),
+                    'total'=>Yii::t('labels','Total'),
+                    'currency_id'=>Yii::t('labels','Currency'),
+                    'src_tax'=>Yii::t('labels','Src Tax'),
+                    'status'=>Yii::t('labels','Status'),
+                    'printed'=>Yii::t('labels','Printed'),
+                    'comments'=>Yii::t('labels','Comments'),
+                    'owner'=>Yii::t('labels','Owner'),
             );
     }
 

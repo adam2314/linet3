@@ -14,7 +14,7 @@ return array(
 	'preload'=>array('log'),
 	'language'=>'he_il',
 	'defaultController' => 'test',
-		
+	'onBeginRequest' => array('Linet3', 'beginRequest'),	
     
 	// autoloading model and component classes
 	'import'=>array(
@@ -80,8 +80,8 @@ return array(
 				//'class'=>'CApcCache',
 		//),
 		'user'=>array(
-			//'class' => 'application.modules.user.components.YumWebUser',
-			'class'=>'RWebUser',//rights
+			'class' => 'RLinUser',
+			//'class'=>'RWebUser',//rights
 			'allowAutoLogin'=>true,
 			//'loginUrl' => array('//user/user/login'),
 

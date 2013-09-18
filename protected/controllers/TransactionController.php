@@ -24,6 +24,23 @@ class TransactionController extends RightsController{
                 $model->linenum=$line;
                 $line++;
                 if($model->save()){
+                    foreach($_POST['ops'] as $acc){
+                        $i=$line-2;
+                        $submodel=new Transactions();
+                        $submodel->attributes=$_POST['Transactions'];
+                        $submodel->num=$model->num;
+                        $submodel->account_id=$acc;
+                        if(isset($_POST['sumpos'][$i]) && (float)$_POST['sumpos'][$i]!=0)
+                            $submodel->sum=$_POST['sumpos'][$i];
+                        else 
+                            $submodel->sum=$_POST['sumneg'][$i]*-1;
+                        
+                        $submodel->owner_id=Yii::app()->user->id;
+                        $submodel->linenum=$line;
+                        $submodel->save();
+                        //$i
+                        $line++;
+                    }
                     //save subs
                     //$line++;
                     $this->redirect(array('create'));

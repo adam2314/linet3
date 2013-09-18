@@ -7,12 +7,12 @@
 jQuery(document).ready(function(){
     preview=<?php echo $preview;?>;
     
-    if(preview==1)
+    if(preview==0)
         window.print();
 });
 
 </script>
-		
+	
 <table>
         <tr>
                 <td colspan="3" width="650">
@@ -170,20 +170,20 @@ if(count($model->docCheques)!=0){
                         
 <table class="table">
         <tr>
-            <th class='Type'><?php echo Yii::t('label','Type'); ?></th>   
-            <th class='Line'><?php echo Yii::t('label','Line'); ?></th> 
-            <th class='Refnum'><?php echo Yii::t('label','Refnum'); ?></th>
+            <th class='Type'><?php echo Yii::t('labels','Type'); ?></th>   
+            <th class='Line'><?php echo Yii::t('labels','Line'); ?></th> 
+            <th class='Refnum'><?php echo Yii::t('labels','Refnum'); ?></th>
 
-            <th class='CreditCompany'><?php echo Yii::t('label','Credit Company'); ?></th>
-            <th class='ChequeNo'><?php echo Yii::t('label','Cheque No.'); ?></th>
-            <th class='Bank'><?php echo Yii::t('label','Bank'); ?></th>
-            <th class='Branch'><?php echo Yii::t('label','Branch'); ?></th>
-            <th class='ChequeAccount'><?php echo Yii::t('label','Cheque Account'); ?></th>
-            <th class='ChequeDate'><?php echo Yii::t('label','Cheque Date'); ?></th>
-            <th class='Currency'><?php echo Yii::t('label','Currency'); ?></th>
-            <th class='Sum'><?php echo Yii::t('label','Sum'); ?></th>
-            <th class='BankRefnum'><?php echo Yii::t('label','Bank Refnum'); ?></th>
-            <th class='DepDate'><?php echo Yii::t('label','Dep Date'); ?></th> 
+            <th class='CreditCompany'><?php echo Yii::t('labels','Credit Company'); ?></th>
+            <th class='ChequeNo'><?php echo Yii::t('labels','Cheque No.'); ?></th>
+            <th class='Bank'><?php echo Yii::t('labels','Bank'); ?></th>
+            <th class='Branch'><?php echo Yii::t('labels','Branch'); ?></th>
+            <th class='ChequeAccount'><?php echo Yii::t('labels','Cheque Account'); ?></th>
+            <th class='ChequeDate'><?php echo Yii::t('labels','Cheque Date'); ?></th>
+            <th class='Currency'><?php echo Yii::t('labels','Currency'); ?></th>
+            <th class='Sum'><?php echo Yii::t('labels','Sum'); ?></th>
+            <th class='BankRefnum'><?php echo Yii::t('labels','Bank Refnum'); ?></th>
+            <th class='DepDate'><?php echo Yii::t('labels','Dep Date'); ?></th> 
         </tr>
         <?php $i=0;
   

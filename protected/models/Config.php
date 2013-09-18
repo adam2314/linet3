@@ -60,8 +60,8 @@ class Config extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id'=>Yii::t('label','ID'),
-                        'value'=>Yii::t('label','Value'),
+			'id'=>Yii::t('labels','ID'),
+                        'value'=>Yii::t('labels','Value'),
 		);
 	}
 

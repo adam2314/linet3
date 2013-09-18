@@ -18,16 +18,18 @@ class DocsController extends RightsController
 	}
 
         
-        public function actionPrint($id,$preview=1){/*usd for print*/
+        public function actionPrint($id,$preview=1,$model=null){/*usd for print*/
+            if(isset($_POST['language']))
+                Yii::app()->language=$_POST['language'];
+            //Yii::app()->language='he_il';
             $this->layout='print';
-//$this->render('pages/about');
             
-            
-		$model = Docs::model()->findByPk($id);
+            if(is_null($model))
+                $model = Docs::model()->findByPk($id);
 
-		$this->render('print',array(
-			'model'=>$model,'preview'=>$preview,
-		));
+            $this->render('print',array(
+                    'model'=>$model,'preview'=>$preview,
+            ));
 	}
         
 	/**
@@ -52,11 +54,33 @@ class DocsController extends RightsController
                         if(isset($_POST['Docdetails'])) $model->docDet=$_POST['Docdetails'];
                         if(isset($_POST['Doccheques'])) $model->docCheq=$_POST['Doccheques'];
                         
+                        //if($_POST['subType']!='preview'){
+                        switch ($_POST['subType']) {
+                            case 'save':
+                                if($model->save())
+                                        $this->redirect(array('admin'));
+                                  return;
+                                  break;
+                            case 'print':
+                                if($model->save())
+                                        $this->actionPrint($model->id, 0, $model);
+                                        //$this->redirect(array('update','id'=>$model->id));
+                                return;
+                                break;
+                            case 'preview':
+                                $this->actionPrint($model->id, 1, $model);
+                                return;
+                                break;
+                            case 'email':
+                                //$this->actionPrint($model->id,  $model);
+                                return;
+                                break;
+                            case 'pdf':
+                                //$this->actionPrint($model->id, $model);
+                                return;
+                                break;
+                        }
                         
-			if($model->save())
-                                //print 'saved';
-				//$this->redirect(array('view','id'=>$model->id));
-                                $this->redirect(array('update','id'=>$model->id));
 		}
 		
 		
@@ -94,11 +118,33 @@ class DocsController extends RightsController
 			
 			if(isset($_POST['Docdetails'])) $model->docDet=$_POST['Docdetails'];
                         if(isset($_POST['Doccheques'])) $model->docCheq=$_POST['Doccheques'];
-                        
-			if($model->save()){
-                                $this->redirect(array('update','id'=>$model->id));
-				//$this->redirect(array('view','id'=>$model->id));
-			}
+                        //echo $_POST['subType'];
+                        //exit;
+                        switch ($_POST['subType']) {
+                            case 'save':
+                                if($model->save())
+                                        $this->redirect(array('admin'));
+                                  return;      
+                                  break;
+                            case 'print':
+                                if($model->save())
+                                        $this->redirect(array('print','id'=>$model->id));
+                                        //$this->redirect(array('update','id'=>$model->id));
+                                return;
+                                break;
+                            case 'preview':
+                                $this->actionPrint($model->id, 1, $model);
+                                return;
+                                break;
+                            case 'email':
+                                //$this->actionPrint($model->id,  $model);
+                                return;
+                                break;
+                            case 'pdf':
+                                //$this->actionPrint($model->id, $model);
+                                return;
+                                break;
+                        }
 		}
 		
 

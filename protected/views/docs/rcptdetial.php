@@ -23,7 +23,7 @@
     <td><b><?php echo $form->labelEx($model, 'bank_refnum'); ?></b><?php echo $form->hiddenField($model, "[$i]bank_refnum", array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;"));  ?></td>
     <td><b><?php echo $form->labelEx($model, 'dep_date'); ?></b><?php echo $form->hiddenField($model, "[$i]dep_date", array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;"));  ?></td>
     
-    <td class="remove"><?php echo Yii::t('ui', 'Remove'); ?>
+    <td class="remove"><?php echo Yii::t('app', 'Remove'); ?>
 
     </td>
 <script type="text/javascript">
