@@ -32,81 +32,61 @@ $this->menu=$actions;
 
 $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View Document ") ." " .$model->id,));
 ?>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        
+        $('#language_chzn').hide();
+                
+    });
+    
+    
+    function hideMe(){
+   $('#printLink').hide();
+   $('#language_chzn').show();
+   return false;   
+  }
+    
+    
+    function sendForm(value){//preview,print,mail,pdf,save
+      $('#subType').val(value);
+      if(value=='preview')
+        $("#docs-form").attr('target', '_BLANK');
+      $('#docs-form').submit();
+      
+      //return false;
+  }
+</script>
+<?php 
 
-<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		'id',
-		//'prefix',
-		'doctype',
-		'docnum',
-		'account_id',
-		'company',
-		'address',
-		'city',
-		'zip',
-		'vatnum',
-		'refnum',
-		'issue_date',
-		'due_date',
-		'sub_total',
-		'novat_total',
-		'vat',
-		'total',
-		'src_tax',
-		'status',
-		'printed',
-		'comments',
-		'owner',
-	),
+echo $this->renderPartial('print', array('model'=>$model,'preview'=>1)); 
+                
+        
+        $form=$this->beginWidget('CActiveForm', array(
+	'id'=>'docs-form',
+        'action'=>'update/'.$model->id,
+	'enableAjaxValidation'=>false,
 )); 
-
-
-
-
-	if($model->docType->isdoc){
-			//echo 'doc';
-			$detials=new Docdetails;
-			?>
-	<div>
-		<table class="templateFrame grid" cellspacing="0">
-        	<thead class="templateHead">
-            	<tr>
-                	<?php //echo $model->getAttributeLabel('doc_id'); ?>
-					<td><?php echo $model->getAttributeLabel('item_id'); ?></td>
-					<td><?php echo $model->getAttributeLabel('name'); ?></td>
-					<td><?php echo $model->getAttributeLabel('description'); ?></td>
-					<td><?php echo $model->getAttributeLabel('qty'); ?></td>
-					<td><?php echo $model->getAttributeLabel('unit_price'); ?></td>
-					<td><?php echo $model->getAttributeLabel('currency'); ?></td>
-					<td><?php echo $model->getAttributeLabel('price'); ?></td>
-					<td><?php echo $model->getAttributeLabel('nisprice'); ?></td>
-					
-                </tr>
-			</thead>
-			<tfoot>
-            	<tr>
-                	<td colspan="9">     	</td>
-	            	</tr>
-	         </tfoot>
-            <tbody class="templateTarget">
-                <?php $i=0;
-				//if(count($model->docdetailes)==0)
-					//$docdetails=array(new Docdetails);
-				
-				foreach ($model->docDetailes as $docdetail){
-                                        //print_r($docdetail);
-					echo $this->renderPartial('docdetialview', array('model'=>$docdetail,)); 
-					$i++;
-				}
-		 ?>
-            </tbody>
-		</table>
-		</div>	
-	<?php		
-			
-		}
-                
-                
+       echo CHTML::hiddenField("subType","print");
+       echo CHTML::hiddenField("Docs[id]",$model->id);
+         $this->widget('bootstrap.widgets.TbButtonGroup', array(
+            'type'=>'', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+            'buttons'=>array(
+                array('icon'=>'print','label'=>Yii::t('app','Print'),'htmlOptions'=>array('onclick'=>'return sendForm("print");'),),
+                array('items'=>array(
+                    //array('icon'=>'envelope','label'=>Yii::t('app','Email'), 'url'=>'javascript:sendForm("email");',),
+                    array('icon'=>'save','label'=>Yii::t('app','PDF'), 'url'=>'javascript:sendForm("pdf");',),
+                    
+                )),
+            ),
+        )); 
+        
+        $this->widget('bootstrap.widgets.TbButton', array(
+            'label'=>Yii::t('app','Change language'),
+            'icon'=>'globe',
+            'htmlOptions'=>array('id'=>'printLink', 'onclick'=>'return hideMe();'),
+        )); 
+        
+         echo CHtml::dropDownList('language',Yii::app()->user->getLanguage(),CHtml::listData(Language::model()->findAll(), 'id', 'name'));
+         $this->endWidget(); 
                 $this->endWidget(); 
 		?>

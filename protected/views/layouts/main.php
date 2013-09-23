@@ -166,8 +166,8 @@ Yii::app()->clientScript->registerScriptFile($baseUrl.'/assets/js/main.js');
 		array('label'=>Yii::t('app','Outcome'), 'icon'=>'shopping-cart','items'=>array(
 			array('label'=>Yii::t('app','Manage Suppliers'), 'url'=>array('accounts/contact/1')),
 			array('label'=>Yii::t('app','Parchace Order'), 'url'=>array('docs/create/10')),
-			array('label'=>Yii::t('app','insert Buisness outcome'), 'url'=>array('docs/create/11')),
-			array('label'=>Yii::t('app','insert Asstes outcome'), 'url'=>array('docs/create/12')),
+			array('label'=>Yii::t('app','insert Buisness outcome'), 'url'=>array('docs/create/13')),
+			array('label'=>Yii::t('app','insert Asstes outcome'), 'url'=>array('docs/create/14')),
 		)),
 		array('label'=>Yii::t('app','Register'), 'icon'=>'money','items'=>array(
 			array('label'=>Yii::t('app','Receipt'), 'url'=>array('docs/create/8')),

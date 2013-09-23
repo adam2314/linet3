@@ -17,6 +17,85 @@ class DocsController extends RightsController
 		));
 	}
 
+        public function actionPdf($id,$preview=1,$model=null){/*usd for print*/
+            if(isset($_POST['language']))
+                Yii::app()->language=$_POST['language'];
+            //Yii::app()->language='he_il';
+            $this->layout='print';
+            
+            //if(is_null($model))
+                $model = Docs::model()->findByPk($id);
+            
+            $file=$this->render('print',array('model'=>$model,'preview'=>$preview,),true);
+            
+            
+            $yiiBasepath=Yii::app()->basePath;
+            $yiiUser=Yii::app()->user->id;
+            $configPath=Config::model()->findByPk("company.path")->value;
+            $configCertpasswd=Yii::app()->user->getCertpasswd();
+            
+            
+            
+            $myHtml = $yiiBasepath."/files/".$configPath."/temp.html";
+            $myPdf=$yiiBasepath."/files/".$configPath."/docs/$model->doctype-$model->docnum.pdf";
+            $myPdfS=$yiiBasepath."/files/".$configPath."/docs/$model->doctype-$model->docnum-signed.pdf";
+            $fh = fopen($myHtml, 'w') or die("can't open file");
+            fwrite($fh, $file);
+            fclose($fh);
+            
+            $a=Config::model()->findByPk("server.wkhtmltopdf")->value." \"$myHtml\" \"$myPdf\"";
+            //print $a."<br />";
+            shell_exec($a);
+            
+            
+            
+            
+           spl_autoload_unregister(array('YiiBase','autoload')); 
+            $oldpath=get_include_path();
+            set_include_path( $yiiBasepath. '/modules/zend_pdf_certificate/');
+            //echo $yiiBasepath. '/modules/zend_pdf_certificate/';
+            //exit;
+            include_once('Pdf.php');
+            include_once('ElementRaw.php');
+            //loads a sample PDF file
+            $pdf = Farit_Pdf::load($myPdf);
+
+
+            $cerfile=$yiiBasepath."/files/".$configPath."/cert/".$yiiUser.".p12";
+            //echo $cerfile;
+            if(file_exists($cerfile)){
+                    $certificate = file_get_contents($cerfile);
+                    //password for the certificate
+
+                    $certificatePassword = $configCertpasswd;
+                    if (empty($certificate)) {
+                            throw new Zend_Pdf_Exception('Cannot open the certificate file');
+                    }
+                    $pdf->attachDigitalCertificate($certificate, $certificatePassword);
+                    //here the digital certificate is inserted inside of the PDF document
+                    $renderedPdf = $pdf->render();
+                    file_put_contents($myPdfS, $renderedPdf);
+                    
+            }
+            set_include_path($oldpath);
+            spl_autoload_register(array('YiiBase','autoload'));
+            
+            
+            
+            header("Pragma: public");
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            header("Cache-Control: public");
+            header("Content-Description: File Transfer");
+            header("Content-Type: application/pdf");
+            header("Content-Disposition: attachment; filename=\"$model->doctype-$model->docnum-signed.pdf\"");
+            header("Content-Transfer-Encoding: binary");
+            
+            readfile($myPdfS);
+            exit;
+	}
+        
+        
         
         public function actionPrint($id,$preview=1,$model=null){/*usd for print*/
             if(isset($_POST['language']))
@@ -76,7 +155,7 @@ class DocsController extends RightsController
                                 return;
                                 break;
                             case 'pdf':
-                                //$this->actionPrint($model->id, $model);
+                                $this->actionPdf($model->id);
                                 return;
                                 break;
                         }
@@ -141,7 +220,7 @@ class DocsController extends RightsController
                                 return;
                                 break;
                             case 'pdf':
-                                //$this->actionPrint($model->id, $model);
+                                $this->actionPdf($model->id);
                                 return;
                                 break;
                         }

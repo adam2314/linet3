@@ -142,65 +142,81 @@ class Docs extends CActiveRecord{
         }
         return $a;
     }
-    private function transaction($action){//if isdoc
-    //if is recipet
-    //spical case 11,12
+    private function transaction($action){
         //income account -
         //vat account +
         //costmer accout +
-        $vat=new Transactions();
-        $accout=new Transactions();
-        $line=1;
-        $num=0;
-        //$valuedate=date(Yii::app()->locale->getDateFormat('phpdatetime'),strtotime($this->issue_date));
         $valuedate=date("Y-m-d H:m:s",CDateTimeParser::parse($this->issue_date,Yii::app()->locale->getDateFormat('yiidatetime')));
-        foreach($this->docDetailes as $docdetail){
-            //item_id->ItemVatCat
-            //user->itemVatCa
-            $vatcat=  Item::model()->findByPk($docdetail->item_id)->itemVatCat_id;
-            $incomeacc= UserIncomeMap::model()->findByPk(array('user_id'=>Yii::app()->user->id,'itemVatCat_id'=>$vatcat))->account_id;
-             $income=new Transactions();
-             $income->num=$num;
-             $income->account_id=$incomeacc;
-             $income->refnum1=$this->id;
-             //refnum2
-             $income->valuedate=$valuedate;
-             
-             $income->details=$this->company;
-             $income->currency_id=$docdetail->currency_id;
-             $income->sum=$docdetail->price*$action;
-             $income->owner_id=$this->owner;
-             $income->linenum=$line;
-             $line++;
-             
-             $num=$income->save();
-             
-             $accout->sum+=($docdetail->invprice+ $docdetail->vat)*$action;
-             $vat->sum+= $docdetail->vat*$action;       
+        $num=0;
+        $line=1;
+        if($this->docType->isdoc){
+            $vat=new Transactions();
+            $accout=new Transactions();
+
+            foreach($this->docDetailes as $docdetail){             
+                 $num=$docdetail->transaction($num,$this->id,$valuedate,$this->company,$action,$line,$model->docType->oppt_account_type);
+                 $line++;
+                 $accout->sum+=($docdetail->invprice+ $docdetail->vat)*$action;
+                 $vat->sum+= $docdetail->vat*$action;       
+            }
+
+            $accout->num=$num;
+            $accout->account_id=$this->account_id;
+            $accout->refnum1=$this->id;
+            $accout->valuedate=$valuedate;
+            $accout->details=$this->company;
+            $accout->currency_id=$this->currency_id;
+            $accout->owner_id=$this->owner;
+            $accout->linenum=$line;
+            $line++;
+            $num=$accout->save();
+
+            $vat->num=$num;
+            $vat->account_id=Config::model()->findByPk('company.acc.vatacc')->value;
+            $vat->refnum1=$this->id;
+            $vat->valuedate=$valuedate;
+            $vat->details=$this->company;
+            $vat->currency_id=$this->currency_id;
+            $vat->owner_id=$this->owner;
+            $vat->linenum=$line;
+            $line++;
+            //print_r($vat->attributes);
+            $num=$vat->save();
         }
         
-        $accout->num=$num;
-        $accout->account_id=$this->account_id;
-        $accout->refnum1=$this->id;
-        $accout->valuedate=$valuedate;
-        $accout->details=$this->company;
-        $accout->currency_id=$this->currency_id;
-        $accout->owner_id=$this->owner;
-        $accout->linenum=$line;
-        $line++;
-        $accout->save();
-        
-        $vat->num=$num;
-        $vat->account_id=Config::model()->findByPk('company.vatacc')->value;
-        $vat->refnum1=$this->id;
-        $vat->valuedate=$valuedate;
-        $vat->details=$this->company;
-        $vat->currency_id=$this->currency_id;
-        $vat->owner_id=$this->owner;
-        $vat->linenum=$line;
-        $line++;
-        //print_r($vat->attributes);
-        $vat->save();
+        if($this->docType->isrecipet){
+            foreach($this->docCheques as $docrcpt){
+               $num=$docrcpt->transaction($num,$this->id,$valuedate,$this->company,$action,$line,$this->account_id);
+
+               $line++;
+               $line++;
+            }
+            $src=new Transactions();
+            $src->num=$num;
+            $src->account_id=$this->account_id;
+            $src->refnum1=$this->id;
+            $src->valuedate=$valuedate;
+            $src->details=$this->company;
+            $src->currency_id=$this->currency_id;
+            $src->owner_id=$this->owner;
+            $src->linenum=$line;
+            $src->sum+=($this->src_tax)*$action;
+            $line++;
+            $num=$src->save();
+            
+            $src=new Transactions();
+            $src->num=$num;
+            $src->account_id=Config::model()->findByPk('company.acc.custtax')->value;
+            $src->refnum1=$this->id;
+            $src->valuedate=$valuedate;
+            $src->details=$this->company;
+            $src->currency_id=$this->currency_id;
+            $src->owner_id=$this->owner;
+            $src->linenum=$line;
+            $src->sum+=($this->src_tax)*$action*-1;
+            $line++;
+            $num=$src->save();
+        }
         
         //exit;
         
@@ -272,7 +288,7 @@ class Docs extends CActiveRecord{
                     'docType'=>array(self::BELONGS_TO, 'Doctype', 'doctype'),
                     'docStatus'=>array(self::BELONGS_TO, 'Docstatus', array('status','doctype')),
                     'docOwner' => array(self::BELONGS_TO, 'Users', 'owner'),
-                    'Currency' => array(self::BELONGS_TO, 'Currecies', 'currency_id'),
+                    //'Currency' => array(self::BELONGS_TO, 'Currecies', 'currency_id'),
                     //
             );
     }

@@ -17,6 +17,28 @@
  */
 class Docdetails extends CActiveRecord
 {
+    
+        public function transaction($num,$refnum,$valuedate,$details,$action,$line,$optacc){
+            if(is_null($optacc)){
+                $vatcat=  Item::model()->findByPk($docdetail->item_id)->itemVatCat_id;
+                $incomeacc= UserIncomeMap::model()->findByPk(array('user_id'=>Yii::app()->user->id,'itemVatCat_id'=>$vatcat))->account_id;
+            }else {
+                $incomeacc=$optacc;
+            }
+            $income=new Transactions();
+            $income->num=$num;
+            $income->account_id=$incomeacc;
+            $income->refnum1=$refnum;
+            $income->valuedate=$valuedate;
+
+            $income->details=$details;
+            $income->currency_id=$this->currency_id;
+            $income->sum=$this->price*$action;
+            $income->owner_id=Yii::app()->user->id;
+            $income->linenum=$line;
+            return $income->save();
+        
+        }
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.

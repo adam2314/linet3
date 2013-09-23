@@ -14,6 +14,15 @@ class RLinUser extends RWebUser{
                 else 
                     return Yii::app()->language;
 	}
+        
+        
+    public function getCertpasswd(){
+		$user=User::model()->findByPk($this->id);
+                if($user)
+                    return $user->certpasswd;
+                else 
+                    return '';
+	}
 }
 
 ?>

@@ -20,6 +20,40 @@
  */
 class Doccheques extends CActiveRecord
 {
+    
+        public function transaction($num,$refnum,$valuedate,$details,$action,$line,$account_id){
+            $vatcat=  Item::model()->findByPk($docdetail->item_id)->itemVatCat_id;
+            $incomeacc= UserIncomeMap::model()->findByPk(array('user_id'=>Yii::app()->user->id,'itemVatCat_id'=>$vatcat))->account_id;
+           
+            
+            $in=new Transactions();
+            $in->num=$num;
+            $in->account_id=$account_id;
+            $in->refnum1=$refnum;
+            $in->valuedate=$valuedate;
+            $in->details=$details;
+            $in->currency_id=$this->currency_id;
+            $in->sum=$this->sum*$action;
+            $in->owner_id=Yii::app()->user->id;
+            $in->linenum=$line;
+            $num=$in->save();
+            $line++;
+            
+            $out=new Transactions();
+            $out->num=$num;
+            $out->account_id=$this->Type->oppt_account_id;
+            $out->refnum1=$refnum;
+            $out->valuedate=$valuedate;
+            $out->details=$details;
+            $out->currency_id=$this->currency_id;
+            $out->sum=$docrcpt->price*$action*-1;
+            $out->owner_id=Yii::app()->user->id;
+            $out->linenum=$line;
+            
+            
+            return $out->save();
+        
+        }
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -73,6 +107,7 @@ class Doccheques extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
                     'Docs'=>array(self::BELONGS_TO, 'Docs', 'doc_id'),
+                    'Type'=>array(self::BELONGS_TO, 'PaymentType', 'type'),
 		);
 	}
 

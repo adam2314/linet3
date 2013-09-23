@@ -468,8 +468,8 @@
 	//}
 
 function changeFileds(){//
-    var type = <?php echo $model->doctype; ?>;
-    if((type==11)||(type==12)){
+    var type = <?php echo (int)$model->docType->oppt_account_type; ?>;
+    if(type>=1){
         $("#Docs_company").prop('disabled', true);
         
         
@@ -754,7 +754,7 @@ function calcLines(){
     
     for (var i=0; i<elements.length; i++){
         
-        console.log(elements[i].id);
+        //console.log(elements[i].id);
         $('#'+elements[i].id).val(i+1);
         //i++;
   }
@@ -841,7 +841,7 @@ function rcptcalcLines(){
     
     for (var i=0; i<elements.length; i++){
         
-        console.log(elements[i].id);
+        //console.log(elements[i].id);
         $('#'+elements[i].id).val(i+1);
         //i++;
     }
@@ -854,8 +854,10 @@ function rcptcalcLines(){
   }
   
   
-  function sendForm(value){//preview,print,mail,pdf
+  function sendForm(value){//preview,print,mail,pdf,save
       $('#subType').val(value);
+      if(value=='preview')
+        $("#docs-form").attr('target', '_BLANK');
       $('#docs-form').submit();
       //return false;
   }
@@ -885,7 +887,7 @@ function rcptcalcLines(){
             'buttons'=>array(
                 array('icon'=>'print','label'=>Yii::t('app','Print'),'htmlOptions'=>array('onclick'=>'return sendForm("print");'),),
                 array('items'=>array(
-                    array('icon'=>'envelope','label'=>Yii::t('app','Email'), 'url'=>'javascript:sendForm("email");',),
+                    //array('icon'=>'envelope','label'=>Yii::t('app','Email'), 'url'=>'javascript:sendForm("email");',),
                     array('icon'=>'save','label'=>Yii::t('app','PDF'), 'url'=>'javascript:sendForm("pdf");',),
                     
                 )),

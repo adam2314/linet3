@@ -7,8 +7,11 @@
 jQuery(document).ready(function(){
     preview=<?php echo $preview;?>;
     
-    if(preview==0)
+    if(preview==0){
         window.print();
+        window.location = "<?php echo Yii::app()->CreateURL('docs/admin')?>"
+        //return url
+    }
 });
 
 </script>
