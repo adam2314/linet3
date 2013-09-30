@@ -128,6 +128,7 @@ class Accounts extends CActiveRecord
 				'accId6111' => array(self::BELONGS_TO, 'Id6111', 'id6111'),
 				'accOwner' => array(self::BELONGS_TO, 'Users', 'owner'),
                                 'Currency' => array(self::BELONGS_TO, 'Currecies', 'currency_id'),
+                                'accHist'=>array(self::HAS_MANY, 'AccHist', 'id'),
 				
 		        //'author' => array(self::BELONGS_TO, 'User', 'author_id'),
 				//'comments' => array(self::HAS_MANY, 'Comment', 'post_id','condition'=>'comments.status='.Comment::STATUS_APPROVED,'order'=>'comments.create_time DESC'),

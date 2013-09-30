@@ -108,7 +108,7 @@ class Transactions extends CActiveRecord
 			array('date', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, num, account_id, refnum1, refnum2, valuedate, date, details, currency_id, sum, leadsum, owner_id, linenum', 'safe', 'on'=>'search'),
+			array('id, num, account_id, type, refnum1, refnum2, valuedate, date, details, currency_id, sum, leadsum, owner_id, linenum', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -129,19 +129,20 @@ class Transactions extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'num' => 'Num',
-			'account_id' => 'Account',
-			'refnum1' => 'Refnum1',
-			'refnum2' => 'Refnum2',
-			'valuedate' => 'Valuedate',
-			'date' => 'Date',
-			'details' => 'Details',
-			'currency_id' => 'Currency',
-			'sum' => 'Sum',
-			'leadsum' => 'Leadsum',
-			'owner_id' => 'Owner',
-			'linenum' => 'Linenum',
+			'id' => Yii::t('labels', 'ID'),
+			'num' => Yii::t('labels', 'Num'),
+			'account_id' => Yii::t('labels', 'Account'),
+			'refnum1' => Yii::t('labels', 'Refnum 1'),
+			'refnum2' => Yii::t('labels', 'Refnum 2'),
+			'valuedate' => Yii::t('labels', 'Value Date'),
+			'date' => Yii::t('labels', 'Date'),
+			'details' => Yii::t('labels', 'Details'),
+			'currency_id' => Yii::t('labels', 'Currency'),
+			'sum' => Yii::t('labels', 'Sum'),
+			'leadsum' => Yii::t('labels', 'Lead Sum'),
+			'owner_id' => Yii::t('labels', 'Owner'),
+			'linenum' => Yii::t('labels', 'Line No.'),
+                        'type' => Yii::t('labels', 'Type'),
 		);
 	}
 

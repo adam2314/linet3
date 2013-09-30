@@ -364,9 +364,9 @@ class Docs extends CActiveRecord{
                 $this->issue_to=date("Y-m-d",CDateTimeParser::parse($this->issue_to,Yii::app()->locale->getDateFormat('yiishort')));
                 $criteria->condition = "issue_date <= '$this->issue_to'";
             }elseif(!empty($this->issue_to) && !empty($this->issue_from)){
-                //$this->issue_from=date("Y-m-d",CDateTimeParser::parse($this->issue_from,Yii::app()->locale->getDateFormat('yiishort')));
-                //$this->issue_to=date("Y-m-d",CDateTimeParser::parse($this->issue_to,Yii::app()->locale->getDateFormat('yiishort')));
-                //$criteria->condition = "issue_date  >= '$this->issue_from' and issue_date <= '$this->issue_to'";
+                $this->issue_from=date("Y-m-d",CDateTimeParser::parse($this->issue_from,Yii::app()->locale->getDateFormat('yiishort')));
+                $this->issue_to=date("Y-m-d",CDateTimeParser::parse($this->issue_to,Yii::app()->locale->getDateFormat('yiishort')));
+                $criteria->condition = "issue_date  >= '$this->issue_from' and issue_date <= '$this->issue_to'";
             }
             
             

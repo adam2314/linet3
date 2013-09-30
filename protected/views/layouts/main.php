@@ -36,7 +36,7 @@ Yii::app()->clientScript->registerCSSFile($baseUrl.'/assets/css/bootstrap-toggle
 
 //Yii::app()->clientScript->registerCSSFile($baseUrl.'');
 
-Yii::app()->clientScript->registerScriptFile($baseUrl.'/assets/4585c/jquery.js');
+//Yii::app()->clientScript->registerScriptFile($baseUrl.'/assets/4585c/jquery.js');
 Yii::app()->clientScript->registerScriptFile($baseUrl.'/assets/js/lib/jquery.mousewheel.js');
 Yii::app()->clientScript->registerScriptFile($baseUrl.'/assets/js/lib/jquery.tablesorter.min.js');
 Yii::app()->clientScript->registerScriptFile($baseUrl.'/assets/js/lib/jquery.sparkline.min.js');

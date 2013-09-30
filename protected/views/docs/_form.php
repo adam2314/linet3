@@ -126,13 +126,14 @@
                 <?php $this->widget('zii.widgets.jui.CJuiDatePicker',
 			array(
                         'name'=>'Docs[issue_date]',
-                        'language' => 'en',
+                        'language' => substr(Yii::app()->language,0,2),
                         'value'=>$model->issue_date,    
                         'defaultOptions' => array(  // (#3)
                             'dateFormat' => Yii::app()->locale->getDateFormat('short'),
                         )
 	       	 )
-	        );?>
+	        );        
+                ?>
 		<?php echo $form->error($model,'issue_date'); ?>
 	</div>
 
@@ -141,7 +142,7 @@
 		<?php $this->widget('zii.widgets.jui.CJuiDatePicker',
 			array(
                         'name'=>'Docs[due_date]',
-                        'language' => 'en',
+                        'language' => substr(Yii::app()->language,0,2),
                         'value'=>$model->due_date,    
                         'defaultOptions' => array(  // (#3)
                             'dateFormat' => Yii::app()->locale->getDateFormat('short'),

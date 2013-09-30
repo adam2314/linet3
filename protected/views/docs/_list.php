@@ -10,10 +10,11 @@ if($model->doctype!=null){
 }
 //print_r(Yii::app()->locale);
 $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridView'
-	'id'=>'docs-grid',
+	'id'=>'Docs',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
     'ajaxUpdate'=>true,
+    'ajaxType'=>'POST',
 	'columns'=>array(
 		//'num',
 		//'prefix',

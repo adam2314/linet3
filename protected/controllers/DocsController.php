@@ -4,7 +4,7 @@ class DocsController extends RightsController
 {
 
 
-	public function actionView($id)	{/* used in the refnum selection*/
+	public function actionView($id)	{// used in the refnum selection
 		$model = Docs::model()->findByPk($id);
 		
 		
@@ -17,7 +17,7 @@ class DocsController extends RightsController
 		));
 	}
 
-        public function actionPdf($id,$preview=1,$model=null){/*usd for print*/
+        public function actionPdf($id,$preview=1,$model=null){//usd for print*/
             if(isset($_POST['language']))
                 Yii::app()->language=$_POST['language'];
             //Yii::app()->language='he_il';
@@ -97,7 +97,7 @@ class DocsController extends RightsController
         
         
         
-        public function actionPrint($id,$preview=1,$model=null){/*usd for print*/
+        public function actionPrint($id,$preview=1,$model=null){//usd for print*/
             if(isset($_POST['language']))
                 Yii::app()->language=$_POST['language'];
             //Yii::app()->language='he_il';
@@ -169,16 +169,13 @@ class DocsController extends RightsController
 	}
 
 	
-	public function actionList(){/*used for ajaxList*/
-		
-	}
+	
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionUpdate($id)
-	{
+	public function actionUpdate($id){
 		$id=(int)$id;
 		$model=$this->loadModel($id);
 
@@ -301,25 +298,25 @@ class DocsController extends RightsController
 		$model->unsetAttributes();  // clear any default values
                 $vl='docs-grid';
                 
-                if(!empty($_POST)){
-                    Yii::app()->request->cookies['date_from'] = new CHttpCookie('date_from', $_POST['date_from']);  // define cookie for from_date
-                    Yii::app()->request->cookies['date_to'] = new CHttpCookie('date_to', $_POST['date_to']);
+               /* if(!empty($_POST)){
+                    Yii::app()->request->cookies['issue_from'] = new CHttpCookie('date_from', $_POST['date_from']);  // define cookie for from_date
+                    Yii::app()->request->cookies['issue_to'] = new CHttpCookie('date_to', $_POST['date_to']);
                     
                 }
-                if(!empty(Yii::app()->request->cookies['date_from']))
-                    $model->issue_from = Yii::app()->request->cookies['date_from'];
+                if(!empty(Yii::app()->request->cookies['issue_from']))
+                    $model->issue_from = Yii::app()->request->cookies['issue_from'];
                 else {
                     $model->issue_from =date(Yii::app()->locale->getDateFormat('phpshort'));
                 }
-                if(!empty(Yii::app()->request->cookies['date_to']))
-                    $model->issue_to = Yii::app()->request->cookies['date_to'];
+                if(!empty(Yii::app()->request->cookies['issue_to']))
+                    $model->issue_to = Yii::app()->request->cookies['issue_to'];
                 else{
                     $model->issue_to =date(Yii::app()->locale->getDateFormat('phpshort'));
-                }
+                }*/
                 
-		if(isset($_GET['Docs']))
-			$model->attributes=$_GET['Docs'];
-                if(Yii::app()->request->isAjaxRequest && isset($_GET['ajax']) && $_GET['ajax'] === $vl) {
+		if(isset($_POST['Docs']))
+			$model->attributes=$_POST['Docs'];
+                if(Yii::app()->request->isAjaxRequest && isset($_POST['ajax']) && $_POST['ajax'] === $vl) {
                     // Render partial file created in Step 1
                     $this->renderPartial('_list', array(
                       //'subscriberActiveDataProvider' => $subscriberActiveDataProvider,

@@ -14,7 +14,8 @@ class AccountsController extends RightsController
 		));
 	}
 	public function actionTransaction($id=200){
-		$transactions= new Transaction('search');
+		$transactions= new Transactions('search');
+                $transactions->unsetAttributes();
 		$transactions->account_id=$id;
 		$this->render('transaction',array('model'=>$transactions,));
 	}

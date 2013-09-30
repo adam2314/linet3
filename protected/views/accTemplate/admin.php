@@ -23,7 +23,7 @@ $('.search-form form').submit(function(){
 ");
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => "Manage Acc Templates",
+    'haeder' => "Manage Account Templates",
 )); 
 ?>
 

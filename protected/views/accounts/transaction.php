@@ -9,12 +9,13 @@
     'haeder' => "Transactions for Account $model->id",
     'width' => '800',
 )); 
-$this->widget('zii.widgets.grid.CGridView', array(
+$this->widget('bootstrap.widgets.TbGridView', array(
 	'id'=>'transactions-grid',
 	'dataProvider'=>$model->search(),
+        //'enablePagination'=> false,
 	//'filter'=>$model,
 	'columns'=>array(
-		'id',
+		'num',
 		//'prefix',
 		//'company',
 		/*array(
@@ -24,6 +25,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 	        ),*/
 		'type',
 		'refnum1',
+                'refnum2',
 		'date',
 		'sum',
 		/*

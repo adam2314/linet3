@@ -13,6 +13,7 @@ return array(
 	// preloading 'log' component
 	'preload'=>array('log'),
 	'language'=>'he_il',
+        'localeDataPath'=>'protected/i18n/data/',
 	'defaultController' => 'test',
 	'onBeginRequest' => array('Linet3', 'beginRequest'),	
     

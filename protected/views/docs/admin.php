@@ -32,9 +32,10 @@ $form=$this->beginWidget('CActiveForm', array(
 
 echo Yii::t('app','From Date');
 $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-    'name'=>'date_from',  // name of post parameter
+    'name'=>'Docs[issue_from]',  // name of post parameter
     'value'=>$model->issue_from,//Yii::app()->request->cookies['date.from']->value,  // value comes from cookie after submittion
     //'value'=>date("d/m/Y"),
+    'language' => substr(Yii::app()->language,0,2),
      'options'=>array(
         'showAnim'=>'fold',
         'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
@@ -48,9 +49,10 @@ $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 echo Yii::t('app','To Date');
 
 $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-    'name'=>'date_to',
+    'name'=>'Docs[issue_to]',
     //'value'=>$model->issue_to,//Yii::app()->request->cookies['date.to']->value,
-    'value'=>date("d/m/Y"),
+    'language' => substr(Yii::app()->language,0,2),
+    'value'=>$model->issue_to,
      'options'=>array(
         'showAnim'=>'fold',
         'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
