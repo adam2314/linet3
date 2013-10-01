@@ -149,12 +149,13 @@ class Docs extends CActiveRecord{
         $valuedate=date("Y-m-d H:m:s",CDateTimeParser::parse($this->issue_date,Yii::app()->locale->getDateFormat('yiidatetime')));
         $num=0;
         $line=1;
+        $tranType=$this->docType->transactionType_id;
         if($this->docType->isdoc){
             $vat=new Transactions();
             $accout=new Transactions();
 
             foreach($this->docDetailes as $docdetail){             
-                 $num=$docdetail->transaction($num,$this->id,$valuedate,$this->company,$action,$line,$model->docType->oppt_account_type);
+                 $num=$docdetail->transaction($num,$this->id,$valuedate,$this->company,$action,$line,$model->docType->oppt_account_type,$tranType);
                  $line++;
                  $accout->sum+=($docdetail->invprice+ $docdetail->vat)*$action;
                  $vat->sum+= $docdetail->vat*$action;       
@@ -162,6 +163,7 @@ class Docs extends CActiveRecord{
 
             $accout->num=$num;
             $accout->account_id=$this->account_id;
+            $accout->type=$tranType;
             $accout->refnum1=$this->id;
             $accout->valuedate=$valuedate;
             $accout->details=$this->company;
@@ -173,6 +175,7 @@ class Docs extends CActiveRecord{
 
             $vat->num=$num;
             $vat->account_id=Yii::app()->user->settings['company.acc.vatacc'];
+            $vat->type=$tranType;
             $vat->refnum1=$this->id;
             $vat->valuedate=$valuedate;
             $vat->details=$this->company;
@@ -186,7 +189,7 @@ class Docs extends CActiveRecord{
         
         if($this->docType->isrecipet){
             foreach($this->docCheques as $docrcpt){
-               $num=$docrcpt->transaction($num,$this->id,$valuedate,$this->company,$action,$line,$this->account_id);
+               $num=$docrcpt->transaction($num,$this->id,$valuedate,$this->company,$action,$line,$this->account_id,$tranType);
 
                $line++;
                $line++;
@@ -194,6 +197,7 @@ class Docs extends CActiveRecord{
             $src=new Transactions();
             $src->num=$num;
             $src->account_id=$this->account_id;
+            $src->type=$tranType;
             $src->refnum1=$this->id;
             $src->valuedate=$valuedate;
             $src->details=$this->company;
@@ -207,6 +211,7 @@ class Docs extends CActiveRecord{
             $src=new Transactions();
             $src->num=$num;
             $src->account_id=Yii::app()->user->settings['company.acc.custtax'];
+            $src->type=$tranType;
             $src->refnum1=$this->id;
             $src->valuedate=$valuedate;
             $src->details=$this->company;

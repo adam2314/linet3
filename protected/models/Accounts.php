@@ -47,7 +47,24 @@ class Accounts extends CActiveRecord
 	    return 'id';
 	}
 
+        public function getBalance(){
+            $sum=0;
+            foreach($this->transactions as $transaction)
+                $sum+=$transaction->sum;           
+	    return $sum;
+	}
         
+        public function getTotal($from,$to){
+            $sum=0;
+            //$transactions=
+            
+            
+            
+            foreach($this->transactions as $transaction)
+                $sum+=$transaction->sum;           
+	    return $sum;
+	}
+
         function behaviors() {
             return array(
                 'eavAttr' => array(
@@ -129,6 +146,7 @@ class Accounts extends CActiveRecord
 				'accOwner' => array(self::BELONGS_TO, 'Users', 'owner'),
                                 'Currency' => array(self::BELONGS_TO, 'Currecies', 'currency_id'),
                                 'accHist'=>array(self::HAS_MANY, 'AccHist', 'id'),
+                                'transactions'=>array(self::HAS_MANY, 'Transactions', 'account_id'),
 				
 		        //'author' => array(self::BELONGS_TO, 'User', 'author_id'),
 				//'comments' => array(self::HAS_MANY, 'Comment', 'post_id','condition'=>'comments.status='.Comment::STATUS_APPROVED,'order'=>'comments.create_time DESC'),
@@ -211,9 +229,15 @@ class Accounts extends CActiveRecord
 		));
 	}
 	public static function AutoComplete($name='',$type=1) {
-		$sql= 'SELECT id as value, name AS label FROM '.Accounts::table.' WHERE name LIKE :name AND type=:type';
-		$name = $name.'%';
-		$type = $type;
-		return Yii::app()->db->createCommand($sql)->queryAll(true,array(':name'=>$name,':type'=>$type));
+                $name = $name.'%';
+                if($type!='all'){
+                    $sql= 'SELECT id as value, name AS label FROM '.Accounts::table.' WHERE name LIKE :name AND type=:type';
+                    return Yii::app()->db->createCommand($sql)->queryAll(true,array(':name'=>$name,':type'=>$type));
+                }else {
+                    $sql= 'SELECT id as value, name AS label FROM '.Accounts::table.' WHERE name LIKE :name';
+                    return Yii::app()->db->createCommand($sql)->queryAll(true,array(':name'=>$name));
+                }
+		//$type = $type;
+		
 	}
 }

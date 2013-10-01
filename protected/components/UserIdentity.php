@@ -31,6 +31,9 @@ class UserIdentity extends CUserIdentity
                         $this->setState('certpasswd', $user->certpasswd);
                         $this->setState('language', $user->language);
                         
+                        
+                        
+                        //adam: shuld be cached in memory
                         $temp=  Settings::model()->findAll();
                         $settings=array();
                         foreach ($temp as $key) {

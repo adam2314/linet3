@@ -21,7 +21,7 @@
 class Doccheques extends CActiveRecord
 {
     
-        public function transaction($num,$refnum,$valuedate,$details,$action,$line,$account_id){
+        public function transaction($num,$refnum,$valuedate,$details,$action,$line,$account_id,$tranType){
             $vatcat=  Item::model()->findByPk($docdetail->item_id)->itemVatCat_id;
             $incomeacc= UserIncomeMap::model()->findByPk(array('user_id'=>Yii::app()->user->id,'itemVatCat_id'=>$vatcat))->account_id;
            
@@ -29,6 +29,7 @@ class Doccheques extends CActiveRecord
             $in=new Transactions();
             $in->num=$num;
             $in->account_id=$account_id;
+            $in->type=$tranType;
             $in->refnum1=$refnum;
             $in->valuedate=$valuedate;
             $in->details=$details;
@@ -42,6 +43,7 @@ class Doccheques extends CActiveRecord
             $out=new Transactions();
             $out->num=$num;
             $out->account_id=$this->Type->oppt_account_id;
+            $out->type=$tranType;
             $out->refnum1=$refnum;
             $out->valuedate=$valuedate;
             $out->details=$details;

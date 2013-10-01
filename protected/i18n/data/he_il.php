@@ -14,10 +14,14 @@ return CMap::mergeArray(
                         'long' => 'd בMMMM y',
                         'medium' => 'd בMMM yyyy',
                         'short' => 'dd/mm/yy',
-                        'yiishort'=>'dd/mm/yyyy',
-                        'yiidatetime'=>'dd/mm/yyyy HH:mm:ss',
+                        'yiishort'=>'dd/MM/yyyy',
+                        'yiidatetime'=>'dd/MM/yyyy HH:mm',
+                        'yiidatetimesec'=>'dd/MM/yyyy HH:mm:ss',
+                        'yiidbdatetime'=>'yyyy-MM-d HH:mm:ss',
                         'phpshort'=>'d/m/Y',
-                        'phpdatetime'=>'d/m/Y H:m:s',
+                        'phpdatetime'=>'d/m/Y H:i:s',
+                        'phpdbdatetime'=>'Y-m-d H:i',
+                        
                     ),
 		//'timeFormats' => array(
 			//'small'=>'HH:mm:ss',          // format used for input

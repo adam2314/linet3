@@ -1,16 +1,94 @@
-<?php $this->pageTitle=Yii::app()->name; ?>
+<?php 
+//$this->widget('zii.widgets.CListView', array(
+//	'dataProvider'=>$dataProvider,
+//	'itemView'=>'_view',
+//)); ?>
 
-<h1>Welcome to <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h1>
+<?php 
+ $this->beginWidget('MiniForm',array(
+    'haeder' => Yii::t('app',"Transactions"),
+    'width' => '800',
+)); 
+ 
+ 
+ 
+ $form=$this->beginWidget('CActiveForm', array(
+	'method'=>'post',
+    'id'=>'page-form',
+    'enableAjaxValidation'=>true,
+)); 
 
-<p>Congratulations! You have successfully created your Yii application.</p>
 
-<p>You may change the content of this page by modifying the following two files:</p>
-<ul>
-	<li>View file: <tt><?php echo __FILE__; ?></tt></li>
-	<li>Layout file: <tt><?php echo $this->getLayoutFile('main'); ?></tt></li>
-</ul>
 
-<p>For more details on how to further develop this application, please read
-the <a href="http://www.yiiframework.com/doc/">documentation</a>.
-Feel free to ask in the <a href="http://www.yiiframework.com/forum/">forum</a>,
-should you have any questions.</p>
+
+echo Yii::t('app','From Date');
+
+Yii::import('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker');
+$this->widget('CJuiDateTimePicker',array(
+    'model'=>$model, //Model object
+    'attribute'=>'from_date', //attribute name
+    'mode'=>'datetime', 
+    'language' => substr(Yii::app()->language,0,2),
+    'options'=>array(
+        'showAnim'=>'fold',
+        'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
+    ) // jquery plugin options
+));
+
+
+?>
+
+<br />
+<?php
+
+echo Yii::t('app','To Date');
+
+$this->widget('CJuiDateTimePicker',array(
+    'model'=>$model, //Model object
+    'attribute'=>'to_date', //attribute name
+    'mode'=>'datetime', //use "time","date" or "datetime" (default)
+    'language' => substr(Yii::app()->language,0,2),
+    'options'=>array(
+        'showAnim'=>'fold',
+        'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
+        
+        
+        
+    ) // jquery plugin options
+));
+ echo CHtml::submitButton(Yii::t('app','Search')); 
+ 
+ 
+$yiidbdatetime=Yii::app()->locale->getDateFormat('yiidbdatetime');
+$phpdatetime=Yii::app()->locale->getDateFormat('phpdatetime');
+ 
+$this->widget('bootstrap.widgets.TbGridView', array(
+	'id'=>'transactions-grid',
+	'dataProvider'=>$model->search(),
+        //'enablePagination'=> false,
+        'ajaxUpdate'=>true,
+        'ajaxType'=>'POST',
+	'filter'=>$model,
+	'columns'=>array(
+		'num',
+
+		'type',
+		'refnum1',
+                'refnum2',
+		//'date',
+                 array(
+                    'name'=>'date',
+                    'filter' => '',
+                     
+                     
+                    'value'=>'date("'.$phpdatetime.'",CDateTimeParser::parse($data->date,"'.$yiidbdatetime.'"))'
+                ),
+            
+		'sum',
+
+	),
+)); 
+ $this->endWidget(); //form
+ 
+  $this->endWidget(); //miniform
+ ?>

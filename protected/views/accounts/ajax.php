@@ -4,7 +4,7 @@
 //	'itemView'=>'_view',
 //)); ?>
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php $this->widget('bootstrap.widgets.TbGridView', array(
 	'id'=>'accounts-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,

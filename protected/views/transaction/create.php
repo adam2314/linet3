@@ -78,7 +78,7 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Create Manual Tran
                                     'name'=>'Transactions[account_id]',
                                     'id'=>'Transactions_account_id',
                                     'value'=>"$model->account_id",
-                                    'source'=>$this->createUrl('/accounts/autocomplete',array('type'=>'')),
+                                    'source'=>$this->createUrl('/accounts/autocomplete',array('type'=>'all')),
                                     'options'=>array(
                                             'minLength'=>0,
                                             'showAnim'=>'fold',
@@ -244,7 +244,7 @@ function addItem(last) {
 	
 	ni.appendChild(r);
 	$( "#ops"+num ).autocomplete({
-			source: "<?php echo $this->createUrl('/accounts/autocomplete',array('type'=>''));?>",  
+			source: "<?php echo $this->createUrl('/accounts/autocomplete',array('type'=>'all'));?>",  
 			open: function(){
         		$(this).autocomplete('widget').css('z-index', 2048);
         		return false;

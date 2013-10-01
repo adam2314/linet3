@@ -18,7 +18,7 @@
 class Docdetails extends CActiveRecord
 {
     
-        public function transaction($num,$refnum,$valuedate,$details,$action,$line,$optacc){
+        public function transaction($num,$refnum,$valuedate,$details,$action,$line,$optacc,$tranType){
             if(is_null($optacc)){
                 $vatcat=  Item::model()->findByPk($docdetail->item_id)->itemVatCat_id;
                 $incomeacc= UserIncomeMap::model()->findByPk(array('user_id'=>Yii::app()->user->id,'itemVatCat_id'=>$vatcat))->account_id;
@@ -28,6 +28,7 @@ class Docdetails extends CActiveRecord
             $income=new Transactions();
             $income->num=$num;
             $income->account_id=$incomeacc;
+            $income->type=$tranType;
             $income->refnum1=$refnum;
             $income->valuedate=$valuedate;
 

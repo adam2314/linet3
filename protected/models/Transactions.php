@@ -20,6 +20,9 @@
  */
 class Transactions extends CActiveRecord
 {
+    public $from_date;
+    public $to_date;
+    
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -38,8 +41,10 @@ class Transactions extends CActiveRecord
 
     private function newNum(){
         if($this->num==0){
-            $model=Yii::app()->user->settings['company.transaction'];
+            //$model=Yii::app()->user->settings['company.transaction'];
+            $model=Settings::model()->findByPk('company.transaction');
             $model->value=(int)$model->value+1;
+            //Yii::app()->user->settings['company.transaction']=$model->value;
             $model->save();
             return (int)$model->value-1;
         }else{
@@ -108,7 +113,7 @@ class Transactions extends CActiveRecord
 			array('date', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, num, account_id, type, refnum1, refnum2, valuedate, date, details, currency_id, sum, leadsum, owner_id, linenum', 'safe', 'on'=>'search'),
+			array('from_date, to_date, id, num, account_id, type, refnum1, refnum2, valuedate, date, details, currency_id, sum, leadsum, owner_id, linenum', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -171,6 +176,28 @@ class Transactions extends CActiveRecord
 		$criteria->compare('owner_id',$this->owner_id);
 		$criteria->compare('linenum',$this->linenum);
                 
+                $yiidatetime=Yii::app()->locale->getDateFormat('yiidatetime');
+                $phpdbdatetime=Yii::app()->locale->getDateFormat('phpdbdatetime');
+                
+                if(!empty($this->from_date) && empty($this->to_date)) {
+                    $date_from=date($phpdbdatetime,CDateTimeParser::parse($this->from_date,$yiidatetime));
+                    //print $this->from_date.";".$date_from;
+                    
+                    $criteria->condition = "date >= '".$date_from."'";  // date is database date column field
+                }elseif(!empty($this->to_date) && empty($this->from_date)) {
+                    $date_to=date($phpdbdatetime,CDateTimeParser::parse($this->to_date,$yiidatetime));
+                    //print $this->to_date.";".$date_to;
+                    
+                    $criteria->condition = "date <= '".$date_to."'";
+                }elseif(!empty($this->to_date) && !empty($this->from_date)) {
+                    $date_from=date($phpdbdatetime,CDateTimeParser::parse($this->from_date,$yiidatetime));
+                    $date_to=date($phpdbdatetime,CDateTimeParser::parse($this->to_date,$yiidatetime));
+                    
+                    
+                    $criteria->condition = "date  >= '".$date_from."' and date <= '".$date_to."'";
+                }
+                
+                //exit;
              
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

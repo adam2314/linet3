@@ -5,14 +5,14 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Currates', 'url'=>array('index')),
-	array('label'=>'Create Currates', 'url'=>array('create')),
+	//array('label'=>'List Currates', 'url'=>array('index')),
+	array('label'=>Yii::t('app','Create Currency Rate'), 'url'=>array('create')),
 );
 ?>
 
 
 <?php 
- $this->beginWidget('MiniForm',array('haeder' => "Manage Currates",)); 
+ $this->beginWidget('MiniForm',array('haeder' => Yii::t('app',"Manage Currencies Rates"),)); 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
@@ -27,19 +27,6 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Currates</h1>
-
-<p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>
-
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display:none">
-<?php $this->renderPartial('_search',array(
-	'model'=>$model,
-)); ?>
-</div><!-- search-form -->
 <?php 
 $this->widget('bootstrap.widgets.TbGridView', array(
 	'id'=>'currates-grid',
