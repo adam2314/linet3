@@ -11,8 +11,16 @@ $this->menu=array(
 	array('label'=>'View AccTemplate','url'=>array('view','id'=>$model->id)),
 	array('label'=>'Manage AccTemplate','url'=>array('admin')),
 );
+
+$this->beginWidget('MiniForm',array(
+    'haeder' => Yii::t('app',"Update Account Template #").$model->id,
+)); 
+
 ?>
 
-<h1>Update AccTemplate <?php echo $model->id; ?></h1>
 
-<?php echo $this->renderPartial('_form',array('model'=>$model)); ?>
+
+<?php echo $this->renderPartial('_form',array('model'=>$model)); 
+ $this->endWidget(); 
+
+?>

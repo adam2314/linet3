@@ -81,8 +81,8 @@ return array(
 				//'class'=>'CApcCache',
 		//),
 		'user'=>array(
-			'class' => 'RLinUser',
-			//'class'=>'RWebUser',//rights
+			//'class' => 'RLinUser',
+			'class'=>'RWebUser',//rights
 			'allowAutoLogin'=>true,
 			//'loginUrl' => array('//user/user/login'),
 

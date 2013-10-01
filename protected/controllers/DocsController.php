@@ -31,8 +31,8 @@ class DocsController extends RightsController
             
             $yiiBasepath=Yii::app()->basePath;
             $yiiUser=Yii::app()->user->id;
-            $configPath=Config::model()->findByPk("company.path")->value;
-            $configCertpasswd=Yii::app()->user->getCertpasswd();
+            $configPath=Yii::app()->user->settings["company.path"];
+            $configCertpasswd=Yii::app()->user->certpasswd;
             
             
             
@@ -43,7 +43,7 @@ class DocsController extends RightsController
             fwrite($fh, $file);
             fclose($fh);
             
-            $a=Config::model()->findByPk("server.wkhtmltopdf")->value." \"$myHtml\" \"$myPdf\"";
+            $a=Yii::app()->user->settings["server.wkhtmltopdf"]." \"$myHtml\" \"$myPdf\"";
             //print $a."<br />";
             shell_exec($a);
             

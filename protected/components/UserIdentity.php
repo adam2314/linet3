@@ -28,6 +28,16 @@ class UserIdentity extends CUserIdentity
 			$this->_id=$user->id;
 			$this->username=$user->username;
 			$this->errorCode=self::ERROR_NONE;
+                        $this->setState('certpasswd', $user->certpasswd);
+                        $this->setState('language', $user->language);
+                        
+                        $temp=  Settings::model()->findAll();
+                        $settings=array();
+                        foreach ($temp as $key) {
+                            $settings[$key->id]=$key->value;
+                        }
+                        
+                        $this->setState('settings',$settings);
 		}
 		return $this->errorCode==self::ERROR_NONE;
 		/*$users=array(

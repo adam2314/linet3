@@ -38,7 +38,7 @@ class Transactions extends CActiveRecord
 
     private function newNum(){
         if($this->num==0){
-            $model=Config::model()->findByPk('company.transaction');
+            $model=Yii::app()->user->settings['company.transaction'];
             $model->value=(int)$model->value+1;
             $model->save();
             return (int)$model->value-1;
@@ -56,7 +56,7 @@ class Transactions extends CActiveRecord
         $acccur=  Accounts::model()->findByPk($this->account_id)->currency_id;
         
         //leadsum
-        $cur=Config::model()->findByPk('company.cur')->value;
+        $cur=Yii::app()->user->settings['company.cur'];
         if($cur==$this->currency_id)
             $this->leadsum=$this->sum;
         else{
@@ -73,7 +73,7 @@ class Transactions extends CActiveRecord
         }
             
         //secsum
-        $seccur=Config::model()->findByPk('company.seccur')->value;
+        $seccur=Yii::app()->user->settings['company.seccur'];
         if($seccur!=''){
             if($seccur==$this->currency_id) 
                 $this->secsum=$this->sum;
@@ -170,9 +170,11 @@ class Transactions extends CActiveRecord
 		$criteria->compare('leadsum',$this->leadsum,true);
 		$criteria->compare('owner_id',$this->owner_id);
 		$criteria->compare('linenum',$this->linenum);
-
+                
+             
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination'=>array('pageSize'=>50),
 		));
 	}
 }

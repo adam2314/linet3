@@ -5,7 +5,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List AccTemplate','url'=>array('index')),
+	//array('label'=>'List AccTemplate','url'=>array('index')),
 	array('label'=>'Manage AccTemplate','url'=>array('admin')),
 );
 

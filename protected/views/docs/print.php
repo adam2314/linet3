@@ -19,15 +19,15 @@ jQuery(document).ready(function(){
 <table>
         <tr>
                 <td colspan="3" width="650">
-                <h3><?php echo Config::model()->findByPk('company.name')->value; ?></h3><br />
-                <?php echo Config::model()->findByPk('company.address')->value; ?><br />
+                <h3><?php echo Yii::app()->user->settings['company.name']; ?></h3><br />
+                <?php echo Yii::app()->user->settings['company.address']; ?><br />
                 
                 
-                <?php echo Config::model()->findByPk('company.vatid')->value; ?><?php echo Yii::t('app','VAT No.'); ?><br />
+                <?php echo Yii::app()->user->settings['company.vatid']; ?><?php echo Yii::t('app','VAT No.'); ?><br />
                 </td>
 
                 <td>
-                <?php echo Config::model()->findByPk('company.logo')->value; ?>
+                <?php echo Yii::app()->user->settings['company.logo']; ?>
                 
                 </td>
         </tr>

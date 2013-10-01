@@ -84,14 +84,14 @@ class Paypal extends CComponent{
     public $version = '3.0';
     
     public function init(){
-        $this->apiUsername = Config::model()->findByPk('paypal.apiUsername')->value;
+        $this->apiUsername = Yii::app()->user->settings['paypal.apiUsername'];
         //'adam2314-facilitator_api1.gmail.com';
-        $this->apiPassword = Config::model()->findByPk('paypal.apiPassword')->value;
+        $this->apiPassword = Yii::app()->user->settings['paypal.apiPassword'];
         //'1377498089';
         
-        $this->apiSignature = Config::model()->findByPk('paypal.apiSignature')->value;
+        $this->apiSignature = Yii::app()->user->settings['paypal.apiSignature'];
         //'AAIVQYQw1NM1GpwV39qoyAlLZqNaArnmriH3xY5IQg-ENXEhq9jz27IB';
-        $this->apiLive = Config::model()->findByPk('paypal.apiLive')->value;
+        $this->apiLive = Yii::app()->user->settings['paypal.apiLive'];
         $this->apiLive=false;
 
         $this->returnUrl = 'paypal/confirm/'; //regardless of url management component

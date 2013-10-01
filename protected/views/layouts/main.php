@@ -115,9 +115,11 @@ Yii::app()->clientScript->registerScriptFile($baseUrl.'/assets/js/main.js');
 			$menu=array(array('label'=>Yii::t('app','Login'), 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest));
 		}else{
 			$menu=array(
+                            
 		//Yii::t('app', 'message to be translated')
          array('label'=>Yii::t('app','Settings'),  'icon'=>'cogs','items'=>array(//'url'=>array('site/index'),
-            array('label'=>Yii::t('app','Bussines details'), 'url'=>array('config/admin')),
+             array('label'=>Yii::t('app','Logout'), 'url'=>array('/site/Logout')),
+            array('label'=>Yii::t('app','Bussines details'), 'url'=>array('settings/admin')),
             //'---',
             //array('label'=>Yii::t('app','Accounts')),
             

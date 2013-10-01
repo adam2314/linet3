@@ -1,11 +1,11 @@
 <?php
 
-class ConfigController extends RightsController
+class SettingsController extends RightsController
 {
 
 
 	public function actionAdmin()	{/* used in the refnum selection*/
-		$models = Config::model()->findAll();
+		$models = Settings::model()->findAll();
 		
 		
 		//$docdetails =$model->docDetailes;

@@ -172,7 +172,7 @@ class Docs extends CActiveRecord{
             $num=$accout->save();
 
             $vat->num=$num;
-            $vat->account_id=Config::model()->findByPk('company.acc.vatacc')->value;
+            $vat->account_id=Yii::app()->user->settings['company.acc.vatacc'];
             $vat->refnum1=$this->id;
             $vat->valuedate=$valuedate;
             $vat->details=$this->company;
@@ -206,7 +206,7 @@ class Docs extends CActiveRecord{
             
             $src=new Transactions();
             $src->num=$num;
-            $src->account_id=Config::model()->findByPk('company.acc.custtax')->value;
+            $src->account_id=Yii::app()->user->settings['company.acc.custtax'];
             $src->refnum1=$this->id;
             $src->valuedate=$valuedate;
             $src->details=$this->company;

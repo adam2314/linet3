@@ -5,7 +5,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List AccTemplate','url'=>array('index')),
+	//array('label'=>'List AccTemplate','url'=>array('index')),
 	array('label'=>'Create AccTemplate','url'=>array('create')),
 	array('label'=>'Update AccTemplate','url'=>array('update','id'=>$model->id)),
 	array('label'=>'Delete AccTemplate','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
@@ -32,8 +32,6 @@ $('.search-form form').submit(function(){
     'haeder' => "View AccTemplate #",
 )); 
 ?>
-
-<h1>View AccTemplate #<?php echo $model->id; ?></h1>
 
 <?php $this->widget('bootstrap.widgets.TbDetailView',array(
 	'data'=>$model,

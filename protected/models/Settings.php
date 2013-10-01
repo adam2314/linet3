@@ -7,7 +7,7 @@
  * @property string $id
  * @property string $value
  */
-class Config extends CActiveRecord
+class Settings extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
