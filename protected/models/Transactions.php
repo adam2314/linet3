@@ -38,7 +38,30 @@ class Transactions extends CActiveRecord
     public function tableName()	{
         return 'transactions';
     }
+    public function getOptAcc($opt){
+        
+        $criteria=new CDbCriteria;
+        $criteria->condition="num = :num";
+        $criteria->addCondition("account_id<>:account_id");
+        $criteria->params=array(
+          ':num' => $this->num,
+          ':account_id' => $this->account_id,
+        );
 
+       
+        $models=  Transactions::model()->findAll($criteria);
+        $array=array();
+        if($opt=='string')
+            $array='';
+        foreach($models as $model)
+            if($opt=='string')
+                $array.= $model->account_id.",";
+            else 
+                $array[]= $model->account_id;
+            
+        
+        return $array;
+    }
     private function newNum(){
         if($this->num==0){
             //$model=Yii::app()->user->settings['company.transaction'];

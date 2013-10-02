@@ -36,4 +36,14 @@ class ReportsController extends RightsController
             $this->render('owe',array('model'=>$model,));
             
         }
+        
+        
+        public function actionVat(){
+            //$model= new Accounts('search');
+            //$model->unsetAttributes();
+            //$model->type=0;//could be dynamic
+            
+            $this->render('vat',array());
+            
+        }
 }
