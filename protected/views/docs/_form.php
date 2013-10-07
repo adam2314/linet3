@@ -152,14 +152,14 @@
 		<?php echo $form->error($model,'due_date'); ?>
 	</div>
     </div>
-</div><!-- form -->
 
+<br />
 
 <?php 
 		if($model->docType->isdoc){
 			
 			?>
-<div class="form">	
+
 <table  data-role="table" class="formtable" ><!-- docdetalies -->
 	
 	<!--<div class="row">-->
@@ -282,7 +282,7 @@
 		
 </table><!-- doc detiales -->
    
-</div><!-- form -->	
+
                 <?php }?>
 
 
@@ -290,7 +290,7 @@
 		if($model->docType->isrecipet){
 			
 			?>
-<div class="form">	
+
 <table  data-role="table" class="formtable" ><!-- docrecipet -->
 	
 
@@ -366,7 +366,7 @@
     
     
 </table><!-- doc recipet -->
-</div><!-- form -->	
+
 <?php }?>
 	<?php		
 			
@@ -863,7 +863,7 @@ function rcptcalcLines(){
       //return false;
   }
 </script>
-<div class="form">
+
     <p>
         <?php echo $form->labelEx($model,'comments'); ?>
         <?php echo $form->textArea($model,'comments',array('rows'=>6, 'cols'=>50)); ?>
@@ -901,7 +901,7 @@ function rcptcalcLines(){
             'htmlOptions'=>array('id'=>'printLink', 'onclick'=>'return hideMe();'),
         )); ?>
         
-        <?php echo CHtml::dropDownList('language',Yii::app()->user->getLanguage(),CHtml::listData(Language::model()->findAll(), 'id', 'name'));//Docstatus::model()->findAll();?>
+        <?php echo CHtml::dropDownList('language',Yii::app()->user->language,CHtml::listData(Language::model()->findAll(), 'id', 'name'));//Docstatus::model()->findAll();?>
         <!--</div>-->
     </div>
     

@@ -14,33 +14,43 @@ $form=$this->beginWidget('CActiveForm', array(
                                'onkeypress'=>" if(event.keyCode == 13){ send(); } " /* Do ajax call when user presses enter key */
             ),
 )); 
-$year = date("Y");
-$max = $year + 1;
-$years=array();
 
-for($min = $year - 2; $min <= $max; $min++) 
-    $years[$min]=$min;
 
 
 echo Yii::t('app','From Date');
 
-
-echo $form->dropDownList($model,'from_month',Yii::app()->locale->monthNames);
-echo $form->dropDownList($model,'year', $years);              
+echo $form->hiddenField($model,'step');
+echo $form->hiddenField($model,'from_month');
+echo $form->hiddenField($model,'year');              
 
 echo "<br>";
 
 echo Yii::t('app','To Date');
-echo $form->dropDownList($model,'to_month',Yii::app()->locale->monthNames);
-//echo $form->dropDownList($model,'to_year', $years);  
-echo CHtml::submitButton('Go',array('onclick'=>'send();')); 
+echo $form->hiddenField($model,'to_month');
+//echo $form->hiddenField($model,'to_year');  
+
+echo $form->hiddenField($model,'selvat_acc');  
+echo $form->textField($model,'selvat_total');
+echo $form->textField($model,'income_sum');
+echo $form->textField($model,'income_sum_novat');
+echo '<br />';
+
+
+
+echo $form->hiddenField($model,'assetvat_acc');  
+echo $form->textField($model,'assetvat_total');
+
+echo $form->hiddenField($model,'buyvat_acc');  
+echo $form->textField($model,'buyvat_total');
+echo $form->textField($model,'payvat_total');
+
+echo CHtml::submitButton('Pay',array('onclick'=>'send();')); 
 
  $this->endWidget(); 
 
 $this->endWidget(); 
 ?>
-Yii::app()->user->settings['company.vat.id'];
-echo Yii::app()->createAbsoluteUrl("person/ajax");
+
 <script type="text/javascript">
  
 function send()
@@ -54,7 +64,6 @@ function send()
     url: '<?php echo Yii::app()->createAbsoluteUrl("reports/vat"); ?>',
    data:data,
 success:function(data){
-                //alert(data); 
                 $('#content > div').html(data);
               },
    error: function(data) { // if error occured

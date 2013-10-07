@@ -174,7 +174,8 @@ class Docs extends CActiveRecord{
             $num=$accout->save();
 
             $vat->num=$num;
-            $vat->account_id=Yii::app()->user->settings['company.acc.vatacc'];
+            //$vat->account_id=Yii::app()->user->settings['company.acc.vatacc'];
+            $vat->account_id=$this->docType->vat_acc_id;
             $vat->type=$tranType;
             $vat->refnum1=$this->id;
             $vat->valuedate=$valuedate;

@@ -9,6 +9,9 @@
     'haeder' => "Transactions for Account $model->id",
     'width' => '800',
 )); 
+ 
+ $yiidbdatetime=Yii::app()->locale->getDateFormat('yiidbdatetime');
+$phpdatetime=Yii::app()->locale->getDateFormat('phpdatetime');
 $this->widget('bootstrap.widgets.TbGridView', array(
 	'id'=>'transactions-grid',
 	'dataProvider'=>$model->search(),
@@ -21,12 +24,21 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 		array(
 	            'name' => 'Oppt Acc',
 	            //'type' => 'raw',
-	            'value' => '$data->getOptAcc("string")',
+	            'value' => '$data->getOptAcc()',
 	        ),
-		'type',
+		array(
+                       'name'=>'type',
+                       //'filter'=>CHtml::dropDownList('Transactions[type]', $model->type,CHtml::listData(TransactionType::model()->findAll(), 'id', 'name')),
+                       'value'=>'Yii::t("app",$data->Type->name)'
+                   ),
 		'refnum1',
                 'refnum2',
-		'date',
+                'details',
+		array(
+                    'name'=>'date',
+                    //'filter' => '',
+                    'value'=>'date("'.$phpdatetime.'",CDateTimeParser::parse($data->date,"'.$yiidbdatetime.'"))'
+                ),
 		'sum',
 		
 	),

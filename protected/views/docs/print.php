@@ -23,7 +23,7 @@ jQuery(document).ready(function(){
                 <?php echo Yii::app()->user->settings['company.address']; ?><br />
                 
                 
-                <?php echo Yii::app()->user->settings['company.vatid']; ?><?php echo Yii::t('app','VAT No.'); ?><br />
+                <?php echo Yii::app()->user->settings['company.vat.id']; ?><?php echo Yii::t('app','VAT No.'); ?><br />
                 </td>
 
                 <td>

@@ -8,6 +8,7 @@
 	'id'=>'accounts-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+    'ajaxUpdate'=>true,
      /*'pager' => array('class' => 'CLinkPager', 'header' => '',
          'firstPageLabel' => '&lt;&lt;',
         'prevPageLabel'  => '<img src="images/pagination/left.png">',

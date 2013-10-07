@@ -72,15 +72,20 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 	'columns'=>array(
 		'num',
 
-		'type',
+		
+                array(
+                       'name'=>'type',
+                       //'filter'=>CHtml::dropDownList('Transactions[type]', $model->type,CHtml::listData(TransactionType::model()->findAll(), 'id', 'name')),
+                     'filter'=>CHtml::listData(TransactionType::model()->findAll(), 'id', 'name'),
+                       'value'=>'$data->Type->name'
+                   ),
+                'account_id',
 		'refnum1',
                 'refnum2',
-		//'date',
+		'details',
                  array(
                     'name'=>'date',
                     'filter' => '',
-                     
-                     
                     'value'=>'date("'.$phpdatetime.'",CDateTimeParser::parse($data->date,"'.$yiidbdatetime.'"))'
                 ),
             

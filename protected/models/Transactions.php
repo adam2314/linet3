@@ -38,7 +38,7 @@ class Transactions extends CActiveRecord
     public function tableName()	{
         return 'transactions';
     }
-    public function getOptAcc($opt){
+    public function getOptAcc(){
         
         $criteria=new CDbCriteria;
         $criteria->condition="num = :num";
@@ -50,17 +50,25 @@ class Transactions extends CActiveRecord
 
        
         $models=  Transactions::model()->findAll($criteria);
-        $array=array();
-        if($opt=='string')
-            $array='';
+        $retacc=0;
+        $maxsum=0;
         foreach($models as $model)
-            if($opt=='string')
-                $array.= $model->account_id.",";
-            else 
-                $array[]= $model->account_id;
+            if($this->sum<=0.0){
+                if($model->sum > 0.0) 
+                    if($model->sum > $maxsum) {
+                        $maxsum = $model->sum;
+                        $retacc = $model->account_id;
+                    }
+            }else{
+                if($model->sum < 0.0) 
+                    if($model->sum < $maxsum) {
+                        $maxsum = $model->sum;
+                        $retacc = $model->account_id;
+                    }
+            }
             
         
-        return $array;
+        return $retacc;
     }
     private function newNum(){
         if($this->num==0){
@@ -136,7 +144,7 @@ class Transactions extends CActiveRecord
 			array('date', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('from_date, to_date, id, num, account_id, type, refnum1, refnum2, valuedate, date, details, currency_id, sum, leadsum, owner_id, linenum', 'safe', 'on'=>'search'),
+			array('type, from_date, to_date, id, num, account_id, type, refnum1, refnum2, valuedate, date, details, currency_id, sum, leadsum, owner_id, linenum', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -148,6 +156,9 @@ class Transactions extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'Type'=>array(self::BELONGS_TO, 'TransactionType', 'type'),
+                    //'docStatus'=>array(self::BELONGS_TO, 'Docstatus', array('status','doctype')),
+                    'docOwner' => array(self::BELONGS_TO, 'Users', 'owner_id'),
 		);
 	}
 
@@ -160,6 +171,7 @@ class Transactions extends CActiveRecord
 			'id' => Yii::t('labels', 'ID'),
 			'num' => Yii::t('labels', 'Num'),
 			'account_id' => Yii::t('labels', 'Account'),
+                        'type' => Yii::t('labels', 'Type'),
 			'refnum1' => Yii::t('labels', 'Refnum 1'),
 			'refnum2' => Yii::t('labels', 'Refnum 2'),
 			'valuedate' => Yii::t('labels', 'Value Date'),
@@ -188,6 +200,7 @@ class Transactions extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('num',$this->num);
 		$criteria->compare('account_id',$this->account_id);
+                $criteria->compare('type',$this->type);
 		$criteria->compare('refnum1',$this->refnum1,true);
 		$criteria->compare('refnum2',$this->refnum2,true);
 		$criteria->compare('valuedate',$this->valuedate,true);
@@ -206,18 +219,38 @@ class Transactions extends CActiveRecord
                     $date_from=date($phpdbdatetime,CDateTimeParser::parse($this->from_date,$yiidatetime));
                     //print $this->from_date.";".$date_from;
                     
-                    $criteria->condition = "date >= '".$date_from."'";  // date is database date column field
+                   // $criteria->condition = "date >= '".$date_from."'";  // date is database date column field
+                    $criteria->addCondition("date>=:date_from");
+                    $criteria->params=array(
+                      ':date_from' => $date_from,
+                      
+                    );
+                    
+                    
+                    
                 }elseif(!empty($this->to_date) && empty($this->from_date)) {
                     $date_to=date($phpdbdatetime,CDateTimeParser::parse($this->to_date,$yiidatetime));
                     //print $this->to_date.";".$date_to;
                     
-                    $criteria->condition = "date <= '".$date_to."'";
+                    $criteria->addCondition("date>=:date_to");
+                    $criteria->params=array(
+                      
+                        ':date_to' => $date_to
+                    );
+                    
+                    
                 }elseif(!empty($this->to_date) && !empty($this->from_date)) {
                     $date_from=date($phpdbdatetime,CDateTimeParser::parse($this->from_date,$yiidatetime));
                     $date_to=date($phpdbdatetime,CDateTimeParser::parse($this->to_date,$yiidatetime));
                     
                     
-                    $criteria->condition = "date  >= '".$date_from."' and date <= '".$date_to."'";
+                    //$criteria->condition = "date  >= '".$date_from."' and date <= '".$date_to."'";
+                    $criteria->addCondition("date>=:date_from");
+                    $criteria->addCondition("date<=:date_to");
+                    $criteria->params=array(
+                      ':date_from' => $date_from,
+                      ':date_to' => $date_to
+                    );
                 }
                 
                 //exit;

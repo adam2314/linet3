@@ -145,7 +145,7 @@ return array (
   'company.printDoc' => '@@@@',
   'company.seccur' => '@@@@',
   'company.stock' => '@@Those manage stock@@',
-  'company.vatid' => '@@VAT No.@@',
+  'company.vat.id' => '@@VAT No.@@',
   'company.zip' => '@@Company Address ZIP@@',
   'paypal.apiLive' => '@@@@',
   'paypal.apiPassword' => '@@@@',

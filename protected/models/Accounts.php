@@ -54,15 +54,33 @@ class Accounts extends CActiveRecord
 	    return $sum;
 	}
         
-        public function getTotal($from,$to){
+        public function getTotal($from_date,$to_date){
             $sum=0;
-            //$transactions=
+            
+            $yiidatetimesec=Yii::app()->locale->getDateFormat('yiidatetimesec');
+            $phpdbdatetime=Yii::app()->locale->getDateFormat('phpdbdatetime');
             
             
+            $from_date=date($phpdbdatetime,CDateTimeParser::parse($from_date,$yiidatetimesec));
+            $to_date=date($phpdbdatetime,CDateTimeParser::parse($to_date,$yiidatetimesec));
             
-            foreach($this->transactions as $transaction)
-                $sum+=$transaction->sum;           
-	    return $sum;
+            
+            $criteria=new CDbCriteria;
+            $criteria->condition="account_id = :id";
+            $criteria->addCondition("date BETWEEN :from_date AND :to_date");
+            $criteria->params=array(
+                
+                ':id' => $this->id,
+                ':from_date' => $from_date,
+                ':to_date' => $to_date,
+              );
+
+            $transactions=  Transactions::model()->findAll($criteria);
+                foreach($transactions as $transaction){
+                    //echo $transaction->date.','.$transaction->sum.'<br>';
+                    $sum+=$transaction->sum; 
+                }
+                return $sum;
 	}
 
         function behaviors() {

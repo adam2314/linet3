@@ -134,9 +134,10 @@ class AccountsController extends RightsController
 		//$this->
 		$model=new Accounts('search');
 		$model->type=$type;
-
-    	$params =array( 'model'=>$model,   );//array('dataProvider'=>$dataProvider,)
-		$this->renderPartial('ajax',$params);
+                if(isset($_GET['Accounts']))
+			$model->attributes=$_GET['Accounts'];
+                //$params =array( 'model'=>$model,   );//array('dataProvider'=>$dataProvider,)
+		$this->renderPartial('ajax',array( 'model'=>$model,   ));
 	}
 	/**
 	 * Lists all models.
