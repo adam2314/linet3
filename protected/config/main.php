@@ -14,7 +14,7 @@ return array(
 	'preload'=>array('log'),
 	'language'=>'he_il',
         'localeDataPath'=>'protected/i18n/data/',
-	'defaultController' => 'test',
+	'defaultController' => 'company',
 	'onBeginRequest' => array('Linet3', 'beginRequest'),	
     
 	// autoloading model and component classes
@@ -28,10 +28,10 @@ return array(
 	'modules'=>array(
 		//'auth'=>array(),
 		'rights'=>array(
-				'debug'=>true,
-				//'install'=>true,
-				'enableBizRuleData'=>true,
-				//'superuserName'=>'admin',
+                        'debug'=>true,
+                        //'install'=>true,
+                        'enableBizRuleData'=>true,
+                        //'superuserName'=>'admin',
 		),
 		'eav'=>array(),
 		'forum'=>array(),
@@ -49,11 +49,11 @@ return array(
                         'ipFilters'=>array('172.22.102.12','::24'),
                         //'ipFilters'=>array('93.172.157.9','::24'),
                         //'ipFilters'=>array('62.219.135.89','::24'),
-						//'ipFilters'=>array('85.250.92.183','::24'),
+                        //'ipFilters'=>array('85.250.92.183','::24'),
 				
 				
 			'generatorPaths'=>array(
-					'bootstrap.gii',
+                                'bootstrap.gii',
 			),
 		),
 		
@@ -65,20 +65,20 @@ return array(
                 //    'class'=>'LocalTime',
                 //),
 		'Paypal' => array(
-			'class'=>'application.components.Paypal',
+                        'class'=>'application.components.Paypal',
 			
 		),
 		'session' => array (
-				'autoStart' => True,
-				'class' => 'system.web.CDbHttpSession',
-				'connectionID' => 'db',
-				'sessionTableName' => 'sessionStore',
+                        'autoStart' => True,
+                        'class' => 'system.web.CDbHttpSession',
+                        'connectionID' => 'db',
+                        'sessionTableName' => 'sessionStore',
 		),
 		'bootstrap'=>array(
-				'class'=>'bootstrap.components.Bootstrap',
+                        'class'=>'bootstrap.components.Bootstrap',
 		),
 		//'cache'=>array(
-				//'class'=>'CApcCache',
+                        //'class'=>'CApcCache',
 		//),
 		'user'=>array(
 			//'class' => 'RLinUser',
@@ -89,6 +89,7 @@ return array(
 			// enable cookie-based authentication
 			//'allowAutoLogin'=>true,
 		),
+            
 		'authManager'=>array(
 			'class'=>'RDbAuthManager',
 			'connectionID'=>'db',
@@ -96,7 +97,7 @@ return array(
 			'itemTable'=>'AuthItem',
 			'itemChildTable'=>'AuthItemChild',
 			'assignmentTable'=>'AuthAssignment',
-			'rightsTable'=>'Rights',//*/
+			'rightsTable'=>'Rights',
 		),
 		/* 'authManager'=>array(
             'class'=>'CDbAuthManager',
@@ -116,18 +117,18 @@ return array(
 		),//*/
 		// uncomment the following to enable URLs in path-format
 		'urlManager' => array(
-				'urlFormat'=>'path',
-                                'showScriptName'=>false,
-				'rules' => array(
-						'' => 'controller/action',
-                                                'minify/<group:[^\/]+>'=>'minify/index',
-						/*'post/<id:\d+>/<title:.*?>'=>'post/view',
-						'posts/<tag:.*?>'=>'post/index',//*/
-						'<controller:\w+>/<id:\d+>'=>'<controller>/view',
-                                                '<controller:\w+>/create/<type:\d+>'=>'<controller>/create',//mainly for doc and acc creating
-						'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
-						'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-				),
+                        'urlFormat'=>'path',
+                        'showScriptName'=>false,
+                        'rules' => array(
+                                '' => 'company/index',
+                                'minify/<group:[^\/]+>'=>'minify/index',
+                                /*'post/<id:\d+>/<title:.*?>'=>'post/view',
+                                'posts/<tag:.*?>'=>'post/index',//*/
+                                '<controller:\w+>/<id:\d+>'=>'<controller>/view',
+                                '<controller:\w+>/create/<type:\d+>'=>'<controller>/create',//mainly for doc and acc creating
+                                '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+                                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+                        ),
 		),
 		//'clientScript'=>array(
                 //    'class'=>'application.extensions.CClientScriptMinify',
@@ -151,7 +152,8 @@ return array(
 		// uncomment the following to use a MySQL database
 		
 		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=linetnew',
+			'connectionString' => 'mysql:host=localhost;dbname=linetmain',
+                        //'connectionString' => 'mysql:host=localhost;dbname=linetnew',
 			'emulatePrepare' => true,
 			'username' => 'root',
 			'password' => 'VBy7t6r5',

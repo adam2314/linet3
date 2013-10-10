@@ -1,6 +1,6 @@
 <?php
 
-class CurratesController extends RightsController
+class CompanyController extends RightsController
 {
 	public $defaultAction = 'index';
 
@@ -11,8 +11,22 @@ class CurratesController extends RightsController
 	 */
 	public function actionIndex()
 	{
+            //$model=  Company::model()->findByPk(1);
+            //print_r($model->Level);
+            //exit;
+            $model=new Company('search');
+		$model->unsetAttributes();  // clear any default values
+                //$model->
+		//if(isset($_GET['Company']))
+		//	$model->attributes=$_GET['Company'];
+                if(isset($_Post['Company'])){
+                    //setdatabase
+                    //redirect
+                    
+                }
+            
 		$this->render('index',array(
-			//'model'=>$this->loadModel($id),
+			'model'=>$model,
 		));
 	}
 

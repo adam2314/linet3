@@ -33,14 +33,6 @@ class UserIdentity extends CUserIdentity
                         
                         
                         
-                        //adam: shuld be cached in memory
-                        $temp=  Settings::model()->findAll();
-                        $settings=array();
-                        foreach ($temp as $key) {
-                            $settings[$key->id]=$key->value;
-                        }
-                        
-                        $this->setState('settings',$settings);
 		}
 		return $this->errorCode==self::ERROR_NONE;
 		/*$users=array(
