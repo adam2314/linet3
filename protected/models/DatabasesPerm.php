@@ -9,8 +9,8 @@
  * @property integer $database_id
  * @property integer $level_id
  */
-class DatabasesPerm extends CActiveRecord
-{
+class DatabasesPerm extends CActiveRecord{
+    const table='databasesPerm';
     public function primaryKey(){
 	    return 'id';
 	}
@@ -21,7 +21,7 @@ class DatabasesPerm extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'databasesPerm';
+		return (self::table);
 	}
 
 	/**

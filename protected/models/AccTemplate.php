@@ -10,6 +10,7 @@
  */
 class AccTemplate extends CActiveRecord
 {
+        const table='{{accTemplate}}';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -25,7 +26,7 @@ class AccTemplate extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'accTemplate';
+		return self::table;
 	}
 
 	/**

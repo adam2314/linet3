@@ -29,14 +29,19 @@
  * @property integer $system_acc
  * @property integer $owner
  */
-class Accounts extends CActiveRecord
-{
-	const table='accounts';
+class Accounts extends CActiveRecord{
+	const table='{{accounts}}';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
 	 * @return Accounts the static model class
 	 */
+         public function tableName() {
+            return self::table;
+        }
+        
+        
+        
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
@@ -100,14 +105,7 @@ class Accounts extends CActiveRecord
         
         
         
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return Accounts::table;
-	}
-
+        
          public function beforeSave(){
             if ($this->isNewRecord)
                 $this->created = new CDbExpression('NOW()');

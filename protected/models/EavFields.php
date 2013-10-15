@@ -10,8 +10,8 @@
  * @property integer $min
  * @property integer $max
  */
-class EavFields extends CActiveRecord
-{
+class EavFields extends CActiveRecord{
+    const table='{{eavFields}}';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -25,9 +25,8 @@ class EavFields extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return 'eavFields';
+	public function tableName(){
+		return self::table;
 	}
 
 	/**

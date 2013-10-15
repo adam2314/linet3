@@ -9,8 +9,8 @@
  * @property string $desc
  * @property string $openformat
  */
-class Acctype extends CActiveRecord
-{
+class Acctype extends CActiveRecord{
+        const table='{{accType}}';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -24,9 +24,8 @@ class Acctype extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return 'accType';
+	public function tableName(){
+		return  self::table;
 	}
 
 	/**

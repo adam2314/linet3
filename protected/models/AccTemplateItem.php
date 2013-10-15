@@ -8,8 +8,8 @@
  * @property integer $AccTemplate_id
  * @property integer $eavFields_id
  */
-class AccTemplateItem extends CActiveRecord
-{
+class AccTemplateItem extends CActiveRecord{
+        const table='{{accTemplateItem}}';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -23,9 +23,8 @@ class AccTemplateItem extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return 'accTemplateItem';
+	public function tableName(){
+		return self::table;
 	}
 
 	/**

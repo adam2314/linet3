@@ -8,7 +8,7 @@
  * @property string $name
  */
 class BankName extends CActiveRecord{
-        const table='bankName';
+        const table='{{bankName}}';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -24,7 +24,7 @@ class BankName extends CActiveRecord{
 	 */
 	public function tableName()
 	{
-		return BankName::table;
+		return self::table;
 	}
 
 	/**

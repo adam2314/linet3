@@ -14,7 +14,7 @@
  * @property ItemVatCat $itemVatCat
  */
 class UserIncomeMap extends CActiveRecord{
-    
+    const table='{{userIncomeMap}}';
     
      public function primaryKey(){
        return array('user_id', 'itemVatCat_id');
@@ -33,9 +33,8 @@ class UserIncomeMap extends CActiveRecord{
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return 'userIncomeMap';
+	public function tableName(){
+		return self::table;
 	}
 
 	/**

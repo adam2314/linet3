@@ -18,8 +18,8 @@
  * @property integer $owner_id
  * @property integer $linenum
  */
-class Transactions extends CActiveRecord
-{
+class Transactions extends CActiveRecord{
+    const table='{{transactions}}';
     public $from_date;
     public $to_date;
     
@@ -36,7 +36,7 @@ class Transactions extends CActiveRecord
      * @return string the associated database table name
      */
     public function tableName()	{
-        return 'transactions';
+        return self::table;
     }
     public function getOptAcc(){
         

@@ -29,8 +29,8 @@ class SiteController extends Controller
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		Yii::app()->user->setState('company', 'main');
-		$this->render('index');
+		//Yii::app()->user->setState('company', 'main');
+		//$this->render('index');
 	}
 
 	/**
@@ -50,6 +50,7 @@ class SiteController extends Controller
 	/**
 	 * Displays the contact page
 	 */
+        /*
 	public function actionContact()
 	{
 		$model=new ContactForm;
@@ -65,14 +66,14 @@ class SiteController extends Controller
 			}
 		}
 		$this->render('contact',array('model'=>$model));
-	}
+	}//*/
 
 	/**
 	 * Displays the login page
 	 */
 	public function actionLogin()
 	{
-		$model=new LoginForm;
+		$model=new FormLogin;
 
 		// if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
@@ -82,9 +83,9 @@ class SiteController extends Controller
 		}
 
 		// collect user input data
-		if(isset($_POST['LoginForm']))
+		if(isset($_POST['FormLogin']))
 		{
-			$model->attributes=$_POST['LoginForm'];
+			$model->attributes=$_POST['FormLogin'];
 			// validate user input and redirect to the previous page if valid
 			if($model->validate() && $model->login())
 				$this->redirect(Yii::app()->user->returnUrl);

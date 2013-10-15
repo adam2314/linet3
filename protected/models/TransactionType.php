@@ -7,14 +7,13 @@
  * @property integer $id
  * @property string $name
  */
-class TransactionType extends CActiveRecord
-{
+class TransactionType extends CActiveRecord{
+    const table='{{transactionType}}';
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return 'transactionType';
+	public function tableName(){
+		return self::table;
 	}
 
 	/**

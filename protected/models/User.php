@@ -20,8 +20,8 @@
  * @property Docs[] $docs
  * @property UserIncomeMap[] $userIncomeMaps
  */
-class User extends CActiveRecord
-{
+class User extends CActiveRecord{
+    const table='user';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -35,9 +35,8 @@ class User extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return 'user';
+	public function tableName()	{
+		return self::table;
 	}
 
 	/**

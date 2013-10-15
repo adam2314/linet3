@@ -12,14 +12,13 @@
  * The followings are the available model relations:
  * @property Accounts $account
  */
-class AccHist extends CActiveRecord
-{
+class AccHist extends CActiveRecord{
+        const table='{{accHist}}';
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return 'accHist';
+	public function tableName(){
+                return self::table;
 	}
 
 	/**

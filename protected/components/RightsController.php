@@ -19,9 +19,12 @@ class RightsController extends RController{
 	 * for more details on how to specify this property.
 	 */
 	 public $breadcrumbs=array();
-	
+	 
 	 public $layout='//layouts/column2';
 	
+   
+         
+         
 	/**
 	 * @return array action filters
 	 */

@@ -71,7 +71,7 @@ return array(
 		'session' => array (
                         'autoStart' => True,
                         'class' => 'system.web.CDbHttpSession',
-                        'connectionID' => 'db',
+                        'connectionID' => 'dbSession',
                         'sessionTableName' => 'sessionStore',
 		),
 		'bootstrap'=>array(
@@ -161,6 +161,17 @@ return array(
 			'tablePrefix' => '',
                         'enableParamLogging'=>true,//needs to be removed some day
 		),
+                'dbSession'=>array(
+			'connectionString' => 'mysql:host=localhost;dbname=linetmain',
+                        //'connectionString' => 'mysql:host=localhost;dbname=linetnew',
+			'emulatePrepare' => true,
+			'username' => 'root',
+			'password' => 'VBy7t6r5',
+			'charset' => 'utf8',
+			'tablePrefix' => '',
+                        'enableParamLogging'=>true,//needs to be removed some day
+                        'class'=> 'CDbConnection'
+		),
 		
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
@@ -208,5 +219,6 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'adam@speedcomp.co.il',
+                //'tablePrefix' => ''
 	),
 );

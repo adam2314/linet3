@@ -18,9 +18,8 @@
  * @property string $dep_date
  * @property integer $id
  */
-class Doccheques extends CActiveRecord
-{
-    
+class Doccheques extends CActiveRecord{
+    const table='{{docCheques}}';
         public function transaction($num,$refnum,$valuedate,$details,$action,$line,$account_id,$tranType){
             $vatcat=  Item::model()->findByPk($docdetail->item_id)->itemVatCat_id;
             $incomeacc= UserIncomeMap::model()->findByPk(array('user_id'=>Yii::app()->user->id,'itemVatCat_id'=>$vatcat))->account_id;
@@ -75,9 +74,8 @@ class Doccheques extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return 'docCheques';
+	public function tableName(){
+		return self::table;
 	}
 
 	/**

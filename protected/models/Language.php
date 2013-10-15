@@ -7,8 +7,8 @@
  * @property string $id
  * @property string $name
  */
-class Language extends CActiveRecord
-{
+class Language extends CActiveRecord{
+    const table='{{language}}';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -24,7 +24,7 @@ class Language extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'language';
+		return self::table;
 	}
 
 	/**

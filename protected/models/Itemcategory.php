@@ -8,8 +8,8 @@
  * @property string $name
  * @property integer $profit
  */
-class Itemcategory extends CActiveRecord
-{
+class Itemcategory extends CActiveRecord{
+    const table='{{itemCategories}}';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -23,9 +23,8 @@ class Itemcategory extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return 'itemCategories';
+	public function tableName(){
+		return self::table;
 	}
 
 	/**

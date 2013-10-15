@@ -118,7 +118,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/ass
                             
 		//Yii::t('app', 'message to be translated')
          array('label'=>Yii::t('app','Settings'),  'icon'=>'cogs','items'=>array(//'url'=>array('site/index'),
-             array('label'=>Yii::t('app','Logout'), 'url'=>array('/site/Logout')),
+             //array('label'=>Yii::t('app','Logout'), 'url'=>array('/site/Logout')),
             array('label'=>Yii::t('app','Bussines details'), 'url'=>array('settings/admin')),
             //'---',
             //array('label'=>Yii::t('app','Accounts')),
@@ -195,11 +195,11 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/ass
 			array('label'=>Yii::t('app','Income tax advances'), 'url'=>array('reports/taxrep')),
 		)),
 		array('label'=>Yii::t('app','Import Export'), 'icon'=>'exchange','items'=>array(
-			array('label'=>Yii::t('app','Open docs'), 'url'=>array('openfrmt')),
-			array('label'=>Yii::t('app','Open docs Import'), 'url'=>array('openfrmtimport')),
-			array('label'=>Yii::t('app','General backup'), 'url'=>array('backup')),
-			array('label'=>Yii::t('app','Backup restore'), 'url'=>array('backup&amp;step=restore')),
-			array('label'=>Yii::t('app','PCN874'), 'url'=>array('pcn874')),
+			array('label'=>Yii::t('app','Open docs'), 'url'=>array('data/openfrmt')),
+			array('label'=>Yii::t('app','Open docs Import'), 'url'=>array('data/openfrmtimport')),
+			array('label'=>Yii::t('app','General backup'), 'url'=>array('data/backup')),
+			array('label'=>Yii::t('app','Backup restore'), 'url'=>array('data/restore')),
+			array('label'=>Yii::t('app','PCN874'), 'url'=>array('data/pcn874')),
 		)),
 		array('label'=>Yii::t('app','Support'), 'icon'=>'info-sign','items'=>array(
 			array('label'=>Yii::t('app','Update'), 'url'=>array('module/update/')),
@@ -245,7 +245,10 @@ $this->widget('bootstrap.widgets.TbNavbar', array('items'=>$menu1,'brand'=>''));
             
         </div>
         <div id="left">
-            
+            <?php if(!Yii::app()->user->isGuest){
+			
+                //array('label'=>Yii::t('app','Logout'), 'url'=>array('/site/Logout')),
+                ?>
             
             <div class="media user-media hidden-phone">
                 <a class="user-link" href="">
@@ -253,24 +256,34 @@ $this->widget('bootstrap.widgets.TbNavbar', array('items'=>$menu1,'brand'=>''));
                     <span class="label user-label">16</span>
                 </a>
                 <div class="media-body hidden-tablet">
-                    <h5 class="media-heading">Archie</h5>
+                    <h5 class="media-heading">$fullname</h5>
                     <ul class="unstyled user-info">
                         <li>
-                            <a href="">Administrator</a>
+                            <a href="">$username</a>
                         </li>
+                        <li>
+                            <a href="<?php echo Yii::app()->createAbsoluteUrl('/site/Logout');?>"><?php echo Yii::t('app','Logout');?></a>
+                        </li>
+                        <li>
+                            <a href="<?php echo Yii::app()->createAbsoluteUrl('/company/index');?>">Change Company</a>
+                        </li>
+                        
                         <li>
                             Last Access :
                             <br>
-                            <small>
+                            
                                 <i class="icon-calendar"></i>
                                 16 Mar 16:32
-                            </small>
                         </li>
                     </ul>
                 </div>
             </div>
             
+            <?php 
             
+		}
+            
+            ?>
             <?php
 		//$this->beginWidget('zii.widgets.CPortlet', array(
 		//	'title'=>'Operations',

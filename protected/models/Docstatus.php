@@ -12,6 +12,7 @@
  * @property string $action
  */
 class Docstatus extends CActiveRecord{
+    const table='{{docStatus}}';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -28,9 +29,8 @@ class Docstatus extends CActiveRecord{
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return 'docStatus';
+	public function tableName(){
+		return self::table;
 	}
 
 	/**

@@ -16,7 +16,7 @@
  * @property integer $last_docnum
  */
 class Doctype extends CActiveRecord{
-	const table='docType';
+	const table='{{docType}}';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -34,9 +34,8 @@ class Doctype extends CActiveRecord{
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return Doctype::table;
+	public function tableName(){
+		return self::table;
 	}
 
 	/**

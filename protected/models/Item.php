@@ -22,7 +22,7 @@
  */
 class Item extends CActiveRecord
 {
-	const table='items';
+	const table='{{items}}';
         public $vat; //loads vat from user by cat
         
         public function findByPk($id, $condition = '', $params = Array()){
@@ -85,7 +85,7 @@ class Item extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return Item::table;
+		return self::table;
 	}
 
 	/**

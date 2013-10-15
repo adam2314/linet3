@@ -9,7 +9,7 @@
  * @property string $prefix
  */
 class Company extends CActiveRecord{
-        
+        const table='databases';
 	/**
 	 * @return string the associated database table name
 	 */
@@ -18,9 +18,8 @@ class Company extends CActiveRecord{
              return $level;
          }
     
-	public function tableName()
-	{
-		return 'databases';
+	public function tableName(){
+		return self::table;
 	}
 
 	/**
@@ -117,20 +116,18 @@ class Company extends CActiveRecord{
         public function getName(){
             $oldName=Yii::app()->db->connectionString;
             $oldPrefix=Yii::app()->db->tablePrefix;
+            
             Yii::app()->db->setActive(false);
             Yii::app()->db->connectionString = $this->string;
             Yii::app()->db->tablePrefix=$this->prefix;
             Yii::app()->db->setActive(true);
             
-            
-            
+            Settings::model()->refreshMetaData() ;
             $name=Settings::model()->findByPk('company.name')->value;
-            
             Yii::app()->db->setActive(false);
             Yii::app()->db->connectionString = $oldName;
             Yii::app()->db->tablePrefix=$oldPrefix;
             Yii::app()->db->setActive(true);
-            
             
             return $name;
             

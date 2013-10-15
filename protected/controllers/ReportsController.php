@@ -42,7 +42,7 @@ class ReportsController extends RightsController
         
         
         public function actionVat(){
-            $model=new ReportVat();
+            $model=new FormReportVat();
 
             if(isset($_POST['ReportVat'])){
                 $model->attributes=$_POST['ReportVat'];

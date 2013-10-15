@@ -1,5 +1,5 @@
 <?php
-class ReportVat extends CFormModel
+class FormReportVat extends CFormModel
 {
     public $from_month;
     public $year;

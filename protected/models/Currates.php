@@ -9,8 +9,8 @@
  * @property string $date
  * @property string $value
  */
-class Currates extends CActiveRecord
-{
+class Currates extends CActiveRecord{
+    const table='{{curRates}}';
     public $name;
     public $code;
 	/**
@@ -18,17 +18,15 @@ class Currates extends CActiveRecord
 	 * @param string $className active record class name.
 	 * @return Currates the static model class
 	 */
-	public static function model($className=__CLASS__)
-	{
+	public static function model($className=__CLASS__){
 		return parent::model($className);
 	}
 
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return 'curRates';
+	public function tableName(){
+		return self::table;
 	}
 
 	/**

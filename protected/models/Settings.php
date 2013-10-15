@@ -7,8 +7,8 @@
  * @property string $id
  * @property string $value
  */
-class Settings extends CActiveRecord
-{
+class Settings extends CActiveRecord{
+        const table='{{config}}';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -22,10 +22,10 @@ class Settings extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return 'config';
+	public function tableName(){
+		return self::table;
 	}
+        
 
 	/**
 	 * @return array validation rules for model attributes.

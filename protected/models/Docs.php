@@ -28,6 +28,7 @@
  * @property integer $owner
  */
 class Docs extends CActiveRecord{
+    const table='{{docs}}';
     //public $lang;
     public $docDet=NULL;
     public $docCheq=NULL;
@@ -257,7 +258,7 @@ class Docs extends CActiveRecord{
      * @return string the associated database table name
      */
     public function tableName(){
-            return 'docs';
+            return self::table;
     }
 
     /**

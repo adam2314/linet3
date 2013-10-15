@@ -15,9 +15,8 @@
  * @property string $invprice
  * @property integer $line
  */
-class Docdetails extends CActiveRecord
-{
-    
+class Docdetails extends CActiveRecord{
+    const table='{{docDetails}}';
         public function transaction($num,$refnum,$valuedate,$details,$action,$line,$optacc,$tranType){
             if(is_null($optacc)){
                 $vatcat=  Item::model()->findByPk($docdetail->item_id)->itemVatCat_id;
@@ -58,9 +57,8 @@ class Docdetails extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return 'docDetails';
+	public function tableName(){
+		return self::table;
 	}
 
 	/**

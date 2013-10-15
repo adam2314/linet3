@@ -9,8 +9,8 @@
  * @property string $name
  * @property string $symbol
  */
-class Currecies extends CActiveRecord
-{
+class Currecies extends CActiveRecord{
+        const table='{{currencies}}';
         public function primaryKey()     {
                 return 'id';
                 // For composite primary key, return an array like the following
@@ -31,7 +31,7 @@ class Currecies extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'currencies';
+		return self::table;
 	}
 
 	/**

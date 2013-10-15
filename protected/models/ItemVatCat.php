@@ -7,8 +7,8 @@
  * @property integer $id
  * @property string $name
  */
-class ItemVatCat extends CActiveRecord
-{
+class ItemVatCat extends CActiveRecord{
+    const table='{{itemVatCat}}';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -24,7 +24,7 @@ class ItemVatCat extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'itemVatCat';
+		return self::table;
 	}
 
         

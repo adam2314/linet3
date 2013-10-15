@@ -9,8 +9,8 @@
  * @property integer $ammount
  * @property string $idcode
  */
-class InventoryItem extends CActiveRecord
-{
+class InventoryItem extends CActiveRecord{
+    const table='{{inventoryItem}}';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -26,7 +26,7 @@ class InventoryItem extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'inventoryItem';
+		return self::table;
 	}
 
 	/**

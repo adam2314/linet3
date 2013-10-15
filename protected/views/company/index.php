@@ -33,9 +33,25 @@ $('.search-form form').submit(function(){
 	'columns'=>array(
 		'id',
 		//'string',
-                array('value'=>'$data->getName()'),
+                array(
+                    
+                    
+                    //'value'=>'$data->getName()',
+                    'value'=>'CHtml::link(CHtml::encode($data->getName()),"#", array(  "onclick"=>\'chose("\'.$data->id.\'")\',))',
+                    // echo CHtml::link(CHtml::encode($data->id),'#', array(  'onclick'=>'refNum("'.$data->id.'","'.$data->docnum.'","'.$data->docType->name.'")',));
+                    'type'=>'raw',
+                    
+                    
+                    ),
+            
+            
+            
+            
                 //array('value'=>'$data->getLevel()->level_id'),
                 array('value'=>'$data->level->level_id'),
+            
+            
+            
                 //array('value'=>'$data->level[0]->level_id'),
 		//'desc',
 		//'openformat',
@@ -49,3 +65,11 @@ $('.search-form form').submit(function(){
 
 
 ?>
+<script type="text/javascript">
+    function chose(id){
+        $.post( "<?php echo Yii::app()->createAbsoluteUrl('/company/index');?>",{ Company: id }, function( data ) {
+            alert( "Data Loaded: " + data );
+          });
+        
+    }
+    </script>

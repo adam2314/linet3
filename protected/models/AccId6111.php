@@ -8,8 +8,8 @@
  * @property string $name
  * @property integer $percentage
  */
-class AccId6111 extends CActiveRecord
-{
+class AccId6111 extends CActiveRecord{
+        const table='{{accId6111}}';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -23,9 +23,9 @@ class AccId6111 extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
-	{
-		return 'accId6111';
+	public function tableName(){
+                return  self::table;
+                
 	}
 
 	/**
