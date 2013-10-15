@@ -2,10 +2,7 @@
 
 class Linet3 {
   public static function beginRequest(CEvent $event) {
-    //print_r(Yii::app()->getRequest()->requestUri);
-    //echo Yii::app()->user->Company;  
-    //Yii::app()->user->setState('Company',0);
-    //exit;
+
     if(isset(Yii::app()->user->language))
         Yii::app()->language=Yii::app()->user->language;
     if(!isset(Yii::app()->user->OrgDatabase)){
@@ -14,12 +11,7 @@ class Linet3 {
     }
     if(!isset(Yii::app()->user->Company))
         Yii::app()->user->setState('Company',0);
-    // Yii::app()->user->setState('Database',null );
-    //echo Yii::app()->user->Database;
-    //echo Yii::app()->user->OrgDatabase['string'];
-    //exit;
     
-    //if(isset(Yii::app()->user->Company))
      if(Yii::app()->user->Company==0){
             Yii::app()->db->setActive(false);
             Yii::app()->db->connectionString = Yii::app()->user->OrgDatabase['string'];
@@ -32,7 +24,7 @@ class Linet3 {
             Yii::app()->db->tablePrefix=Yii::app()->user->Database->prefix;
             Yii::app()->db->setActive(true);
 
-             //adam: shuld be cached in memory
+            //adam: shuld be cached in memory
             $temp=  Settings::model()->findAll();
             $settings=array();
             foreach ($temp as $key) {
@@ -40,7 +32,6 @@ class Linet3 {
             }
 
             Yii::app()->user->setState('settings',$settings);
-            //Yii::app()->user->setState('Database',null );
     }else{
          //Yii::app()->setController('company');//->redirect(array('company/admin'));
 

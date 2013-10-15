@@ -10,11 +10,10 @@ $this->menu=array(
 );
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => "Create AccTemplate",
+    'haeder' => Yii::t('app',"Create AccTemplate"),
 )); 
 ?>
 
-<h1>Create AccTemplate</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); 
 

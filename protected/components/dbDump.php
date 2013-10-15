@@ -28,8 +28,12 @@ class dbDump{
                     //echo Yii::app()->db->tablePrefix;
                     //echo strpos($key,Yii::app()->db->tablePrefix)===true;
                     //echo strpos($key,Yii::app()->db->tablePrefix);
-                    if((strpos($key,Yii::app()->db->tablePrefix)===0))
-			$this->dumpTable($key);
+                    if(Yii::app()->db->tablePrefix!=''){
+                        if((strpos($key,Yii::app()->db->tablePrefix)===0))
+                            $this->dumpTable($key);
+                    }else{
+                        $this->dumpTable($key);
+                    }
                 }
 		$result = $this->setHeader();
                 $result.= ob_get_contents();
