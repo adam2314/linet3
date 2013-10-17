@@ -325,21 +325,10 @@ $this->widget('bootstrap.widgets.TbNavbar', array('items'=>$menu1,'brand'=>''));
             </div>
         </div>
 	<div id="footer">
-		<p>
-                  
-			
-		<div class="firefox"><table border="0" dir="rtl"><tr><td>
-			<a href='http://www.mozilla.org/firefox?WT.mc_id=aff_en02&amp;WT.mc_ev=click'><!--<img src='images/logo_firefox.png' alt='Firefox Download Button' border='0' />--></a>
-			</td><td valign="top">
-			מומלץ להשתמש בתוכנה זו עם דפדפן פיירפוקס<br />
-			להתקנה לחץ על הלוגו מימין</td></tr></table>
-		</div>
-				
-		<div class="osi">
-			<!--<img src="images/logo_osi2.png" alt="logo osi2" /><img src="images/logo_osi.png" alt="osi logo" />-->
-		</div>
-        </p>
-	</div><!-- footer -->
+		מונע על ידי מחשוב מהיר<br>
+		נכתב על ידי אדם בן חור<br>
+		<a href="http://www.speedcomp.co.il/">www.speedcomp.co.il</a>
+	</div>
 
 </div><!-- page -->
 

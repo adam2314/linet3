@@ -68,7 +68,8 @@ $('.search-form form').submit(function(){
 <script type="text/javascript">
     function chose(id){
         $.post( "<?php echo Yii::app()->createAbsoluteUrl('/company/index');?>",{ Company: id }, function( data ) {
-            alert( "Data Loaded: " + data );
+            //alert( "Data Loaded: " + data );
+            window.location = "<?php echo Yii::app()->createAbsoluteUrl('/settings/admin');?>";
           });
         
     }

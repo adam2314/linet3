@@ -3,7 +3,7 @@
 class CompanyController extends RightsController
 {
 	public $defaultAction = 'index';
-
+        public $layout='//layouts/noMenu';
 
 	/**
 	 * Displays a particular model.

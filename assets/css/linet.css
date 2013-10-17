@@ -6,7 +6,10 @@
     
     
 }
-
+#footer {
+    height: 65px;
+    text-align: center;
+}
 .ui-tabs .ui-tabs-panel {
     overflow: auto;
 }

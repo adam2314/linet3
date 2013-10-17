@@ -19,33 +19,58 @@ class DataController extends RightsController{
             $model = new FormBackupFile;
             
             if(isset($_POST['FormBackupFile'])){
-                $model->attributes = $_POST['FormBackupFile'];
+                $yiiBasepath=Yii::app()->basePath;
+                $yiiUser=Yii::app()->user->id;
+                $configPath=Yii::app()->user->settings["company.path"];
+     
+                $mysql = $yiiBasepath."/files/".$configPath."/tmp.sql";
+                
+                $model->file = $_POST['FormBackupFile']['file'];
                 $model->file = CUploadedFile::getInstance($model,'file');
-                if($model->file->saveAs($this->path . $model->file)){
+                if($model->file->saveAs($mysql)){
                         // redirect to success page
                     
-                        if (file_exists($sqlFile)){
-                            $sqlArray = file_get_contents($sqlFile);
+                        if (file_exists($mysql)){
+                            $sqlArray = file_get_contents($mysql);
 
-                             //if DROP TABLE IF EXISTS `
-
-                            //if CREATE TABLE `
-
-
+                             $src1='DROP TABLE IF EXISTS `';
+                             $rplc1='DROP TABLE IF EXISTS `'.Yii::app()->db->tablePrefix;
+                            //
+                             $src2='CREATE TABLE `';
+                             $rplc2='CREATE TABLE `'.Yii::app()->db->tablePrefix;
                             //INSERT INTO `
-
+                            $src3='INSERT INTO `';
+                            $rplc3='INSERT INTO `'.Yii::app()->db->tablePrefix;
+                            
+                             
+                            $src4='ALTER TABLE ';
+                            $rplc4='ALTER TABLE '.Yii::app()->db->tablePrefix;
+                            
+                            
+                            $src5=') REFERENCES `';
+                            $rplc5=') REFERENCES `'.Yii::app()->db->tablePrefix;
+                            
+                            $sqlArray=  str_replace($src1, $rplc1, $sqlArray);
+                            $sqlArray=  str_replace($src2, $rplc2, $sqlArray);
+                            $sqlArray=  str_replace($src3, $rplc3, $sqlArray);
+                            $sqlArray=  str_replace($src4, $rplc4, $sqlArray);
+                            $sqlArray=  str_replace($src5, $rplc5, $sqlArray);
+                            
+                            //print $sqlArray;
                             $cmd = Yii::app()->db->createCommand($sqlArray);
+                            //$cmd->execute();
                             try{
                                     $cmd->execute();
                             }
                             catch(CDbException $e){
                                     $message = $e->getMessage();
+                                    print $message;
                             }
 
                         }
                     
                     
-                        $this->redirect(array('index'));
+                        //$this->redirect(array('index'));
                 }
                 
             }

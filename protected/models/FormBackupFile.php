@@ -16,6 +16,7 @@ class FormBackupFile extends CFormModel{
     public function rules(){
         return array(
             array('file','file','allowEmpty'=>false,'types'=>'sql, bak'),
+            array('file', 'safe')
         );
         
     }

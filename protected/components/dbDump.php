@@ -37,7 +37,7 @@ class dbDump{
                 }
 		$result = $this->setHeader();
                 $result.= ob_get_contents();
-                $result.= $this->getConstraints();
+                //$result.= $this->getConstraints();
                 $result.= $this->setFooter();
                 ob_end_clean();
                 if($download){
@@ -131,19 +131,25 @@ class dbDump{
 		$q = $db->createCommand('SHOW CREATE TABLE '.$db->quoteTableName($tableName).';')->queryRow();
                 
                 $create_query = $q['Create Table'];
-
+                //echo "\n".$create_query."\n";
                 $pattern = '/CONSTRAINT.*|FOREIGN[\s]+KEY/';
                 
                 // constraints to $tablename
-                preg_match_all($pattern, $create_query,$this->constraints[$tableName]);
-                
-                $create_query = explode(',',preg_replace($pattern, '', $create_query));
-                
-                for($i=0;$i<count($create_query)-1;$i++){
-                    //echo "\n adam:".$create_query[$i]."\n";
-                    //echo ($i>=0 && $i<count($create_query)-2)?$create_query[$i].',':$create_query[$i];
-                    echo str_replace($tableName, $newTableName, $create_query[$i]).',';
+                if(preg_match_all($pattern, $create_query,$this->constraints[$tableName])){
+                    $create_query=preg_replace($pattern, '', $create_query);
+                    $create_query = explode(',',$create_query);
+                    for($i=0;$i<count($create_query)-1;$i++){
+                        echo ($i>=0 && $i<count($create_query)-2)?$create_query[$i].',':$create_query[$i];
+                    }
+                } else  {      
+                    $create_query = explode(',',$create_query);
+                    for($i=0;$i<count($create_query)-1;$i++){
+                        echo $create_query[$i].',';
+                    }
                 }
+              
+               
+               
                 echo "\n".trim($create_query[$i]).";".PHP_EOL;
                 
 

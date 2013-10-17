@@ -19,6 +19,7 @@ $this->menu=array(
 	'htmlOptions'=>array('enctype'=>'multipart/form-data'),
 ));
 ?>
+    <?php echo Yii::t('app','Worrinng:').Yii::t('app','All current compnay data will be removed:'); ?>
 		<div class="row">
 		<?php echo $form->labelEx($model,'file'); ?>
 		<?php echo $form->fileField($model,'file'); ?>

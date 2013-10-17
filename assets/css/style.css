@@ -23,8 +23,8 @@ body {
   margin: 0 auto -48px;
 }
 /* Set the fixed height of the footer here */
-#push,
-#footer {
+#push
+ {
   height: 48px;
 }
 @media (max-width: 767px) {
