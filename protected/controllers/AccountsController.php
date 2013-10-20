@@ -142,22 +142,10 @@ class AccountsController extends RightsController
 	/**
 	 * Lists all models.
 	 */
-	public function actionIndex($type=10)
+	public function actionIndex()
 	{
-		//print "bla".$type."bla";
-		//$this->type=$type;
-		$dataProvider=new CActiveDataProvider('Accounts',
-			array(
-			'criteria'=>array(
-				'condition'=>'type= :type',
-				'params'=>array(':type'=>$type),
-			
-				//'order'=>'num DESC',
-        		//'with'=>array('author'),
-    			)
-    		)
-    	);
-		$this->render('index');//,array('dataProvider'=>$dataProvider)
+            $type=isset($_GET['type'])?(int)$_GET['type']:0;
+            $this->render('index',array('type'=>$type));
 	}
 
 	/**
@@ -180,8 +168,6 @@ class AccountsController extends RightsController
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer the ID of the model to be loaded
 	 */
-	//public $prefix ='40f26e6e5928a9756309e91c6368d8f745f8ff8c';
-	//public $type='1';
 	public function loadModel($id)
 	{
 		//$model=Accounts::model()->findByPk($id);
