@@ -179,8 +179,8 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/ass
 			array('label'=>Yii::t('app','Nat. Ins. payment'), 'url'=>array('outcome/create','type'=>'2')),
 		)),
 		array('label'=>Yii::t('app','Reconciliations'), 'icon'=>'eye-open','items'=>array(
-			array('label'=>Yii::t('app','Bank docs entry'), 'url'=>array('bankbook')),
-			array('label'=>Yii::t('app','Bank recon.'), 'url'=>array('extmatch')),
+			array('label'=>Yii::t('app','Bank docs entry'), 'url'=>array('bankbook/admin')),
+			array('label'=>Yii::t('app','Bank recon.'), 'url'=>array('bankbook/extmatch')),
 			array('label'=>Yii::t('app','Show bank recon.'), 'url'=>array('edispmatch')),
 			array('label'=>Yii::t('app','Accts. recon.'), 'url'=>array('intmatch')),
 			array('label'=>Yii::t('app','Show recon.'), 'url'=>array('dispmatch')),
