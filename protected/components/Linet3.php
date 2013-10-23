@@ -13,10 +13,11 @@ class Linet3 {
         Yii::app()->user->setState('Company',0);
     
      if(Yii::app()->user->Company==0){
-            Yii::app()->db->setActive(false);
-            Yii::app()->db->connectionString = Yii::app()->user->OrgDatabase['string'];
-            Yii::app()->db->tablePrefix=Yii::app()->user->OrgDatabase['prefix'];
-            Yii::app()->db->setActive(true);
+            //Yii::app()->db->setActive(false);
+            //Yii::app()->db->connectionString = Yii::app()->user->OrgDatabase['string'];
+            //Yii::app()->db->tablePrefix=Yii::app()->user->OrgDatabase['prefix'];
+            //Yii::app()->db->setActive(true);
+            
         }else   
     if(isset(Yii::app()->user->Database)){
             Yii::app()->db->setActive(false);
@@ -34,8 +35,8 @@ class Linet3 {
             Yii::app()->user->setState('settings',$settings);
     }else{
          //Yii::app()->setController('company');//->redirect(array('company/admin'));
-
-    
+        echo 'לך תבחר חברה!';
+        exit;
           //if(Yii::app()->controller!='company'){
               //echo Yii::app()->controller->id;
             //Yii::app()->redirect('company');

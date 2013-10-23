@@ -19,7 +19,7 @@ class BankbookController extends RightsController{
             $model=new Bankbook('search');
             //$model->account_id=$account_id;
             if(isset($_POST['Bankbook']))
-                    $model->attributes=$_GET['Bankbook'];
+                    $model->attributes=$_POST['Bankbook'];
             $this->renderPartial('ajax',array( 'model'=>$model,   ));
     }
 }
