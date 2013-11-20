@@ -20,7 +20,7 @@ class Controller extends CController{
 	 */
 	public $breadcrumbs=array();
 	
-	public $layout='//layouts/column2';
+	public $layout='//layouts/single';
 	
 	/**
 	 * @return array action filters

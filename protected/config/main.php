@@ -9,6 +9,7 @@ Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Linet 3.0',
+	//'theme'=>'fancy',
 	'sourceLanguage'=>'en',
 	// preloading 'log' component
 	'preload'=>array('log'),

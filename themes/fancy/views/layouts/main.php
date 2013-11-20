@@ -4,8 +4,15 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="language" content="en" />
         <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+        <meta content="width=device-width" name="viewport" />
        
-            <?php 
+
+        
+        
+        
+        
+	<!-- blueprint CSS framework -->
+<?php 
 $baseUrl=Yii::app()->request->baseUrl;
 //Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/screen.css", 'screen, projection'));
 //Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/print.css", 'print'));
@@ -15,13 +22,53 @@ $baseUrl=Yii::app()->request->baseUrl;
 //Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/bootstrap-responsive.min.css"));
 //Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/assets/css/linet.css"));
 
-
+Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/Font-awesome/css/font-awesome.min.css'));
 Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/style.css'));
+Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/calendar.css'));
+Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/theme.css'));
+Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/style-switcher.css'));
+Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/colorpicker.css'));
+Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/chosen/chosen/chosen.css'));
+
+Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/bootstrap.min.css'));
+Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/bootstrap-responsive.min.css'));
+Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/bootstrap-toggle-buttons.css'));
+
+//Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl(''));
 
 //Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/4585c/jquery.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.mousewheel.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.tablesorter.min.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.sparkline.min.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.dualListBox-1.3.min.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.autosize-min.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.inputlimiter.1.3.1.min.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.tagsinput.min.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.toggle.buttons.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/uniform/jquery.uniform.min.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.validVal-4.3.2.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/chosen/chosen/chosen.jquery.min.js'));
+//Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/vendor/bootstrap.min.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/bootstrap-colorpicker.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/bootstrap-progressbar.min.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/bootstrap-datepicker.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/bootstrap-timepicker.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/bootstrap-inputmask.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/prettify.js'));
 
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/cssbeautify.js'));
+
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/vendor/less-1.3.3.min.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/date.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/daterangepicker.js'));
+Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/main.js'));
+//Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl(''));
 
 ?>
+         <meta content="Metis: Bootstrap Responsive Admin Theme" name="description">
+
+   
         <link href="<?php echo $baseUrl; ?>/assets/less/theme.less" rel="stylesheet/less" type="text/css" />       
         <link href="<?php echo Yii::app()->createAbsoluteUrl('/assets/css/linet.css');?>" rel="stylesheet" type="text/css" />
         <style id="less:bootstrap-admin-assets-less-theme" type="text/css" ></style>
@@ -46,6 +93,7 @@ Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets
 </head>
 
 <body>
+Fancy!
 <!-- <div id="">-->
 <div class="wrapper" id="page">
     
@@ -222,7 +270,7 @@ $this->widget('bootstrap.widgets.TbNavbar', array('items'=>$menu1,'brand'=>''));
                         </li>
                         
                         <li>
-                            Last Access :
+                            Last Fancy Access :
                             <br>
                             
                                 <i class="icon-calendar"></i>
@@ -280,6 +328,7 @@ $this->widget('bootstrap.widgets.TbNavbar', array('items'=>$menu1,'brand'=>''));
 	<div id="footer">
 		מונע על ידי מחשוב מהיר<br>
 		נכתב על ידי אדם בן חור<br>
+		
 		<a href="http://www.speedcomp.co.il/">www.speedcomp.co.il</a>
 	</div>
 

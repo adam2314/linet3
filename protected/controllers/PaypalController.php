@@ -1,6 +1,6 @@
 <?php
 
-class PaypalController extends Controller
+class PaypalController extends RightsController
 {
 	public function actionBuy(){
                

@@ -22,4 +22,8 @@ class BankbookController extends RightsController{
                     $model->attributes=$_POST['Bankbook'];
             $this->renderPartial('ajax',array( 'model'=>$model,   ));
     }
+    
+    public function actionDeposit(){
+        
+    }
 }

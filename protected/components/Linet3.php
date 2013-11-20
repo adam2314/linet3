@@ -5,12 +5,20 @@ class Linet3 {
 
     if(isset(Yii::app()->user->language))
         Yii::app()->language=Yii::app()->user->language;
+    
+    if(isset(Yii::app()->user->theme))
+        Yii::app()->theme=Yii::app()->user->theme;
+    
     if(!isset(Yii::app()->user->OrgDatabase)){
         $org=array('string'=>Yii::app()->db->connectionString,'prefix'=>Yii::app()->db->tablePrefix);
         Yii::app()->user->setState('OrgDatabase',$org);
     }
     if(!isset(Yii::app()->user->Company))
         Yii::app()->user->setState('Company',0);
+    
+    
+    
+    
     
      if(Yii::app()->user->Company==0){
             //Yii::app()->db->setActive(false);
@@ -33,6 +41,7 @@ class Linet3 {
             }
 
             Yii::app()->user->setState('settings',$settings);
+            
     }else{
          //Yii::app()->setController('company');//->redirect(array('company/admin'));
         echo 'לך תבחר חברה!';

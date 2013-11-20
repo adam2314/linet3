@@ -42,6 +42,7 @@ $this->beginWidget('MiniForm',array(
 		//'category_id',
                  array(
                     'name' => 'category_id',
+                     'filter'=>CHtml::listData(Itemcategory::model()->findAll(), 'id', 'name'),
                      'value' => 'isset($data->Category)?$data->Category->name:0',   //where name is Client model attribute 
                    ),
 		'parent_item_id',

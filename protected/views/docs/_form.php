@@ -307,7 +307,6 @@
 			<th><?php echo Yii::t('labels','Cheque Date'); ?></th>
                         <th><?php echo Yii::t('labels','Currency'); ?></th>
 			<th><?php echo Yii::t('labels','Sum'); ?></th>
-			<th><?php echo Yii::t('labels','Bank Refnum'); ?></th>
 			<th><?php echo Yii::t('labels','Dep Date'); ?></th>
 			
                         
