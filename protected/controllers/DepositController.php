@@ -1,39 +1,25 @@
 <?php
 
-class DepositController extends RightsController
-{
-	//public $defaultAction = 'index';
-        //public $layout='//layouts/noMenu';
+class DepositController extends RightsController{
+  
+    public function actionAdmin(){
+		$model=new FormDeposit('search');
+		$model->unsetAttributes();  // clear any default values
+		//if(isset($_POST['Bankbook']))
+		//	$model->attributes=$_GET['Currates'];
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionIndex(){
-             $model = new FormDeposit;
-        
-            if(isset($_POST['Company'])){
-                //if has access
-                $database= Company::model()->findByPk((int)$_POST['Company']);
-                Yii::app()->user->setState('Database',$database );
-                Yii::app()->user->setState('Company',1);
-                //redirect
-                
-                Yii::app()->end();
-
-            }
-
-            if(Yii::app()->user->Company!=0){
-                Yii::app()->user->setState('Company',0);
-                Yii::app()->user->Company=0;
-
-                $this->redirect('company');
-                Yii::app()->end();
-            }
-
-            $model=new Company('search');
-            $model->unsetAttributes();  // clear any default values
-            $this->render('index',array('model'=>$model,));
+		$this->render('admin',array(
+			'model'=>$model,
+		));
 	}
-
-	
+        
+    public function actionAjax(){
+            $model=new Doccheques('search');
+            //$model=new Bankbook('search');
+            //$model=new Docdetails('search');
+            $model->bank_refnum='';
+            //if(isset($_POST['Deposit']))
+            //$model->attributes['bank_refnum']='';
+            $this->renderPartial('ajax',array( 'model'=>$model,   ));
+    }
+}

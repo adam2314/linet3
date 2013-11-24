@@ -122,13 +122,11 @@ return array(
                         'showScriptName'=>false,
                         'rules' => array(
                                 '' => 'company/index',
-                                'minify/<group:[^\/]+>'=>'minify/index',
-                                /*'post/<id:\d+>/<title:.*?>'=>'post/view',
-                                'posts/<tag:.*?>'=>'post/index',//*/
-                                '<controller:\w+>/<id:\d+>'=>'<controller>/view',
-                                '<controller:\w+>/create/<type:\d+>'=>'<controller>/create',//mainly for doc and acc creating
-                                '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
-                                '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+                                //'minify/<group:[^\/]+>'=>'minify/index',
+                                //'<controller:\w+>/<id:\d+>'=>'<controller>/view',
+                                //'<controller:\w+>/create/<type:\d+>'=>'<controller>/create',//mainly for doc and acc creating
+                                //'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+                                //'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
                         ),
 		),
 		//'clientScript'=>array(

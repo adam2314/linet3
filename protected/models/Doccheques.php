@@ -21,10 +21,7 @@
 class Doccheques extends CActiveRecord{
     const table='{{docCheques}}';
         public function transaction($num,$refnum,$valuedate,$details,$action,$line,$account_id,$tranType){
-            $vatcat=  Item::model()->findByPk($docdetail->item_id)->itemVatCat_id;
-            $incomeacc= UserIncomeMap::model()->findByPk(array('user_id'=>Yii::app()->user->id,'itemVatCat_id'=>$vatcat))->account_id;
-           
-            
+                       
             $in=new Transactions();
             $in->num=$num;
             $in->account_id=$account_id;
@@ -47,7 +44,7 @@ class Doccheques extends CActiveRecord{
             $out->valuedate=$valuedate;
             $out->details=$details;
             $out->currency_id=$this->currency_id;
-            $out->sum=$docrcpt->price*$action*-1;
+            $out->sum=$this->price*$action*-1;
             $out->owner_id=Yii::app()->user->id;
             $out->linenum=$line;
             
@@ -63,7 +60,7 @@ class Doccheques extends CActiveRecord{
     
          public function primaryKey(){
 	    return array('doc_id','line');
-	}
+	}//*/
     
     
 	public static function model($className=__CLASS__)
@@ -81,10 +78,7 @@ class Doccheques extends CActiveRecord{
 	/**
 	 * @return array validation rules for model attributes.
 	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
+	public function rules()	{
 		return array(
 			array('type, creditcompany, line', 'numerical', 'integerOnly'=>true),
 			array('doc_id, cheque_num, bank_refnum', 'length', 'max'=>10),
@@ -92,8 +86,6 @@ class Doccheques extends CActiveRecord{
 			array('cheque_acct', 'length', 'max'=>20),
 			array('sum', 'length', 'max'=>8),
 			array('cheque_date, dep_date', 'safe'),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
 			array('doc_id, type, creditcompany, cheque_num, bank, branch, cheque_acct, cheque_date, sum, bank_refnum, dep_date, line', 'safe', 'on'=>'search'),
 		);
 	}
@@ -106,16 +98,15 @@ class Doccheques extends CActiveRecord{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                    'Docs'=>array(self::BELONGS_TO, 'Docs', 'doc_id'),
-                    'Type'=>array(self::BELONGS_TO, 'PaymentType', 'type'),
+                    //'Docs'=>array(self::BELONGS_TO, 'Docs', 'doc_id'),
+                    //'Type'=>array(self::BELONGS_TO, 'PaymentType', 'type'),
 		);
 	}
 
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
-	public function attributeLabels()
-	{
+	public function attributeLabels(){
 		return array(
 			'doc_id' => Yii::t('labels','Refnum'),
 			'type' => Yii::t('labels','Type'),
@@ -136,11 +127,7 @@ class Doccheques extends CActiveRecord{
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
+	public function search()	{
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('doc_id',$this->refnum,true);
@@ -158,6 +145,7 @@ class Doccheques extends CActiveRecord{
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'pagination'=>array('pageSize'=>50),
 		));
 	}
 }

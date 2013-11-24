@@ -126,7 +126,7 @@ Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets
 		)),
 		array('label'=>Yii::t('app','Register'), 'icon'=>'money','items'=>array(
 			array('label'=>Yii::t('app','Receipt'), 'url'=>array('docs/create/8')),
-			array('label'=>Yii::t('app','Bank deposits'), 'url'=>array('deposit&amp;type=2')),
+			array('label'=>Yii::t('app','Bank deposits'), 'url'=>array('deposit/admin')),
 			array('label'=>Yii::t('app','Payment'), 'url'=>array('outcome/create')),
 			array('label'=>Yii::t('app','VAT payment'), 'url'=>array('outcome/create','type'=>'1')),
 			array('label'=>Yii::t('app','Nat. Ins. payment'), 'url'=>array('outcome/create','type'=>'2')),

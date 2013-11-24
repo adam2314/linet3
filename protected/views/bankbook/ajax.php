@@ -1,5 +1,5 @@
 <?php $this->widget('bootstrap.widgets.TbGridView', array(
-	'id'=>'doctype-grid',
+	'id'=>'bankbook-grid',
 	'dataProvider'=>$model->search(),
 	//'filter'=>$model,
 	'columns'=>array(

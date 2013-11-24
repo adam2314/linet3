@@ -30,10 +30,7 @@ class Bankbook extends CActiveRecord{
 	/**
 	 * @return array validation rules for model attributes.
 	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
+	public function rules(){
 		return array(
 			array('id, account_id, date, sum, total', 'required'),
 			array('id, account_id', 'numerical', 'integerOnly'=>true),
@@ -77,11 +74,7 @@ class Bankbook extends CActiveRecord{
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
+	public function search(){
 		$criteria=new CDbCriteria;
 		$criteria->compare('id',$this->id);
 		$criteria->compare('account_id',$this->account_id);
