@@ -30,6 +30,7 @@ class UserIdentity extends CUserIdentity
 			$this->errorCode=self::ERROR_NONE;
                         $this->setState('certpasswd', $user->certpasswd);
                         $this->setState('language', $user->language);
+                        $this->setState('timezone', $user->timezone);
                         $this->setState('theme', $user->theme);
                         
                         

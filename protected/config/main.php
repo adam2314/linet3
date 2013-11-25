@@ -100,6 +100,20 @@ return array(
 			'assignmentTable'=>'AuthAssignment',
 			'rightsTable'=>'Rights',
 		),
+            
+                'ePdf' => array(
+                    'class'         => 'ext.yii-pdf.EYiiPdf',
+                    'params'        => array(
+                        'mpdf'     => array(
+                            'librarySourcePath' => 'ext.yii-pdf.mpdf57.*',
+                            'constants'         => array(
+                                '_MPDF_TEMP_PATH' => Yii::getPathOfAlias('application.runtime'),
+                            ),
+                            'class'=>'mpdf',
+                        )
+                    )
+                ),//ePdf
+            
 		/* 'authManager'=>array(
             'class'=>'CDbAuthManager',
             'connectionID'=>'db',
