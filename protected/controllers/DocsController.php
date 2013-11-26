@@ -39,22 +39,19 @@ class DocsController extends RightsController
             $myHtml = $yiiBasepath."/files/".$configPath."/temp.html";
             $myPdf=$yiiBasepath."/files/".$configPath."/docs/$model->doctype-$model->docnum.pdf";
             $myPdfS=$yiiBasepath."/files/".$configPath."/docs/$model->doctype-$model->docnum-signed.pdf";
-            $fh = fopen($myHtml, 'w') or die("can't open file");
-            fwrite($fh, $file);
-            fclose($fh);
+
             
-            $a=Yii::app()->user->settings["server.wkhtmltopdf"]." \"$myHtml\" \"$myPdf\"";
-            //print $a."<br />";
-            shell_exec($a);
+            // mPDF
+            $mPDF1 = Yii::app()->ePdf->mpdf();
+            $mPDF1 = Yii::app()->ePdf->mpdf('', 'A5');
+            $mPDF1->WriteHTML($file);
+            $mPDF1->Output($myPdf,'F');
             
-            
-            
-            
-           spl_autoload_unregister(array('YiiBase','autoload')); 
+            //add digi sign
+            spl_autoload_unregister(array('YiiBase','autoload')); 
             $oldpath=get_include_path();
             set_include_path( $yiiBasepath. '/modules/zend_pdf_certificate/');
-            //echo $yiiBasepath. '/modules/zend_pdf_certificate/';
-            //exit;
+           
             include_once('Pdf.php');
             include_once('ElementRaw.php');
             //loads a sample PDF file
@@ -92,6 +89,8 @@ class DocsController extends RightsController
             header("Content-Transfer-Encoding: binary");
             
             readfile($myPdfS);
+             
+            //*/
             exit;
 	}
         

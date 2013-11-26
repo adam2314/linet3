@@ -270,15 +270,15 @@ class Docs extends CActiveRecord{
             return array(
                     array('status, printed, owner', 'numerical', 'integerOnly'=>true),
                     array('city', 'length', 'max'=>40),
-                    array('doctype, docnum, account_id, zip, vatnum', 'length', 'max'=>10),
+                    array('doctype, docnum, oppt_account_id, account_id, zip, vatnum', 'length', 'max'=>11),
                     array('company, address', 'length', 'max'=>80),
                     array('currency_id', 'length', 'max'=>3),
                     array('refnum', 'length', 'max'=>20),
-                    array('sub_total, novat_total, vat, total, src_tax', 'length', 'max'=>20),
+                    array('discount, sub_total, novat_total, vat, total, src_tax', 'length', 'max'=>20),
                     array('issue_date, due_date, comments', 'safe'),
                     // The following rule is used by search().
                     // Please remove those attributes that should not be searched.
-                    array('issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, owner', 'safe', 'on'=>'search'),
+                    array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, owner', 'safe', 'on'=>'search'),
             );
     }
 
