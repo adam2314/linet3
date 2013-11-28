@@ -35,6 +35,13 @@ $this->beginWidget('MiniForm',array(
     $model->account_id=0;
  
         echo $form->dropDownList($model, "account_id", $temp,array('class'=>''));
+        
+        
+        echo $form->labelEx($model,'refnum'); 
+        echo $form->textField($model,'refnum',array('size'=>60,'maxlength'=>100));
+        echo $form->error($model,'refnum'); 
+        
+        
         ?>
 <div id ="result">
 </div>
