@@ -42,15 +42,74 @@ $this->beginWidget('MiniForm',array(
         echo $form->error($model,'refnum'); 
         
         
+        echo $form->labelEx($model,'date'); 
+	$this->widget('zii.widgets.jui.CJuiDatePicker',
+			array(
+                        'name'=>'FormDeposit[date]',
+                        'language' => substr(Yii::app()->language,0,2),
+                        'value'=>$model->date,    
+                        'defaultOptions' => array(  // (#3)
+                            'dateFormat' => Yii::app()->locale->getDateFormat('short'),
+                        )
+	       	 )
+	        );
+	echo $form->error($model,'date'); 
+        
         ?>
+
 <div id ="result">
+    
+    <?php $this->widget('bootstrap.widgets.TbGridView', array(
+	'id'=>'depsoit-grid',
+	'dataProvider'=>$cheques->search(),
+	'columns'=>array(
+                array(
+                    'type'=>'raw',
+                    'value'=>
+                        'CHtml::checkBox("FormDeposit[Deposit][$data->doc_id,$data->line]",null,array( "onchange"=>"CalcSum()"))',
+                    ),
+                array(
+                    'type'=>'raw',
+                     'value'=>
+                        'CHtml::hiddenField("FormDeposit[Total][$data->doc_id,$data->line]","$data->sum")',
+                    ),
+                'type',
+		'bank',
+                'branch',
+                'cheque_acct',
+                'cheque_num',
+                'cheque_date',
+                'dep_date',
+		//'account_id',
+		'currency_id',
+                'refnum',
+		'sum',
+		//'total',
+		
+		
+		array(
+			'class'=>'bootstrap.widgets.TbButtonColumn',
+		),
+	),
+)); 
+?>
+    
 </div>
+<?php
+        echo $form->labelEx($model,'sum'); 
+        echo $form->textField($model,'sum',array('size'=>60,'maxlength'=>100));
+        echo $form->error($model,'sum'); 
+
+
+
+echo CHtml::submitButton('Search'); ?>
 <?php
  $this->endWidget();
  $this->endWidget();
 ?>
 
 <script type="text/javascript">
+    /*
     jQuery(document).ready(function(){
         $( "#FormDeposit_account_id" ).change(function() {
             var value=$("#FormDeposit_account_id").val();
@@ -67,5 +126,29 @@ $this->beginWidget('MiniForm',array(
 
 
     });
-        
+       //*/ 
+    
+    function CalcSum() {
+	var vals = $("[id^=FormDeposit_Deposit]");
+	var total = $("[id^=FormDeposit_Total]");
+	size = vals.length;
+	//console.log("Length: " + size);
+	sum = parseFloat("0.0");
+	if(size) {
+                for (x in vals){
+                        //console.log("value: " + x + vals[x].checked);
+			if(vals[x].checked) {
+				//console.log("value: " + total[x].value);
+				sum += parseFloat(total[x].value);
+			}
+		}
+	}
+	
+        //console.log("sum: " + sum);
+        $("#FormDeposit_sum").val(sum);
+    }
+
+
+    
+    
 </script>

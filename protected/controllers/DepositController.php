@@ -5,11 +5,22 @@ class DepositController extends RightsController{
     public function actionAdmin(){
 		$model=new FormDeposit('search');
 		$model->unsetAttributes();  // clear any default values
-		//if(isset($_POST['Bankbook']))
-		//	$model->attributes=$_GET['Currates'];
-
+		if(isset($_POST['FormDeposit'])){
+			$model->attributes=$_GET['FormDeposit'];
+                        if($model->save())
+				//add: saved!
+                                echo 'ok';
+                    
+                    
+                    
+                }
+                $cheques=new Doccheques('search');
+                $cheques->bank_refnum='';
+                
+                
 		$this->render('admin',array(
 			'model'=>$model,
+                        'cheques'=>$cheques,
 		));
 	}
         
