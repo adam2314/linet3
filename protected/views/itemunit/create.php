@@ -8,8 +8,14 @@ $this->menu=array(
 	array('label'=>'List Itemunit', 'url'=>array('index')),
 	array('label'=>'Manage Itemunit', 'url'=>array('admin')),
 );
+
+
+$this->beginWidget('MiniForm',array(
+    'haeder' => Yii::t('app',"Create Item Units"),
+    //'width' => '800',
+)); 
 ?>
 
-<h1>Create Itemunit</h1>
-
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+
+<?php  $this->endWidget(); ?>

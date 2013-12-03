@@ -29,6 +29,12 @@ class ItemunitController extends RightsController
 		if(isset($_POST['Itemunit']))
 		{
 			$model->attributes=$_POST['Itemunit'];
+                        if(Yii::app()->getRequest()->getIsAjaxRequest()) {
+                            echo CActiveForm::validate( array( $model)); 
+                            Yii::app()->end(); 
+                        }
+                        
+                        
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}

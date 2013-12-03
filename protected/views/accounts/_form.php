@@ -174,7 +174,7 @@
         
 	<div class="row">
 		<?php echo $form->labelEx($model,'owner'); ?>
-                <?php echo $form->dropDownList($model,'owner',CHtml::listData(User::model()->findAll(), 'id', 'username')); ?>
+                <?php //adam: echo $form->dropDownList($model,'owner',CHtml::listData(User::model()->findAll(), 'id', 'username')); ?>
 		<?php echo $form->error($model,'owner'); ?>
 	</div>
 

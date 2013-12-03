@@ -2,7 +2,7 @@
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'item-form',
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
@@ -105,7 +105,7 @@
         
         <div class="row">
 		<?php echo $form->labelEx($model,'owner'); ?>
-                <?php echo $form->dropDownList($model,'owner',CHtml::listData(User::model()->findAll(), 'id', 'username')); ?>
+                <?php //echo $form->dropDownList($model,'owner',CHtml::listData(User::model()->findAll(), 'id', 'username')); ?>
 		<?php echo $form->error($model,'owner'); ?>
 	</div>
 

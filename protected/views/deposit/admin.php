@@ -25,8 +25,8 @@ $this->beginWidget('MiniForm',array(
  <?php 
  
  $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
-	'id'=>'user-form',
-	'enableAjaxValidation'=>false,
+	'id'=>'deposit-form',
+	'enableAjaxValidation'=>true 
         )
     );
  
@@ -102,7 +102,7 @@ $this->beginWidget('MiniForm',array(
 
 
 
-echo CHtml::submitButton('Search'); ?>
+echo CHtml::submitButton('Go'); ?>
 <?php
  $this->endWidget();
  $this->endWidget();

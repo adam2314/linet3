@@ -11,8 +11,11 @@ $this->menu=array(
 	array('label'=>'View Itemunit', 'url'=>array('view', 'id'=>$model->id)),
 	array('label'=>'Manage Itemunit', 'url'=>array('admin')),
 );
+$this->beginWidget('MiniForm',array(
+    'haeder' => Yii::t('app',"Update Item Unit"). $model->id,
+    //'width' => '800',
+)); 
 ?>
 
-<h1>Update Itemunit <?php echo $model->id; ?></h1>
-
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php  $this->endWidget(); ?>

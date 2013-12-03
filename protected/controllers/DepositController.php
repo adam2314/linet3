@@ -6,10 +6,16 @@ class DepositController extends RightsController{
 		$model=new FormDeposit('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_POST['FormDeposit'])){
-			$model->attributes=$_GET['FormDeposit'];
+			$model->attributes=$_POST['FormDeposit'];
+                        
+                        if(Yii::app()->getRequest()->getIsAjaxRequest()) {
+                            echo CActiveForm::validate( array( $model)); 
+                            Yii::app()->end(); 
+                        }
+                        
                         if($model->save())
-				//add: saved!
-                                echo 'ok';
+				Yii::app()->user->setFlash('success', Yii::t('app','Deposit Success'));
+                                
                     
                     
                     
@@ -33,4 +39,14 @@ class DepositController extends RightsController{
             //$model->attributes['bank_refnum']='';
             $this->renderPartial('ajax',array( 'model'=>$model,   ));
     }
+    
+    
+    protected function performAjaxValidation($model)
+	{
+		if(isset($_POST['ajax']) && $_POST['ajax']==='deposit-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+	}
 }
