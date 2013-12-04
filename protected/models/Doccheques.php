@@ -44,7 +44,7 @@ class Doccheques extends CActiveRecord{
             $out->valuedate=$valuedate;
             $out->details=$details;
             $out->currency_id=$this->currency_id;
-            $out->sum=$this->price*$action*-1;
+            $out->sum=$this->sum*$action*-1;
             $out->owner_id=Yii::app()->user->id;
             $out->linenum=$line;
             
@@ -82,11 +82,11 @@ class Doccheques extends CActiveRecord{
 		return array(
 			array('type, creditcompany, line', 'numerical', 'integerOnly'=>true),
 			array('doc_id, cheque_num, bank_refnum', 'length', 'max'=>10),
-			array('bank, branch', 'length', 'max'=>3),
+			array('bank, currency_id, branch, refnum', 'length', 'max'=>3),
 			array('cheque_acct', 'length', 'max'=>20),
 			array('sum', 'length', 'max'=>8),
-			array('cheque_date, dep_date', 'safe'),
-			array('doc_id, type, creditcompany, cheque_num, bank, branch, cheque_acct, cheque_date, sum, bank_refnum, dep_date, line', 'safe', 'on'=>'search'),
+			array('currency_id, refnum, cheque_date, dep_date', 'safe'),
+			array('currency_id, refnum, doc_id, type, creditcompany, cheque_num, bank, branch, cheque_acct, cheque_date, sum, bank_refnum, dep_date, line', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -98,8 +98,8 @@ class Doccheques extends CActiveRecord{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                    //'Docs'=>array(self::BELONGS_TO, 'Docs', 'doc_id'),
-                    //'Type'=>array(self::BELONGS_TO, 'PaymentType', 'type'),
+                    'Docs'=>array(self::BELONGS_TO, 'Docs', 'doc_id'),
+                    'Type'=>array(self::BELONGS_TO, 'PaymentType', 'type'),
 		);
 	}
 
@@ -128,10 +128,11 @@ class Doccheques extends CActiveRecord{
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
 	public function search()	{
+            
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('doc_id',$this->refnum,true);
-		$criteria->compare('type',$this->type);
+		$criteria->compare('doc_id',$this->doc_id,true);
+		//$criteria->compare('type',$this->type,true);
 		$criteria->compare('creditcompany',$this->creditcompany);
 		$criteria->compare('cheque_num',$this->cheque_num,true);
 		$criteria->compare('bank',$this->bank,true);
@@ -139,10 +140,20 @@ class Doccheques extends CActiveRecord{
 		$criteria->compare('cheque_acct',$this->cheque_acct,true);
 		$criteria->compare('cheque_date',$this->cheque_date,true);
 		$criteria->compare('sum',$this->sum,true);
-		$criteria->compare('bank_refnum',$this->bank_refnum,true);
+                
+                if($this->bank_refnum==null)
+                    $criteria->addCondition('bank_refnum IS NULL');
+                else
+                    $criteria->compare('bank_refnum',$this->bank_refnum);
+
+                
+                
+                
 		$criteria->compare('dep_date',$this->dep_date,true);
 		$criteria->compare('line',$this->line);
-
+                
+                $criteria->compare('refnum',$this->refnum,true);
+                $criteria->compare('currency_id',$this->currency_id,true);
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
                         'pagination'=>array('pageSize'=>50),

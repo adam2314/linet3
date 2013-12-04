@@ -120,12 +120,12 @@ Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets
               
 		array('label'=>Yii::t('app','Outcome'), 'icon'=>'shopping-cart','items'=>array(
 			array('label'=>Yii::t('app','Manage Suppliers'), 'url'=>array('accounts/index','type'=>'1')),
-			array('label'=>Yii::t('app','Parchace Order'), 'url'=>array('docs/create/10')),
-			array('label'=>Yii::t('app','insert Buisness outcome'), 'url'=>array('docs/create/13')),
-			array('label'=>Yii::t('app','insert Asstes outcome'), 'url'=>array('docs/create/14')),
+			array('label'=>Yii::t('app','Parchace Order'), 'url'=>array('docs/create','type'=>'10')),
+			array('label'=>Yii::t('app','insert Buisness outcome'), 'url'=>array('docs/create','type'=>'13')),
+			array('label'=>Yii::t('app','insert Asstes outcome'), 'url'=>array('docs/create','type'=>'14')),
 		)),
 		array('label'=>Yii::t('app','Register'), 'icon'=>'money','items'=>array(
-			array('label'=>Yii::t('app','Receipt'), 'url'=>array('docs/create/8')),
+			array('label'=>Yii::t('app','Receipt'), 'url'=>array('docs/create','type'=>'8')),
 			array('label'=>Yii::t('app','Bank deposits'), 'url'=>array('deposit/admin')),
 			array('label'=>Yii::t('app','Payment'), 'url'=>array('outcome/create')),
 			array('label'=>Yii::t('app','VAT payment'), 'url'=>array('outcome/create','type'=>'1')),

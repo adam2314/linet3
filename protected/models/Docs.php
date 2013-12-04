@@ -127,7 +127,7 @@ class Docs extends CActiveRecord{
                         $saved=true;
                         $line++;
                     }else{
-                        echo "fatel error cant save doc rcpt";
+                        echo "fatel error cant save doc rcpt:".$this->id;
                         //exit;
                     }
                 }
@@ -196,33 +196,36 @@ class Docs extends CActiveRecord{
                $line++;
                $line++;
             }
-            $src=new Transactions();
-            $src->num=$num;
-            $src->account_id=$this->account_id;
-            $src->type=$tranType;
-            $src->refnum1=$this->id;
-            $src->valuedate=$valuedate;
-            $src->details=$this->company;
-            $src->currency_id=$this->currency_id;
-            $src->owner_id=$this->owner;
-            $src->linenum=$line;
-            $src->sum+=($this->src_tax)*$action;
-            $line++;
-            $num=$src->save();
+            if((int)$this->src_tax!=0){
+                $src=new Transactions();
+                $src->num=$num;
+                $src->account_id=$this->account_id;
+                $src->type=$tranType;
+                $src->refnum1=$this->id;
+                $src->valuedate=$valuedate;
+                $src->details=$this->company;
+                $src->currency_id=$this->currency_id;
+                $src->owner_id=$this->owner;
+                $src->linenum=$line;
+                $src->sum+=($this->src_tax)*$action;
+                $line++;
+                $num=$src->save();
+
+                $src=new Transactions();
+                $src->num=$num;
+                $src->account_id=Yii::app()->user->settings['company.acc.custtax'];
+                $src->type=$tranType;
+                $src->refnum1=$this->id;
+                $src->valuedate=$valuedate;
+                $src->details=$this->company;
+                $src->currency_id=$this->currency_id;
+                $src->owner_id=$this->owner;
+                $src->linenum=$line;
+                $src->sum+=($this->src_tax)*$action*-1;
+                $line++;
+                $num=$src->save();
             
-            $src=new Transactions();
-            $src->num=$num;
-            $src->account_id=Yii::app()->user->settings['company.acc.custtax'];
-            $src->type=$tranType;
-            $src->refnum1=$this->id;
-            $src->valuedate=$valuedate;
-            $src->details=$this->company;
-            $src->currency_id=$this->currency_id;
-            $src->owner_id=$this->owner;
-            $src->linenum=$line;
-            $src->sum+=($this->src_tax)*$action*-1;
-            $line++;
-            $num=$src->save();
+            }
         }
         
         //exit;

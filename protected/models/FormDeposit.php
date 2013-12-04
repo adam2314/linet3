@@ -45,15 +45,15 @@ class FormDeposit  extends CFormModel{
 	}
     
     public function save(){
-            print_r($this->Deposit);
+            //print_r($this->Deposit);
             $num=0;
-            $line=1;
-            $tranType=Settings::model()->findByPk('transactionType.chequedeposit');;
+            $linenum=1;
+            $tranType=Settings::model()->findByPk('transactionType.chequedeposit')->value;
             foreach($this->Deposit as $line=>$val){
                 list($a, $b ) =  explode(',', $line);
                 $cheq=  Doccheques::model()->findByPk(array("doc_id"=>$a,"line"=>$b));
                 $oppt_acc=  PaymentType::model()->findByPk($cheq->type)->oppt_account_id;
-                print_r($cheq);
+                //print_r($cheq);
                 
                 $accout=new Transactions();
                 $accout->num=$num;
@@ -63,10 +63,10 @@ class FormDeposit  extends CFormModel{
                 $accout->valuedate=$this->date;
                 //$accout->details=$this->company;
                 $accout->currency_id=$cheq->currency_id;
-                //$accout->owner_id=$this->owner;
-                $accout->linenum=$line;
-                $accout->sum=$cheq->sum;
-                $line++;
+                $accout->owner_id=Yii::app()->user->id;
+                $accout->linenum=$linenum;
+                $accout->sum=$cheq->sum*1;
+                $linenum++;
                 $num=$accout->save();
                 
                 $oppt=new Transactions();
@@ -77,22 +77,25 @@ class FormDeposit  extends CFormModel{
                 $oppt->valuedate=$this->date;
                 //$oppt->details=$this->company;
                 $oppt->currency_id=$cheq->currency_id;
-                //$oppt->owner_id=$this->owner;
-                $oppt->linenum=$line;
-                $accout->sum=$cheq->sum*-1;
-                $line++;
+                $oppt->owner_id=Yii::app()->user->id;
+                $oppt->linenum=$linenum;
+                $oppt->sum=$cheq->sum*-1;
+                $linenum++;
                 $num=$oppt->save();
                 
+                
+                $cheq->bank_refnum=$num;
+                $cheq->save();
             }
             
             
             
             
-            exit;
+            //exit;
             
             
             
-        return true;
+        return $num;
     }
     //put your code here
 }

@@ -74,6 +74,7 @@ $this->beginWidget('MiniForm',array(
                         'CHtml::hiddenField("FormDeposit[Total][$data->doc_id,$data->line]","$data->sum")',
                     ),
                 'type',
+                'bank_refnum',
 		'bank',
                 'branch',
                 'cheque_acct',

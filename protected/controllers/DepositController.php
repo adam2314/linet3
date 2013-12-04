@@ -21,7 +21,7 @@ class DepositController extends RightsController{
                     
                 }
                 $cheques=new Doccheques('search');
-                $cheques->bank_refnum='';
+                $cheques->bank_refnum=null;
                 
                 
 		$this->render('admin',array(

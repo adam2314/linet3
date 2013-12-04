@@ -191,40 +191,42 @@ return array(
             'errorAction'=>'site/error',
         ),
 		'log'=>array(
-            'class'=>'CLogRouter',
-            'routes'=>array(
-                array(
-                    'class'=>'CWebLogRoute',
-                    'levels'=>'info,error,warning',//trace,
-                    'filter' => array(
-                        'class' => 'CLogFilter',
-                        'prefixSession' => true,
-                        'prefixUser' => false,
-                        'logUser' => false,
-                        'logVars' => array(),
+                    'class'=>'CLogRouter',
+                    'routes'=>array(
+                        array(
+                            'class'=>'CWebLogRoute',
+                            'levels'=>'info,error,warning',
+                            //'levels'=>'trace, info, error, warning, application',
+                            'categories'=>'system.db.*, application',
+                            'filter' => array(
+                                'class' => 'CLogFilter',
+                                'prefixSession' => true,
+                                'prefixUser' => false,
+                                'logUser' => false,
+                                'logVars' => array(),
+                            ),
+                        ),
+                        array(
+                            'class'=>'CFileLogRoute',
+                            'levels'=>'trace, info, error, warning',
+                            //'categories'=>'system.*',
+                                //'categories'=>'*',
+                        ),
+                                array(
+                                        'class'=>'XWebDebugRouter',
+                                        'config'=>'alignLeft, opaque, runInDebug, fixedPos, collapsed, yamlStyle',
+                                        'levels'=>'error, warning, trace, profile, info',
+                                        'allowedIPs'=>array('127.0.0.1'),
+                                ),
+                        /*array(
+                            'class'=>'CEmailLogRoute',
+                            'levels'=>'error, warning',
+                            'emails'=>'adam@speedcomp.co.il',
+                        ),*/
+
+
                     ),
-                ),
-                array(
-                    'class'=>'CFileLogRoute',
-                    'levels'=>'trace, info, error, warning',
-                    //'categories'=>'system.*',
-                	//'categories'=>'*',
-                ),
-           		array(
-       				'class'=>'XWebDebugRouter',
-      				'config'=>'alignLeft, opaque, runInDebug, fixedPos, collapsed, yamlStyle',
-       				'levels'=>'error, warning, trace, profile, info',
-       				'allowedIPs'=>array('127.0.0.1'),
-           		),
-                /*array(
-                    'class'=>'CEmailLogRoute',
-                    'levels'=>'error, warning',
-                    'emails'=>'adam@speedcomp.co.il',
-                ),*/
-                
-                
-            ),
-        ),
+            ),//end log
 	),
 		
 	// application-level parameters that can be accessed
