@@ -158,7 +158,7 @@ class Transactions extends CActiveRecord{
 		return array(
                     'Type'=>array(self::BELONGS_TO, 'TransactionType', 'type'),
                     //'docStatus'=>array(self::BELONGS_TO, 'Docstatus', array('status','doctype')),
-                    'docOwner' => array(self::BELONGS_TO, 'Users', 'owner_id'),
+                    'Owner' => array(self::BELONGS_TO, 'Users', 'owner_id'),
 		);
 	}
 

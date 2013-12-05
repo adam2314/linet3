@@ -38,6 +38,7 @@ $this->beginWidget('MiniForm',array(
         ?>
 <div id ="result">
 </div>
+
 <?php
  $this->endWidget();
  $this->endWidget();

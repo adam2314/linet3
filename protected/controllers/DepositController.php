@@ -15,10 +15,6 @@ class DepositController extends RightsController{
                         
                         if($model->save())
 				Yii::app()->user->setFlash('success', Yii::t('app','Deposit Success'));
-                                
-                    
-                    
-                    
                 }
                 $cheques=new Doccheques('search');
                 $cheques->bank_refnum=null;
