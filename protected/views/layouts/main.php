@@ -45,7 +45,19 @@ Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets
 </head>
 
 <body>
-<!-- <div id="">-->
+    <div id="modal" class="modal hide fade in" style="display: none; ">
+        <div id="modal-header" class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Modal Heading</h3>
+        </div>
+        <div id="modal-body" class="modal-body">
+            	        
+        </div>
+        <div id="modal-footer" class="modal-footer">
+            <a href="#" class="btn btn-success">Action</a>
+            <a href="#" class="btn" data-dismiss="modal">Close</a>
+        </div>
+    </div>
 <div class="wrapper" id="page">
     
 	<div class="headerA">
@@ -133,9 +145,9 @@ Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets
 		array('label'=>Yii::t('app','Reconciliations'), 'icon'=>'eye-open','items'=>array(
 			array('label'=>Yii::t('app','Bank docs entry'), 'url'=>array('bankbook/admin')),
 			array('label'=>Yii::t('app','Bank recon.'), 'url'=>array('bankbook/extmatch')),
-			array('label'=>Yii::t('app','Show bank recon.'), 'url'=>array('edispmatch')),
-			array('label'=>Yii::t('app','Accts. recon.'), 'url'=>array('intmatch')),
-			array('label'=>Yii::t('app','Show recon.'), 'url'=>array('dispmatch')),
+			array('label'=>Yii::t('app','Show bank recon.'), 'url'=>array('match/extindex')),
+			array('label'=>Yii::t('app','Accts. recon.'), 'url'=>array('match/admin')),
+			array('label'=>Yii::t('app','Show recon.'), 'url'=>array('match/index')),
 		)),
 		array('label'=>Yii::t('app','Reports'),'icon'=>'bar-chart','items'=>array(
 			array('label'=>Yii::t('app','Display transactions'), 'url'=>array('reports/journal')),

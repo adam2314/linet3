@@ -31,13 +31,22 @@ class BankbookController extends RightsController{
     public function actionExtmatch(){
         $extmatch=new FormExtmatch('search');
         $model=new Bankbook('search');
-		$model->unsetAttributes();  // clear any default values
-		//if(isset($_POST['Bankbook']))
-		//	$model->attributes=$_GET['Currates'];
+        $model->unsetAttributes();  // clear any default value
+        
+        if(isset($_POST['FormExtmatch'])){
+            $extmatch->attributes=$_POST['FormExtmatch'];
+            //if(){
+            $this->performAjaxValidation($extmatch);
+            
+                Yii::app()->user->setFlash('success', Yii::t('app','Mach1 Success'));
+            //}
+            //Yii::app()->user->setFlash('success', Yii::t('app','Mach2 Success'));
+            
+        }
 
-		$this->render('extmatch',array(
-			'model'=>$model,'extmatch'=>$extmatch,
-		));
+        $this->render('extmatch',array(
+                'model'=>$model,'extmatch'=>$extmatch,
+        ));
         
     }
     
@@ -52,10 +61,19 @@ class BankbookController extends RightsController{
             $model->unsetAttributes();
             $trans->unsetAttributes();
             //$model->account_id=$account_id;
-            if(isset($_POST['Bankbook'])){
-                    $model->attributes=$_POST['Bankbook'];
-                    $trans->attributes=$_POST['Bankbook'];
+            if(isset($_POST['FormExtmatch'])){
+                    $model->attributes=$_POST['FormExtmatch'];
+                    $trans->attributes=$_POST['FormExtmatch'];
             }
             $this->renderPartial('extmatchajax',array('model'=>$model, 'trans'=>$trans  ));
     }
+    
+    protected function performAjaxValidation($model){
+            //$model=new FormExtmatch('search');
+            if(isset($_POST['ajax']) && $_POST['ajax']==='extmatch-form'){
+                    echo CActiveForm::validate($model);
+                    Yii::app()->end();
+            }
+	}
+    
 }

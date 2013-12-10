@@ -15,7 +15,7 @@
                         'CHtml::hiddenField("FormExtmatch[Bankbook][total][$data->id]","$data->sum")',
                     ),
 		//'id',
-		//'account_id',
+		'account_id',
 		'details',
                 'refnum',
                 'currency_id',
@@ -49,7 +49,7 @@
                     ),
             
 		//'id',
-		//'account_id',
+		'account_id',
 		'details',
                 //'refnum',
 		

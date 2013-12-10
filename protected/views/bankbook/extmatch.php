@@ -25,16 +25,21 @@ $this->beginWidget('MiniForm',array(
  <?php 
  
  $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
-	'id'=>'user-form',
-	'enableAjaxValidation'=>false,
+	'id'=>'extmatch-form',
+	'enableAjaxValidation'=>true,
+        'clientOptions'=>array(
+               'validateOnSubmit'=>true,
+               //'submitHandler'=>'js: go()',
+            ),
         )
     );
  
     $temp=CHtml::listData(Accounts::model()->AutoComplete('',7), 'value', 'label');
     $temp[0]=Yii::t('app','Chose Bank');
     $model->account_id=0;
- 
-        echo $form->dropDownList($model, "account_id", $temp,array('class'=>''));
+        echo $form->error($extmatch,'account_id'); 
+        echo $form->dropDownList($extmatch, "account_id", $temp,array('class'=>''));
+        echo $form->error($extmatch,'account_id'); 
         ?>
 <div id ="result">
 </div>
@@ -55,14 +60,19 @@ echo CHtml::submitButton('Go'); ?>
  $this->endWidget();
 ?>
 
+
 <script type="text/javascript">
     jQuery(document).ready(function(){
-        $( "#Bankbook_account_id" ).change(function() {
-            var value=$("#Bankbook_account_id").val();
-
-            $.post( "<?php echo $this->createUrl('/bankbook/extmatchajax');?>", { Bankbook: {account_id: value}} ).done(
-                function( data )
-                {
+        $("#extmatch-form").submit(function(e){
+                go(e);
+	   });
+        
+        
+        
+        $( "#FormExtmatch_account_id" ).change(function() {
+            var value=$("#FormExtmatch_account_id").val();
+            $.post( "<?php echo $this->createUrl('/bankbook/extmatchajax');?>", { FormExtmatch: {account_id: value}} ).done(
+                function( data ){
                     $( "#result" ).html( data );
                 }
             );
@@ -72,6 +82,36 @@ echo CHtml::submitButton('Go'); ?>
 
 
     });
+    function ajaxSubmit(e){
+        e.preventDefault();
+        var postData = $("#transaction-form").serializeArray();
+        console.log(postData);
+        //location.reload();
+    }
+
+
+    function go(e){
+
+	if(parseFloat($('#FormExtmatch_ext_total').val())!=parseFloat($('#FormExtmatch_int_total').val())){
+                e.preventDefault();
+		var sum=(-1)*(parseFloat($('#FormExtmatch_ext_total').val())-parseFloat($('#FormExtmatch_int_total').val()));
+                $('#modal-header').html("<h3><?php echo Yii::t("app","Create Manual Transaction"); ?></h3>");
+                $('#modal-body').load("<?php echo $this->createUrl('/transaction/create');?> #transaction-form", {minmal:true} );
+                $('#modal-footer').html("");
+                $('#modal').width("1000px");
+                
+                $("#transaction-form").submit( ajaxSubmit(event));
+                
+                
+                $('#modal').modal('show');
+                
+
+	}
+
+    }
+    
+    
+    
     
     function CalcSum() {
 	var extsum=CalcExtSum();

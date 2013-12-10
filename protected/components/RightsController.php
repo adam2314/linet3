@@ -34,6 +34,15 @@ class RightsController extends RController{
 				'rights', // perform access control for CRUD operations
 		);
 	}
+        
+        public function render($view, $data=NULL, $return=false){
+            if(isset($_POST['minmal']))
+                return parent::renderPartial($view,$data,$return);
+            else
+                return parent::render($view,$data,$return);
+        }
+        
+        
 	public function init()	{
 		$uri = 'path to your controller-specific css';
                 if(Yii::app()->user->Company==0){

@@ -7,7 +7,7 @@ $this->menu=array(
 $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Create Manual Transaction"))); 
 ?>
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
-	'id'=>'user-form',
+	'id'=>'transaction-form',
 	'enableAjaxValidation'=>false,
 )); ?>
 

@@ -8,10 +8,7 @@ class DepositController extends RightsController{
 		if(isset($_POST['FormDeposit'])){
 			$model->attributes=$_POST['FormDeposit'];
                         
-                        if(Yii::app()->getRequest()->getIsAjaxRequest()) {
-                            echo CActiveForm::validate( array( $model)); 
-                            Yii::app()->end(); 
-                        }
+                        $this->performAjaxValidation($model);
                         
                         if($model->save())
 				Yii::app()->user->setFlash('success', Yii::t('app','Deposit Success'));
@@ -37,10 +34,8 @@ class DepositController extends RightsController{
     }
     
     
-    protected function performAjaxValidation($model)
-	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='deposit-form')
-		{
+    protected function performAjaxValidation($model){
+		if(Yii::app()->getRequest()->getIsAjaxRequest()) {
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}

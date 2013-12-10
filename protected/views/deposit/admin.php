@@ -26,7 +26,8 @@ $this->beginWidget('MiniForm',array(
  
  $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'deposit-form',
-	'enableAjaxValidation'=>true 
+	'enableAjaxValidation'=>true, 
+        
         )
     );
  
