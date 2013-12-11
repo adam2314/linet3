@@ -24,10 +24,7 @@ class BankbookController extends RightsController{
             $this->renderPartial('ajax',array( 'model'=>$model,   ));
     }
     
-    public function actionDeposit(){
         
-    }
-    
     public function actionExtmatch(){
         $extmatch=new FormExtmatch('search');
         $model=new Bankbook('search');

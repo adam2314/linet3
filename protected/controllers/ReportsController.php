@@ -5,8 +5,55 @@ class ReportsController extends RightsController
 	/**
 	 * Declares class-based actions.
 	 */
-	
-	
+    public function actionMprofloss(){
+            $model= new FormMprofloss('search');
+            //$model->unsetAttributes();
+                        
+            $this->render('mprofloss',array('model'=>$model,));
+            
+        }
+	public function actionMproflossajax(){
+            $model=new FormMprofloss('search');
+            //$trans=new Transactions('search');
+            
+            
+            
+            $model->unsetAttributes();
+            
+            if(isset($_POST['FormMprofloss'])){
+                    
+                    $model->attributes=$_POST['FormMprofloss'];
+                    //$trans->attributes=$_POST['FormProfloss'];
+            }
+            $this->renderPartial('mproflossajax',array('model'=>$model ));
+            
+        }
+    
+    
+    
+	public function actionProfloss(){
+            $model= new FormProfloss('search');
+            //$model->unsetAttributes();
+                        
+            $this->render('profloss',array('model'=>$model,));
+            
+        }
+	public function actionProflossajax(){
+            $model=new FormProfloss('search');
+            //$trans=new Transactions('search');
+            
+            
+            
+            $model->unsetAttributes();
+            if(isset($_POST['FormProfloss'])){
+                    $model->attributes=$_POST['FormProfloss'];
+                    //$trans->attributes=$_POST['FormProfloss'];
+            }
+            $this->renderPartial('proflossajax',array('model'=>$model ));
+            
+        }
+        
+        
 	public function actionJournal()	{
                 $model= new Transactions('search');
                 $model->unsetAttributes();
