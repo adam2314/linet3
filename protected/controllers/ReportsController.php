@@ -148,4 +148,48 @@ class ReportsController extends RightsController
             $this->render('vat',array('model'=>$model));
             
         }
+        
+        
+        
+        public function actionTaxrep(){
+            $model=new FormReportTaxrep();
+
+            if(isset($_POST['FormReportTaxrep'])){
+                $model->attributes=$_POST['FormReportTaxrep'];
+                if($model->step==1){
+                    
+                    $model->pay();
+                    
+                    
+                }
+                
+                $model->step=1;
+                   
+                $last = 31;   
+                while(!checkdate($model->to_month, $last, $model->year)) {
+                        $last--;
+                }
+                
+                if(strlen($model->from_month)==1)
+                    $model->from_month="0{$model->from_month}";
+                if(strlen($model->to_month)==1)
+                    $model->to_month="0{$model->to_month}";
+                
+                $model->from_date="01/{$model->from_month}/{$model->year} 00:00:00";
+                $model->to_date="$last/{$model->to_month}/{$model->year} 23:59:59";
+                
+                $model->calcPay();
+                
+                $this->renderPartial('taxrep_preview', array('model' => $model,));
+                Yii::app()->end();
+              }
+            
+            
+            $model->year=date('Y');
+            $model->from_month=date('m');
+            $model->to_month=date('m');
+            
+            $this->render('taxrep',array('model'=>$model));
+            
+        }
 }

@@ -1,16 +1,4 @@
 <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of FormProfloss
- *
- * @author adam
- */
 class FormReportBalance extends CFormModel
 {
     public $year;
@@ -44,8 +32,10 @@ class FormReportBalance extends CFormModel
         foreach($accounts as $account){
                 //echo $this->from_date.":00<br>";
                 $sum=$account->getTotal($this->from_date.":00",$this->to_date.":00"); 
-                //if($sum!=0)
-                    $data[]=array('id'=>$account->id,'name'=>$account->name,'sum'=>$sum,'id6111'=>$account->id6111);
+                $neg=$account->getNeg($this->from_date.":00",$this->to_date.":00"); 
+                $pos=$account->getPos($this->from_date.":00",$this->to_date.":00"); 
+                if(($sum!=0)||($neg!=0)||($pos!=0))
+                    $data[]=array('id'=>$account->id,'name'=>$account->name,'neg'=>$neg,'pos'=>$pos,'sum'=>$sum,'id6111'=>$account->id6111);
         }
         return $data;
     }

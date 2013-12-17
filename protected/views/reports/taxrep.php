@@ -1,11 +1,11 @@
 <?php 
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Vat Report"),
+    'haeder' => Yii::t('app',"Tax Report"),
 )); 
 
 $form=$this->beginWidget('CActiveForm', array(
-    'id'=>'reportvat-form',
+    'id'=>'reporttaxrep-form',
     //'enableAjaxValidation'=>true,
     
     'enableAjaxValidation'=>false,
@@ -42,22 +42,20 @@ $this->endWidget();
 
 <script type="text/javascript">
  
-function send()
- {
+function send() {
  
-   var data=$("#reportvat-form").serialize();
+   var data=$("#reporttaxrep-form").serialize();
  
  
   $.ajax({
    type: 'POST',
-    url: '<?php echo Yii::app()->createAbsoluteUrl("reports/vat"); ?>',
+    url: '<?php echo Yii::app()->createAbsoluteUrl("reports/taxrep"); ?>',
    data:data,
 success:function(data){
                 //alert(data); 
                 $('#content > div').html(data);
               },
    error: function(data) { // if error occured
-         //alert("Error occured.please try again");
          alert(data);
     },
  
