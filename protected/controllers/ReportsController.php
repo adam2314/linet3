@@ -53,6 +53,25 @@ class ReportsController extends RightsController
             
         }
         
+        public function actionBalance(){
+            $model= new FormReportBalance('search');
+            //$model->unsetAttributes();
+                        
+            $this->render('balance',array('model'=>$model,));
+            
+        }
+	public function actionBalanceajax(){
+            $model=new FormReportBalance('search');
+            
+            $model->unsetAttributes();
+            if(isset($_POST['FormReportBalance'])){
+                    $model->attributes=$_POST['FormReportBalance'];
+            }
+            $this->renderPartial('balanceajax',array('model'=>$model ));
+            
+        }
+        
+        
         
 	public function actionJournal()	{
                 $model= new Transactions('search');
