@@ -112,11 +112,8 @@ class ReportsController extends RightsController
 
             if(isset($_POST['ReportVat'])){
                 $model->attributes=$_POST['ReportVat'];
-                if($model->step==1){
-                    
+                if($model->step==1){                  
                     $model->pay();
-                    
-                    
                 }
                 
                 $model->step=1;
@@ -156,11 +153,9 @@ class ReportsController extends RightsController
 
             if(isset($_POST['FormReportTaxrep'])){
                 $model->attributes=$_POST['FormReportTaxrep'];
+                               
                 if($model->step==1){
-                    
                     $model->pay();
-                    
-                    
                 }
                 
                 $model->step=1;
@@ -190,6 +185,24 @@ class ReportsController extends RightsController
             $model->to_month=date('m');
             
             $this->render('taxrep',array('model'=>$model));
+            
+        }
+        
+        
+        public function actionInout(){
+            $model= new FormReportInout('search');
+
+            $this->render('Inout',array('model'=>$model,));
+            
+        }
+	public function actionInoutajax(){
+            $model=new FormReportInout('search');
+            
+            $model->unsetAttributes();
+            if(isset($_POST['FormReportInout'])){
+                    $model->attributes=$_POST['FormReportInout'];
+            }
+            $this->renderPartial('Inoutajax',array('model'=>$model ));
             
         }
 }

@@ -3,13 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/FormProfloss.php</file>
-            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/reports/balanceajax.php</file>
-            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/reports/proflossajax.php</file>
-            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/reports/profloss.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/FormReportVat.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/IntCorrelation.php</file>
             <file>file:/home/adam/devsrv/yii/demos/new/protected/controllers/ReportsController.php</file>
-            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/FormReportBalance.php</file>
-            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/reports/balance.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/Acctype.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/Accounts.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/FormReportTaxrep.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/reports/taxrep_preview.php</file>
         </group>
     </open-files>
 </project-private>

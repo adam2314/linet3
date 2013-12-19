@@ -157,6 +157,7 @@ Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets
 			array('label'=>Yii::t('app','VAT calculation'), 'url'=>array('reports/vat')),
 			array('label'=>Yii::t('app','Balance'), 'url'=>array('reports/balance')),
 			array('label'=>Yii::t('app','Income tax advances'), 'url'=>array('reports/taxrep')),
+                        array('label'=>Yii::t('app','Income outcome'), 'url'=>array('reports/inout')),
 		)),
 		array('label'=>Yii::t('app','Import Export'), 'icon'=>'exchange','items'=>array(
 			array('label'=>Yii::t('app','Open docs'), 'url'=>array('data/openfrmt')),

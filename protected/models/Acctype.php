@@ -27,7 +27,23 @@ class Acctype extends CActiveRecord{
 	public function tableName(){
 		return  self::table;
 	}
+        
+        public function getTotal($from_date,$to_date){
+            $sum=0;
+            $criteria=new CDbCriteria;
+            $criteria->condition="type = :type";
+            $criteria->params=array(
+                ':type' => $this->id,
+              );
 
+            $accounts= Accounts::model()->findAll($criteria);
+            foreach($accounts as $account){
+                    $sum+=$account->getTotal($from_date,$to_date); 
+            }
+            return $sum;
+        }
+        
+        
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -62,7 +78,7 @@ class Acctype extends CActiveRecord{
 		//print_r($this);
 		//$post=Post::model()->find('postID=:postID', array(':postID'=>10));
 		return $model->id;
-	}
+	}//*/
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
