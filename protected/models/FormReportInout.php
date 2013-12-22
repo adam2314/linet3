@@ -31,7 +31,7 @@ class FormReportInout extends CFormModel
 		);
 	}
     
-    private function calc($account_type){
+    private function calc($accounts=array(),$types=array()){
         $sum=0;
             
         $yiidatetimesec=Yii::app()->locale->getDateFormat('yiidatetimesec');
@@ -39,35 +39,71 @@ class FormReportInout extends CFormModel
         
         
         $from_date=date($phpdbdatetime,CDateTimeParser::parse($this->from_date,$yiidatetimesec));
-        $to_date=date($phpdbdatetime,CDateTimeParser::parse($$this->to_date,$yiidatetimesec));
+        $to_date=date($phpdbdatetime,CDateTimeParser::parse($this->to_date,$yiidatetimesec));
         
         
         $criteria=new CDbCriteria;
-        $criteria->condition="type = :type";
-        $criteria->addCondition("date BETWEEN :from_date AND :to_date");
+        $criteria->condition="date BETWEEN :from_date AND :to_date";
         $criteria->params=array(
-            ':type' => 14,
             ':from_date' => $from_date,
             ':to_date' => $to_date,
-          );
+         );
+        $criteria->compare('type', $types);
+        $criteria->compare('account_id', $accounts);
+   
 
-        $accounts= Transactions::model()->findAll($criteria);
+        $trans= Transactions::model()->findAll($criteria);
         $sum=0;
         $data=array();
-        foreach($accounts as $account){
+        foreach($trans as $tran){
                 
-                $sum=$account->getTotal($this->from_date.":00",$this->to_date.":00"); 
+                $sum=$tran->sum;
                 if($sum!=0)
-                    $data[]=array('id'=>$account->id,'name'=>$account->name,'sum'=>$sum,'id6111'=>$account->id6111);
+                    $data[]=array('id'=>$tran->id,'name'=>$tran->account_id,'sum'=>$sum,'id6111'=>$tran->id);
         }
         return $data;
     }
     
     public function search(){
+        //search
+        //find all relvent transctions by type aginst income accounts
+        //types:$RelevantTypes = array(INVOICE, SUPINV, MANINVOICE,INVRCPT,DOCPROFORMA);
+        //($type == MANINVOICE) || ($type == INVOICE) || ($type == INVRCPT)||($type == DOCPROFORMA)||($type == SUPINV)
+        $types=array(
+            /*
+            0 Manual
+1Invoice
+2Supplier Invoicve
+3Receipt
+4CHEQUEDEPOSIT
+5Supplier Payment
+6vat
+7STORENO
+8BANKMATCH
+9SRCTAX
+10PATTERN
+11MANINVOICE
+12MANRECEIPT
+14TRAN_PRETAX
+15TRAN_SALARY
+16OPBALANCE
+17RETURNINV
+18INVRCPT
+19DOCREDIT
+20DOCPROFORMA
+21DELIVERY
+            
+            */
+            
+        );
+        $accounts=array();
+        $data=$this->calc($accounts,$types);//incomes
+        //find all relvent transctions by type aginst outcome accounts
+        //(($actype == OUTCOME) || ($actype == OBLIGATIONS)||($actype==ASSETS))
+        $types=array();
+        $accounts=array();
         
-        
-        $data=$this->calc(3);//incomes
-        $data=array_merge($data,$this->calc(4));//outcomes
+        $data=array_merge($data,$this->calc($accounts,$types));//outcomes
         
         
         return new CArrayDataProvider($data,

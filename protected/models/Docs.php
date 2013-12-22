@@ -47,9 +47,43 @@ class Docs extends CActiveRecord{
         
     }//*/
     
-    public function beforeSave(){
+    public function pcn874(){
+        //stringfy a doc by pcn874
+        //A1    type
+        //N9    oppt-vatid
+        //N8    inv date YYYYMMDD
+        //A4    0000
+        //N9    doc number
+        //N9    vat sum(round)
+        //A1    +\-
+        //N10   inv sum(round)
+        //N9    000000000
         
-            
+        //S
+        //3,4,9,11
+        //T
+        //13,14  
+        $a="T";
+        if(in_array($this->doctype, array(3,4,9,11)))
+                $a="S";
+        else if (in_array($this->doctype, array(13,14  )))
+                $a="T";
+        else
+             echo $this->docnum;
+        $opptacc=$this->vatnum;
+        $docdate=date("Ymd",CDateTimeParser::parse($this->issue_date,Yii::app()->locale->getDateFormat('yiidatetimesec')));
+        $doctype=$this->doctype;
+        $docnum=$this->docnum;
+        $vatsum=$this->vat;
+        $plusmin=($this->total>=0)?"+":"-";
+        $docsum=$this->total;
+        return sprintf("%1s%09d%08d0000%02d%07d%09d%1s%010d000000000",
+			$a, $opptacc, $docdate,$doctype,$docnum, $vatsum, $plusmin,$docsum);
+        
+    }
+    
+    
+    public function beforeSave(){
             if ($this->isNewRecord) 
                 $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetime'));
             $this->modified = date(Yii::app()->locale->getDateFormat('phpshort'));

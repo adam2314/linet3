@@ -66,36 +66,36 @@ class DataController extends RightsController{
                                     $message = $e->getMessage();
                                     print $message;
                             }
-
-                        }
-                    
-                    
+                        }                                      
                         //$this->redirect(array('index'));
-                }
-                
+                }                
             }
-            
-            
-            //read file
-            
-            //if DROP TABLE IF EXISTS `
-            
-            //if CREATE TABLE `
-            
-            
+                        
+            //read file            
+            //if DROP TABLE IF EXISTS `            
+            //if CREATE TABLE `         
             //INSERT INTO `
-            
-            
-            
-            
-            
-            
-            
-            
                 
                 $this->render('backupRestore',array('model'=>$model));
         }
         
+        public function actionPcn874(){
+            $model= new FormReportPcn874('search');
+
+            $this->render('pcn874',array('model'=>$model,));
+        }
+        
+        
+        public function actionPcn874ajax(){
+            $model=new FormReportPcn874('search');
+            
+            $model->unsetAttributes();
+            if(isset($_POST['FormReportPcn874'])){
+                    $model->attributes=$_POST['FormReportPcn874'];
+            }
+            $this->renderPartial('pcn874ajax',array('model'=>$model ));
+            
+        }
 
 }
 ?>
