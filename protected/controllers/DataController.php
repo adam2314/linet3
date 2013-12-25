@@ -81,21 +81,42 @@ class DataController extends RightsController{
         
         public function actionPcn874(){
             $model= new FormReportPcn874('search');
-
+            if(isset($_POST['FormReportPcn874'])){
+                    $model->attributes=$_POST['FormReportPcn874'];
+                    
+                    return Yii::app()->getRequest()->sendFile("pcn874.txt", $model->make());
+            }
             $this->render('pcn874',array('model'=>$model,));
         }
         
-        
+        /*
         public function actionPcn874ajax(){
             $model=new FormReportPcn874('search');
             
             $model->unsetAttributes();
             if(isset($_POST['FormReportPcn874'])){
                     $model->attributes=$_POST['FormReportPcn874'];
+                    
+                    return Yii::app()->getRequest()->sendFile("pcn874.txt", $model->make());
             }
             $this->renderPartial('pcn874ajax',array('model'=>$model ));
             
-        }
+        }*/
 
+        
+        
+        public function actionOpenfrmt(){
+            $model= new FormOpenfrmt();
+            if(isset($_POST['FormOpenfrmt'])){
+                    $model->attributes=$_POST['FormOpenfrmt'];
+                    
+                    
+                    
+                    exit;
+                    //return Yii::app()->getRequest()->sendFile("pcn874.txt", $model->make());
+            }
+            $this->render('openfrmt',array('model'=>$model,));
+        }
+        
 }
 ?>

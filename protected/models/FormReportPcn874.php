@@ -47,30 +47,66 @@ class FormReportPcn874 extends CFormModel{
         return $data;
     }
     
-    protected function start(){
+    protected function start($array){
         //stringfy a company by pcn874
-        //A1    type
-        //N9    vatid
-        //N6    file contacet date YYYYMM
-        //N1    1
-        //N8    file date YYYYMMDD
-        //A1    +/- total without vat
-        //N11   total without vat
-        //N9    total vat
-        //A1    +/- total without vat not standert
-        //N11   total without vat not standert
+        //+A1    type
+        //+N9    vatid
+        //+N6    file contacet date YYYYMM
+        //+N1    1
+        //+N8    file date YYYYMMDD
+        //+A1    +/- total without vat
+        //+N11   total without vat
+        //+A1     +/- total vat    
+        //+N9    total vat
+        //+A1    +/- total without vat not standert
+        //+N11   total without vat not standert
+        //+A1    +/- vat not standert
+        //+N9    doc vat not standert
+        //+N9    doc count imcome
         //
-        //N9    doc number
-        //N9    vat sum(round)
-        //A1    +\-
-        //N10   inv sum(round)
-        //N9    000000000
+        //+A1    +/- exclude vat*
+        //+N11   total exclude vat*
+        //+A1    +/- Other outcome vat
+        //+N9    total Other Outcomes vat
+        //+A1    +/- Assets Outcome vat
+        //+N9    total Assets Outcome vat
+        //+N9    doc count total outcome
+        //A1    +/- to pay
+        //N9    total to pay
+        //
+        //
+        extract($array);
+        $yiidatetimesec=Yii::app()->locale->getDateFormat('yiidatetimesec');
+        
+        $companyid=Settings::model()->findByPk('company.vat.id')->value;
+        $condate=date('Ym',CDateTimeParser::parse($this->from_date.":00",$yiidatetimesec));;
+        $filedate=date('Ymd');                                  //+N8    file date YYYYMMDD
+        $t_pn=($t_wovat>=0)?"+":"-";                                               //+A1    +/- total without vat
+        $t_vat_pn=($t_vat>=0)?"+":"-";                                           //+A1     +/- total vat
+        $ns_t_pn=($ns_t_wovat>=0)?"+":"-";                                            //+A1    +/- total without vat not standert
+        $ns_t_vat_pn=($ns_t_vat>=0)?"+":"-";                                        //+A1    +/- vat not standert
+        
+        $t_exclude_vat_pn=($t_exclude_vat>=0)?"+":"-";
+        $ot_vat_pn=($ot_vat>=0)?"+":"-";
+        $at_vat_pn=($at_vat>=0)?"+":"-";
+        $sum_pn=($sum>=0)?"+":"-";
+        
+        return sprintf("O%09d%06d1%08d%01s%011d%01s%09d%01s%011d%01s%09d%01s%011d%01s%09d%01s%09d%09d%01s%09d",
+            $companyid, $condate,$filedate,$t_pn, $t_wovat,$t_vat_pn,$t_vat,$ns_t_pn,$ns_t_wovat,$ns_t_vat_pn,$ns_t_vat,$i_doc_count,
+            $t_exclude_vat_pn,$t_exclude_vat,$ot_vat_pn,$ot_vat,$at_vat_pn,$at_vat,$o_doc_count,$sum_pn,$sum
+        );
         
         
     }
 
-
-
+    protected function end(){
+        //A1    type
+        //N9    vatid
+        $companyid=Settings::model()->findByPk('company.vat.id')->value;
+        return sprintf("Z%09d",
+			$companyid);
+    }
+    
 
 
 
@@ -93,18 +129,50 @@ class FormReportPcn874 extends CFormModel{
         $criteria->compare('doctype', $types);
         
         $docs= Docs::model()->findAll($criteria);
+        $vatper=18;
+        $start=array('t_wovat'=>0,'t_vat'=>0,'ns_t_wovat'=>0,'ns_t_vat'=>0,'i_doc_count'=>0,
+            't_exclude_vat'=>0,'ot_vat'=>0,'at_vat'=>0,'o_doc_count'=>0,'sum'=>0,
+            
+            );
         foreach($docs as $doc){
                 $text.=$doc->pcn874()."\n"; 
+                
+                if(in_array($doc->doctype, array(3,4,9,11))){
+                    if($doc->sub_total!=0){
+                        if((($doc->vat/$doc->sub_total)*100) ==$vatper){
+                            $start['t_wovat']+=$doc->sub_total;
+                            $start['t_vat']+=$doc->vat;
+                        }else if($doc->vat==0){
+                            $start['t_exclude_vat']+=$doc->sub_total;
+                        }else{
+                            $start['ns_t_wovat']+=$doc->sub_total;
+                            $start['ns_t_vat']+=$doc->vat;
+                        }
+                    }    
+                    
+                    $start['i_doc_count']++;
+                    
+                    
+                }
+                if(in_array($doc->doctype, array(13,14))){        
+                    if($doc->doctype==13)
+                         $start['ot_vat']+=$doc->vat;
+                    else 
+                         $start['at_vat']+=$doc->vat;
+                    $start['o_doc_count']++;
+                }
         }
-        return $text;      
+        $start['sum']=$start['t_vat']+$start['ns_t_vat'];
+        
+        return $this->start($start)."\n".$text.$this->end();      
     }
     
     
     
     public function search(){
         $data= array();
-        echo $this->make();
-        exit;
+        //echo $this->make();
+        //exit;
         //$data=$this->calc(3);//incomes
         //$data=array_merge($data,$this->calc(4));//outcomes
         

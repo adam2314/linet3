@@ -40,7 +40,9 @@ class Accounts extends CActiveRecord{
             return self::table;
         }
         
-        
+        public function openfrmt(){
+            
+        }
         
 	public static function model($className=__CLASS__)
 	{

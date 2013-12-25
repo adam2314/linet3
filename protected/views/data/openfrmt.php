@@ -1,9 +1,9 @@
 <?php
 
-$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","PCN874 Report"))); 
+$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Open Format Create"))); 
 ?>
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
-	'id'=>'pcn874-form',
+	'id'=>'openfrmt-form',
 	'enableAjaxValidation'=>false,
 )); 
 
@@ -65,18 +65,18 @@ $this->endWidget();
 
 <script type="text/javascript">
     jQuery(document).ready(function(){
-       // $("#pcn874-form").submit(function(e){
-       //         go(e);
-	//   });
+        $("#openfrmt-form").submit(function(e){
+                go(e);
+	   });
 
     });
     
     function go(e){
         e.preventDefault();
         
-        var from=$("#FormReportPcn874_from_date").val();
-        var to=$("#FormReportPcn874_to_date").val();
-            $.post( "<?php echo $this->createUrl('/data/pcn874ajax');?>", { FormReportPcn874: {from_date: from, to_date: to}} ).done(
+        var from=$("#FormOpenfrmt_from_date").val();
+        var to=$("#FormOpenfrmt_to_date").val();
+            $.post( "<?php echo $this->createUrl('/data/openfrmt');?>", { FormOpenfrmt: {from_date: from, to_date: to}} ).done(
                 function( data ){
                     $( "#result" ).html( data );
                 }
@@ -84,13 +84,5 @@ $this->endWidget();
         
     }
     
-    $( "#year" ).change(function() {
-            var value=$("#year").val();
-            $.post( "<?php echo $this->createUrl('/data/pcn874ajax');?>", { FormReportPcn874: {year: value}} ).done(
-                function( data ){
-                    $( "#result" ).html( data );
-                }
-            );
-            
-          });    
+    
 </script>
