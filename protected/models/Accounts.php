@@ -41,7 +41,19 @@ class Accounts extends CActiveRecord{
         }
         
         public function openfrmt(){
+            $acc='';
             
+            //get all fields (b110) sort by id
+            $criteria=new CDbCriteria;
+            $criteria->condition="account_id = :type_id";
+            $criteria->params=array(':type_id' => "B110");
+            $fields= OpenFormat::model()->findAll($criteria);
+            
+            //loop strfgy
+            foreach ($fields as $field) {
+                
+            }
+            //return
         }
         
 	public static function model($className=__CLASS__)

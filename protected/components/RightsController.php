@@ -23,8 +23,17 @@ class RightsController extends RController{
 	 public $layout='//layouts/single';
 	
    
+        protected function openfrmtFieldValue($id){//,$begin=null,$end=null
+            
+            
+        } 
          
-         
+        
+        
+        protected function openfrmtFieldStr($id){//,$begin=null,$end=null
+            
+            
+        } 
 	/**
 	 * @return array action filters
 	 */
@@ -44,7 +53,6 @@ class RightsController extends RController{
         
         
 	public function init()	{
-		$uri = 'path to your controller-specific css';
                 if(Yii::app()->user->Company==0){
                     if(Yii::app()->controller->id!='company'){
                         print "'".Yii::app()->controller->id."'";
