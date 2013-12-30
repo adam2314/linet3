@@ -23,17 +23,7 @@ class RightsController extends RController{
 	 public $layout='//layouts/single';
 	
    
-        protected function openfrmtFieldValue($id){//,$begin=null,$end=null
-            
-            
-        } 
-         
         
-        
-        protected function openfrmtFieldStr($id){//,$begin=null,$end=null
-            
-            
-        } 
 	/**
 	 * @return array action filters
 	 */

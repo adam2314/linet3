@@ -20,10 +20,25 @@
  * @property integer $stockType
  * @property integer $vat
  */
-class Item extends CActiveRecord
-{
+class Item extends basicRecord{
 	const table='{{items}}';
         public $vat; //loads vat from user by cat
+        
+        public function openfrmt($line){
+            $itms='';
+            
+            //get all fields (m100) sort by id
+            $criteria=new CDbCriteria;
+            $criteria->condition="type_id = :type_id";
+            $criteria->params=array(':type_id' => "M100");
+            $fields= OpenFormat::model()->findAll($criteria);
+            
+            //loop strfgy
+            foreach ($fields as $field) {
+                $itms.=";".$this->openfrmtFieldStr($field,$line);
+            }
+            return $itms;
+        }
         
         public function findByPk($id, $condition = '', $params = Array()){
             $model = parent::findByPk($id, $condition = '', $params = Array());

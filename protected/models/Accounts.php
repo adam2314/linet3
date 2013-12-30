@@ -29,7 +29,7 @@
  * @property integer $system_acc
  * @property integer $owner
  */
-class Accounts extends CActiveRecord{
+class Accounts extends basicRecord{//CActiveRecord
 	const table='{{accounts}}';
 	/**
 	 * Returns the static model of the specified AR class.
@@ -40,20 +40,20 @@ class Accounts extends CActiveRecord{
             return self::table;
         }
         
-        public function openfrmt(){
-            $acc='';
+        public function openfrmt($line){
+            $accs='';
             
             //get all fields (b110) sort by id
             $criteria=new CDbCriteria;
-            $criteria->condition="account_id = :type_id";
+            $criteria->condition="type_id = :type_id";
             $criteria->params=array(':type_id' => "B110");
             $fields= OpenFormat::model()->findAll($criteria);
             
             //loop strfgy
             foreach ($fields as $field) {
-                
+                $accs.=";".$this->openfrmtFieldStr($field,$line);
             }
-            //return
+            return $accs;
         }
         
 	public static function model($className=__CLASS__)
@@ -72,7 +72,9 @@ class Accounts extends CActiveRecord{
                 $sum+=$transaction->sum;           
 	    return $sum;
 	}
-        
+         public function getType(){
+             return isset($this->accType)?$this->accType->name:"";
+         }
         public function getPos($from_date,$to_date){
             $sum=0;
             

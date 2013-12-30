@@ -110,7 +110,7 @@ class DataController extends RightsController{
             if(isset($_POST['FormOpenfrmt'])){
                     $model->attributes=$_POST['FormOpenfrmt'];
                     
-                    
+                    echo $model->make();
                     
                     exit;
                     //return Yii::app()->getRequest()->sendFile("pcn874.txt", $model->make());

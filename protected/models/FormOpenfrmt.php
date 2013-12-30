@@ -32,8 +32,9 @@ class FormOpenfrmt extends CFormModel{
     }
     
     public function make(){
-        $iniArr=array('b110'=>0,'b100'=>0,'c100'=>0,'d100'=>0,'d110'=>0,'d120'=>0,);
-        $bkmv='';    
+        $iniArr=array('b110'=>0,'b100'=>0,'m100'=>0,'c100'=>0,'d100'=>0,'d110'=>0,'d120'=>0,);
+        $bkmv='';
+        $line=1;
         $yiidatetimesec=Yii::app()->locale->getDateFormat('yiidatetimesec');
         $phpdbdatetime=Yii::app()->locale->getDateFormat('phpdbdatetime');
 
@@ -49,30 +50,40 @@ class FormOpenfrmt extends CFormModel{
         $criteria=new CDbCriteria;
         $accounts= Accounts::model()->findAll($criteria);
         foreach($accounts as $account){
-                $bkmv.=$account->openfrmt()."\n"; 
+                $bkmv.=$account->openfrmt($line,$from_date,$to_date)."<br />\n"; 
                 $iniArr['b110']++;
+                $line++;
         }
-        //
-        //
         //items
+        $criteria=new CDbCriteria;
+        $items= Item::model()->findAll($criteria);
+        foreach($items as $item){
+                $bkmv.=$item->openfrmt($line,$from_date,$to_date)."<br />\n"; 
+                $iniArr['m100']++;
+                $line++;
+        }//*/
         //
         //transactions
-        
+        $criteria=new CDbCriteria;
+        $criteria->condition="valuedate BETWEEN :from_date AND :to_date";
+        $criteria->params=array(
+            ':from_date' => $from_date,
+            ':to_date' => $to_date,
+          );
+        $transactions= Transactions::model()->findAll($criteria);
+        foreach($transactions as $transaction){
+                $bkmv.=$item->openfrmt($line,$from_date,$to_date)."<br />\n"; 
+                $iniArr['b100']++;
+                $line++;
+        }//*/
         //docs
         
             //detiales
             //recips
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
+             
+        /*
         $criteria=new CDbCriteria;
         $criteria->condition="issue_date BETWEEN :from_date AND :to_date";
         $criteria->params=array(
@@ -88,8 +99,8 @@ class FormOpenfrmt extends CFormModel{
                 
         }
         $start['sum']=$start['t_vat']+$start['ns_t_vat'];
-        
-        return $this->start($start)."\n".$text.$this->end();      
+        */
+        return $bkmv;      
     }
     //put your code here
 }
