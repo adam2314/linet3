@@ -51,7 +51,7 @@ class Accounts extends basicRecord{//CActiveRecord
             
             //loop strfgy
             foreach ($fields as $field) {
-                $accs.=";".$this->openfrmtFieldStr($field,$line);
+                $accs.=$this->openfrmtFieldStr($field,$line);
             }
             return $accs;
         }
@@ -72,9 +72,14 @@ class Accounts extends basicRecord{//CActiveRecord
                 $sum+=$transaction->sum;           
 	    return $sum;
 	}
-         public function getType(){
+        
+        /*
+         * for open format export 
+         * get name of accType
+         */
+        public function getType(){
              return isset($this->accType)?$this->accType->name:"";
-         }
+        }
         public function getPos($from_date,$to_date){
             $sum=0;
             

@@ -18,8 +18,32 @@
  * @property string $dep_date
  * @property integer $id
  */
-class Doccheques extends CActiveRecord{
+class Doccheques extends basicRecord{
     const table='{{docCheques}}';
+    
+     /*
+     * for open format export 
+     */
+    public function getType(){
+             return isset($this->Doc)?$this->Doc->getType():"";
+         }
+    public function openfrmt($line){
+            $itms='';
+            
+            //get all fields (D110) sort by id
+            $criteria=new CDbCriteria;
+            $criteria->condition="type_id = :type_id";
+            $criteria->params=array(':type_id' => "D120");
+            $fields= OpenFormat::model()->findAll($criteria);
+            
+            //loop strfgy
+            foreach ($fields as $field) {
+                $itms.=$this->openfrmtFieldStr($field,$line);
+            }
+            return $itms;
+        }
+    
+    
         public function transaction($num,$refnum,$valuedate,$details,$action,$line,$account_id,$tranType){
                        
             $in=new Transactions();

@@ -15,8 +15,42 @@
  * @property string $invprice
  * @property integer $line
  */
-class Docdetails extends CActiveRecord{
+class Docdetails extends basicRecord{
     const table='{{docDetails}}';
+    
+    
+    
+    /*
+     * for open format export 
+     */
+    public function getType(){
+             return isset($this->Doc)?$this->Doc->getType():"";
+         }
+    
+    public function getNum(){
+             return isset($this->Doc)?$this->Doc->getType():"";
+         }
+         public function getDate(){
+             return isset($this->Doc)?$this->Doc->getType():"";
+         }
+    
+    public function openfrmt($line){
+            $itms='';
+            
+            //get all fields (D110) sort by id
+            $criteria=new CDbCriteria;
+            $criteria->condition="type_id = :type_id";
+            $criteria->params=array(':type_id' => "D110");
+            $fields= OpenFormat::model()->findAll($criteria);
+            
+            //loop strfgy
+            foreach ($fields as $field) {
+                $itms.=$this->openfrmtFieldStr($field,$line);
+            }
+            return $itms;
+        }
+    
+    
         public function transaction($num,$refnum,$valuedate,$details,$action,$line,$optacc,$tranType){
             if(is_null($optacc)){
                 $vatcat=  Item::model()->findByPk($docdetail->item_id)->itemVatCat_id;

@@ -18,7 +18,7 @@
  * @property integer $owner_id
  * @property integer $linenum
  */
-class Transactions extends CActiveRecord{
+class Transactions extends basicRecord{
     const table='{{transactions}}';
     public $from_date;
     public $to_date;
@@ -32,6 +32,23 @@ class Transactions extends CActiveRecord{
         return parent::model($className);
     }
 
+    
+    public function openfrmt($line){
+            $trans='';
+            
+            //get all fields (b110) sort by id
+            $criteria=new CDbCriteria;
+            $criteria->condition="type_id = :type_id";
+            $criteria->params=array(':type_id' => "B100");
+            $fields= OpenFormat::model()->findAll($criteria);
+            
+            //loop strfgy
+            foreach ($fields as $field) {
+                $trans.=$this->openfrmtFieldStr($field,$line);
+            }
+            return $trans;
+        }
+    
     /**
      * @return string the associated database table name
      */

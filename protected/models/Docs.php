@@ -27,7 +27,7 @@
  * @property string $comments
  * @property integer $owner
  */
-class Docs extends CActiveRecord{
+class Docs extends basicRecord{
     const table='{{docs}}';
     //public $lang;
     public $docDet=NULL;
@@ -47,6 +47,31 @@ class Docs extends CActiveRecord{
         
     }//*/
     
+    /*
+     * for open format export 
+     */
+    public function getType(){
+             return isset($this->docType)?$this->docType->openformat:"";
+         }
+    
+    
+    
+    public function openfrmt($line){
+            $itms='';
+            
+            //get all fields (m100) sort by id
+            $criteria=new CDbCriteria;
+            $criteria->condition="type_id = :type_id";
+            $criteria->params=array(':type_id' => "C100");
+            $fields= OpenFormat::model()->findAll($criteria);
+            
+            //loop strfgy
+            foreach ($fields as $field) {
+                $itms.=$this->openfrmtFieldStr($field,$line);
+            }
+            return $itms;
+        }
+        
     public function pcn874(){
         //stringfy a doc by pcn874
         //A1    type

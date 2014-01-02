@@ -34,7 +34,7 @@ class basicRecord extends CActiveRecord{
             //v99
             //v9999
             //date
-            
+            //hour
             
             $value="";
             if($field->action==$field->type_id)
@@ -53,7 +53,7 @@ class basicRecord extends CActiveRecord{
             if(strpos($field->action, "limit.") === 0)
                     $value=$this->{str_replace("limit.", "", $field->action)}($begin,$end);
                     
-            return sprintf($template,$value);
+            return ";".sprintf($template,$value);
             
         } 
 }

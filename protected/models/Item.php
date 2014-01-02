@@ -35,7 +35,7 @@ class Item extends basicRecord{
             
             //loop strfgy
             foreach ($fields as $field) {
-                $itms.=";".$this->openfrmtFieldStr($field,$line);
+                $itms.=$this->openfrmtFieldStr($field,$line);
             }
             return $itms;
         }
