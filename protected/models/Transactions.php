@@ -46,7 +46,7 @@ class Transactions extends basicRecord{
             foreach ($fields as $field) {
                 $trans.=$this->openfrmtFieldStr($field,$line);
             }
-            return $trans;
+            return $trans."\r\n";
         }
     
     /**

@@ -15,8 +15,17 @@ class FormOpenfrmt extends CFormModel{
     public $year;
     public $from_date;
     public $to_date;
+    
+    private $id;
+    private $line=1;
+
     private $iniArr;
     private $docArr;
+    private $docSumArr;
+    
+    public $bkmvId;
+    public $iniId;
+            
     
     public function rules(){
 		// NOTE: you should only define rules for those attributes that
@@ -34,10 +43,11 @@ class FormOpenfrmt extends CFormModel{
     }
     
     public function make(){
+        $this->id= rand(0,999999999999999);
         //$this->iniArr=array('b110'=>0,'b100'=>0,'m100'=>0,'c100'=>0,'d100'=>0,'d110'=>0,'d120'=>0,);
         //$this->docArr=array(0=>0,305=>0,300=>0,);
         $bkmv='';
-        $line=1;
+        //$this->line=1;
         $yiidatetimesec=Yii::app()->locale->getDateFormat('yiidatetimesec');
         $phpdbdatetime=Yii::app()->locale->getDateFormat('phpdbdatetime');
 
@@ -52,10 +62,10 @@ class FormOpenfrmt extends CFormModel{
         //accounts
         $criteria=new CDbCriteria;
         $accounts= Accounts::model()->findAll($criteria);
-        $record=array('id'=>'b110','name'=>'','count'=>0);
+        $record=array('id'=>'B110','name'=>'','count'=>0);
         foreach($accounts as $account){
-                $line++;
-                $bkmv.=$account->openfrmt($line,$from_date,$to_date)."<br />\n"; 
+                $this->line++;
+                $bkmv.=$account->openfrmt($this->line,$from_date,$to_date); 
                 $record['count']++;
         }
         $this->iniArr[]=$record;
@@ -64,10 +74,10 @@ class FormOpenfrmt extends CFormModel{
         //items
         $criteria=new CDbCriteria;
         $items= Item::model()->findAll($criteria);
-        $record=array('id'=>'m100','name'=>'','count'=>0);
+        $record=array('id'=>'M100','name'=>'','count'=>0);
         foreach($items as $item){
-                $line++;
-                $bkmv.=$item->openfrmt($line,$from_date,$to_date)."<br />\n"; 
+                $this->line++;
+                $bkmv.=$item->openfrmt($this->line,$from_date,$to_date); 
                 $record['count']++;
         }
         $this->iniArr[]=$record;
@@ -80,10 +90,10 @@ class FormOpenfrmt extends CFormModel{
             ':to_date' => $to_date,
           );
         $transactions= Transactions::model()->findAll($criteria);
-        $record=array('id'=>'b100','name'=>'','count'=>0);
+        $record=array('id'=>'B100','name'=>'','count'=>0);
         foreach($transactions as $transaction){
-                $line++;
-                $bkmv.=$transaction->openfrmt($line,$from_date,$to_date)."<br />\n"; 
+                $this->line++;
+                $bkmv.=$transaction->openfrmt($this->line,$from_date,$to_date); 
                 $record['count']++;
 
         }
@@ -97,43 +107,82 @@ class FormOpenfrmt extends CFormModel{
             ':to_date' => $to_date,
           );
         $docs= Docs::model()->findAll($criteria);
-        $record=array('id'=>'c100','name'=>'','count'=>0);
-        $d110=array('id'=>'d110','name'=>'','count'=>0);
-        $d120=array('id'=>'d120','name'=>'','count'=>0);
+        $record=array('id'=>'C100','name'=>'','count'=>0);
+        $d110=array('id'=>'D110','name'=>'','count'=>0);
+        $d120=array('id'=>'D120','name'=>'','count'=>0);
         
-        $this->docArr[305]=0;
-        $this->docArr[400]=0;
-        $this->docArr[0]=0;
+
         foreach($docs as $doc){
-                $line++;
-                $bkmv.=$doc->openfrmt($line,$from_date,$to_date)."<br />\n"; 
+                $this->line++;
+                $bkmv.=$doc->openfrmt($this->line,$from_date,$to_date); 
                 foreach($doc->docDetailes as $detial){
-                    $line++;
-                    $bkmv.=$detial->openfrmt($line,$from_date,$to_date)."<br />\n"; 
+                    $this->line++;
+                    $bkmv.=$detial->openfrmt($this->line,$from_date,$to_date); 
                     $d110['count']++;
                 }
                 foreach($doc->docCheques as $detial){
-                    $line++;
-                    $bkmv.=$detial->openfrmt($line,$from_date,$to_date)."<br />\n";
+                    $this->line++;
+                    $bkmv.=$detial->openfrmt($this->line,$from_date,$to_date);
                     $d120['count']++;
                 }
-                $this->docArr[$doc->getType()]++;
+                $type=$doc->getType();
+                $this->docArr[$type]=isset($this->docArr[$type])?$this->docArr[$type]+1:0;
+                $this->docSumArr[$type]=isset($this->docSumArr[$type])?$this->docSumArr[$type]+$doc->total:$doc->total;
                 $record['count']++;
         }
         $this->iniArr[]=$record;
         $this->iniArr[]=$d110;
         $this->iniArr[]=$d120;
-        //A000
         
-        print_r($this->iniArr);
-        print_r($this->docArr);
+        
+        $company=Settings::model()->findByPk('company.name');
+        //A100
+        $bkmv=$company->a100(1,$this->id).$bkmv;
+
+        //Z900
+        $bkmv=$bkmv.$company->z900($this->line+1,$this->id,$this->line);
+        
+        
+        
+        $bkmvFile=new Files;
+        $bkmvFile->name='bkmvdata.txt';
+        $bkmvFile->path='openformt/bkmvdata.txt';//-'.$this->id.'
+        $bkmvFile->expire=360;
+        $bkmvFile->writeFile($bkmv);
+        $this->bkmvId=$bkmvFile->id;
+        
+        
+        
+        //A000
+        $ini=$company->a000(1,$this->id);
+        foreach($this->iniArr as $line){
+            $ini.=$line['id'].sprintf("%015d",$line['count'])."\r\n";
+        }
+        //Z
+        
+        $iniFile=new Files;
+        $iniFile->name='ini.txt';
+        $iniFile->path='openformt/ini.txt';//-'.$this->id.'
+        $iniFile->expire=360;
+        $iniFile->writeFile($ini);
+        $this->iniId=$iniFile->id;
+        
+        
+        
         return $bkmv;      
     }
-    //put your code here
     
+
     
      public function docsTable(){
-        return new CArrayDataProvider($this->docArr,
+         
+       $array=array();
+       foreach($this->docArr as $key=>$value){
+           $array[]=array('id'=>$key,'name'=>'','count'=>$value,'sum'=>$this->docSumArr[$key]);
+       }
+         
+         
+        return new CArrayDataProvider($array,
                  array(
                                 'pagination'=>array(
                                     'pageSize'=>100,

@@ -25,17 +25,6 @@ class basicRecord extends CActiveRecord{
         
         
         protected function openfrmtFieldStr($field,$line,$begin=null,$end=null){//,
-            
-            $template="%0".$field->size."d";  
-            if($field->type=='s')
-                $template="% ".$field->size."s";
-            if($field->type=='n')
-                $template="%0".$field->size."d";    
-            //v99
-            //v9999
-            //date
-            //hour
-            
             $value="";
             if($field->action==$field->type_id)
                 $value=$field->action;
@@ -52,8 +41,63 @@ class basicRecord extends CActiveRecord{
                     
             if(strpos($field->action, "limit.") === 0)
                     $value=$this->{str_replace("limit.", "", $field->action)}($begin,$end);
-                    
-            return ";".sprintf($template,$value);
+            if(($value=='')&& ($field->action!='NA'))
+                $value=$field->action;
+            
+            
+            $template="%0".$field->size."d";  
+            if($field->type=='s')
+                $template="% ".$field->size."s";
+            if($field->type=='n')
+                $template="%0".$field->size."d";
+            if($field->type=='date'){//date
+                $phpdbdatetime=Yii::app()->locale->getDateFormat('phpdbdatetime');
+                return date('Ymd',CDateTimeParser::parse($value,$phpdbdatetime));   
+            }
+            if($field->type=='hour'){//hour
+                $phpdbdatetime=Yii::app()->locale->getDateFormat('phpdbdatetime');
+                return date('Hs',CDateTimeParser::parse($value,$phpdbdatetime));   
+            }   
+            
+            
+            if($field->type=='v99'){//v99
+                $template="%0".($field->size-1)."d";
+                $value=  round($value*100);
+                if($value>=0){
+                    $sign="+";
+                }else{
+                    $sign="-";
+                    $value=$value*-1;
+                }
+                
+                return $sign.sprintf($template,$value);   
+            }   
+            
+            if($field->type=='v9999'){//v9999
+                $template="%0".($field->size-1)."d";
+                $value=  round($value*10000);
+                if($value>=0){
+                    $sign="+";
+                }else{
+                    $sign="-";
+                    $value=$value*-1;
+                }
+                
+                return $sign.sprintf($template,$value);   
+            }   
+           
+            
+            
+            
+            //ini_set('mbstring.substitute_character', "none"); 
+            //$value= mb_convert_encoding($value, 'UTF-8', 'UTF-8'); 
+            $value = substr($value,0,$field->size);
+            $value=htmlentities($value);
+            $value=str_replace("&amp;","&",$value);
+            $value = iconv("UTF-8", "CP1255", $value);
+            //$value=mb_convert_encoding($value, "windows-1255",'utf-8');
+            
+            return sprintf($template,$value);
             
         } 
 }

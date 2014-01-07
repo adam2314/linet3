@@ -37,7 +37,7 @@ class Item extends basicRecord{
             foreach ($fields as $field) {
                 $itms.=$this->openfrmtFieldStr($field,$line);
             }
-            return $itms;
+            return $itms."\r\n";
         }
         
         public function findByPk($id, $condition = '', $params = Array()){

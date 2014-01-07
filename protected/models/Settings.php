@@ -7,10 +7,76 @@
  * @property string $id
  * @property string $value
  */
-class Settings extends CActiveRecord{
+class Settings extends basicRecord{
         const table='{{config}}';
 	
         
+        
+        
+        public function a000($line,$id){
+            $rec='';
+            
+            //get all fields (b110) sort by id
+            $criteria=new CDbCriteria;
+            $criteria->condition="type_id = :type_id";
+            $criteria->params=array(':type_id' => "A000");
+            $fields= OpenFormat::model()->findAll($criteria);
+            
+            //loop strfgy
+            foreach ($fields as $field) {
+                //$rec.=basicRecord::model()->openfrmtFieldStr($field,$line);
+                if($field->id==1004){
+                    $rec.=sprintf("%015d",$id);
+                    continue;
+                }
+                    
+                $rec.=$this->openfrmtFieldStr($field,$line);
+            }
+            return $rec."\r\n";
+    }
+        
+        public function a100($line,$id){
+            $rec='';
+            
+            //get all fields (b110) sort by id
+            $criteria=new CDbCriteria;
+            $criteria->condition="type_id = :type_id";
+            $criteria->params=array(':type_id' => "A100");
+            $fields= OpenFormat::model()->findAll($criteria);
+            
+            //loop strfgy
+            foreach ($fields as $field) {
+                //$rec.=basicRecord::model()->openfrmtFieldStr($field,$line);
+                if($field->id==1103){
+                    $rec.=sprintf("%015d",$id);
+                    continue;
+                }
+                    
+                $rec.=$this->openfrmtFieldStr($field,$line);
+            }
+            return $rec."\r\n";
+    }
+            
+    public function z900($line,$id,$count){
+        $rec='';
+            
+            //get all fields (b110) sort by id
+            $criteria=new CDbCriteria;
+            $criteria->condition="type_id = :type_id";
+            $criteria->params=array(':type_id' => "Z900");
+            $fields= OpenFormat::model()->findAll($criteria);
+            
+            //loop strfgy
+            foreach ($fields as $field) {
+                if($field->id==1153){
+                    $rec.=sprintf("%015d",$id);
+                    continue;
+                }
+                $rec.=$this->openfrmtFieldStr($field,$line);
+            }
+            return $rec."\r\n";
+    }
+    
         public function primaryKey(){
 	    return 'id';
 	}

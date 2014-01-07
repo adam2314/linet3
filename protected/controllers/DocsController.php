@@ -36,7 +36,6 @@ class DocsController extends RightsController
             
             
             
-            $myHtml = $yiiBasepath."/files/".$configPath."/temp.html";
             $myPdf=$yiiBasepath."/files/".$configPath."/docs/$model->doctype-$model->docnum.pdf";
             $myPdfS=$yiiBasepath."/files/".$configPath."/docs/$model->doctype-$model->docnum-signed.pdf";
 

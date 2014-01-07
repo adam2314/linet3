@@ -28,7 +28,7 @@ class Doccheques extends basicRecord{
              return isset($this->Doc)?$this->Doc->getType():"";
          }
     public function openfrmt($line){
-            $itms='';
+            $rcps='';
             
             //get all fields (D110) sort by id
             $criteria=new CDbCriteria;
@@ -38,9 +38,9 @@ class Doccheques extends basicRecord{
             
             //loop strfgy
             foreach ($fields as $field) {
-                $itms.=$this->openfrmtFieldStr($field,$line);
+                $rcps.=$this->openfrmtFieldStr($field,$line);
             }
-            return $itms;
+            return $rcps."\r\n";
         }
     
     

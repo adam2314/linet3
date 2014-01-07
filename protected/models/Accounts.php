@@ -53,7 +53,7 @@ class Accounts extends basicRecord{//CActiveRecord
             foreach ($fields as $field) {
                 $accs.=$this->openfrmtFieldStr($field,$line);
             }
-            return $accs;
+            return $accs."\r\n";
         }
         
 	public static function model($className=__CLASS__)

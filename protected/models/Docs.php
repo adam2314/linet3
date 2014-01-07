@@ -57,7 +57,7 @@ class Docs extends basicRecord{
     
     
     public function openfrmt($line){
-            $itms='';
+            $docs='';
             
             //get all fields (m100) sort by id
             $criteria=new CDbCriteria;
@@ -67,9 +67,9 @@ class Docs extends basicRecord{
             
             //loop strfgy
             foreach ($fields as $field) {
-                $itms.=$this->openfrmtFieldStr($field,$line);
+                $docs.=$this->openfrmtFieldStr($field,$line);
             }
-            return $itms;
+            return $docs."\r\n";
         }
         
     public function pcn874(){

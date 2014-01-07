@@ -35,7 +35,7 @@ class Docdetails extends basicRecord{
          }
     
     public function openfrmt($line){
-            $itms='';
+            $dets='';
             
             //get all fields (D110) sort by id
             $criteria=new CDbCriteria;
@@ -45,9 +45,9 @@ class Docdetails extends basicRecord{
             
             //loop strfgy
             foreach ($fields as $field) {
-                $itms.=$this->openfrmtFieldStr($field,$line);
+                $dets.=$this->openfrmtFieldStr($field,$line);
             }
-            return $itms;
+            return $dets."\r\n";
         }
     
     
