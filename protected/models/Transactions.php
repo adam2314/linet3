@@ -55,6 +55,17 @@ class Transactions extends basicRecord{
     public function tableName()	{
         return self::table;
     }
+    
+    
+    public function opefrmtMrk(){
+        if($this->sum>=0.0)
+            return 2;
+        else 
+            return 1;
+        
+    }
+    
+    
     public function getOptAcc(){
         
         $criteria=new CDbCriteria;

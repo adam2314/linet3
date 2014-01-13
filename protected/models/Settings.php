@@ -13,7 +13,7 @@ class Settings extends basicRecord{
         
         
         
-        public function a000($line,$id){
+        public function a000($line,$id,$count){
             $rec='';
             
             //get all fields (b110) sort by id
@@ -29,7 +29,10 @@ class Settings extends basicRecord{
                     $rec.=sprintf("%015d",$id);
                     continue;
                 }
-                    
+                if($field->id==1002){
+                    $rec.=sprintf("%015d",$count);
+                    continue;
+                }    
                 $rec.=$this->openfrmtFieldStr($field,$line);
             }
             return $rec."\r\n";
@@ -70,6 +73,10 @@ class Settings extends basicRecord{
             foreach ($fields as $field) {
                 if($field->id==1153){
                     $rec.=sprintf("%015d",$id);
+                    continue;
+                }
+                if($field->id==1155){
+                    $rec.=sprintf("%015d",$count);
                     continue;
                 }
                 $rec.=$this->openfrmtFieldStr($field,$line);

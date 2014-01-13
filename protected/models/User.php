@@ -20,8 +20,11 @@
  * @property Docs[] $docs
  * @property UserIncomeMap[] $userIncomeMaps
  */
-class User extends CActiveRecord{
+class User extends mainRecord{
     const table='user';
+    
+    
+    
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.

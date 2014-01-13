@@ -28,10 +28,10 @@ class Docdetails extends basicRecord{
          }
     
     public function getNum(){
-             return isset($this->Doc)?$this->Doc->getType():"";
+             return isset($this->Doc)?$this->Doc->docnum:"";
          }
          public function getDate(){
-             return isset($this->Doc)?$this->Doc->getType():"";
+             return isset($this->Doc)?$this->Doc->issue_date:"";
          }
     
     public function openfrmt($line){
@@ -53,7 +53,7 @@ class Docdetails extends basicRecord{
     
         public function transaction($num,$refnum,$valuedate,$details,$action,$line,$optacc,$tranType){
             if(is_null($optacc)){
-                $vatcat=  Item::model()->findByPk($docdetail->item_id)->itemVatCat_id;
+                $vatcat=  Item::model()->findByPk($this->item_id)->itemVatCat_id;
                 $incomeacc= UserIncomeMap::model()->findByPk(array('user_id'=>Yii::app()->user->id,'itemVatCat_id'=>$vatcat))->account_id;
             }else {
                 $incomeacc=$optacc;

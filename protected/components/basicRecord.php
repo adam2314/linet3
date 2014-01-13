@@ -26,25 +26,29 @@ class basicRecord extends CActiveRecord{
         
         protected function openfrmtFieldStr($field,$line,$begin=null,$end=null){//,
             $value="";
-            if($field->action==$field->type_id)
+            if(($value=='')&& ($field->action!='NA'))
                 $value=$field->action;
-            
-            if($field->action=="file.line")
+             if($field->action=="file.line")
                 $value=$line;
             if($field->action=="company.vatnum")
                 $value=Settings::model()->findByPk('company.vat.id')->value;
             if(strpos($field->action, "this.") === 0)
-                    $value=$this->{str_replace("this.", "", $field->action)};
+                    if(isset($this->{str_replace("this.", "", $field->action)}))
+                        $value=$this->{str_replace("this.", "", $field->action)};
+                        
+            if(strpos($field->action, "system.") === 0)
+                $value=Settings::model()->findByPk($field->action)->value;        
                     
             if(strpos($field->action, "func.") === 0)
                     $value=$this->{str_replace("func.", "", $field->action)}();
                     
             if(strpos($field->action, "limit.") === 0)
                     $value=$this->{str_replace("limit.", "", $field->action)}($begin,$end);
-            if(($value=='')&& ($field->action!='NA'))
-                $value=$field->action;
+
             
             
+                    
+            /*******************************************************************************************************/        
             $template="%0".$field->size."d";  
             if($field->type=='s')
                 $template="% ".$field->size."s";
@@ -58,8 +62,14 @@ class basicRecord extends CActiveRecord{
                 $phpdbdatetime=Yii::app()->locale->getDateFormat('phpdbdatetime');
                 return date('Hs',CDateTimeParser::parse($value,$phpdbdatetime));   
             }   
-            
-            
+            if($field->type=='99'){//v99
+                $template="%0".($field->size)."d";
+                $value=  round($value*100);
+                if($value<0){
+                     $value=$value*-1;
+                }
+                return sprintf($template,$value);   
+            }   
             if($field->type=='v99'){//v99
                 $template="%0".($field->size-1)."d";
                 $value=  round($value*100);
@@ -69,10 +79,8 @@ class basicRecord extends CActiveRecord{
                     $sign="-";
                     $value=$value*-1;
                 }
-                
                 return $sign.sprintf($template,$value);   
             }   
-            
             if($field->type=='v9999'){//v9999
                 $template="%0".($field->size-1)."d";
                 $value=  round($value*10000);

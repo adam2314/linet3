@@ -8,8 +8,89 @@
  * @property string $string
  * @property string $prefix
  */
-class Company extends CActiveRecord{
+class Company extends mainRecord{
         const table='databases';
+        
+        public function backup(){
+            $dumper = new dbDump();
+            echo $dumper->getDump(true);
+            Yii::app()->end();
+        }
+        
+        public  function restore(){
+            
+        }
+        private function createDb(){
+            $yiiBasepath=Yii::app()->basePath;
+            $mysql=$yiiBasepath."/data/company.sql";
+            
+            
+            if (file_exists($mysql)){
+                $sqlArray = file_get_contents($mysql);
+
+                 $src1='DROP TABLE IF EXISTS `';
+                 $rplc1='DROP TABLE IF EXISTS `'.Yii::app()->db->tablePrefix;
+                //
+                 $src2='CREATE TABLE `';
+                 $rplc2='CREATE TABLE `'.Yii::app()->db->tablePrefix;
+                //INSERT INTO `
+                $src3='INSERT INTO `';
+                $rplc3='INSERT INTO `'.Yii::app()->db->tablePrefix;
+
+
+                $src4='ALTER TABLE ';
+                $rplc4='ALTER TABLE '.Yii::app()->db->tablePrefix;
+
+
+                $src5=') REFERENCES `';
+                $rplc5=') REFERENCES `'.Yii::app()->db->tablePrefix;
+
+                $sqlArray=  str_replace($src1, $rplc1, $sqlArray);
+                $sqlArray=  str_replace($src2, $rplc2, $sqlArray);
+                $sqlArray=  str_replace($src3, $rplc3, $sqlArray);
+                $sqlArray=  str_replace($src4, $rplc4, $sqlArray);
+                $sqlArray=  str_replace($src5, $rplc5, $sqlArray);
+
+                //print $sqlArray;
+                $cmd = Yii::app()->db->createCommand($sqlArray);
+                //$cmd->execute();
+                try{
+                        $cmd->execute();
+                }
+                catch(CDbException $e){
+                        $message = $e->getMessage();
+                        print $message;
+                }
+            } else{
+                throw new CDbException(Yii::t('app','Cant find Company template file unable to create database'));
+                
+            }
+            
+            
+            
+            
+        }
+        
+        public function save($runValidation = true, $attributes = NULL) {
+            //if tables config notexsits
+            Yii::app()->db->setActive(false);
+            Yii::app()->db->connectionString = $this->string;
+            Yii::app()->db->tablePrefix=$this->prefix;
+            Yii::app()->db->setActive(true);
+            
+            if(Yii::app()->db->schema->getTable('{{config}}')=== null){
+                //create tables
+                $this->createDb();
+                //add permisstions
+            }else{     //else
+                //table version
+                    //upgrade
+            }
+            
+            return parent::save($runValidation,$attributes);
+        }
+        
+        
 	/**
 	 * @return string the associated database table name
 	 */

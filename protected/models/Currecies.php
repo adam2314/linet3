@@ -9,8 +9,8 @@
  * @property string $name
  * @property string $symbol
  */
-class Currecies extends CActiveRecord{
-        const table='{{currencies}}';
+class Currecies extends mainRecord{
+        const table='currencies';
         public function primaryKey()     {
                 return 'id';
                 // For composite primary key, return an array like the following

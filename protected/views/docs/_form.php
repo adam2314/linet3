@@ -244,7 +244,7 @@
                                     <?php //echo $form->error($model,'novat_total'); ?>
                        </td>
                         <td>
-                                    <?php //echo $form->textField($model,'novat_total',array('size'=>4,'maxlength'=>8,'style' => "width: 90px;")); ?>
+                                    <?php echo $form->hiddenField($model,'novat_total'); ?>
                         </td>
                     </tr>
                      
@@ -781,7 +781,7 @@ function CalcPriceSum() {
     }
     $('#Docs_vat').val(vattotal.toFixed(2)).trigger('change');
     $('#Docs_sub_total').val(subtotal.toFixed(2)).trigger('change');
-    //$('#Docs_novat_total').val(novat_total.toFixed(2));
+    $('#Docs_novat_total').val(subtotal.toFixed(2));
     $('#Docs_total').val((subtotal+vattotal).toFixed(2)).trigger('change');//novat_total
 }
 function CalcDueDate(valdate, pay_terms) {

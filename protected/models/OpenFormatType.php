@@ -1,7 +1,7 @@
 <?php
 
-class OpenFormatType extends CActiveRecord{
-         const table='{{openformattype}}';
+class OpenFormatType extends mainRecord{
+         const table='openformattype';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.

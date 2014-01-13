@@ -27,6 +27,12 @@ class Doccheques extends basicRecord{
     public function getType(){
              return isset($this->Doc)?$this->Doc->getType():"";
          }
+    public function getNum(){
+             return isset($this->Doc)?$this->Doc->docnum:"";
+         }
+         public function getDate(){
+             return isset($this->Doc)?$this->Doc->issue_date:"";
+         }
     public function openfrmt($line){
             $rcps='';
             
@@ -122,7 +128,7 @@ class Doccheques extends basicRecord{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                    'Docs'=>array(self::BELONGS_TO, 'Docs', 'doc_id'),
+                    'Doc'=>array(self::BELONGS_TO, 'Docs', 'doc_id'),
                     'Type'=>array(self::BELONGS_TO, 'PaymentType', 'type'),
 		);
 	}

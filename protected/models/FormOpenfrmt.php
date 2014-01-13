@@ -42,6 +42,27 @@ class FormOpenfrmt extends CFormModel{
     
     }
     
+    public function read(){
+        
+        
+        //new company
+        
+        //new accounts
+        
+        //new items
+        
+        //new docs
+        
+        //new transactions
+        
+        
+    }
+
+
+
+
+
+
     public function make(){
         $this->id= rand(0,999999999999999);
         //$this->iniArr=array('b110'=>0,'b100'=>0,'m100'=>0,'c100'=>0,'d100'=>0,'d110'=>0,'d120'=>0,);
@@ -140,13 +161,13 @@ class FormOpenfrmt extends CFormModel{
         $bkmv=$company->a100(1,$this->id).$bkmv;
 
         //Z900
-        $bkmv=$bkmv.$company->z900($this->line+1,$this->id,$this->line);
+        $bkmv=$bkmv.$company->z900($this->line+1,$this->id,$this->line+1);
         
         
         
         $bkmvFile=new Files;
         $bkmvFile->name='bkmvdata.txt';
-        $bkmvFile->path='openformt/bkmvdata.txt';//-'.$this->id.'
+        $bkmvFile->path='openformt/bkmvdata-'.$this->id.'.txt';//
         $bkmvFile->expire=360;
         $bkmvFile->writeFile($bkmv);
         $this->bkmvId=$bkmvFile->id;
@@ -154,7 +175,7 @@ class FormOpenfrmt extends CFormModel{
         
         
         //A000
-        $ini=$company->a000(1,$this->id);
+        $ini=$company->a000(1,$this->id,$this->line+1);
         foreach($this->iniArr as $line){
             $ini.=$line['id'].sprintf("%015d",$line['count'])."\r\n";
         }
@@ -162,7 +183,7 @@ class FormOpenfrmt extends CFormModel{
         
         $iniFile=new Files;
         $iniFile->name='ini.txt';
-        $iniFile->path='openformt/ini.txt';//-'.$this->id.'
+        $iniFile->path='openformt/ini-'.$this->id.'.txt';//
         $iniFile->expire=360;
         $iniFile->writeFile($ini);
         $this->iniId=$iniFile->id;
@@ -177,10 +198,11 @@ class FormOpenfrmt extends CFormModel{
      public function docsTable(){
          
        $array=array();
-       foreach($this->docArr as $key=>$value){
-           $array[]=array('id'=>$key,'name'=>'','count'=>$value,'sum'=>$this->docSumArr[$key]);
-       }
-         
+       if(isset($this->docArr)){
+        foreach($this->docArr as $key=>$value){
+            $array[]=array('id'=>$key,'name'=>'','count'=>$value,'sum'=>$this->docSumArr[$key]);
+        }
+       }  
          
         return new CArrayDataProvider($array,
                  array(

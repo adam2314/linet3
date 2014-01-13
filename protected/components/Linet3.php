@@ -48,7 +48,7 @@ class Linet3 {
     }else{
          //Yii::app()->setController('company');//->redirect(array('company/admin'));
         echo 'לך תבחר חברה!';
-        exit;
+        //exit;
           //if(Yii::app()->controller!='company'){
               //echo Yii::app()->controller->id;
             //Yii::app()->redirect('company');

@@ -215,7 +215,7 @@ class Docs extends basicRecord{
             $accout=new Transactions();
 
             foreach($this->docDetailes as $docdetail){             
-                 $num=$docdetail->transaction($num,$this->id,$valuedate,$this->company,$action,$line,$model->docType->oppt_account_type,$tranType);
+                 $num=$docdetail->transaction($num,$this->id,$valuedate,$this->company,$action,$line,$this->docType->oppt_account_type,$tranType);
                  $line++;
                  $accout->sum+=($docdetail->invprice+ $docdetail->vat)*$action;
                  $vat->sum+= $docdetail->vat*$action;       

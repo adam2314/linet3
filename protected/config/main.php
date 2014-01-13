@@ -173,6 +173,17 @@ return array(
 			'charset' => 'utf8',
 			'tablePrefix' => '',
                         'enableParamLogging'=>true,//needs to be removed some day
+                        'class'=> 'CDbConnection'
+		),
+                'dbMain'=>array(
+			'connectionString' => 'mysql:host=localhost;dbname=linetmain',
+			'emulatePrepare' => true,
+			'username' => 'root',
+			'password' => 'VBy7t6r5',
+			'charset' => 'utf8',
+			'tablePrefix' => '',
+                        'enableParamLogging'=>true,//needs to be removed some day
+                        'class'=> 'CDbConnection'
 		),
                 'dbSession'=>array(
 			'connectionString' => 'mysql:host=localhost;dbname=linetmain',

@@ -9,7 +9,7 @@
  * @property integer $database_id
  * @property integer $level_id
  */
-class DatabasesPerm extends CActiveRecord{
+class DatabasesPerm extends mainRecord{
     const table='databasesPerm';
     public function primaryKey(){
 	    return 'id';
