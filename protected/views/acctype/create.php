@@ -1,22 +1,14 @@
 <?php
-$this->breadcrumbs=array(
-	'Acctypes'=>array('index'),
-	'Create',
-);
-
 $this->menu=array(
-	array('label'=>'List Acctype','url'=>array('index')),
-	array('label'=>'Manage Acctype','url'=>array('admin')),
+	array('label'=>'List Account Type','url'=>array('index')),
+	array('label'=>'Manage Account Type','url'=>array('admin')),
 );
 
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => "Create Acctype",
-    //'width' => '800',
+    'haeder' => Yii::t("app","Create Account Type"),
 )); 
 ?>
-
-<h1>Create Acctype</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); 
 

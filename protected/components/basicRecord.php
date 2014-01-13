@@ -17,9 +17,13 @@ class basicRecord extends CActiveRecord{
     }*/
     
     
-    protected function openfrmtFieldValue($id){//,$begin=null,$end=null
-            
-            
+    public function openfrmtFieldValue($action,$value){//,$begin=null,$end=null
+            if(isset($this->$action)){
+                print $action;
+                $this->$action=$value;
+            }else{
+                 //print " not ".$action;
+            }
         } 
          
         

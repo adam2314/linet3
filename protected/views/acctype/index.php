@@ -1,15 +1,11 @@
 <?php
-$this->breadcrumbs=array(
-	'Acctypes',
-);
-
 $this->menu=array(
-	array('label'=>'Create Acctype','url'=>array('create')),
-	array('label'=>'Manage Acctype','url'=>array('admin')),
+	array('label'=>'Create Account Type','url'=>array('create')),
+	array('label'=>'Manage Accounts Type','url'=>array('admin')),
 );
 ?>
 
-<h1>Acctypes</h1>
+<h1>Account Types</h1>
 
 <?php $this->widget('bootstrap.widgets.TbListView',array(
 	'dataProvider'=>$dataProvider,

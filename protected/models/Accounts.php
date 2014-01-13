@@ -172,7 +172,7 @@ class Accounts extends basicRecord{//CActiveRecord
             return array(
                 'eavAttr' => array(
                     'class' => 'application.modules.eav.extensions.EEavBehavior',
-                    'tableName' => 'accEav',
+                    'tableName' => '{{accEav}}',
                     'entityField' => 'entity',
                     'attributeField' => 'attribute',
                     'valueField' => 'value',

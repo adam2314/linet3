@@ -141,5 +141,10 @@ class DataController extends RightsController{
             $file   = $model->getFullPath();
             return Yii::app()->getRequest()->sendFile($model->name, @file_get_contents($file));
         }
+        
+        public function actionOpenfrmtimport(){
+            $model= new FormOpenfrmt();
+            echo $model->read();
+        }
 }
 ?>
