@@ -107,7 +107,6 @@ class Docdetails extends basicRecord{
 			array('line', 'numerical', 'integerOnly'=>true),
 			array('doc_id, item_id, currency_id', 'length', 'max'=>10),
 			array('name', 'length', 'max'=>255),
-			array('qty', 'length', 'max'=>5),
 			array('vat, unit_price, price, invprice', 'length', 'max'=>20),
 			array('description', 'safe'),
 			// The following rule is used by search().

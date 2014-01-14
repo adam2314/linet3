@@ -40,6 +40,10 @@ class Accounts extends basicRecord{//CActiveRecord
             return self::table;
         }
         
+        
+        
+        
+        
         public function openfrmt($line){
             $accs='';
             
@@ -195,7 +199,10 @@ class Accounts extends basicRecord{//CActiveRecord
         }
         
     public function save($runValidation = true, $attributes = NULL) {
-         if($this->system_acc !=1)parent::save($runValidation,$attributes);
+        if(isset($this->system_acc))
+            if($this->system_acc !=1)parent::save($runValidation,$attributes);
+        else 
+            parent::save($runValidation,$attributes);
          //else no save
     }
 
@@ -218,7 +225,7 @@ class Accounts extends basicRecord{//CActiveRecord
 			array('src_tax', 'length', 'max'=>5),
                         array('currency_id', 'length', 'max'=>3),
 			array('name, contact, address', 'length', 'max'=>80),
-			array('department, web', 'length', 'max'=>60),
+			//array('department, web', 'length', 'max'=>60),
 			array('vatnum, phone, dir_phone, cellular, fax', 'length', 'max'=>20),
 			array('email', 'length', 'max'=>50),
 			array('city', 'length', 'max'=>40),

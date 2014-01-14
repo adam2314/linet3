@@ -106,6 +106,11 @@ class FormOpenfrmt extends CFormModel{
 		while ($line = fgets($fp)) 
 			fwrite($fh, $line);
 		fclose($fp);
+                $fp = fopen($bkmv."m100", 'r');
+		while ($line = fgets($fp)) 
+			fwrite($fh, $line);
+		fclose($fp);
+                
 		$fp = fopen($bkmv."c100", 'r');
 		while ($line = fgets($fp)) 
 			fwrite($fh, $line);
@@ -118,10 +123,7 @@ class FormOpenfrmt extends CFormModel{
 		while ($line = fgets($fp)) 
 			fwrite($fh, $line);
 		fclose($fp);
-		$fp = fopen($bkmv."m100", 'r');
-		while ($line = fgets($fp)) 
-			fwrite($fh, $line);
-		fclose($fp);
+		
 		$fp = fopen($bkmv."b100", 'r');
 		while ($line = fgets($fp)) 
 			fwrite($fh, $line);
@@ -151,71 +153,7 @@ class FormOpenfrmt extends CFormModel{
     }
     
     
-    private function readline($line, $type){
-        
-            //get all fields (b110) sort by id
-            $criteria=new CDbCriteria;
-            $criteria->condition="type_id = :type_id";
-            $criteria->params=array(':type_id' => $type);
-            $fields= OpenFormat::model()->findAll($criteria);
-            
-            
-            $pos=0;
-            $object=array();
-            $first=true;
-            foreach ($fields as $field) {
-                $str=mb_substr($line,$pos,$field->size,"utf-8");
-                $pos+=$field->size;
-                if($this->fieldvalid($str,$field->type)){
-                        if (($field->import!="??") && ($field->import!="NA")){
-                                if ($first){
-                                        $first=false;
-                                }else{
-                                        $object[$field->import]=$this->fieldvalue($str,$field->type,$field->import);
-                                }
-                        }
-                        //store field into var
-                }else{
-                        return false;
-                }
-            }
-            return $object;
-    }
     
-    private function fieldvalue($str,$type,$action){
-	switch ($type){
-		case "date":
-			return substr($str,0,4)."-".substr($str,4,2)."-".substr($str,6,2);
-			break;
-		case "hour":
-			return $str;
-			break;
-		case "v99":
-			$a=substr($str,0,1);
-			$str=substr($str,1)/100;
-			return number_format($str, 2, '.', '');;
-			break;
-		case "v9999":
-			$a=substr($str,0,1);
-			$str=substr($str,1)/1000;
-			return number_format($str, 4, '.', '');
-			break;
-		case "s":
-			return ltrim( $str , ' 0!'  ); //iconv("windows-1255","utf-8",$str);
-			break;
-		case "n":
-			$str=ltrim( $str , ' 0!'  );
-			return (int)$str;
-			break;
-		default:
-			return ltrim( $str , ' 0!'  );
-	}
-    }
-    private function fieldvalid($str,$type){
-	return true;
-	//chek aginst type
-	
-    }
     /*
 function typeline($str, $filter){	
 	foreach ($filter as $key=>$value){
@@ -227,7 +165,7 @@ function typeline($str, $filter){
     
     public function read(){
         //sort
-        //$this->sortBkmvFile(); //skip for testing
+        $this->sortBkmvFile(); //skip for testing
         //
         //new company
         //get perm from ini
@@ -248,24 +186,33 @@ function typeline($str, $filter){
         $suc['B110']=0;
         $suc['A100']=0;
         $suc['B100']=0;
-        
+        $suc['C100']=0;
+        $suc['M100']=0;
+        $suc['D110']=0; 
+        $suc['D120']=0; 
+        $suc['Z900']=0;
         
         $analze=array();
         $analze['B110']=0;
         $analze['A100']=0;
         $analze['B100']=0;
+        $analze['C100']=0;
+        $analze['M100']=0;
+        $analze['D110']=0;
+        $analze['D120']=0;
+        $analze['Z900']=0;
         
         $accIndex=array();
         
-        //DELETE FROM `qwe_accounts` WHERE `id`>=250
+        //DELETE FROM `qwe_docCheques` WHERE 1;DELETE FROM `qwe_docDetails` WHERE 1;DELETE FROM `qwe_accounts` WHERE 1;DELETE FROM `qwe_items` WHERE 1;DELETE FROM `qwe_docs` WHERE 1;
         
         if ($fp = fopen($bkmv, 'r')) {
 		while ($line = fgets($fp)) {
                         
-			//$line=iconv($encoding,"UTF-8",$line);
+			$line=iconv($encoding,"UTF-8",$line);
 			$type=substr($line,0,4);
-			$obj=$this->readline($line,$type);
-			
+			//$obj=$this->readline($line,$type);
+			$obj=true;
 			
 			if (!$obj){
 				$suc[$type]--;
@@ -277,35 +224,47 @@ function typeline($str, $filter){
 				if ($type=='B110'){//Acc Haeder
 					/* Account Import */
 					$acc=new Accounts;
+                                        /*
 					$obj["type"]=(int)$obj["type"]+50;					
 					if(isset($accTypeIndex[$obj["type"]]))
 							$accTypeIndex[$obj["type"]]=$accTypeIndex[$obj["type"]].",".$obj["name"];
 						else 
 							$accTypeIndex[$obj["type"]]=$obj["typedesc"].":".$obj["name"];
-					unset($obj["typedesc"]);
+					unset($obj["typedesc"]);*/
 					//1405 acc type code
 					//1406 acc type name
                                         //print_r($obj);//exit;
-					foreach($obj as $action=>$value){
-                                                //if(property_exists(new Accounts,$key)){
-                                                //    print $key;
-                                                $acc->openfrmtFieldValue($action,$value);
-                                                    
-                                                    
-                                                //}
-					}
-					//print_r($acc);
-					$accIndex[$obj["id"]]=$acc->save();
+                                        $acc->readLine($line,$type);
+					$acc->save();
+					//$accIndex[$obj["id"]]=$acc->save();
 					//get new acc index save old
 					unset($acc);
 					
 				}
+                                if ($type=='M100'){//Item In Stock
+					$item=new Item;
+                                        $item->category_id=0;
+                                        $item->parent_item_id=0; 
+                                        $item->isProduct=0; 
+                                        $item->profit=0; 
+                                        $item->stockType=0;
+                                        
+					$item->readLine($line,$type);
+					$item->save();
+				}
+                                
+                                
 				if ($type=='C100'){//Doc Haeder
-                                    return "done!";
-                                    exit;
+                                        //return "done!";
+                                        //exit;
 					//find type
-					global $DocOpenType;
-
+					//global $DocOpenType;
+                                        $item=new Docs;
+                                        
+                                        
+					$item->readLine($line,$type);
+					$item->save();
+                                        /*
 					if ((isset($DocOpenType[$obj['doctype']])) && (isset($accIndex[$obj['account']]))){
 						$obj['doctype']=$DocOpenType[$obj['doctype']];
 						$doc=new document($obj['doctype']);
@@ -327,12 +286,16 @@ function typeline($str, $filter){
 						}
 						//get new doc index save old
 						unset($doc);
-					}
+					}*/
 				}
 				if ($type=='D110'){//Doc Detial
+                                    $item=new Docdetails;
+                                    $item->readLine($line,$type);
+                                    $item->save();
+                                    
+                                    /*
 					global $DocOpenType;
 					$stype=$DocOpenType[$obj['doctype']];
-					//print_r($obj);
 					if (isset($docIndex[$stype.$obj["num"]])){		
 						$docdetial=new documentDetail;
 						$docdetial->price=$obj['price'];
@@ -351,9 +314,13 @@ function typeline($str, $filter){
 						//die;
 						//update to new index
 						unset($docdetial);
-					}
+					}//*/
 				}
 				if ($type=='D120') {//Kaballa Detial
+                                    $item=new Doccheques;
+                                    $item->readLine($line,$type);
+                                    $item->save();
+                                    /*
 					global $DocOpenType;
 					$stype=$DocOpenType[$obj['doctype']];
 					if (isset($docIndex[$stype.$obj["refnum"]])){
@@ -370,9 +337,14 @@ function typeline($str, $filter){
 						//search for old doc index
 						//update to new index
 						unset($rcptdetial);
-					}
+					}*/
 				}
 				if ($type=='B100'){//Move Recored
+                                    $item=new Transactions;
+                                    $item->readLine($line,$type);
+                                    $item->save();
+                                    
+                                    /*
 					//print $obj['value'].":".$obj['type'];
 					global $openTransType;
 					
@@ -410,21 +382,14 @@ function typeline($str, $filter){
 								$transaction->newTransactions();
 							}
 						unset($transaction);
-					}
+					}//*/
 				}
-				if ($type=='M100'){//Item In Stock
-					$item=new item;
-					foreach($obj as $key=>$value){
-						$item->$key=$value;
-					}
-					$item->newItem();
-					unset($item);
-				}
+				
 				unset($obj);
 				$suc[$type]++;
 			}
 			$analze[$type]++;
-			if ($analze[$type]>100)	break;
+			//if ($analze[$type]>100)	break;
 		}
 		
 		//print_r($docIndex);

@@ -61,7 +61,7 @@ class Item extends basicRecord{
 						//'class' => 'ext.eav.EEavBehavior',
 						'class' => 'application.modules.eav.extensions.EEavBehavior',
 						// Table that stores attributes (required)
-						'tableName' => 'itemEav',
+						'tableName' => '{{itemEav}}',
 						// model id column
 						// Default is 'entity'
 						'entityField' => 'entity',

@@ -197,9 +197,10 @@ class Docs extends basicRecord{
                 }
 
         }
-        if($this->docStatus->action!=0){
-            $this->transaction((int)$this->docStatus->action);
-        }
+        if(isset($this->docStatus))
+            if($this->docStatus->action!=0){
+                $this->transaction((int)$this->docStatus->action);
+            }
         return $a;
     }
     private function transaction($action){

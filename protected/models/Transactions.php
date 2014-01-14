@@ -130,10 +130,12 @@ class Transactions extends basicRecord{
         
         
         //set sum accourding to acc
-        if($this->currency_id!=$acccur){
-            $this->currency_id=$acccur;
-            $rate=  Currates::model()->GetRate($acccur);
-            $this->sum=$this->leadsum/$rate;
+        if(!isset($this->sum)){//adam need to dubl chk
+            if($this->currency_id!=$acccur){
+                $this->currency_id=$acccur;
+                $rate=  Currates::model()->GetRate($acccur);
+                $this->sum=$this->leadsum/$rate;
+            }
         }
             
         //secsum

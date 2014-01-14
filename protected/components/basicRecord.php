@@ -15,39 +15,157 @@ class basicRecord extends CActiveRecord{
     public function tableName() {
         return (Yii::app()->db->tablePrefix . self::table);
     }*/
+        
+    protected function fieldvalue($str,$type,$action){
+	switch ($type){
+		case "date":
+			return substr($str,0,4)."-".substr($str,4,2)."-".substr($str,6,2);
+			break;
+		case "hour":
+			return $str;
+			break;
+		case "v99":
+			$a=substr($str,0,1);
+			$str=substr($str,1)/100;
+			return number_format($str, 2, '.', '');;
+			break;
+		case "v9999":
+			$a=substr($str,0,1);
+			$str=substr($str,1)/1000;
+			return number_format($str, 4, '.', '');
+			break;
+		case "s":
+			return ltrim( $str , ' 0!'  ); //iconv("windows-1255","utf-8",$str);
+			break;
+		case "n":
+			$str=ltrim( $str , ' 0!'  );
+			return (int)$str;
+			break;
+		default:
+			return ltrim( $str , ' 0!'  );
+	}
+    }
+    protected function fieldvalid($str,$type){
+	return true;
+	//chek aginst type
+	
+    }
     
-    
-    public function openfrmtFieldValue($action,$value){//,$begin=null,$end=null
-            if(isset($this->$action)){
-                print $action;
-                $this->$action=$value;
-            }else{
-                 //print " not ".$action;
+    public function readLine($line, $type){
+            $criteria=new CDbCriteria;
+            $criteria->condition="type_id = :type_id";
+            $criteria->params=array(':type_id' => $type);
+            $fields= OpenFormat::model()->findAll($criteria);
+            
+            
+            $pos=0;
+            $encoding="utf-8";
+            
+            
+            foreach ($fields as $field) {
+                $str=mb_substr($line,$pos,$field->size,$encoding);
+                echo "$pos,";
+                $pos+=$field->size;
+                echo "$pos-1,";
+                $this->openfrmtFieldValue($field,$str);
+
             }
+            
+            echo "****************************<br />\n";
+            return true;          
+        }
+    
+    
+    
+    protected function openfrmtFieldValue($field,$value){//,$begin=null,$end=null
+         
+        switch ($field->type){
+		case "date":
+			$value= substr($value,0,4)."-".substr($value,4,2)."-".substr($value,6,2);
+			break;
+		case "hour":
+			$value= $value;
+			break;
+		case "v99":
+			$a=substr($value,0,1);
+			$value=substr($value,1)/100;
+			$value= number_format($value, 2, '.', '');;
+			break;
+		case "v9999":
+			$a=substr($value,0,1);
+			$value=substr($value,1)/1000;
+			$value= number_format($value, 4, '.', '');
+			break;
+		case "s":
+			$value= ltrim( $value , ' 0!'  ); //iconv("windows-1255","utf-8",$str);
+			break;
+		case "n":
+			$value=ltrim( $value , ' 0!'  );
+			$value= (int)$value;
+			break;
+		default:
+			$value= ltrim( $value , ' 0!'  );
+	}//*/
+        
+        
+        
+        //$value="";
+            if($field->import=='NA')
+                return;
+                //$value=$field->export;
+             if($field->import=="file.line")
+                return;
+            if($field->import=="company.vatnum")
+                return;
+            if(strpos($field->import, "this.") === 0){
+                    //echo $field->import;
+                    ///if(isset($this->{str_replace("this.", "", $field->export)}))
+                        echo $field->import.":$value<br/>\n";
+                        $this->{str_replace("this.", "", $field->import)}=$value;
+                        //echo  $this->{str_replace("this.", "", $field->import)};
+                        return true;
+            }
+                        
+            if(strpos($field->import, "system.") === 0)
+                return;
+                    
+            if(strpos($field->import, "func.") === 0)
+                    $value=$this->{str_replace("func.", "", $field->import)}();
+                    
+            if(strpos($field->import, "limit.") === 0)
+                    return;
+                    
+                    
+        
+       
+        
+        
+        
+        
         } 
          
         
         
         protected function openfrmtFieldStr($field,$line,$begin=null,$end=null){//,
             $value="";
-            if(($value=='')&& ($field->action!='NA'))
-                $value=$field->action;
-             if($field->action=="file.line")
+            if(($value=='')&& ($field->export!='NA'))
+                $value=$field->export;
+             if($field->export=="file.line")
                 $value=$line;
-            if($field->action=="company.vatnum")
+            if($field->export=="company.vatnum")
                 $value=Settings::model()->findByPk('company.vat.id')->value;
-            if(strpos($field->action, "this.") === 0)
-                    if(isset($this->{str_replace("this.", "", $field->action)}))
-                        $value=$this->{str_replace("this.", "", $field->action)};
+            if(strpos($field->export, "this.") === 0)
+                    if(isset($this->{str_replace("this.", "", $field->export)}))
+                        $value=$this->{str_replace("this.", "", $field->export)};
                         
-            if(strpos($field->action, "system.") === 0)
-                $value=Settings::model()->findByPk($field->action)->value;        
+            if(strpos($field->export, "system.") === 0)
+                $value=Settings::model()->findByPk($field->action)->export;        
                     
-            if(strpos($field->action, "func.") === 0)
-                    $value=$this->{str_replace("func.", "", $field->action)}();
+            if(strpos($field->export, "func.") === 0)
+                    $value=$this->{str_replace("func.", "", $field->export)}();
                     
-            if(strpos($field->action, "limit.") === 0)
-                    $value=$this->{str_replace("limit.", "", $field->action)}($begin,$end);
+            if(strpos($field->export, "limit.") === 0)
+                    $value=$this->{str_replace("limit.", "", $field->export)}($begin,$end);
 
             
             
