@@ -3,11 +3,34 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/layouts/noMenu.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/install/index.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/config/test.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/config/install.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/assets/css/linet.css</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/components/RightsController.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/components/WizardBehavior.php</file>
             <file>file:/home/adam/devsrv/yii/demos/new/protected/components/basicRecord.php</file>
-            <file>file:/home/adam/devsrv/yii/demos/new/protected/data/company.sql</file>
-            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/Accounts.php</file>
-            <file>file:/home/adam/devsrv/yii/demos/new/protected/controllers/DataController.php</file>
-            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/FormOpenfrmt.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/controllers/InstallController.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/components/sideNavBar.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/install/completed.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/eavFields/_form.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/install/Pre.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/InstallPre.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/install/config.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/reports/balance.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/assets/js/main.js</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/controllers/SiteController.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/components/Linet3.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/controllers/ReportsController.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/config/main.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/InstallConfig.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/site/login.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/controllers/CompanyController.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/components/UserIdentity.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/layouts/main.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/fields/create.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/components/Controller.php</file>
         </group>
     </open-files>
 </project-private>

@@ -32,7 +32,9 @@ class UserIdentity extends CUserIdentity
                         $this->setState('language', $user->language);
                         $this->setState('timezone', $user->timezone);
                         $this->setState('theme', $user->theme);
-                        
+                        $this->setState('fname', $user->fname);
+                        $this->setState('lname', $user->lname);
+                        $this->setState('username', $user->username);
                         
 		}
 		return $this->errorCode==self::ERROR_NONE;

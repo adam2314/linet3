@@ -1,69 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="language" content="en" />
-        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
-        <meta content="width=device-width" name="viewport" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
+        <!--<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">-->
        
-
-        
-        
-        
-        
-	<!-- blueprint CSS framework -->
-<?php 
+            <?php 
 $baseUrl=Yii::app()->request->baseUrl;
+//Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/screen.css", 'screen, projection'));
+//Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/print.css", 'print'));
+//Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/main.css"));
+//Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/form.css"));
+//Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/bootstrap.min.css"));
+//Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/bootstrap-responsive.min.css"));
+//Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/assets/css/linet.css"));
 
-Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/Font-awesome/css/font-awesome.min.css'));
+
 Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/style.css'));
-Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/calendar.css'));
-Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/theme.css'));
-Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/style-switcher.css'));
-Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/colorpicker.css'));
-Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/chosen/chosen/chosen.css'));
-
-Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/bootstrap.min.css'));
-Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/bootstrap-responsive.min.css'));
-Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/bootstrap-toggle-buttons.css'));
-
-//Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl(''));
 
 //Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/4585c/jquery.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.mousewheel.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.tablesorter.min.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.sparkline.min.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.dualListBox-1.3.min.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.autosize-min.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.inputlimiter.1.3.1.min.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.tagsinput.min.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.toggle.buttons.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/uniform/jquery.uniform.min.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.validVal-4.3.2.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/chosen/chosen/chosen.jquery.min.js'));
-//Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/vendor/bootstrap.min.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/bootstrap-colorpicker.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/bootstrap-progressbar.min.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/bootstrap-datepicker.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/bootstrap-timepicker.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/bootstrap-inputmask.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/prettify.js'));
 
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/cssbeautify.js'));
-
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/vendor/less-1.3.3.min.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/date.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/daterangepicker.js'));
-Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/main.js'));
-//Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl(''));
 
 ?>
-         <meta content="Metis: Bootstrap Responsive Admin Theme" name="description">
-
-   
         <link href="<?php echo $baseUrl; ?>/assets/less/theme.less" rel="stylesheet/less" type="text/css" />       
-        <link href="<?php echo Yii::app()->createAbsoluteUrl('/assets/css/linet.css');?>" rel="stylesheet" type="text/css" />
         <style id="less:bootstrap-admin-assets-less-theme" type="text/css" ></style>
  
                 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -76,16 +34,29 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/ass
        
   
 
-        
+       
         
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
         
-        
+         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->createAbsoluteUrl('/assets/css/linet.css');?>" />
         
        
 </head>
 
 <body>
+    <div id="modal" class="modal hide fade in" style="display: none; ">
+        <div id="modal-header" class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Modal Heading</h3>
+        </div>
+        <div id="modal-body" class="modal-body">
+            	        
+        </div>
+        <div id="modal-footer" class="modal-footer">
+            <a href="#" class="btn btn-success">Action</a>
+            <a href="#" class="btn" data-dismiss="modal">Close</a>
+        </div>
+    </div>
 <div class="wrapper" id="page">
     
 	<div class="headerA">
@@ -97,14 +68,8 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/ass
 	</div><!-- header -->
 
 	<div class="navbar-inverse">
-            <div class="navbar navbar-fixed-top">
-                <div class="navbar-inner">
-                    <div class="container">
-                        <a href="/yii/demos/new/" class="brand"></a>
-                        
-                    </div>
-                </div>
-            </div>      
+          
+			<div class="navbar navbar-fixed-top"><div class="navbar-inner"><div class="container"><a href="/yii/demos/new/" class="brand"></a><ul id="yw0" class="nav"><li class="active"><a href="/yii/demos/new/site/login">הכנס</a></li></ul></div></div></div>      
 	</div>
         <div id="shadowleft">
             
@@ -119,25 +84,25 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/ass
                     <span class="label user-label">16</span>
                 </a>
                 <div class="media-body hidden-tablet">
-                    <h5 class="media-heading">$fullname</h5>
+                    <h5 class="media-heading"><?php echo Yii::app()->user->fname." ".Yii::app()->user->lname; ?></h5>
                     <ul class="unstyled user-info">
                         <li>
-                            <a href="">$username</a>
+                            <a href=""><?php echo Yii::app()->user->username; ?></a>
                         </li>
                         <li>
                             <a href="<?php echo Yii::app()->createAbsoluteUrl('/site/Logout');?>"><?php echo Yii::t('app','Logout');?></a>
                         </li>
                         <li>
-                            <a href="<?php echo Yii::app()->createAbsoluteUrl('/company/index');?>">Change Company</a>
+                            <a href="<?php echo Yii::app()->createAbsoluteUrl('/company/index');?>"><?php echo Yii::t('app','Change Company');?></a>
                         </li>
                         
-                        <li>
+                        <!--<li>
                             Last Access :
                             <br>
                             
                                 <i class="icon-calendar"></i>
                                 16 Mar 16:32
-                        </li>
+                        </li>-->
                     </ul>
                 </div>
             </div>

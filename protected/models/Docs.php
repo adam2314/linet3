@@ -338,7 +338,7 @@ class Docs extends basicRecord{
                     array('currency_id', 'length', 'max'=>3),
                     array('refnum', 'length', 'max'=>20),
                     array('discount, sub_total, novat_total, vat, total, src_tax', 'length', 'max'=>20),
-                    array('issue_date, due_date, comments', 'safe'),
+                    array('issue_date, due_date, comments, qty', 'safe'),
                     // The following rule is used by search().
                     // Please remove those attributes that should not be searched.
                     array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, owner', 'safe', 'on'=>'search'),

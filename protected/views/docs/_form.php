@@ -919,7 +919,8 @@ $this->beginWidget('zii.widgets.jui.CJuiDialog',array(
     ),
 ));
 $dataProvider=new CActiveDataProvider('Docs');
-echo $this->renderPartial('index', array('dataProvider'=>$dataProvider,)); 
+echo $this->renderPartial('index'); 
+//echo $this->renderPartial('index', array('dataProvider'=>$dataProvider,)); 
 
 $this->endWidget('zii.widgets.jui.CJuiDialog');
 

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <!--<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">-->
        
             <?php 
 $baseUrl=Yii::app()->request->baseUrl;
@@ -22,7 +22,6 @@ Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets
 
 ?>
         <link href="<?php echo $baseUrl; ?>/assets/less/theme.less" rel="stylesheet/less" type="text/css" />       
-        <link href="<?php echo Yii::app()->createAbsoluteUrl('/assets/css/linet.css');?>" rel="stylesheet" type="text/css" />
         <style id="less:bootstrap-admin-assets-less-theme" type="text/css" ></style>
  
                 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -40,7 +39,7 @@ Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
         
         
-        
+        <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->createAbsoluteUrl('/assets/css/linet.css');?>" />
        
 </head>
 
@@ -221,25 +220,25 @@ $this->widget('bootstrap.widgets.TbNavbar', array('items'=>$menu1,'brand'=>''));
                     <span class="label user-label">16</span>
                 </a>
                 <div class="media-body hidden-tablet">
-                    <h5 class="media-heading">$fullname</h5>
+                    <h5 class="media-heading"><?php echo Yii::app()->user->fname." ".Yii::app()->user->lname; ?></h5>
                     <ul class="unstyled user-info">
                         <li>
-                            <a href="">$username</a>
+                            <a href=""><?php echo Yii::app()->user->username; ?></a>
                         </li>
                         <li>
                             <a href="<?php echo Yii::app()->createAbsoluteUrl('/site/Logout');?>"><?php echo Yii::t('app','Logout');?></a>
                         </li>
                         <li>
-                            <a href="<?php echo Yii::app()->createAbsoluteUrl('/company/index');?>">Change Company</a>
+                            <a href="<?php echo Yii::app()->createAbsoluteUrl('/company/index');?>"><?php echo Yii::t('app','Change Company');?></a>
                         </li>
                         
-                        <li>
+                        <!--<li>
                             Last Access :
                             <br>
                             
                                 <i class="icon-calendar"></i>
                                 16 Mar 16:32
-                        </li>
+                        </li>-->
                     </ul>
                 </div>
             </div>

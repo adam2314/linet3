@@ -2,8 +2,9 @@
 
 class Linet3 {
   public static function beginRequest(CEvent $event) {
-
-    if(isset(Yii::app()->user->timezone))
+      
+      
+if(isset(Yii::app()->user->timezone))
         ini_set('date.timezone', Yii::app()->user->timezone);  
       
     if(isset(Yii::app()->user->language))
@@ -18,12 +19,8 @@ class Linet3 {
     }
     if(!isset(Yii::app()->user->Company))
         Yii::app()->user->setState('Company',0);
-    
-    
-    
-    
-    
-     if(Yii::app()->user->Company==0){
+     
+    if(Yii::app()->user->Company==0){
             //Yii::app()->db->setActive(false);
             //Yii::app()->db->connectionString = Yii::app()->user->OrgDatabase['string'];
             //Yii::app()->db->tablePrefix=Yii::app()->user->OrgDatabase['prefix'];
@@ -62,4 +59,13 @@ class Linet3 {
       }
       
   }
-}
+   
+      
+      
+      
+        
+        
+        
+    
+      
+  }

@@ -229,7 +229,7 @@ class Accounts extends basicRecord{//CActiveRecord
 			array('vatnum, phone, dir_phone, cellular, fax', 'length', 'max'=>20),
 			array('email', 'length', 'max'=>50),
 			array('city', 'length', 'max'=>40),
-			array('src_date, comments', 'safe'),
+			array('src_date, comments, web, department', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, type, id6111, pay_terms, src_tax, src_date, parent_account_id, company, contact, department, vatnum, email, phone, dir_phone, cellular, fax, web, address, currency_id, city, zip, comments, owner', 'safe', 'on'=>'search'),
