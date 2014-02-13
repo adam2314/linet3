@@ -17,5 +17,5 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  'Table "{table}" does not have a primary key defined.' => '',
+  'Owner must be an instance of CController' => '',
 );

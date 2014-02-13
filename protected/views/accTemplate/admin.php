@@ -5,8 +5,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	//array('label'=>'List AccTemplate','url'=>array('index')),
-	array('label'=>'Create AccTemplate','url'=>array('create')),
+	array('label'=>Yii::t('app','Create Account Template'),'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -23,7 +22,7 @@ $('.search-form form').submit(function(){
 ");
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => "Manage Account Templates",
+    'haeder' => Yii::t('app',"Manage Account Templates"),
 )); 
 ?>
 

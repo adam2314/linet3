@@ -1,12 +1,12 @@
 <?php
 
 $this->menu=array(
-	array('label'=>'List Company','url'=>array('index')),
+	array('label'=>Yii::t('app',"List Company"),'url'=>array('index')),
 );
 
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => "Create Company",
+    'haeder' => Yii::t('app',"Create Company"),
 )); 
 ?>
 

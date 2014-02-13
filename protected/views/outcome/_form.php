@@ -88,7 +88,7 @@
         
         
 	<div class="row buttons">
-		<?php echo CHtml::submitButton('Create' ); ?>
+		<?php echo CHtml::submitButton(Yii::t('app',"Create")); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

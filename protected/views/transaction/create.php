@@ -11,10 +11,6 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Create Manual Tran
 	'enableAjaxValidation'=>false,
 )); ?>
 
-<p class="help-block">Fields with <span class="required">*</span> are required.</p>
-
-
-
 
 <table>
     <tbody>
@@ -57,8 +53,8 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Create Manual Tran
 <table class="formy">
     <tbody>
         <tr>
-            <th class="header">חשבון</th>
-            <th class="header">חשבון נגדי</th></tr>
+            <th class="header"><?php echo Yii::t('app',"Account")?></th>
+            <th class="header"><?php echo Yii::t('app',"Oppt Account")?></th></tr>
         <tr>
             <td style="vertical-align: top;">
                 <table>
@@ -66,7 +62,8 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Create Manual Tran
                         <tr>
                             <td><?php echo Yii::t('app','Account id'); ?></td>
                             <td style="width:200px;"><?php echo Yii::t('app','Account Name'); ?></td>
-                            <td>זכות</td><td>חובה</td>
+                            <td><?php echo Yii::t('app','Credit'); ?></td>
+                            <td><?php echo Yii::t('app','Debit'); ?></td>
                         </tr>
                     </thead>
                     <tbody>
@@ -114,8 +111,8 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Create Manual Tran
                         <tr>
                             <td><?php echo Yii::t('app','Account id'); ?></td>
                             <td style="width:200px;"><?php echo Yii::t('app','Account Name'); ?></td>
-                            <td>זכות</td>
-                            <td>חובה</td>
+                            <td><?php echo Yii::t('app','Credit'); ?></td>
+                            <td><?php echo Yii::t('app','Debit'); ?></td>
                             <td></td>
                         </tr>
                     </thead>
@@ -280,7 +277,7 @@ foreach($models as $model){
  * 
  */
 ?>  
-<?php echo CHtml::submitButton('Save'); ?>    
+<?php echo CHtml::submitButton(Yii::t('app',"Save")); ?>    
 <?php $this->endWidget(); ?>
 
 

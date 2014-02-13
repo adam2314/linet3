@@ -58,7 +58,7 @@ for($i = 0; $i < 10; $i++) {
 
 
 
-<?php echo CHtml::submitButton('Save'); ?>    
+<?php echo CHtml::submitButton(Yii::t('app',"Save")); ?>    
 <?php $this->endWidget(); ?>
 
 

@@ -24,13 +24,13 @@ class MiniForm extends CWidget
  
         if(($this->logo!='')&&(file_exists($this->logo)))$this->logo="<img src=\"$this->logo\" alt=\"$this->logo\" />";else $logo="<img src=\"images/icon.png\" alt=\"images/icon.png\" />";
 		if(isset($back)){
-			$l=_("Back");
+			$l=Yii::t("app",'Back');
 			$back='<div class="formback"><a href="javascript:history.go(-1)">'.$l.'&nbsp;<img src="images/icon_back.png" alt="Icon back" /></a></div>';
 			$this->titlewidth=75;
 		}else 	
 			$back='';
 		if ($this->help!=''){
-			$l=_("Help");
+			$l=Yii::t("app",'Help');
 			$this->help='<div class="formhelp"><a class="help" target="_blank" href="'.$this->help.'"><img src="images/icon_help.png" alt="Icon help" /><span>'.$l.'</span></a></div>';
 			$this->titlewidth+=75;
 		}else{
@@ -84,7 +84,7 @@ class MiniForm extends CWidget
                     <h5>'.$this->haeder.'</h5>
                     <ul class="nav pull-right">
                         <li>
-                            <a href="'.$this->help.'">Help</a>
+                            <a href="'.$this->help.'">'.Yii::t("app",'Help').'</a>
                         </li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">

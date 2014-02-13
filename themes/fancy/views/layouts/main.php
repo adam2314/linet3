@@ -209,8 +209,7 @@ Fancy!
 			array('label'=>Yii::t('app','Bag Report'), 'url'=>array('bag')),
 		)),
 				//*/		
-		//array('label'=>Yii::t('app','Logout ('.Yii::app()->user->name.')'), 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest),
-		//array('label'=>Yii::t('app','Logout ('.Yii::app()->user->name.')'), 'url'=>'0','items'=>array()),
+		
 		
 		
     );

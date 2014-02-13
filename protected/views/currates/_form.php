@@ -5,8 +5,6 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
@@ -52,13 +50,13 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'nisvalue'); ?>
-		<?php echo $form->textField($model,'nisvalue',array('size'=>7,'maxlength'=>7)); ?>
-		<?php echo $form->error($model,'nisvalue'); ?>
+		<?php echo $form->labelEx($model,'value'); ?>
+		<?php echo $form->textField($model,'value',array('size'=>7,'maxlength'=>7)); ?>
+		<?php echo $form->error($model,'value'); ?>
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('app',"Create") : Yii::t('app',"Save")); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

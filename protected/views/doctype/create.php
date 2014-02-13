@@ -5,8 +5,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Doctype', 'url'=>array('index')),
-	array('label'=>'Manage Doctype', 'url'=>array('admin')),
+	//array('label'=>'List Doctype', 'url'=>array('index')),
+	array('label'=>Yii::t('app',"Manage Doctype"), 'url'=>array('admin')),
 );
 ?>
 
@@ -14,8 +14,7 @@ $this->menu=array(
 
 <?php 
 $this->beginWidget('MiniForm',array(
-    'haeder' => "Create Doctype",
-    'width' => '800',
+    'haeder' => Yii::t('app',"Create Doctype"),
 )); 
 echo $this->renderPartial('_form', array('model'=>$model)); 
  $this->endWidget(); 

@@ -15,7 +15,10 @@
  * of the guide for details.
  *
  * NOTE, this file must be saved in UTF-8 encoding.
+ *
+ * @version $Id: $
  */
 return array (
-  'Table "{table}" does not have a primary key defined.' => '',
+  'Home' => '',
+  'The column must be specified in the format of "Name:Type:Label", where "Type" and "Label" are optional.' => '',
 );

@@ -6,11 +6,11 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	//array('label'=>'List AccTemplate','url'=>array('index')),
-	array('label'=>'Manage AccTemplate','url'=>array('admin')),
+	array('label'=>Yii::t('app','Manage Account Template'),'url'=>array('admin')),
 );
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Create AccTemplate"),
+    'haeder' => Yii::t('app',"Create Account Template"),
 )); 
 ?>
 

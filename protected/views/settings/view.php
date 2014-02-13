@@ -1,18 +1,12 @@
 <?php
 
-$this->menu=array(
-	//array('label'=>'List Config','url'=>array('index')),
-	//array('label'=>'View Config','url'=>array('view','id'=>$model->id)),
-);
+
 $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Update Configuration"))); 
 ?>
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'user-form',
 	'enableAjaxValidation'=>false,
 )); ?>
-
-<p class="help-block">Fields with <span class="required">*</span> are required.</p>
-
 
 <?php 
 foreach($models as $model){
@@ -24,7 +18,7 @@ foreach($models as $model){
 	
 } 
 ?>  
-<?php echo CHtml::submitButton('Save'); ?>    
+<?php echo CHtml::submitButton(Yii::t('app',"Save")); ?>    
 <?php $this->endWidget(); ?>
 
 

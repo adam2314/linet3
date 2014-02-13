@@ -86,8 +86,14 @@ class Company extends mainRecord{
                 //table version
                     //upgrade
             }
-            
-            return parent::save($runValidation,$attributes);
+            $a=parent::save($runValidation,$attributes);
+			$perm=new DatabasesPerm;
+			$perm->user_id=Yii::app()->user->id;
+			$perm->database_id=$this->id;
+			$perm->level_id=1;
+			$perm->save();
+			
+            return $a;
         }
         
         

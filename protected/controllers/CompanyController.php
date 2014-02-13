@@ -42,14 +42,11 @@ class CompanyController extends RightsController
         
         public function actionCreate(){
 		$model=new Company;
-		if(isset($_POST['Company']))
-		{
+		$model->string=Yii::app()->dbMain->connectionString;
+		if(isset($_POST['Company'])){
 			$model->attributes=$_POST['Company'];
 			if($model->save()){
-
-                            $this->redirect(array('index'));
-                                
-                                
+                            $this->redirect(array('index')); 
                         }
 		}
 

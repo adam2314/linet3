@@ -5,8 +5,7 @@
 //);
 
 $this->menu=array(
-	array('label'=>'List Doctype', 'url'=>array('index')),
-	array('label'=>'Create Doctype', 'url'=>array('create')),
+	array('label'=>Yii::t('app',"Create Doctype"), 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
