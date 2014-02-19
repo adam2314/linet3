@@ -1,5 +1,5 @@
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
-	'id'=>'acc-template-form',
+	'id'=>'item-template-form',
 	'enableAjaxValidation'=>false,
 )); ?>
 
@@ -14,7 +14,7 @@
         $select=CHtml::dropDownList(ucfirst($this->id).'[AccType_id]', 0, $list, $htmlOptions );
         
         ?>
-        <label for="AccTemplate_AccType_id" class="required">Acc Type <span class="required">*</span></label>
+        <label for="ItemTemplate_ItemType_id" class="required">Item Catagory <span class="required">*</span></label>
         <?php echo $select; ?>
             <?php //echo $form->textFieldRow($model,'AccType_id',array('class'=>'span5')); ?>
 

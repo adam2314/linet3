@@ -1,6 +1,6 @@
 <?php
+
 $this->menu=array(
-	//array('label'=>'List AccTemplate','url'=>array('index')),
 	array('label'=>Yii::t('app','Manage Account Template'),'url'=>array('admin')),
 );
 

@@ -43,13 +43,18 @@ class CompanyController extends RightsController
         public function actionCreate(){
 		$model=new Company;
 		$model->string=Yii::app()->dbMain->connectionString;
-		if(isset($_POST['Company'])){
-			$model->attributes=$_POST['Company'];
-			if($model->save()){
-                            $this->redirect(array('index')); 
-                        }
+                $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                $model->prefix=substr(str_shuffle($chars),0,4)."_";
+                
+		
+                if($model->save()){
+                    $database= Company::model()->findByPk($model->id);
+                    Yii::app()->user->setState('Database',$database );
+                    Yii::app()->user->setState('Company',$model->id);
+                     //redierct to settings.
+                    $this->redirect(array('settings/admin')); 
 		}
-
+                
 		$this->render('create',array(
 			'model'=>$model,
 		));

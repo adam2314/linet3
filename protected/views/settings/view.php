@@ -8,16 +8,23 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Update Configurati
 	'enableAjaxValidation'=>false,
 )); ?>
 
+
+<table>
 <?php 
+
 foreach($models as $model){
-	 echo $form->errorSummary($model); 
-
-        echo "<p>".Yii::t('app',$model->id); 
-        echo $form->textField($model,'['.$model->id.']value',array('size'=>30,'maxlength'=>80))."</p>"; 
-
+        if($model->hidden==0){
+            echo $form->errorSummary($model); 
+            echo "<tr>";
+           echo "<td>".Yii::t('app',$model->id)."</td>"; 
+           echo "<td>".$form->textField($model,'['.$model->id.']value',array('size'=>30,'maxlength'=>80))."</td>"; 
+           echo "</tr>";
+        }
 	
 } 
 ?>  
+    
+</table>
 <?php echo CHtml::submitButton(Yii::t('app',"Save")); ?>    
 <?php $this->endWidget(); ?>
 

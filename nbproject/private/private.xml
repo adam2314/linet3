@@ -2,6 +2,12 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/FormReportVat.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/User.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/settings/view.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/ExtCorrelation.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/models/Accounts.php</file>
+        </group>
     </open-files>
 </project-private>
