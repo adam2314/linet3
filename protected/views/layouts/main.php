@@ -112,7 +112,7 @@ Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets
         	array('label'=>Yii::t('app','Werehouses'), 'url'=>array('accounts/index','type'=>'8'),'visible'=>Yii::app()->user->checkAccess( 'accounts', array() )),
         	array('label'=>Yii::t('app','Categories'), 'url'=>array('itemcategory/admin'),'visible'=>Yii::app()->user->checkAccess( 'item/admin', array() )),
         	array('label'=>Yii::t('app','Units'), 'url'=>array('itemunit/admin'),'visible'=>Yii::app()->user->checkAccess( 'itemunit/admin', array() )),
-        	array('label'=>Yii::t('app','Item Template'), 'url'=>array('items/report')),
+        	array('label'=>Yii::t('app','Item Template'), 'url'=>array('itemTemplate/admin')),
         )),
 		array('label'=>Yii::t('app','Income'), 'icon'=>'thumbs-up-alt','items'=>array(
 			//array('label'=>Yii::t('app','Manage Customers'), 'url'=>array('accounts/contact','type'=>'0')),

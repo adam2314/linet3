@@ -30,7 +30,7 @@ $('.search-form form').submit(function(){
 		'name',
 		//'AccType_id',
             array(
-                'name' => 'ItemType_id',
+                'name' => 'Itemcatagory_id',
                 'value' => '$data->type->name',
                ),
 		array(

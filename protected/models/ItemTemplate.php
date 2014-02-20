@@ -55,7 +55,7 @@ class ItemTemplate extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
                     'items'=>array(self::HAS_MANY, 'ItemTemplateItem', 'ItemTemplate_id'),
-                    'type'=>array(self::BELONGS_TO, 'Itemcategory', 'ItemCat_id'),
+                    'type'=>array(self::BELONGS_TO, 'Itemcategory', 'Itemcatagory_id'),
 		);
 	}
 
@@ -67,7 +67,7 @@ class ItemTemplate extends CActiveRecord
 		return array(
 			'id' => Yii::t('labels', 'ID'),
 			'name' => Yii::t('labels', 'Name'),
-			'ItemCat_id' => Yii::t('labels', 'Item Category'),
+			'Itemcatagory_id' => Yii::t('labels', 'Item Category'),
 		);
 	}
 
@@ -84,7 +84,7 @@ class ItemTemplate extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('ItemCat_id',$this->AccType_id);
+		$criteria->compare('Itemcatagory_id',$this->Itemcatagory_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

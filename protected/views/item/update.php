@@ -1,12 +1,7 @@
 <?php
-$this->breadcrumbs=array(
-	'Items'=>array('index'),
-	$model->name=>array('view','id'=>$model->id),
-	'Update',
-);
 
 $this->menu=array(
-	array('label'=>'List Item', 'url'=>array('index')),
+	//array('label'=>'List Item', 'url'=>array('index')),
 	array('label'=>'Create Item', 'url'=>array('create')),
 	array('label'=>'View Item', 'url'=>array('view', 'id'=>$model->id)),
 	array('label'=>'Manage Item', 'url'=>array('admin')),
@@ -15,7 +10,6 @@ $this->menu=array(
 
 $this->beginWidget('MiniForm',array(
     'haeder' => "Manage Items",
-    //'width' => '800',
 )); 
 ?>
 

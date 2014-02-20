@@ -28,6 +28,12 @@
 	<div class="row">
 		<?php echo $form->labelEx($model,'parent_item_id'); ?>
 		<?php //echo $form->textField($model,'parent_item_id'); 
+                
+                $temp=CHtml::listData(Item::model()->findAll(), 'id', 'name');
+                $temp[0]=Yii::t('app','None');
+                echo $form->dropDownList($model,'parent_item_id',$temp);
+                
+                /*
 		$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 		    'name'=>'Item[parent_item_id]',
 		    'value'=>"$model->parent_item_id",
@@ -37,7 +43,7 @@
 		            'showAnim'=>'fold',
 		    ),
 		));
-		
+		*/
 		
 		?>
 		<?php echo $form->error($model,'parent_item_id'); ?>

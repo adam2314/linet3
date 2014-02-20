@@ -8,7 +8,7 @@
 	<?php echo $form->textFieldRow($model,'name',array('class'=>'span5','maxlength'=>255)); ?>
 
         <?php
-        $models = Acctype::model()->findAll(array('order' => 'name'));
+        $models = Itemcategory::model()->findAll(array('order' => 'name'));
         $list = CHtml::listData($models, 'id', 'name');
         $htmlOptions=array ( "class"=>'span5','id'=>ucfirst($this->id).'_AccType_id');
         $select=CHtml::dropDownList(ucfirst($this->id).'[AccType_id]', 0, $list, $htmlOptions );

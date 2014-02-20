@@ -675,12 +675,12 @@ INSERT INTO `config` (`id`, `value`, `eavType`,`hidden`) VALUES
 ('company.acc.sellvat', '3', 'integer', 1),
 ('company.address', '', 'string', 0),
 ('company.city', '', 'string', 0),
-('company.cur', 'ILS', 'list(curRates)', 0),
+('company.cur', 'ILS', 'list(Currecies)', 0),
 ('company.logo', '', '', 0),
 ('company.name', '', 'string', 0),
 ('company.path', 'test', 'string', 0),
 ('company.pdfprint', 'true', 'boolean', 0),
-('company.seccur', '', 'list(curRates)', 0),
+('company.seccur', '', 'list(Currecies)', 0),
 ('company.stock', 'false', 'boolean', 0),
 ('company.tax.rate', '10', 'integer', 0),
 ('company.transaction', '0', 'integer', 1),
@@ -1163,6 +1163,41 @@ CREATE TABLE `items` (
   KEY `parent_item_id` (`parent_item_id`),
 KEY `itemVatCat_id` (`itemVatCat_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+--
+-- Structure for table `accTemplate`
+--
+
+DROP TABLE IF EXISTS `itemTemplate`;
+
+CREATE TABLE `itemTemplate` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `Itemcatagory_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `Itemcatagory_id` (`Itemcatagory_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+
+
+
+
+--
+-- Structure for table `accTemplateItem`
+--
+
+DROP TABLE IF EXISTS `itemTemplateItem`;
+
+CREATE TABLE `itemTemplateItem` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ItemTemplate_id` int(11) NOT NULL,
+  `eavFields_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ItemTemplate_id` (`ItemTemplate_id`),
+  KEY `eavFields_id` (`eavFields_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+
+
+
 
 --
 -- Structure for table `language`
