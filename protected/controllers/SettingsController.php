@@ -13,8 +13,6 @@ class SettingsController extends RightsController
 		if(isset($_POST['Settings'])){
                     foreach ($_POST['Settings'] as $key => $value) {
                         $model = Settings::model()->findByPk($key);
-                        //print_r($value);
-                        //exit;
                         $model->value=$value['value'];
                         $model->save();
                     }

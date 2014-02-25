@@ -1,18 +1,31 @@
-@media (min-width: 1200px){
-.container, .navbar-static-top .container, .navbar-fixed-top .container, .navbar-fixed-bottom .container {
-width: 1199px;
-}
+
+.nav-collapse>ul {
+float: left;
 }
 
+.navbar {
 
-.form div.row{
-    
-    
-    margin-left: 0px;
-    
-    
-    
+margin-bottom: 0px;
 }
+
+input {
+display: block;
+width: 100%;
+height: 34px;
+padding: 6px 12px;
+font-size: 14px;
+line-height: 1.42857143;
+color: #555;
+background-color: #fff;
+background-image: none;
+border: 1px solid #ccc;
+border-radius: 4px;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
 #footer {
     height: 65px;
     text-align: center;
@@ -44,12 +57,13 @@ width: 1199px;
     padding-bottom: 8px;
     padding-top: 8px;
 }
+/*
 .ui-tabs-nav > li > a, .nav-pills > li > a {
     line-height: 14px;
     margin-right: 2px;
     padding-left: 12px;
     padding-right: 12px;
-}
+}*/
 .ui-tabs-nav > li > a {
     display: block;
     color: #0088CC;
@@ -82,16 +96,12 @@ width: 1199px;
     border-top: 1px solid #DDDDDD;
     line-height: 20px;
     padding: 8px;
-    text-align: left;
+    /*text-align: left;*/
     vertical-align: top;
 }
 
 
-.btn-group > .btn + .dropdown-toggle{
-    height: 20px;
-    
-    
-}
+
 
 
 .form-actions{
@@ -142,7 +152,7 @@ width: 1199px;
 	}
     .formtable td,
 	.formtable th { 
-		text-align: left;
+		/*text-align: left;*/
 		display: block;
 	}
     

@@ -57,6 +57,10 @@ $this->beginWidget('MiniForm',array(
 		'pic',
 		'owner',
 		*/
+                array(
+			'class'=>'bootstrap.widgets.TbButtonColumn',
+		),
+            /*
 		array(
 			'class'=>'CButtonColumn',
 			'template'=>'{edit}{remove}{display}',
@@ -64,27 +68,27 @@ $this->beginWidget('MiniForm',array(
 		    (
 		        'edit' => array
 		        (
-                            'label'=>'<i class="icon-edit"></i>',
+                            'label'=>'<i class="glyphicon glyphicon-edit"></i>',
 		            //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
 		            'url'=>'Yii::app()->createUrl("item/update", array("id"=>$data->id))',
 		        	
 		        ),
 		        'remove' => array
 		        (
-		            'label'=>'<i class="icon-remove"></i>',
+		            'label'=>'<i class="glyphicon glyphicon-remove"></i>',
 		            //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
 		        	'url'=>'Yii::app()->createUrl("item/delete", array("id"=>$data->id))',
 		            //'url'=>'Yii::app()->createUrl("users/email", array("id"=>$data->id))',
 		        ),
 		        'display' => array
 		        (
-		            'label'=>'<i class="icon-search"></i>',
+		            'label'=>'<i class="glyphicon glyphicon-search"></i>',
 		            'url'=>'Yii::app()->createUrl("item/view", array("id"=>$data->id))',
 		            //'visible'=>'$data->score > 0',
 		            //'click'=>'function(){alert("Going down!");}',
 		        ),
 		    ),
-		),
+		),*/
 	),
 )); 
 

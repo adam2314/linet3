@@ -10,7 +10,35 @@
 class Settings extends basicRecord{
         const table='{{config}}';
 	
-        
+      public function save($runValidation = true, $attributes = NULL){
+          //adam:
+          if($this->eavType=='boolean'){
+              if($this->value=='true')
+                  $this->value='true';
+              else 
+                  $this->value='false';
+              
+          }else if($this->eavType=='file'){
+                
+                
+                $yiiBasepath=Yii::app()->basePath;
+                $yiiUser=Yii::app()->user->id;
+                $configPath=Yii::app()->user->settings["company.path"];
+                        
+                
+
+                $this->value = CUploadedFile::getInstanceByName('Settings[company.logo][value]');
+                
+
+		$ext = $this->value->extensionName;
+
+                $fileName = $yiiBasepath."/files/".$configPath."/settings/".$this->id.".".$ext; 
+                if($this->value->saveAs($fileName)){
+                    $this->value="/files/".$configPath."/settings/".$this->id.".".$ext;
+                }
+          }
+          return parent::save($runValidation,$attributes);
+      }  
         
         
         public function a000($line,$id,$count){

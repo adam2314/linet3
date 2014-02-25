@@ -6,6 +6,7 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Update Configurati
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'user-form',
 	'enableAjaxValidation'=>false,
+    'htmlOptions'=>array('enctype'=>'multipart/form-data'),
 )); ?>
 
 
@@ -25,6 +26,24 @@ foreach($models as $model){
                        "</td>"; 
                echo "</tr>";
                 
+            }elseif($model->eavType=='file'){
+                
+                  echo "<tr>";
+               echo "<td>".Yii::t('app',$model->id)."</td>"; 
+               echo "<td>".
+                       CHtml::fileField('Settings['.$model->id.'][value]',$model->value).
+                       CHtml::hiddenField('Settings['.$model->id.'][value]',$model->value).
+                       "</td>"; 
+               echo "</tr>";
+            }elseif($model->eavType=='boolean'){
+                
+                  echo "<tr>";
+               echo "<td>".Yii::t('app',$model->id)."</td>"; 
+               echo "<td>".
+                       CHtml::checkbox('Settings['.$model->id.'][value]',$model->value).
+                       CHtml::hiddenField('Settings['.$model->id.'][value]',$model->value).
+                       "</td>"; 
+               echo "</tr>";
             }else{
                 //echo $form->errorSummary($model); 
                 echo "<tr>";

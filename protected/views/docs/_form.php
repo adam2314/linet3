@@ -16,7 +16,7 @@
         <?php echo CHTML::hiddenField("doc_rate","1"); ?>
 	<?php echo CHTML::hiddenField("doc_items",count($model->docDetailes)); ?>
         <?php echo CHTML::hiddenField("rcpt_items",count($model->docCheques)); ?>
-<div class="span4"><!--block-->
+<div class="col-md-4"><!--block-->
 	<p>
 		<?php echo $form->labelEx($model,'account_id'); ?>
 		<?php //echo $model->docType->name . ";".Acctype::model()->getType('customers');
@@ -72,7 +72,7 @@
             <?php echo $form->error($model,'status'); ?>
         </p>
 </div><!--block-->
-<div class="span3"><!--block-->
+<div class="col-md-3"><!--block-->
 	<div class="row">
 		<?php echo $form->labelEx($model,'address'); ?>
 		<?php echo $form->textField($model,'address',array('size'=>30,'maxlength'=>80)); ?>
@@ -97,7 +97,7 @@
 		<?php echo $form->error($model,'currency_id'); ?>
 	</div>
 </div><!--block-->
-<div class="span4"><!--block-->
+<div class="col-md-4"><!--block-->
 	<div class="row">
 		<?php echo $form->labelEx($model,'vatnum'); ?>
 		<?php echo $form->textField($model,'vatnum',array('size'=>10,'maxlength'=>10)); ?>
@@ -378,7 +378,6 @@
 	?>
 	<!--</div>-->
 <script type="text/javascript">
-
 	jQuery(document).ready(function(){
                 $("#docs-form").submit(function() {
                     
@@ -460,7 +459,7 @@
 
                 }
                 
-                $('#language_chzn').hide();
+                $('#language_chosen').hide();
                 
 	});/*******************end ready*****************************/
 	//function hideEmptyHeaders(){
@@ -849,7 +848,7 @@ function rcptcalcLines(){
   
   function hideMe(){
    $('#printLink').hide();
-   $('#language_chzn').show();
+   $('#language_chosen').show();
    return false;   
   }
   
@@ -869,26 +868,27 @@ function rcptcalcLines(){
         <?php echo $form->error($model,'comments'); ?>
     </p>
             
-    <div class="btn-toolbar">
+    <div class="btn">
         <!--</div>
         
         <div class="row buttons">-->
         <?php //echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
         <?php $this->widget('bootstrap.widgets.TbButton', array(
             'label'=>Yii::t('app','Preview'),
-            'icon'=>'file',
-                    
+            'icon'=>'glyphicon glyphicon-file',
+            'type'=>'primary',        
             'htmlOptions'=>array('onclick'=>'return sendForm("preview");',),
         )); ?>
         
        
         <?php $this->widget('bootstrap.widgets.TbButtonGroup', array(
             'type'=>'', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+            'type'=>'primary',
             'buttons'=>array(
-                array('icon'=>'print','label'=>Yii::t('app','Print'),'htmlOptions'=>array('onclick'=>'return sendForm("print");'),),
+                array('icon'=>'glyphicon glyphicon-print','label'=>Yii::t('app','Print'),'htmlOptions'=>array('onclick'=>'return sendForm("print");'),),
                 array('items'=>array(
                     //array('icon'=>'envelope','label'=>Yii::t('app','Email'), 'url'=>'javascript:sendForm("email");',),
-                    array('icon'=>'save','label'=>Yii::t('app','PDF'), 'url'=>'javascript:sendForm("pdf");',),
+                    array('icon'=>'glyphicon glyphicon-save','label'=>Yii::t('app','PDF'), 'url'=>'javascript:sendForm("pdf");',),
                     
                 )),
             ),
@@ -896,7 +896,8 @@ function rcptcalcLines(){
         
         <?php $this->widget('bootstrap.widgets.TbButton', array(
             'label'=>Yii::t('app','Change language'),
-            'icon'=>'globe',
+            'type'=>'primary',
+            'icon'=>'glyphicon glyphicon-globe',
             'htmlOptions'=>array('id'=>'printLink', 'onclick'=>'return hideMe();'),
         )); ?>
         

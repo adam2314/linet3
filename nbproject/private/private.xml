@@ -2,6 +2,13 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/home/adam/devsrv/yii/demos/new/assets/css/linet.css</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/settings/view.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/components/Linet3.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/extensions/bootstrap/components/Bootstrap.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/views/accounts/index.php</file>
+            <file>file:/home/adam/devsrv/yii/demos/new/protected/controllers/CompanyController.php</file>
+        </group>
     </open-files>
 </project-private>

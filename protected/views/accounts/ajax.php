@@ -38,18 +38,18 @@
 			'template'=>'{edit}{remove}{display}',
 			'buttons'=>array(
                             'edit' => array(
-                                'label'=>'<i class="icon-edit"></i>',
+                                'label'=>'<i class="glyphicon glyphicon-edit"></i>',
                                 'url'=>'Yii::app()->createUrl("accounts/update", array("id"=>$data->id))',
 
                             ),
                             'remove' => array(
-                                'label'=>'<i class="icon-remove"></i>',
+                                'label'=>'<i class="glyphicon glyphicon-remove"></i>',
                                 //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
                                     'url'=>'Yii::app()->createUrl("accounts/delete", array("id"=>$data->id))',
                                 //'url'=>'Yii::app()->createUrl("users/email", array("id"=>$data->id))',
                             ),
                             'display' => array(
-                                'label'=>'<i class="icon-search"></i>',
+                                'label'=>'<i class="glyphicon glyphicon-search"></i>',
                                 'url'=>'Yii::app()->createUrl("accounts/transaction", array("id"=>$data->id))',
                                 //'visible'=>'$data->score > 0',
                                 'click'=>'function(){alert("Going down!");}',

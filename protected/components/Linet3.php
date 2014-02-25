@@ -3,6 +3,73 @@
 class Linet3 {
   public static function beginRequest(CEvent $event) {
       
+        
+      Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/bootstrap/css/bootstrap.min.css'));
+      Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/Font-Awesome/css/font-awesome.min.css'));
+      Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/chosen/chosen.min.css'));
+      Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/jasny/css/jasny-bootstrap.min.css'));
+      
+      
+      Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/main.css'));
+      Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/theme.css'));
+      Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/linet.css'));
+      
+      
+      Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/modernizr-build.min.js'));
+      
+      
+      Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/bootstrap/js/bootstrap.min.js'), CClientScript::POS_END);
+      Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/chosen/chosen.jquery.min.js'), CClientScript::POS_END);
+      Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/cssbeautify/cssbeautify.js'), CClientScript::POS_END);
+      Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/screenfull/screenfull.js'), CClientScript::POS_END);
+      Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/main.js'), CClientScript::POS_END);
+      
+      
+      
+      Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/linet.js'), CClientScript::POS_END);
+      /*  
+       
+        Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/bootstrap-toggle-buttons.css'));
+        
+        Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/calendar.css'));
+        
+        Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/style-switcher.css'));
+        Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/colorpicker.css'));
+        
+
+
+
+
+
+
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.mousewheel.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.tablesorter.min.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.sparkline.min.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.dualListBox-1.3.min.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.autosize-min.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.inputlimiter.1.3.1.min.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.tagsinput.min.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.toggle.buttons.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/uniform/jquery.uniform.min.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/jquery.validVal-4.3.2.js'));
+        
+        //
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/bootstrap-colorpicker.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/bootstrap-progressbar.min.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/bootstrap-datepicker.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/bootstrap-timepicker.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/bootstrap-inputmask.js'));
+        
+
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/vendor/less-1.3.3.min.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/date.js'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/lib/daterangepicker.js'));
+
+      //*/
+      
+      
+      
+      
       
 if(isset(Yii::app()->user->timezone))
         ini_set('date.timezone', Yii::app()->user->timezone);  

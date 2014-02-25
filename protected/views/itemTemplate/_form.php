@@ -10,11 +10,11 @@
         <?php
         $models = Itemcategory::model()->findAll(array('order' => 'name'));
         $list = CHtml::listData($models, 'id', 'name');
-        $htmlOptions=array ( "class"=>'span5','id'=>ucfirst($this->id).'_AccType_id');
-        $select=CHtml::dropDownList(ucfirst($this->id).'[AccType_id]', 0, $list, $htmlOptions );
+        $htmlOptions=array ( "class"=>'span5','id'=>ucfirst($this->id).'_Itemcategory_id');
+        $select=CHtml::dropDownList(ucfirst($this->id).'[Itemcategory_id]', 0, $list, $htmlOptions );
         
         ?>
-        <label for="ItemTemplate_ItemType_id" class="required">Item Catagory <span class="required">*</span></label>
+            <label for="ItemTemplate_Itemcategory_id" class="required">Item Category <span class="required">*</span></label>
         <?php echo $select; ?>
             <?php //echo $form->textFieldRow($model,'AccType_id',array('class'=>'span5')); ?>
 

@@ -9,7 +9,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('acc-template-grid', {
+	$.fn.yiiGridView.update('itm-template-grid', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -22,7 +22,7 @@ $('.search-form form').submit(function(){
 ?>
 
 <?php $this->widget('bootstrap.widgets.TbGridView',array(
-	'id'=>'acc-template-grid',
+	'id'=>'itm-template-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
@@ -30,8 +30,8 @@ $('.search-form form').submit(function(){
 		'name',
 		//'AccType_id',
             array(
-                'name' => 'Itemcatagory_id',
-                'value' => '$data->type->name',
+                'name' => 'Itemcategory_id',
+                'value' => '$data->Category->name',
                ),
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',

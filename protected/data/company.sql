@@ -676,7 +676,7 @@ INSERT INTO `config` (`id`, `value`, `eavType`,`hidden`) VALUES
 ('company.address', '', 'string', 0),
 ('company.city', '', 'string', 0),
 ('company.cur', 'ILS', 'list(Currecies)', 0),
-('company.logo', '', '', 0),
+('company.logo', '', 'file', 0),
 ('company.name', '', 'string', 0),
 ('company.path', 'test', 'string', 0),
 ('company.pdfprint', 'true', 'boolean', 0),
@@ -1173,9 +1173,9 @@ DROP TABLE IF EXISTS `itemTemplate`;
 CREATE TABLE `itemTemplate` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `Itemcatagory_id` int(11) NOT NULL,
+  `Itemcategory_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `Itemcatagory_id` (`Itemcatagory_id`)
+  KEY `Itemcategory_id` (`Itemcategory_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 

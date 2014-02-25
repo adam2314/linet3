@@ -5,7 +5,7 @@ body {
   background-color: #222;
   position: fixed;
   left: -212px;
-  top: 50px;
+  top: 54px;
   width: 212px;
   z-index: 999;
   -webkit-transition: all 1s;
@@ -29,20 +29,24 @@ body {
   margin: 0;
   padding: 8px;
   line-height: 23px;
-  text-shadow: 0 1px 0 #000;
+  text-shadow: 0 1px 0 #000;  
+  border-top: 1px solid #666;
 }
 .style-switcher h5 a {
   background: #333;
   border-radius: 0 4px 4px 0;
   color: #E1E1E8;
-  right: -36px;
+  right: -39px;
   padding: 4px;
   position: absolute;
   text-decoration: none;
-  top: 0;
+  top: 0;  
+  border: 1px solid #666;
 }
 .style-switcher .style-switcher-wrap {
   padding: 5px 10px;
+  border: 1px solid #666;
+  border-left-width: 0;
 }
 .style-switcher .style-switcher-wrap a {
   font-size: 12px;
@@ -122,7 +126,6 @@ body {
 #cssbeautify {
   height: 233px;
   cursor: text;
-  width: 520px;
   resize: none;
 }
 
@@ -142,6 +145,12 @@ body {
   display: none;
 }
 #topNavStyle {display: none;}
-.padTop44 #topNavStyle {
+.padTop53 #topNavStyle {
     display: block;
+}
+
+.boxedFixedBody {display: none;}
+
+@media (min-width: 1200px) {
+.boxedFixedBody {display: block;}  
 }

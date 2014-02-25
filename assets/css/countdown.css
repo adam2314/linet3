@@ -1,24 +1,13 @@
 
 body {
     padding-top: 40px;
-    background: url("../img/pattern/always_grey.png") repeat rgba(68, 68, 68, .9);
 }
 
 .orange {
     color: orange;
 }
 
-#main {
-    width: 80%;
-    position: relative;
-    margin: 0 auto;
-    -moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
-    -webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
-    -o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
-    box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
-    color: #999;
-    padding: 20px 20px 0;
-}
+
 
 .logo {
     position: relative;
@@ -71,11 +60,7 @@ hr {
 .progress.mini {
     height: 6px;
 }
-.btn, input,textarea {
-    -webkit-border-radius: 0 !important;
-    -moz-border-radius: 0 !important;
-    border-radius: 0 !important;
-}
+
 
 /* jQuery Countdown styles 1.6.1. */
 
@@ -85,7 +70,7 @@ hr {
 #counter-default {
     margin: 20px auto;
 }
-#counter-default .span3 {
+#counter-default .inner {
     font-size: large;
     text-align: center;
     color: #8c8c8c;
@@ -96,16 +81,17 @@ hr {
     -webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
     -o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
     box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
-    padding: 12px;
+    margin: 15px 0;
+    padding: 15px;
     text-shadow: 0px 1px 2px #000;
 }
-#counter-default .span3 .timer-number {
+#counter-default .timer-number {
     font-size: 36px;
     margin-bottom: 12px;
     color: #EFEFF0;
     font-weight: bold;
 }
-#counter-default .span3 .timer-text {
+#counter-default  .timer-text {
     padding: 12px;
     color: #8c8c8c;
 }
@@ -128,38 +114,7 @@ legend {
     border-bottom: 1px solid #333333;
 }
 
-.form-actions {
-    background-color: #202020;
-    background-color: rgba(0, 0, 0, 0.3);
-    -moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
-    -webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
-    -o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
-    box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
-    border-top: none;
-    margin-bottom:0;
-}
 @media (max-width: 767px) {
     body {padding-top: 10px;}
     #main {width:auto;}
-
-
-    #counter-default .span3 {
-        width: 48%;
-        *width: 48%;
-        display: inline-block;
-        margin-bottom: 4px;
-        margin-left: 2%;
-    }
-
-    #counter-default .span3:nth-child(odd) {
-        margin-left: 0;
-    }
-
-}
-@media (max-width: 479px) {
-    #counter-default .span3 {
-        width: 100%;
-        margin-bottom: 12px;
-        margin-left: 0;
-    }
 }

@@ -1,59 +1,170 @@
-$(function() {
+/**
+* Bootstrap-Admin-Template v2.1.4
+* Author : [object Object] 
+* Copyright 2014
+* Licensed under ,, (,,)
+*/
+$(function () {
+    "use strict";
 
-    $('a[rel=tooltip]').tooltip();
+    $('a[href=#]').on('click', function (e) {
+        e.preventDefault();
+    });
 
-    // make code pretty
-    window.prettyPrint && prettyPrint();
 
-    /*----------- BEGIN TABLESORTER CODE -------------------------*/
-    /* required jquery.tablesorter.min.js*/
-    $(".sortableTable").tablesorter();
-    /*----------- END TABLESORTER CODE -------------------------*/
+    $('a[data-toggle=tooltip]').tooltip();
+    $('a[data-tooltip=tooltip]').tooltip();
 
-    
-    
-    $('.minimize-box').on('click', function(e){
+
+    $('.minimize-box').on('click', function (e) {
         e.preventDefault();
         var $icon = $(this).children('i');
-        if($icon.hasClass('icon-chevron-down')) {
+        if ($icon.hasClass('icon-chevron-down')) {
             $icon.removeClass('icon-chevron-down').addClass('icon-chevron-up');
-        } else if($icon.hasClass('icon-chevron-up')) {
+        } else if ($icon.hasClass('icon-chevron-up')) {
             $icon.removeClass('icon-chevron-up').addClass('icon-chevron-down');
         }
     });
-    $('.minimize-box').on('click', function(e){
-        e.preventDefault();
-        var $icon = $(this).children('i');
-        if($icon.hasClass('icon-minus')) {
-            $icon.removeClass('icon-minus').addClass('icon-plus');
-        } else if($icon.hasClass('icon-plus')) {
-            $icon.removeClass('icon-plus').addClass('icon-minus');
-        }
-    });
-
-    $('.close-box').click(function() {
+    $('.close-box').click(function () {
         $(this).closest('.box').hide('slow');
     });
 
-    $('#changeSidebarPos').on('click', function(e) {
+    $('#changeSidebarPos').on('click', function (e) {
         $('body').toggleClass('hide-sidebar');
     });
+
+    $('li.accordion-group > a').on('click', function (e) {
+        $(this).children('span').children('i').toggleClass('icon-angle-down');
+    });
+    
+    $('#menu').metisMenu();
     
     
-    //adam:
-    //$(".chzn-select").chosen();
-    $("select:not(.not-chzn-select)").chosen();
+    
 });
+function metisButton() {
+    window.prettyPrint && prettyPrint();
+    $.each($('.inner a.btn'), function () {
+        $(this).popover({
+            placement: 'bottom',
+            title: this.innerHTML,
+            content: this.outerHTML,
+            trigger: 'hover'
+        });
+    });
+}
+
+function metisChart() {
+    "use strict";
+    var d2 = [
+        [0, 3],
+        [1, 8],
+        [2, 5],
+        [3, 13],
+        [4, 1]
+    ];
+
+    // a null signifies separate line segments
+    var d3 = [
+        [0, 12],
+        [2, 2],
+        [3, 9],
+        [4, 4]
+    ];
+
+    $.plot($("#trigo"), [
+        {data: d2, label: 'MAN'},
+        {data: d3, label: 'WOMAN'}
+    ], {
+        clickable: true,
+        hoverable: true,
+        series: {
+            lines: {show: true, fill: true, fillColor: {colors: [
+                {opacity: 0.5},
+                {opacity: 0.15}
+            ]}},
+            points: {show: true}
+        }
+    });
+
+    $.plot($("#trigo2"), [
+        {data: d2, label: 'BAR'}
+    ], {
+        clickable: true,
+        hoverable: true,
+        series: {
+            bars: {show: true, barWidth: 0.6},
+            points: {show: true}
+        }
+    });
+
+    var parabola = [],
+        parabola2 = [];
+    for (var i = -5; i <= 5; i += 0.5) {
+        parabola.push([i, Math.pow(i, 2) - 25]);
+        parabola2.push([i, -Math.pow(i, 2) + 25]);
+    }
+
+    var circle = [];
+
+    for (var c = -2; c <= 2.1; c += 0.1) {
+        circle.push([c, Math.sqrt(400 - c * c * 100)]);
+        circle.push([c, -Math.sqrt(400 - c * c * 100)]);
+    }
+    var daire = [3];
+    $.plot($("#eye"), [
+        {data: parabola2, lines: {show: true, fill: true}},
+        {data: parabola, lines: {show: true, fill: true}},
+        {data: circle, lines: {show: true}}
+    ]);
+
+    var heart = [];
+    for (i = -2; i <= 5; i += 0.01) {
+        heart.push([16 * Math.pow(Math.sin(i), 3), 13 * Math.cos(i) - 5 * Math.cos(2 * i) - 2 * Math.cos(3 * i) - Math.cos(4 * i)]);
+    }
+    $.plot($("#heart"), [
+        {data: heart, label: '<i class="fa fa-heart"></i>', color: '#9A004D'}
+    ], {
+        series: {
+            lines: {show: true, fill: true},
+            points: {show: false}
+
+        },
+        yaxis: {
+            show: true
+        },
+        xaxis: {
+            show: true
+        }
+    });
+    $('#heart .legendLabel').addClass('animated pulse');
+    setInterval(function () {
+        $('#heart .legendLabel .fa.fa-heart').toggleClass('fa-2x');
+    }, 400);
 
 
+    var bernoulli = [];
 
-/*--------------------------------------------------------
- BEGIN DASHBOARD SCRIPTS
- ---------------------------------------------------------*/
+    function lemniscatex(i) {
+        return Math.sqrt(2) * Math.cos(i) / (Math.pow(Math.sin(i), 2) + 1);
+    }
+
+    function lemniscatey(i) {
+        return Math.sqrt(2) * Math.cos(i) * Math.sin(i) / (Math.pow(Math.sin(i), 2) + 1);
+    }
+
+    for (var k = 0; k <= 2 * Math.PI; k += 0.01) {
+        bernoulli.push([lemniscatex(k), lemniscatey(k)]);
+    }
+    $.plot($("#bernoilli"), [
+        {data: bernoulli, label: 'Lemniscate of Bernoulli', lines: {show: true, fill: true}}
+    ]);
+}
 function dashboard() {
+    "use strict";
 
-    /*----------- BEGIN SPARKLINE CODE -------------------------*/
-    /* required jquery.sparkline.min.js*/
+    //----------- BEGIN SPARKLINE CODE -------------------------*/
+    // required jquery.sparkline.min.js*/
 
     /** This code runs when everything has been loaded on the page */
     /* Inline sparklines take their values from the contents of the tag */
@@ -99,96 +210,92 @@ function dashboard() {
         barColor: '#4d6189',
         negBarColor: '#a20051'
     });
-    /*----------- END SPARKLINE CODE -------------------------*/
+    //----------- END SPARKLINE CODE -------------------------*/
 
 
-    /*----------- BEGIN FULLCALENDAR CODE -------------------------*/
+    //----------- BEGIN FULLCALENDAR CODE -------------------------*/
 
-    if (jQuery().fullCalendar) {
-        var date = new Date();
-        var d = date.getDate();
-        var m = date.getMonth();
-        var y = date.getFullYear();
+    var date = new Date();
+    var d = date.getDate();
+    var m = date.getMonth();
+    var y = date.getFullYear();
 
-        var calendar = $('#calendar').fullCalendar({
-            header: {
-                left: 'prev,today,next,',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
+    var calendar = $('#calendar').fullCalendar({
+        header: {
+            left: 'prev,today,next,',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+        },
+        selectable: true,
+        selectHelper: true,
+        select: function(start, end, allDay) {
+            var title = prompt('Event Title:');
+            if (title) {
+                calendar.fullCalendar('renderEvent',
+                        {
+                            title: title,
+                            start: start,
+                            end: end,
+                            allDay: allDay
+                        },
+                true // make the event "stick"
+                        );
+            }
+            calendar.fullCalendar('unselect');
+        },
+        editable: true,
+        events: [
+            {
+                title: 'All Day Event',
+                start: new Date(y, m, 1),
+                className: 'label label-success'
             },
-            selectable: true,
-            selectHelper: true,
-            select: function(start, end, allDay) {
-                var title = prompt('Event Title:');
-                if (title) {
-                    calendar.fullCalendar('renderEvent',
-                            {
-                                title: title,
-                                start: start,
-                                end: end,
-                                allDay: allDay
-                            },
-                    true // make the event "stick"
-                            );
-                }
-                calendar.fullCalendar('unselect');
+            {
+                title: 'Long Event',
+                start: new Date(y, m, d - 5),
+                end: new Date(y, m, d - 2),
+                className: 'label label-info'
             },
-            editable: true,
-            events: [
-                {
-                    title: 'All Day Event',
-                    start: new Date(y, m, 1),
-                    className: 'label label-success'
-                },
-                {
-                    title: 'Long Event',
-                    start: new Date(y, m, d - 5),
-                    end: new Date(y, m, d - 2),
-                    className: 'label label-info'
-                },
-                {
-                    id: 999,
-                    title: 'Repeating Event',
-                    start: new Date(y, m, d - 3, 16, 0),
-                    allDay: false,
-                    className: 'label label-warning'
-                },
-                {
-                    id: 999,
-                    title: 'Repeating Event',
-                    start: new Date(y, m, d + 4, 16, 0),
-                    allDay: false,
-                    className: 'label label-inverse'
-                },
-                {
-                    title: 'Meeting',
-                    start: new Date(y, m, d, 10, 30),
-                    allDay: false,
-                    className: 'label label-important'
-                },
-                {
-                    title: 'Lunch',
-                    start: new Date(y, m, d, 12, 0),
-                    end: new Date(y, m, d, 14, 0),
-                    allDay: false
-                },
-                {
-                    title: 'Birthday Party',
-                    start: new Date(y, m, d + 1, 19, 0),
-                    end: new Date(y, m, d + 1, 22, 30),
-                    allDay: false
-                },
-                {
-                    title: 'Click for Google',
-                    start: new Date(y, m, 28),
-                    end: new Date(y, m, 29),
-                    url: 'http://google.com/'
-                }
-            ]
-        });
-    } else {
-        console.log('could not load fullcalendar.min.js');
-    }
+            {
+                id: 999,
+                title: 'Repeating Event',
+                start: new Date(y, m, d - 3, 16, 0),
+                allDay: false,
+                className: 'label label-warning'
+            },
+            {
+                id: 999,
+                title: 'Repeating Event',
+                start: new Date(y, m, d + 4, 16, 0),
+                allDay: false,
+                className: 'label label-inverse'
+            },
+            {
+                title: 'Meeting',
+                start: new Date(y, m, d, 10, 30),
+                allDay: false,
+                className: 'label label-important'
+            },
+            {
+                title: 'Lunch',
+                start: new Date(y, m, d, 12, 0),
+                end: new Date(y, m, d, 14, 0),
+                allDay: false
+            },
+            {
+                title: 'Birthday Party',
+                start: new Date(y, m, d + 1, 19, 0),
+                end: new Date(y, m, d + 1, 22, 30),
+                allDay: false
+            },
+            {
+                title: 'Click for Google',
+                start: new Date(y, m, 28),
+                end: new Date(y, m, 29),
+                url: 'http://google.com/'
+            }
+        ]
+    });
     /*----------- END FULLCALENDAR CODE -------------------------*/
 
 
@@ -258,7 +365,7 @@ function dashboard() {
         $("#y").text(pos.y.toFixed(2));
 
         if (item) {
-            if (previousPoint != item.dataIndex) {
+            if (previousPoint !== item.dataIndex) {
                 previousPoint = item.dataIndex;
 
                 $("#tooltip").remove();
@@ -276,156 +383,14 @@ function dashboard() {
     });
     /*----------- END CHART CODE -------------------------*/
 
+    /*----------- BEGIN TABLESORTER CODE -------------------------*/
+    /* required jquery.tablesorter.min.js*/
+    $(".sortableTable").tablesorter();
+    /*----------- END TABLESORTER CODE -------------------------*/
 
 }
-/*--------------------------------------------------------
- END DASHBOARD SCRIPTS
- ---------------------------------------------------------*/
-
-
-/*--------------------------------------------------------
- BEGIN PROGRESS.HTML SCRIPTS
- ---------------------------------------------------------*/
-
-function progRess() {
-    /* required bootstrap-progressbar.min.js*/
-    
-        $('.progress .bar.text-no').progressbar();
-        $('.progress .bar.text-filled').progressbar({
-            display_text: 1
-        });
-        $('.progress .bar.text-centered').progressbar({
-            display_text: 2
-        });
-}
-/*--------------------------------------------------------
- END PROGRESS.HTML SCRIPTS
- ---------------------------------------------------------*/
-
-/*--------------------------------------------------------
- BEGIN CALENDAR.HTML SCRIPTS
- ---------------------------------------------------------*/
-function metisCalendar() {
-    if (!jQuery.fullCalendar) {
-        return;
-    }
-
-    var date = new Date();
-    var d = date.getDate();
-    var m = date.getMonth();
-    var y = date.getFullYear();
-
-    var hdr = {};
-
-    if ($(window).width() <= 767) {
-        hdr = {
-            left: 'title',
-            center: '',
-            right: 'prev,today,month,agendaWeek,agendaDay,next'
-        }
-    } else {
-        hdr = {
-            left: '',
-            center: 'title',
-            right: 'prev,today,month,agendaWeek,agendaDay,next'
-        }
-    }
-
-    var initDrag = function(e) {
-        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
-        // it doesn't need to have a start or end
-
-
-
-        var eventObject = {
-            title: $.trim(e.text()), // use the element's text as the event title
-
-            className: $.trim(e.children('span').attr('class')) // use the element's children as the event class
-        };
-        // store the Event Object in the DOM element so we can get to it later
-        e.data('eventObject', eventObject);
-
-        // make the event draggable using jQuery UI
-        e.draggable({
-            zIndex: 999,
-            revert: true, // will cause the event to go back to its
-            revertDuration: 0  //  original position after the drag
-        });
-    }
-
-    var addEvent = function(title, priority) {
-        title = title.length == 0 ? "Untitled Event" : title;
-
-        priority = priority.length == 0 ? "label" : priority;
-
-        var html = $('<li class="external-event"><span class="' + priority + '">' + title + '</span></li>');
-
-        jQuery('#external-events').append(html);
-        initDrag(html);
-    }
-
-    /* initialize the external events
-     -----------------------------------------------------------------*/
-
-    $('#external-events li.external-event').each(function() {
-        initDrag($(this));
-    });
-
-    $('#add-event').click(function() {
-        var title = $('#title').val();
-        var priority = $('input:radio[name=priority]:checked').val();
-
-        addEvent(title, priority);
-    });
-    /* initialize the calendar
-     -----------------------------------------------------------------*/
-
-    $('#calendar').fullCalendar({
-        header: hdr,
-        buttonText: {
-            prev: '<i class="icon-chevron-left"></i>',
-            next: '<i class="icon-chevron-right"></i>'
-        },
-        editable: true,
-        droppable: true, // this allows things to be dropped onto the calendar !!!
-        drop: function(date, allDay) { // this function is called when something is dropped
-
-            // retrieve the dropped element's stored Event Object
-            var originalEventObject = $(this).data('eventObject');
-
-            // we need to copy it, so that multiple events don't have a reference to the same object
-            var copiedEventObject = $.extend({}, originalEventObject);
-
-            // assign it the date that was reported
-            copiedEventObject.start = date;
-            copiedEventObject.allDay = allDay;
-
-            // render the event on the calendar
-            // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-            $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-
-
-            // is the "remove after drop" checkbox checked?
-            if ($('#drop-remove').is(':checked')) {
-                // if so, remove the element from the "Draggable Events" list
-                $(this).remove();
-            }
-
-        },
-        windowResize: function(event, ui) {
-            $('#calendar').fullCalendar('render');
-        }
-    });
-}
-
-/*--------------------------------------------------------
- END CALENDAR.HTML SCRIPTS
- ---------------------------------------------------------*/
-
-/*--------------------------------------------------------
- BEGIN FORM-GENERAL.HTML SCRIPTS
- ---------------------------------------------------------*/
 function formGeneral() {
+    "use strict";
 
     $('.with-tooltip').tooltip({
         selector: ".input-tooltip"
@@ -456,20 +421,20 @@ function formGeneral() {
     /*----------- END chosen CODE -------------------------*/
 
     /*----------- BEGIN spinner CODE -------------------------*/
-
-    $('#spin1').spinner();
-    $("#spin2").spinner({
-        step: 0.01,
-        numberFormat: "n"
-    });
-    $("#spin3").spinner({
-        culture: 'en-US',
-        min: 5,
-        max: 2500,
-        step: 25,
-        start: 1000,
-        numberFormat: "C"
-    });
+//     DEPRECATED
+//     $('#spin1').spinner();
+//     $("#spin2").spinner({
+//         step: 0.01,
+//         numberFormat: "n"
+//     });
+//     $("#spin3").spinner({
+//         culture: 'en-US',
+//         min: 5,
+//         max: 2500,
+//         step: 25,
+//         start: 1000,
+//         numberFormat: "C"
+//     });
     /*----------- END spinner CODE -------------------------*/
 
     /*----------- BEGIN uniform CODE -------------------------*/
@@ -502,8 +467,8 @@ function formGeneral() {
     $('#dpMonths').datepicker();
 
 
-    var startDate = new Date(2012, 1, 20);
-    var endDate = new Date(2012, 1, 25);
+    var startDate = new Date(2014, 1, 20);
+    var endDate = new Date(2014, 1, 25);
     $('#dp4').datepicker()
             .on('changeDate', function(ev) {
         if (ev.date.valueOf() > endDate.valueOf()) {
@@ -534,17 +499,18 @@ function formGeneral() {
     $('#reportrange').daterangepicker(
             {
                 ranges: {
-                    'Today': ['today', 'today'],
-                    'Yesterday': ['yesterday', 'yesterday'],
-                    'Last 7 Days': [Date.today().add({days: -6}), 'today'],
-                    'Last 30 Days': [Date.today().add({days: -29}), 'today'],
-                    'This Month': [Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()],
-                    'Last Month': [Date.today().moveToFirstDayOfMonth().add({months: -1}), Date.today().moveToFirstDayOfMonth().add({days: -1})]
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
                 }
             },
     function(start, end) {
-        $('#reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
-    });
+        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    }
+    );
     /*----------- END daterangepicker CODE -------------------------*/
 
     /*----------- BEGIN timepicker CODE -------------------------*/
@@ -558,43 +524,22 @@ function formGeneral() {
     /*----------- END timepicker CODE -------------------------*/
 
     /*----------- BEGIN toggleButtons CODE -------------------------*/
-    $('#normal-toggle-button').toggleButtons();
-
-    $('#callback-toggle-button').toggleButtons({
-        onChange: function($el, status, e) {
-            console.log($el, status, e);
-            $('#magic-text').text("Status is: " + status);
-        }
-    });
-    $('#text-toggle-button').toggleButtons({
-        width: 220,
-        label: {
-            enabled: "Metis",
-            disabled: "Admin"
-        }
-    });
-    $('#danger-toggle-button').toggleButtons({
-        style: {
-            // Accepted values ["primary", "danger", "info", "success", "warning"] or nothing
-            enabled: "danger",
-            disabled: "info"
-        }
-    });
+    // Resets to the regular style
+$('#dimension-switch').bootstrapSwitch('setSizeClass', '');
+// Sets a mini switch
+$('#dimension-switch').bootstrapSwitch('setSizeClass', 'switch-mini');
+// Sets a small switch
+$('#dimension-switch').bootstrapSwitch('setSizeClass', 'switch-small');
+// Sets a large switch
+$('#dimension-switch').bootstrapSwitch('setSizeClass', 'switch-large');
     /*----------- END toggleButtons CODE -------------------------*/
 
     /*----------- BEGIN dualListBox CODE -------------------------*/
     $.configureBoxes();
     /*----------- END dualListBox CODE -------------------------*/
 }
-/*--------------------------------------------------------
- END FORM-GENERAL.HTML SCRIPTS
- ---------------------------------------------------------*/
-
-/*--------------------------------------------------------
- BEGIN FORM-VALIDATION.HTML SCRIPTS
- ---------------------------------------------------------*/
-
 function formValidation() {
+    "use strict";
     /*----------- BEGIN validationEngine CODE -------------------------*/
     $('#popup-validation').validationEngine();
     /*----------- END validationEngine CODE -------------------------*/
@@ -642,13 +587,13 @@ function formValidation() {
                 max: 16
             }
         },
-        errorClass: 'help-inline',
+        errorClass: 'help-block col-lg-6',
         errorElement: 'span',
         highlight: function(element, errorClass, validClass) {
-            $(element).parents('.control-group').removeClass('success').addClass('error');
+            $(element).parents('.form-group').removeClass('has-success').addClass('has-error');
         },
         unhighlight: function(element, errorClass, validClass) {
-            $(element).parents('.control-group').removeClass('error').addClass('success');
+            $(element).parents('.form-group').removeClass('has-error').addClass('has-success');
         }
     });
 
@@ -690,58 +635,16 @@ function formValidation() {
         errorClass: 'help-block',
         errorElement: 'span',
         highlight: function(element, errorClass, validClass) {
-            $(element).parents('.control-group').removeClass('success').addClass('error');
+            $(element).parents('.form-group').removeClass('has-success').addClass('has-error');
         },
         unhighlight: function(element, errorClass, validClass) {
-            $(element).parents('.control-group').removeClass('error').addClass('success');
+            $(element).parents('.form-group').removeClass('has-error').addClass('has-success');
         }
     });
     /*----------- END validate CODE -------------------------*/
 }
-
-/*--------------------------------------------------------
- END FORM-VALIDATION.HTML SCRIPTS
- ---------------------------------------------------------*/
-
-/*--------------------------------------------------------
- BEGIN FORM-WYSIWYG.HTML SCRIPTS
- ---------------------------------------------------------*/
-function formWysiwyg() {
-
-    /*----------- BEGIN wysihtml5 CODE -------------------------*/
-    $('#wysihtml5').wysihtml5();
-    /*----------- END wysihtml5 CODE -------------------------*/
-
-    /*----------- BEGIN Markdown.Editor CODE -------------------------*/
-    var converter = Markdown.getSanitizingConverter();
-    var editor = new Markdown.Editor(converter);
-    editor.run();
-    /*----------- END Markdown.Editor CODE -------------------------*/
-
-    /*----------- BEGIN cleditor CODE -------------------------*/
-    editor = $("#cleditor").cleditor({width: "100%", height: "100%"})[0].focus();
-    $(window).resize();
-
-    $(window).resize(function() {
-        var $win = $('#cleditorDiv');
-        $("#cleditor").width($win.width() - 24).height($win.height() - 24).offset({
-            left: 15,
-            top: 15
-        });
-        editor.refresh();
-    });
-    /*----------- END cleditor CODE -------------------------*/
-
-}
-/*--------------------------------------------------------
- END FORM-WYSIWYG.HTML SCRIPTS
- ---------------------------------------------------------*/
-
-/*--------------------------------------------------------
- BEGIN FORM-WIZARD.HTML SCRIPTS
- ---------------------------------------------------------*/
-
 function formWizard() {
+    "use strict";
 
     /*----------- BEGIN uniform CODE -------------------------*/
     $('#fileUpload').uniform();
@@ -808,94 +711,249 @@ function formWizard() {
                     equalTo: "#pass"
                 }
             },
-            errorClass: 'help-inline',
+            errorClass: 'help-block',
             errorElement: 'span',
             highlight: function(element, errorClass, validClass) {
-                $(element).parents('.control-group').removeClass('success').addClass('error');
+                $(element).parents('.form-group').removeClass('has-success').addClass('has-error');
             },
             unhighlight: function(element, errorClass, validClass) {
-                $(element).parents('.control-group').removeClass('error').addClass('success');
+                $(element).parents('.form-group').removeClass('has-error').addClass('has-success');
             }
         }
     });
     /*----------- END formwizard CODE -------------------------*/
 
 }
+function formWysiwyg() {
+    "use strict";
 
-/*--------------------------------------------------------
- END FORM-WIZARD.HTML SCRIPTS
- ---------------------------------------------------------*/
+    /*----------- BEGIN wysihtml5 CODE -------------------------*/
+    $('#wysihtml5').wysihtml5();
+    /*----------- END wysihtml5 CODE -------------------------*/
 
-/*--------------------------------------------------------
- BEGIN TABLES.HTML SCRIPTS
- ---------------------------------------------------------*/
-function metisTable() {
+    /*----------- BEGIN Markdown.Editor CODE -------------------------*/
+    var converter = Markdown.getSanitizingConverter();
+    var editor = new Markdown.Editor(converter);
+    editor.run();
+    /*----------- END Markdown.Editor CODE -------------------------*/
 
-    /*----------- BEGIN datatable CODE -------------------------*/
-    $('#dataTable').dataTable({
-        "sDom": "<'pull-right'l>t<'row-fluid'<'span6'f><'span6'p>>",
-        "sPaginationType": "bootstrap",
-        "oLanguage": {
-            "sLengthMenu": "Show _MENU_ entries"
+    /*----------- BEGIN cleditor CODE -------------------------*/
+    editor = $("#cleditor").cleditor({width: "100%", height: "100%"})[0].focus();
+    $(window).resize();
+
+    $(window).resize(function() {
+        var $win = $('#cleditorDiv');
+        $("#cleditor").width($win.width() - 24).height($win.height() - 24).offset({
+            left: 15,
+            top: 15
+        });
+        editor.refresh();
+    });
+    /*----------- END cleditor CODE -------------------------*/
+    
+    /*----------- BEGIN epiceditor CODE -------------------------*/
+    var opts={
+      basePath: 'assets/lib/epiceditor',
+    };
+    var editor = new EpicEditor(opts).load();
+    /*----------- END epiceditor CODE -------------------------*/
+}
+// Define toggleFullScreen
+var toggleFullScreen = {
+    init: function() {
+        if ((window.screenfull !== undefined) && screenfull.enabled) {
+            $('#toggleFullScreen').on('click', function(e) {
+                screenfull.toggle(window.document[0]);
+                $('body').toggleClass('fullScreen');
+                e.preventDefault();
+            });
+        } else {
+            $('#toggleFullScreen').addClass('hidden');
+        }
+    }
+};
+// toggleFullScreen init
+toggleFullScreen.init();
+
+var boxFullScreen = {
+    init: function() {
+        if ((window.screenfull !== undefined) && screenfull.enabled) {
+            $('.full-box').on('click', function(e) {
+              var $toggledPanel = $(this).parents('.box')[0];
+                screenfull.toggle($toggledPanel);
+                $(this).parents('.box').toggleClass('full-screen-box');
+                $(this).parents('.box').children('.body').toggleClass('full-screen-box');
+                $(this).children('i').toggleClass('fa-compress');
+                e.preventDefault();
+            });
+        } else {
+            $('.full-box').addClass('hidden');
+        }
+    }
+};
+// boxFullScreen init
+boxFullScreen.init();
+
+var panelBodyCollapse = {
+    init: function() {
+        var $collapseButton = $('.collapse-box'),
+            $collapsedPanelBody = $collapseButton.closest('.box').children('.body');
+
+        $collapsedPanelBody.collapse('show');
+        
+        $collapseButton.on('click', function (e) {
+          var $collapsePanelBody = $(this).closest('.box').children('.body'),
+              $toggleButtonImage = $(this).children('i');
+            $collapsePanelBody.on('show.bs.collapse', function () {
+              $toggleButtonImage.removeClass('fa-minus fa-plus').addClass('fa-spinner fa-spin');
+            });
+            $collapsePanelBody.on('shown.bs.collapse', function () {
+              $toggleButtonImage.removeClass('fa-spinner fa-spin').addClass('fa-minus');
+            });
+            
+            $collapsePanelBody.on('hide.bs.collapse', function () {
+              $toggleButtonImage.removeClass('fa-minus fa-plus').addClass('fa-spinner fa-spin');
+            });
+            
+            $collapsePanelBody.on('hidden.bs.collapse', function () {
+              $toggleButtonImage.removeClass('fa-spinner fa-spin').addClass('fa-plus');
+            });
+
+            $collapsePanelBody.collapse('toggle');
+          
+          e.preventDefault();
+        });
+    }
+};
+// panelBodyCollapse init
+panelBodyCollapse.init();
+
+
+var boxHiding = {
+  init: function () {
+    $('.close-box').click(function () {
+        $(this).closest('.box').hide('slow');
+    });
+  }
+};
+boxHiding.init();
+function metisCalendar() {
+    "use strict";
+
+    var date = new Date();
+    var d = date.getDate();
+    var m = date.getMonth();
+    var y = date.getFullYear();
+
+    var hdr = {};
+
+    if ($(window).width() <= 767) {
+        hdr = {left: 'title', center: 'month,agendaWeek,agendaDay', right: 'prev,today,next'};
+    } else {
+        hdr = {left: '', center: 'title', right: 'prev,today,month,agendaWeek,agendaDay,next'};
+    }
+
+    var initDrag = function(e) {
+        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+        // it doesn't need to have a start or end
+
+
+
+        var eventObject = {
+            title: $.trim(e.text()), // use the element's text as the event title
+
+            className: $.trim(e.children('span').attr('class')) // use the element's children as the event class
+        };
+        // store the Event Object in the DOM element so we can get to it later
+        e.data('eventObject', eventObject);
+
+        // make the event draggable using jQuery UI
+        e.draggable({
+            zIndex: 999,
+            revert: true, // will cause the event to go back to its
+            revertDuration: 0  //  original position after the drag
+        });
+    };
+
+    var addEvent = function(title, priority) {
+        title = title.length === 0 ? "Untitled Event" : title;
+
+        priority = priority.length === 0 ? "label label-default" : priority;
+
+        var html = $('<li class="external-event"><span class="' + priority + '">' + title + '</span></li>');
+
+        jQuery('#external-events').append(html);
+        initDrag(html);
+    };
+
+    /* initialize the external events
+     -----------------------------------------------------------------*/
+
+    $('#external-events li.external-event').each(function() {
+        initDrag($(this));
+    });
+
+    $('#add-event').click(function() {
+        var title = $('#title').val();
+        var priority = $('input:radio[name=priority]:checked').val();
+
+        addEvent(title, priority);
+    });
+    /* initialize the calendar
+     -----------------------------------------------------------------*/
+
+    $('#calendar').fullCalendar({
+        header: hdr,
+        buttonText: {
+            prev: '<i class="fa fa-chevron-left"></i>',
+            next: '<i class="fa fa-chevron-right"></i>'
+        },
+        editable: true,
+        droppable: true, // this allows things to be dropped onto the calendar !!!
+        drop: function(date, allDay) { // this function is called when something is dropped
+
+            // retrieve the dropped element's stored Event Object
+            var originalEventObject = $(this).data('eventObject');
+
+            // we need to copy it, so that multiple events don't have a reference to the same object
+            var copiedEventObject = $.extend({}, originalEventObject);
+
+            // assign it the date that was reported
+            copiedEventObject.start = date;
+            copiedEventObject.allDay = allDay;
+
+            // render the event on the calendar
+            // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+            $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+
+
+            // is the "remove after drop" checkbox checked?
+            if ($('#drop-remove').is(':checked')) {
+                // if so, remove the element from the "Draggable Events" list
+                $(this).remove();
+            }
+
+        },
+        windowResize: function(event, ui) {
+            $('#calendar').fullCalendar('render');
         }
     });
-    /*----------- END datatable CODE -------------------------*/
-
-    /*----------- BEGIN action table CODE -------------------------*/
-    $('#actionTable button.remove').on('click', function() {
-        $(this).closest('tr').remove();
-    });
-    $('#actionTable button.edit').on('click', function() {
-        $('#editModal').modal({
-            show: true
-        });
-        var val1 = $(this).closest('tr').children('td').eq(1),
-                val2 = $(this).closest('tr').children('td').eq(2),
-                val3 = $(this).closest('tr').children('td').eq(3);
-        $('#editModal #fName').val(val1.html());
-        $('#editModal #lName').val(val2.html());
-        $('#editModal #uName').val(val3.html());
-
-
-        $('#editModal #sbmtBtn').on('click', function() {
-            val1.html($('#editModal #fName').val());
-            val2.html($('#editModal #lName').val());
-            val3.html($('#editModal #uName').val());
-        });
-
-    });
-    /*----------- END action table CODE -------------------------*/
-
 }
-/*--------------------------------------------------------
- END TABLES.HTML SCRIPTS
- ---------------------------------------------------------*/
-
-
-/*--------------------------------------------------------
- BEGIN FILE.HTML SCRIPTS
- ---------------------------------------------------------*/
 function metisFile() {
+    "use strict";
 
     /*----------- BEGIN elfinder CODE -------------------------*/
     var elf = $('#elfinder').elfinder({
-        url: 'assets/php/connector.php'  // connector URL (REQUIRED)
+        url: 'assets/elfinder-2.0-rc1/php/connector.php'  // connector URL (REQUIRED)
                 // lang: 'de',             // language (OPTIONAL)
     }).elfinder('instance');
     /*----------- END elfinder CODE -------------------------*/
 
 }
-/*--------------------------------------------------------
- END FILE.HTML SCRIPTS
- ---------------------------------------------------------*/
-
-
-/*--------------------------------------------------------
- BEGIN MAPS.HTML SCRIPTS
- ---------------------------------------------------------*/
 function metisMaps() {
+    "use strict";
 
-    var map1, map2, map3, map4, map5, map6;
+    var map1, map2, map3, map4, map5, map6, path;
 
     map1 = new GMaps({
         el: '#gmaps-basic',
@@ -997,7 +1055,7 @@ function metisMaps() {
         strokeWeight: 6
     });
 
-    map6 = new GMaps({
+    addressMap = new GMaps({
         el: '#gmaps-geocoding',
         lat: -12.043333,
         lng: -77.028333
@@ -1009,8 +1067,8 @@ function metisMaps() {
             callback: function(results, status) {
                 if (status === 'OK') {
                     var latlng = results[0].geometry.location;
-                    map6.setCenter(latlng.lat(), latlng.lng());
-                    map6.addMarker({
+                    addressMap.setCenter(latlng.lat(), latlng.lng());
+                    addressMap.addMarker({
                         lat: latlng.lat(),
                         lng: latlng.lng()
                     });
@@ -1020,6 +1078,129 @@ function metisMaps() {
     });
 
 }
-/*--------------------------------------------------------
- END MAPS.HTML SCRIPTS
- ---------------------------------------------------------*/
+;(function ($, window, document, undefined) {
+
+    var pluginName = "metisMenu",
+        defaults = {
+            toggle: true
+        };
+        
+    function Plugin(element, options) {
+        this.element = element;
+        this.settings = $.extend({}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.init();
+    }
+
+    Plugin.prototype = {
+        init: function () {
+
+            var $this = $(this.element),
+                $toggle = this.settings.toggle;
+
+            $this.find('li.active').has('ul').children('ul').addClass('collapse in');
+            $this.find('li').not('.active').has('ul').children('ul').addClass('collapse');
+
+            $this.find('li').has('ul').children('a').on('click', function (e) {
+                e.preventDefault();
+
+                $(this).parent('li').toggleClass('active').children('ul').collapse('toggle');
+
+                if ($toggle) {
+                    $(this).parent('li').siblings().removeClass('active').children('ul.in').collapse('hide');
+                }
+            });
+        }
+    };
+
+    $.fn[ pluginName ] = function (options) {
+        return this.each(function () {
+            if (!$.data(this, "plugin_" + pluginName)) {
+                $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+            }
+        });
+    };
+
+})(jQuery, window, document);
+function metisSortable() {
+    
+  $('.inner .row').sortable({
+    
+  });
+  
+}
+
+function metisTable() {
+    "use strict";
+
+    /*----------- BEGIN TABLESORTER CODE -------------------------*/
+    /* required jquery.tablesorter.min.js*/
+    $(".sortableTable").tablesorter();
+    /*----------- END TABLESORTER CODE -------------------------*/
+
+    /*----------- BEGIN datatable CODE -------------------------*/
+    $('#dataTable').dataTable({
+        "sDom": "<'pull-right'l>t<'row'<'col-lg-6'f><'col-lg-6'p>>",
+        "sPaginationType": "bootstrap",
+        "oLanguage": {
+            "sLengthMenu": "Show _MENU_ entries"
+        }
+    });
+    /*----------- END datatable CODE -------------------------*/
+
+    /*----------- BEGIN action table CODE -------------------------*/
+    $('#actionTable button.remove').on('click', function() {
+        $(this).closest('tr').remove();
+    });
+    $('#actionTable button.edit').on('click', function() {
+        $('#editModal').modal({
+            show: true
+        });
+        var val1 = $(this).closest('tr').children('td').eq(1),
+                val2 = $(this).closest('tr').children('td').eq(2),
+                val3 = $(this).closest('tr').children('td').eq(3);
+        $('#editModal #fName').val(val1.html());
+        $('#editModal #lName').val(val2.html());
+        $('#editModal #uName').val(val3.html());
+
+
+        $('#editModal #sbmtBtn').on('click', function() {
+            val1.html($('#editModal #fName').val());
+            val2.html($('#editModal #lName').val());
+            val3.html($('#editModal #uName').val());
+        });
+
+    });
+    /*----------- END action table CODE -------------------------*/
+
+}
+function metisPricing(){
+  $("#dark-toggle label").on("click", function(){	      
+		var $this = $(this);
+		$("ul.dark li.active").removeClass("primary success danger warning info default").addClass($this.find("input").val());
+	      });
+	      
+	      $("#light-toggle label").on("click", function(){	      
+		var $this = $(this);
+		$("ul#light li.active").removeClass("primary success danger warning info default").addClass($this.find("input").val());
+	      });
+};
+function progRess() {
+
+    window.prettyPrint && prettyPrint();
+
+    $.each($('.progress .progress-bar'), function () {
+
+        $(this).animate({
+            width: $(this).attr('aria-valuenow') + '%'
+        });
+
+        $(this).popover({
+            placement: 'bottom',
+            title: 'Source',
+            content: this.outerHTML
+        });
+
+    });
+}

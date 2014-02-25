@@ -35,8 +35,8 @@ $('.search-form form').submit(function(){
 		'name',
 		//'AccType_id',
                 array(
-                'name' => 'AccType_id',
-                'value' => $model->type->name,   //where name is Client model attribute 
+                'name' => 'Itemcategory_id',
+                'value' => $model->Category->name,   //where name is Client model attribute 
                ),
 	),
 )); 
@@ -66,8 +66,8 @@ $this->widget('bootstrap.widgets.TbGridView',array(
 		//'id',
             
 		array(
-               'name' => 'AccTemplate_id',
-                'value' => '$data->AccTemplate->name',   //where name is Client model attribute 
+               'name' => 'ItemTemplate_id',
+                'value' => '$data->Category->name',   //where name is Client model attribute 
               ),
             
             array(

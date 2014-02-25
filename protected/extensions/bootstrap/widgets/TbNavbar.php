@@ -169,6 +169,6 @@ class TbNavbar extends CWidget
 	 */
 	protected function getContainerCssClass()
 	{
-		return $this->fluid ? 'container-fluid' : 'container';
+		return $this->fluid ? 'navbar-fluid' : 'navbar';
 	}
 }

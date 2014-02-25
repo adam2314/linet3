@@ -37,12 +37,12 @@ class ItemTemplate extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, AccType_id', 'required'),
-			array('ItemCat_id', 'numerical', 'integerOnly'=>true),
+			array('name, Itemcategory_id', 'required'),
+			array('Itemcategory_id', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, ItemCat_id', 'safe', 'on'=>'search'),
+			array('id, name, Itemcategory_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -54,8 +54,8 @@ class ItemTemplate extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                    'items'=>array(self::HAS_MANY, 'ItemTemplateItem', 'ItemTemplate_id'),
-                    'type'=>array(self::BELONGS_TO, 'Itemcategory', 'Itemcatagory_id'),
+                    'Items'=>array(self::HAS_MANY, 'ItemTemplateItem', 'ItemTemplate_id'),
+                    'Category'=>array(self::BELONGS_TO, 'Itemcategory', 'Itemcategory_id'),
 		);
 	}
 
@@ -67,7 +67,7 @@ class ItemTemplate extends CActiveRecord
 		return array(
 			'id' => Yii::t('labels', 'ID'),
 			'name' => Yii::t('labels', 'Name'),
-			'Itemcatagory_id' => Yii::t('labels', 'Item Category'),
+			'Itemcategory_id' => Yii::t('labels', 'Item Category'),
 		);
 	}
 
@@ -84,7 +84,7 @@ class ItemTemplate extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('Itemcatagory_id',$this->Itemcatagory_id);
+		$criteria->compare('Itemcategory_id',$this->Itemcategory_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

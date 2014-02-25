@@ -74,47 +74,36 @@ class MiniForm extends CWidget
                 */
                 $newform='
 
-    <div class="row-fluid">
-        <div class="span12">
-            <div class="box">
+
+        <div class="col-lg-12">
+            <div class="box dark">
                 <header>
                     <div class="icons">
-                    <i class="icon-th-large"></i>
+                        <i class="fa fa-th-large"></i>
                     </div>
                     <h5>'.$this->haeder.'</h5>
-                    <ul class="nav pull-right">
-                        <li>
-                            <a href="'.$this->help.'">'.Yii::t("app",'Help').'</a>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                                <i class="icon-th-large"></i>
+                        <div class="toolbar">
+                      <nav style="padding: 8px;">
+                       <a class="btn btn-default" href="'.$this->help.'">'.Yii::t("app",'Help').'
+                                <i class="fa fa-help"></i>
                             </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="">q</a>
-                                </li>
-                                <li>
-                                    <a href="">a</a>
-                                </li>
-                                <li>
-                                    <a href="">b</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a class="accordion-toggle minimize-box" href="#div-2" data-toggle="collapse">
-                                <i class="icon-chevron-up"></i>
-                            </a>
-                        </li>
-                    </ul>
+                        <a href="javascript:;" class="btn btn-default btn-xs collapse-box"  data-toggle="collapse">
+                          <i class="fa fa-minus"></i>
+                        </a> 
+                        <a href="javascript:;" class="btn btn-default btn-xs full-box">
+                          <i class="fa fa-expand"></i>
+                        </a> 
+                        
+                      </nav>
+                    </div>
+                    
                 </header>
-                <div id="div-2" class="accordion-body collapse in body">
+                <div id="div-2" class="body">
                     '.$content.'
                 </div>
             </div>
         </div>
-    </div>
+
 
 
 

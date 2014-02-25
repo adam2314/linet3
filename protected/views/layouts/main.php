@@ -1,45 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <!--<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">-->
-       
-            <?php 
-$baseUrl=Yii::app()->request->baseUrl;
-//Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/screen.css", 'screen, projection'));
-//Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/print.css", 'print'));
-//Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/main.css"));
-//Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/form.css"));
-//Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/bootstrap.min.css"));
-//Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/css/bootstrap-responsive.min.css"));
-//Yii::app()->clientScript->registerCssFile(Yii::app()->createAbsoluteUrl( "/assets/css/linet.css"));
-
-
-Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/style.css'));
-
-//Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/4585c/jquery.js'));
-
-
-?>
-        <link href="<?php echo $baseUrl; ?>/assets/less/theme.less" rel="stylesheet/less" type="text/css" />       
-        <style id="less:bootstrap-admin-assets-less-theme" type="text/css" ></style>
- 
-                <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-                <!--[if lt IE 9]>
-        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-                <!--[if IE 7]>
-        <link type="text/css" rel="stylesheet" href="assets/Font-awesome/css/font-awesome-ie7.min.css"/>
-        <![endif]-->
-
-       
-  
-
-        
-        
+	<meta charset="UTF-8">
+                
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
-        
-        
-        <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->createAbsoluteUrl('/assets/css/linet.css');?>" />
+
        
 </head>
 
@@ -59,16 +24,8 @@ Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets
     </div>
 <div class="wrapper" id="page">
     
-	<div class="headerA">
-		<!--<div id="right_hdr"><a href="?r=site/index"><?php echo CHtml::encode(Yii::app()->name); ?></a></div>-->
-		<div class="logo">
-			<!--<img alt="linet logo" src="images/logo.png" />-->
-		</div>
-		
-	</div><!-- header -->
 
-	<div class="navbar-inverse">
-          
+         
 	<?php 
 	Yii::app()->bootstrap->register();
 
@@ -190,7 +147,11 @@ Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets
 
 		//$this->widget('zii.widgets.CMenu',array('items'=>$menu)); 
 
-$this->widget('bootstrap.widgets.TbNavbar', array('items'=>$menu1,'brand'=>''));
+$this->widget('bootstrap.widgets.TbNavbar', array('items'=>$menu1,'fixed'=>false,'fluid'=>true,'collapse'=>true));
+//'collapse'=>true
+//'fixed'=>false
+//'fluid'=>true
+
 /*
 
 			/*'items'=>array(
@@ -204,10 +165,7 @@ $this->widget('bootstrap.widgets.TbNavbar', array('items'=>$menu1,'brand'=>''));
 
 ?>
       
-	</div><!-- mainmenu -->
-        <div id="shadowleft">
-            
-        </div>
+	
         <div id="left">
             <?php if(!Yii::app()->user->isGuest){
 			

@@ -60,12 +60,7 @@ class Currecies extends mainRecord{
 		// class name for the relations automatically generated below.
 		//return array();
                  return array(
-                        //'author' => array(self::BELONGS_TO, 'User', 'author_id'),
-                        //'comments' => array(self::HAS_MANY, 'Comment', 'post_id',
-                        //    'condition'=>'comments.status='.Comment::STATUS_APPROVED,
-                        //    'order'=>'comments.create_time DESC'),
-                        //'commentCount' => array(self::STAT, 'Comment', 'post_id',
-                        //    'condition'=>'status='.Comment::STATUS_APPROVED),
+                        
                         
                     );
 	}
@@ -92,11 +87,8 @@ class Currecies extends mainRecord{
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
+	public function search(){
+		
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);

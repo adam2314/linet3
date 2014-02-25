@@ -7,7 +7,7 @@ $this->menu=array(
 $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Create Open Balance"))); 
 ?>
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
-	'id'=>'user-form',
+	'id'=>'balance-form',
 	'enableAjaxValidation'=>false,
 )); ?>
 
