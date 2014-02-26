@@ -6,8 +6,8 @@
 
 <?php 
  $this->beginWidget('MiniForm',array(
-    'haeder' => "Transactions for Account $model->id",
-    'width' => '800',
+    'haeder' => Yii::t('app',"Transactions for Account"). " ". $model->id,
+
 )); 
  
  $yiidbdatetime=Yii::app()->locale->getDateFormat('yiidbdatetime');

@@ -104,7 +104,7 @@ $('.search-form form').submit(function(){
         //var id = obj.getAttribute("href")
         $.post( "<?php echo Yii::app()->createAbsoluteUrl('/company/index');?>",{ Company: id }, function( data ) {
             //alert( "Data Loaded: " + data );
-            window.location = "<?php echo Yii::app()->createAbsoluteUrl('/settings/admin');?>";
+            window.location = "<?php echo Yii::app()->createAbsoluteUrl('/settings/dashboard');?>";
             
           });
         

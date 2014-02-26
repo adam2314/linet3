@@ -36,30 +36,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridVie
                 //'issue_date',
                 array(
                     'name'=>'issue_date',
-                     'filter' => '',/*$this->widget('zii.widgets.jui.CJuiDatePicker', array(
-                                'model'=>$model, 
-                                'attribute'=>'issue_date', 
-                                //'language' => 'he',
-                                //'i18nScriptFile' => 'jquery.ui.datepicker-he.js', // (#2)
-                                //'htmlOptions' => array(
-                                 //   'id' => 'datepicker_for_issue_date',
-                                  //  'size' => '10',
-                                //),
-                                'defaultOptions' => array(  // (#3)
-                                    //'showOn' => 'focus', 
-                                    'dateFormat' =>  Yii::app()->locale->getDateFormat('short'),
-                                    //'showOtherMonths' => true,
-                                    //'selectOtherMonths' => true,
-                                    //'changeMonth' => true,
-                                    //'changeYear' => true,
-                                    //'showButtonPanel' => true,
-                                )
-                            ), 
-                            true), // (#4)*/
-                        //),
-                        //'filter'=>CHtml::listData(Docstatus::model()->findAllByAttributes(array('doc_type'=>$data->doctype)), 'num', 'name'),
-                       //'value'=>'date("M j, Y", $data->issue_date)'
-                    
+                     'filter' => '',
                     'value'=>'$data->issue_date'
                 ),
             'total',
@@ -89,21 +66,21 @@ $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridVie
 		    (
 		        'edit' => array
 		        (
-                            'label'=>'<i class="icon-edit"></i>',
+                            'label'=>'<i class="glyphicon glyphicon-edit"></i>',
 		            //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
 		            'url'=>'Yii::app()->createUrl("docs/update", array("id"=>$data->id,"preview"=>0))',
 		        	
 		        ),
 		        'remove' => array
 		        (
-		            'label'=>'<i class="icon-remove"></i>',
+		            'label'=>'<i class="glyphicon glyphicon-remove"></i>',
 		            //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
                             'url'=>'Yii::app()->createUrl("docs/delete", array("id"=>$data->id))',
 		            //'url'=>'Yii::app()->createUrl("users/email", array("id"=>$data->id))',
 		        ),
                         'print' => array
 		        (
-		            'label'=>'<i class="icon-print"></i>',
+		            'label'=>'<i class="glyphicon glyphicon-print"></i>',
 		            //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
                             'url'=>'Yii::app()->createUrl("docs/print", array("id"=>$data->id))',
                             'options'=>array("target"=>"_blank"),
@@ -111,7 +88,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridVie
 		        ),    
 		        'display' => array
 		        (
-		            'label'=>'<i class="icon-search"></i>',
+		            'label'=>'<i class="glyphicon glyphicon-search"></i>',
 		            'url'=>'Yii::app()->createUrl("docs/view", array("id"=>$data->id))',
 		            //'visible'=>'$data->score > 0',
 		            //'click'=>'function(){alert("Going down!");}',

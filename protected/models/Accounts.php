@@ -220,6 +220,7 @@ class Accounts extends basicRecord{//CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+                        array('name, type', 'required'),
 			array('type, pay_terms, parent_account_id, system_acc, owner', 'numerical', 'integerOnly'=>true),
 			array('id6111, zip', 'length', 'max'=>10),
 			array('src_tax', 'length', 'max'=>5),

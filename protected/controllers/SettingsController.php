@@ -2,8 +2,14 @@
 
 class SettingsController extends RightsController
 {
-
-
+        public function actionDashboard(){
+		$models = Settings::model()->findAll();
+		$this->render('dashboard',array(
+			//'models'=>$models,
+		));
+	}
+        
+        
 	public function actionAdmin()	{/* used in the refnum selection*/
 		
 		

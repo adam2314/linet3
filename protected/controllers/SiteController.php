@@ -2,6 +2,7 @@
 
 class SiteController extends Controller
 {
+        public $layout='//layouts/noMenu';
 	/**
 	 * Declares class-based actions.
 	 */
@@ -73,6 +74,7 @@ class SiteController extends Controller
 	 */
 	public function actionLogin()
 	{
+                
 		$model=new FormLogin;
 
 		// if it is ajax validation request

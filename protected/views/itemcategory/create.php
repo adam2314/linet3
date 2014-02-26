@@ -5,11 +5,18 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Itemcategory', 'url'=>array('index')),
-	array('label'=>'Manage Itemcategory', 'url'=>array('admin')),
+	array('label'=>Yii::t('app','List Item Category'), 'url'=>array('index')),
+	array('label'=>Yii::t('app','Manage Item Category'), 'url'=>array('admin')),
 );
+$this->beginWidget('MiniForm',array(
+    'haeder' => Yii::t('app',"Create Item Category"),
+    
+)); 
+
 ?>
 
-<h1>Create Itemcategory</h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_form', array('model'=>$model)); 
+
+ $this->endWidget();
+?>

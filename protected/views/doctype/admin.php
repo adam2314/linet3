@@ -5,7 +5,7 @@
 //);
 
 $this->menu=array(
-	array('label'=>Yii::t('app',"Create Doctype"), 'url'=>array('create')),
+	array('label'=>Yii::t('app',"Create Document Type"), 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -21,8 +21,7 @@ $('.search-form form').submit(function(){
 });
 ");
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Manage Documenet types"),
-    //'width' => '800',
+    'haeder' => Yii::t('app',"Manage Document types"),
 )); 
 
 

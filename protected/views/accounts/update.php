@@ -8,16 +8,16 @@
 $this->menu=array(
 	//array('label'=>'List Accounts', 'url'=>array('index')),
 	//array('label'=>'Create Accounts', 'url'=>array('create')),
-	array('label'=>'View Account', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage Accounts', 'url'=>array('admin')),
+	array('label'=>Yii::t('app','View Account'), 'url'=>array('view', 'id'=>$model->id)),
+	array('label'=>Yii::t('app','Manage Accounts'), 'url'=>array('admin')),
 );
 ?>
 
 
 <?php 
  $this->beginWidget('MiniForm',array(
-    'haeder' => "Update Account $model->id",
-    'width' => '800',
+    'haeder' => Yii::t('app',"Update Account"). " ". $model->id,
+    
 )); 
 echo $this->renderPartial('_form', array('model'=>$model)); 
  $this->endWidget(); 

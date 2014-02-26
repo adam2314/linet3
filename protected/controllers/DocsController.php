@@ -95,7 +95,7 @@ class DocsController extends RightsController
         
         
         
-        public function actionPrint($id,$preview=1,$model=null){//usd for print*/
+        public function actionPrint($id,$preview=0,$model=null){//usd for print*/
             if(isset($_POST['language']))
                 Yii::app()->language=$_POST['language'];
             //Yii::app()->language='he_il';

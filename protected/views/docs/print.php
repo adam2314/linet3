@@ -3,18 +3,7 @@
 
 //$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View Document ") ." " .$model->id,));
 ?>
-<script type="text/javascript">
-jQuery(document).ready(function(){
-    preview=<?php echo $preview;?>;
-    
-    if(preview==0){
-        window.print();
-        window.location = "<?php echo Yii::app()->CreateURL('docs/admin')?>"
-        //return url
-    }
-});
 
-</script>
 	
 <table>
         <tr>
@@ -240,3 +229,15 @@ if(count($model->docCheques)!=0){
 <?php		
 //$this->endWidget(); 
 ?>
+<script type="text/javascript">
+//$(function () {
+    preview=<?php echo $preview;?>;
+    
+    if(preview==0){
+        window.print();
+        window.location = "<?php echo Yii::app()->CreateURL('docs/admin')?>"
+        //return url
+    }
+//});
+
+</script>

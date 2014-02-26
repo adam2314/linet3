@@ -383,7 +383,7 @@
                     
                     if (($('#Docs_total').length)&&($('#rcptsum').length)) {
                         if(Number($('#Docs_total').val())!=Number($('#rcptsum').val())){
-                          alert("sumisnot equil");
+                          alert("sum is not equil");
                           return false;
                         }
                     }

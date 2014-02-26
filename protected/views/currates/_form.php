@@ -1,24 +1,15 @@
 <div class="form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
+<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'id'=>'currates-form',
 	'enableAjaxValidation'=>false,
 )); ?>
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<div class="row">
-		<?php //echo $form->labelEx($model,'id'); ?>
-		<?php //echo $form->textField($model,'id',array('size'=>10,'maxlength'=>10)); ?>
-		<?php //echo $form->error($model,'id'); ?>
-	</div>
-
-	<div class="row">
+	
 		<?php echo $form->labelEx($model,'currency_id'); ?>
-		<?php //echo $form->textField($model,'currency_id',array('size'=>3,'maxlength'=>3)); ?>
-		
-            
-                <?php
+		<?php
 
                 $this->widget('ext.JAutoComplete', array(
                     'model'=>$model,
@@ -39,24 +30,17 @@
                 ?>
                 <?php echo $form->error($model,'currency_id'); ?>
             
-            
-            
-	</div>
-
-	<div class="row">
-		<?php //echo $form->labelEx($model,'date'); ?>
-		<?php //echo $form->textField($model,'date'); ?>
-		<?php //echo $form->error($model,'date'); ?>
-	</div>
-
-	<div class="row">
+           
 		<?php echo $form->labelEx($model,'value'); ?>
 		<?php echo $form->textField($model,'value',array('size'=>7,'maxlength'=>7)); ?>
 		<?php echo $form->error($model,'value'); ?>
-	</div>
-
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('app',"Create") : Yii::t('app',"Save")); ?>
+	
+	<div class="form-actions">
+		<?php $this->widget('bootstrap.widgets.TbButton', array(
+			'buttonType'=>'submit',
+			'type'=>'primary',
+			'label'=>$model->isNewRecord ? Yii::t('app',"Create") : Yii::t('app',"Save"),
+		)); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

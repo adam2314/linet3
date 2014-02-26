@@ -1,26 +1,23 @@
 <div class="form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
+<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'id'=>'itemcategory-form',
 	'enableAjaxValidation'=>false,
 )); ?>
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'name'); ?>
-		<?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'name'); ?>
-	</div>
+	
+		<?php echo $form->textFieldRow($model,'name',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->textFieldRow($model,'profit'); ?>
+	
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'profit'); ?>
-		<?php echo $form->textField($model,'profit'); ?>
-		<?php echo $form->error($model,'profit'); ?>
-	</div>
-
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('app',"Create") : Yii::t('app',"Save")); ?>
+	<div class="form-actions">
+		<?php $this->widget('bootstrap.widgets.TbButton', array(
+			'buttonType'=>'submit',
+			'type'=>'primary',
+			'label'=>$model->isNewRecord ? Yii::t('app',"Create") : Yii::t('app',"Save"),
+		)); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

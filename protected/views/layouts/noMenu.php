@@ -26,21 +26,62 @@
     </div>
 <div class="wrapper" id="page">
     
-	<div class="headerA">
-		<!--<div id="right_hdr"><a href="?r=site/index"><?php echo CHtml::encode(Yii::app()->name); ?></a></div>-->
-		<div class="logo">
-			<!--<img alt="linet logo" src="images/logo.png" />-->
-		</div>
-		
-	</div><!-- header -->
+    
+    <nav class="navbar navbar-inverse navbar-static-top">
 
-	<div class="navbar-inverse">
-          
-			<div class="navbar navbar-fixed-top"><div class="navbar-inner"><div class="container"><a href="/yii/demos/new/" class="brand"></a><ul id="yw0" class="nav"><li class="active"><a href="/yii/demos/new/site/login">הכנס</a></li></ul></div></div></div>      
-	</div>
-        <div id="shadowleft">
-            
-        </div>
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <header class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+              <span class="sr-only">Toggle navigation</span> 
+              <span class="icon-bar"></span> 
+              <span class="icon-bar"></span> 
+              <span class="icon-bar"></span> 
+            </button>
+            <a href="<?php echo Yii::app()->createAbsoluteUrl('/settings/dashboard');?>" class="navbar-brand">
+                Linet 3.0
+              <!--<img src="assets/img/logo.png" alt="">-->
+            </a> 
+          </header>
+          <div class="topnav">
+            <div class="btn-toolbar">
+              <div class="btn-group">
+                <a data-placement="bottom" data-original-title="Fullscreen" data-toggle="tooltip" class="btn btn-default btn-sm" id="toggleFullScreen">
+                  <i class="glyphicon glyphicon-fullscreen"></i>
+                </a> 
+              </div>
+              <div class="btn-group">
+                <a data-placement="bottom" data-original-title="Show / Hide Sidebar" data-toggle="tooltip" class="btn btn-success btn-sm" id="changeSidebarPos">
+                  <i class="fa fa-expand"></i>
+                </a> 
+              </div>
+              
+              <div class="btn-group">
+                
+                <a data-toggle="modal" data-original-title="Help" data-placement="bottom" class="btn btn-default btn-sm" href="#helpModal">
+                  <i class="fa fa-question"></i>
+                </a> 
+              </div>
+              <div class="btn-group">
+                <a href="login.html" data-toggle="tooltip" data-original-title="Logout" data-placement="bottom" class="btn btn-metis-1 btn-sm">
+                  <i class="fa fa-power-off"></i>
+                </a> 
+              </div>
+            </div>
+          </div><!-- /.topnav -->
+          <div class="navbar-collapse navbar-ex1-collapse collapse" style="height: 1px;">
+
+           
+         
+        
+         
+	<?php 
+	Yii::app()->bootstrap->register();
+
+?>
+	
+       </div>
+	</nav>
+       
         <div id="left">
             <?php if(!Yii::app()->user->isGuest){
                 ?>

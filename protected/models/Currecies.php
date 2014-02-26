@@ -107,7 +107,7 @@ class Currecies extends mainRecord{
 	    $res =array();
 	 
 
-            $qtxt ="SELECT id ,name as label FROM {{currencies}} WHERE name LIKE :term";
+            $qtxt ="SELECT id ,name as label FROM ".Self::table." WHERE name LIKE :term";
             $command =Yii::app()->db->createCommand($qtxt);
             $command->bindValue(":term", '%'.$name.'%', PDO::PARAM_STR);
             //$command->bindValue(":prefix", $this->prefix, PDO::PARAM_STR);

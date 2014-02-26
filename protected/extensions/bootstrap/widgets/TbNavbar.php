@@ -150,8 +150,9 @@ class TbNavbar extends CWidget
 				if (isset($item['class']))
 				{
 					$className = $item['class'];
+                                        
 					unset($item['class']);
-
+                                        //echo $className;
 					$this->controller->widget($className, $item);
 				}
 			}

@@ -30,10 +30,10 @@ class AccHist extends CActiveRecord{
 		// will receive user inputs.
 		return array(
 			array('account_id', 'length', 'max'=>11),
-			array('dt, details', 'safe'),
+			array('dt, details, type', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, account_id, dt, details', 'safe', 'on'=>'search'),
+			array('id, account_id, dt, details, type', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -45,7 +45,7 @@ class AccHist extends CActiveRecord{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'account' => array(self::BELONGS_TO, 'Accounts', 'account_id'),
+			'Account' => array(self::BELONGS_TO, 'Accounts', 'account_id'),
 		);
 	}
 
@@ -59,6 +59,7 @@ class AccHist extends CActiveRecord{
 			'account_id' => Yii::t('labels','Account'),
 			'dt' => Yii::t('labels','Timestamp'),
 			'details' => Yii::t('labels','Details'),
+                        'type'=>Yii::t('labels','Type'),
 		);
 	}
 
@@ -84,7 +85,8 @@ class AccHist extends CActiveRecord{
 		$criteria->compare('account_id',$this->account_id,true);
 		$criteria->compare('dt',$this->dt,true);
 		$criteria->compare('details',$this->details,true);
-
+                $criteria->compare('type',$this->account_id,true);
+                
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

@@ -1,8 +1,8 @@
 <?php
 
 $this->menu=array(
-	array('label'=>Yii::t('app','List Account types'),'url'=>array('index')),
-	array('label'=>Yii::t('app','Create Account types'),'url'=>array('create')),
+	array('label'=>Yii::t('app','List Account Contact History'),'url'=>array('index')),
+	array('label'=>Yii::t('app','Create Account Contact History'),'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -19,7 +19,7 @@ $('.search-form form').submit(function(){
 ");
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Manage Account types"),
+    'haeder' => Yii::t('app',"Manage Account Contact History"),
 
 )); 
 
@@ -27,14 +27,14 @@ $('.search-form form').submit(function(){
 ?>
 
 <?php $this->widget('bootstrap.widgets.TbGridView',array(
-	'id'=>'acctype-grid',
+	'id'=>'acchist-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
-		'name',
-		'desc',
-		'openformat',
+		'account_id',
+		'dt',
+		'details',
+		
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
 		),

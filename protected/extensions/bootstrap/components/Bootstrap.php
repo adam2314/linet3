@@ -70,6 +70,34 @@ class Bootstrap extends CApplicationComponent
 	public function registerYiiCss()
 	{
 		Yii::app()->clientScript->registerCssFile($this->getAssetsUrl().'/css/yii.css');
+                
+                
+            Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/bootstrap/css/bootstrap.min.css'));
+            Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/Font-Awesome/css/font-awesome.min.css'));
+            Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/chosen/chosen.min.css'));
+            Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/jasny/css/jasny-bootstrap.min.css'));
+
+
+            Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/main.css'));
+            Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/theme.css'));
+            Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/linet.css'));
+
+
+            Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/modernizr-build.min.js'));
+
+
+            Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/bootstrap/js/bootstrap.min.js'), CClientScript::POS_END);
+            Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/chosen/chosen.jquery.min.js'), CClientScript::POS_END);
+            Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/cssbeautify/cssbeautify.js'), CClientScript::POS_END);
+            Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/screenfull/screenfull.js'), CClientScript::POS_END);
+            Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/main.js'), CClientScript::POS_END);
+
+
+
+            Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/linet.js'), CClientScript::POS_END);
+                
+                
+                
 	}
 
 	/**

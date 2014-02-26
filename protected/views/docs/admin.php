@@ -25,7 +25,7 @@ $this->beginWidget('MiniForm',array(
     'haeder' => "Manage Docs",  )); 
 
 
-$form=$this->beginWidget('CActiveForm', array(
+$form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'page-form',
     'enableAjaxValidation'=>true,
 )); 

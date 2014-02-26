@@ -53,7 +53,9 @@ class TbPager extends CLinkPager
 
 		if (in_array($this->alignment, $validAlignments))
 			$classes[] = 'pagination-'.$this->alignment;
-
+                
+                $classes[]='pagination';
+                
 		if (!empty($classes))
 		{
 			$classes = implode(' ', $classes);
