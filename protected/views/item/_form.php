@@ -50,7 +50,7 @@
             'attr' => $model->getEavAttributes(),
         )); 
 
-         $this->endWidget(); ?>
+         $this->endWidget();  ?>
     </div>
 </div>
         <?php //echo $form->labelEx($model,'owner'); ?>

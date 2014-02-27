@@ -64,6 +64,8 @@ return array (
   'Is Product' => '',
   'Issue Date' => '',
   'Item' => '',
+  'Item Category' => '',
+  'Item Template' => '',
   'Item VAT Catagory' => '',
   'Language' => '',
   'Last Login' => '',

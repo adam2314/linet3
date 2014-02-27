@@ -17,20 +17,23 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
+  'Hash' => '',
+  'Item Category' => 'קטגוריית פריט',
+  'Item Template' => 'תבנית פריט',
   'Account' => 'חשבון',
   'Account Template' => 'תבנית חשבון',
   'Account Type' => 'סוג חשבון',
   'Account id' => 'מזהה חשבון',
   'Address' => 'כתובת',
-  'Ammount' => 'כמות',			//Amount
+  'Ammount' => 'כמות',
   'Bank' => 'בנק',
   'Bank Refnum' => 'מספר בנק',
   'Branch' => 'סניף',
   'Category' => 'קטגוריה',
-  'Certifcate Password' => 'סיסמת אישור',	//Certificate
-  'Cheque Account' => 'מספר חשבון',		//Check
-  'Cheque Date' => 'תאריך פרעון',		//Check Date
-  'Cheque No.' => 'צ\'ק מספר',		//Check No.
+  'Certifcate Password' => 'סיסמת אישור',
+  'Cheque Account' => 'מספר חשבון',
+  'Cheque Date' => 'תאריך פרעון',
+  'Cheque No.' => 'צ\'ק מספר',
   'City' => 'עיר',
   'Code' => 'קוד',
   'Comments' => 'הערות',
@@ -47,16 +50,15 @@ return array (
   'Details' => 'פרטים',
   'Dir Phone' => 'טלפון ישיר',
   'Doc' => 'מסמך',
-  'Documenet No.' => 'מס\' מסמך',		//Document No.
-  'Documenet Type' => 'סוג מסמך',		//Document Type
+  'Documenet No.' => 'מס\' מסמך',
+  'Documenet Type' => 'סוג מסמך',
   'Due Date' => 'תאריך פקיעת תוקף',
   'Eav Fields' => 'שדות מותאמים',
   'Email' => 'דוא"ל',
   'Expire' => 'פג',
-  'Extrnal No.' => 'מס\' חיצוני',		//External
+  'Extrnal No.' => 'מס\' חיצוני',
   'Fax No.' => 'מס\' פקס',
   'First Name' => 'שם פרטי',
-  'Hash' => '',
   'ID' => 'מזהה',
   'Id6111' => 'מזהה 6111',
   'Idcode' => 'קוד מזהה',
@@ -64,7 +66,7 @@ return array (
   'Is Product' => 'האם מוצר מדף?',
   'Issue Date' => 'תאריך הפקה',
   'Item' => 'פריט',
-  'Item VAT Catagory' => 'קטגורית מע"מ לפריט',	//Category
+  'Item VAT Catagory' => 'קטגורית מע"מ לפריט',
   'Language' => 'שפה',
   'Last Login' => 'תאריך התחברות אחרון',
   'Last Name' => 'שם משפחה',
@@ -76,7 +78,7 @@ return array (
   'Name' => 'שם',
   'No VAT Total' => 'סה"כ מע"מ',
   'Num' => 'מס\'',
-  'Open Format' => 'קובץ אחיד',		//Standard Format
+  'Open Format' => 'קובץ אחיד',
   'Out' => 'חוץ',
   'Owner' => 'בעלים',
   'Parent Account Id' => 'מזהה חשבון אב',
@@ -100,9 +102,9 @@ return array (
   'Refnum' => 'מס\' אסמכתא',
   'Refnum 1' => 'מס\' אסמכתא 1',
   'Refnum 2' => 'מס\' אסמכתא 2',
-  'Sale Price' => 'מחיר מכירה',		//Sales price
+  'Sale Price' => 'מחיר מכירה',
   'Salt' => 'מלח',
-  'Sescription' => 'מנוי',		//subscription
+  'Sescription' => 'מנוי',
   'Src Tax' => 'ניכוי מס במקור',
   'Status' => 'מצב',
   'Stock Type' => 'סוג מלאי',
@@ -124,6 +126,6 @@ return array (
   'Value Date' => 'תאריך ערך',
   'Vat No.' => 'מספר ע"מ/ח"פ',
   'Website' => 'אתר אינטרנט',
-  'Zip' => 'מיקוד',			//zipcode
+  'Zip' => 'מיקוד',
   'invoice Price' => 'מחיר חשבונית',
 );

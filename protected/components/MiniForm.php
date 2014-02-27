@@ -9,15 +9,11 @@ class MiniForm extends CWidget
     public $haeder= '';
     public $titlewidth=0;
     public $class='col-lg-12';
+    public $content='';
     
-    public function init()
-    {
+    public function init() {
     	ob_start();
         parent::init();
- 
-		
- 
-        
     }
  
     /**
@@ -25,7 +21,8 @@ class MiniForm extends CWidget
      * @see CWidget::run()
      */
     public function run(){//style="width:'.($this->width-$this->titlewidth-28).'px;"
-    	$content = ob_get_clean();
+    	if($this->content=='')
+            $this->content = ob_get_clean();
         
         if($this->help!='none'){
             $this->help='<a class="btn btn-default" href="'.$this->help.'">'.Yii::t("app",'Help').'
@@ -77,7 +74,7 @@ class MiniForm extends CWidget
                     
                 </header>
                 <div id="div-2" class="body">
-                    '.$content.'
+                    '.$this->content.'
                 </div>
             </div>
         </div>

@@ -7,7 +7,7 @@
 <?php 
  $this->beginWidget('MiniForm',array(
     'haeder' => Yii::t('app',"Transactions"),
-    'width' => '800',
+    //'width' => '800',
 )); 
  
  

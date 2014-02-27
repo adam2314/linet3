@@ -9,7 +9,7 @@
  * Each array element represents the translation (value) of a message (key).
  * If the value is empty, the message is considered as not translated.
  * Messages that no longer need translation will have their translations
- * enclosed between a pair of '@@' marks.
+ * enclosed between a pair of '' marks.
  *
  * Message string can be used with plural forms format. Check i18n section
  * of the guide for details.
@@ -17,6 +17,97 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
+'Accounts Related events' => 'אירועים הקשורים בחשבונות',
+  'Cheques and Cash to be deposited' => 'הכנסות להפקדה בבנק',
+  'Convert to Invoice' => ' המרה לחשבונית מס',
+  'Convert to Invoice Receipt' => 'המרה לחשבונית מס-קבלה',
+  'Convert to Sales Order' => 'המרה להזמנת עבודה',
+  'Create Account' => 'צור חשבון',
+  'Create Account Contact History' => 'צור אירוע לחשבון',					//Create Account Contact Event
+  'Create Account Template' => 'צור תבנית חשבון',
+  'Create Account types' => 'צור סוג חשבון',
+  'Create Accounts' => 'צור חשבון',								//Create Account
+  'Create Docs' => 'צור מסמך',								//Create Document
+  'Create Document Type' => 'צור סוג מסמך',
+  'Create Document type' => 'צור סוג מסמך',
+  'Create Eav Fields' => 'צור שדה מותאם אישית',
+  'Create Item Category' => 'צור קטגורית פריט',
+  'Invoices to be collected' => 'חשבוניות לגביה',						//Invoices to collec
+  'List Account Contact History' => 'הצג היסטוריית קשר לחשבון',
+  'List Account types' => 'הצג סוגי חשבונות',
+  'List Accounts' => 'הצג חשבונות',
+  'Create Items' => 'צור פריט',
+  'Credit' => 'זיכוי',
+  'Debit' => 'חיוב',
+  'Duplicate Docs' => 'שכפל מסמך',								//Duplicate Document
+  'Expenses' => 'הוצאות',
+  'Help' => 'עזרה',
+  'List Company' => 'הצג חשבון',
+  'List Docs' => 'הצג מסמכים',
+  'List Item' => 'הצג פריט',
+  'List Item Category' => 'הצג קטגוריית פריטים',
+  'Manage Account Contact History' => 'נהל היסטוריית קשר לחשבון',
+  'Manage Account Template' => 'נהל תבנית חשבון',
+  'Manage Account Templates' => 'נהל תבניות חשבון',
+  'Manage Account types' => 'נהל סוגי חשבונות',
+  'Manage Accounts' => 'נהל חשבונות',
+  'Manage Docs' => 'נהל מסמכים',								//Manage Documents
+  'Manage Document types' => 'נהל סוגי מסמכים',
+  'Manage EavFields' => 'נהל שדות מותאמים אישית',
+  'Manage Item' => 'נהל פריט',
+  'Manage Item Category' => 'נהל קטגוריית פריטים',
+  'None' => 'ללא',
+  'Oppt Account' => 'חשבון נגדי',
+  'PDF' => 'PDF',
+  'Sales' => 'מכירות',
+  'Save' => 'שמור',
+  'Today Tasks and Events' => 'משימות ואירועים להיום',
+  'Transactions for Account' => 'תנועות בחשבון',
+  'Treat Needed Documents' => 'מסמכים לטיפול',						//Documents to handle
+  'Update Account' => 'ערוך חשבון',
+  'View Account' => 'הצג חשבון',
+  'View Docs' => 'הצג מסמכים',								//View Documents
+  'View Eav Field #' => 'הצג שדה מותאם אישית',
+  'Create AccTemplate' => 'צור תבנית חשבון',
+  'Income outcome' => 'הכנסות הוצאות',
+  'Manage Documenet types' => 'נהל סוגי מסמכים',
+  'company.acc.assetvat' => '',
+  'company.acc.buyvat' => '',
+  'company.acc.custtax' => '',
+  'company.acc.irs' => '',
+  'company.acc.natinspay' => '',
+  'company.acc.openbalance' => '',
+  'company.acc.payvat' => '',
+  'company.acc.pretax' => '',
+  'company.acc.sellvat' => '',
+  'company.address' => 'כתובת',
+  'company.city' => 'עיר',
+  'company.cur' => 'מטבע עיקרי לחברה',
+  'company.logo' => 'לוגו',
+  'company.name' => 'שם',
+  'company.path' => 'נתיב ליישום',
+  'company.pdfprint' => 'הדפס מסמכים ל-PDF',
+  'company.seccur' => ' מטבע משני לחברה',
+  'company.stock' => 'סוג מלאי',
+  'company.tax.rate' => 'שיעור מס',
+  'company.transaction' => '',
+  'company.vat.id' => '',
+  'company.vat.type' => '',
+  'company.zip' => 'מיקוד',
+  'paypal.apiLive' => 'API של PAY PAL',
+  'paypal.apiPassword' => 'סיסמת PAYPAL ל-API',
+  'paypal.apiSignature' => 'חתימת PAYPAL ל-API',
+  'paypal.apiUsername' => 'משתמש PAYPAL ל-API',
+  'server.Latest' => '',
+  'server.Version' => '',
+  'server.checkTime' => '',
+  'server.dbVersion' => '',
+  'server.wkhtmltopdf' => '',
+  'system.auth' => '',
+  'system.name' => '',
+  'system.vendor.name' => '',
+  'system.vendor.vatnum' => '',
+  'system.version' => '',
   'About' => 'אודות',
   'Account' => 'חשבון',
   'Account Name' => 'שם חשבון',
@@ -26,41 +117,40 @@ return array (
   'Accounts' => 'חשבונות',
   'Acct. balance' => 'מאזן חשבון',
   'Accts. recon.' => 'התאמת חשבונות',
-  'All current compnay data will be removed:' => 'כל המידע בחברה הנוכחית יוסר',		//All current company
+  'All current compnay data will be removed:' => 'כל המידע בחברה הנוכחית יוסר',
   'Backup restore' => 'שחזור גיבוי',
-  'Bag Report' => 'דיווח באגים',							//Bug Report
+  'Bag Report' => 'דיווח באגים',
   'Balance' => 'מאזן',
   'Bank deposits' => 'הפקדות בנק',
   'Bank docs entry' => 'ייבוא דפי חשבון בנק',
   'Bank recon.' => 'התאמת בנקים',
   'Bankbooks' => 'חשבון בנק',
   'Business docs' => 'מסמכים עסקיים',
-  'Bussines details' => 'פרטי בית העסק',						//Business Details
+  'Bussines details' => 'פרטי בית העסק',
   'Cant find Company template file unable to create database' => 'לא מוצא קובץ תבנית חברה ולכן לא יכול ליצור מסד נתונים',
   'Categories' => 'קטגוריות',
   'Change Company' => 'שנה חברה',
   'Change language' => 'שנה שפה',
-  'Chose Account' => 'בחר חשבון',							//Choose
-  'Chose Bank' => 'בחר בנק',							//Choose
-  'Chose Payment type' => 'בחר סוג אמצעי תשלום',					//Choose
+  'Chose Account' => 'בחר חשבון',
+  'Chose Bank' => 'בחר בנק',
+  'Chose Payment type' => 'בחר סוג אמצעי תשלום',
   'Comments' => 'הערות',
   'Contact Item' => 'פרטי קשר',
-  'Costum Fields' => 'שדות מותאמים',						//Custom
+  'Costum Fields' => 'שדות מותאמים',
   'Create' => 'צור',
-  'Create AccTemplate' => 'צור תבנית חשבון',
   'Create Account Type' => 'צור סוג חשבון',
   'Create Company' => 'צור חברה',
   'Create Currency Rate' => 'צור שער חליפין',
-  'Create Item Tax Catagory' => 'צור קטגורית מס לפריטים',				//Create Item Tax Category
+  'Create Item Tax Catagory' => 'צור קטגורית מס לפריטים',
   'Create Item Units' => 'צור יחידת מידה לפריטים',
   'Create Manual Transaction' => 'צור תנועה ידנית',
-  'Create Open Balance' => 'צור תנועה מאזנת',						
+  'Create Open Balance' => 'צור תנועה מאזנת',
   'Create User' => 'צור משתמש',
   'Credit inv.' => 'חשבונית זיכוי',
   'Currency' => 'מטבע',
   'Currency rates' => 'שער מטבע',
-  'Customers owes' => 'חוב לקוח',							//Customers in Debit
-  'Customers owing money' => 'לקוחות חייבים',						//Customers in Debit
+  'Customers owes' => 'חוב לקוח',
+  'Customers owing money' => 'לקוחות חייבים',
   'Delete User' => 'מחק משתמש',
   'Delivery doc.' => 'תעודת משלוח',
   'Deposit Success' => 'הפקדה הצליחה',
@@ -74,9 +164,8 @@ return array (
   'General backup' => 'גיבוי כללי',
   'ID' => 'מזהה',
   'Import Export' => 'ייבוא יצוא',
-  'In Out' => 'הכנסות הוצאות',							//Credit Debit
+  'In Out' => 'הכנסות הוצאות',
   'Income' => 'הכנסות',
-  'Income outcome' => 'הכנסות הוצאות',						//Credit Debit
   'Income tax advances' => 'מקדמות מס הכנסה',
   'Invoice' => 'חשבונית מס',
   'Invoice receipt' => 'חשבונית מס קבלה',
@@ -87,7 +176,6 @@ return array (
   'List User' => 'הצג משתמש',
   'List Users' => 'הצג משתמשים',
   'Login' => 'התחבר',
-  0 => '',
   'Logout' => 'התנתק',
   'Mach Success' => 'התאמה הצליחה',
   'Mach1 Success' => 'התאמה 1 הצליחה',
@@ -95,7 +183,6 @@ return array (
   'Manage Bankbooks' => 'נהל דפי בנק',
   'Manage Currencies Rates' => 'נהל שערי מטבע',
   'Manage Customers' => 'נהל לקוחות',
-  'Manage Documenet types' => 'נהל סוגי מסמכים',
   'Manage Eav Fields' => 'נהל שדות',
   'Manage Groups' => 'נהל קבוצות',
   'Manage Item Categories' => 'נהל קטגוריות פריטים',
@@ -116,9 +203,8 @@ return array (
   'Outcome' => 'הוצאות',
   'PCN874' => 'PCN874',
   'PCN874 Report' => 'דוח PCN874',
-  'PDF' => '',
   'Paid Support' => 'תמיכה בתשלום',
-  'Parchace Order' => 'הזמנת רכש',							//Purchase Order
+  'Parchace Order' => 'הזמנת רכש',
   'Password' => 'סיסמא',
   'Payment' => 'תשלום',
   'Prefix' => 'קידומת',
@@ -151,8 +237,8 @@ return array (
   'Subtotal tax exempt' => 'סה"כ מס שהופחת',
   'Subtotal to pay' => 'סה"כ לתשלום',
   'Support' => 'תמיכה',
-  'Tax Catagory' => 'קטגורית מס',							//Tax Category
-  'Tax Catagory For Items' => 'קטגורית מס לפריטים',					//Tax Category For Items			
+  'Tax Catagory' => 'קטגורית מס',
+  'Tax Catagory For Items' => 'קטגורית מס לפריטים',
   'Tax Report' => 'דוח מע"מ',
   'To' => 'אל',
   'To Date' => 'לתאריך',
@@ -176,57 +262,14 @@ return array (
   'Vat No.' => 'מספר עוסק מורשה/ח"פ',
   'Vat Report' => 'דוח מע"מ',
   'View Document ' => 'צפה במסמך',
-  'View Item Tax Catagory #' => 'צפה קטוגרית מס לפריט',					//View Item Tax Category
+  'View Item Tax Catagory #' => 'צפה קטוגרית מס לפריט',
   'View User ' => 'צפה במשתמש',
-  'Werehouses' => 'מחסנים',							//Warehouses
-  'Worrinng:' => 'אזהרה',								//Warning
+  'Werehouses' => 'מחסנים',
+  'Worrinng:' => 'אזהרה',
   'balance' => 'מאזן',
-  'insert Asstes outcome' => 'קליטת רכוש קבוע',					//Insert Assets outcome
-  'insert Buisness outcome' => 'קליטת הוצאה עסקית',					//Insert Business outcome
+  'insert Asstes outcome' => 'קליטת רכוש קבוע',
+  'insert Buisness outcome' => 'קליטת הוצאה עסקית',
   'message to be translated' => 'הודעה לתרגום',
   'tax' => 'מס',
   'vat' => 'מע"מ',
- 
-
-  'company.acc.assetvat' => '',
-  'company.acc.buyvat' => '',
-  'company.acc.custtax' => '',
-  'company.acc.irs' => '',
-  'company.acc.natinspay' => '',
-  'company.acc.openbalance' => '',
-  'company.acc.payvat' => '',
-  'company.acc.pretax' => '',
-  'company.acc.sellvat' => '',
-  'company.address' => 'כתובת',
-  'company.city' => 'עיר',
-  'company.cur' => 'מטבע עיקרי לחברה',
-  'company.logo' => 'לוגו',
-  'company.name' => 'שם',
-  'company.path' => 'נתיב ליישום',
-  'company.pdfprint' => 'הדפס מסמכים ל-PDF',
-  'company.seccur' => ' מטבע משני לחברה',
-  'company.stock' => 'סוג מלאי',
-  'company.tax.rate' => 'שיעור מס',
-  'company.transaction' => '',
-  'company.vat.id' => '',
-  'company.vat.type' => '',
-  'company.zip' => 'מיקוד',
-  'paypal.apiLive' => 'API של PAY PAL',
-  'paypal.apiPassword' => 'סיסמת PAYPAL ל-API',
-  'paypal.apiSignature' => 'חתימת PAYPAL ל-API',
-  'paypal.apiUsername' => 'משתמש PAYPAL ל-API',
-  'server.checkTime' => '',
-  'server.dbVersion' => '',
-  'server.Latest' => '',
-  'server.Version' => '',
-  'server.wkhtmltopdf' => '',
-  'system.auth' => '',
-  'system.name' => '',
-  'system.vendor.name' => '',
-  'system.vendor.vatnum' => '',
-  'system.version' => '',
-
-  
-  
-  
 );

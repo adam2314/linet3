@@ -24,6 +24,7 @@ return CMap::mergeArray(
             'import'=>array(
                     'application.models.*',
                     'application.components.*',
+                    'application.components.dashboard.*',
                     'application.modules.rights.*',
                     'application.modules.rights.components.*',
                     'application.extensions.debugtoolbar.*',

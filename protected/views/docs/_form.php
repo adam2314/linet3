@@ -166,16 +166,16 @@
 		<thead>
                     <tr  class="head1">
                             <?php //echo $form->labelEx($model,'doc_id'); ?>
-                                            <th><?php echo $form->labelEx($model,'item_id'); ?></th>
-                                            <th><?php echo $form->labelEx($model,'name'); ?></th>
-                                            <th><?php echo $form->labelEx($model,'description'); ?></th>
-                                            <th><?php echo $form->labelEx($model,'qty'); ?></th>
-                                            <th><?php echo $form->labelEx($model,'unit_price'); ?></th>
-                                            <th><?php echo $form->labelEx($model,'currency'); ?></th>
-                                            <th><?php echo $form->labelEx($model,'price'); ?></th>
-                                            <th style="width: 90px;"><?php echo $form->labelEx($model,'invprice'); ?></th>
-                                            <th style="width: 90px;"><?php echo $form->labelEx($model,'VAT'); ?></th>
-                                            <th>action</th>
+                                            <th><?php echo Yii::t('labels','Item'); ?></th>
+                                            <th><?php echo Yii::t('labels', 'Name'); ?></th>
+                                            <th><?php echo Yii::t('labels', 'Description'); ?></th>
+                                            <th><?php echo Yii::t('labels','Qty'); ?></th>
+                                            <th><?php echo Yii::t('labels','Unit Price'); ?></th>
+                                            <th><?php echo Yii::t('labels','Currency'); ?></th>
+                                            <th><?php echo Yii::t('labels','Price'); ?></th>
+                                            <th style="width: 90px;"><?php echo Yii::t('labels','Invprice'); ?></th>
+                                            <th style="width: 90px;"><?php echo Yii::t('labels', 'VAT'); ?></th>
+                                            <th><?php echo Yii::t('labels', 'Action'); ?></th>
                     </tr>
 		</thead>	
 		<tfoot>
@@ -314,7 +314,7 @@
                         
                         
                         
-                                            <th>action</th>
+                                            <th><?php echo Yii::t('labels', 'Action'); ?></th>
                     </tr>
 		</thead>	
 		<tfoot>

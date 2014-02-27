@@ -372,6 +372,7 @@ class Docs extends basicRecord{
                     'doctype'=>Yii::t('labels','Documenet Type'),
                     'docnum'=>Yii::t('labels','Documenet No.'),
                     'account_id'=>Yii::t('labels','Account'),
+                    'oppt_account_id'=>Yii::t('labels','Opposite account'),
                     'company'=>Yii::t('labels','Company'),
                     'address'=>Yii::t('labels','Address'),
                     'city'=>Yii::t('labels','City'),
@@ -390,6 +391,8 @@ class Docs extends basicRecord{
                     'printed'=>Yii::t('labels','Printed'),
                     'comments'=>Yii::t('labels','Comments'),
                     'owner'=>Yii::t('labels','Owner'),
+                    'discount'=>Yii::t('labels','Discount'),
+                
             );
     }
 

@@ -55,7 +55,7 @@ class Item extends basicRecord{
         }
 	function behaviors() {
 		return array(
-				///*
+				
 				  
 				'eavAttr' => array(
 						//'class' => 'ext.eav.EEavBehavior',

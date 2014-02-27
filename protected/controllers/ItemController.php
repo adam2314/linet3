@@ -49,12 +49,12 @@ class ItemController extends RightsController
 	public function actionCreate()
 	{
 		$model=new Item;
-
+                //$model->unsetAttributes();  // clear any default values
 				//print Yii::app()->user->getState('company');
 				//die;
 		
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Item']))
 		{
@@ -66,7 +66,7 @@ class ItemController extends RightsController
 
 		$cat=CHtml::listData(Itemcategory::model()->findAll(), 'id', 'name');
 		$units=CHtml::listData(Itemunit::model()->findAll(), 'id', 'name');
-		
+		$model->parent_item_id=0;
 		$this->render('create',array(
 			'model'=>$model,
 			'cat'=>$cat,
@@ -84,7 +84,7 @@ class ItemController extends RightsController
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 		//$model->setEavAttributes(array('attribute1' => 'value1', 'attribute2' => 'value2'));
 
 		if(isset($_POST['Item']))

@@ -38,8 +38,7 @@
                 Linet 3.0
               <!--<img src="assets/img/logo.png" alt="">-->
             </a> 
-          </header>
-          <div class="topnav">
+            <div class="topnav">
             <div class="btn-toolbar">
               <div class="btn-group">
                 <a data-placement="bottom" data-original-title="Fullscreen" data-toggle="tooltip" class="btn btn-default btn-sm" id="toggleFullScreen">
@@ -59,12 +58,16 @@
                 </a> 
               </div>
               <div class="btn-group">
-                <a href="login.html" data-toggle="tooltip" data-original-title="Logout" data-placement="bottom" class="btn btn-metis-1 btn-sm">
+                <a href="<?php echo Yii::app()->createAbsoluteUrl('/site/Logout');?>" data-toggle="tooltip" data-original-title="Logout" data-placement="bottom" class="btn btn-metis-1 btn-sm">
                   <i class="fa fa-power-off"></i>
                 </a> 
               </div>
             </div>
-          </div><!-- /.topnav -->
+          </div><!-- /.topnav -->  
+              
+              
+          </header>
+          
           <div class="navbar-collapse navbar-ex1-collapse collapse" style="height: 1px;">
 
            
@@ -197,15 +200,6 @@ $this->widget('bootstrap.widgets.TbMenu', array('items'=>$menu,'htmlOptions'=>ar
 //'fixed'=>false
 //'fluid'=>true
 
-/*
-
-			/*'items'=>array(
-				array('label'=>'Home', 'url'=>array('/site/index')),
-				array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-				array('label'=>'Contact', 'url'=>array('/site/contact')),
-				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
-			),*/
  
 
 ?>

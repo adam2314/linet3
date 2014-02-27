@@ -81,8 +81,8 @@ class Bootstrap extends CApplicationComponent
             Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/main.css'));
             Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/theme.css'));
             Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/linet.css'));
-
-
+            if(Yii::app()->language=='he_il')
+                Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/linet-rtl.css'));
             Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/modernizr-build.min.js'));
 
 
