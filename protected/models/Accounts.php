@@ -189,7 +189,7 @@ class Accounts extends basicRecord{//CActiveRecord
         
         
         
-        
+       
          public function beforeSave(){
             if ($this->isNewRecord)
                 $this->created = new CDbExpression('NOW()');
@@ -199,11 +199,13 @@ class Accounts extends basicRecord{//CActiveRecord
         }
         
     public function save($runValidation = true, $attributes = NULL) {
-        if(isset($this->system_acc))
-            if($this->system_acc !=1)parent::save($runValidation,$attributes);
-        else 
-            parent::save($runValidation,$attributes);
+        if(isset($this->system_acc)){
+            if($this->system_acc !=1) return parent::save($runValidation,$attributes);
+        }
+        //else 
+        //    parent::save($runValidation,$attributes);
          //else no save
+        return false;
     }
 
     public function delete() {

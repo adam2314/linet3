@@ -2,10 +2,12 @@
 
 class SiteController extends Controller
 {
-        public $layout='//layouts/noMenu';
+        //public $layout='//layouts/noMenu';
 	/**
 	 * Declares class-based actions.
 	 */
+    
+    /*
 	public function actions()
 	{
 		return array(
@@ -20,19 +22,20 @@ class SiteController extends Controller
 				'class'=>'CViewAction',
 			),
 		);
-	}
+	}*/
 
 	/**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
 	 */
+    /*
 	public function actionIndex()
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
 		//Yii::app()->user->setState('company', 'main');
 		//$this->render('index');
-	}
+	}*/
 
 	/**
 	 * This is the action to handle external exceptions.
@@ -76,7 +79,7 @@ class SiteController extends Controller
 	{
                 
 		$model=new FormLogin;
-
+                $this->layout='//layouts/clean';
 		// if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
 		{

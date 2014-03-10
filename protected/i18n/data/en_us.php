@@ -11,10 +11,17 @@ return CMap::mergeArray(
 	array(
 		'dateFormats' =>  array (
 
-                        'yiishort'=>'mm/dd/yyyy',
-                        'yiidatetime'=>'mm/dd/yyyy HH:mm:ss',
-                        'phpshort'=>'m/d/Y',
-                        'phpdatetime'=>'m/d/Y H:m:s',
+                    
+                    
+                    
+                        'yiishort'=>'dd/MM/yyyy',
+                        'yiidatetime'=>'dd/MM/yyyy HH:mm',
+                        'yiidatetimesec'=>'dd/MM/yyyy HH:mm:ss',
+                        'yiidbdatetime'=>'yyyy-MM-d HH:mm:ss',
+                        'phpshort'=>'d/m/Y',
+                        'phpdatetime'=>'d/m/Y H:i:s',
+                        'phpdatetimes'=>'d/m/Y H:i',
+                        'phpdbdatetime'=>'Y-m-d H:i',
                     ),
 
 	)

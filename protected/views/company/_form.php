@@ -3,8 +3,6 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="help-block">Fields with <span class="required">*</span> are required.</p>
-
 	<?php echo $form->errorSummary($model); ?>
 
 	<?php echo $form->textFieldRow($model,'string',array('class'=>'span5','maxlength'=>40)); ?>

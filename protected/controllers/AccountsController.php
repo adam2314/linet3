@@ -2,7 +2,6 @@
 
 class AccountsController extends RightsController
 {
-
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -38,7 +37,7 @@ class AccountsController extends RightsController
                             $model->setEavAttributes(array_combine($_POST['AccounteavE'],$_POST['AccounteavV']));
                         }
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index','id'=>$model->id));
 		}
 
 		$this->render('create',array(
@@ -78,7 +77,10 @@ class AccountsController extends RightsController
                                 $model->setEavAttributes(array_combine($_POST['AccountseavE'],$_POST['AccountseavV']));
                             }
                             if($model->save())
-                                $this->redirect(array('view','id'=>$model->id));
+                                $this->redirect(array('index','id'=>$model->id));
+                            else{
+                                echo "not save error";
+                            }
                         }
 		}
 
@@ -129,39 +131,55 @@ class AccountsController extends RightsController
 		 echo CJSON::encode($model);
 	    Yii::app()->end();//*/
 	}
-	
+	/*
 	public function actionAjax($type=10){
 		//$this->
-		$model=new Accounts('search');
-		$model->type=$type;
-                if(isset($_GET['Accounts']))
-			$model->attributes=$_GET['Accounts'];
-                //$params =array( 'model'=>$model,   );//array('dataProvider'=>$dataProvider,)
-		$this->renderPartial('ajax',array( 'model'=>$model,   ));
-	}
+		
+	}*/
 	/**
 	 * Lists all models.
 	 */
-	public function actionIndex()
+	public function actionIndex($type=0)
 	{
-            $type=isset($_GET['type'])?(int)$_GET['type']:0;
+            //$type=isset($_GET['type'])?(int)$_GET['type']:0;
+            
+            
+            
+            $model=new Accounts('search');
+            $model->type=$type;
+            $vl='accounts-grid';
+            if(isset($_POST['Accounts'])){
+                    $model->attributes=$_POST['Accounts'];
+            }
+            if( isset($_GET['ajax']) ) {//Yii::app()->request->isAjaxRequest && && $_GET['ajax'] === $vl
+                // Render partial file created in Step 1
+                $this->renderPartial('ajax', array(
+                  'model' => $model,
+                ));
+                Yii::app()->end();
+              }
+            
             $this->render('index',array('type'=>$type));
+            
+            
 	}
 
 	/**
 	 * Manages all models.
 	 */
-	/*public function actionAdmin()
+	public function actionAdmin()
 	{
 		$model=new Accounts('search');
+                $type=isset($_GET['type'])?(int)$_GET['type']:0;
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Accounts']))
 			$model->attributes=$_GET['Accounts'];
 
 		$this->render('admin',array(
 			'model'=>$model,
+                        'type'=>$type
 		));
-	}*/
+	}
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.

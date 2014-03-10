@@ -147,8 +147,24 @@ class ItemController extends RightsController
 	{
 		$model=new Item('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Item']))
-			$model->attributes=$_GET['Item'];
+                
+                
+                $vl='item-grid';
+		if(isset($_POST['Item']))
+			$model->attributes=$_POST['Item'];
+                if(isset($_GET['ajax']) && $_GET['ajax'] === $vl) {
+                    // Render partial file created in Step 1
+                    $this->renderPartial('_ajax', array(
+                      //'subscriberActiveDataProvider' => $subscriberActiveDataProvider,
+                      'model' => $model,
+                    ));
+                    Yii::app()->end();
+                  }
+                
+                
+                
+		//if(isset($_GET['Item']))
+		//	$model->attributes=$_GET['Item'];
 
 		$this->render('admin',array(
 			'model'=>$model,

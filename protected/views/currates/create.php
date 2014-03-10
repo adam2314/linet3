@@ -6,13 +6,13 @@
 
 $this->menu=array(
 	//array('label'=>'List Currates', 'url'=>array('index')),
-	array('label'=>'Manage Currates', 'url'=>array('admin')),
+	array('label'=>Yii::t('app','Manage currency rates'), 'url'=>array('admin')),
 );
 
 
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => "Create Currates",
+    'haeder' => "Create Currency rate",
     //'width' => '800',
 )); 
 ?>

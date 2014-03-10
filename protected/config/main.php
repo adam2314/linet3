@@ -89,10 +89,10 @@ return CMap::mergeArray(
                             'class'=>'RDbAuthManager',
                             'connectionID'=>'db',
                             'defaultRoles'=>array('Guest'),
-                            'itemTable'=>'AuthItem',
-                            'itemChildTable'=>'AuthItemChild',
-                            'assignmentTable'=>'AuthAssignment',
-                            'rightsTable'=>'Rights',
+                            'itemTable'=>'{{AuthItem}}',
+                            'itemChildTable'=>'{{AuthItemChild}}',
+                            'assignmentTable'=>'{{AuthAssignment}}',
+                            'rightsTable'=>'{{Rights}}',
                     ),
 
                     'ePdf' => array(
@@ -132,7 +132,7 @@ return CMap::mergeArray(
                                     '' => 'company/index',
                                     //'minify/<group:[^\/]+>'=>'minify/index',
                                     //'<controller:\w+>/<id:\d+>'=>'<controller>/view',
-                                    '<controller:\w+>/create/<type:\d+>'=>'<controller>/create',//mainly for doc and acc creating
+                                    '<controller:\w+>/create/<type:\d+>'=>'<controller>/create',//mainly for doc, acc,outcome creating
                                     //'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
                                     //'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
                                     'install/<step:\d+>'=>'install/index',

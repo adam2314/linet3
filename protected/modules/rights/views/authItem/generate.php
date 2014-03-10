@@ -13,7 +13,7 @@
 
 		<?php $form=$this->beginWidget('CActiveForm'); ?>
 
-			<div class="row">
+			<div>
 
 				<table class="items generate-item-table" border="0" cellpadding="0" cellspacing="0">
 
@@ -38,7 +38,7 @@
 
 			</div>
 
-			<div class="row">
+			<div>
 
    				<?php echo CHtml::link(Rights::t('core', 'Select all'), '#', array(
    					'onclick'=>"jQuery('.generate-item-table').find(':checkbox').attr('checked', 'checked'); return false;",
@@ -50,7 +50,7 @@
 
 			</div>
 
-   			<div class="row">
+   			<div>
 
 				<?php echo CHtml::submitButton(Rights::t('core', 'Generate')); ?>
 

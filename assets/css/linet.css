@@ -1,3 +1,70 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Feb 27, 2014, 5:42:19 PM
+    Author     : adam
+*/
+
+.formtable .item_id{
+    width:6%;
+}
+.formtable .name{
+    width:24%;
+}
+.formtable .qty{
+    width:7%;
+}
+.formtable .unit_id{
+    width:8%; 
+}
+.formtable .unit_price{
+    width:6%; 
+}
+.formtable .currency_id{
+    width:8%;
+}
+.formtable .price{
+    width:8%;
+}
+/*.formtable .invprice{
+    width:8%;
+}*/
+.formtable .vat{
+    width:7%;
+}
+.formtable .actions{
+    width:5%;
+}
+
+
+
+
+
+.chosen-container .chosen-drop {
+    left:0;
+    display:none;
+}
+
+div.container-fluid.outer{
+        padding:0px;
+        
+    }
+
+.chosen-container.chosen-with-drop .chosen-drop {
+  display:block;
+}
+.chosen-container-single.chosen-container-single-nosearch .chosen-search {
+  left: 0px;
+}
+.chosen-rtl.chosen-container-single-nosearch .chosen-search,
+.chosen-rtl .chosen-drop {
+      left: 0px;
+}
+
+
 .topnav{
     float:right;
     padding: 10px;
@@ -5,6 +72,13 @@
 
 .navbar{
     margin-bottom: 0px;
+}
+
+
+
+div #chose{
+    /*background-color: azure;*/
+    background-color: #DDDDDD;
 }
 
 input {
@@ -28,6 +102,9 @@ input {
 #footer {
     height: 65px;
     text-align: center;
+    
+   
+    
 }
 .ui-tabs .ui-tabs-panel {
     overflow: auto;
@@ -44,7 +121,9 @@ input {
     border: medium none;
 }
 
-
+.ui-widget-content a {
+    color: #428bca;
+}
 
 .ui-tabs-nav > li {
     margin-bottom: -1px;
@@ -178,16 +257,20 @@ input {
 	}
 }
 
+@media (min-width: 992px){
+    #left {
+        width: 160px;
+    }
+}
+
+
 @media (max-width: 980px){
     
     .box header{
         display:none;
         
     }
-    div.container-fluid.outer{
-        padding:0;
-        
-    }
+    
     
     div.col-lg-12{
         padding:0;
@@ -197,7 +280,7 @@ input {
 
 
 
-@media ( min-width: 1000px ) {
+@media ( min-width: 700px ) {
 	/* Show the table header rows and set all cells to display: table-cell */ 
 	.formtable td,
 	.formtable th,
@@ -220,9 +303,8 @@ input {
     .container, .navbar-static-top .container, .navbar-fixed-top .container, .navbar-fixed-bottom .container {
 width: 1200px;
 }
-    */
     
     
     
     
-}
+    }*/

@@ -9,7 +9,7 @@ $this->menu=array(
 	//array('label'=>'List Accounts', 'url'=>array('index')),
 	//array('label'=>'Create Accounts', 'url'=>array('create')),
 	array('label'=>Yii::t('app','View Account'), 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>Yii::t('app','Manage Accounts'), 'url'=>array('admin')),
+	array('label'=>Yii::t('app','Manage Accounts'), 'url'=>array('index')),
 );
 ?>
 

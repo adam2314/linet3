@@ -11,6 +11,10 @@
  */
 class Currates extends CActiveRecord{
     const table='{{curRates}}';
+    
+    public $from;
+    public $to;
+    
     public $name;
     public $code;
 	/**

@@ -50,7 +50,7 @@ class User extends mainRecord{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, lname, certpasswd, salt, email', 'required'),
+			array('username, lname, certpasswd, salt, email, timezone', 'required'),
 			array('username', 'length', 'max'=>100),
 			array('fname, lname, certpasswd, salt, email', 'length', 'max'=>255),
                         array('language', 'length', 'max'=>10),
@@ -79,17 +79,25 @@ class User extends mainRecord{
 
         public function save($runValidation = true, $attributes = NULL) {
             $catagories=ItemVatCat::model()->findAll();
-            parent::save($runValidation,$attributes);
-            foreach ($catagories as $catagory){
-                if(!UserIncomeMap::model()->findByPk(array('user_id'=>$this->id, 'itemVatCat_id'=>$catagory->id))){//'user_id', 'itemVatCat_id'
-                    $model=new UserIncomeMap;
-                    $attr=array("user_id"=>$this->id,"itemVatCat_id"=>$catagory->id,"account_id"=>100);
-                    $model->attributes=$attr;
-                    if(!$model->save())
-                        return false;
+            if($this->salt=='') $this->salt=sha1(rand());
+            if($this->attributes["password"]!='') $this->password=$this->hashPassword($this->password,$this->salt);
+            if($this->attributes["password"]=='') unset($attributes["password"]);
+            
+            
+            $res=parent::save($runValidation,$attributes);
+            if($res){
+                foreach ($catagories as $catagory){
+                    if(!UserIncomeMap::model()->findByPk(array('user_id'=>$this->id, 'itemVatCat_id'=>$catagory->id))){//'user_id', 'itemVatCat_id'
+                        $model=new UserIncomeMap;
+                        $attr=array("user_id"=>$this->id,"itemVatCat_id"=>$catagory->id,"account_id"=>100);
+                        $model->attributes=$attr;
+                        if(!$model->save())
+                            return false;
+                    }
+
                 }
-                
             }
+            return $res;
         }
         
         public function delete() {

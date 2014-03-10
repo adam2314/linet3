@@ -20,6 +20,7 @@ return CMap::mergeArray(
                         'yiidbdatetime'=>'yyyy-MM-d HH:mm:ss',
                         'phpshort'=>'d/m/Y',
                         'phpdatetime'=>'d/m/Y H:i:s',
+                        'phpdatetimes'=>'d/m/Y H:i',
                         'phpdbdatetime'=>'Y-m-d H:i',
                         
                     ),

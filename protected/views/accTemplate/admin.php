@@ -25,6 +25,8 @@ $('.search-form form').submit(function(){
 	'id'=>'acc-template-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+        'template' => '{items}{pager}',
+        'ajaxUpdate'=>true,
 	'columns'=>array(
 		//'id',
 		'name',

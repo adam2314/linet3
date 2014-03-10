@@ -5,9 +5,9 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Accounts', 'url'=>array('index')),
-	array('label'=>'Create Account', 'url'=>array('create')),
-	array('label'=>'Update Account', 'url'=>array('update', 'id'=>$model->id)),
+	array('label'=>Yii::t('app','List Accounts'), 'url'=>array('index')),
+	array('label'=>Yii::t('app','Create Account'), 'url'=>array('create')),
+	array('label'=>Yii::t('app','Update Account'), 'url'=>array('update', 'id'=>$model->id)),
 	//array('label'=>'Delete Account', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	//array('label'=>'Manage Accounts', 'url'=>array('admin')),
 );
@@ -16,8 +16,8 @@ $this->menu=array(
 
 <?php 
  $this->beginWidget('MiniForm',array(
-    'haeder' => "View Account #$model->id;",
-    'width' => '800',
+    'haeder' => Yii::t('app',"View Account") ." #$model->id;",
+    //'width' => '800',
 )); 
 $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

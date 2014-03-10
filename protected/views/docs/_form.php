@@ -6,7 +6,12 @@
 )); 
 
 ?>
-<div class="form">
+<div class="form" style="
+     /*
+     background-image:url('<?php echo Yii::app()->createAbsoluteUrl('/form.png');?>');
+     background-repeat:no-repeat;
+     background-size:100% 700px;*/
+     ">
 	<!-- <p class="note">Fields with <span class="required">*</span> are required.</p>-->
 
 	<?php echo $form->errorSummary($model); ?>
@@ -16,7 +21,8 @@
         <?php echo CHTML::hiddenField("doc_rate","1"); ?>
 	<?php echo CHTML::hiddenField("doc_items",count($model->docDetailes)); ?>
         <?php echo CHTML::hiddenField("rcpt_items",count($model->docCheques)); ?>
-<div class="col-md-4"><!--block-->
+<div><!--Company block-->
+    <div class="col-md-1">
 	<p>
 		<?php echo $form->labelEx($model,'account_id'); ?>
 		<?php //echo $model->docType->name . ";".Acctype::model()->getType('customers');
@@ -37,7 +43,8 @@
 		?>
 		<?php echo $form->error($model,'account_id'); ?>
 	</p>
-        
+    </div>
+    <div class="col-md-1">
         <div>
 		<?php echo $form->labelEx($model,'oppt_account_id'); ?>
 		<?php //echo $model->docType->name . ";".Acctype::model()->getType('customers');
@@ -57,54 +64,58 @@
                 <p></p>
 		<?php echo $form->error($model,'oppt_account_id'); ?>
 	</div>
-        
-
+     </div>   
+        <div class="col-md-2">
 	<p>
 		<?php echo $form->labelEx($model,'company'); ?>
 		<?php echo $form->textField($model,'company',array('size'=>30,'maxlength'=>80)); ?>
 		<?php echo $form->error($model,'company'); ?>
 	</p>
-    
-        <p>
-            <?php echo $form->labelEx($model,'status'); ?>
-            <?php echo $form->dropDownList($model,'status',CHtml::listData(Docstatus::model()->findAllByAttributes(array('doc_type'=>$model->doctype)), 'num', 'name'));//Docstatus::model()->findAll();?>
-            <?php //echo $form->textField($model,'status'); ?>
-            <?php echo $form->error($model,'status'); ?>
-        </p>
+    </div>
+    <div class="col-md-2">
+		<?php echo $form->labelEx($model,'vatnum'); ?>
+		<?php echo $form->textField($model,'vatnum',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->error($model,'vatnum'); ?>
+	</div>
+        
 </div><!--block-->
-<div class="col-md-3"><!--block-->
-	<div class="row">
+<div class="row"><!--Address block-->
+	<div class="col-md-3">
 		<?php echo $form->labelEx($model,'address'); ?>
 		<?php echo $form->textField($model,'address',array('size'=>30,'maxlength'=>80)); ?>
 		<?php echo $form->error($model,'address'); ?>
 	</div>
 
-	<div class="row">
+	<div class="col-md-2">
 		<?php echo $form->labelEx($model,'city'); ?>
 		<?php echo $form->textField($model,'city',array('size'=>30,'maxlength'=>40)); ?>
 		<?php echo $form->error($model,'city'); ?>
 	</div>
 
-	<div class="row">
+	<div class="col-md-1">
 		<?php echo $form->labelEx($model,'zip'); ?>
 		<?php echo $form->textField($model,'zip',array('size'=>10,'maxlength'=>10)); ?>
 		<?php echo $form->error($model,'zip'); ?>
 	</div>
 	
-	<div class="row">
-		<?php echo $form->labelEx($model,'currency_id'); ?>
+	
+</div><!--block-->
+<div class="row"><!--Doc block-->
+	
+
+	<div class="col-md-1">
+            <p><?php echo $form->labelEx($model,'status'); ?></p>
+            <?php echo $form->dropDownList($model,'status',CHtml::listData(Docstatus::model()->findAllByAttributes(array('doc_type'=>$model->doctype)), 'num', 'name'));//Docstatus::model()->findAll();?>
+            <?php echo $form->error($model,'status'); ?>
+        </div>    
+            
+        <div class="col-md-2">
+            <p><?php echo $form->labelEx($model,'currency_id'); ?></p>
 		<?php echo $form->dropDownList($model,'currency_id',CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name'));//currency ?>
 		<?php echo $form->error($model,'currency_id'); ?>
 	</div>
-</div><!--block-->
-<div class="col-md-4"><!--block-->
-	<div class="row">
-		<?php echo $form->labelEx($model,'vatnum'); ?>
-		<?php echo $form->textField($model,'vatnum',array('size'=>10,'maxlength'=>10)); ?>
-		<?php echo $form->error($model,'vatnum'); ?>
-	</div>
-
-	<div class="row">
+        
+        <div class="col-md-2">
 		<?php echo $form->labelEx($model,'refnum'); ?>
             <div id="Docsrefnum">
 		<?php 
@@ -120,10 +131,13 @@
                 <?php echo $form->hiddenField($model,'refnum',array('size'=>20,'maxlength'=>20)); ?>
 		<?php echo $form->error($model,'refnum'); ?>
 	</div>
-
-	<div class="row">
+    <div class="col-md-3"></div>
+   <div><!--date block-->
+	<div class="col-md-2">
 		<?php echo $form->labelEx($model,'issue_date'); ?>
-                <?php $this->widget('zii.widgets.jui.CJuiDatePicker',
+                <?php 
+                /*
+                $this->widget('zii.widgets.jui.CJuiDatePicker',
 			array(
                         'name'=>'Docs[issue_date]',
                         'language' => substr(Yii::app()->language,0,2),
@@ -132,14 +146,32 @@
                             'dateFormat' => Yii::app()->locale->getDateFormat('short'),
                         )
 	       	 )
-	        );        
+	        ); 
+                */
+                $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker',array(
+                    'model'=>$model, //Model object
+                    'attribute'=>'issue_date', //attribute name
+                    'mode'=>'datetime', 
+                    'language' => substr(Yii::app()->language,0,2),
+                    'options'=>array(
+                        'showAnim'=>'fold',
+                        'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
+                    ) // jquery plugin options
+                ));
+
+
+                
+                
+                
                 ?>
 		<?php echo $form->error($model,'issue_date'); ?>
 	</div>
 
-	<div class="row">
+	<div class="col-md-2">
 		<?php echo $form->labelEx($model,'due_date'); ?>
-		<?php $this->widget('zii.widgets.jui.CJuiDatePicker',
+		<?php 
+                /*
+                $this->widget('zii.widgets.jui.CJuiDatePicker',
 			array(
                         'name'=>'Docs[due_date]',
                         'language' => substr(Yii::app()->language,0,2),
@@ -148,11 +180,26 @@
                             'dateFormat' => Yii::app()->locale->getDateFormat('short'),
                         )
 	       	 )
-	        );?>
+	        );*/
+                
+                $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker',array(
+                    'model'=>$model, //Model object
+                    'attribute'=>'due_date', //attribute name
+                    'mode'=>'datetime', 
+                    'language' => substr(Yii::app()->language,0,2),
+                    'options'=>array(
+                        'showAnim'=>'fold',
+                        'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
+                    ) // jquery plugin options
+                ));
+                
+                
+                
+                ?>
 		<?php echo $form->error($model,'due_date'); ?>
 	</div>
     </div>
-
+</div>
 <br />
 
 <?php 
@@ -166,28 +213,29 @@
 		<thead>
                     <tr  class="head1">
                             <?php //echo $form->labelEx($model,'doc_id'); ?>
-                                            <th><?php echo Yii::t('labels','Item'); ?></th>
-                                            <th><?php echo Yii::t('labels', 'Name'); ?></th>
-                                            <th><?php echo Yii::t('labels', 'Description'); ?></th>
-                                            <th><?php echo Yii::t('labels','Qty'); ?></th>
-                                            <th><?php echo Yii::t('labels','Unit Price'); ?></th>
-                                            <th><?php echo Yii::t('labels','Currency'); ?></th>
-                                            <th><?php echo Yii::t('labels','Price'); ?></th>
-                                            <th style="width: 90px;"><?php echo Yii::t('labels','Invprice'); ?></th>
-                                            <th style="width: 90px;"><?php echo Yii::t('labels', 'VAT'); ?></th>
-                                            <th><?php echo Yii::t('labels', 'Action'); ?></th>
+                                            <th class="item_id"><?php echo Yii::t('labels','Item'); ?></th>
+                                            <th class="name"><?php echo Yii::t('labels', 'Name'); ?></th>
+                                            <!--<th class="item_id"><?php echo Yii::t('labels', 'Description'); ?></th>-->
+                                            <th class="qty"><?php echo Yii::t('labels','Qty'); ?></th>
+                                            <th class="unit_id"><?php echo Yii::t('labels','Unit id'); ?></th>
+                                            <th class="unit_price"><?php echo Yii::t('labels','Unit Price'); ?></th>
+                                            <th class="currency_id"><?php echo Yii::t('labels','Currency'); ?></th>
+                                            <th class="price"><?php echo Yii::t('labels','Price'); ?></th>
+                                            <!--<th class="invprice"><?php echo Yii::t('labels','Invprice'); ?></th>-->
+                                            <th class="vat"><?php echo Yii::t('labels', 'VAT'); ?></th>
+                                            <th class="actions"><?php echo Yii::t('labels', 'Action'); ?></th>
                     </tr>
 		</thead>	
 		<tfoot>
                     <tr>
-			<td class="docadd"><?php echo Yii::t('app','New');?>
+			<td>
                             <textarea id="doc" style='display:none;'>       
                                     <?php 
                                     echo $this->renderPartial('docdetial', array('model'=>new Docdetails,'form'=>$form,'i'=>'ABC')); 
                                     ?>
                             </textarea>      
                         </td>
-                        <td></td>
+                        
                         <td></td>
                         <td></td>
                         <td></td>
@@ -201,14 +249,15 @@
                         <td>
                                     <?php echo $form->textField($model,'discount',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
                         </td>
-                        <td>
-                                    <?php //echo $form->textField($model,'vat',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
+                        <td></td>
+                        <td class="docadd">
+                                    <?php echo Yii::t('app','New');?>
                         </td>
                     </tr>
                     
                      <tr>
 			<td></td>
-                        <td></td>
+                        
                         <td></td>
                         <td></td>
                         <td></td>
@@ -234,7 +283,7 @@
                     
                     <tr>
 			<td></td>
-                        <td></td>
+                        
                         <td></td>
                         <td></td>
                         <td></td>
@@ -250,7 +299,7 @@
                      
                     <tr>
 			<td></td>
-                        <td></td>
+                        
                         <td></td>
                         <td></td>
                         <td></td>
@@ -296,30 +345,25 @@
 
     <thead>
                     <tr  class="head1">
-                        <th><?php echo Yii::t('labels','Type'); ?></th>   
-                        <th><?php echo Yii::t('labels','Refnum'); ?></th>
+                        <th class="type"><?php echo Yii::t('labels','Type'); ?></th>   
+                        <th class="refnum"><?php echo Yii::t('labels','Refnum'); ?></th>
 			
-			<th><?php echo Yii::t('labels','Credit Company'); ?></th>
-			<th><?php echo Yii::t('labels','Cheque No.'); ?></th>
-			<th><?php echo Yii::t('labels','Bank'); ?></th>
-			<th><?php echo Yii::t('labels','Branch'); ?></th>
-			<th><?php echo Yii::t('labels','Cheque Account'); ?></th>
-			<th><?php echo Yii::t('labels','Cheque Date'); ?></th>
-                        <th><?php echo Yii::t('labels','Currency'); ?></th>
-			<th><?php echo Yii::t('labels','Sum'); ?></th>
-			<th><?php echo Yii::t('labels','Dep Date'); ?></th>
-			
+			<th class="creditcompany"><?php echo Yii::t('labels','Credit Company'); ?></th>
+			<th class="cheque_num"><?php echo Yii::t('labels','Cheque No.'); ?></th>
+			<th class="bank"><?php echo Yii::t('labels','Bank'); ?></th>
+			<th class="branch"><?php echo Yii::t('labels','Branch'); ?></th>
+			<th class="cheque_acct"><?php echo Yii::t('labels','Cheque Account'); ?></th>
+			<th class="cheque_date"><?php echo Yii::t('labels','Cheque Date'); ?></th>
+                        <th class="currency_id"><?php echo Yii::t('labels','Currency'); ?></th>
+			<th class="sum"><?php echo Yii::t('labels','Sum'); ?></th>
+			<th class="dep_date"><?php echo Yii::t('labels','Dep Date'); ?></th>
                         
-                        
-                        
-                        
-                        
-                                            <th><?php echo Yii::t('labels', 'Action'); ?></th>
+                        <th class="actions"><?php echo Yii::t('labels', 'Action'); ?></th>
                     </tr>
 		</thead>	
 		<tfoot>
                     <tr>
-			<td colspan='8' class="rcptadd"><?php echo Yii::t('app','New');?>
+			<td colspan='8'>
         		<textarea id="rcpt" style='display:none;'>       
 	                      	<?php 
                         	echo $this->renderPartial('rcptdetial', array('model'=>new Doccheques,'form'=>$form,'i'=>'ABC')); 
@@ -333,6 +377,9 @@
                         
                         <td>
                                     <?php echo $form->textField($model,'src_tax',array('size'=>8,'maxlength'=>8,'style' => "width: 65px;")); ?>
+                        </td>
+                        <td></td>
+                        <td class="rcptadd"><?php echo Yii::t('app','New');?>
                         </td>
                     </tr>
                     <tr>
@@ -397,11 +444,25 @@
                         //var i=$(".templateTarget tr").length;
                         var i=$('#doc_items').val()*1;
 			template=template.replace(/ABC/g, i);
-
+                        //template    
 			
 			$('.docTarget').append(template);
+                        
+        
+                        var textbox = $("#Docdetails_"+i+"_description");
+                        var textarea = $("<textarea style='width:100%' rows='1' name='Docdetails["+i+"][description]' id='Docdetails_"+i+"_description'></textarea>");
+                        textarea.val(textbox.val());
+                        //Replace textbox with textarea
+                        textbox = textbox.replaceWith(textarea);
+                        
+                        
+                        
 			$('#doc_items').val(i+1);
 			// start specific commands
+                        
+                        
+                        
+                        
                         
                         //console.clear();
                         //console.log('lets Build');
@@ -607,7 +668,9 @@ function itemChange(index){
         $('#Docdetails_'+index+'_accvat').val(data[1].vat);
         
         $('#Docdetails_'+index+'_rate').val("1");
-        $('#Docdetails_'+index+'_qty').focus();
+        if($('#Docdetails_'+index+'_qty').val()==0)
+            $('#Docdetails_'+index+'_qty').val("1");
+        //$('#Docdetails_'+index+'_qty').focus();
     }, "json")
     .error(function() { });
 }
@@ -847,8 +910,8 @@ function rcptcalcLines(){
   }
   
   function hideMe(){
-   $('#printLink').hide();
-   $('#language_chosen').show();
+   $('#printLink').hide(150);
+   $('#language_chosen').show(150);
    return false;   
   }
   
@@ -861,10 +924,21 @@ function rcptcalcLines(){
       //return false;
   }
 </script>
-
+    <p>
+        <?php echo $form->labelEx($model,'description'); ?>
+        <?php echo $form->textArea($model,'description',array(
+                            'rows'=>6, 'cols'=>50,
+                            'class'=>'form-control wysihtml5-editor'
+                            )); ?>
+        <?php echo $form->error($model,'description'); ?>
+    </p>
+    
     <p>
         <?php echo $form->labelEx($model,'comments'); ?>
-        <?php echo $form->textArea($model,'comments',array('rows'=>6, 'cols'=>50)); ?>
+        <?php echo $form->textArea($model,'comments',array(
+                            'rows'=>6, 'cols'=>50,
+                            'class'=>'form-control wysihtml5-editor'
+                            )); ?>
         <?php echo $form->error($model,'comments'); ?>
     </p>
             

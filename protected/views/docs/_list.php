@@ -36,7 +36,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridVie
                 //'issue_date',
                 array(
                     'name'=>'issue_date',
-                     'filter' => '',
+                    'filter' => '',
                     'value'=>'$data->issue_date'
                 ),
             'total',
@@ -61,7 +61,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridVie
 		array(
 			'class'=>'CButtonColumn',
                         'htmlOptions' => array('style'=>'width:80px'),
-			'template'=>'{print}{edit}{remove}{display}',
+			'template'=>'{print}{edit}{delete}{display}',
 			'buttons'=>array
 		    (
 		        'edit' => array
@@ -71,11 +71,13 @@ $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridVie
 		            'url'=>'Yii::app()->createUrl("docs/update", array("id"=>$data->id,"preview"=>0))',
 		        	
 		        ),
-		        'remove' => array
+		        'delete' => array
 		        (
 		            'label'=>'<i class="glyphicon glyphicon-remove"></i>',
-		            //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
+                            'deleteConfirmation'=>true,
+		            'imageUrl'=>false,
                             'url'=>'Yii::app()->createUrl("docs/delete", array("id"=>$data->id))',
+                            //'class'=>'',
 		            //'url'=>'Yii::app()->createUrl("users/email", array("id"=>$data->id))',
 		        ),
                         'print' => array

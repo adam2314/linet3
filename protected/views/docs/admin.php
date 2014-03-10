@@ -5,8 +5,8 @@
 //);
 
 $this->menu=array(
-	array('label'=>'List Docs', 'url'=>array('index')),
-	array('label'=>'Create Docs', 'url'=>array('create')),
+	array('label'=>Yii::t('app','List documents'), 'url'=>array('index')),
+	array('label'=>Yii::t('app','Create document'), 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -20,9 +20,46 @@ $('.search-form form').submit(function(){
 	});
 	return false;
 });
+
+
+
+
+/*
+//adam: need work!
+jQuery('#docs-grid a.delete').live('click',function() {
+        if(!confirm('Are you sure you want to delete this item?')) return false;
+        var th=this;
+        var afterDelete=function(){};
+        $.fn.yiiGridView.update('docs-grid', {
+                type:'POST',
+                url:$(this).attr('href'),
+                success:function(data) {
+                        getAlert(data);
+                        $.fn.yiiGridView.update('docs-grid');
+                        afterDelete(th,true,data);
+                        
+                },
+                error:function(XHR) {
+                        return afterDelete(th,false,XHR);
+                }
+        });
+        return false;
+});
+*/
+
+function getAlert(response){
+    $('#yw12').html($(response).filter('.alert'));
+}
+
+
+
+
+
+
+
 ");
 $this->beginWidget('MiniForm',array(
-    'haeder' => "Manage Docs",  )); 
+    'haeder' => Yii::t('app',"Manage Docs"),  )); 
 
 
 $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
@@ -62,7 +99,17 @@ $this->widget('zii.widgets.jui.CJuiDatePicker', array(
         'style'=>'height:20px;'
     ),
 ));
-echo CHtml::submitButton('Go'); 
+?>
+
+<div class="form-actions">
+		<?php $this->widget('bootstrap.widgets.TbButton', array(
+			'buttonType'=>'submit',
+			'type'=>'primary',
+			'label'=>Yii::t('app',"Go"),
+		)); ?>
+	</div>
+
+<?php
  $this->endWidget(); 
 
 

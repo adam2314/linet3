@@ -42,6 +42,9 @@
 	
     
         <?php echo $form->dropDownListRow($model,'stockType',array(0=>'no stock',1=>'qty',2=>'instanse')); ?>
+        
+        <br />
+        <?php echo $form->textAreaRow($model,'description'); ?>
 
     </div>
     <div>

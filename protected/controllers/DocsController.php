@@ -120,6 +120,8 @@ class DocsController extends RightsController
 		$model->doctype=$type;
                 $model->docType=Doctype::model()->findByPk($type);
                 $model->status=$model->docType->docStatus_id;
+                $model->issue_date=date(Yii::app()->locale->getDateFormat('phpdatetimes'));
+                $model->due_date=date(Yii::app()->locale->getDateFormat('phpdatetimes'));
 		//$doctype =$model->docType;
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -137,25 +139,20 @@ class DocsController extends RightsController
                                 if($model->save())
                                         $this->redirect(array('admin'));
                                   return;
-                                  break;
                             case 'print':
                                 if($model->save())
                                         $this->actionPrint($model->id, 0, $model);
                                         //$this->redirect(array('update','id'=>$model->id));
                                 return;
-                                break;
                             case 'preview':
                                 $this->actionPrint($model->id, 1, $model);
                                 return;
-                                break;
                             case 'email':
                                 //$this->actionPrint($model->id,  $model);
                                 return;
-                                break;
                             case 'pdf':
                                 $this->actionPdf($model->id);
                                 return;
-                                break;
                         }
                         
 		}
@@ -184,8 +181,9 @@ class DocsController extends RightsController
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 		if(isset($model->docStatus))
-                    if($model->docStatus->looked){
-                            $this->redirect(array('view','id'=>$model->id));
+                    if($model->docStatus->looked==1){
+                            Yii::app()->user->setFlash('danger', 'unable to edit documenet');
+                            $this->redirect(array('admin','id'=>$model->id));
                     }
 		if(isset($_POST['Docs'])){
 			$model->attributes=$_POST['Docs'];
@@ -199,25 +197,20 @@ class DocsController extends RightsController
                                 if($model->save())
                                         $this->redirect(array('admin'));
                                   return;      
-                                  break;
                             case 'print':
                                 if($model->save())
                                         $this->redirect(array('print','id'=>$model->id));
                                         //$this->redirect(array('update','id'=>$model->id));
                                 return;
-                                break;
                             case 'preview':
                                 $this->actionPrint($model->id, 1, $model);
                                 return;
-                                break;
                             case 'email':
                                 //$this->actionPrint($model->id,  $model);
                                 return;
-                                break;
                             case 'pdf':
                                 $this->actionPdf($model->id);
                                 return;
-                                break;
                         }
 		}
 		
@@ -260,20 +253,31 @@ class DocsController extends RightsController
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
-	/*public function actionDelete($id)
+	public function actionDelete($id)
 	{
 		if(Yii::app()->request->isPostRequest)
 		{
-			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
-
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
+                    $model=$this->loadModel($id);
+                    if(isset($model->docStatus)){
+                        if($model->docStatus->looked){
+                                Yii::app()->user->setFlash('danger', 'unable to delete documenet');
+                                $this->redirect(array('admin','id'=>$model->id));
+                                return;
+                        }else{
+                    
+                            // we only allow deletion via POST request
+                            $this->loadModel($id)->delete();
+                        }
+                    }// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+			if(!isset($_GET['ajax'])){
 				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+                        }
 		}
-		else
+		else{
+                    
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
-	}*/
+                }
+	}
 
 	/**
 	 * Lists all models.
@@ -294,7 +298,7 @@ class DocsController extends RightsController
             
 		$model=new Docs('search');
 		$model->unsetAttributes();  // clear any default values
-                $vl='docs-grid';
+                
                 
                /* if(!empty($_POST)){
                     Yii::app()->request->cookies['issue_from'] = new CHttpCookie('date_from', $_POST['date_from']);  // define cookie for from_date
@@ -311,7 +315,7 @@ class DocsController extends RightsController
                 else{
                     $model->issue_to =date(Yii::app()->locale->getDateFormat('phpshort'));
                 }*/
-                
+                $vl='docs-grid';
 		if(isset($_POST['Docs']))
 			$model->attributes=$_POST['Docs'];
                 if(Yii::app()->request->isAjaxRequest && isset($_POST['ajax']) && $_POST['ajax'] === $vl) {

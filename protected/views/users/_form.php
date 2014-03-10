@@ -1,9 +1,13 @@
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'user-form',
 	'enableAjaxValidation'=>false,
-)); ?>
+)); 
 
-	<p class="help-block">Fields with <span class="required">*</span> are required.</p>
+
+$model->password='';
+?>
+
+	
 
 	<?php echo $form->errorSummary($model); ?>
 

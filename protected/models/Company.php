@@ -81,6 +81,21 @@ class Company extends mainRecord{
             if(Yii::app()->db->schema->getTable('{{config}}')=== null){
                 //create tables
                 $this->createDb();
+                
+                $a=Settings::model()->findByPk('company.path');//update path by prefix
+                $a->value=$this->prefix;
+                $a->save();
+                
+                
+                $yiiBasepath=Yii::app()->basePath;
+                $configPath=$this->prefix;
+                $folder = $yiiBasepath."/files/".$configPath."/";
+                mkdir($folder);
+                mkdir($folder."settings/");//settings
+                mkdir($folder."cert/");//cert
+                mkdir($folder."docs/");//docs
+                mkdir($folder."openformat/");//openformat
+                
                 //add permisstions
             }else{     //else
                 //table version

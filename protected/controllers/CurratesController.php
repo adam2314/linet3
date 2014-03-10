@@ -36,7 +36,7 @@ class CurratesController extends RightsController
                         unset($_POST['Currates']["date"]);
 			$model->attributes=$_POST['Currates'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('admin','id'=>$model->id));
 		}
 
 		$this->render('create',array(
@@ -49,6 +49,7 @@ class CurratesController extends RightsController
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
+        /*
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
@@ -66,13 +67,14 @@ class CurratesController extends RightsController
 		$this->render('update',array(
 			'model'=>$model,
 		));
-	}
+	}*/
 
 	/**
 	 * Deletes a particular model.
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
+        /*
 	public function actionDelete($id)
 	{
 		if(Yii::app()->request->isPostRequest)
@@ -86,7 +88,7 @@ class CurratesController extends RightsController
 		}
 		else
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
-	}
+	}*/
 
 	/**
 	 * Lists all models.

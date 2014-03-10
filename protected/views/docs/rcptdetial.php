@@ -4,23 +4,23 @@
         <?php echo $form->hiddenField($model, "[$i]doc_id"); ?>
         <?php echo $form->hiddenField($model, "[$i]line"); ?>
         
-        <b><?php echo $form->labelEx($model, 'type'); ?></b><?php echo $form->dropDownList($model, "[$i]type", CHtml::listData(PaymentType::model()->findAll(), 'id', 'name'), array('style' => "width: 80px;", "data-placeholder"=>'bla...')); ?>
+        <b><?php echo $form->labelEx($model, 'type'); ?></b><?php echo $form->dropDownList($model, "[$i]type", CHtml::listData(PaymentType::model()->findAll(), 'id', 'name'), array()); ?>
     </td>
     
 
 
 
-    <td><b><?php echo $form->labelEx($model, 'refnum'); ?></b><?php echo $form->textField($model, "[$i]refnum", array('size' => 10, 'maxlength' => 255, 'style' => "width: 110px;")); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'creditcompany'); ?></b><?php echo $form->textField($model, "[$i]creditcompany", array('size' => 10, 'maxlength' => 255, 'style' => "width: 110px;")); 
+    <td><b><?php echo $form->labelEx($model, 'refnum'); ?></b><?php echo $form->textField($model, "[$i]refnum", array('maxlength' => 255)); ?></td>
+    <td><b><?php echo $form->labelEx($model, 'creditcompany'); ?></b><?php echo $form->textField($model, "[$i]creditcompany", array('maxlength' => 255)); 
                                                                     //echo $form->dropDownList($model, "[$i]creditcompany", CHtml::listData(Item::model()->findAll(), 'id', 'name')); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'cheque_num'); ?></b><?php echo $form->textField($model, "[$i]cheque_num", array('rows' => 1, 'cols' => 10, 'style' => "width: 120px;")); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'bank'); ?></b><?php echo $form->textField($model, "[$i]bank", array('size' => 5, 'maxlength' => 5, 'style' => "width: 60px;")); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'branch'); ?></b><?php echo $form->textField($model, "[$i]branch", array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'cheque_acct'); ?></b><?php echo $form->textField($model, "[$i]cheque_acct", array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'cheque_date'); ?></b><?php echo $form->textField($model, "[$i]cheque_date", array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'currency_id'); ?></b><?php echo $form->dropDownList($model, "[$i]currency_id", CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name'), array('class'=>'currSelect','style' => "width: 70px;")); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'sum'); ?></b><?php echo $form->textField($model, "[$i]sum", array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'dep_date'); ?></b><?php echo $form->hiddenField($model, "[$i]dep_date", array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;"));  ?></td>
+    <td><b><?php echo $form->labelEx($model, 'cheque_num'); ?></b><?php echo $form->textField($model, "[$i]cheque_num", array()); ?></td>
+    <td><b><?php echo $form->labelEx($model, 'bank'); ?></b><?php echo $form->textField($model, "[$i]bank", array('maxlength' => 5)); ?></td>
+    <td><b><?php echo $form->labelEx($model, 'branch'); ?></b><?php echo $form->textField($model, "[$i]branch", array( 'maxlength' => 8)); ?></td>
+    <td><b><?php echo $form->labelEx($model, 'cheque_acct'); ?></b><?php echo $form->textField($model, "[$i]cheque_acct", array('maxlength' => 8)); ?></td>
+    <td><b><?php echo $form->labelEx($model, 'cheque_date'); ?></b><?php echo $form->textField($model, "[$i]cheque_date", array('maxlength' => 8)); ?></td>
+    <td><b><?php echo $form->labelEx($model, 'currency_id'); ?></b><?php echo $form->dropDownList($model, "[$i]currency_id", CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name'), array('class'=>'currSelect')); ?></td>
+    <td><b><?php echo $form->labelEx($model, 'sum'); ?></b><?php echo $form->textField($model, "[$i]sum", array('maxlength' => 8)); ?></td>
+    <td><b><?php echo $form->labelEx($model, 'dep_date'); ?></b><?php echo $form->hiddenField($model, "[$i]dep_date", array('maxlength' => 8));  ?></td>
     
     <td class="remove"><?php echo Yii::t('app', 'Remove'); ?>
 

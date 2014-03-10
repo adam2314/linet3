@@ -37,6 +37,8 @@ class Docs extends basicRecord{
     public $issue_from;
     public $issue_to;
     
+    private $dateDBformat=true;
+    
     /*
     public function __construct($arg = NULL) {
     //    public function __construct($type=0) {
@@ -109,30 +111,50 @@ class Docs extends basicRecord{
     
     
     public function beforeSave(){
-            if ($this->isNewRecord) 
-                $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetime'));
-            $this->modified = date(Yii::app()->locale->getDateFormat('phpshort'));
-
-            $this->due_date=date("Y-m-d H:m:s",CDateTimeParser::parse($this->due_date,Yii::app()->locale->getDateFormat('yiishort')));
-            $this->issue_date=date("Y-m-d H:m:s",CDateTimeParser::parse($this->issue_date,Yii::app()->locale->getDateFormat('yiidatetime')));
-            $this->modified=date("Y-m-d H:m:s",CDateTimeParser::parse($this->modified,Yii::app()->locale->getDateFormat('yiishort')));
+            if ($this->isNewRecord) {
+                //$this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetime'));
+                $this->dateDBformat=false;
+            }
+            $this->modified = date(Yii::app()->locale->getDateFormat('phpdatetime'));
             
+            //echo Yii::app()->locale->getDateFormat('yiishort');
+            //echo $this->due_date;
+            //echo CDateTimeParser::parse($this->due_date,Yii::app()->locale->getDateFormat('yiishort'));
+            //echo date("Y-m-d H:m:s",CDateTimeParser::parse($this->due_date,Yii::app()->locale->getDateFormat('yiishort')));
+            
+            //echo $this->due_date.";".$this->issue_date.";".$this->modified."<br>";
+            if(!$this->dateDBformat){
+                $this->dateDBformat=true;
+                $this->due_date=date("Y-m-d H:m:s",CDateTimeParser::parse($this->due_date,Yii::app()->locale->getDateFormat('yiidatetime')));
+                $this->issue_date=date("Y-m-d H:m:s",CDateTimeParser::parse($this->issue_date,Yii::app()->locale->getDateFormat('yiidatetime')));
+                $this->modified=date("Y-m-d H:m:s",CDateTimeParser::parse($this->modified,Yii::app()->locale->getDateFormat('yiidatetimesec')));
+            }
             //return true;
+            
+            
+            //echo $this->due_date.";".$this->issue_date.";".$this->modified;
+            
+            
+            //exit;
             return parent::beforeSave();
         }
         
         public function afterSave(){
-           $this->due_date=date(Yii::app()->locale->getDateFormat('phpshort'),strtotime($this->due_date));
-           $this->issue_date=date(Yii::app()->locale->getDateFormat('phpdatetime'),strtotime($this->issue_date));
-           $this->modified=date(Yii::app()->locale->getDateFormat('phpshort'),strtotime($this->modified));
-            
+            if($this->dateDBformat){
+                $this->dateDBformat=false;
+                $this->due_date=date(Yii::app()->locale->getDateFormat('phpdatetimes'),strtotime($this->due_date));
+                $this->issue_date=date(Yii::app()->locale->getDateFormat('phpdatetimes'),strtotime($this->issue_date));
+                $this->modified=date(Yii::app()->locale->getDateFormat('phpdatetime'),strtotime($this->modified));
+            }
             return parent::afterSave();
         }
        public function  afterFind(){
-           $this->due_date=date(Yii::app()->locale->getDateFormat('phpshort'),strtotime($this->due_date));
-           $this->issue_date=date(Yii::app()->locale->getDateFormat('phpdatetime'),strtotime($this->issue_date));
-           $this->modified=date(Yii::app()->locale->getDateFormat('phpshort'),strtotime($this->modified));
-
+           if($this->dateDBformat){
+                $this->dateDBformat=false;
+                $this->due_date=date(Yii::app()->locale->getDateFormat('phpdatetimes'),strtotime($this->due_date));
+                $this->issue_date=date(Yii::app()->locale->getDateFormat('phpdatetimes'),strtotime($this->issue_date));
+                $this->modified=date(Yii::app()->locale->getDateFormat('phpdatetime'),strtotime($this->modified));
+           }
             return parent::afterFind();
          }
        
@@ -151,10 +173,9 @@ class Docs extends basicRecord{
                 if(!$submodel){//new line
                    $submodel=new Docdetails; 
                 }
-
+                
                 $submodel->attributes=$detial;
                 $submodel->doc_id=$this->id;
-
                 if((int)$detial["item_id"]!=0){
                     if($submodel->save()){
                         $saved=true;
@@ -338,10 +359,10 @@ class Docs extends basicRecord{
                     array('currency_id', 'length', 'max'=>3),
                     array('refnum', 'length', 'max'=>20),
                     array('discount, sub_total, novat_total, vat, total, src_tax', 'length', 'max'=>20),
-                    array('issue_date, due_date, comments, qty', 'safe'),
+                    array('issue_date, due_date, comments, description', 'safe'),
                     // The following rule is used by search().
                     // Please remove those attributes that should not be searched.
-                    array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, owner', 'safe', 'on'=>'search'),
+                    array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe', 'on'=>'search'),
             );
     }
 

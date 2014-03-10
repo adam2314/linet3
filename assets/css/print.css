@@ -92,6 +92,6 @@ table {
  }   
  
  
+ /*,.Description*/
  
- 
- .line,.Itemid,.Description { display: none; }
+ .line,.Itemid { display: none; }

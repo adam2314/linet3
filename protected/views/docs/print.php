@@ -27,14 +27,22 @@
                 <td width="50" style="text-align:top;"><?php echo Yii::t('app','To'); ?>:</td>
                 <td width="400" ><?php echo $model->company; ?></td>
                 <td width="150" ><?php echo Yii::t('app','Doc. Issued date'); ?>:</td>
-                <td><?php echo $model->issue_date; ?></td>
+                <td>
+                <?php 
+                echo date(Yii::app()->locale->getDateFormat('phpshort'),CDateTimeParser::parse($model->issue_date,Yii::app()->locale->getDateFormat('yiidatetime')));
+                ?>
+                </td>
         </tr>
 
         <tr>
                 <td></td>
                 <td><?php echo $model->address; ?></td>
                 <td><?php echo Yii::t('app','Due date'); ?></td>
-                <td><?php echo $model->due_date; ?></td>
+                <td>
+                <?php  
+                echo date(Yii::app()->locale->getDateFormat('phpshort'),CDateTimeParser::parse($model->due_date,Yii::app()->locale->getDateFormat('yiidatetime')));
+                ?>
+                </td>
         </tr>
         <tr>
                 <td></td>
