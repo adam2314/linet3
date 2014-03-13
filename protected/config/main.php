@@ -27,7 +27,7 @@ return CMap::mergeArray(
                     'application.components.dashboard.*',
                     'application.modules.rights.*',
                     'application.modules.rights.components.*',
-                    'application.extensions.debugtoolbar.*',
+                    //'application.extensions.debugtoolbar.*',
             ),
             'modules'=>array(
                     //'auth'=>array(),
@@ -135,7 +135,13 @@ return CMap::mergeArray(
                                     '<controller:\w+>/create/<type:\d+>'=>'<controller>/create',//mainly for doc, acc,outcome creating
                                     //'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
                                     //'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+                                    '<controller:\w+>/index/<type:\d+>'=>'<controller>/index',
                                     'install/<step:\d+>'=>'install/index',
+                                    'docs/view/<doctype:\d+>/<docnum:\d+>'=>'docs/view',
+                                    'docs/view/<id:\d+>'=>'docs/view',
+                                
+                                    'download/<id:\d+>'=>'data/download',
+                                    'download/<company:\w+>/<hash:\d+>'=>'data/downloadpublic',
                             ),
                     ),
                     //'clientScript'=>array(
@@ -187,12 +193,7 @@ return CMap::mergeArray(
                                 //'categories'=>'system.*',
                                     //'categories'=>'*',
                             ),
-                                    array(
-                                            'class'=>'XWebDebugRouter',
-                                            'config'=>'alignLeft, opaque, runInDebug, fixedPos, collapsed, yamlStyle',
-                                            'levels'=>'error, warning, trace, profile, info',
-                                            'allowedIPs'=>array('127.0.0.1'),
-                                    ),
+                                    
                             /*array(
                                 'class'=>'CEmailLogRoute',
                                 'levels'=>'error, warning',

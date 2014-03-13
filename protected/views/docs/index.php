@@ -1,17 +1,3 @@
-<?php
-//$this->breadcrumbs=array('Docs',);
-/*
-$this->menu=array(
-	array('label'=>'Create Docs', 'url'=>array('create')),
-	array('label'=>'Manage Docs', 'url'=>array('admin')),
-);*/
-?>
-<?php //$this->widget('zii.widgets.CListView', array(
-	//'dataProvider'=>$dataProvider,
-	//'itemView'=>'_view',
-//)); ?>
-
-
 <?php 
 $model=new Docs('search');
 $model->unsetAttributes();

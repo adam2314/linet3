@@ -17,7 +17,7 @@ $model->password='';
         
 	<?php echo $form->textFieldRow($model,'lname',array('class'=>'span5','maxlength'=>80)); ?>
 
-	<?php echo $form->passwordFieldRow($model,'password',array('class'=>'span5','maxlength'=>41)); ?>
+	<?php echo $form->passwordFieldRow($model,'passwd',array('class'=>'span5','maxlength'=>41)); ?>
 
 	<?php echo $form->textFieldRow($model,'lastlogin',array('class'=>'span5')); ?>
 
@@ -33,7 +33,7 @@ $model->password='';
 
         <?php echo $form->dropDownListRow($model,'language',CHtml::listData(Language::model()->findAll(), 'id', 'name'));?>
 
-        
+        <?php echo $form->dropDownListRow($model,'warehouse',CHtml::listData(Accounts::model()->AutoComplete('',8), 'value', 'label'));?>
     <table  data-role="table" class="formtable" ><!-- docdetalies -->
         <thead>
             <tr  class="head1">

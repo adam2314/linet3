@@ -2,6 +2,7 @@
 
 class Linet3 {
   public static function beginRequest(CEvent $event) {
+           
     if(isset(Yii::app()->user->timezone)){
         ini_set('date.timezone', Yii::app()->user->timezone);  
     } 

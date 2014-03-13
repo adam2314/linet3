@@ -3,6 +3,7 @@
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'id'=>'accounts-form',
 	'enableAjaxValidation'=>true,
+    'htmlOptions'=>array('enctype'=>'multipart/form-data'),
 )); ?>
 <div class="row">
     <?php echo $form->errorSummary($model); ?>
@@ -63,13 +64,66 @@
              $this->endWidget(); ?>
     </div>
 
-
+    <div class="col-md-3">
+        
+    
+    <?php
+    $this->widget('CMultiFileUpload', array(
+            'name' => 'Files',
+            'model'=> $model,
+            'id'=>'Files',
+            'accept' => '*', // useful for verifying files
+            'duplicate' => 'Duplicate file!', // useful, i think
+            'denied' => 'Invalid file type', // useful, i think
+        ));
+  ?>
+    
+    
+    </div>
 
             <?php //echo $form->labelEx($model,'owner'); ?>
             <?php //adam: echo $form->dropDownList($model,'owner',CHtml::listData(User::model()->findAll(), 'id', 'username')); ?>
             <?php //echo $form->error($model,'owner'); ?>
 
+<?php 
+if(!$model->isNewRecord){
+    $files=new Files('search');
+    $files->unsetAttributes();
+    $files->parent_type=get_class($model);
+    $files->parent_id=$model->id;
+    $this->widget('bootstrap.widgets.TbGridView',array(
+            'id'=>'acc-template-grid',
+            'dataProvider'=>$files->search(),
+            //'filter'=>$model,
+            'template' => '{items}{pager}',
+            'ajaxUpdate'=>true,
+            'columns'=>array(
+                    array(
+                        'name' => 'name',
+                        'type' => 'raw',
+                        'value' => 'CHtml::link(CHtml::encode($data->name), Yii::app()->createUrl("download/".$data->id))',
+                    ),
+                    array(
+                        'name'=>'date',
+                        'value'=>'date("'.Yii::app()->locale->getDateFormat('phpdatetime').'",CDateTimeParser::parse($data->date,"'.Yii::app()->locale->getDateFormat('yiidbdatetime').'"))'
+                    ),
+                    array(
+                            'class'=>'CButtonColumn',
+                            'template'=>'{delete}',
+                            'buttons'=>array(
+                                'delete' => array(
+                                    'label'=>'<i class="glyphicon glyphicon-trash"></i>',
+                                    'deleteConfirmation'=>true,
+                                    'imageUrl'=>false,
+                                    'url'=>'Yii::app()->createUrl("files/delete", array("id"=>$data->id))',
+                                ),
+                        ),
+                    ),
+            ),
+    )); 
 
+}
+?>
 
 
     <div class="form-actions">

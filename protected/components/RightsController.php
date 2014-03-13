@@ -35,10 +35,11 @@ class RightsController extends RController{
 	}
         
         public function render($view, $data=NULL, $return=false){
-            if(isset($_POST['minmal']))
+            if(isset($_POST['minmal'])){
                 return parent::renderPartial($view,$data,$return);
-            else
+            }else{
                 return parent::render($view,$data,$return);
+            }
         }
         
         

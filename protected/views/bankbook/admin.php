@@ -37,6 +37,15 @@ $this->beginWidget('MiniForm',array(
         echo $form->dropDownList($model, "account_id", $temp,array('class'=>''));
         ?>
 <div id ="result">
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
 </div>
 
 <?php

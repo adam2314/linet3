@@ -29,7 +29,7 @@
  * @property integer $system_acc
  * @property integer $owner
  */
-class Accounts extends basicRecord{//CActiveRecord
+class Accounts extends fileRecord{//CActiveRecord
 	const table='{{accounts}}';
 	/**
 	 * Returns the static model of the specified AR class.

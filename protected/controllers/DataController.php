@@ -110,9 +110,10 @@ class DataController extends RightsController{
             if(isset($_POST['FormOpenfrmt'])){
                     $model->attributes=$_POST['FormOpenfrmt'];
                     
-                    $model->make();
-                    $this->renderPartial('openfrmtajax',array('model'=>$model ));
-                    exit;
+                    if($model->make()){
+                        $this->renderPartial('openfrmtajax',array('model'=>$model ));
+                        exit;
+                    }
                     //return Yii::app()->getRequest()->sendFile("pcn874.txt", $model->make());
             }
             $this->render('openfrmt',array('model'=>$model,));
@@ -122,12 +123,13 @@ class DataController extends RightsController{
         public function actionDownload($id){
             $id=(int)$id;
             $model=Files::model()->findByPk($id);
-            if($model===null)
+            if($model===null){
                     throw new CHttpException(404,'The requested page does not exist.');
-            
-            $configPath=Yii::app()->user->settings["company.path"];
-            $file   = $model->getFullPath();
-            return Yii::app()->getRequest()->sendFile($model->name, @file_get_contents($file));
+            }
+            //$configPath=Yii::app()->user->settings["company.path"];
+            $file   = $model->getFullPath().$model->id;
+
+            return Yii::app()->getRequest()->sendFile($model->name, file_get_contents($file));
         }
         
         
@@ -144,7 +146,7 @@ class DataController extends RightsController{
         
         public function actionOpenfrmtimport(){
             $model= new FormOpenfrmt();
-            echo $model->read();
+            //echo $model->read();
         }
 }
 ?>

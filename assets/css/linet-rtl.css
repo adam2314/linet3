@@ -37,8 +37,10 @@ float: right;
 .navbar-nav {
 float: right;
 }
-.nav > li {
-float: right;
+@media (min-width: 1164px){
+    .nav > li {
+        float: right;
+    }
 }
 .dropdown-menu {
     right:0;

@@ -1,4 +1,3 @@
-
 <?php
 return array(
     'language'=>'he_il',

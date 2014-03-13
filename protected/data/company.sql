@@ -556,7 +556,7 @@ INSERT INTO `accounts` (`id`, `type`, `id6111`, `pay_terms`, `src_tax`, `src_dat
  ('112', '2', '3680', '0', '0.00', '0000-00-00 00:00:00', '0', 'תקשורת', '', '', '', '', '', '', '', '', '', '', '', '', 'ILS', '', '1', '0', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
  ('113', '0', '0', '0', '0.00', '0000-00-00 00:00:00', '0', 'לקוחות שונים', '', '', '', '', '', '', '', '', '', '', '', '', 'ILS', '', '1', '0', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
  ('114', '1', '0', '0', '0.00', '0000-00-00 00:00:00', '0', 'ספקים שונים', '', '', '', '', '', '', '', '', '', '', '', '', 'ILS', '', '1', '0', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-
+ ('115', '8', '0', '0', '0.00', '0000-00-00 00:00:00', '0', 'מחסן ראשי', '', '', '', '', '', '', '', '', '', '', '', '', 'ILS', '', '1', '0', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 
 --
@@ -664,7 +664,7 @@ PRIMARY KEY (`id`)
 --
 
 INSERT INTO `config` (`id`, `value`, `eavType`,`hidden`) VALUES
- ('company.acc.assetvat', '3', 'integer', 1),
+('company.acc.assetvat', '3', 'integer', 1),
 ('company.acc.buyvat', '1', 'integer', 1),
 ('company.acc.custtax', '8', 'integer', 1),
 ('company.acc.irs', '16', 'integer', 1),
@@ -674,6 +674,17 @@ INSERT INTO `config` (`id`, `value`, `eavType`,`hidden`) VALUES
 ('company.acc.pretax', '13', 'integer', 1),
 ('company.acc.sellvat', '3', 'integer', 1),
 ('company.address', '', 'string', 0),
+
+('company.postal', '', 'string', 0),
+('company.po', '', 'string', 0),
+('company.phone', '', 'string', 0),
+('company.fax', '', 'string', 0),
+('company.website', '', 'string', 0),
+
+('company.doublebook', 'true', 'boolean', 0),
+('company.tax.vat', '1', 'integer', 0),
+('company.tax.irs', '1', 'integer', 0),
+
 ('company.city', '', 'string', 0),
 ('company.cur', 'ILS', 'list(Currecies)', 0),
 ('company.logo', '', 'file', 0),
@@ -684,9 +695,8 @@ INSERT INTO `config` (`id`, `value`, `eavType`,`hidden`) VALUES
 ('company.stock', 'false', 'boolean', 0),
 ('company.tax.rate', '10', 'integer', 0),
 ('company.transaction', '0', 'integer', 1),
-('company.vat.id', '69924504', 'integer', 0),
-('company.vat.type', '1', 'integer', 0),
-('company.zip', '52215', 'string', 0),
+('company.vat.id', '', 'integer', 0),
+('company.zip', '', 'string', 0),
 ('company.en.city',  '',  'string',  '0'),
 ('company.en.address',  '',  'string',  '0'),
 ('company.en.name',  'anther one',  'string',  '0'),
@@ -883,6 +893,8 @@ CREATE TABLE `docType` (
   `oppt_account_type` int(11) DEFAULT NULL,
   `transactionType_id` int(11) DEFAULT NULL,
   `vat_acc_id` int(11) NOT NULL,
+  `header` TEXT NOT NULL ,
+  `footer` TEXT NOT NULL ,
   PRIMARY KEY (`id`),
   KEY `account_type` (`account_type`),
   KEY `docStatus_id` (`docStatus_id`),
@@ -907,8 +919,8 @@ INSERT INTO `docType` (`id`, `name`, `openformat`, `isdoc`, `isrecipet`, `iscont
  ('11', 'Manual invoice', '0', '1', '0', '0', '1', '1', '1', '1', '1', NULL, '11', '3'),
  ('12', 'Manual receipt', '0', '1', '0', '0', '1', '1', '1', '1', '1', NULL, '12', '3'),
  ('13', 'Buisness outcome', '0', '1', '0', '0', '0', '0', '0', '0', '1', '2', '5', '1'),
- ('14', 'Asstes outcome', '0', '1', '0', '0', '0', '0', '0', '0', '1', '4', '5', '2');
-
+ ('14', 'Asstes outcome', '0', '1', '0', '0', '0', '0', '0', '0', '1', '4', '5', '2'),
+ ('15', 'Warehouse transaction', '830', '1', '0', '0', '0', '1', '0', '0', '1', '8', '0', '0');
 
 
 --
@@ -940,8 +952,8 @@ CREATE TABLE `docs` (
   `src_tax` decimal(20,2) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   `printed` int(11) DEFAULT NULL,
-  `comments` text,
-  `description` text,
+  `comments` text NOT NULL,
+  `description` text NOT NULL,
   `oppt_account_id` int(11) DEFAULT NULL,
   `owner` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -1514,11 +1526,11 @@ PRIMARY KEY (`id`)
 --
 
 INSERT INTO `paymentType` (`id`, `name`, `value`, `oppt_account_id`) VALUES
- ('1', 'Cash', '', '150'),
- ('2', 'Cheque', '', '150'),
- ('3', 'Credit card', '', '150'),
- ('4', 'Bank transfer', '', '150'),
- ('5', 'Manual Credit', '', '150');
+ ('1', 'Cash', '', '10'),
+ ('2', 'Cheque', '', '7'),
+ ('3', 'Credit card', '', '11'),
+ ('4', 'Bank transfer', '', '0'),
+ ('5', 'Manual Credit', '', '11');
 
 
 

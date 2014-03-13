@@ -225,7 +225,7 @@ if(count($model->docCheques)!=0){
 
 
                 <br />
-        <?php echo Yii::t('app','Comments'); ?>: <?php echo $model->comments; ?>
+        <?php echo Yii::t('app','Comments'); ?>: <?php echo $model->description; ?>
         <br />
         <br />
 

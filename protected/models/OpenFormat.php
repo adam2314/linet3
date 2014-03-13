@@ -34,7 +34,7 @@ class OpenFormat extends mainRecord{
 			array('description', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, description, type, size, record, action, type_id', 'safe', 'on'=>'search'),
+			array('id, description, type, size, record, type_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,7 +58,7 @@ class OpenFormat extends mainRecord{
 			'type' => 'Type',
                         'size' => 'Size',
                         'record' => 'Record',//out
-                        'action' => 'Action',
+                        //'action' => 'Action',
                         'type_id' => 'Type Id',
 			
 		);
@@ -80,7 +80,7 @@ class OpenFormat extends mainRecord{
                 
                 $criteria->compare('size',$this->size,true);
                 $criteria->compare('record',$this->record,true);//out
-                $criteria->compare('action',$this->action,true);
+                //$criteria->compare('action',$this->action,true);
                 $criteria->compare('type_id',$this->type_id);
 		
 

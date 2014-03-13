@@ -29,7 +29,20 @@
 	<br />
 		<?php echo $form->textFieldRow($model,'last_docnum'); ?>
 	
-
+        
+        <?php echo $form->textAreaRow($model,'header',array(
+                            'rows'=>6, 'cols'=>50,
+                            'class'=>'form-control wysihtml5-editor'
+                            )); ?>
+        
+        <?php echo $form->textAreaRow($model,'footer',array(
+                            'rows'=>6, 'cols'=>50,
+                            'class'=>'form-control wysihtml5-editor'
+                            )); ?>
+    
+        
+        
+        
 	<div class="form-actions">
             <?php $this->widget('bootstrap.widgets.TbButton', array(
                     'buttonType'=>'submit',

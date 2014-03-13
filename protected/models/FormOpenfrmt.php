@@ -534,7 +534,7 @@ function typeline($str, $filter){
         
         
         
-        return $bkmv;      
+        return $this->id;      
     }
     
 

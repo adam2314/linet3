@@ -85,8 +85,8 @@ echo $this->renderPartial('print', array('model'=>$model,'preview'=>1));
             'icon'=>'globe',
             'htmlOptions'=>array('id'=>'printLink', 'onclick'=>'return hideMe();'),
         )); 
-        
-         echo CHtml::dropDownList('language',Yii::app()->user->getLanguage(),CHtml::listData(Language::model()->findAll(), 'id', 'name'));
+         echo CHtml::dropDownList('language',Yii::app()->user->language,CHtml::listData(Language::model()->findAll(), 'id', 'name'));
+         //echo CHtml::dropDownList('language',Yii::app()->user->getLanguage(),CHtml::listData(Language::model()->findAll(), 'id', 'name'));
          $this->endWidget(); 
                 $this->endWidget(); 
 		?>

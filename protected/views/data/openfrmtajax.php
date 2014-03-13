@@ -1,3 +1,7 @@
+
+<a href="">ini.txt</a>
+<a href="">bkmvdata.txt</a>
+
 <div style=" width: 40%; display: inline-block; margin-right: 150px; ">
     <?php $this->widget('bootstrap.widgets.TbGridView', array(
 	'id'=>'profloss-grid',

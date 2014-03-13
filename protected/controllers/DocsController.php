@@ -4,9 +4,12 @@ class DocsController extends RightsController
 {
 
 
-	public function actionView($id)	{// used in the refnum selection
-		$model = Docs::model()->findByPk($id);
-		
+	public function actionView($id=0,$docnum=0,$doctype=0)	{// used in the refnum selection
+                if((int)$id!=0){
+                    $model = Docs::model()->findByPk($id);
+                }else{
+                    $model =Docs::model()->findByNum($doctype,$docnum);
+                }
 		
 		//$docdetails =$model->docDetailes;
 		//$doctype =$model->docType;
@@ -122,9 +125,10 @@ class DocsController extends RightsController
                 $model->status=$model->docType->docStatus_id;
                 $model->issue_date=date(Yii::app()->locale->getDateFormat('phpdatetimes'));
                 $model->due_date=date(Yii::app()->locale->getDateFormat('phpdatetimes'));
+                $model->description=$model->docType->footer;
 		//$doctype =$model->docType;
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		 $this->performAjaxValidation($model);
 
 		if(isset($_POST['Docs'])){
 			$model->attributes=$_POST['Docs'];
@@ -179,7 +183,7 @@ class DocsController extends RightsController
 		$doctype =$model->docType;
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 		if(isset($model->docStatus))
                     if($model->docStatus->looked==1){
                             Yii::app()->user->setFlash('danger', 'unable to edit documenet');

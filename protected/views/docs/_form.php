@@ -2,7 +2,8 @@
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'docs-form',
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
+    'htmlOptions'=>array('enctype'=>'multipart/form-data'),
 )); 
 
 ?>
@@ -131,7 +132,60 @@
                 <?php echo $form->hiddenField($model,'refnum',array('size'=>20,'maxlength'=>20)); ?>
 		<?php echo $form->error($model,'refnum'); ?>
 	</div>
-    <div class="col-md-3"></div>
+    
+    <div class="col-md-3">
+        
+    
+    <?php
+    $this->widget('CMultiFileUpload', array(
+            'name' => 'Files',
+            'model'=> $model,
+            'id'=>'Files',
+            'accept' => '*', // useful for verifying files
+            'duplicate' => 'Duplicate file!', // useful, i think
+            'denied' => 'Invalid file type', // useful, i think
+        ));
+  ?>
+    <?php 
+if(!$model->isNewRecord){
+    $files=new Files('search');
+    $files->unsetAttributes();
+    $files->parent_type=get_class($model);
+    $files->parent_id=$model->id;
+    $this->widget('bootstrap.widgets.TbGridView',array(
+            'id'=>'acc-template-grid',
+            'dataProvider'=>$files->search(),
+            //'filter'=>$model,
+            'template' => '{items}{pager}',
+            'ajaxUpdate'=>true,
+            'columns'=>array(
+                    array(
+                        'name' => 'name',
+                        'type' => 'raw',
+                        'value' => 'CHtml::link(CHtml::encode($data->name), Yii::app()->createUrl("download/".$data->id))',
+                    ),
+                    array(
+                        'name'=>'date',
+                        'value'=>'date("'.Yii::app()->locale->getDateFormat('phpdatetime').'",CDateTimeParser::parse($data->date,"'.Yii::app()->locale->getDateFormat('yiidbdatetime').'"))'
+                    ),
+                    array(
+                            'class'=>'CButtonColumn',
+                            'template'=>'{delete}',
+                            'buttons'=>array(
+                                'delete' => array(
+                                    'label'=>'<i class="glyphicon glyphicon-trash"></i>',
+                                    'deleteConfirmation'=>true,
+                                    'imageUrl'=>false,
+                                    'url'=>'Yii::app()->createUrl("files/delete", array("id"=>$data->id))',
+                                ),
+                        ),
+                    ),
+            ),
+    ));
+}
+    ?>
+    
+    </div>
    <div><!--date block-->
 	<div class="col-md-2">
 		<?php echo $form->labelEx($model,'issue_date'); ?>
@@ -538,22 +592,22 @@ function changeFileds(){//
         $("#Docs_city").parent().hide();
         $("#Docs_zip").parent().hide();
 
-        $("#Docs_vatnum").parent().hide();
+        //$("#Docs_vatnum").parent().hide();
         $("#Docs_zip").parent().hide();
 
-        $("#Docsrefnum").parent().hide();
-        $("#Docs_due_date").parent().hide();
+        //$("#Docsrefnum").parent().hide();
+        //$("#Docs_due_date").parent().hide();
 
         $('#Docs_discount').hide();
         
-        $('.formtable tr th:nth-child(3)').hide();
-        $('.formtable tr td:nth-child(3)').hide();
+        //$('.formtable tr th:nth-child(3)').hide();
+        //$('.formtable tr td:nth-child(3)').hide();
 
-        $('.formtable tr th:nth-child(7)').hide();
-        $('.formtable tr td:nth-child(7)').hide();
+        //$('.formtable tr th:nth-child(7)').hide();
+        //$('.formtable tr td:nth-child(7)').hide();
 
-        $('.formtable tr th:nth-child(9)').hide();
-        $('.formtable tr td:nth-child(9)').hide();
+        //$('.formtable tr th:nth-child(9)').hide();
+        //$('.formtable tr td:nth-child(9)').hide();
     }else{
         $('#Docs_oppt_account_id').parent().hide();
         
@@ -647,6 +701,54 @@ function nameChange(index) {
     $('#Docdetails_'+index+'_item_id').val(item_id);
     itemChange(index);      
 }*/
+
+function TypeSelChange(index) {
+	var val = $('#Doccheques_'+index+'_type').val();
+        
+	//$('#Doccheques_'+index+"#banksel"+num).parent().append("<?php //echo PrintBankSelect();?>");
+	$('#Doccheques_'+index+"_cheque_acct").attr('placeholder','');
+	$('#Doccheques_'+index+"_cheque_num").attr('placeholder','');
+	$('#Doccheques_'+index+"_branch").attr('placeholder','');
+	$('#Doccheques_'+index+"_banksel").remove();
+	if((val == 1)||(val==3)) {
+		$('#Doccheques_'+index+"_date").hide();
+		$('#Doccheques_'+index+"_banksel").hide();
+		$('#Doccheques_'+index+"_cheque_num").hide();
+		$('#Doccheques_'+index+"_bank").hide();
+		$('#Doccheques_'+index+"_branch").hide();
+		$('#Doccheques_'+index+"_cheque_acct").hide();
+	}else if(val == 2) {
+		$('#Doccheques_'+index+"_date").show();
+		$('#Doccheques_'+index+"_banksel").hide();
+		$('#Doccheques_'+index+"_cheque_num").show();
+		$('#Doccheques_'+index+"_bank").show();
+		$('#Doccheques_'+index+"_branch").show();
+		$('#Doccheques_'+index+"_cheque_acct").show();
+	}else if(val == 4) {
+		$('#Doccheques_'+index+"_date").show();
+		$('#Doccheques_'+index+"_banksel").show();
+		$('#Doccheques_'+index+"_cheque_num").show();
+		$('#Doccheques_'+index+"_bank").show();
+		$('#Doccheques_'+index+"_branch").show();
+		$('#Doccheques_'+index+"_cheque_acct").show();
+	}else if(val == 5) {
+		$('#Doccheques_'+index+"_date").show();
+		$('#Doccheques_'+index+"_banksel").hide();
+		
+		$('#Doccheques_'+index+"_bank").parent().append('<?php //echo PrintCreditCompany();?>');
+		$('#Doccheques_'+index+"_bank").remove();
+		
+		$('#Doccheques_'+index+"_branch").show();
+		$('#Doccheques_'+index+"_cheque_num").attr('placeholder','Reference');
+		
+
+		$('#Doccheques_'+index+"_cheque_acct").show();
+		$('#Doccheques_'+index+"_branch").attr('placeholder','Number of payments');
+		$('#Doccheques_'+index+"_cheque_num").show();
+		$('#Doccheques_'+index+"_cheque_acct").attr('placeholder','last four digits of credit card');
+	}
+}
+
 
 function itemChange(index){
     var part = $('#Docdetails_'+ index +'_item_id').val();
@@ -776,7 +878,7 @@ $('input').blur(function(){
                 $("#Docs_currency_id").trigger("liszt:updated");
 
                 var pay_terms=data.pay_terms;
-                CalcDueDate(idate, pay_terms);
+                //CalcDueDate(idate, pay_terms);
             }, "json")
             .error(function() { });
     }//end account_id

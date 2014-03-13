@@ -49,6 +49,8 @@ class Doctype extends CActiveRecord{
 			array('name, openformat, isdoc, isrecipet, iscontract, stockAction, account_type, docStatus_id, last_docnum', 'required'),
 			array('openformat, isdoc, isrecipet, iscontract, stockAction, account_type, docStatus_id, last_docnum', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
+                    
+                        array('header, footer', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, name, openformat, isdoc, isrecipet, iscontract, stockAction, account_type, docStatus_id, last_docnum', 'safe', 'on'=>'search'),

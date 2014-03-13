@@ -8,6 +8,23 @@ and open the template in the editor.
     Author     : adam
 */
 
+@media (max-width: 770px){
+    .topnav {
+        display:none;
+    }
+}
+
+
+@media (min-width: 1164px){
+    .dropdown-menu li:hover .sub-menu {
+        visibility: visible;
+    }
+
+    .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+}
+
 .formtable .item_id{
     width:6%;
 }

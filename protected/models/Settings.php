@@ -27,7 +27,7 @@ class Settings extends basicRecord{
                         
                 
 
-                $this->value = CUploadedFile::getInstanceByName('Settings[company.logo][value]');
+                $this->value = CUploadedFile::getInstanceByName('Settings['.$this->id.'][value]');
                 
 
 		$ext = $this->value->extensionName;
@@ -146,6 +146,7 @@ class Settings extends basicRecord{
 			array('id', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
+                        array('value', 'safe'),
 			array('id, value', 'safe', 'on'=>'search'),
 		);
 	}

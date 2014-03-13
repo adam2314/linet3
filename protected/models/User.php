@@ -22,8 +22,8 @@
  */
 class User extends mainRecord{
     const table='user';
-    
-    
+    public $warehouse='';
+    public $passwd;
     
 	/**
 	 * Returns the static model of the specified AR class.
@@ -57,7 +57,7 @@ class User extends mainRecord{
 			array('password', 'length', 'max'=>41),
 			array('cookie, hash', 'length', 'max'=>32),
 			array('certpasswd, salt, email', 'length', 'max'=>255),
-			array('lastlogin', 'safe'),
+			array('lastlogin, warehouse, passwd', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, username, fname, lname, password, lastlogin, cookie, hash, certpasswd, salt, email, language', 'safe', 'on'=>'search'),
@@ -77,15 +77,33 @@ class User extends mainRecord{
 		);
 	}
 
+        public function afterFind(){
+            $a=Settings::model()->findByPk("company.".$this->id.".warehouse");
+            if($a){
+                $this->warehouse=$a->value;
+            }
+            return parent::afterFind();
+         }
+        
+        
         public function save($runValidation = true, $attributes = NULL) {
             $catagories=ItemVatCat::model()->findAll();
             if($this->salt=='') $this->salt=sha1(rand());
-            if($this->attributes["password"]!='') $this->password=$this->hashPassword($this->password,$this->salt);
-            if($this->attributes["password"]=='') unset($attributes["password"]);
-            
-            
+            if($this->passwd!='') $this->password=$this->hashPassword($this->passwd,$this->salt);
+              
             $res=parent::save($runValidation,$attributes);
             if($res){
+                $model = Settings::model()->findByPk("company.".$this->id.".warehouse");
+                if(!$model){
+                    $model=new Settings();
+                    $model->id="company.".$this->id.".warehouse";
+                    $model->eavType='integer';
+                    $model->hidden=1;
+                }
+                $model->value=$this->warehouse;
+                $model->save();
+                
+                
                 foreach ($catagories as $catagory){
                     if(!UserIncomeMap::model()->findByPk(array('user_id'=>$this->id, 'itemVatCat_id'=>$catagory->id))){//'user_id', 'itemVatCat_id'
                         $model=new UserIncomeMap;

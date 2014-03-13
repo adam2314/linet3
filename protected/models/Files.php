@@ -18,6 +18,13 @@ class Files extends CActiveRecord{
         const table='{{files}}';
         public $handle;
         
+        
+        public function delete(){
+            unlink($this->getFullPath().$this->id);
+            return parent::delete();
+        }
+        
+        
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -76,7 +83,7 @@ class Files extends CActiveRecord{
 	}
         public function getFullPath(){
             $configPath=Yii::app()->user->settings["company.path"];
-            return    Yii::app()->basePath."/files/$configPath/".$this->path;
+            return Yii::app()->basePath."/files/$configPath/".$this->path;
         }
 	/**
 	 * @return array relational rules.

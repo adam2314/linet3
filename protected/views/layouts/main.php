@@ -27,19 +27,7 @@
 <nav class="navbar navbar-inverse navbar-static-top">
 
           <!-- Brand and toggle get grouped for better mobile display -->
-          <header class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-              <span class="sr-only">Toggle navigation</span> 
-              <span class="icon-bar"></span> 
-              <span class="icon-bar"></span> 
-              <span class="icon-bar"></span> 
-            </button>
-            <a href="<?php echo Yii::app()->createAbsoluteUrl('/settings/dashboard');?>" class="navbar-brand">
-                Linet 3.0
-              <!--<img src="assets/img/logo.png" alt="">-->
-            </a> 
-
-            <div class="topnav">
+          <div class="topnav">
                 <div class="btn-toolbar">
                     <div class="btn-group">
                         <a data-placement="bottom" data-original-title="Show / Hide Sidebar" data-toggle="tooltip" class="btn btn-success btn-sm" id="changeSidebarPos">
@@ -48,24 +36,29 @@
                     </div>
                </div>
             </div><!-- /.topnav -->  
-              
-              
+          
+          
+          <header class="navbar-header">
+            
+            
+
+            
+             
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+              <span class="sr-only">Toggle navigation</span> 
+              <span class="icon-bar"></span> 
+              <span class="icon-bar"></span> 
+              <span class="icon-bar"></span> 
+            </button>
+            
+             <div class="navbar-collapse navbar-ex1-collapse collapse" style="height: 1px;">
+                <?php Yii::app()->bootstrap->register();?>
+                <?php $this->widget('bootstrap.widgets.TbMenu', array('items'=>Yii::app()->user->menu,'htmlOptions'=>array('class'=>'navbar-nav')));?>
+            </div>
           </header>
           
-          <div class="navbar-collapse navbar-ex1-collapse collapse" style="height: 1px;">
+          
 
-           
-         
-        
-         
-	<?php 
-	Yii::app()->bootstrap->register();
-
-?>
-		<?php 
-$this->widget('bootstrap.widgets.TbMenu', array('items'=>Yii::app()->user->menu,'htmlOptions'=>array('class'=>'navbar-nav')));
-?>
-       </div>
 	</nav>
     <div>
         <div id="left">
@@ -75,7 +68,10 @@ $this->widget('bootstrap.widgets.TbMenu', array('items'=>Yii::app()->user->menu,
                 ?>
             
             <div class="media user-media hidden-phone">
-                
+                <a href="<?php echo Yii::app()->createAbsoluteUrl('/settings/dashboard');?>" class="navbar-brand">
+                Linet 3.0
+              <!--<img src="assets/img/logo.png" alt="">-->
+            </a> 
                 
                 <div class="topnav">
                     <div class="btn-toolbar">

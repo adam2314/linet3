@@ -793,7 +793,7 @@ var boxFullScreen = {
 };
 // boxFullScreen init
 boxFullScreen.init();
-
+/*
 var panelBodyCollapse = {
     init: function() {
         var $collapseButton = $('.collapse-box'),
@@ -827,7 +827,7 @@ var panelBodyCollapse = {
 };
 // panelBodyCollapse init
 panelBodyCollapse.init();
-
+*/
 
 var boxHiding = {
   init: function () {

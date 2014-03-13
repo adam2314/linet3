@@ -104,7 +104,7 @@ class Docdetails extends basicRecord{
 		// will receive user inputs.
 		return array(
 			array('name, line', 'required'),
-			array('line', 'numerical', 'integerOnly'=>true),
+			array('line, unit_id', 'numerical', 'integerOnly'=>true),
 			array('doc_id, item_id, currency_id', 'length', 'max'=>10),
 			array('name', 'length', 'max'=>255),
 			array('vat, unit_price, price, invprice, qty', 'length', 'max'=>20),
@@ -112,7 +112,7 @@ class Docdetails extends basicRecord{
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('doc_id, item_id, name, description, qty, unit_price, currency_id, vat, price, invprice, line', 'safe', 'on'=>'search'),
+			array('doc_id, item_id, name, description, qty, unit_price, unit_id, currency_id, vat, price, invprice, line', 'safe', 'on'=>'search'),
 		);
 	}
 

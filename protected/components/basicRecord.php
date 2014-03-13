@@ -15,7 +15,7 @@ class basicRecord extends CActiveRecord{
     public function tableName() {
         return (Yii::app()->db->tablePrefix . self::table);
     }*/
-        
+    
     protected function fieldvalue($str,$type,$action){
 	switch ($type){
 		case "date":
@@ -159,7 +159,7 @@ class basicRecord extends CActiveRecord{
                         $value=$this->{str_replace("this.", "", $field->export)};
                         
             if(strpos($field->export, "system.") === 0)
-                $value=Settings::model()->findByPk($field->action)->export;        
+                $value=Settings::model()->findByPk($field->export)->value;        
                     
             if(strpos($field->export, "func.") === 0)
                     $value=$this->{str_replace("func.", "", $field->export)}();
@@ -231,5 +231,3 @@ class basicRecord extends CActiveRecord{
             
         } 
 }
-
-?>

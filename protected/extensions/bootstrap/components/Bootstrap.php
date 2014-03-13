@@ -87,7 +87,7 @@ class Bootstrap extends CApplicationComponent
             Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/modernizr-build.min.js'));
 
 
-            Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/bootstrap/js/bootstrap.min.js'), CClientScript::POS_END);
+            Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/bootstrap/js/bootstrap.min.js'), CClientScript::POS_HEAD);
             Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/chosen/chosen.jquery.min.js'), CClientScript::POS_HEAD);
             Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/cssbeautify/cssbeautify.js'), CClientScript::POS_END);
             Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/screenfull/screenfull.js'), CClientScript::POS_END);

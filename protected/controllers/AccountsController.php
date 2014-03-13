@@ -50,43 +50,39 @@ class AccountsController extends RightsController
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionUpdate($id)//$prefix
-	{
-		//print 'in action';
+	public function actionUpdate($id){//$prefix
+            //print 'in action';
             //Yii::app()->user->setFlash('error', 'unable to change sys account');
             //Yii::app()->user->setFlash('success', '<strong>Well done!</strong> You successfully read this important alert message.');
             //Yii::app()->user->setFlash('info', '<strong>Heads up!</strong> This alert needs your attention, but it\'s not super important.');
             //Yii::app()->user->setFlash('warning', '<strong>Warning!</strong> Best check yo self, you\'re not looking too good.');
             //Yii::app()->user->setFlash('error', '<strong>Oh snap!</strong> Change a few things up and try submitting again.');
             
-            
-		$model=$this->loadModel($id);
+            $model=$this->loadModel($id);
 
-		
-		$this->performAjaxValidation($model);
+            $this->performAjaxValidation($model);
 
-		if(isset($_POST['Accounts']))
-		{
-			$model->attributes=$_POST['Accounts'];
-                        if($model->system_acc==1)
-                            Yii::app()->user->setFlash('error', 'unable to change sys account');
-                        
-                        else{
-                            $model->deleteEavAttributes();
-                            if(isset($_POST['AccountseavE'])&&isset($_POST['AccountseavE'])){
-                                $model->setEavAttributes(array_combine($_POST['AccountseavE'],$_POST['AccountseavV']));
-                            }
-                            if($model->save())
-                                $this->redirect(array('index','id'=>$model->id));
-                            else{
-                                echo "not save error";
-                            }
+            if(isset($_POST['Accounts'])){
+                    $model->attributes=$_POST['Accounts'];
+                    if($model->system_acc==1){
+                        Yii::app()->user->setFlash('error', 'unable to change sys account');
+                    }else{
+                        $model->deleteEavAttributes();
+                        if(isset($_POST['AccountseavE'])&&isset($_POST['AccountseavE'])){
+                            $model->setEavAttributes(array_combine($_POST['AccountseavE'],$_POST['AccountseavV']));
                         }
-		}
+                        if($model->save()){
+                            echo 'saved';
+                            //$this->redirect(array('index','id'=>$model->id));
+                        }else{
+                            echo "not save error";
+                        }
+                    }
+            }
 
-		$this->render('update',array(
-			'model'=>$model,
-		));
+            $this->render('update',array(
+                    'model'=>$model,
+            ));
 	}
 
 	/**

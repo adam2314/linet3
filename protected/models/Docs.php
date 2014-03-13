@@ -27,12 +27,12 @@
  * @property string $comments
  * @property integer $owner
  */
-class Docs extends basicRecord{
+class Docs extends fileRecord{
     const table='{{docs}}';
     //public $lang;
     public $docDet=NULL;
     public $docCheq=NULL;
-
+    
     
     public $issue_from;
     public $issue_to;
@@ -52,6 +52,11 @@ class Docs extends basicRecord{
     /*
      * for open format export 
      */
+    public function findByNum($docnum,$doctype){
+        
+        return Docs::model()->findByAttributes(array('docnum'=>$docnum,'doctype'=>$doctype));
+    }
+       
     public function getType(){
              return isset($this->docType)?$this->docType->openformat:"";
          }
@@ -159,13 +164,23 @@ class Docs extends basicRecord{
          }
        
     public function save($runValidation = true, $attributes = NULL) {
-
         $this->docnum=$this->newNum();
         $this->owner=Yii::app()->user->id;
-        //$catagories=ItemVatCat::model()->findAll();
         $a=parent::save($runValidation,$attributes);
         //$this->docType->stockAction;
-        /***********************doc********************/
+        if($a){
+            $this->saveDet();
+            $this->saveCheq();
+            if(isset($this->docStatus)){
+                if($this->docStatus->action!=0){
+                    $this->transaction((int)$this->docStatus->action);
+                }
+            } 
+        }
+        return $a;
+    }
+    
+    private function saveDet(){/***********************doc********************/    
         if(!is_null($this->docDet)){
             $line=0;
             foreach($this->docDet as $key=>$detial){
@@ -173,7 +188,6 @@ class Docs extends basicRecord{
                 if(!$submodel){//new line
                    $submodel=new Docdetails; 
                 }
-                
                 $submodel->attributes=$detial;
                 $submodel->doc_id=$this->id;
                 if((int)$detial["item_id"]!=0){
@@ -190,7 +204,9 @@ class Docs extends basicRecord{
                             $this->docDetailes[$curLine]->delete();
             }
         }
-        /**********************rcpt********************/
+    }
+    
+    private function saveCheq(){/**********************rcpt********************/
         if(!is_null($this->docCheq)){
             $line=0;
             foreach($this->docCheq as $key=>$rcpt){
@@ -201,7 +217,6 @@ class Docs extends basicRecord{
 
                 $submodel->attributes=$rcpt;
                 $submodel->doc_id=$this->id;
-
                 if((int)$rcpt["type"]!=0){
                     if($submodel->save()){
                         $saved=true;
@@ -211,6 +226,8 @@ class Docs extends basicRecord{
                         //exit;
                     }
                 }
+                
+                //exit;
             }
                 if(count($this->docCheques)!=$line){//if more items in $docCheques delete them
                         for ($curLine=$line;$curLine< count($this->docCheques);$curLine++)
@@ -218,12 +235,10 @@ class Docs extends basicRecord{
                 }
 
         }
-        if(isset($this->docStatus))
-            if($this->docStatus->action!=0){
-                $this->transaction((int)$this->docStatus->action);
-            }
-        return $a;
     }
+
+
+    
     private function transaction($action){
         //income account -
         //vat account +
@@ -352,6 +367,7 @@ class Docs extends basicRecord{
             // NOTE: you should only define rules for those attributes that
             // will receive user inputs.
             return array(
+                    array('account_id', 'required'),
                     array('status, printed, owner', 'numerical', 'integerOnly'=>true),
                     array('city', 'length', 'max'=>40),
                     array('doctype, docnum, oppt_account_id, account_id, zip, vatnum', 'length', 'max'=>11),
@@ -379,6 +395,7 @@ class Docs extends basicRecord{
                     'docType'=>array(self::BELONGS_TO, 'Doctype', 'doctype'),
                     'docStatus'=>array(self::BELONGS_TO, 'Docstatus', array('status','doctype')),
                     'docOwner' => array(self::BELONGS_TO, 'Users', 'owner'),
+                    //'Files'=>array(self::HAS_MANY, 'Files',array('parent_id'=>'id','parent_type'=>'Docs')),
                     //'Currency' => array(self::BELONGS_TO, 'Currecies', 'currency_id'),
                     //
             );
@@ -390,8 +407,8 @@ class Docs extends basicRecord{
     public function attributeLabels()    {
             return array(
                     'id'=>Yii::t('labels','ID'),
-                    'doctype'=>Yii::t('labels','Documenet Type'),
-                    'docnum'=>Yii::t('labels','Documenet No.'),
+                    'doctype'=>Yii::t('labels','Document Type'),
+                    'docnum'=>Yii::t('labels','Document No.'),
                     'account_id'=>Yii::t('labels','Account'),
                     'oppt_account_id'=>Yii::t('labels','Opposite account'),
                     'company'=>Yii::t('labels','Company'),
@@ -399,7 +416,7 @@ class Docs extends basicRecord{
                     'city'=>Yii::t('labels','City'),
                     'zip'=>Yii::t('labels','Zip'),
                     'vatnum'=>Yii::t('labels','VAT No.'),
-                    'refnum'=>Yii::t('labels','Refernce No.'),
+                    'refnum'=>Yii::t('labels','Reference No.'),
                     'issue_date'=>Yii::t('labels','Issue Date'),
                     'due_date'=>Yii::t('labels','Due Date'),
                     'sub_total'=>Yii::t('labels','Sub Total'),
@@ -410,7 +427,8 @@ class Docs extends basicRecord{
                     'src_tax'=>Yii::t('labels','Src Tax'),
                     'status'=>Yii::t('labels','Status'),
                     'printed'=>Yii::t('labels','Printed'),
-                    'comments'=>Yii::t('labels','Comments'),
+                    'description'=>Yii::t('labels','Comments for document'),
+                    'comments'=>Yii::t('labels','Hidden internal comments'),
                     'owner'=>Yii::t('labels','Owner'),
                     'discount'=>Yii::t('labels','Discount'),
                 
