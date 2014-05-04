@@ -112,7 +112,7 @@ class DataController extends RightsController{
                     
                     if($model->make()){
                         $this->renderPartial('openfrmtajax',array('model'=>$model ));
-                        exit;
+                        Yii::app()->end();
                     }
                     //return Yii::app()->getRequest()->sendFile("pcn874.txt", $model->make());
             }
@@ -127,7 +127,7 @@ class DataController extends RightsController{
                     throw new CHttpException(404,'The requested page does not exist.');
             }
             //$configPath=Yii::app()->user->settings["company.path"];
-            $file   = $model->getFullPath().$model->id;
+            $file   = $model->getFullPath();//????.$model->id;
 
             return Yii::app()->getRequest()->sendFile($model->name, file_get_contents($file));
         }
@@ -146,6 +146,57 @@ class DataController extends RightsController{
         
         public function actionOpenfrmtimport(){
             $model= new FormOpenfrmt();
+            
+            
+            if(isset($_POST['SwitchType'])){
+                //save current
+                //$corComp=Yii::app()->user->Database->id;
+                
+                $newComp=(int)$_POST['companyId'];
+                //company load
+                Company::model()->select($newComp);
+                
+                foreach($_POST['SwitchType'] as $old=>$new){
+                    Acctype::model()->switchType($old,$new);
+                }
+                
+                //end
+                $this->redirect('company');
+            }
+            if(isset($_POST['FormOpenfrmt'])){
+                
+                $yiiBasepath=Yii::app()->basePath;
+                //$yiiUser=Yii::app()->user->id;
+                $configPath=Yii::app()->user->settings["company.path"];
+     
+                $file = $yiiBasepath."/files/".$configPath."/ini.txt";
+                
+                $model->iniFile = $_POST['FormOpenfrmt']['iniFile'];
+                $model->iniFile = CUploadedFile::getInstance($model,'iniFile');
+                if($model->iniFile->saveAs($file)){
+                    $model->iniFile=$file;
+                    //$model->read();
+                }
+                
+                $file= $yiiBasepath."/files/".$configPath."/bkmv.txt";
+                $model->bkmvFile = $_POST['FormOpenfrmt']['bkmvFile'];
+                $model->bkmvFile = CUploadedFile::getInstance($model,'bkmvFile');
+                if($model->bkmvFile->saveAs($file)){
+                    $corComp=Yii::app()->user->Database->id;
+                    $model->bkmvFile=$file;
+                    $model->readIni();
+                    Company::model()->select($model->companyId);
+                    $model->readBkmv();
+                    Company::model()->select($corComp);
+                }
+                 $this->render('openfrmtimportajax',array('model'=>$model,));
+                 
+                 Yii::app()->end();
+            }
+            
+            
+            
+            $this->render('openfrmtimport',array('model'=>$model,));
             //echo $model->read();
         }
 }

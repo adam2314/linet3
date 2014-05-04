@@ -59,7 +59,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridVie
 		'owner',
 		*/
 		array(
-			'class'=>'CButtonColumn',
+			'class'=>'bootstrap.widgets.TbButtonColumn',
                         'htmlOptions' => array('style'=>'width:80px'),
 			'template'=>'{print}{edit}{delete}{display}',
 			'buttons'=>array

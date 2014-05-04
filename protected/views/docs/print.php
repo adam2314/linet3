@@ -9,14 +9,17 @@
         <tr>
                 <td colspan="3" width="650">
                 <h3><?php echo Yii::app()->user->settings['company.name']; ?></h3><br />
-                <?php echo Yii::app()->user->settings['company.address']; ?><br />
+                <?php echo Yii::app()->user->settings['company.address']; ?>, <?php echo Yii::app()->user->settings['company.city']; ?> ,<?php echo Yii::app()->user->settings['company.postal']; ?><br />
+                <?php echo Yii::t('app','Phone'); ?>: <?php echo Yii::app()->user->settings['company.phone']; ?><br />
+                <?php echo Yii::t('app','Fax'); ?>: <?php echo Yii::app()->user->settings['company.fax']; ?><br />
+                <?php echo Yii::app()->user->settings['company.website']; ?><br />
                 
-                
-                <?php echo Yii::app()->user->settings['company.vat.id']; ?><?php echo Yii::t('app','VAT No.'); ?><br />
+                <?php echo Yii::t('app','VAT No.'); ?>: <?php echo Yii::app()->user->settings['company.vat.id']; ?><br />
                 </td>
 
                 <td>
-                <?php echo Yii::app()->user->settings['company.logo']; ?>
+                    
+                <img width="100px" alt="logo" src="<?php echo Yii::app()->createAbsoluteUrl("download/".Yii::app()->user->settings['company.logo']);?>">
                 
                 </td>
         </tr>
@@ -59,7 +62,7 @@
 
         <tr>
                 <td colspan="4">
-                        <div align="center"><h1><?php echo $model->docType->name; ?> <span style="font-size:25px;"> <?php echo Yii::t('app','No.'); ?> <?php echo $model->docnum; ?> </span>~copy~</h1></div>
+                        <div align="center"><h1><?php echo Yii::t('app',$model->docType->name); ?> <span style="font-size:25px;"> <?php echo Yii::t('app','No.'); ?> <?php echo $model->docnum; ?> </span><?php echo ($model->printed==1)? Yii::t('app','Source'):Yii::t('app','Copy'); ?></h1></div>
                 </td>
         </tr>
 </table>
@@ -161,7 +164,7 @@ if(count($model->docDetailes)!=0){
 <?php
 }
 
-
+echo count($model->docCheques);
 /******************************************************************************************************************************/
 if(count($model->docCheques)!=0){
 

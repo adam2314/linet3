@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 // change the following paths if necessary
-$yii=dirname(__FILE__).'/../../framework/yii.php';
+$yii=dirname(__FILE__).'/../yii/framework/yii.php';
 $config=dirname(__FILE__).'/protected/config/main.php';
 
 // remove the following lines when in production mode
@@ -19,3 +19,5 @@ Yii::createWebApplication($config)->run();
 //apache: mod_rewrite
 //mysql
 
+//open format import linet 2 db error fld 1322
+//must fix.

@@ -10,6 +10,7 @@ class MiniForm extends CWidget
     public $titlewidth=0;
     public $class='col-lg-12';
     public $content='';
+    public $height=false;
     
     public function init() {
     	ob_start();
@@ -34,6 +35,9 @@ class MiniForm extends CWidget
         }
         
         
+        
+        
+        
         if($this->collapse){
             $this->collapse='<a href="javascript:;" class="btn btn-default btn-xs collapse-box"  data-toggle="collapse">
                           <i class="fa fa-minus"></i>
@@ -44,6 +48,14 @@ class MiniForm extends CWidget
             
         }
         
+        
+        if($this->height){
+            $this->height='style="height:'.$this->height.'px"';
+            
+        }else{
+            $this->height='';
+            
+        }
         if($this->fullscreen){
             $this->fullscreen='<a href="javascript:;" class="btn btn-default btn-xs full-box">
                           <i class="fa fa-expand"></i>
@@ -73,7 +85,7 @@ class MiniForm extends CWidget
                     </div>
                     
                 </header>
-                <div id="div-2" class="body">
+                <div ' .$this->height . ' id="div-2" class="body">
                     '.$this->content.'
                 </div>
             </div>

@@ -13,7 +13,7 @@ $this->menu=array(
 <div class="form">
 
 
-<?php $form = $this->beginWidget('CActiveForm', array(
+<?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'id' => 'upload-form',
 	'enableAjaxValidation' => true,
 	'htmlOptions'=>array('enctype'=>'multipart/form-data'),

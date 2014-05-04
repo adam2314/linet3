@@ -22,7 +22,7 @@
  */
 class User extends mainRecord{
     const table='user';
-    public $warehouse='';
+    public $warehouse=117;
     public $passwd;
     
 	/**
@@ -78,14 +78,23 @@ class User extends mainRecord{
 	}
 
         public function afterFind(){
-            $a=Settings::model()->findByPk("company.".$this->id.".warehouse");
-            if($a){
-                $this->warehouse=$a->value;
+            if(Yii::app()->user->Company!=0){
+                $a=Settings::model()->findByPk("company.".$this->id.".warehouse");
+                if($a){
+                    $this->warehouse=$a->value;
+                }
             }
             return parent::afterFind();
          }
         
-        
+         
+        public function saveAttr(){
+            
+            
+        }
+         
+         
+         
         public function save($runValidation = true, $attributes = NULL) {
             $catagories=ItemVatCat::model()->findAll();
             if($this->salt=='') $this->salt=sha1(rand());

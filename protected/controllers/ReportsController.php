@@ -71,14 +71,37 @@ class ReportsController extends RightsController
             
         }
         
-        
+        public function actionStockAction()	{
+                $model= new stockAction('search');
+                $model->unsetAttributes();
+                $vl='stockAction-grid';
+                //echo Yii::app()->request->isAjaxRequest;
+                //Yii::app()->end();
+                if(isset($_POST['stockAction']))
+			$model->attributes=$_POST['stockAction'];
+                if(Yii::app()->request->isAjaxRequest || isset($_POST['ajax']) && $_POST['ajax'] === $vl) {
+                    
+                    
+                    // Render partial file created in Step 1
+                    $this->renderPartial('stockAction', array(
+
+                      'model' => $model,
+                    ));
+                    Yii::app()->end();
+                  }
+                
+                
+                
+		$this->render('stockAction',array('model'=>$model,));
+
+	}
         
 	public function actionJournal()	{
                 $model= new Transactions('search');
                 $model->unsetAttributes();
                 $vl='transactions-grid';
                 //echo Yii::app()->request->isAjaxRequest;
-                //exit;
+                //Yii::app()->end();
                 if(isset($_POST['Transactions']))
 			$model->attributes=$_POST['Transactions'];
                 if(Yii::app()->request->isAjaxRequest || isset($_POST['ajax']) && $_POST['ajax'] === $vl) {

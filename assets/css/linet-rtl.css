@@ -20,6 +20,10 @@ direction:rtl;
     left:0;
 }
 
+.pagination>li>a, .pagination>li>span {
+    float: right;
+    
+}
 
 
 #left {

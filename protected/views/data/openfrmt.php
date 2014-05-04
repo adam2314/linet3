@@ -7,8 +7,9 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Open Format Create
 	'enableAjaxValidation'=>false,
 )); 
 
-
-
+?>
+<div class="noPrint">
+<?php
 echo Yii::t('app','From Date');
 
 Yii::import('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker');
@@ -43,11 +44,25 @@ $this->widget('CJuiDateTimePicker',array(
 
     ) // jquery plugin options
 ));
-echo CHtml::submitButton(Yii::t('app','Search')); 
+//echo CHtml::submitButton(Yii::t('app','Search')); 
 ?>
+<div class="form-actions">
+		<?php $this->widget('bootstrap.widgets.TbButton', array(
+			'buttonType'=>'submit',
+			'type'=>'primary',
+			'label'=>Yii::t('app',"Go"),
+		)); ?>
+                <?php $this->widget('bootstrap.widgets.TbButton', array(
+			'buttonType'=>'print',
+			'type'=>'primary',
+			'label'=>Yii::t('app',"Print"),
+                    'htmlOptions'=>array(
+                        'onclick'=>'js:window.print();'
+                        )
+		)); ?>
+	</div>
 
-
-
+</div>
 
 <div id ="result">
 </div>

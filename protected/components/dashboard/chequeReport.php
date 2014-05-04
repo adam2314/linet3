@@ -47,6 +47,7 @@ $this->content=$this->widget('bootstrap.widgets.TbGridView', array(
 ),true); 
         //parent::init();
     }
+    /*
      public function run(){//style="width:'.($this->width-$this->titlewidth-28).'px;"
                     $newform='
         <div class="'.$this->class.'">
@@ -59,7 +60,7 @@ $this->content=$this->widget('bootstrap.widgets.TbGridView', array(
                 
                 
 		echo $newform;
-    }
+    }*/
 }
 
 

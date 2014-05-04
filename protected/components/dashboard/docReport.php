@@ -13,11 +13,12 @@ class docReport extends MiniForm{
                 'template' => '{items}{pager}',
                 'columns'=>array(
 
-                        array(
+                        /*array(
                                 'name'=>'doctype',
                                 //'filter'=>CHtml::listData(Doctype::model()->findAll(), 'id', 'name'),
-                                'value'=>'$data->docType->name'
-                        ),
+                                'value'=>'isset($data->docType)?$data->docType->name:""'
+                        ),*/
+                    /*
                         array(
                             'name'=>'docnum', 
                             'value'=>'CHtml::link(CHtml::encode($data->docnum),"#", array(  "onclick"=>\'refNum("\'.$data->id.\'","\'.$data->docnum.\'","\'.$data->docType->name.\'")\',))',
@@ -25,7 +26,7 @@ class docReport extends MiniForm{
 
 
 
-                        ),
+                        ),*/
                         'company',
                         //array(  'onclick'=>""refNum(\"".$data->id.",".$data->docnum.",".$data->docType->name.")",
                         /*array(
@@ -37,11 +38,13 @@ class docReport extends MiniForm{
                                  //'url'=>'accouts/view&id=$data->account_id',
                                   'urlExpression'=>'"users/view&id=".$data->account_id',
                         ),*/
+                    
+                    /*
                         array(
                                 'name'=>'status',
                                 'value' => 'isset($data->docStatus)?$data->docStatus->name:""'
 
-                        ),
+                        ),*/
 
                         'total',
 
@@ -49,6 +52,7 @@ class docReport extends MiniForm{
         ),true); 
         //parent::init();
     }
+    /*
      public function run(){//style="width:'.($this->width-$this->titlewidth-28).'px;"
                     $newform='
         <div class="'.$this->class.'">
@@ -61,7 +65,7 @@ class docReport extends MiniForm{
                 
                 
 		echo $newform;
-    }
+    }*/
 }
 
 

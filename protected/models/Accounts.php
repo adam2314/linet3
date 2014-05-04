@@ -31,7 +31,14 @@
  */
 class Accounts extends fileRecord{//CActiveRecord
 	const table='{{accounts}}';
-	/**
+	
+        
+        public function findAllByType($type){
+        
+            return Accounts::model()->findByAttributes(array('type'=>$type));
+        }
+        
+        /**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
 	 * @return Accounts the static model class
@@ -209,11 +216,27 @@ class Accounts extends fileRecord{//CActiveRecord
     }
 
     public function delete() {
-         if($this->system_acc !=1)parent::delete();
+         if($this->system_acc !=1){
+             if(!$this->hasHistory()){
+                return parent::delete();
+             }
+         }
+         return false;
            //else no delete
     }
         
+    private function hasHistory(){
+        //echo "help";
+        //echo count($this->transactions);
+        //Yii::app()->end();
+        if(count($this->transactions)==0){
+            return false;
+        }else {
+            return true;
+        }
         
+        
+    }
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -224,6 +247,9 @@ class Accounts extends fileRecord{//CActiveRecord
 		return array(
                         array('name, type', 'required'),
 			array('type, pay_terms, parent_account_id, system_acc, owner', 'numerical', 'integerOnly'=>true),
+                        //array('vatnum', 'length', 'max'=>9),
+                        //array('vatnum', 'length', 'min'=>9),
+                        array('vatnum', 'vatnumVal'),
 			array('id6111, zip', 'length', 'max'=>10),
 			array('src_tax', 'length', 'max'=>5),
                         array('currency_id', 'length', 'max'=>3),
@@ -239,6 +265,24 @@ class Accounts extends fileRecord{//CActiveRecord
 		);
 	}
 	
+        public function vatnumVal($attribute,$params)
+        {
+            return;
+            $counter = 0;
+            for ($i = 0; $i<strlen($this->$attribute); $i++)  { 
+                    $digi = substr($this->$attribute, $i,1);  
+                    $incNum = $digi * (($i % 2) + 1);//multiply digit by 1 or 2
+                    $counter += ($incNum > 9) ? $incNum - 9 : $incNum;//sum the digits up and add to counter
+            }
+            if(! ($counter % 10 == 0)){
+                $this->addError($attribute, Yii::t('app','Not a valid VAT id'));
+            }
+            
+            
+        }
+        
+        
+        
 	/**
 	 * @return array relational rules.
 	 */

@@ -2,6 +2,9 @@
 <html lang="en">
     <head>
 	<meta charset="UTF-8">
+        
+        <link rel="shortcut icon" href="<?php echo Yii::app()->createAbsoluteUrl('/assets/img/favicon.ico'); ?>">
+        <link rel="icon" type="image/ico" href="<?php echo Yii::app()->createAbsoluteUrl('/assets/img/favicon.ico'); ?>">
 
 <?php 
 $baseUrl=Yii::app()->request->baseUrl;

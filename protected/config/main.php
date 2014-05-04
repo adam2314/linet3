@@ -72,9 +72,9 @@ return CMap::mergeArray(
                     'bootstrap'=>array(
                             'class'=>'bootstrap.components.Bootstrap',
                     ),
-                    //'cache'=>array(
-                            //'class'=>'CApcCache',
-                    //),
+                    'cache'=>array(
+                            'class'=>'CApcCache',
+                    ),
                     'user'=>array(
                             //'class' => 'RLinUser',
                             'class'=>'RWebUser',//rights
@@ -190,8 +190,8 @@ return CMap::mergeArray(
                             array(
                                 'class'=>'CFileLogRoute',
                                 'levels'=>'trace, info, error, warning',
-                                //'categories'=>'system.*',
-                                    //'categories'=>'*',
+                                'categories'=>'app',
+                                //'categories'=>'*',
                             ),
                                     
                             /*array(

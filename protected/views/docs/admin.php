@@ -78,7 +78,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker', array(
         'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
     ),
     'htmlOptions'=>array(
-        'style'=>'height:20px;'
+        //'style'=>'height:20px;'
     ),
 ));
 
@@ -96,7 +96,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker', array(
  
     ),
     'htmlOptions'=>array(
-        'style'=>'height:20px;'
+        //'style'=>'height:20px;'
     ),
 ));
 ?>

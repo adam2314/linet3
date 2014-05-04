@@ -2,10 +2,10 @@
 
 class Linet3 {
   public static function beginRequest(CEvent $event) {
-           
+    ini_set('date.timezone', 'Asia/Tel_Aviv');         
     if(isset(Yii::app()->user->timezone)){
         ini_set('date.timezone', Yii::app()->user->timezone);  
-    } 
+    }
     if(isset(Yii::app()->user->language)){
         Yii::app()->language=Yii::app()->user->language;
     }
@@ -31,7 +31,8 @@ class Linet3 {
             
         }else   
     if(isset(Yii::app()->user->Database)){
-            
+            Company::model()->loadComp();
+            /*
             Yii::app()->db->setActive(false);
             Yii::app()->db->connectionString = Yii::app()->user->Database->string;
             Yii::app()->db->tablePrefix=Yii::app()->user->Database->prefix;
@@ -47,15 +48,15 @@ class Linet3 {
                 
                 Yii::app()->user->setState('settings',$settings);
                 Yii::app()->user->setState('menu',Menu::model()->buildUserMenu()); 
-            }
+            }*/
     }else{
          //Yii::app()->setController('company');//->redirect(array('company/admin'));
         echo 'לך תבחר חברה!';
-        //exit;
+        //Yii::app()->end();
           //if(Yii::app()->controller!='company'){
               //echo Yii::app()->controller->id;
             //Yii::app()->redirect('company');
-           // exit;
+           // Yii::app()->end();
           //}
           //Yii::app()->user->setState('Database','1');
       }

@@ -60,7 +60,7 @@ class invoiceReport extends MiniForm{
     }
     
     
-    
+    /*
     public function run(){//style="width:'.($this->width-$this->titlewidth-28).'px;"
                     $newform='
         <div class="'.$this->class.'">
@@ -73,7 +73,7 @@ class invoiceReport extends MiniForm{
 
 
                 echo $newform;
-    }
+    }*/
     
 }
 

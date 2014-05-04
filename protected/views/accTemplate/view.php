@@ -61,7 +61,7 @@ $('.search-form form').submit(function(){
 
 <?php 
 //print_r($model->items);
-//exit;
+//Yii::app()->end();
 
 $this->widget('bootstrap.widgets.TbGridView',array(
 	'id'=>'acc-templateItem-grid',

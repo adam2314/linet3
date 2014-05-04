@@ -65,7 +65,7 @@ class AccountsController extends RightsController
             if(isset($_POST['Accounts'])){
                     $model->attributes=$_POST['Accounts'];
                     if($model->system_acc==1){
-                        Yii::app()->user->setFlash('error', 'unable to change sys account');
+                        Yii::app()->user->setFlash('error', Yii::t('app','unable to edit, it is a system account'));
                     }else{
                         $model->deleteEavAttributes();
                         if(isset($_POST['AccountseavE'])&&isset($_POST['AccountseavE'])){
@@ -91,23 +91,29 @@ class AccountsController extends RightsController
 	 * @param integer $id the ID of the model to be deleted
 	 */
 	public function actionDelete($id){
-                $model=$this->loadModel($id);
                 //echo $model->system_acc;
-                if($model->system_acc==1){
-                            Yii::app()->user->setFlash('error', "unable to delete sys account");
-                            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
-                }
-		elseif(Yii::app()->request->isPostRequest)
-		{
+		//if(Yii::app()->request->isPostRequest){
+                        $model=$this->loadModel($id);
 			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
-
+                        if($model->system_acc==1){
+                            Yii::app()->user->setFlash('error', Yii::t('app',"unable to delete, it is a system account"));
+                            //$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+                        }else{
+                    
+                    
+                            if(!$this->loadModel($id)->delete())
+                                Yii::app()->user->setFlash('error', Yii::t('app',"unable to delete, the account has transactions"));
+                        }
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-		}
-		else
-			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+			//if(!isset($_GET['ajax']))
+			//	$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		//}else{
+                        //Yii::app()->user->setFlash('error', "Invalid request. Please do not repeat this request again.");
+			
+                //}
+                
+                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+                //$this->actionIndex($model->);
                 
 	}
 	
@@ -188,7 +194,7 @@ class AccountsController extends RightsController
 		$model=Accounts::model()->findByPk($id);
 
 		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+			throw new CHttpException(404,Yii::t('app','The requested page does not exist.'));
 		return $model;
 	}
 

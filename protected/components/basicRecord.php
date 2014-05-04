@@ -15,6 +15,13 @@ class basicRecord extends CActiveRecord{
     public function tableName() {
         return (Yii::app()->db->tablePrefix . self::table);
     }*/
+    public function __toString()
+    {
+        $vars = $this->getAttributes();
+        return json_encode($vars);
+    }
+    
+    
     
     protected function fieldvalue($str,$type,$action){
 	switch ($type){
@@ -52,26 +59,42 @@ class basicRecord extends CActiveRecord{
     }
     
     public function readLine($line, $type){
-            $criteria=new CDbCriteria;
-            $criteria->condition="type_id = :type_id";
-            $criteria->params=array(':type_id' => $type);
-            $fields= OpenFormat::model()->findAll($criteria);
-            
-            
+        
+            $fields=Yii::app()->cache->get("Openformat.".$type);
+            if($fields===false)
+            {
+                $criteria=new CDbCriteria;
+                $criteria->condition="type_id = :type_id";
+                $criteria->params=array(':type_id' => $type);
+
+                $fields= OpenFormat::model()->findAll($criteria);
+                
+                Yii::app()->cache->set("Openformat.".$type, $fields, 600);
+                Yii::log("Openformat".$type.' saved','info','app');
+            }
+        
+        
+        
             $pos=0;
             $encoding="utf-8";
             
             
             foreach ($fields as $field) {
+                
+                
+                
                 $str=mb_substr($line,$pos,$field->size,$encoding);
-                echo "$pos,";
+                //echo "$pos,";
                 $pos+=$field->size;
-                echo "$pos-1,";
+                //echo "$str,";
+                
+                //Yii::log($field->id."(".$pos.",".$field->size."):".$str,'info','app');
+                    
                 $this->openfrmtFieldValue($field,$str);
 
             }
-            
-            echo "****************************<br />\n";
+            //Yii::app()->end();
+            //echo "****************************<br />\n";
             return true;          
         }
     
@@ -81,7 +104,14 @@ class basicRecord extends CActiveRecord{
          
         switch ($field->type){
 		case "date":
-			$value= substr($value,0,4)."-".substr($value,4,2)."-".substr($value,6,2);
+                        //if(get_class($this)=="Doccheques")
+                        //    Yii::log($value,'info','app');
+                        //$this->issue_date=date("Y-m-d H:m:s",CDateTimeParser::parse($this->issue_date,Yii::app()->locale->getDateFormat('yiidatetime')));
+                        $value= substr($value,0,4)."-".substr($value,4,2)."-".substr($value,6,2);
+                        
+                        if(get_class($this)=="Docs")
+                            $value=date(Yii::app()->locale->getDateFormat('phpdatetimes'),strtotime($value));
+			
 			break;
 		case "hour":
 			$value= $value;
@@ -93,7 +123,7 @@ class basicRecord extends CActiveRecord{
 			break;
 		case "v9999":
 			$a=substr($value,0,1);
-			$value=substr($value,1)/1000;
+			$value=substr($value,1)/10000;
 			$value= number_format($value, 4, '.', '');
 			break;
 		case "s":
@@ -120,7 +150,7 @@ class basicRecord extends CActiveRecord{
             if(strpos($field->import, "this.") === 0){
                     //echo $field->import;
                     ///if(isset($this->{str_replace("this.", "", $field->export)}))
-                        echo $field->import.":$value<br/>\n";
+                        //echo $field->import.":$value<br/>\n";
                         $this->{str_replace("this.", "", $field->import)}=$value;
                         //echo  $this->{str_replace("this.", "", $field->import)};
                         return true;
@@ -130,7 +160,7 @@ class basicRecord extends CActiveRecord{
                 return;
                     
             if(strpos($field->import, "func.") === 0)
-                    $value=$this->{str_replace("func.", "", $field->import)}();
+                    $value=$this->{str_replace("func.", "", $field->import)}($value);
                     
             if(strpos($field->import, "limit.") === 0)
                     return;
@@ -177,11 +207,18 @@ class basicRecord extends CActiveRecord{
             if($field->type=='n')
                 $template="%0".$field->size."d";
             if($field->type=='date'){//date
-                $phpdbdatetime=Yii::app()->locale->getDateFormat('phpdbdatetime');
+                if(isset($this->dateDBformat)){
+                    if($this->dateDBformat){
+                        $phpdbdatetime=Yii::app()->locale->getDateFormat('yiidbdatetime');
+                        return date('Ymd',CDateTimeParser::parse($value,$phpdbdatetime));   
+                    }
+                    
+                }
+                $phpdbdatetime=Yii::app()->locale->getDateFormat('yiidatetime');//phpdbdatetime
                 return date('Ymd',CDateTimeParser::parse($value,$phpdbdatetime));   
             }
             if($field->type=='hour'){//hour
-                $phpdbdatetime=Yii::app()->locale->getDateFormat('phpdbdatetime');
+                $phpdbdatetime=Yii::app()->locale->getDateFormat('yiidatetime');//phpdbdatetime
                 return date('Hs',CDateTimeParser::parse($value,$phpdbdatetime));   
             }   
             if($field->type=='99'){//v99
@@ -221,12 +258,12 @@ class basicRecord extends CActiveRecord{
             
             //ini_set('mbstring.substitute_character', "none"); 
             //$value= mb_convert_encoding($value, 'UTF-8', 'UTF-8'); 
-            $value = substr($value,0,$field->size);
+            
             $value=htmlentities($value);
             $value=str_replace("&amp;","&",$value);
             $value = iconv("UTF-8", "CP1255", $value);
             //$value=mb_convert_encoding($value, "windows-1255",'utf-8');
-            
+            $value = substr($value,0,$field->size);
             return sprintf($template,$value);
             
         } 

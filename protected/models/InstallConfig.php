@@ -18,7 +18,7 @@ class InstallConfig extends CFormModel {
         public function make(){
             //make conf file
             //echo $this->dbtype;
-            //exit;
+            //Yii::app()->end();
             
             if($this->dbtype=='sqlite'){
                 $str="'connectionString' => '".$this->dbstring."',"; 

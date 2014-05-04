@@ -18,7 +18,7 @@
         echo CHTML::hiddenField("Docdetails_${i}_accvat",$vat);
 
         //echo $form->textField($model,"[$i]item_id",array('size'=>10,'maxlength'=>10, 'style' => "width: 60px;"));
-
+/*
         $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
             'value' => $model->item_id,
             'name' => "Docdetails[$i][item_id]",
@@ -29,8 +29,16 @@
                 'showAnim' => 'fold',
             ),
         ));
-
+*/
         ?>
+        
+        <?php 
+        if($model->item_id=='')
+            $model->item_id=0;
+        
+        $temp= CHtml::listData(Item::model()->findAll(), 'id', 'name');
+        $temp[0]= Yii::t('app','None');
+        echo $form->dropDownList($model,"[$i]item_id",$temp);?>
     </td>
 
 
@@ -54,8 +62,9 @@
                                                                     </td>
     <td class="remove"><?php echo Yii::t('app', 'Remove'); ?>
         <input type="hidden" class="rowIndex" value="<?php echo $i; ?>" />
-        <input id="Docdetails_<?php echo $i; ?>_src_tax"type="hidden" value="" />
-        <input id="Docdetails_<?php echo $i; ?>_rate"type="hidden" value="1" />
+        <input id="Docdetails_<?php echo $i; ?>_unit_price_org" type="hidden" value="" />
+        <input id="Docdetails_<?php echo $i; ?>_src_tax" type="hidden" value="" />
+        <input id="Docdetails_<?php echo $i; ?>_rate" type="hidden" value="1" />
     </td>
 </tr>
 <tr class="docSubContent">
@@ -73,20 +82,21 @@
 <script type="text/javascript">
     
     $("#Docdetails_<?php echo $i; ?>_currency_id").chosen();
+    $("#Docdetails_<?php echo $i; ?>_item_id").chosen();
     //$("#Docdetails_<?php echo $i; ?>_name").chosen();
     
     jQuery(function($) {
-        jQuery("#Docdetails_<?php echo $i; ?>_item_id").autocomplete({"minLength":0, "showAnim": "fold", "source": "/yii/demos/new/index.php?r=item/autocomplete"});
+        //jQuery("#Docdetails_<?php echo $i; ?>_item_id").autocomplete({"minLength":0, "showAnim": "fold", "source": "/yii/demos/new/index.php?r=item/autocomplete"});
         CalcPrice(<?php echo $i; ?>);
         changeFileds();
     });
-    var det=true;
+    /*var det=true;
     $("#Docdetails_<?php echo $i; ?>_item_id").focus(function(){
         if($("#Docdetails_<?php echo $i; ?>_item_id").val()=='' && det){
             $("#Docdetails_<?php echo $i; ?>_item_id").autocomplete("search","");
             det=false;
         }
-    });
+    });//*/
 
 
 
@@ -104,7 +114,7 @@
     //    nameChange(<?php echo $i; ?>);  
     //});
     
-    $("#Docdetails_<?php echo $i; ?>_item_id").blur(function(){
+    $("#Docdetails_<?php echo $i; ?>_item_id").change(function(){
         itemChange(<?php echo $i; ?>);  
     });
     

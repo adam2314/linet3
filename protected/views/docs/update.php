@@ -1,9 +1,4 @@
 <?php
-//$this->breadcrumbs=array(
-//	'Docs'=>array('index'),
-//	$model->id=>array('view','id'=>$model->id),
-//	'Update',
-//);
 $actions=array();
 $actions[]=array('label'=>Yii::t('app','List Documents'), 'url'=>array('index'));
 $actions[]=array('label'=>Yii::t('app','Create Document'), 'url'=>array('create'));
@@ -22,13 +17,19 @@ if(($model->doctype==1)||($model->doctype==2)){//Proforma || Delivery doc
     $actions[]=array('label'=>Yii::t('app','Convert to Invoice Receipt'), 'url'=>array('duplicate','id'=>$model->id,'type'=>9));//Invoice Receipt 
 }
 
+if($model->doctype==3){//Invoice
+    $actions[]=array('label'=>Yii::t('app','Convert to Credit Invoice'), 'url'=>array('duplicate','id'=>$model->id,'type'=>4));//Credit Invoice
+}
+if($model->doctype==2){//Delivery doc
+    $actions[]=array('label'=>Yii::t('app','Convert to Return document'), 'url'=>array('duplicate','id'=>$model->id,'type'=>5));//Return document
+}
 
 
 
 $this->menu=$actions;
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Update") . " " . Yii::t('app',$type->name),
+    'haeder' => Yii::t('app',"Update") . " " . Yii::t('app',$type->name) . " " . $model->docnum,
     //'width' => '800',
 )); 
  echo $this->renderPartial('_form', array('model'=>$model,'type'=>$type)); 

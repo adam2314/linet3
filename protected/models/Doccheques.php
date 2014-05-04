@@ -111,9 +111,9 @@ class Doccheques extends basicRecord{
 	public function rules()	{
 		return array(
 			array('type, creditcompany, line', 'numerical', 'integerOnly'=>true),
-			array('doc_id, cheque_num, bank_refnum', 'length', 'max'=>10),
-			array('bank, currency_id, branch, refnum', 'length', 'max'=>3),
-			array('cheque_acct', 'length', 'max'=>20),
+			array('doc_id', 'length', 'max'=>10),
+			array('currency_id', 'length', 'max'=>3),
+			array('cheque_acct, cheque_num, bank_refnum', 'length', 'max'=>20),
 			array('sum', 'length', 'max'=>8),
 			array('currency_id, refnum, cheque_date, dep_date', 'safe'),
 			array('currency_id, refnum, doc_id, type, creditcompany, cheque_num, bank, branch, cheque_acct, cheque_date, sum, bank_refnum, dep_date, line', 'safe', 'on'=>'search'),
@@ -189,4 +189,13 @@ class Doccheques extends basicRecord{
                         'pagination'=>array('pageSize'=>50),
 		));
 	}
+        
+        
+        
+        public function save($runValidation = true, $attributes = NULL) {
+        
+        $a=parent::save($runValidation,$attributes);
+        Yii::log($a,'info','app');
+        return $a;
+    }
 }

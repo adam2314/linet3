@@ -5,9 +5,9 @@
 	'enableAjaxValidation'=>true,
     'htmlOptions'=>array('enctype'=>'multipart/form-data'),
 )); ?>
-<div class="row">
+
     <?php echo $form->errorSummary($model); ?>
-</div>
+
     <div class="col-md-6">
         <?php echo $form->textFieldRow($model,'name',array('class'=>'span5','maxlength'=>200)); ?>
         <?php echo $form->dropDownListRow($model,'type',CHtml::listData(Acctype::model()->findAll(), 'id', 'name')); ?>

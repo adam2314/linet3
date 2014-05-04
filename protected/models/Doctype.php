@@ -26,7 +26,18 @@ class Doctype extends CActiveRecord{
 	{
 		return parent::model($className);
 	}
-
+        public function getOpenType($key){
+            //$this->find
+            $tmp=$this->findByAttributes(array('openformat'=>$key));
+            if($tmp!==null)
+                return Yii::t('app',$tmp->name);
+            else {
+                Yii::log("OpenFormat Import: no type:".$key,'error','app');
+                //Yii::app()->end();
+                return '';
+            }
+            // return isset($this->docType)?$this->docType->openformat:"";
+         }
 	
 	public function primaryKey(){
 		return 'id';
@@ -73,22 +84,32 @@ class Doctype extends CActiveRecord{
 		//$post=Post::model()->find('postID=:postID', array(':postID'=>10));
 		return $model->id;
 	}
+        
+        public function getOType($type){
+		$model=Doctype::model()->find('openformat=:openformat',array(':openformat'=>$type));
+		//$post=Post::model()->find('postID=:postID', array(':postID'=>10));
+                if($model===null)
+                    return 0;
+                
+		return $model->id;
+	}
+        
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'name' => 'Name',
-			'openformat' => 'Openformat',
-			'isdoc' => 'Isdoc',
-			'isrecipet' => 'Isrecipet',
-			'iscontract' => 'Iscontract',
-			'stockAction' => 'Stock Action',
-			'account_type' => 'Account Type',
-			'docStatus_id' => 'Doc Status',
-			'last_docnum' => 'Last Docnum',
+			'id' => Yii::t('labels','ID'),
+			'name' => Yii::t('labels','Name'),
+			'openformat' => Yii::t('labels','Open Format'),
+			'isdoc' => Yii::t('labels','Is Documenet'),
+			'isrecipet' => Yii::t('labels','Is Recipet'),
+			'iscontract' => Yii::t('labels','Is Contract'),
+			'stockAction' => Yii::t('labels','Stock Action'),
+			'account_type' => Yii::t('labels','Account Type'),
+			'docStatus_id' => Yii::t('labels','Documenet Status'),
+			'last_docnum' => Yii::t('labels','Last Documenet num'),
 		);
 	}
 

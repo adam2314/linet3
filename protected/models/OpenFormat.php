@@ -20,7 +20,7 @@ class OpenFormat extends mainRecord{
         public function primaryKey(){
 	    return 'id';
 	}
-
+        
 	/**
 	 * @return array validation rules for model attributes.
 	 */

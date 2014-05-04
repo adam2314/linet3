@@ -22,7 +22,7 @@ class dbDump{
 	public function getDump($download = TRUE){
 		ob_start();
                 //echo Yii::app()->db->tablePrefix;
-                //exit;
+                //Yii::app()->end();
 		foreach($this->getTables() as $key=>$val){
                     //echo $key;
                     //echo Yii::app()->db->tablePrefix;

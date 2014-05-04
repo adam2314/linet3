@@ -6,9 +6,12 @@ class DocsController extends RightsController
 
 	public function actionView($id=0,$docnum=0,$doctype=0)	{// used in the refnum selection
                 if((int)$id!=0){
-                    $model = Docs::model()->findByPk($id);
+                    $model = $this->loadModel($id);
                 }else{
-                    $model =Docs::model()->findByNum($doctype,$docnum);
+                    $model = Docs::model()->findByNum($doctype,$docnum);
+                    if($model===null){
+			throw new CHttpException(404,Yii::t('app','The requested page does not exist.'));
+                    }
                 }
 		
 		//$docdetails =$model->docDetailes;
@@ -26,8 +29,8 @@ class DocsController extends RightsController
             //Yii::app()->language='he_il';
             $this->layout='print';
             
-            //if(is_null($model))
-                $model = Docs::model()->findByPk($id);
+            if(is_null($model))
+                $model=$this->loadModel($id);
             
             $file=$this->render('print',array('model'=>$model,'preview'=>$preview,),true);
             
@@ -93,7 +96,7 @@ class DocsController extends RightsController
             readfile($myPdfS);
              
             //*/
-            exit;
+            Yii::app()->end();
 	}
         
         
@@ -105,8 +108,9 @@ class DocsController extends RightsController
             $this->layout='print';
             
             if(is_null($model))
-                $model = Docs::model()->findByPk($id);
-
+                $model=$this->loadModel($id);
+            
+            $model->printDoc();
             $this->render('print',array(
                     'model'=>$model,'preview'=>$preview,
             ));
@@ -195,7 +199,7 @@ class DocsController extends RightsController
 			if(isset($_POST['Docdetails'])) $model->docDet=$_POST['Docdetails'];
                         if(isset($_POST['Doccheques'])) $model->docCheq=$_POST['Doccheques'];
                         //echo $_POST['subType'];
-                        //exit;
+                        //Yii::app()->end();
                         switch ($_POST['subType']) {
                             case 'save':
                                 if($model->save())
@@ -347,7 +351,7 @@ class DocsController extends RightsController
 	{
 		$model=Docs::model()->findByPk($id);
 		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+			throw new CHttpException(404,Yii::t('app','The requested page does not exist.'));
 		return $model;
 	}
 

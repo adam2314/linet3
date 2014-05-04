@@ -91,7 +91,7 @@ class FormDeposit  extends CFormModel{
             
             
             
-            //exit;
+            //Yii::app()->end();
             
             
             

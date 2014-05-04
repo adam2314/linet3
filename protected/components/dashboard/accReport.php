@@ -19,6 +19,9 @@ class accReport extends MiniForm{
         ),true); 
         //parent::init();
     }
+    
+    
+    /*
      public function run(){//style="width:'.($this->width-$this->titlewidth-28).'px;"
                     $newform='
         <div class="'.$this->class.'">
@@ -31,7 +34,7 @@ class accReport extends MiniForm{
                 
                 
 		echo $newform;
-    }
+    }*/
 }
 
 

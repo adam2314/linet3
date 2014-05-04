@@ -74,8 +74,8 @@ class Files extends CActiveRecord{
 		// will receive user inputs.
 		return array(
 			array('name, path', 'required'),
-			array('id, parent_id, expire', 'numerical', 'integerOnly'=>true),
-			array('name, path, parent_type, hash', 'length', 'max'=>255),
+			array('id, expire', 'numerical', 'integerOnly'=>true),
+			array('name, path, parent_type, parent_id, hash', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, name, path, public, parent_id, parent_type, date, expire, hash', 'safe', 'on'=>'search'),

@@ -24,7 +24,7 @@ class toggleButton extends CWidget{
      */
     public function run(){//style="width:'.($this->width-$this->titlewidth-28).'px;"
                 print_r($this->model);
-                exit;
+                Yii::app()->end();
                 $baseUrl=Yii::app()->request->baseUrl;
                 $newform="
                 <div id='$this->name'>

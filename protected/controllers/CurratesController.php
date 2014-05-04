@@ -119,7 +119,7 @@ class CurratesController extends RightsController
         public function actionGetrate($id)
 	{
 		print_r(Currates::model()->GetRate($id));
-                exit;
+                Yii::app()->end();
 	}
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.

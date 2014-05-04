@@ -30,7 +30,7 @@ class Docdetails extends basicRecord{
     public function getNum(){
              return isset($this->Doc)?$this->Doc->docnum:"";
          }
-         public function getDate(){
+    public function getDate(){
              return isset($this->Doc)?$this->Doc->issue_date:"";
          }
     

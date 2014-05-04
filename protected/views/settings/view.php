@@ -19,6 +19,7 @@ foreach($models as $model){
                 $modelName=  str_replace("list(", "", $model->eavType);
                 $modelName=  str_replace(")", "", $modelName);
                 $temp=CHtml::listData($modelName::model()->findAll(), 'id', 'name');
+                $temp['']=Yii::t('app','None');
                  echo "<tr>";
                echo "<td>".Yii::t('app',$model->id)."</td>"; 
                echo "<td>".

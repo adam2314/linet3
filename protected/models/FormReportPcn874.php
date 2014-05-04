@@ -172,7 +172,7 @@ class FormReportPcn874 extends CFormModel{
     public function search(){
         $data= array();
         //echo $this->make();
-        //exit;
+        //Yii::app()->end();
         //$data=$this->calc(3);//incomes
         //$data=array_merge($data,$this->calc(4));//outcomes
         

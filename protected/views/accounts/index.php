@@ -11,18 +11,7 @@ $this->menu=array(
 )); 
  
  
- Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('accounts-grid', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
+
  
  
  $types=  Acctype::model()->findAll();
@@ -43,8 +32,10 @@ $this->widget('zii.widgets.jui.CJuiTabs', array(
 	));
 $this->endWidget(); 
   ?>
+<script type="text/javascript" src="/linet3/assets/4401c650/gridview/jquery.yiigridview.js"></script>
 
 <script type="text/javascript">
+    
 $('.sort-link').live( "click",
         function(e){
             //console.log($(this).parent().parent().parent().parent().parent().attr("id"));
@@ -58,5 +49,34 @@ $('.sort-link').live( "click",
             return false;
         }
             );
-
+    
+$('a.delete').live( "click",
+        function(){
+            if(!confirm('Are you sure you want to delete this item?')) return false;
+	var th = this,afterDelete = function(){};
+        
+        $.post( $(this).attr("href"), {
+                    function(data) {
+                            //jQuery('#accounts-grid0').yiiGridView('update');
+                            //afterDelete(th, true, data);
+                    }/*
+                    error: function(XHR) {
+                            //return afterDelete(th, false, XHR);
+                    }*/
+        });
+        /*
+	jQuery('#accounts-grid0').yiiGridView('update', {
+		type: 'POST',
+		url: jQuery(this).attr('href'),
+		success: function(data) {
+			jQuery('#accounts-grid0').yiiGridView('update');
+			afterDelete(th, true, data);
+		},
+		error: function(XHR) {
+			return afterDelete(th, false, XHR);
+		}
+	});*/
+	return false;
+        }
+            );
 </script>

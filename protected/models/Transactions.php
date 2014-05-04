@@ -32,7 +32,7 @@ class Transactions extends basicRecord{
         return parent::model($className);
     }
 
-    
+    ///*
     public function openfrmt($line){
             $trans='';
             
@@ -47,7 +47,7 @@ class Transactions extends basicRecord{
                 $trans.=$this->openfrmtFieldStr($field,$line);
             }
             return $trans."\r\n";
-        }
+        }//*/
     
     /**
      * @return string the associated database table name
@@ -105,7 +105,7 @@ class Transactions extends basicRecord{
             $model->value=(int)$model->value+1;
             //Yii::app()->user->settings['company.transaction']=$model->value;
             $model->save();
-            return (int)$model->value-1;
+            return (int)$model->value-1;//adam: has to go
         }else{
             return (int)$this->num;
         }
@@ -116,14 +116,28 @@ class Transactions extends basicRecord{
         $this->num=$this->newNum();
         $this->date=date("Y-m-d H:m:s");
         
+        $cur=Yii::app()->user->settings['company.cur'];
+        $acc=Accounts::model()->findByPk($this->account_id);
+        if($acc===null){
+            $acccur=$this->currency_id;
+        }else{
+            $acccur=  $acc->currency_id;
+        }
         
-        $acccur=  Accounts::model()->findByPk($this->account_id)->currency_id;
+        
+        if($this->currency_id==''){
+            $this->currency_id=$cur;
+            $this->sum=$this->leadsum;
+        }
         
         //leadsum
-        $cur=Yii::app()->user->settings['company.cur'];
-        if($cur==$this->currency_id)
+        
+        
+        
+        
+        if($cur==$this->currency_id){
             $this->leadsum=$this->sum;
-        else{
+        }else{
             $rate=  Currates::model()->GetRate($this->currency_id);
             $this->leadsum=$this->sum*$rate;
         }
@@ -134,6 +148,9 @@ class Transactions extends basicRecord{
             if($this->currency_id!=$acccur){
                 $this->currency_id=$acccur;
                 $rate=  Currates::model()->GetRate($acccur);
+                if($rate==0){
+                    throw new CHttpException(404,Yii::t('app','The rate for'). $this->currency_id. Yii::t('app','is invalid') );
+                }
                 $this->sum=$this->leadsum/$rate;
             }
         }
@@ -145,6 +162,9 @@ class Transactions extends basicRecord{
                 $this->secsum=$this->sum;
             else{   
                 $rate=  Currates::model()->GetRate($this->currency_id);
+                 if($rate==0){
+                    throw new CHttpException(404,Yii::t('app','The sec rate for').$seccur. $this->currency_id. Yii::t('app','is invalid') );
+                }
                 $this->secsum=$this->leadsum/$rate;
             }
         }  
@@ -283,7 +303,7 @@ class Transactions extends basicRecord{
                     );
                 }
                 
-                //exit;
+                //Yii::app()->end();
              
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

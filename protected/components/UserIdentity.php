@@ -35,7 +35,7 @@ class UserIdentity extends CUserIdentity
                         $this->setState('fname', $user->fname);
                         $this->setState('lname', $user->lname);
                         $this->setState('username', $user->username);
-                        
+                        $this->setState('warehouse', $user->warehouse);
 		}
 		return $this->errorCode==self::ERROR_NONE;
 		/*$users=array(

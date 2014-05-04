@@ -32,7 +32,7 @@ class Docs extends fileRecord{
     //public $lang;
     public $docDet=NULL;
     public $docCheq=NULL;
-    
+    public $rcptsum=0;
     
     public $issue_from;
     public $issue_to;
@@ -49,6 +49,13 @@ class Docs extends fileRecord{
         
     }//*/
     
+    
+    public function findAllByType($doctype){
+        
+        return Docs::model()->findByAttributes(array('doctype'=>$doctype));
+    }
+    
+    
     /*
      * for open format export 
      */
@@ -57,8 +64,13 @@ class Docs extends fileRecord{
         return Docs::model()->findByAttributes(array('docnum'=>$docnum,'doctype'=>$doctype));
     }
        
-    public function getType(){
-             return isset($this->docType)?$this->docType->openformat:"";
+    public function getType($type=''){
+            if($type==''){
+                return isset($this->docType)?$this->docType->openformat:"";
+            }else {
+                $this->doctype=Doctype::model()->getOType($type);
+                return $this->doctype;
+            }
          }
     
     
@@ -140,7 +152,7 @@ class Docs extends fileRecord{
             //echo $this->due_date.";".$this->issue_date.";".$this->modified;
             
             
-            //exit;
+            //Yii::app()->end();
             return parent::beforeSave();
         }
         
@@ -166,11 +178,15 @@ class Docs extends fileRecord{
     public function save($runValidation = true, $attributes = NULL) {
         $this->docnum=$this->newNum();
         $this->owner=Yii::app()->user->id;
+        if($this->total==0)$this->total=$this->rcptsum;
         $a=parent::save($runValidation,$attributes);
         //$this->docType->stockAction;
+        if(!is_null($attributes))
+            return $a;
         if($a){
             $this->saveDet();
             $this->saveCheq();
+            
             if(isset($this->docStatus)){
                 if($this->docStatus->action!=0){
                     $this->transaction((int)$this->docStatus->action);
@@ -180,7 +196,8 @@ class Docs extends fileRecord{
         return $a;
     }
     
-    private function saveDet(){/***********************doc********************/    
+    /***********************doc********************/    
+    private function saveDet(){
         if(!is_null($this->docDet)){
             $line=0;
             foreach($this->docDet as $key=>$detial){
@@ -195,7 +212,7 @@ class Docs extends fileRecord{
                         $saved=true;
                         $line++;
                     }else{
-                        echo "fatel error cant save doc detial";
+                        Yii::log("fatel error cant save docdetial,doc_id:".$submodel->line.",".$submodel->doc_id,'error','application');
                     }
                 }
             }
@@ -205,8 +222,8 @@ class Docs extends fileRecord{
             }
         }
     }
-    
-    private function saveCheq(){/**********************rcpt********************/
+    /**********************rcpt********************/
+    private function saveCheq(){
         if(!is_null($this->docCheq)){
             $line=0;
             foreach($this->docCheq as $key=>$rcpt){
@@ -222,12 +239,13 @@ class Docs extends fileRecord{
                         $saved=true;
                         $line++;
                     }else{
-                        echo "fatel error cant save doc rcpt:".$this->id;
-                        //exit;
+                        Yii::log("fatel error cant save rcptdetial,doc_id:".$submodel->line.",".$submodel->doc_id,'error','application');
+                        
+                        //Yii::app()->end();
                     }
                 }
                 
-                //exit;
+                //Yii::app()->end();
             }
                 if(count($this->docCheques)!=$line){//if more items in $docCheques delete them
                         for ($curLine=$line;$curLine< count($this->docCheques);$curLine++)
@@ -237,7 +255,22 @@ class Docs extends fileRecord{
         }
     }
 
-
+    private function stock($item_id,$qty){
+        if(Yii::app()->user->settings['company.stock']){// remove from stock.
+            $stockAction=$this->docType->stockAction;
+            if ($stockAction) {
+                if((int)$this->oppt_account_id!=0){
+                    $account_id=$this->account_id;
+                    $oppt_account_id=$this->oppt_account_id;        
+                }else{
+                    $account_id=Yii::app()->user->warehouse;
+                    $oppt_account_id=$this->account_id;        
+                }
+                return stockAction::newTransaction($this->id,$account_id, $oppt_account_id, $item_id, $qty*$stockAction);
+            }
+        }
+        return false;
+    }
     
     private function transaction($action){
         //income account -
@@ -247,11 +280,13 @@ class Docs extends fileRecord{
         $num=0;
         $line=1;
         $tranType=$this->docType->transactionType_id;
-        if($this->docType->isdoc){
+        if(!is_null($tranType)){//has trans action!
+            if($this->docType->isdoc){
             $vat=new Transactions();
             $accout=new Transactions();
 
-            foreach($this->docDetailes as $docdetail){             
+            foreach($this->docDetailes as $docdetail){
+                $refnum2=$this->stock($docdetail->item_id,$docdetail->qty);
                  $num=$docdetail->transaction($num,$this->id,$valuedate,$this->company,$action,$line,$this->docType->oppt_account_type,$tranType);
                  $line++;
                  $accout->sum+=($docdetail->invprice+ $docdetail->vat)*$action;
@@ -323,8 +358,10 @@ class Docs extends fileRecord{
             
             }
         }
+        }
         
-        //exit;
+        
+        //Yii::app()->end();
         
     }   
         
@@ -344,6 +381,10 @@ class Docs extends fileRecord{
 
 
     private function newNum(){
+        if($this->doctype==0){
+            return 0;
+        }
+        
         if($this->docnum==0){            
             $this->docType->last_docnum=$this->docType->last_docnum+1;
             $this->docType->save();
@@ -374,13 +415,32 @@ class Docs extends fileRecord{
                     array('company, address', 'length', 'max'=>80),
                     array('currency_id', 'length', 'max'=>3),
                     array('refnum', 'length', 'max'=>20),
-                    array('discount, sub_total, novat_total, vat, total, src_tax', 'length', 'max'=>20),
+                    //array('vatnum', 'length', 'max'=>9),
+                    //array('vatnum', 'length', 'min'=>9),
+                    array('vatnum', 'vatnumVal'),
+                    array('rcptsum, discount, sub_total, novat_total, vat, total, src_tax', 'length', 'max'=>20),
                     array('issue_date, due_date, comments, description', 'safe'),
                     // The following rule is used by search().
                     // Please remove those attributes that should not be searched.
                     array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe', 'on'=>'search'),
             );
     }
+    
+    public function vatnumVal($attribute,$params)
+        {
+            return;
+            $counter = 0;
+            for ($i = 0; $i<strlen($this->$attribute); $i++)  { 
+                    $digi = substr($this->$attribute, $i,1);  
+                    $incNum = $digi * (($i % 2) + 1);//multiply digit by 1 or 2
+                    $counter += ($incNum > 9) ? $incNum - 9 : $incNum;//sum the digits up and add to counter
+            }
+            if(! ($counter % 10 == 0)){
+                $this->addError($attribute, Yii::t('app','Not a valid VAT id'));
+            }
+            
+            
+        }
 
     /**
      * @return array relational rules.
@@ -404,7 +464,7 @@ class Docs extends fileRecord{
     /**
      * @return array customized attribute labels (name=>label)
      */
-    public function attributeLabels()    {
+    public function attributeLabels()   {
             return array(
                     'id'=>Yii::t('labels','ID'),
                     'doctype'=>Yii::t('labels','Document Type'),
@@ -434,7 +494,12 @@ class Docs extends fileRecord{
                 
             );
     }
-
+    
+    public function printDoc(){
+        $this->printed=(int)$this->printed+1;
+        $this->save(false,false);
+        
+    }
     /**
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.

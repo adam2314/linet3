@@ -67,12 +67,12 @@ class Docstatus extends CActiveRecord{
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'num' => 'Num',
-			'doc_type' => 'Doc Type',
-			'name' => 'Name',
-			'looked' => 'Looked',
-			'action' => 'Action',
+			'id' => Yii::t('labels','ID'),
+			'num' => Yii::t('labels','Num'),
+			'doc_type' => Yii::t('labels','Documenet Type'),
+			'name' => Yii::t('labels','Name'),
+			'looked' => Yii::t('labels','Looked'),
+			'action' => Yii::t('labels','Action'),
 		);
 	}
 

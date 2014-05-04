@@ -1,16 +1,17 @@
 <?php
-$this->pageTitle=Yii::app()->name . ' - Error';
- $this->beginWidget('MiniForm',array(    'haeder' => Yii::t('app',"Error"),)); 
+$this->pageTitle=Yii::app()->name . ' - '. Yii::t('app','Error');
+ //$this->beginWidget('MiniForm',array(    'haeder' => Yii::t('app',"Error"),)); 
 ?>
 
-<h2>Error <?php echo $code; ?></h2>
 
-<div class="alert-block">
+
+<div class="alert in alert-block fade alert-danger">
+    <h2><?php echo Yii::t('app','Error') ." ".$code; ?></h2>
 <?php echo CHtml::encode($message); 
 
-print_r(Yii::app()->theme);
+//print_r(Yii::app()->theme);
 
 ?>
 </div>
 
-<?php $this->endWidget(); ?>
+<?php //$this->endWidget(); ?>

@@ -8,24 +8,98 @@
  * @property string $string
  * @property string $prefix
  */
-class Company extends mainRecord{
+class Company extends mainRecord
+{
         const table='databases';
         
-        public function backup(){
+        
+        public function loadComp($database=''){
+            if($database==''){
+                $database=Yii::app()->user->Database;
+            }else{
+                
+            }
+            Yii::app()->db->setActive(false);
+            Yii::app()->db->connectionString = $database->string;
+            Yii::app()->db->tablePrefix=$database->prefix;
+            Yii::app()->db->setActive(true);
+            
+            if(!isset(Yii::app()->user->settings)) { //adam: shuld be cached in memory
+                //echo 'run';
+                $temp=  Settings::model()->findAll();
+                $settings=array();
+                foreach ($temp as $key) {
+                    $settings[$key->id]=$key->value;
+                }
+                
+                Yii::app()->user->setState('settings',$settings);
+                //Yii::app()->user->settings=$settings;
+                Yii::app()->user->setState('menu',Menu::model()->buildUserMenu()); 
+                
+            }
+        }
+        public function select($id)
+        {
+            $database= Company::model()->findByPk($id);
+            Yii::app()->user->setState('Database',$database );
+            Yii::app()->user->setState('Company',1);
+            unset(Yii::app()->user->settings);
+            $this->loadComp($database);           
+        }
+        
+        
+        public function delete()
+        {
+            //delete tables
+           
+            $connection = Yii::app()->db;//get connection
+            $dbSchema = $connection->schema;
+            //or $connection->getSchema();
+            $tables = $dbSchema->getTableNames();//returns array of tbl schema's
+            foreach($tables as $tbl)
+            {
+                if(strpos($tbl, $this->prefix) === 0)
+                {
+                    //echo $tbl->rawName, ":<br/>", implode(', ', $tbl->columnNames), "<br/>\n";
+                    
+                    //$dbSchema->dropTable($tbl);
+                    $command=$connection->createCommand($dbSchema->dropTable($tbl));
+                    $command->execute(); // execute the non-query SQL
+                    //echo "holyshit:". $tbl . "<br/>\n";
+                    
+                }
+            }
+            //delete folders
+            
+            $yiiBasepath=Yii::app()->basePath;
+            $configPath=$this->prefix;
+            $folder = $yiiBasepath."/files/".$configPath."/";
+            //rmdir($folder);
+            
+            //delete db perms
+            
+            return parent::delete();
+        }
+        
+        public function backup()
+        {
             $dumper = new dbDump();
             echo $dumper->getDump(true);
             Yii::app()->end();
         }
         
-        public  function restore(){
+        public  function restore()
+        {
             
         }
-        private function createDb(){
+        private function createDb()
+        {
             $yiiBasepath=Yii::app()->basePath;
             $mysql=$yiiBasepath."/data/company.sql";
             
             
-            if (file_exists($mysql)){
+            if (file_exists($mysql))
+            {
                 $sqlArray = file_get_contents($mysql);
 
                  $src1='DROP TABLE IF EXISTS `';
@@ -54,14 +128,17 @@ class Company extends mainRecord{
                 //print $sqlArray;
                 $cmd = Yii::app()->db->createCommand($sqlArray);
                 //$cmd->execute();
-                try{
+                try
+                {
                         $cmd->execute();
                 }
                 catch(CDbException $e){
                         $message = $e->getMessage();
                         print $message;
                 }
-            } else{
+            } 
+            else
+            {
                 throw new CDbException(Yii::t('app','Cant find Company template file unable to create database'));
                 
             }
@@ -71,21 +148,34 @@ class Company extends mainRecord{
             
         }
         
-        public function save($runValidation = true, $attributes = NULL) {
+        public function save($runValidation = true, $attributes = NULL) 
+        {
+            if($this->prefix==''){
+                $this->string=Yii::app()->dbMain->connectionString;
+                $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                $this->prefix=substr(str_shuffle($chars),0,4)."_";
+            }
+            
             //if tables config notexsits
             Yii::app()->db->setActive(false);
             Yii::app()->db->connectionString = $this->string;
             Yii::app()->db->tablePrefix=$this->prefix;
             Yii::app()->db->setActive(true);
-            
-            if(Yii::app()->db->schema->getTable('{{config}}')=== null){
+            //needs to clear accounts
+            if(1==1)//Yii::app()->db->schema->getTable('{{config}}')=== null
+            {
                 //create tables
                 $this->createDb();
+                
+                
+                Yii::app()->db->setActive(false);
+                Yii::app()->db->connectionString = $this->string;
+                Yii::app()->db->tablePrefix=$this->prefix;
+                Yii::app()->db->setActive(true);
                 
                 $a=Settings::model()->findByPk('company.path');//update path by prefix
                 $a->value=$this->prefix;
                 $a->save();
-                
                 
                 $yiiBasepath=Yii::app()->basePath;
                 $configPath=$this->prefix;
@@ -108,7 +198,7 @@ class Company extends mainRecord{
 			$perm->database_id=$this->id;
 			$perm->level_id=1;
 			$perm->save();
-			
+                        		
             return $a;
         }
         
@@ -152,7 +242,7 @@ class Company extends mainRecord{
                 
                 
                 //print($this->user_id.$this->id);
-                //exit;
+                //Yii::app()->end();
 		return array(
                     
                      'level'=>array(self::HAS_ONE,'DatabasesPerm',array('database_id'=>'id')),

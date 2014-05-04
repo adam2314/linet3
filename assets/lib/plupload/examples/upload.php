@@ -27,7 +27,7 @@ header("Pragma: no-cache");
 header("Access-Control-Allow-Origin: *");
 // other CORS headers if any...
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-	exit; // finish preflight CORS requests here
+	Yii::app()->end(); // finish preflight CORS requests here
 }
 */
 

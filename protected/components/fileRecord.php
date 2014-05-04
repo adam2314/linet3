@@ -19,6 +19,11 @@ class fileRecord extends basicRecord{
         return parent::afterFind();
     }
     public function save($runValidation = true, $attributes = NULL) {
+        $class=get_class($this);
+        if($class=='Accounts')
+            if(Accounts::model()->findByPk($this->id)){
+                $this->isNewRecord=false;
+            }
         $a=parent::save($runValidation,$attributes);
         if($a){
             //if (isset($_POST['Files'])) {

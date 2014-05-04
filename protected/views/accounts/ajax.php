@@ -63,7 +63,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                             ),
                             'delete' => array(
                                 'label'=>'<i class="glyphicon glyphicon-trash"></i>',
-                                'deleteConfirmation'=>true,
+                                //'deleteConfirmation'=>true,
                                 'imageUrl'=>false,
                                 'url'=>'Yii::app()->createUrl("accounts/delete", array("id"=>$data->id))',
                                 //'url'=>'Yii::app()->createUrl("users/email", array("id"=>$data->id))',
@@ -78,3 +78,51 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 		),
 	),
 )); ?>
+
+
+<script type="text/javascript">
+
+
+
+
+jQuery('#accounts-grid0').yiiGridView({
+    'ajaxUpdate':['1','accounts-grid0'],
+    'ajaxVar':'ajax',
+    'pagerClass':'pagination',
+    'loadingClass':'grid-view-loading',
+    'filterClass':'filters',
+    'tableClass':'accounts table',
+    'selectableRows':1,
+    'enableHistory':false,
+    'updateSelector':'{page}, {sort}',
+    'filterSelector':'{filter}',
+    'ajaxType':'POST',
+    'pageVar':'Accounts_page'
+    });
+/*
+jQuery(document).on('click','#accounts-grid0 a.delete',function() {
+	if(!confirm('Are you sure you want to delete this item?')) return false;
+	var th = this,
+		afterDelete = function(){};
+	jQuery('#accounts-grid0').yiiGridView('update', {
+		type: 'POST',
+		url: jQuery(this).attr('href'),
+		success: function(data) {
+			jQuery('#accounts-grid0').yiiGridView('update');
+			afterDelete(th, true, data);
+		},
+		error: function(XHR) {
+			return afterDelete(th, false, XHR);
+		}
+	});
+	return false;
+});*/
+
+
+
+
+
+
+
+
+</script>

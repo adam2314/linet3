@@ -18,9 +18,16 @@ class OpenFormatType extends mainRecord{
             return self::table;
         }
         public function primaryKey(){
-	    return 'id';
+	    return array('id','type');
 	}
-
+        
+        public function getDesc($id){
+             $tmp=$this->findByPk(array('id'=>$id,'type'=>'INI'));
+             if($tmp)
+                 return $tmp->description;
+             else
+                 return '';
+        }
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -28,13 +35,13 @@ class OpenFormatType extends mainRecord{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, desc, type', 'required'),
+			array('id, description, type', 'required'),
 			array('id', 'length', 'max'=>30),
 			array('type', 'length', 'max'=>4),
-			array('desc', 'length', 'max'=>255),
+			array('description', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, desc, type', 'safe', 'on'=>'search'),
+			array('id, description, type', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -54,7 +61,7 @@ class OpenFormatType extends mainRecord{
 	public function attributeLabels(){
 		return array(
 			'id' => 'ID',
-			'desc' => 'Descrieption',
+			'description' => 'Descrieption',
 			'type' => 'Type',
 			
 		);
@@ -71,7 +78,7 @@ class OpenFormatType extends mainRecord{
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('desc',$this->desc,true);
+		$criteria->compare('description',$this->desc,true);
 		$criteria->compare('type',$this->type,true);
 		
 

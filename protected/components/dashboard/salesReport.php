@@ -59,7 +59,7 @@ class salesReport extends MiniForm{
 
     }
     
-    
+    /*
     
     public function run(){//style="width:'.($this->width-$this->titlewidth-28).'px;"
                     $newform='
@@ -73,7 +73,7 @@ class salesReport extends MiniForm{
 
 
                 echo $newform;
-    }
+    }*/
     
 }
 

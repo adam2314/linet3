@@ -2,6 +2,16 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/home/adam/devsrv/linet3/protected/data/company.sql</file>
+            <file>file:/home/adam/devsrv/linet3/protected/components/basicRecord.php</file>
+            <file>file:/home/adam/devsrv/linet3/index.php</file>
+            <file>file:/home/adam/devsrv/linet3/protected/models/FormOpenfrmt.php</file>
+            <file>file:/home/adam/devsrv/linet3/protected/extensions/bootstrap/components/Bootstrap.php</file>
+            <file>file:/home/adam/devsrv/linet3/protected/data/main.sql</file>
+            <file>file:/home/adam/devsrv/linet3/protected/models/Transactions.php</file>
+            <file>file:/home/adam/devsrv/linet3/protected/models/Doccheques.php</file>
+            <file>file:/home/adam/devsrv/linet3/protected/models/Docs.php</file>
+        </group>
     </open-files>
 </project-private>

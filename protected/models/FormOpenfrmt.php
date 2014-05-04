@@ -26,6 +26,13 @@ class FormOpenfrmt extends CFormModel{
     public $bkmvId;
     public $iniId;
             
+    public $bkmvFile;
+    public $iniFile;
+    
+    public $accDesc=array();
+    public $accTypeIndex=array();
+    
+    public $companyId;
     
     public function rules(){
 		// NOTE: you should only define rules for those attributes that
@@ -46,8 +53,8 @@ class FormOpenfrmt extends CFormModel{
         $yiiBasepath=Yii::app()->basePath;
         $configPath=Yii::app()->user->settings["company.path"];
      
-        $bkmv = $yiiBasepath."/files/".$configPath."/openformt/bkmvdata.txt";
-        //$bkmv='';
+        //$bkmv = $yiiBasepath."/files/".$configPath."/openformt/bkmvdata.txt";
+        $bkmv=$this->bkmvFile;
         if ($fp = fopen($bkmv, 'r')) {
                 $A100='';
 		$Z900='';
@@ -162,8 +169,66 @@ function typeline($str, $filter){
 		}
 		return "UNKO";//need to stop from entring readline
 }*/
+    public function readIni(){
+        //new company
+        //
+        //
+        //get perm from ini
+        $encoding="windows-1255";
+        //$encoding="ibm862";
+        $ini = $this->iniFile;
+        
+        if ($fp = fopen($ini, 'r')) {
+		while ($line = fgets($fp)) {
+                        
+			@$line=iconv($encoding,"UTF-8//IGNORE",$line);
+                        //$line=utf8_encode($line);
+			$type=substr($line,0,4);
+			//$obj=$this->readline($line,$type);
+			$obj=true;
+			
+			if (!$obj){
+				//$suc[$type]--;
+			}else{
+
+				//foreach ($obj as &$value)
+				//	if ($encoding=="ibm862") 
+				//		$value = iconv("ISO-8859-8", "UTF-8", hebrev(iconv("UTF-8", "ISO-8859-8", $value)));
+				
+				if ($type=='A000'){//Acc Haeder
+					/* Account Import */
+					$comp=new Company;
+                                        /*
+					$obj["type"]=(int)$obj["type"]+50;					
+					if(isset($accTypeIndex[$obj["type"]]))
+							$accTypeIndex[$obj["type"]]=$accTypeIndex[$obj["type"]].",".$obj["name"];
+						else 
+							$accTypeIndex[$obj["type"]]=$obj["typedesc"].":".$obj["name"];
+					unset($obj["typedesc"]);*/
+					//1405 acc type code
+					//1406 acc type name
+                                        //print_r($obj);//Yii::app()->end();
+                                        //$comp->createDb();
+                                        
+					$comp->save();
+                                        $this->companyId=$comp->id;
+                                        $comp->readLine($line,$type);
+					//$accIndex[$obj["id"]]=$acc->save();
+					//get new acc index save old
+                                        //$this->companyId=$comp->id;
+                                        //echo $this->companyId;
+                                        //Yii::app()->end();
+					unset($comp);
+					
+				}
+                        }
+                }
+        }
+        
+    }
     
-    public function read(){
+    
+    public function readBkmv(){
         //sort
         $this->sortBkmvFile(); //skip for testing
         //
@@ -172,15 +237,15 @@ function typeline($str, $filter){
         //if (substr($line,395,1)=='2')
         //    $encoding="ibm862";
         //else 
-            $encoding="windows-1255";
+        $encoding="windows-1255";
+        //$encoding="ibm862";
         
         
-        
-        
+        Yii::log('start Openimport','info','app');
         $yiiBasepath=Yii::app()->basePath;
         $configPath=Yii::app()->user->settings["company.path"];
-        $bkmv = $yiiBasepath."/files/".$configPath."/openformt/bkmvdata.txt-sorted";
-        
+        //$bkmv = $yiiBasepath."/files/".$configPath."/openformt/bkmvdata.txt-sorted";
+        $bkmv = $this->bkmvFile."-sorted";
         
         $suc=array();
         $suc['B110']=0;
@@ -202,20 +267,21 @@ function typeline($str, $filter){
         $analze['D120']=0;
         $analze['Z900']=0;
         
-        $accIndex=array();
         
+        $accType=200;
         //DELETE FROM `qwe_docCheques` WHERE 1;DELETE FROM `qwe_docDetails` WHERE 1;DELETE FROM `qwe_accounts` WHERE 1;DELETE FROM `qwe_items` WHERE 1;DELETE FROM `qwe_docs` WHERE 1;
         
         if ($fp = fopen($bkmv, 'r')) {
 		while ($line = fgets($fp)) {
                         
-			$line=iconv($encoding,"UTF-8",$line);
+			@$line=iconv($encoding,"UTF-8//IGNORE",$line);
+                        //$line=utf8_encode($line);
 			$type=substr($line,0,4);
 			//$obj=$this->readline($line,$type);
 			$obj=true;
 			
 			if (!$obj){
-				$suc[$type]--;
+				//$suc[$type]--;
 			}else{
 				//foreach ($obj as &$value)
 				//	if ($encoding=="ibm862") 
@@ -223,25 +289,33 @@ function typeline($str, $filter){
 				
 				if ($type=='B110'){//Acc Haeder
 					/* Account Import */
+                                    
 					$acc=new Accounts;
-                                        /*
-					$obj["type"]=(int)$obj["type"]+50;					
-					if(isset($accTypeIndex[$obj["type"]]))
-							$accTypeIndex[$obj["type"]]=$accTypeIndex[$obj["type"]].",".$obj["name"];
-						else 
-							$accTypeIndex[$obj["type"]]=$obj["typedesc"].":".$obj["name"];
-					unset($obj["typedesc"]);*/
-					//1405 acc type code
-					//1406 acc type name
-                                        //print_r($obj);//exit;
                                         $acc->readLine($line,$type);
+                                        
+                                        
+                                        if(isset($this->accTypeIndex[$acc->type])){
+                                            $this->accDesc[$acc->type]=$this->accDesc[$acc->type].",".$acc->name;
+                                            
+                                        }else {
+                                            $this->accDesc[$acc->type]=$acc->name;
+                                            
+                                            $this->accTypeIndex[$acc->type]=$accType;
+                                            
+                                            $accType++;
+                                        }
+					$acc->type=$this->accTypeIndex[$acc->type];	
+                                        
+                                        
 					$acc->save();
-					//$accIndex[$obj["id"]]=$acc->save();
+					
 					//get new acc index save old
 					unset($acc);
+                                        //*/
 					
 				}
                                 if ($type=='M100'){//Item In Stock
+                                    
 					$item=new Item;
                                         $item->category_id=0;
                                         $item->parent_item_id=0; 
@@ -251,19 +325,29 @@ function typeline($str, $filter){
                                         
 					$item->readLine($line,$type);
 					$item->save();
+                                        unset($item);
+                                     //*/
+                                     
 				}
                                 
                                 
 				if ($type=='C100'){//Doc Haeder
                                         //return "done!";
-                                        //exit;
+                                        //Yii::app()->end();
 					//find type
 					//global $DocOpenType;
-                                        $item=new Docs;
+                                    
+                                        $doc=new Docs;
                                         
                                         
-					$item->readLine($line,$type);
-					$item->save();
+					$doc->readLine($line,$type);
+                                        $doc->status=1;//needtoChange
+                                        
+                                        //Yii::log($doc,'info','app');
+                                        
+					$doc->save();
+                                        
+                                        unset($doc);
                                         /*
 					if ((isset($DocOpenType[$obj['doctype']])) && (isset($accIndex[$obj['account']]))){
 						$obj['doctype']=$DocOpenType[$obj['doctype']];
@@ -289,9 +373,12 @@ function typeline($str, $filter){
 					}*/
 				}
 				if ($type=='D110'){//Doc Detial
-                                    $item=new Docdetails;
-                                    $item->readLine($line,$type);
-                                    $item->save();
+                                    
+                                    $docdetial=new Docdetails;
+                                    $docdetial->readLine($line,$type);
+                                    //Yii::log($docdetial,'info','app');
+                                    $docdetial->save();
+                                    unset($docdetial);
                                     
                                     /*
 					global $DocOpenType;
@@ -317,9 +404,11 @@ function typeline($str, $filter){
 					}//*/
 				}
 				if ($type=='D120') {//Kaballa Detial
-                                    $item=new Doccheques;
-                                    $item->readLine($line,$type);
-                                    $item->save();
+                                    $rcptdetial=new Doccheques;
+                                    $rcptdetial->readLine($line,$type);
+                                    Yii::log($rcptdetial,'info','app');
+                                    $rcptdetial->save();
+                                    unset($rcptdetial);
                                     /*
 					global $DocOpenType;
 					$stype=$DocOpenType[$obj['doctype']];
@@ -340,10 +429,13 @@ function typeline($str, $filter){
 					}*/
 				}
 				if ($type=='B100'){//Move Recored
-                                    $item=new Transactions;
-                                    $item->readLine($line,$type);
-                                    $item->save();
                                     
+                                    $transaction=new Transactions;
+                                    $transaction->readLine($line,$type);
+                                    $transaction->save();
+                                    //Yii::log($transaction,'info','app');
+                                    
+                                    unset($transaction);
                                     /*
 					//print $obj['value'].":".$obj['type'];
 					global $openTransType;
@@ -391,7 +483,7 @@ function typeline($str, $filter){
 			$analze[$type]++;
 			//if ($analze[$type]>100)	break;
 		}
-		
+		Yii::log("End OpenImport",'info','app');
 		//print_r($docIndex);
 		//end loop
 		//print_r($accIndex);
@@ -427,7 +519,7 @@ function typeline($str, $filter){
         //accounts
         $criteria=new CDbCriteria;
         $accounts= Accounts::model()->findAll($criteria);
-        $record=array('id'=>'B110','name'=>'','count'=>0);
+        $record=array('id'=>'B110','name'=>OpenFormatType::model()->getDesc('B110'),'count'=>0);
         foreach($accounts as $account){
                 $this->line++;
                 $bkmv.=$account->openfrmt($this->line,$from_date,$to_date); 
@@ -439,7 +531,7 @@ function typeline($str, $filter){
         //items
         $criteria=new CDbCriteria;
         $items= Item::model()->findAll($criteria);
-        $record=array('id'=>'M100','name'=>'','count'=>0);
+        $record=array('id'=>'M100','name'=>OpenFormatType::model()->getDesc('M100'),'count'=>0);
         foreach($items as $item){
                 $this->line++;
                 $bkmv.=$item->openfrmt($this->line,$from_date,$to_date); 
@@ -455,7 +547,7 @@ function typeline($str, $filter){
             ':to_date' => $to_date,
           );
         $transactions= Transactions::model()->findAll($criteria);
-        $record=array('id'=>'B100','name'=>'','count'=>0);
+        $record=array('id'=>'B100','name'=>OpenFormatType::model()->getDesc('B100'),'count'=>0);
         foreach($transactions as $transaction){
                 $this->line++;
                 $bkmv.=$transaction->openfrmt($this->line,$from_date,$to_date); 
@@ -472,28 +564,32 @@ function typeline($str, $filter){
             ':to_date' => $to_date,
           );
         $docs= Docs::model()->findAll($criteria);
-        $record=array('id'=>'C100','name'=>'','count'=>0);
-        $d110=array('id'=>'D110','name'=>'','count'=>0);
-        $d120=array('id'=>'D120','name'=>'','count'=>0);
+       //OpenFormatType::model()->getDesc('C100')
+        $record=array('id'=>'C100','name'=>OpenFormatType::model()->getDesc('C100'),'count'=>0);
+        $d110=array('id'=>'D110','name'=>OpenFormatType::model()->getDesc('D110'),'count'=>0);
+        $d120=array('id'=>'D120','name'=>OpenFormatType::model()->getDesc('D120'),'count'=>0);
         
 
         foreach($docs as $doc){
-                $this->line++;
-                $bkmv.=$doc->openfrmt($this->line,$from_date,$to_date); 
-                foreach($doc->docDetailes as $detial){
+
+                if($doc->docType->openformat!='0'){
                     $this->line++;
-                    $bkmv.=$detial->openfrmt($this->line,$from_date,$to_date); 
-                    $d110['count']++;
+                    $bkmv.=$doc->openfrmt($this->line,$from_date,$to_date); 
+                    foreach($doc->docDetailes as $detial){
+                        $this->line++;
+                        $bkmv.=$detial->openfrmt($this->line,$from_date,$to_date); 
+                        $d110['count']++;
+                    }
+                    foreach($doc->docCheques as $detial){
+                        $this->line++;
+                        $bkmv.=$detial->openfrmt($this->line,$from_date,$to_date);
+                        $d120['count']++;
+                    }
+                    $type=$doc->getType();
+                    $this->docArr[$type]=isset($this->docArr[$type])?$this->docArr[$type]+1:0;
+                    $this->docSumArr[$type]=isset($this->docSumArr[$type])?$this->docSumArr[$type]+$doc->total:$doc->total;
+                    $record['count']++;
                 }
-                foreach($doc->docCheques as $detial){
-                    $this->line++;
-                    $bkmv.=$detial->openfrmt($this->line,$from_date,$to_date);
-                    $d120['count']++;
-                }
-                $type=$doc->getType();
-                $this->docArr[$type]=isset($this->docArr[$type])?$this->docArr[$type]+1:0;
-                $this->docSumArr[$type]=isset($this->docSumArr[$type])?$this->docSumArr[$type]+$doc->total:$doc->total;
-                $record['count']++;
         }
         $this->iniArr[]=$record;
         $this->iniArr[]=$d110;
@@ -544,7 +640,11 @@ function typeline($str, $filter){
        $array=array();
        if(isset($this->docArr)){
         foreach($this->docArr as $key=>$value){
-            $array[]=array('id'=>$key,'name'=>'','count'=>$value,'sum'=>$this->docSumArr[$key]);
+            $tmp=OpenFormatType::model()->findByPk(array('id'=>$key,'type'=>'INI'));
+            //echo OpenFormatType::model()->findByPk($key)->description;
+            if($tmp)
+                print_r($tmp);
+            $array[]=array('id'=>$key,'name'=> Doctype::model()->getOpenType($key),'count'=>$value,'sum'=>$this->docSumArr[$key]);
         }
        }  
          

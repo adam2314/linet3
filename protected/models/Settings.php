@@ -27,14 +27,32 @@ class Settings extends basicRecord{
                         
                 
 
-                $this->value = CUploadedFile::getInstanceByName('Settings['.$this->id.'][value]');
-                
+                 $a= CUploadedFile::getInstanceByName('Settings['.$this->id.'][value]');
+                if($a){
+                    $this->value=$a;
+                    $ext = $this->value->extensionName;
 
-		$ext = $this->value->extensionName;
+                    //$fileName = $yiiBasepath."/files/".$configPath."/settings/".$this->id.".".$ext; 
+                    
+                    
+                    //echo $this->id.get_class($this);
+                    $logo = new Files();
+                    $logo->name = $this->id.".".$ext; //it might be $img_add->name for you, filename is just what I chose to call it in my model
+                    $logo->path="settings/";
+                    $logo->parent_type=get_class($this);
+                    $logo->parent_id = $this->id; // this links your picture model to the main model (like your user, or profile model)
 
-                $fileName = $yiiBasepath."/files/".$configPath."/settings/".$this->id.".".$ext; 
-                if($this->value->saveAs($fileName)){
-                    $this->value="/files/".$configPath."/settings/".$this->id.".".$ext;
+                    $id=$logo->save(); // DONE
+                    
+                    
+                    //echo $logo->id;
+                    //Yii::app()->end();
+                    if($this->value->saveAs($yiiBasepath."/files/".$configPath."/settings/".$logo->id)){
+                        $this->value=$logo->id;//"/files/".$configPath."/settings/".$this->id.".".$ext;
+                    }
+                    
+                    
+                    //Yii::app()->end();
                 }
           }
           return parent::save($runValidation,$attributes);

@@ -52,19 +52,13 @@ echo Yii::t('app',"Select Company");
                     
                     
                     ),
+
+                //array('value'=>'$data->level->level_id'),
             
             
-            
-            
-                //array('value'=>'$data->getLevel()->level_id'),
-                array('value'=>'$data->level->level_id'),
-            
-            
-            
-                //array('value'=>'$data->level[0]->level_id'),
-		//'desc',
-		//'openformat',
-		array(
+  
+                /*
+                array(
                         //'text'=>'Action',
 			'class'=>'CButtonColumn',
 			'template'=>'{edit}{remove}',
@@ -77,7 +71,7 @@ echo Yii::t('app',"Select Company");
                                  'options' => array(
                                     'class'=>'glyphicon glyphicon-edit' ,
                                     'onclick'=>'edit(this);return false;',
-                                  ),//*/
+                                  ),
                                 
                                 
                                 'imageUrl' => false,
@@ -91,7 +85,7 @@ echo Yii::t('app',"Select Company");
                             ),
                             
 		    ),
-		),
+		),//*/
 	),
 )); 
 
@@ -100,19 +94,9 @@ echo Yii::t('app',"Select Company");
 
 ?>
                         
+                    
                         
-                   <div class="form-actions">
-                            <?php $this->widget('bootstrap.widgets.TbButton', array(
-                                    'buttonType'=>'submit',//,'url'=>array('create'))
-                                    'type'=>'primary',
-                                    'label'=>Yii::t('app','Create Company'),
-                                'htmlOptions'=>array(
-                                    'class'=>"btn btn-lg btn-primary btn-block"
-                                    ),
-                            )); ?>
-                    </div>      
-                        
-                        
+                        <a href="<?php echo Yii::app()->createAbsoluteUrl('/company/admin');?>"><?php echo Yii::t('app','Admin');?></a>
                         
                 </div><!-- tab-pane -->
             </div><!-- tab-content -->

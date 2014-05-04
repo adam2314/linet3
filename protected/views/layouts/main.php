@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-                
+        <link rel="shortcut icon" href="<?php echo Yii::app()->createAbsoluteUrl('/assets/img/favicon.ico'); ?>">
+        <link rel="icon" type="image/ico" href="<?php echo Yii::app()->createAbsoluteUrl('/assets/img/favicon.ico'); ?>">        
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
        
@@ -68,10 +69,7 @@
                 ?>
             
             <div class="media user-media hidden-phone">
-                <a href="<?php echo Yii::app()->createAbsoluteUrl('/settings/dashboard');?>" class="navbar-brand">
-                Linet 3.0
-              <!--<img src="assets/img/logo.png" alt="">-->
-            </a> 
+                
                 
                 <div class="topnav">
                     <div class="btn-toolbar">
@@ -96,9 +94,9 @@
                     </div>
                 </div><!-- /.topnav -->  
                 
-                <a class="user-link" href="">
-                    <img class="media-object img-polaroid user-img" alt="" src="<?php echo Yii::app()->createAbsoluteUrl('/assets/img/user.gif');?>">
-                    <span class="label user-label">16</span>
+                <a href="<?php echo Yii::app()->createAbsoluteUrl('/settings/dashboard');?>">
+                    <img width="100px" alt="<?php echo Yii::app()->user->settings['company.name']; ?>" src="<?php echo Yii::app()->createAbsoluteUrl("download/".Yii::app()->user->settings['company.logo']);?>">
+                    <!--<span class="label user-label">16</span>-->
                 </a>
                 
                 

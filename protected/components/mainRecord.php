@@ -10,7 +10,7 @@
  *
  * @author adam
  */
-class mainRecord extends CActiveRecord{
+class mainRecord extends basicRecord{
     private static $dbMain = null;
  
     protected static function getMainDbConnection()

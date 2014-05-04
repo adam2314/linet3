@@ -48,9 +48,27 @@ class DatabasesPerm extends mainRecord{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                        'Company' => array(self::BELONGS_TO, 'Company', 'database_id'),
+                        'User' => array(self::BELONGS_TO, 'User', 'user_id'),
 		);
 	}
 
+        
+         public function save($runValidation = true, $attributes = NULL) {
+            $a=parent::save($runValidation,$attributes);
+            if($a){
+                
+                Yii::app()->db->setActive(false);
+                Yii::app()->db->connectionString = $this->Company->string;
+                Yii::app()->db->tablePrefix=$this->Company->prefix;
+                Yii::app()->db->setActive(true);
+                
+                $user=User::model()->findByPk($this->user_id);
+                $user->save();
+            }
+            return $a;
+        }
+        
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */

@@ -27,7 +27,7 @@
 	<p>
 		<?php echo $form->labelEx($model,'account_id'); ?>
 		<?php //echo $model->docType->name . ";".Acctype::model()->getType('customers');
-		
+		/*
 		$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 	    'name'=>'Docs[account_id]',
 		'id'=>'Docs_account_id',
@@ -40,16 +40,24 @@
 	            'showAnim'=>'fold',
 	    ),
 	));
-		
+		*/
 		?>
-		<?php echo $form->error($model,'account_id'); ?>
+            <?php echo $form->dropDownList($model,'account_id',CHtml::listData(Accounts::model()->findAllByAttributes(array('type'=>$model->docType->account_type)), 'id', 'name'));?>
+            <?php echo $form->error($model,'account_id'); ?>
+            <?php $this->widget('bootstrap.widgets.TbButton', array(
+            'label'=>Yii::t('app','New'),
+            //'type'=>'primary',
+            'icon'=>'glyphicon glyphicon-file',
+            'url'=>$this->createUrl('/accounts/create',array('type'=>$model->docType->account_type)),
+            //'htmlOptions'=>array('id'=>'printLink', 'onclick'=>'return hideMe();'),
+        )); ?>
 	</p>
     </div>
     <div class="col-md-1">
         <div>
 		<?php echo $form->labelEx($model,'oppt_account_id'); ?>
 		<?php //echo $model->docType->name . ";".Acctype::model()->getType('customers');
-		
+		/*
 		$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 	    'name'=>'Docs[oppt_account_id]',
 		'id'=>'Docs_oppt_account_id',
@@ -59,9 +67,11 @@
                     'minLength'=>0,
 	            'showAnim'=>'fold',
 	    ),
-	));
+	));*/
 		
 		?>
+            
+            <?php echo $form->dropDownList($model,'oppt_account_id',CHtml::listData(Accounts::model()->findAllByAttributes(array('type'=>$model->docType->oppt_account_type)), 'id', 'name'));?>
                 <p></p>
 		<?php echo $form->error($model,'oppt_account_id'); ?>
 	</div>
@@ -267,7 +277,18 @@ if(!$model->isNewRecord){
 		<thead>
                     <tr  class="head1">
                             <?php //echo $form->labelEx($model,'doc_id'); ?>
-                                            <th class="item_id"><?php echo Yii::t('labels','Item'); ?></th>
+                                            <th class="item_id">
+                                                <?php echo Yii::t('labels','Item'); ?>
+                                                <?php $this->widget('bootstrap.widgets.TbButton', array(
+                                                    'label'=>Yii::t('app','New'),
+                                                    //'type'=>'primary',
+                                                    'icon'=>'glyphicon glyphicon-file',
+                                                    'url'=>$this->createUrl('/item/create'),
+                                                    //'htmlOptions'=>array('id'=>'printLink', 'onclick'=>'return hideMe();'),
+                                                )); ?>
+                                            
+                                            
+                                            </th>
                                             <th class="name"><?php echo Yii::t('labels', 'Name'); ?></th>
                                             <!--<th class="item_id"><?php echo Yii::t('labels', 'Description'); ?></th>-->
                                             <th class="qty"><?php echo Yii::t('labels','Qty'); ?></th>
@@ -447,7 +468,9 @@ if(!$model->isNewRecord){
                        </td>
                         
                         <td>
-                                    <div id="rcptSum"></div><?php echo CHTML::hiddenField('rcptsum'); ?>
+                                    <div id="rcptSum"></div>
+                                    <?php echo $form->hiddenField($model,"rcptsum"); ?>    
+                                        <?php //echo CHTML::hiddenField('rcptsum'); ?>
                         </td>
                     </tr>
            	</tfoot>	
@@ -479,11 +502,32 @@ if(!$model->isNewRecord){
 	?>
 	<!--</div>-->
 <script type="text/javascript">
+    
+    $("#Docs_account_id").change(function(){
+        var idate = $('#Docs_issue_date').val();
+        $.get("<?php echo $this->createUrl('/');?>/index.php", {"r": "/accounts/JSON" ,"id": $("#Docs_account_id").val()},
+            function(data) {
+                $("#Docs_company").val(data.name);
+                $("#Docs_address").val(data.address);
+                $("#Docs_city").val(data.city);
+                $("#Docs_zip").val(data.zip);
+                $("#Docs_vatnum").val(data.vatnum);
+                $("#Docs_currency_id").val(data.currency_id);
+                $("#Docs_currency_id").trigger("liszt:updated");
+
+                var pay_terms=data.pay_terms;
+                //CalcDueDate(idate, pay_terms);
+            }, "json")
+            .error(function() { });
+    });
+    
+    
+    
 	jQuery(document).ready(function(){
                 $("#docs-form").submit(function() {
                     
-                    if (($('#Docs_total').length)&&($('#rcptsum').length)) {
-                        if(Number($('#Docs_total').val())!=Number($('#rcptsum').val())){
+                    if (($('#Docs_total').length)&&($('#Docs_rcptsum').length)) {
+                        if(Number($('#Docs_total').val())!=Number($('Docs_rcptsum').val())){
                           alert("sum is not equil");
                           return false;
                         }
@@ -661,10 +705,10 @@ $('#Docs_discount').change(function(){
         var linesum=Number($('#Docdetails_'+i+'_invprice').val());
         
         linesum=(linesum)-(linesum*per)
-        $('#Docdetails_'+i+'_invprice').val(linesum);
+        $('#Docdetails_'+i+'_invprice').val(linesum.toFixed(2));
         sumChange(i,false);
     }
-    CalcPriceSum();
+    CalcPriceSum(true);
 });
 
 
@@ -761,6 +805,7 @@ function itemChange(index){
         //$('#Docdetails_'+index+'_name').trigger("liszt:updated");
         
         $('#Docdetails_'+index+'_description').val(data[0].description);
+        $('#Docdetails_'+index+'_unit_price_org').val(data[0].saleprice);
         $('#Docdetails_'+index+'_unit_price').val(data[0].saleprice);
 
         $('#Docdetails_'+index+'_currency_id').val(data[0].currency_id);
@@ -821,10 +866,10 @@ function sumChange(index,calc){
         
     }
     
-    $('#Docdetails_'+index+'_vat').val(vat);
+    $('#Docdetails_'+index+'_vat').val(vat.toFixed(2));//
     $('#Docdetails_'+index+'_vatlabel').html((linesum*(vat/100)).toFixed(2)+" (%"+vatrate+")");
-    $('#Docdetails_'+index+'_price').val(price);
-    $('#Docdetails_'+index+'_unit_price').val(uprice);
+    $('#Docdetails_'+index+'_price').val(price.toFixed(2));//
+    $('#Docdetails_'+index+'_unit_price').val(uprice.toFixed(2));//
     if(calc)
         CalcPriceSum();
 }
@@ -847,10 +892,10 @@ function priceChange(index){
 
     //console.log(uprice);
     
-    $('#Docdetails_'+index+'_vat').val(vat);
+    $('#Docdetails_'+index+'_vat').val(vat.toFixed(2));//
     $('#Docdetails_'+index+'_vatlabel').html((linesum*(vat/100)).toFixed(2)+" (%"+vatrate+")");
-    $('#Docdetails_'+index+'_invprice').val(linesum);
-    $('#Docdetails_'+index+'_unit_price').val(uprice);
+    $('#Docdetails_'+index+'_invprice').val(linesum.toFixed(2));//
+    $('#Docdetails_'+index+'_unit_price').val(uprice.toFixed(2));//
     CalcPriceSum();
 }
 $('input').blur(function(){
@@ -866,28 +911,18 @@ $('input').blur(function(){
     
     
     if(this.id=='Docs_account_id'){
-        var idate = $('#Docs_issue_date').val();
-        $.get("<?php echo $this->createUrl('/');?>/index.php", {"r": "/accounts/JSON" ,"id": $("#Docs_account_id").val()},
-            function(data) {
-                $("#Docs_company").val(data.name);
-                $("#Docs_address").val(data.address);
-                $("#Docs_city").val(data.city);
-                $("#Docs_zip").val(data.zip);
-                $("#Docs_vatnum").val(data.vatnum);
-                $("#Docs_currency_id").val(data.currency_id);
-                $("#Docs_currency_id").trigger("liszt:updated");
-
-                var pay_terms=data.pay_terms;
-                //CalcDueDate(idate, pay_terms);
-            }, "json")
-            .error(function() { });
+        
     }//end account_id
 	
 } );
 
-function CalcPrice(index) {
+function CalcPrice(index,org) {
     var qty = $('#Docdetails_'+index+'_qty').val();
+    //console.log("org:"+org);
     var uprice = $('#Docdetails_'+index+'_unit_price').val();
+    if(org) 
+        uprice = $('#Docdetails_'+index+'_unit_price_org').val();
+    
     var rate = $('#Docdetails_'+index+'_rate').val();
     var doc_rate = $('#doc_rate').val();
     var vat=$('#Docdetails_'+index+'_accvat').val();
@@ -909,7 +944,10 @@ function CalcPrice(index) {
     $('#Docdetails_'+index+'_vat').val((itemtotal*(vat/100)).toFixed(2));
     $('#Docdetails_'+index+'_vatlabel').html((itemtotal*(vat/100)).toFixed(2)+" (%"+vat+")");
     $('#Docdetails_'+index+'_invprice').val(itemtotal);
-    CalcPriceSum();
+    if(org) 
+        return itemtotal;//smart:>
+    else
+        CalcPriceSum();
 }
 
 function calcLines(){
@@ -924,7 +962,7 @@ function calcLines(){
   }
        
 }
-function CalcPriceSum() {
+function CalcPriceSum(org) {
     var elements = $('[id^=Docdetails][id$=invprice]');
     var selements = $('[id^=Docdetails][id$=_vat]');
     var vattotal=0;
@@ -932,7 +970,10 @@ function CalcPriceSum() {
     //var novat_total=0;
     for (var i=0; i<elements.length; i++) {
         //console.log(elements[i].id);
+        if(org)
+            CalcPrice(i,org);
         var itemtotal=Number($('#'+elements[i].id).val());
+        
         var vat= Number($('#'+selements[i].id).val());
         //console.log(vat);
         //console.log(selements[i].id);
@@ -996,7 +1037,7 @@ function rcptSum(){
         total+=item;
     }
     $('#rcptSum').html((total).toFixed(2));
-    $('#rcptsum').val(total);
+    $('#Docs_rcptsum').val(total);
 }
 
 function rcptcalcLines(){

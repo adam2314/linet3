@@ -34,7 +34,21 @@ $model->password='';
         <?php echo $form->dropDownListRow($model,'language',CHtml::listData(Language::model()->findAll(), 'id', 'name'));?>
 
         <?php echo $form->dropDownListRow($model,'warehouse',CHtml::listData(Accounts::model()->AutoComplete('',8), 'value', 'label'));?>
-    <table  data-role="table" class="formtable" ><!-- docdetalies -->
+    
+
+<?php 
+
+
+
+    
+
+//$list = DateTimeZone::listAbbreviations();
+//$idents = DateTimeZone::listIdentifiers();
+//$tzlist = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
+//print_r($list);
+echo $form->dropDownListRow($model,'timezone',Timezone::makeList());?>
+
+<table  data-role="table" class="formtable" ><!-- docdetalies -->
         <thead>
             <tr  class="head1">
                 <th><?php echo $form->labelEx($model,'ItemVatCat'); ?></th>

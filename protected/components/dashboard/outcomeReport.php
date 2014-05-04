@@ -20,6 +20,7 @@ class outcomeReport extends MiniForm{
         ),true); 
         //parent::init();
     }
+    /*
      public function run(){//style="width:'.($this->width-$this->titlewidth-28).'px;"
                     $newform='
         <div class="'.$this->class.'">
@@ -32,7 +33,7 @@ class outcomeReport extends MiniForm{
                 
                 
 		echo $newform;
-    }
+    }*/
 }
 
 

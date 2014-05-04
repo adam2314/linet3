@@ -28,6 +28,24 @@ class Acctype extends CActiveRecord{
 		return  self::table;
 	}
         
+        
+        public function switchType($old,$new){
+            
+            $criteria=new CDbCriteria;
+            $criteria->condition="type = :type";
+            $criteria->params=array(
+                ':type' => $old,
+              );
+
+            $accounts= Accounts::model()->findAll($criteria);
+            foreach($accounts as $account){
+                $account->type=$new;
+                $account->save();
+            }
+            
+        }
+        
+        
         public function getTotal($from_date,$to_date){
             $sum=0;
             $criteria=new CDbCriteria;
