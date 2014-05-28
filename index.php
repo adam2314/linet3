@@ -14,7 +14,7 @@ require_once($yii);
 Yii::createWebApplication($config)->run();
 //echo ";".Yii::app()->theme.";";
 
-//php:curl,zip
+//php:curl,zip,apc
 //wkhtmltopdf
 //apache: mod_rewrite
 //mysql

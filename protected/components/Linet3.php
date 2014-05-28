@@ -2,7 +2,21 @@
 
 class Linet3 {
   public static function beginRequest(CEvent $event) {
-    ini_set('date.timezone', 'Asia/Tel_Aviv');         
+    ini_set('date.timezone', 'Asia/Tel_Aviv');
+    if(!isset(Yii::app()->user->Company)){
+        Yii::app()->user->setState('Company',0);
+    }
+    
+    
+    if(!Yii::app()->user->isGuest){
+        self::startLinet();
+    }
+             
+    
+  }/**end beginRequest*/
+   
+  public static function startLinet(){
+      
     if(isset(Yii::app()->user->timezone)){
         ini_set('date.timezone', Yii::app()->user->timezone);  
     }
@@ -16,9 +30,7 @@ class Linet3 {
         $org=array('string'=>Yii::app()->db->connectionString,'prefix'=>Yii::app()->db->tablePrefix);
         Yii::app()->user->setState('OrgDatabase',$org);
     }
-    if(!isset(Yii::app()->user->Company)){
-        Yii::app()->user->setState('Company',0);
-    }
+    
     if(!isset(Yii::app()->user->menu)) {
         Yii::app()->user->setState('menu',Menu::model()->buildUserMenu()); 
     }
@@ -60,9 +72,7 @@ class Linet3 {
           //}
           //Yii::app()->user->setState('Database','1');
       }
-  }/**end beginRequest*/
-   
-      
+  }    
  
       
   }
