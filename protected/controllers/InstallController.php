@@ -59,6 +59,7 @@ class InstallController extends Controller {
             }
             if ($step == 4) {//finsih
                 //Yii::app()->request->redirect();
+                unset(Yii::app()->user->install);
                 $this->redirect(array('company/admin'));
                 //$model=new InstallConfig();
                 //$this->renderPartial('config',array('model'=>$model ));

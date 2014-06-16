@@ -1,11 +1,11 @@
-DROP TABLE `accCountry`;
+DROP TABLE IF EXISTS `accCountry`;
 CREATE TABLE IF NOT EXISTS `accCountry` (
   `id` varchar(2) NOT NULL DEFAULT '',
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `AuthAssignment`;
+DROP TABLE IF EXISTS `AuthAssignment`;
 CREATE TABLE IF NOT EXISTS `AuthAssignment` (
   `itemname` varchar(64) NOT NULL,
   `userid` varchar(64) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `AuthAssignment` (
   PRIMARY KEY (`itemname`,`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `AuthItem`;
+DROP TABLE IF EXISTS `AuthItem`;
 CREATE TABLE IF NOT EXISTS `AuthItem` (
   `name` varchar(64) NOT NULL,
   `type` int(11) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `AuthItem` (
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `AuthItemChild`;
+DROP TABLE IF EXISTS `AuthItemChild`;
 CREATE TABLE IF NOT EXISTS `AuthItemChild` (
   `parent` varchar(64) NOT NULL,
   `child` varchar(64) NOT NULL,
@@ -32,14 +32,14 @@ CREATE TABLE IF NOT EXISTS `AuthItemChild` (
   KEY `child` (`child`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `creditErrorCode`;
+DROP TABLE IF EXISTS `creditErrorCode`;
 CREATE TABLE IF NOT EXISTS `creditErrorCode` (
   `ErrorID` int(3) NOT NULL DEFAULT '0',
   `ErrorText` varchar(158) DEFAULT NULL,
   PRIMARY KEY (`ErrorID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `currencies`;
+DROP TABLE IF EXISTS `currencies`;
 CREATE TABLE IF NOT EXISTS `currencies` (
   `id` varchar(3) DEFAULT NULL,
   `code` varchar(3) DEFAULT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `currencies` (
   `symbol` varchar(17) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `databases`;
+DROP TABLE IF EXISTS `databases`;
 CREATE TABLE IF NOT EXISTS `databases` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `string` varchar(255) NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `databases` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=138 ;
 
-DROP TABLE `databasesPerm`;
+DROP TABLE IF EXISTS `databasesPerm`;
 CREATE TABLE IF NOT EXISTS `databasesPerm` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -64,14 +64,14 @@ CREATE TABLE IF NOT EXISTS `databasesPerm` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=145 ;
 
-DROP TABLE `language`;
+DROP TABLE IF EXISTS `language`;
 CREATE TABLE IF NOT EXISTS `language` (
   `id` varchar(10) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `menu`;
+DROP TABLE IF EXISTS `menu`;
 CREATE TABLE IF NOT EXISTS `menu` (
   `id` int(12) NOT NULL AUTO_INCREMENT,
   `label` varchar(255) DEFAULT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `menu` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=71 ;
 
-DROP TABLE `openformat`;
+DROP TABLE IF EXISTS `openformat`;
 CREATE TABLE IF NOT EXISTS `openformat` (
   `id` int(11) NOT NULL,
   `description` text NOT NULL,
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `openformat` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `openformattype`;
+DROP TABLE IF EXISTS `openformattype`;
 CREATE TABLE IF NOT EXISTS `openformattype` (
   `id` varchar(4) NOT NULL,
   `description` varchar(26) DEFAULT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `openformattype` (
   PRIMARY KEY (`id`,`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `Rights`;
+DROP TABLE IF EXISTS `Rights`;
 CREATE TABLE IF NOT EXISTS `Rights` (
   `itemname` varchar(64) NOT NULL,
   `type` int(11) NOT NULL,
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `Rights` (
   PRIMARY KEY (`itemname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE `user`;
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(100) NOT NULL,
@@ -128,4 +128,4 @@ CREATE TABLE IF NOT EXISTS `user` (
   `timezone` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

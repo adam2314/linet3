@@ -3,13 +3,14 @@
 class Linet3 {
 
     public static function beginRequest(CEvent $event) {
-        if (!isset(Yii::app()->user->install)) {
-            if (!Yii::app()->params['newInstall']) {
+
+        if (!isset(Yii::app()->user->install)) {//new install?
+            
+            if (!Yii::app()->params['newInstall']) {//install process
                 ini_set('date.timezone', 'Asia/Tel_Aviv');
                 if (!isset(Yii::app()->user->Company)) {
                     Yii::app()->user->setState('Company', 0);
                 }
-
 
                 if (!Yii::app()->user->isGuest) {
                     self::startLinet();
@@ -26,7 +27,7 @@ class Linet3 {
 /*     * end beginRequest */
 
     public static function startLinet() {
-
+        
         if (isset(Yii::app()->user->timezone)) {
             ini_set('date.timezone', Yii::app()->user->timezone);
         }
@@ -43,7 +44,10 @@ class Linet3 {
 
         if (!isset(Yii::app()->user->menu)) {
             Yii::app()->user->setState('menu', Menu::model()->buildUserMenu());
+            //echo 'hell';
         }
+        //echo 'hell';
+        //EXIT;
 
         if (Yii::app()->user->Company == 0) {
             //Yii::app()->db->setActive(false);
