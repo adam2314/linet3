@@ -1,9 +1,13 @@
+
 <?php
 return array(
     'language'=>'he_il',
+    'params'=>array(
+                    'newInstall'=>false,
+            ),
     'components'=>array(
         'db'=>array(
-                'connectionString' => 'mysql:host=localhost;dbname=linetmain',
+                'connectionString' => 'mysql:host=localhost;dbname=linet3.0',
                         'username' => 'root',
                         'password' => 'VBy7t6r5',
                 
@@ -12,10 +16,10 @@ return array(
                 'charset' => 'utf8',
                 'tablePrefix' => '',
                 'enableParamLogging'=>true,//needs to be removed some day
-                'class'=> 'DbConnection'
+                'class'=> 'CDbConnection'
         ),
         'dbMain'=>array(
-                'connectionString' => 'mysql:host=localhost;dbname=linetmain',
+                'connectionString' => 'mysql:host=localhost;dbname=linet3.0',
                         'username' => 'root',
                         'password' => 'VBy7t6r5',
             
@@ -23,10 +27,10 @@ return array(
                 'charset' => 'utf8',
                 'tablePrefix' => '',
                 'enableParamLogging'=>true,//needs to be removed some day
-                'class'=> 'DbConnection'
+                'class'=> 'CDbConnection'
         ),
         'dbSession'=>array(
-                'connectionString' => 'mysql:host=localhost;dbname=linetmain',
+                'connectionString' => 'mysql:host=localhost;dbname=linet3.0',
                         'username' => 'root',
                         'password' => 'VBy7t6r5',
             
@@ -34,7 +38,7 @@ return array(
                 'emulatePrepare' => true,
                 'tablePrefix' => '',
                 'enableParamLogging'=>true,//needs to be removed some day
-                'class'=> 'DbConnection'
+                'class'=> 'CDbConnection'
         ),
     ),
     

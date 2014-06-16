@@ -3,6 +3,9 @@ return "
 <?php
 return array(
     'language'=>'he_il',
+    'params'=>array(
+                    'newInstall'=>false,
+            ),
     'components'=>array(
         'db'=>array(
                 <placeholder>
@@ -12,7 +15,7 @@ return array(
                 'charset' => 'utf8',
                 'tablePrefix' => '',
                 'enableParamLogging'=>true,//needs to be removed some day
-                'class'=> 'DbConnection'
+                'class'=> 'CDbConnection'
         ),
         'dbMain'=>array(
                 <placeholder>
@@ -21,7 +24,7 @@ return array(
                 'charset' => 'utf8',
                 'tablePrefix' => '',
                 'enableParamLogging'=>true,//needs to be removed some day
-                'class'=> 'DbConnection'
+                'class'=> 'CDbConnection'
         ),
         'dbSession'=>array(
                 <placeholder>
@@ -30,7 +33,7 @@ return array(
                 'emulatePrepare' => true,
                 'tablePrefix' => '',
                 'enableParamLogging'=>true,//needs to be removed some day
-                'class'=> 'DbConnection'
+                'class'=> 'CDbConnection'
         ),
     ),
     

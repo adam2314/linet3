@@ -50,14 +50,14 @@ class User extends mainRecord{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, lname, certpasswd, salt, email, timezone', 'required'),
+			array('username, lname, certpasswd, email, timezone', 'required'),
 			array('username', 'length', 'max'=>100),
 			array('fname, lname, certpasswd, salt, email', 'length', 'max'=>255),
                         array('language', 'length', 'max'=>10),
 			array('password', 'length', 'max'=>41),
 			array('cookie, hash', 'length', 'max'=>32),
 			array('certpasswd, salt, email', 'length', 'max'=>255),
-			array('lastlogin, warehouse, passwd', 'safe'),
+			array('lastlogin, theme, warehouse, passwd', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, username, fname, lname, password, lastlogin, cookie, hash, certpasswd, salt, email, language', 'safe', 'on'=>'search'),
@@ -96,32 +96,35 @@ class User extends mainRecord{
          
          
         public function save($runValidation = true, $attributes = NULL) {
-            $catagories=ItemVatCat::model()->findAll();
+            //$this->id=0;
             if($this->salt=='') $this->salt=sha1(rand());
             if($this->passwd!='') $this->password=$this->hashPassword($this->passwd,$this->salt);
               
             $res=parent::save($runValidation,$attributes);
-            if($res){
-                $model = Settings::model()->findByPk("company.".$this->id.".warehouse");
-                if(!$model){
-                    $model=new Settings();
-                    $model->id="company.".$this->id.".warehouse";
-                    $model->eavType='integer';
-                    $model->hidden=1;
-                }
-                $model->value=$this->warehouse;
-                $model->save();
-                
-                
-                foreach ($catagories as $catagory){
-                    if(!UserIncomeMap::model()->findByPk(array('user_id'=>$this->id, 'itemVatCat_id'=>$catagory->id))){//'user_id', 'itemVatCat_id'
-                        $model=new UserIncomeMap;
-                        $attr=array("user_id"=>$this->id,"itemVatCat_id"=>$catagory->id,"account_id"=>100);
-                        $model->attributes=$attr;
-                        if(!$model->save())
-                            return false;
+            if(Yii::app()->user->Company!=0){
+                $catagories=ItemVatCat::model()->findAll();
+                if($res){
+                    $model = Settings::model()->findByPk("company.".$this->id.".warehouse");
+                    if(!$model){
+                        $model=new Settings();
+                        $model->id="company.".$this->id.".warehouse";
+                        $model->eavType='integer';
+                        $model->hidden=1;
                     }
+                    $model->value=$this->warehouse;
+                    $model->save();
 
+
+                    foreach ($catagories as $catagory){
+                        if(!UserIncomeMap::model()->findByPk(array('user_id'=>$this->id, 'itemVatCat_id'=>$catagory->id))){//'user_id', 'itemVatCat_id'
+                            $model=new UserIncomeMap;
+                            $attr=array("user_id"=>$this->id,"itemVatCat_id"=>$catagory->id,"account_id"=>100);
+                            $model->attributes=$attr;
+                            if(!$model->save())
+                                return false;
+                        }
+
+                    }
                 }
             }
             return $res;

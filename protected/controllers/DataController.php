@@ -2,13 +2,14 @@
 
 class DataController extends RightsController{
 	public function actionBackup()	{
-            
+            $comp=  Company::model()->findByPk(Yii::app()->user->Company);
+            $comp->backp();
             
             //if(isset($_POST['name'])){
                 //Yii::import('ext.dumpDB.dumpDB');
-                $dumper = new dbDump();
-                echo $dumper->getDump(true);
-                Yii::app()->end();
+                //$dumper = new dbDump();
+                //echo $dumper->getDump(true);
+                //Yii::app()->end();
            // }
             $this->render('backup',array(
                     //'model'=>$this->loadModel($id),

@@ -54,7 +54,13 @@
             
              <div class="navbar-collapse navbar-ex1-collapse collapse" style="height: 1px;">
                 <?php Yii::app()->bootstrap->register();?>
-                <?php $this->widget('bootstrap.widgets.TbMenu', array('items'=>Yii::app()->user->menu,'htmlOptions'=>array('class'=>'navbar-nav')));?>
+                 <?php 
+                 if(!Yii::app()->user->isGuest){
+			$this->widget('bootstrap.widgets.TbMenu', array('items'=>Yii::app()->user->menu,'htmlOptions'=>array('class'=>'navbar-nav')));
+                }
+                 //array('label'=>Yii::t('app','Logout'), 'url'=>array('/site/Logout')),
+                ?>
+                
             </div>
           </header>
           

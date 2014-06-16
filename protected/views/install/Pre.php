@@ -65,7 +65,7 @@ function send() {
    data:data,
 success:function(data){
                 //alert(data); 
-                $('#content > div').html(data);
+                $('.col-lg-12').html(data);
               },
    error: function(data) { // if error occured
          alert(data);

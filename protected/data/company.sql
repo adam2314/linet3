@@ -1305,11 +1305,6 @@ INSERT INTO `transactionType` (`id`, `name`) VALUES
  ('21', 'DELIVERY');
 
 
-
---
--- Structure for table `transactions`
---
-
 DROP TABLE IF EXISTS `transactions`;
 
 CREATE TABLE `transactions` (
@@ -1331,11 +1326,6 @@ CREATE TABLE `transactions` (
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-
---
--- Structure for table `userIncomeMap`
---
-
 DROP TABLE IF EXISTS `userIncomeMap`;
 
 CREATE TABLE `userIncomeMap` (
@@ -1349,8 +1339,3 @@ KEY `user_id` (`user_id`)
 
 
 SET FOREIGN_KEY_CHECKS=1;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -28,7 +28,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     echo $form->textFieldRow($model,'dbstring',array('class'=>'span5','maxlength'=>255));
     
     
-echo CHtml::submitButton('Previews',array('onclick'=>'send();')); 
+//echo CHtml::submitButton('Previews',array('onclick'=>'send();')); 
 echo CHtml::submitButton('Next',array('onclick'=>'send();')); 
 
  $this->endWidget(); 
@@ -54,7 +54,7 @@ function send() {
          url: '<?php echo Yii::app()->createAbsoluteUrl("install/3"); ?>',
         data:data,
      success:function(data){
-                     $('#content > div').html(data);
+                     $('.col-lg-12').html(data);
                    },
         error: function(data) { // if error occured
               alert(data);

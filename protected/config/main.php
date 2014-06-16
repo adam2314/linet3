@@ -63,6 +63,7 @@ return CMap::mergeArray(
                             'class'=>'application.components.Paypal',
 
                     ),
+                
                     'session' => array (
                             'autoStart' => True,
                             'class' => 'system.web.CDbHttpSession',

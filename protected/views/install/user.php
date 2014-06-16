@@ -1,5 +1,15 @@
 <?php
 
+
+//exit;
+
+
+$this->beginWidget('MiniForm',array(
+    'haeder' => Yii::t("app","Install Wizard"),
+)); 
+
+//$this->renderPartial('application.views.users._form',array('model'=>$model ));
+///*
 $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'user-form',
 	'enableAjaxValidation'=>false,
@@ -15,7 +25,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
         
 	<?php echo $form->textFieldRow($model,'lname',array('class'=>'span5','maxlength'=>80)); ?>
 
-	<?php echo $form->passwordFieldRow($model,'password',array('class'=>'span5','maxlength'=>41)); ?>
+	<?php echo $form->passwordFieldRow($model,'passwd',array('class'=>'span5','maxlength'=>41)); ?>
 
 	<?php echo $form->textFieldRow($model,'lastlogin',array('class'=>'span5')); ?>
 
@@ -31,6 +41,9 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 
         <?php echo $form->dropDownListRow($model,'language',CHtml::listData(Language::model()->findAll(), 'id', 'name'));?>
 
+        <?php echo $form->dropDownListRow($model,'timezone',Timezone::makeList());?>
+        
+        <?php echo $form->textFieldRow($model,'theme');?>
         <div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType'=>'submit',
@@ -39,5 +52,5 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 		)); ?>
 	</div>
         
-        
+   <?php $this->endWidget(); //*/?>     
 <?php $this->endWidget(); ?>

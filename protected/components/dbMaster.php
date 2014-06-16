@@ -9,17 +9,82 @@
  *           $dumper->getDump();
  * </pre>
  */
-class dbDump{
+class dbMaster{
 
         private $constraints;
 
+        private function prefixMe($sqlCmd, $prefix) {
+        $rplcArr = array(
+            'DROP TABLE IF EXISTS `',
+            'CREATE TABLE `',
+            'INSERT INTO `',
+            'ALTER TABLE ',
+            ') REFERENCES `',
+            '` ON `',
+            'CREATE INDEX `',
+        );
+
+        foreach($rplcArr as $niddle){
+            $sqlCmd = str_replace($niddle, $niddle. $prefix, $sqlCmd);
+        }
+
+        return $sqlCmd;
+    }
+
+    public function loadFile($filename, $prefix='') {
+        if (file_exists($filename)) {
+            $sqlCmd = file_get_contents($filename);
+            if ($prefix != '') {
+                $sqlCmd = $this->prefixMe($sqlCmd, $prefix);
+            }
+
+
+            $transaction = Yii::app()->db->beginTransaction();
+            try {
+                $sqlArray = explode(";\n", $sqlCmd);
+                foreach ($sqlArray as $line) {
+
+                    Yii::app()->db->createCommand($line.";")->execute();
+                }
+
+
+                $transaction->commit();
+            } catch (Exception $e) { // an exception is raised if a query fails
+                $transaction->rollback();
+                $message = $e->getMessage();
+                echo $line."<br />";
+                print $message;
+                Yii::app()->end();
+            }
+        } else {
+            return false;
+        }
+    }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         /**
          * Dump all tables
          * @param boolean $download - if the generated data is to be sent to browser 
          * @return file|strings 
          */
-	public function getDump($download = TRUE){
+	public function getDump($download = TRUE,$prefix=''){
 		ob_start();
                 //echo Yii::app()->db->tablePrefix;
                 //Yii::app()->end();
@@ -28,8 +93,8 @@ class dbDump{
                     //echo Yii::app()->db->tablePrefix;
                     //echo strpos($key,Yii::app()->db->tablePrefix)===true;
                     //echo strpos($key,Yii::app()->db->tablePrefix);
-                    if(Yii::app()->db->tablePrefix!=''){
-                        if((strpos($key,Yii::app()->db->tablePrefix)===0))
+                    if($prefix=''){
+                        if((strpos($key,$prefix)===0))
                             $this->dumpTable($key);
                     }else{
                         $this->dumpTable($key);
