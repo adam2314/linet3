@@ -17,7 +17,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 )); 
 
 
-   $option = array('sqlite'=>'Sqlite', 'mysql'=>'Mysql');
+   $option = array( 'mysql'=>'Mysql');//'sqlite'=>'Sqlite',
     echo $form->radioButtonList($model,'dbtype',$option,array('separator'=>' '));
 
     
@@ -67,11 +67,11 @@ function send() {
 function strChange () {
     var value=$('input[name="InstallConfig[dbtype]"]:checked').val();
     var str;
-    if(value=='sqlite'){
-        str='sqlite:protected/data/'+$("#InstallConfig_dbname").val();
-    }else{
+    //if(value=='sqlite'){
+    //    str='sqlite:protected/data/'+$("#InstallConfig_dbname").val();
+    //}else{
         str='mysql:host='+$("#InstallConfig_dbhost").val()+';dbname='+$("#InstallConfig_dbname").val();
-    }    
+    //}    
     $("#InstallConfig_dbstring").val(str);
  
 }
