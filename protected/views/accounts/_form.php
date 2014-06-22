@@ -8,7 +8,7 @@
 
     <?php echo $form->errorSummary($model); ?>
 
-    <div class="col-md-6">
+    <div class="col-md-4">
         <?php echo $form->textFieldRow($model,'name',array('class'=>'span5','maxlength'=>200)); ?>
         <?php echo $form->dropDownListRow($model,'type',CHtml::listData(Acctype::model()->findAll(), 'id', 'name')); ?>
         <br />
@@ -38,7 +38,7 @@
         <?php echo $form->textFieldRow($model,'department',array('class'=>'span5','maxlength'=>60)); ?>
         <?php echo $form->textFieldRow($model,'vatnum',array('class'=>'span5','maxlength'=>20)); ?>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         <?php echo $form->textFieldRow($model,'email',array('class'=>'span5','maxlength'=>50)); ?>
         <?php echo $form->textFieldRow($model,'phone',array('class'=>'span5','maxlength'=>20)); ?>
         <?php echo $form->textFieldRow($model,'dir_phone',array('class'=>'span5','maxlength'=>20)); ?>
@@ -64,7 +64,7 @@
              $this->endWidget(); ?>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-4">
         
     
     <?php

@@ -18,9 +18,13 @@ class Company extends mainRecord {
         } else {
             
         }
+
         Yii::app()->db->setActive(false);
         Yii::app()->db->connectionString = $database->string;
         Yii::app()->db->tablePrefix = $database->prefix;
+        Yii::app()->db->username = $database->user;
+        Yii::app()->db->password = $database->password;
+        Yii::app()->db->charset = 'utf8';
         Yii::app()->db->setActive(true);
 
         if (!isset(Yii::app()->user->settings)) { //adam: shuld be cached in memory
@@ -35,6 +39,8 @@ class Company extends mainRecord {
             Yii::app()->user->setState('settings', $settings);
             Yii::app()->user->setState('menu', Menu::model()->buildUserMenu());
         }
+        
+        
     }
 
     public function select($id) {
@@ -43,6 +49,12 @@ class Company extends mainRecord {
         Yii::app()->user->setState('Company', 1);
         unset(Yii::app()->user->settings);
         $this->loadComp($database);
+
+        //need to chk user income map save
+        $user=User::model()->findByPk(Yii::app()->user->id);
+        $user->save();
+        
+        //exit;
     }
 
     public function delete() {
@@ -240,20 +252,27 @@ class Company extends mainRecord {
     }
 
     public function getName() {
-        $oldName = Yii::app()->db->connectionString;
-        $oldPrefix = Yii::app()->db->tablePrefix;
-
-        Yii::app()->db->setActive(false);
-        Yii::app()->db->connectionString = $this->string;
-        Yii::app()->db->tablePrefix = $this->prefix;
-        Yii::app()->db->setActive(true);
+        //$oldName = Yii::app()->db->connectionString;
+        //$oldPrefix = Yii::app()->db->tablePrefix;
+        //Yii::app()->db->setActive(false);
+        //Yii::app()->db->connectionString = $this->string;
+        //Yii::app()->db->tablePrefix = $this->prefix;
+        //Yii::app()->db->setActive(true);
+        //$database = Yii::app()->user->Database;
+        //Yii::app()->user->setState('Company', 1);
+        $this->select($this->id);
 
         Settings::model()->refreshMetaData();
         $name = Settings::model()->findByPk('company.name')->value;
-        Yii::app()->db->setActive(false);
-        Yii::app()->db->connectionString = $oldName;
-        Yii::app()->db->tablePrefix = $oldPrefix;
-        Yii::app()->db->setActive(true);
+
+        //$this->select($database->id);
+        //Yii::app()->user->setState('Company', 0);
+        // Yii::app()->user->Database=$database;
+        
+        //Yii::app()->db->setActive(false);
+        //Yii::app()->db->connectionString = $oldName;
+        //Yii::app()->db->tablePrefix = $oldPrefix;
+        //Yii::app()->db->setActive(true);
 
         return $name;
     }

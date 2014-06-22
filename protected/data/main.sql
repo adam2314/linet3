@@ -52,6 +52,8 @@ CREATE TABLE IF NOT EXISTS `databases` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `string` varchar(255) NOT NULL,
   `prefix` varchar(255) NOT NULL,
+`user` varchar(255) NOT NULL,
+`password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=138 ;
 

@@ -1,5 +1,4 @@
 <?php
-
 return array(
     'language' => 'he_il',
     'params' => array(
@@ -7,9 +6,9 @@ return array(
     ),
     'components' => array(
         'db' => array(
-            'connectionString' => 'mysql:host=localhost;dbname=lin1etnow',
-            'username' => 'root',
-            'password' => 'VBy7t6r5',
+            'connectionString' => 'mysql:host=localhost;dbname=linetnow',
+                        'username' => 'root',
+                        'password' => 'VBy7t6r5',
             'emulatePrepare' => true,
             'charset' => 'utf8',
             'tablePrefix' => '',
@@ -17,9 +16,9 @@ return array(
             'class' => 'CDbConnection'
         ),
         'dbMain' => array(
-            'connectionString' => 'mysql:host=localhost;dbname=li1netnow',
-            'username' => 'root',
-            'password' => 'VBy7t6r5',
+            'connectionString' => 'mysql:host=localhost;dbname=linetnow',
+                        'username' => 'root',
+                        'password' => 'VBy7t6r5',
             'emulatePrepare' => true,
             'charset' => 'utf8',
             'tablePrefix' => '',

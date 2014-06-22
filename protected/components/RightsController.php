@@ -44,12 +44,18 @@ class RightsController extends RController{
         
         
 	public function init()	{
+            /*
+            if(!isset(Yii::app()->user->Company)){
+               Yii::app()->user->setState('Company',0);
+            }*/
                 if(Yii::app()->user->Company==0){
                     if(Yii::app()->controller->id!='company'){
                         //print "'".Yii::app()->controller->id."'";
                         $this->redirect(Yii::app()->createAbsoluteUrl('company/index'));
                         Yii::app()->end();
                     }
+                }else{
+                    Company::model()->loadComp();
                 }       
                 
                 

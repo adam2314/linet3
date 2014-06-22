@@ -86,12 +86,15 @@ return CMap::mergeArray(
                     'showScriptName' => false,
                     'rules' => array(
                         '' => 'company/index',
-                        'api/login' => 'api/login',
-                        'api/logout' => 'api/logout',
+                        'api/login' => 'site/login',
+                        'api/logout' => 'site/logout',
+                        
                         'api/select/<id:\d+>' => 'api/select',
+                        'api/search/<model:\w+>' => 'api/search',
+                        
                         array('api/list', 'pattern' => 'api/<model:\w+>', 'verb' => 'GET'),
                         array('api/view', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'GET'),
-                        array('api/update', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'PUT'),
+                        array('api/update', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'POST'),
                         array('api/delete', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'DELETE'),
                         array('api/create', 'pattern' => 'api/<model:\w+>', 'verb' => 'POST'),
                         //'minify/<group:[^\/]+>'=>'minify/index',

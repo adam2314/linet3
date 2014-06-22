@@ -793,7 +793,7 @@ DROP TABLE IF EXISTS "databases";
 
 
 
-CREATE TABLE `databases` (  `id` INTEGER PRIMARY KEY AUTOINCREMENT,  `string` varchar(255) NOT NULL,  `prefix` varchar(255) NOT NULL);
+CREATE TABLE `databases` (  `id` INTEGER PRIMARY KEY AUTOINCREMENT,  `string` varchar(255) NOT NULL,  `prefix` varchar(255) NOT NULL, `user` varchar(255) NOT NULL, `password` varchar(255) NOT NULL,);
 
 DROP TABLE IF EXISTS "databasesPerm";
 

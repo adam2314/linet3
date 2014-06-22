@@ -23,6 +23,7 @@ class basicRecord extends CActiveRecord{
     
     
     
+
     protected function fieldvalue($str,$type,$action){
 	switch ($type){
 		case "date":
