@@ -31,42 +31,53 @@ $this->widget('zii.widgets.jui.CJuiTabs', array(
 ));
 $this->endWidget();
 ?>
-<script type="text/javascript" src="/linet3/assets/4401c650/gridview/jquery.yiigridview.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->createAbsoluteUrl('/assets/8b529727/jquery.ba-bbq.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->createAbsoluteUrl('/assets/460bb703/gridview/jquery.yiigridview.js'); ?>"></script>
 
 <script type="text/javascript">
 
     $('.sort-link').live("click",
             function(e) {
-                //console.log($(this).parent().parent().parent().parent().parent().attr("id"));
-                var str = $(this).parent().parent().parent().parent().parent().attr("id");
+                var id=($(this).parent().parent().parent().parent().parent().attr("id"));
                 
-                $.post($(this).attr("href"), function(data) {
-                    //console.log(str);
-
-                    $("#" + str).parent().html(data);
-                });
-
+                $.fn.yiiGridView.update(id);
+                $('#'+id).yiiGridView('update', {url: $(this).attr('href')});
+                
                 return false;
             }
     );
-
-    $('.filter-container > input').live("blur",
+  
+/*
+    $('.filter-container > input').on("change",
             function(e) {
-                var value = $(this).val();
-                var fName = $(this).attr("name");
+                console.log('a');
+                
+                $(this).trigger( "change.yiiGridView" );
+                /*
+                //var value = $(this).val();
+                //var fName = $(this).attr("name");
                 var id = $(this).parent().parent().parent().parent().parent().parent().attr("id");
                 var aType = id.replace("accounts-grid", "");
                 var obj = {};
                 var href = "<?php echo $this->createUrl('/accounts/index'); ?>?ajax=accounts-grid&type=" + aType;
                 
-                obj[fName] = value;
+                
+                $( "input[name^='Accounts']" ).each( function(){
+                     obj[$( this ).attr("name")]=$( this ).val();
+        
+                }
+                        
+                );
+                
+                //fName] = value;
   
                 $.post(href, obj, function(data) {
-                    $("#" + id).html(data);
-                });
-                return false;
-            });
-
+                    console.log($(data).first().first());
+                    $("#" + id+" > table > tbody").html();
+                });*/
+                //return false;
+            //});
+//*/
     $('a.delete').live("click",
             function() {
                 if (!confirm('Are you sure you want to delete this item?'))

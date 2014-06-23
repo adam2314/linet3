@@ -12,6 +12,18 @@ class Company extends mainRecord {
 
     const table = 'databases';
 
+    public function loadSettings() {
+        //load also income maps
+        $temp = Settings::model()->findAll();
+        $settings = array();
+        foreach ($temp as $key) {
+            $settings[$key->id] = $key->value;
+        }
+
+        Yii::app()->user->setState('settings', $settings);
+        Yii::app()->user->setState('menu', Menu::model()->buildUserMenu());
+    }
+
     public function loadComp($database = '') {
         if ($database == '') {
             $database = Yii::app()->user->Database;
@@ -29,18 +41,8 @@ class Company extends mainRecord {
 
         if (!isset(Yii::app()->user->settings)) { //adam: shuld be cached in memory
             //echo 'run';
-            //load also income maps
-            $temp = Settings::model()->findAll();
-            $settings = array();
-            foreach ($temp as $key) {
-                $settings[$key->id] = $key->value;
-            }
-
-            Yii::app()->user->setState('settings', $settings);
-            Yii::app()->user->setState('menu', Menu::model()->buildUserMenu());
+            $this->loadSettings();
         }
-        
-        
     }
 
     public function select($id) {
@@ -51,9 +53,9 @@ class Company extends mainRecord {
         $this->loadComp($database);
 
         //need to chk user income map save
-        $user=User::model()->findByPk(Yii::app()->user->id);
+        $user = User::model()->findByPk(Yii::app()->user->id);
         $user->save();
-        
+
         //exit;
     }
 
@@ -101,7 +103,7 @@ class Company extends mainRecord {
 
         $master = new dbMaster();
         //$master->loadFile($yiiBasepath . "/data/company-lite.sql", Yii::app()->db->tablePrefix);
-        $master->loadFile($yiiBasepath."/data/company.sql", Yii::app()->db->tablePrefix);
+        $master->loadFile($yiiBasepath . "/data/company.sql", Yii::app()->db->tablePrefix);
         $master->loadFile($yiiBasepath . "/data/company-data.sql", Yii::app()->db->tablePrefix);
     }
 
@@ -268,7 +270,6 @@ class Company extends mainRecord {
         //$this->select($database->id);
         //Yii::app()->user->setState('Company', 0);
         // Yii::app()->user->Database=$database;
-        
         //Yii::app()->db->setActive(false);
         //Yii::app()->db->connectionString = $oldName;
         //Yii::app()->db->tablePrefix = $oldPrefix;

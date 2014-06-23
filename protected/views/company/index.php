@@ -95,8 +95,18 @@ echo Yii::t('app',"Select Company");
 ?>
                         
                     
+                        <div class="form-actions">
+                            <?php $this->widget('bootstrap.widgets.TbButton', array(
+                                    //'buttonType'=>'submit',
+                                    'url'=>array('/company/admin'),
+                                    'type'=>'primary',
+                                    'label'=>Yii::t('app','Admin'),
+                                'htmlOptions'=>array(
+                                    'class'=>"btn btn-lg btn-primary btn-block"
+                                    ),
+                            )); ?>
+                    </div>      
                         
-                        <a href="<?php echo Yii::app()->createAbsoluteUrl('/company/admin');?>"><?php echo Yii::t('app','Admin');?></a>
                         
                 </div><!-- tab-pane -->
             </div><!-- tab-content -->

@@ -7,6 +7,7 @@
 
 	
         <?php echo $form->dropDownListRow($user,'user_id',CHtml::listData(User::model()->findAll(), 'id', 'username')); ?>
+<br />
 	<?php echo $form->textFieldRow($user,'level_id'); ?>
 
 	<div class="form-actions">

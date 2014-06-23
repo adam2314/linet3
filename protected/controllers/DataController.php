@@ -128,8 +128,10 @@ class DataController extends RightsController{
                     throw new CHttpException(404,'The requested page does not exist.');
             }
             //$configPath=Yii::app()->user->settings["company.path"];
-            $file   = $model->getFullPath();//????.$model->id;
+            $file   = $model->getFullPath().$model->id;//????.$model->id;
 
+            
+            //echo $file.'end';
             return Yii::app()->getRequest()->sendFile($model->name, file_get_contents($file));
         }
         

@@ -47,10 +47,10 @@ class CompanyController extends RightsController{
 
         if(Yii::app()->user->Company!=0){
             Yii::app()->user->setState('Company',0);
-            Yii::app()->user->Company=0;
+            //Yii::app()->user->Company=0;
 
-            $this->redirect('company');
-            Yii::app()->end();
+            //$this->redirect('company');
+            //Yii::app()->end();
         }
 
         $model=new Company('search');

@@ -272,9 +272,7 @@ class Accounts extends fileRecord{//CActiveRecord
 		);
 	}
 	
-        public function vatnumVal($attribute,$params)
-        {
-            return;
+        public function vatnumVal($attribute,$params) {
             $counter = 0;
             for ($i = 0; $i<strlen($this->$attribute); $i++)  { 
                     $digi = substr($this->$attribute, $i,1);  

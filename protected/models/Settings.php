@@ -26,9 +26,10 @@ class Settings extends basicRecord{
                 $configPath=Yii::app()->user->settings["company.path"];
                         
                 
-
+                
                  $a= CUploadedFile::getInstanceByName('Settings['.$this->id.'][value]');
                 if($a){
+                    //exit;
                     $this->value=$a;
                     $ext = $this->value->extensionName;
 
@@ -160,7 +161,7 @@ class Settings extends basicRecord{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, value', 'required'),
+			array('id', 'required'),
 			array('id', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

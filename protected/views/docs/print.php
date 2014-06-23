@@ -9,7 +9,7 @@
         <tr>
                 <td colspan="3" width="650">
                 <h3><?php echo Yii::app()->user->settings['company.name']; ?></h3><br />
-                <?php echo Yii::app()->user->settings['company.address']; ?>, <?php echo Yii::app()->user->settings['company.city']; ?> ,<?php echo Yii::app()->user->settings['company.postal']; ?><br />
+                <?php echo Yii::app()->user->settings['company.address']; ?>, <?php echo Yii::app()->user->settings['company.city']; ?> ,<?php echo Yii::app()->user->settings['company.zip']; ?><br />
                 <?php echo Yii::t('app','Phone'); ?>: <?php echo Yii::app()->user->settings['company.phone']; ?><br />
                 <?php echo Yii::t('app','Fax'); ?>: <?php echo Yii::app()->user->settings['company.fax']; ?><br />
                 <?php echo Yii::app()->user->settings['company.website']; ?><br />

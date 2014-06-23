@@ -255,7 +255,7 @@ CREATE TABLE `files` (
   `name` varchar(255) NOT NULL,
   `path` varchar(255) NOT NULL,
   `public` tinyint(1) NOT NULL,
-  `parent_id` int(11) DEFAULT NULL,
+  `parent_id` int(255) DEFAULT NULL,
   `parent_type` varchar(255) DEFAULT NULL,
   `date` timestamp NOT NULL ,
   `expire` int(11) NOT NULL,

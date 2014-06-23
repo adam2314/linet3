@@ -16,7 +16,7 @@ $('.search-form form').submit(function(){
 
 
 $this->widget('bootstrap.widgets.TbGridView', array(
-	'id'=>'accounts-grid'.$model->type,
+	'id'=>'accounts'.$model->type.'-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
         'template' => '{items}{pager}',
@@ -85,8 +85,8 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 
 
 
-jQuery('#accounts-grid0').yiiGridView({
-    'ajaxUpdate':['1','accounts-grid0'],
+jQuery('#accounts<?php echo $model->type;?>-grid').yiiGridView({
+    'ajaxUpdate':['1','accounts<?php echo $model->type;?>-grid'],
     'ajaxVar':'ajax',
     'pagerClass':'pagination',
     'loadingClass':'grid-view-loading',
@@ -99,21 +99,21 @@ jQuery('#accounts-grid0').yiiGridView({
     'ajaxType':'POST',
     'pageVar':'Accounts_page'
     });
+    //*/
     
     
-    /*
 
     
 
-jQuery(document).on('click','#accounts-grid0 a.delete',function() {
+jQuery(document).on('click','#accounts0-grid a.delete',function() {
 	if(!confirm('Are you sure you want to delete this item?')) return false;
 	var th = this,
 		afterDelete = function(){};
-	jQuery('#accounts-grid0').yiiGridView('update', {
+	jQuery('#accounts0-grid').yiiGridView('update', {
 		type: 'POST',
 		url: jQuery(this).attr('href'),
 		success: function(data) {
-			jQuery('#accounts-grid0').yiiGridView('update');
+			jQuery('#accounts0-grid').yiiGridView('update');
 			afterDelete(th, true, data);
 		},
 		error: function(XHR) {
@@ -121,7 +121,7 @@ jQuery(document).on('click','#accounts-grid0 a.delete',function() {
 		}
 	});
 	return false;
-});*/
+});//*/
 
 
 

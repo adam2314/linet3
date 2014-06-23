@@ -86,16 +86,22 @@ return CMap::mergeArray(
                     'showScriptName' => false,
                     'rules' => array(
                         '' => 'company/index',
-                        'api/login' => 'api/login',
-                        'api/logout' => 'api/logout',
-                        'api/select/<id:\d+>' => 'api/select',
-                        'api/search/<model:\w+>' => 'api/search',
+                        //'api/login' => 'api/login',
+                        //'api/logout' => 'api/logout',
+                        //'api/select/<id:\d+>' => 'api/select',
+                        //'api/search/<model:\w+>' => 'api/search',
                         
-                        array('api/list', 'pattern' => 'api/<model:\w+>', 'verb' => 'GET'),
-                        array('api/view', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'GET'),
-                        array('api/update', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'POST'),
-                        array('api/delete', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'DELETE'),
-                        array('api/create', 'pattern' => 'api/<model:\w+>', 'verb' => 'POST'),
+                        //array('api/list', 'pattern' => 'api/<model:\w+>', 'verb' => 'GET'),
+                        //array('api/view', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'GET'),
+                        //array('api/update', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'POST'),
+                        //array('api/delete', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'DELETE'),
+                        //array('api/create', 'pattern' => 'api/<model:\w+>', 'verb' => 'POST'),
+                        
+                        
+                        
+                        
+                        
+                        
                         //'minify/<group:[^\/]+>'=>'minify/index',
                         //'<controller:\w+>/<id:\d+>'=>'<controller>/view',
                         '<controller:\w+>/create/<type:\d+>' => '<controller>/create', //mainly for doc, acc,outcome creating
