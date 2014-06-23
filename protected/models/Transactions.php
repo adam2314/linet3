@@ -66,7 +66,7 @@ class Transactions extends basicRecord{
     }
     
     
-    public function getOptAcc(){
+    public function getOptAccId(){
         
         $criteria=new CDbCriteria;
         $criteria->condition="num = :num";
@@ -98,6 +98,14 @@ class Transactions extends basicRecord{
         
         return $retacc;
     }
+    
+    public function getOptAccName(){
+        $id=$this->getOptAccId();
+        $model=Accounts::model()->findByPk($id);
+        if($model===null) return $id;
+        return $model->name;
+    }
+    
     private function newNum(){
         if($this->num==0){
             //$model=Yii::app()->user->settings['company.transaction'];
@@ -208,6 +216,7 @@ class Transactions extends basicRecord{
 		return array(
                     'Type'=>array(self::BELONGS_TO, 'TransactionType', 'type'),
                     //'docStatus'=>array(self::BELONGS_TO, 'Docstatus', array('status','doctype')),
+                    'Account' => array(self::BELONGS_TO, 'Accounts', 'account_id'),
                     'Owner' => array(self::BELONGS_TO, 'Users', 'owner_id'),
 		);
 	}

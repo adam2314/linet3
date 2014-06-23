@@ -86,9 +86,8 @@ return CMap::mergeArray(
                     'showScriptName' => false,
                     'rules' => array(
                         '' => 'company/index',
-                        'api/login' => 'site/login',
-                        'api/logout' => 'site/logout',
-                        
+                        'api/login' => 'api/login',
+                        'api/logout' => 'api/logout',
                         'api/select/<id:\d+>' => 'api/select',
                         'api/search/<model:\w+>' => 'api/search',
                         

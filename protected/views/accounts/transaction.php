@@ -25,7 +25,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 	            'name' => 'Oppt Acc',
 	            //'type' => 'raw',
 
-                    'value'=>'CHtml::link(CHtml::encode($data->getOptAcc()),Yii::app()->createAbsoluteUrl("/accounts/transaction/id/".$data->getOptAcc()))',
+                    'value'=>'CHtml::link(CHtml::encode($data->getOptAccName()),Yii::app()->createAbsoluteUrl("/accounts/transaction/id/".$data->getOptAccId()))',
                     'type'=>'raw',
   
 	            //'value' => '$data->getOptAcc()',

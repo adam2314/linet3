@@ -99,7 +99,12 @@ jQuery('#accounts-grid0').yiiGridView({
     'ajaxType':'POST',
     'pageVar':'Accounts_page'
     });
-/*
+    
+    
+    /*
+
+    
+
 jQuery(document).on('click','#accounts-grid0 a.delete',function() {
 	if(!confirm('Are you sure you want to delete this item?')) return false;
 	var th = this,

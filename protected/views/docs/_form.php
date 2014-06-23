@@ -158,6 +158,7 @@
   ?>
     <?php 
 if(!$model->isNewRecord){
+    echo "<h2>" . Yii::t('app','Attached files') . "</h2>";
     $files=new Files('search');
     $files->unsetAttributes();
     $files->parent_type=get_class($model);

@@ -8,7 +8,7 @@ RewriteEngine on
 #NOTE: 
 #If your application is in a folder, for example "application". Then, changing the "application" folder name, will require you to reset the RewriteBase /[your app folder]
 #RewriteBase /
-RewriteBase /linet3.0/
+RewriteBase /linet3/
 # if a directory or a file exists, use it directly
 RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]

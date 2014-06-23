@@ -48,7 +48,14 @@ class Accounts extends fileRecord{//CActiveRecord
         }
         
         
-        
+        public function getSrcTax($id){
+            $model= Accounts::model()->findByPk($id);
+            if($model===null){
+                return false;
+            }else{
+                $model->src_tax;
+            }
+        }
         
         
         public function openfrmt($line){

@@ -3,7 +3,7 @@
 class Linet3 {
 
     public static function beginRequest(CEvent $event) {
-
+//Yii::app()->user->logout();
         //if (!isset(Yii::app()->user->install)) {//new install?
             
             //if (!Yii::app()->params['newInstall']) {//install process

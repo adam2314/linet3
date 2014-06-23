@@ -34,16 +34,7 @@ class InstallConfig extends CFormModel {
         fwrite($handle, $new);
         fclose($handle);
 
-
-
         //make main db
-        
-
-        
-
-
-
-
         try {
             Yii::app()->db->setActive(false);
             Yii::app()->db->connectionString = $this->dbstring;

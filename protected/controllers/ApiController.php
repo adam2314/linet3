@@ -37,6 +37,8 @@ class ApiController extends Controller {//RightsController
         'acchist'=>'AccHist',
         'docs' => 'Docs',
         'docctype' => 'Doctype',
+        'docdetails'=>'Docdetails',
+        'doccheques' => 'Doccheques',
         'item' => 'Item',
         'itemcategory' => 'Itemcategory',
         'inventoryitem' => 'InventoryItem',

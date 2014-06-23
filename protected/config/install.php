@@ -6,7 +6,7 @@ return array(
     ),
     'components' => array(
         'db' => array(
-            'connectionString' => 'mysql:host=localhost;dbname=linetnow',
+            'connectionString' => 'mysql:host=localhost;dbname=linetmain',
                         'username' => 'root',
                         'password' => 'VBy7t6r5',
             'emulatePrepare' => true,
@@ -16,7 +16,7 @@ return array(
             'class' => 'CDbConnection'
         ),
         'dbMain' => array(
-            'connectionString' => 'mysql:host=localhost;dbname=linetnow',
+            'connectionString' => 'mysql:host=localhost;dbname=linetmain',
                         'username' => 'root',
                         'password' => 'VBy7t6r5',
             'emulatePrepare' => true,

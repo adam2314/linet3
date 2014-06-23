@@ -100,8 +100,8 @@ class Company extends mainRecord {
 
 
         $master = new dbMaster();
-        $master->loadFile($yiiBasepath . "/data/company-lite.sql", Yii::app()->db->tablePrefix);
-        //$master->loadFile($yiiBasepath."/data/company.sql", Yii::app()->db->tablePrefix);
+        //$master->loadFile($yiiBasepath . "/data/company-lite.sql", Yii::app()->db->tablePrefix);
+        $master->loadFile($yiiBasepath."/data/company.sql", Yii::app()->db->tablePrefix);
         $master->loadFile($yiiBasepath . "/data/company-data.sql", Yii::app()->db->tablePrefix);
     }
 
