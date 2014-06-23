@@ -28,14 +28,8 @@ class UserIdentity extends CUserIdentity
 			$this->_id=$user->id;
 			$this->username=$user->username;
 			$this->errorCode=self::ERROR_NONE;
-                        $this->setState('certpasswd', $user->certpasswd);
-                        $this->setState('language', $user->language);
-                        $this->setState('timezone', $user->timezone);
-                        $this->setState('theme', $user->theme);
-                        $this->setState('fname', $user->fname);
-                        $this->setState('lname', $user->lname);
-                        $this->setState('username', $user->username);
-                        $this->setState('warehouse', $user->warehouse);
+                        $user->loadUser();
+                        
 		}
 		return $this->errorCode==self::ERROR_NONE;
 		/*$users=array(
