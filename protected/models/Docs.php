@@ -416,7 +416,7 @@ class Docs extends fileRecord {
         );
     }
 
-    public function vatnumVal($attribute, $params) {   
+    public function vatnumVal($attribute, $params) {
         $counter = 0;
         for ($i = 0; $i < strlen($this->$attribute); $i++) {
             $digi = substr($this->$attribute, $i, 1);
@@ -497,7 +497,7 @@ class Docs extends fileRecord {
 
         $criteria->compare('id', $this->id, true);
         //$criteria->compare('prefix',$this->prefix,true);
-        $criteria->compare('doctype', $this->doctype, true);
+        $criteria->compare('doctype', $this->doctype);
         $criteria->compare('docnum', $this->docnum, true);
         $criteria->compare('account_id', $this->account_id, true);
         $criteria->compare('company', $this->company, true);
@@ -521,14 +521,23 @@ class Docs extends fileRecord {
 
         if (!empty($this->issue_from) && empty($this->issue_to)) {
             $this->issue_from = date("Y-m-d", CDateTimeParser::parse($this->issue_from, Yii::app()->locale->getDateFormat('yiishort')));
-            $criteria->condition = "issue_date >= '$this->issue_from'";  // date is database date column field
+            
+            $criteria->addCondition("issue_date>=:date_from");
+            $criteria->params[':date_from'] = $this->issue_from;
         } elseif (!empty($this->issue_to) && empty($this->issue_from)) {
             $this->issue_to = date("Y-m-d", CDateTimeParser::parse($this->issue_to, Yii::app()->locale->getDateFormat('yiishort')));
-            $criteria->condition = "issue_date <= '$this->issue_to'";
+            
+            $criteria->addCondition("issue_date>=:date_to");
+            $criteria->params[':date_to'] = $this->issue_to;
         } elseif (!empty($this->issue_to) && !empty($this->issue_from)) {
             $this->issue_from = date("Y-m-d", CDateTimeParser::parse($this->issue_from, Yii::app()->locale->getDateFormat('yiishort')));
             $this->issue_to = date("Y-m-d", CDateTimeParser::parse($this->issue_to, Yii::app()->locale->getDateFormat('yiishort')));
-            $criteria->condition = "issue_date  >= '$this->issue_from' and issue_date <= '$this->issue_to'";
+
+            $criteria->addCondition("issue_date>=:date_from");
+            $criteria->addCondition("issue_date<=:date_to");
+            $criteria->params[':date_from'] = $this->issue_from;
+            $criteria->params[':date_to'] = $this->issue_to;
+            
         }
 
 

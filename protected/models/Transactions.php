@@ -277,40 +277,28 @@ class Transactions extends basicRecord{
                 
                 if(!empty($this->from_date) && empty($this->to_date)) {
                     $date_from=date($phpdbdatetime,CDateTimeParser::parse($this->from_date,$yiidate));
-                    //print $this->from_date.";".$date_from;
-                    
-                   // $criteria->condition = "date >= '".$date_from."'";  // date is database date column field
+
                     $criteria->addCondition("date>=:date_from");
-                    $criteria->params=array(
-                      ':date_from' => $date_from,
-                      
-                    );
-                    
-                    
+                    $criteria->params[':date_from'] = $date_from;
+                                          
                     
                 }elseif(!empty($this->to_date) && empty($this->from_date)) {
                     $date_to=date($phpdbdatetime,CDateTimeParser::parse($this->to_date,$yiidate));
                     //print $this->to_date.";".$date_to;
                     
                     $criteria->addCondition("date>=:date_to");
-                    $criteria->params=array(
-                      
-                        ':date_to' => $date_to
-                    );
-                    
-                    
+                    $criteria->params[':date_to'] = $date_to;
+
                 }elseif(!empty($this->to_date) && !empty($this->from_date)) {
                     $date_from=date($phpdbdatetime,CDateTimeParser::parse($this->from_date,$yiidate));
                     $date_to=date($phpdbdatetime,CDateTimeParser::parse($this->to_date,$yiidate));
                     
-                    
-                    //$criteria->condition = "date  >= '".$date_from."' and date <= '".$date_to."'";
+
                     $criteria->addCondition("date>=:date_from");
                     $criteria->addCondition("date<=:date_to");
-                    $criteria->params=array(
-                      ':date_from' => $date_from,
-                      ':date_to' => $date_to
-                    );
+                    $criteria->params[':date_from'] = $date_from;
+                    $criteria->params[':date_to'] = $date_to;
+
                 }
                 
                 //Yii::app()->end();
