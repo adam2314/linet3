@@ -44,6 +44,13 @@ return CMap::mergeArray(
                 //'localtime'=>array(
                 //    'class'=>'LocalTime',
                 //),
+                
+                'curl' => array(
+                    'class' => 'ext.curl.Curl',
+                    'options' => array(/* additional curl options */),
+                ),
+
+                
                 'Paypal' => array(
                     'class' => 'application.components.Paypal',
                 ),

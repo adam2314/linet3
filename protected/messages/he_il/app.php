@@ -335,5 +335,10 @@ return array (
   'company.tax.irs' => 'דווח מקדמות מס הכנסה',
   'company.tax.vat' => 'דווח מע"מ',
   'Manage Permissons' => 'נהל הרשאות',
+  'Warehouse transaction' => 'תעודת העברה בין מחסנים',
+  'Open Format File' => 'צור קובץ אחיד',
+  'Import Open Format' => 'יבא קובץ אחיד',
+  'Stock transaction' => 'תנועות מלאי',
+  '' => '',
   '' => '',
 );

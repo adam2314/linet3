@@ -505,9 +505,9 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`) VALUES
 (62, 'PCN874', 'data/pcn874', NULL, 57),
 (63, 'Support', NULL, 'glyphicon glyphicon-info-sign', 0),
 (64, 'Update', 'module/update/', NULL, 63),
-(65, 'Paid Support', 'support', NULL, 63),
-(66, 'About', 'about', NULL, 63),
-(67, 'Bag Report', 'bag', NULL, 63),
+(65, 'Paid Support', 'site/support', NULL, 63),
+(66, 'About', 'site/about', NULL, 63),
+(67, 'Bug Report', 'site/bug', NULL, 63),
 (68, 'Warehouse transaction', 'docs/create/15', NULL, 16),
 (69, 'Manage Permissons', 'rights/authItem/permissions', NULL, 1),
 (70, 'Stock transaction', 'reports/stockAction', NULL, 49);

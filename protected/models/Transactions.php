@@ -271,11 +271,12 @@ class Transactions extends basicRecord{
 		$criteria->compare('owner_id',$this->owner_id);
 		$criteria->compare('linenum',$this->linenum);
                 
-                $yiidatetime=Yii::app()->locale->getDateFormat('yiidatetime');
+                //$yiidatetime=Yii::app()->locale->getDateFormat('yiidatetime');
+                $yiidate=Yii::app()->locale->getDateFormat('yiishort');
                 $phpdbdatetime=Yii::app()->locale->getDateFormat('phpdbdatetime');
                 
                 if(!empty($this->from_date) && empty($this->to_date)) {
-                    $date_from=date($phpdbdatetime,CDateTimeParser::parse($this->from_date,$yiidatetime));
+                    $date_from=date($phpdbdatetime,CDateTimeParser::parse($this->from_date,$yiidate));
                     //print $this->from_date.";".$date_from;
                     
                    // $criteria->condition = "date >= '".$date_from."'";  // date is database date column field
@@ -288,7 +289,7 @@ class Transactions extends basicRecord{
                     
                     
                 }elseif(!empty($this->to_date) && empty($this->from_date)) {
-                    $date_to=date($phpdbdatetime,CDateTimeParser::parse($this->to_date,$yiidatetime));
+                    $date_to=date($phpdbdatetime,CDateTimeParser::parse($this->to_date,$yiidate));
                     //print $this->to_date.";".$date_to;
                     
                     $criteria->addCondition("date>=:date_to");
@@ -299,8 +300,8 @@ class Transactions extends basicRecord{
                     
                     
                 }elseif(!empty($this->to_date) && !empty($this->from_date)) {
-                    $date_from=date($phpdbdatetime,CDateTimeParser::parse($this->from_date,$yiidatetime));
-                    $date_to=date($phpdbdatetime,CDateTimeParser::parse($this->to_date,$yiidatetime));
+                    $date_from=date($phpdbdatetime,CDateTimeParser::parse($this->from_date,$yiidate));
+                    $date_to=date($phpdbdatetime,CDateTimeParser::parse($this->to_date,$yiidate));
                     
                     
                     //$criteria->condition = "date  >= '".$date_from."' and date <= '".$date_to."'";
