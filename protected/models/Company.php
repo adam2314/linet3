@@ -54,7 +54,7 @@ class Company extends mainRecord {
 
         //need to chk user income map save
         $user = User::model()->findByPk(Yii::app()->user->id);
-        $user->save();
+        return $user->save();
 
         //exit;
     }

@@ -16,25 +16,25 @@ class ApiController extends Controller {//RightsController
     private $translate = array(
         //'permissionts'
         //'install' => 'Company',   //main
-        'company' => 'Company',     //main
-        'user' => 'User',           //main
-        'language'=>'Language',     //main
-        'acccountry'=>'AccCountry', //main
-        
-        
+        'company' => 'Company', //main
+        'user' => 'User', //main
+        'language' => 'Language', //main
+        'acccountry' => 'AccCountry', //main
+
+
         'AuthAssignment' => 'User', //dual
-        'AuthItem' => 'User',       //dual
-        'AuthItemChild' => 'User',  //dual
+        'AuthItem' => 'User', //dual
+        'AuthItemChild' => 'User', //dual
 
 
         'bankbook' => 'Bankbook',
         'bankname' => 'BankName',
         'settings' => 'Settings',
         'accounts' => 'Accounts',
-        'acctype'=>'Acctype',
-        
-        'accid6111'=>'AccId6111',
-        'acchist'=>'AccHist',
+        'acctype' => 'Acctype',
+
+        'accid6111' => 'AccId6111',
+        'acchist' => 'AccHist',
         'docs' => 'Docs',
         'docctype' => 'Doctype',
         'docdetails'=>'Docdetails',
@@ -45,10 +45,11 @@ class ApiController extends Controller {//RightsController
         'itemunit' => 'Itemunit',
         'itemvatcat' => 'ItemVatCat',
         'userincomemap' => 'UserIncomeMap',
-        'transaction'=>'Transaction',
-        'files'=>'Files',
+        'transaction' => 'Transaction',
+        'files' => 'Files',
     );
-    
+
+
     public function init() {
         if (Yii::app()->user->Company != 0) {
             Company::model()->loadComp();
@@ -58,8 +59,9 @@ class ApiController extends Controller {//RightsController
 
     private function hasAccess($path) {
         //if isGuest() return false
+        return true;
 
-        $arr=  explode('/', $path);
+        $arr = explode('/', $path);
         if (!isset($this->translate[$arr[0]])) {
             return false;
         }
@@ -72,61 +74,103 @@ class ApiController extends Controller {//RightsController
     public function filters() {
         return array();
     }
-    /*
+
+    ///*
+
     public function actionLogin() {
-        if (isset($_POST['FormLogin'])) {
+        $entityBody = CJSON::decode(file_get_contents('php://input'));
+        if (isset($entityBody)) {
+
             $model = new FormLogin;
-            $model->attributes = $_POST['FormLogin'];
+            $model->attributes = $entityBody;
             if ($model->validate() && $model->login()) {
-                echo 'ok';
+                $this->_sendResponse(200, CJSON::encode("ok"));
+            } else {
+                $this->_sendResponse(500, CJSON::encode("not ok"));
+
             }
         }
         Yii::app()->end();
-    }*/
+    }
+
+//*/
+
 
     public function actionSelect($id) {
-
-        Company::model()->select((int) $id);
-        echo "ok";
-        Yii::app()->end();
+        if ($this->hasAccess('/select')) {
+            if (Company::model()->select((int) $id))
+                $this->_sendResponse(200, CJSON::encode("ok"));
+            else {
+                $this->_sendResponse(401, CJSON::encode("not ok"));
+            }
+            Yii::app()->end();
+        }
     }
-/*
+
+///*
+
+
+
+
+
     public function actionLogout() {
         Yii::app()->user->logout();
-        echo "ok";
+        $this->_sendResponse(200, CJSON::encode("ok"));
+
         Yii::app()->end();
-    }*/
+    }
+
+//*/
+
 
     /*
      * 
      * Api List (get without id)
      * 
      */
+/*
 
     private function search($attr, $modelName) {
         $model = new $modelName;
         $find = array();
         foreach ($attr as $var => $value) {
-            if ($model->hasAttribute($var)){
+            if ($model->hasAttribute($var)) {
                 $find[$var] = $value;
             }//else throw unkown field?
-            
+
         }
-        
+
+
         return $modelName::model()->findAllByAttributes($find);
-    }
+    }*/
+
 
     public function actionSearch($model) {
-        if ($this->hasAccess($model.'/list' )) {
-            $modelName = $this->translate[$model];
-            //print_r($_POST);
-            if (isset($_POST[$modelName])) {
 
-                $models = $this->search($_POST[$modelName], $modelName);
+
+        if ($this->hasAccess($model . '/search')) {
+            $modelName = $this->translate[$model];
+            $loadedModel = new $modelName;
+
+
+
+            $entityBody = CJSON::decode(file_get_contents('php://input'));
+            // Try to assign POST values to attributes
+            foreach ($entityBody as $var => $value) {
+                // Does the model have this attribute? If not raise an error
+                $find=array();
+                if ($loadedModel->hasAttribute($var)) {
+                    $find[$var] = $value;
+                    //echo $value;
+                } else
+                    $this->_sendResponse(500, sprintf('Parameter <b>%s</b> is not allowed for model <b>%s</b>', $var, $model));
+
             }
+
+            $models = $modelName::model()->findAllByAttributes($find);
         } else {
             $this->_sendResponse(403, sprintf(
-                            'Error: Mode <b>list</b> is not implemented for model <b>%s</b>', $model));
+                            'Error: Mode <b>Search</b> is not implemented for model <b>%s</b>', $model));
             Yii::app()->end();
         }
 
@@ -146,7 +190,7 @@ class ApiController extends Controller {//RightsController
 
     public function actionList($model) {
         // Get the respective model instance
-        if ($this->hasAccess($model.'/list')) {
+        if ($this->hasAccess($model . '/list')) {
             $modelName = $this->translate[$model];
 
             $models = $modelName::model()->findAll();
@@ -181,7 +225,7 @@ class ApiController extends Controller {//RightsController
         if (!isset($id))
             $this->_sendResponse(403, 'Error: Parameter <b>id</b> is missing');
 
-        if ($this->hasAccess( $model.'/view')) {
+        if ($this->hasAccess($model . '/view')) {
             $modelName = $this->translate[$model];
             $loadedModel = $modelName::model()->findByPk($id);
         } else {
@@ -206,7 +250,7 @@ class ApiController extends Controller {//RightsController
      */
 
     public function actionCreate($model) {
-        if ($this->hasAccess($model.'/create'  )) {
+        if ($this->hasAccess($model . '/create')) {
             $modelName = $this->translate[$model];
             $loadedModel = new $modelName;
         } else {
@@ -217,15 +261,17 @@ class ApiController extends Controller {//RightsController
 
 
 
+        $entityBody = CJSON::decode(file_get_contents('php://input'));
 
         // Try to assign POST values to attributes
-        foreach ($_POST[$modelName] as $var => $value) {
+        foreach ($entityBody as $var => $value) {
             // Does the model have this attribute? If not raise an error
-            if ($loadedModel->hasAttribute($var)){
+            if ($loadedModel->hasAttribute($var)) {
                 $loadedModel->$var = $value;
                 //echo $value;
-            
-            }else
+            } else
+
+
                 $this->_sendResponse(500, sprintf('Parameter <b>%s</b> is not allowed for model <b>%s</b>', $var, $model));
         }
         // Try to save the model
@@ -260,7 +306,7 @@ class ApiController extends Controller {//RightsController
         //$put_vars = CJSON::decode($json, true);  //true means use associative array
 
 
-        if ($this->hasAccess( $model.'/update' )) {
+        if ($this->hasAccess($model . '/update')) {
             $modelName = $this->translate[$model];
             $loadedModel = $modelName::model()->findByPk($id);
         } else {
@@ -276,8 +322,9 @@ class ApiController extends Controller {//RightsController
         if ($loadedModel === null)
             $this->_sendResponse(400, sprintf("Error: Didn't find any model <b>%s</b> with ID <b>%s</b>.", $model, $id));
 
+        $entityBody = CJSON::decode(file_get_contents('php://input'));
         // Try to assign PUT parameters to attributes
-        foreach ($_POST[$modelName] as $var => $value) {
+        foreach ($entityBody as $var => $value) {
             // Does model have this attribute? If not, raise an error
             if ($loadedModel->hasAttribute($var))
                 $loadedModel->$var = $value;
@@ -302,7 +349,7 @@ class ApiController extends Controller {//RightsController
 
     public function actionDelete($model, $id) {
 
-        if ($this->hasAccess($model.'/delete')) {
+        if ($this->hasAccess($model . '/delete')) {
             $modelName = $this->translate[$model];
             $loadedModel = $modelName::model()->findByPk($id);
         } else {
@@ -320,7 +367,7 @@ class ApiController extends Controller {//RightsController
         // Delete the model
         $num = $loadedModel->delete();
         if ($num > 0)
-            $this->_sendResponse(200, $num);    //this is the only way to work with backbone
+            $this->_sendResponse(200, CJSON::encode($num));    //this is the only way to work with backbone
         else
             $this->_sendResponse(500, sprintf("Error: Couldn't delete model <b>%s</b> with ID <b>%s</b>.", $model, $id));
     }
