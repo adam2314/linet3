@@ -3,7 +3,7 @@
 class DataController extends RightsController{
 	public function actionBackup()	{
             $comp=  Company::model()->findByPk(Yii::app()->user->Company);
-            $comp->backp();
+            $comp->backup();
             
             //if(isset($_POST['name'])){
                 //Yii::import('ext.dumpDB.dumpDB');

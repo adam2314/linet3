@@ -3,7 +3,7 @@ $model=new Docs('search');
 $model->unsetAttributes();
 if(isset($_GET['Docsfilter']))
 			$model->attributes=$_GET['Docsfilter'];
-
+//$var=CHtml::link(CHtml::encode($data->docnum),"#", array("onclick"=>'refNum('.CJSON::encode($data).')'));
 $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'docs-grid',
 	'dataProvider'=>$model->search(),
@@ -24,7 +24,7 @@ for (var i=0; i<elements.length; i++) {
                 ),
                 array(
                     'name'=>'docnum', 
-                    'value'=>'CHtml::link(CHtml::encode($data->docnum),"#", array(  "onclick"=>\'refNum("\'.$data->id.\'","\'.$data->docnum.\'","\'.$data->docType->name.\'")\',))',
+                    'value'=>'CHtml::link(CHtml::encode($data->docnum),"#", array("onclick"=>\'refNum(\'.CJSON::encode($data).\')\'));',
                     'type'=>'raw',
                     
                     

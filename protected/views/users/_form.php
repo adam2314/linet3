@@ -35,7 +35,7 @@ $model->password='';
 
         <?php echo $form->dropDownListRow($model,'warehouse',CHtml::listData(Accounts::model()->AutoComplete('',8), 'value', 'label'));?>
     
-
+        <?php echo $form->dropDownListRow($model,'theme',array());?>
 <?php 
 
 

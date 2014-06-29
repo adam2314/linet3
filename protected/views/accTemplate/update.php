@@ -1,26 +1,26 @@
 <?php
 $this->breadcrumbs=array(
-	'Acc Templates'=>array('index'),
-	$model->name=>array('view','id'=>$model->id),
+	Yii::t('app','Account Templates')=>array('index'),
+	$model->name=>array('update','id'=>$model->id),
 	'Update',
 );
 
 $this->menu=array(
-	array('label'=>'List AccTemplate','url'=>array('index')),
-	array('label'=>'Create AccTemplate','url'=>array('create')),
-	array('label'=>'View AccTemplate','url'=>array('view','id'=>$model->id)),
-	array('label'=>'Manage AccTemplate','url'=>array('admin')),
+	array('label'=>Yii::t('app','List Account Templates'),'url'=>array('index')),
+	array('label'=>Yii::t('app','Create Account Templates'),'url'=>array('create')),
+	array('label'=>Yii::t('app','View Account Templates'),'url'=>array('view','id'=>$model->id)),
+	array('label'=>Yii::t('app','Manage Account Templates'),'url'=>array('admin')),
 );
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Update Account Template #").$model->id,
+    'haeder' => Yii::t('app',"Update Account Template")." ".$model->name,
 )); 
 
 ?>
 
 
 
-<?php echo $this->renderPartial('_form',array('model'=>$model)); 
+<?php echo $this->renderPartial('_form',array('model'=>$model,'items'=>$items)); 
  $this->endWidget(); 
 
 ?>

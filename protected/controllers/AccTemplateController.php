@@ -13,7 +13,7 @@ class AccTemplateController extends RightsController
                         $submodel=new AccTemplateItem;
 			$submodel->attributes=$_POST['AccTemplateItem'];
 			if($submodel->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('update','id'=>$model->id));
                         
                             
 		}
@@ -28,7 +28,7 @@ class AccTemplateController extends RightsController
 	{
                 $model=AccTemplate::model()->findByPk($id);
                 
-                $items=AccTemplateItem::model();//->search(array('AccTemplate_id'=>$id));
+                $items=AccTemplateItem::model();
                 $items->AccTemplate_id=$model->id;
 		$this->render('view',array(
 			'model'=>$model,
@@ -51,7 +51,7 @@ class AccTemplateController extends RightsController
 		{
 			$model->attributes=$_POST['AccTemplate'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('update','id'=>$model->id));
 		}
 
 		$this->render('create',array(
@@ -70,16 +70,18 @@ class AccTemplateController extends RightsController
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-
+                $items=AccTemplateItem::model();
+                $items->AccTemplate_id=$model->id;
 		if(isset($_POST['AccTemplate']))
 		{
 			$model->attributes=$_POST['AccTemplate'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('update','id'=>$model->id));
 		}
 
 		$this->render('update',array(
 			'model'=>$model,
+                        'items'=>$items,
 		));
 	}
 

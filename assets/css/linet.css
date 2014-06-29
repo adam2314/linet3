@@ -91,7 +91,7 @@ div.container-fluid.outer{
         
     }
 
-.chosen-container.chosen-with-drop .chosen-drop {
+.chosen-container,.chosen-with-drop .chosen-drop {
   display:block;
 }
 .chosen-container-single.chosen-container-single-nosearch .chosen-search {

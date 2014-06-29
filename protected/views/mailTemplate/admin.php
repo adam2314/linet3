@@ -1,7 +1,7 @@
 <?php
 
 $this->menu=array(
-	array('label'=>Yii::t('app','List Mail Templates'),'url'=>array('index')),
+	//array('label'=>Yii::t('app','List Mail Templates'),'url'=>array('index')),
 	array('label'=>Yii::t('app','Create Mail Templates'),'url'=>array('create')),
 );
 

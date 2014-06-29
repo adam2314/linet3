@@ -10,8 +10,9 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 ?>
 
 
-<table>
+
     <?php
+    $col1=$col='';
     $print =false;
     foreach ($models as $model) {
         if ($model->hidden == 0) {
@@ -23,6 +24,18 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                 $label= Yii::t('app', $model->id) . "</td>";
                 $field=CHtml::dropDownList('Settings[' . $model->id . '][value]', $model->value, $temp) ;
                 
+            } elseif (strpos($model->eavType, "select(") === 0) {
+                $list = str_replace("select(", "", $model->eavType);
+                $list = CJSON::decode(str_replace(")", "", $list));
+                foreach($list as &$item){
+                    //print $item;
+                    $item=Yii::t('app',$item);
+                }
+                //$temp = CHtml::listData(CJSON::decode($list), 'id', 'name');
+                $temp[''] = Yii::t('app', 'None');
+                $label= Yii::t('app', $model->id) . "</td>";
+                $field=CHtml::dropDownList('Settings[' . $model->id . '][value]', $model->value, $list) ;
+                
             } elseif ($model->eavType == 'file') {
 
              
@@ -30,7 +43,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                 $field=
                     CHtml::fileField('Settings[' . $model->id . '][value]', $model->value) .
                     CHtml::hiddenField('Settings[' . $model->id . '][value]', $model->value) .
-                    "<a href='javascript:del();'>".Yii::t('app','Delete')."</a>"   ;
+                    "<a href='javascript:del();'>".Yii::t('app','Delete')."</a><br />"   ;
             } elseif ($model->eavType == 'boolean') {
 
                $label= Yii::t('app', $model->id);
@@ -43,18 +56,22 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                 
             }
             if($print){
-                echo "<tr><td>$label1</td><td>$field1</td><td>$label</td><td>$field</td></tr>";
+                $col.= "<label>$label</label>$field";
                 $print=false;
             }else{
-                $label1=$label;
-                $field1=$field;
+                $col1.= "<label>$label</label>$field";
+                
                 $print=true;
             }
         }
     }
+    
+    echo "<div class='row'><div class='col-md-6'>$col</div><div class='col-md-6'>$col1</div></div>"
+    
+    
     ?>  
 
-</table>
+
     <?php echo CHtml::submitButton(Yii::t('app', "Save")); ?>    
     <?php $this->endWidget(); ?>
 
