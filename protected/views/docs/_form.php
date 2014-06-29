@@ -136,8 +136,8 @@
                 }
                 ?>
             </div>
-                <?php echo CHtml::link('Clear refnum', '#', array('onclick'=>'$("#Docs_refnum").val("");$("#Docsrefnum").html(""); return false;',)); ?>
-                <?php echo CHtml::link('Choose Doc', '#', array('onclick'=>'$("#choseRefDoc").dialog("open"); return false;',)); ?>
+                <?php echo CHtml::link(Yii::t('app','Clear refnum'), '#', array('onclick'=>'$("#Docs_refnum").val("");$("#Docsrefnum").html(""); return false;',)); ?>
+                <?php echo CHtml::link(Yii::t('app','Choose Doc'), '#', array('onclick'=>'$("#choseRefDoc").dialog("open"); return false;',)); ?>
             
                 <?php echo $form->hiddenField($model,'refnum',array('size'=>20,'maxlength'=>20)); ?>
 		<?php echo $form->error($model,'refnum'); ?>
@@ -1129,10 +1129,10 @@ function rcptcalcLines(){
 
 
 <?php
-$this->beginWidget('zii.widgets.jui.CJuiDialog',array(
+$this->beginWidget('zii.widgets.jui.CJuiDialog',array(//
     'id'=>'choseRefDoc',
     'options'=>array(
-        'title'=>'Chose Refernce Documenet',
+        'title'=>Yii::t('app','Chose Refernce Documenet'),
         'autoOpen'=>false,
         'width'=>'600px',
     ),

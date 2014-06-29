@@ -17,15 +17,24 @@ $this->beginWidget('MiniForm', array(
 $types = Acctype::model()->findAll();
 $list = array();
 foreach ($types as $type1)
-    $list[Yii::t('app', $type1->desc)] = array('ajax' => $this->createUrl('accounts/index?ajax=accounts-grid&type=' . $type1->id));
+    $list[Yii::t('app', $type1->desc)] = array(
+        'ajax' => $this->createUrl('accounts/index?ajax=accounts-grid&type=' . $type1->id),
+        'tooltip' =>'',
+            //'ui-tooltip'
+                
+                
+                );
 
 
 $this->widget('zii.widgets.jui.CJuiTabs', array(
     'tabs' => $list,
     // additional javascript options for the tabs plugin
+    'headerTemplate' => '<li><a href="{url}" title="{title}">{title}</a></li>',
     'options' => array(
         'selected' => $type,
     //'class'=>'nav nav-tabs',
+    
+
     //'collapsible' => true,
     ),
 ));

@@ -410,4 +410,19 @@ CREATE TABLE `accCountry` (
   PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `mailTemplate` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `body` text NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `cc` varchar(255) NOT NULL,
+  `bcc` varchar(255) NOT NULL,
+  `entity_type` int(11) NOT NULL,
+  `entity_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+
+
+
 SET FOREIGN_KEY_CHECKS=1;

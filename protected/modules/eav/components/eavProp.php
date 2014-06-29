@@ -39,7 +39,7 @@ class eavProp extends CWidget
     		//var input1 = '<select name=\"{$this->name}_E_'+uid+'\" id=\"{$this->name}_E_'+uid+'\"></select>';
                 var input1 = '$select';
                 var input2 = '<input id=\"{$this->name}_V_'+uid+'\" type=\"text\" value=\"\" name=\"{$this->name}eavV['+uid+']\" />';
-    		var template = '<tr><td>'+input1+'</td><td>'+input2+'</td><td>remove</td></tr>';
+    		var template = '<tr><td>'+input1+'</td><td>'+input2+'</td><td>" . Yii::t('app','Remove'). "</td></tr>';
 			//var place = $(this).parents('.templateFrame:first').children('.templateTarget');
 			//var i = place.find('.rowIndex').length>0 ? place.find('.rowIndex').max()+1 : 0;
 			//template=template.replace(/ABC/g, i);
@@ -57,9 +57,9 @@ class eavProp extends CWidget
 		<table>
 			<tr>
 				
-				<td>prop</td>
-				<td>value</td>
-				<td>action</td>
+				<td>' . Yii::t('app','property'). '</td>
+				<td>' . Yii::t('app','value'). '</td>
+				<td>' . Yii::t('app','action'). '</td>
 			</tr>
 			<tbody id="eavProp">
 		';
@@ -82,7 +82,7 @@ class eavProp extends CWidget
 					
 						<td></td>
 						<td></td>
-						<td><input id="'.$this->name.'_eav_I" type="hidden" value="0" name="eavI" /><a href=\'javascript:newEav();\'>new</a></td>
+						<td><input id="'.$this->name.'_eav_I" type="hidden" value="0" name="eavI" /><a href=\'javascript:newEav();\'>' . Yii::t('app','Add new field'). '</a></td>
 					</tr>
 				</tfoot>
 			</table>

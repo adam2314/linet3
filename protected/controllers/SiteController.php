@@ -52,8 +52,9 @@ class SiteController extends Controller {
      * Displays the contact page
      */
     
-      public function actionSupport()
-      {
+      public function actionSupport()  {
+         $this->redirect("http://www.linet.org.il/support/paid-support");
+         exit;
       $model=new ContactForm;
       if(isset($_POST['ContactForm']))
       {
@@ -101,10 +102,7 @@ class SiteController extends Controller {
         if (isset($_POST['Bug'])) {
             $model->attributes = $_POST['Bug'];
             
-            //echo $model->send();
             $url=$model->send();
-            
-            //exit;
             //$this->redirect();
         }
 
@@ -113,6 +111,16 @@ class SiteController extends Controller {
             'dataProvider'=>$dataProvider,
         ));
     }
+    
+    public function actionAbout() {
+        //$this->layout = '//layouts/clean';
+
+        $this->render('pages/about', array(
+            
+        ));
+    }
+    
+    
 
     /**
      * Logs out the current user and redirect to homepage.

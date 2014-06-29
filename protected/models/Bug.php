@@ -27,7 +27,7 @@ class Bug extends mainRecord {
     public $labels = array();
     private $site = 'https://api.github.com/repos';
     private $owner = 'adam2314';
-    private $project = "tmp";
+    private $project = "linet3";
     private $authUser = 'Linet3GithubApiUser';
     private $authPasswd = '!AllGood123@';
 

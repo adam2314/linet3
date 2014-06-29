@@ -12,6 +12,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 <table>
     <?php
+    $print =false;
     foreach ($models as $model) {
         if ($model->hidden == 0) {
             if (strpos($model->eavType, "list(") === 0) {
@@ -19,38 +20,35 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                 $modelName = str_replace(")", "", $modelName);
                 $temp = CHtml::listData($modelName::model()->findAll(), 'id', 'name');
                 $temp[''] = Yii::t('app', 'None');
-                echo "<tr>";
-                echo "<td>" . Yii::t('app', $model->id) . "</td>";
-                echo "<td>" .
-                    CHtml::dropDownList('Settings[' . $model->id . '][value]', $model->value, $temp) .
-                    "</td>";
-                echo "</tr>";
+                $label= Yii::t('app', $model->id) . "</td>";
+                $field=CHtml::dropDownList('Settings[' . $model->id . '][value]', $model->value, $temp) ;
+                
             } elseif ($model->eavType == 'file') {
 
-                echo "<tr>";
-                echo "<td>" . Yii::t('app', $model->id) . "</td>";
-                echo "<td>" .
+             
+                $label= Yii::t('app', $model->id) . "</td>";
+                $field=
                     CHtml::fileField('Settings[' . $model->id . '][value]', $model->value) .
                     CHtml::hiddenField('Settings[' . $model->id . '][value]', $model->value) .
-                    "<a href='javascript:del();'>".Yii::t('app','Delete')."</a>"
-                    . "</td>";
-                echo "</tr>";
+                    "<a href='javascript:del();'>".Yii::t('app','Delete')."</a>"   ;
             } elseif ($model->eavType == 'boolean') {
 
-                echo "<tr>";
-                echo "<td>" . Yii::t('app', $model->id) . "</td>";
-                echo "<td>" .
-                    CHtml::checkbox('Settings[' . $model->id . '][value]', $model->value) .
-                    CHtml::hiddenField('Settings[' . $model->id . '][value]', $model->value) .
-                    "</td>";
-                echo "</tr>";
+               $label= Yii::t('app', $model->id);
+                
+                $field=     CHtml::checkbox('Settings[' . $model->id . '][value]', $model->value) .
+                    CHtml::hiddenField('Settings[' . $model->id . '][value]', $model->value);
             } else {
-                //echo $form->errorSummary($model); 
-                echo "<tr>";
-                echo "<td>" . Yii::t('app', $model->id) . "</td>";
-
-                echo "<td>" . $form->textField($model, '[' . $model->id . ']value', array('size' => 30, 'maxlength' => 80)) . "</td>";
-                echo "</tr>";
+                $label= Yii::t('app', $model->id) ;
+                $field= $form->textField($model, '[' . $model->id . ']value', array('maxlength' => 80));
+                
+            }
+            if($print){
+                echo "<tr><td>$label1</td><td>$field1</td><td>$label</td><td>$field</td></tr>";
+                $print=false;
+            }else{
+                $label1=$label;
+                $field1=$field;
+                $print=true;
             }
         }
     }

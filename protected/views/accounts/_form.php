@@ -80,6 +80,7 @@
             'accept' => '*', // useful for verifying files
             'duplicate' => 'Duplicate file!', // useful, i think
             'denied' => 'Invalid file type', // useful, i think
+            
         ));
         ?>
         

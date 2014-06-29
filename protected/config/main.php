@@ -44,13 +44,20 @@ return CMap::mergeArray(
                 //'localtime'=>array(
                 //    'class'=>'LocalTime',
                 //),
-                
+                'Smtpmail' => array(
+                    'class' => 'application.extensions.smtpmail.PHPMailer',
+                    'Host' => "smtp.gmail.com",
+                    'Username' => 'your@gmail.com',
+                    'Password' => 'password here',
+                    'Mailer' => 'smtp',
+                    'Port' => 587,
+                    'SMTPAuth' => true,
+                    'SMTPSecure' => 'tls',
+                ),
                 'curl' => array(
                     'class' => 'ext.curl.Curl',
                     'options' => array(/* additional curl options */),
                 ),
-
-                
                 'Paypal' => array(
                     'class' => 'application.components.Paypal',
                 ),
@@ -93,20 +100,15 @@ return CMap::mergeArray(
                     'showScriptName' => false,
                     'rules' => array(
                         '' => 'company/index',
-                        //'api/login' => 'api/login',
-                        //'api/logout' => 'api/logout',
-                        //'api/select/<id:\d+>' => 'api/select',
-                        //'api/search/<model:\w+>' => 'api/search',
-                        
-                        //array('api/list', 'pattern' => 'api/<model:\w+>', 'verb' => 'GET'),
-                        //array('api/view', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'GET'),
-                        //array('api/update', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'POST'),
-                        //array('api/delete', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'DELETE'),
-                        //array('api/create', 'pattern' => 'api/<model:\w+>', 'verb' => 'POST'),
-                        
-                        
-                        
-                        
+                        'api/login' => 'api/login',
+                        'api/logout' => 'api/logout',
+                        'api/select/<id:\d+>' => 'api/select',
+                        'api/search/<model:\w+>' => 'api/search',
+                        array('api/list', 'pattern' => 'api/<model:\w+>', 'verb' => 'GET'),
+                        array('api/view', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'GET'),
+                        array('api/update', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'POST'),
+                        array('api/delete', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'DELETE'),
+                        array('api/create', 'pattern' => 'api/<model:\w+>', 'verb' => 'POST'),
                         
                         
                         //'minify/<group:[^\/]+>'=>'minify/index',
@@ -120,6 +122,8 @@ return CMap::mergeArray(
                         'docs/view/<id:\d+>' => 'docs/view',
                         'download/<id:\d+>' => 'data/download',
                         'download/<company:\w+>/<hash:\d+>' => 'data/downloadpublic',
+                        
+                        '<controller:\w+>/<action:\w+>/<id:\w+>' => '<controller>/<action>',
                     ),
                 ),
                 //'clientScript'=>array(
@@ -148,7 +152,7 @@ return CMap::mergeArray(
                         array(
                             'class' => 'CFileLogRoute',
                             'levels' => 'trace, info, error, warning',
-                        //'categories'=>'app',
+                        'categories'=>'app',
                         //'categories'=>'*',
                         ),
                     /* array(

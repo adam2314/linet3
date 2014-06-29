@@ -461,7 +461,7 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`) VALUES
 (18, 'Werehouses', 'accounts/index/8', 'type=>8', 16),
 (19, 'Categories', 'itemcategory/admin', NULL, 16),
 (20, 'Units', 'itemunit/admin', NULL, 16),
-(21, 'Item Template', 'items/report', NULL, 16),
+(21, 'Item Template', 'itemTemplate/admin', NULL, 16),
 (22, 'Income', '', 'glyphicon glyphicon-thumbs-up', 0),
 (23, 'Proforma', 'docs/create/1', 'type=>1', 22),
 (24, 'Delivery doc.', 'docs/create/2', 'type=>2', 22),
@@ -510,8 +510,9 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`) VALUES
 (67, 'Bug Report', 'site/bug', NULL, 63),
 (68, 'Warehouse transaction', 'docs/create/15', NULL, 16),
 (69, 'Manage Permissons', 'rights/authItem/permissions', NULL, 1),
-(70, 'Stock transaction', 'reports/stockAction', NULL, 49);
-
+(70, 'Stock transaction', 'reports/stockAction', NULL, 49),
+(71, 'Id6111 Admin', 'accId6111/admin', NULL, 1),
+(72, 'Mail Template', 'mailTemplate/admin', NULL, 1);
 INSERT INTO `openformat` (`id`, `description`, `type`, `size`, `record`, `export`, `import`, `type_id`) VALUES
 (1000, 'קוד רשומה', 's', 4, 1, 'A000', 'A000', 'A000'),
 (1001, 'נתנוים עתדיים', 's', 5, 1, 'NA', 'NA', 'A000'),

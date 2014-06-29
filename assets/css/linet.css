@@ -43,7 +43,9 @@ and open the template in the editor.
         display: block;
     }
 }
-
+.user-media{
+    text-align:center;
+}
 .formtable .item_id{
     width:6%;
 }
@@ -370,7 +372,7 @@ input {
 
 @media (min-width: 992px){
     #left {
-        width: 160px;
+        width: 130px;
     }
 }
 

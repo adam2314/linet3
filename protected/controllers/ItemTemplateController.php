@@ -10,7 +10,7 @@ class ItemTemplateController extends RightsController
 		// $this->performAjaxValidation($model);
   
 		if(isset($_POST['ItemTemplateItem'])){
-                        $submodel=new AccTemplateItem;
+                        $submodel=new ItemTemplateItem;
 			$submodel->attributes=$_POST['ItemTemplateItem'];
 			if($submodel->save())
 				$this->redirect(array('view','id'=>$model->id));

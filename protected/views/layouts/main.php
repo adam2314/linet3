@@ -99,8 +99,8 @@
                       </div>
                     </div>
                 </div><!-- /.topnav -->  
-                
-                <a href="<?php echo Yii::app()->createAbsoluteUrl('/settings/dashboard');?>">
+                <br />
+                <a class='block' href="<?php echo Yii::app()->createAbsoluteUrl('/settings/dashboard');?>">
                     <img width="100px" alt="<?php echo Yii::app()->user->settings['company.name']; ?>" src="<?php echo Yii::app()->createAbsoluteUrl("download/".Yii::app()->user->settings['company.logo']);?>">
                     <!--<span class="label user-label">16</span>-->
                 </a>

@@ -33,7 +33,7 @@ $('.search-form form').submit(function(){
 		//'AccType_id',
             array(
                 'name' => 'AccType_id',
-                'value' => '$data->type->name',
+                'value' => 'Yii::t("app",$data->type->desc)',
                ),
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
