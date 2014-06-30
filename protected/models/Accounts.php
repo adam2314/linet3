@@ -53,7 +53,7 @@ class Accounts extends fileRecord{//CActiveRecord
             if($model===null){
                 return false;
             }else{
-                $model->src_tax;
+                return $model->src_tax;
             }
         }
         

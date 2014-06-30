@@ -74,9 +74,10 @@ class Doctype extends CActiveRecord{
 	public function relations()
 	{
 		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
+		// class name for the relations automatically generated below.);
+	
 		return array(
-                    'docStatus'=>array(self::BELONGS_TO, 'Docstatus', 'id'),
+                    'docStatus'=>array(self::BELONGS_TO, 'Docstatus', array('docStatus_id'=>'num','id'=>'doc_type')),
 		);
 	}
 	public function getType($name){
@@ -103,13 +104,13 @@ class Doctype extends CActiveRecord{
 			'id' => Yii::t('labels','ID'),
 			'name' => Yii::t('labels','Name'),
 			'openformat' => Yii::t('labels','Open Format'),
-			'isdoc' => Yii::t('labels','Is Documenet'),
+			'isdoc' => Yii::t('labels','Is Document'),
 			'isrecipet' => Yii::t('labels','Is Recipet'),
 			'iscontract' => Yii::t('labels','Is Contract'),
 			'stockAction' => Yii::t('labels','Stock Action'),
 			'account_type' => Yii::t('labels','Account Type'),
-			'docStatus_id' => Yii::t('labels','Documenet Status'),
-			'last_docnum' => Yii::t('labels','Last Documenet num'),
+			'docStatus_id' => Yii::t('labels','Document Status'),
+			'last_docnum' => Yii::t('labels','Last Document num'),
 		);
 	}
 

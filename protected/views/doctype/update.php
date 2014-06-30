@@ -1,21 +1,19 @@
 <?php
 $this->breadcrumbs=array(
-	'Doctypes'=>array('index'),
+	Yii::t("app","Documenet Type")=>array('admin'),
 	$model->name=>array('view','id'=>$model->id),
-	'Update',
+	Yii::t("app",'Update'),
 );
 
 $this->menu=array(
-	array('label'=>'List Doctype', 'url'=>array('index')),
-	array('label'=>'Create Doctype', 'url'=>array('create')),
-	array('label'=>'View Doctype', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage Doctype', 'url'=>array('admin')),
+	array('label'=>Yii::t("app",'List Doctype'), 'url'=>array('index')),
+	array('label'=>Yii::t("app",'Create Doctype'), 'url'=>array('create')),
+	array('label'=>Yii::t("app",'View Doctype'), 'url'=>array('view', 'id'=>$model->id)),
+	array('label'=>Yii::t("app","Manage Documenet Type"), 'url'=>array('admin')),
 );
 
- $this->beginWidget('MiniForm',array('haeder' => "Manage Currates",)); 
+ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Manage Documenet Type")." ".$model->id,)); 
 ?>
-
-<h1>Update Doctype <?php echo $model->id; ?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); 
 

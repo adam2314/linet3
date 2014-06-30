@@ -382,7 +382,7 @@ return array (
   'Update Mail Template' => 'עדכן תבנית דוא"ל',
   'monthly' => 'חודשי',
   'bi-monthly' => 'דו-חודשי',
-  '' => '',
+  'Credit invoice' => 'חשבונית זיכוי',
   '' => '',
   '' => '',
   '' => '',

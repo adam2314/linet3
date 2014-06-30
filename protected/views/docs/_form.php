@@ -26,23 +26,6 @@ $form = $this->beginWidget('CActiveForm', array(
         <div class="col-md-1">
             <p>
                 <?php echo $form->labelEx($model, 'account_id'); ?>
-                <?php
-                //echo $model->docType->name . ";".Acctype::model()->getType('customers');
-                /*
-                  $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
-                  'name'=>'Docs[account_id]',
-                  'id'=>'Docs_account_id',
-                  'value'=>"$model->account_id",
-                  'source'=>$this->createUrl('/accounts/autocomplete',array('type'=>$model->docType->account_type)),
-                  //'source'=>'/accounts/autocomplete&type='.Acctype::model()->getType('outcomes'),
-                  // additional javascript options for the autocomplete plugin
-                  'options'=>array(
-                  'minLength'=>0,
-                  'showAnim'=>'fold',
-                  ),
-                  ));
-                 */
-                ?>
                 <?php echo $form->dropDownList($model, 'account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => $model->docType->account_type)), 'id', 'name')); ?>
                 <?php echo $form->error($model, 'account_id'); ?>
                 <?php
@@ -59,57 +42,42 @@ $form = $this->beginWidget('CActiveForm', array(
         <div class="col-md-1">
             <div>
                 <?php echo $form->labelEx($model, 'oppt_account_id'); ?>
-                <?php
-                //echo $model->docType->name . ";".Acctype::model()->getType('customers');
-                /*
-                  $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
-                  'name'=>'Docs[oppt_account_id]',
-                  'id'=>'Docs_oppt_account_id',
-                  'value'=>"$model->oppt_account_id",
-                  'source'=>$this->createUrl('/accounts/autocomplete',array('type'=>$model->docType->oppt_account_type)),
-                  'options'=>array(
-                  'minLength'=>0,
-                  'showAnim'=>'fold',
-                  ),
-                  )); */
-                ?>
-
-<?php echo $form->dropDownList($model, 'oppt_account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => $model->docType->oppt_account_type)), 'id', 'name')); ?>
+                <?php echo $form->dropDownList($model, 'oppt_account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => $model->docType->oppt_account_type)), 'id', 'name')); ?>
                 <p></p>
-<?php echo $form->error($model, 'oppt_account_id'); ?>
+                <?php echo $form->error($model, 'oppt_account_id'); ?>
             </div>
         </div>   
         <div class="col-md-2">
             <p>
-<?php echo $form->labelEx($model, 'company'); ?>
-<?php echo $form->textField($model, 'company', array('size' => 30, 'maxlength' => 80)); ?>
-            <?php echo $form->error($model, 'company'); ?>
+                <?php echo $form->labelEx($model, 'company'); ?>
+                <?php echo $form->textField($model, 'company', array('size' => 30, 'maxlength' => 80)); ?>
+                <?php echo $form->error($model, 'company'); ?>
             </p>
         </div>
         <div class="col-md-2">
-<?php echo $form->labelEx($model, 'vatnum'); ?>
-<?php echo $form->textField($model, 'vatnum', array('size' => 10, 'maxlength' => 10)); ?>
-<?php echo $form->error($model, 'vatnum'); ?>
+            <?php echo $form->labelEx($model, 'vatnum'); ?>
+            <?php echo $form->textField($model, 'vatnum', array('size' => 10, 'maxlength' => 10)); ?>
+            <?php echo $form->error($model, 'vatnum'); ?>
         </div>
 
     </div><!--block-->
     <div class="row"><!--Address block-->
         <div class="col-md-3">
-<?php echo $form->labelEx($model, 'address'); ?>
-<?php echo $form->textField($model, 'address', array('size' => 30, 'maxlength' => 80)); ?>
+            <?php echo $form->labelEx($model, 'address'); ?>
+            <?php echo $form->textField($model, 'address', array('size' => 30, 'maxlength' => 80)); ?>
             <?php echo $form->error($model, 'address'); ?>
         </div>
 
         <div class="col-md-2">
-<?php echo $form->labelEx($model, 'city'); ?>
-<?php echo $form->textField($model, 'city', array('size' => 30, 'maxlength' => 40)); ?>
+            <?php echo $form->labelEx($model, 'city'); ?>
+            <?php echo $form->textField($model, 'city', array('size' => 30, 'maxlength' => 40)); ?>
             <?php echo $form->error($model, 'city'); ?>
         </div>
 
         <div class="col-md-1">
-<?php echo $form->labelEx($model, 'zip'); ?>
-<?php echo $form->textField($model, 'zip', array('size' => 10, 'maxlength' => 10)); ?>
-<?php echo $form->error($model, 'zip'); ?>
+            <?php echo $form->labelEx($model, 'zip'); ?>
+            <?php echo $form->textField($model, 'zip', array('size' => 10, 'maxlength' => 10)); ?>
+            <?php echo $form->error($model, 'zip'); ?>
         </div>
 
 
@@ -119,18 +87,18 @@ $form = $this->beginWidget('CActiveForm', array(
 
         <div class="col-md-1">
             <p><?php echo $form->labelEx($model, 'status'); ?></p>
-<?php echo $form->dropDownList($model, 'status', CHtml::listData(Docstatus::model()->findAllByAttributes(array('doc_type' => $model->doctype)), 'num', 'name')); //Docstatus::model()->findAll(); ?>
-<?php echo $form->error($model, 'status'); ?>
+            <?php echo $form->dropDownList($model, 'status', CHtml::listData(Docstatus::model()->findAllByAttributes(array('doc_type' => $model->doctype)), 'num', 'name')); //Docstatus::model()->findAll(); ?>
+            <?php echo $form->error($model, 'status'); ?>
         </div>    
 
         <div class="col-md-2">
             <p><?php echo $form->labelEx($model, 'currency_id'); ?></p>
-<?php echo $form->dropDownList($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency  ?>
+            <?php echo $form->dropDownList($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency  ?>
             <?php echo $form->error($model, 'currency_id'); ?>
         </div>
 
-        <div class="col-md-2">
-                <?php echo $form->labelEx($model, 'refnum'); ?>
+        <div class="col-md-1">
+            <?php echo $form->labelEx($model, 'refnum'); ?>
             <div id="Docsrefnum">
                 <?php
                 $perent = Docs::model()->findByPk($model->refnum);
@@ -140,11 +108,26 @@ $form = $this->beginWidget('CActiveForm', array(
                 ?>
             </div>
             <?php echo CHtml::link(Yii::t('app', 'Clear refnum'), '#', array('onclick' => '$("#Docs_refnum").val("");$("#Docsrefnum").html(""); return false;',)); ?>
+            <br />
             <?php echo CHtml::link(Yii::t('app', 'Choose Doc'), '#', array('onclick' => '$("#choseRefDoc").dialog("open"); return false;',)); ?>
 
-<?php echo $form->hiddenField($model, 'refnum', array('size' => 20, 'maxlength' => 20)); ?>
-<?php echo $form->error($model, 'refnum'); ?>
+            <?php echo $form->hiddenField($model, 'refnum', array('size' => 20, 'maxlength' => 20)); ?>
+            <?php echo $form->error($model, 'refnum'); ?>
         </div>
+        
+        <div class="col-md-1">
+            <?php if($model->docType->stockSwitch){?>
+            <?php echo $form->labelEx($model, 'stockSwitch'); ?>
+            
+
+            <?php echo $form->checkBox($model, 'stockSwitch'); ?>
+            <?php echo $form->error($model, 'stockSwitch'); ?>
+            
+            <?php } ?>
+        </div>
+        
+        
+        
 
         <div class="col-md-3">
 
@@ -203,20 +186,7 @@ $form = $this->beginWidget('CActiveForm', array(
         <div><!--date block-->
             <div class="col-md-2">
                 <?php echo $form->labelEx($model, 'issue_date'); ?>
-                <?php
-                /*
-                  $this->widget('zii.widgets.jui.CJuiDatePicker',
-                  array(
-                  'name'=>'Docs[issue_date]',
-                  'language' => substr(Yii::app()->language,0,2),
-                  'value'=>$model->issue_date,
-                  'defaultOptions' => array(  // (#3)
-                  'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-                  )
-                  )
-                  );
-                 */
-                $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker', array(
+                <?php $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker', array(
                     'model' => $model, //Model object
                     'attribute' => 'issue_date', //attribute name
                     'mode' => 'datetime',
@@ -231,21 +201,8 @@ $form = $this->beginWidget('CActiveForm', array(
             </div>
 
             <div class="col-md-2">
-<?php echo $form->labelEx($model, 'due_date'); ?>
-                <?php
-                /*
-                  $this->widget('zii.widgets.jui.CJuiDatePicker',
-                  array(
-                  'name'=>'Docs[due_date]',
-                  'language' => substr(Yii::app()->language,0,2),
-                  'value'=>$model->due_date,
-                  'defaultOptions' => array(  // (#3)
-                  'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-                  )
-                  )
-                  ); */
-
-                $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker', array(
+                <?php echo $form->labelEx($model, 'due_date'); ?>
+                <?php $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker', array(
                     'model' => $model, //Model object
                     'attribute' => 'due_date', //attribute name
                     'mode' => 'datetime',
@@ -262,27 +219,27 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
     <br />
 
-<?php
-if ($model->docType->isdoc) {
-    ?>
+    <?php
+    if ($model->docType->isdoc) {
+        ?>
 
         <table  data-role="table" class="formtable" ><!-- docdetalies -->
 
             <!--<div class="row">-->
             <thead>
                 <tr  class="head1">
-    <?php //echo $form->labelEx($model,'doc_id');  ?>
+                    <?php //echo $form->labelEx($model,'doc_id');  ?>
                     <th class="item_id">
-    <?php echo Yii::t('labels', 'Item'); ?>
-    <?php
-    $this->widget('bootstrap.widgets.TbButton', array(
-        'label' => Yii::t('app', 'New'),
-        //'type'=>'primary',
-        'icon' => 'glyphicon glyphicon-file',
-        'url' => $this->createUrl('/item/create'),
-            //'htmlOptions'=>array('id'=>'printLink', 'onclick'=>'return hideMe();'),
-    ));
-    ?>
+                        <?php echo Yii::t('labels', 'Item'); ?>
+                        <?php
+                        $this->widget('bootstrap.widgets.TbButton', array(
+                            'label' => Yii::t('app', 'New'),
+                            //'type'=>'primary',
+                            'icon' => 'glyphicon glyphicon-file',
+                            'url' => $this->createUrl('/item/create'),
+                                //'htmlOptions'=>array('id'=>'printLink', 'onclick'=>'return hideMe();'),
+                        ));
+                        ?>
 
 
                     </th>
@@ -302,9 +259,9 @@ if ($model->docType->isdoc) {
                 <tr>
                     <td>
                         <textarea id="doc" style='display:none;'>       
-    <?php
-    echo $this->renderPartial('docdetial', array('model' => new Docdetails, 'form' => $form, 'i' => 'ABC'));
-    ?>
+                            <?php
+                            echo $this->renderPartial('docdetial', array('model' => new Docdetails, 'form' => $form, 'i' => 'ABC'));
+                            ?>
                         </textarea>      
                     </td>
 
@@ -313,9 +270,9 @@ if ($model->docType->isdoc) {
                     <td></td>
                     <td></td>
                     <td>
-    <?php echo $form->labelEx($model, 'discount'); ?>
-    <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));  ?>
-    <?php echo $form->error($model, 'discount'); ?>
+                        <?php echo $form->labelEx($model, 'discount'); ?>
+                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));  ?>
+                        <?php echo $form->error($model, 'discount'); ?>
                         <?php echo CHTML::checkBox("Docdiscount", '', array('value' => 1, 'uncheckValue' => 0)); ?>
                     </td>
                     <td>
@@ -335,9 +292,9 @@ if ($model->docType->isdoc) {
                     <td></td>
                     <td></td>
                     <td>
-    <?php echo $form->labelEx($model, 'sub_total'); ?>
-    <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));  ?>
-    <?php echo $form->error($model, 'sub_total'); ?>
+                        <?php echo $form->labelEx($model, 'sub_total'); ?>
+                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));  ?>
+                        <?php echo $form->error($model, 'sub_total'); ?>
                     </td>
                     <td>
                         <div id="docsub_total"></div>
@@ -361,8 +318,8 @@ if ($model->docType->isdoc) {
                     <td></td>
                     <td></td>
                     <td>
-    <?php //echo $form->labelEx($model,'novat_total');  ?>
-    <?php //echo $form->error($model,'novat_total');  ?>
+                        <?php //echo $form->labelEx($model,'novat_total');  ?>
+                        <?php //echo $form->error($model,'novat_total');  ?>
                     </td>
                     <td>
                         <?php echo $form->hiddenField($model, 'novat_total'); ?>
@@ -377,8 +334,8 @@ if ($model->docType->isdoc) {
                     <td></td>
                     <td></td>
                     <td>
-    <?php echo $form->labelEx($model, 'total'); ?>
-    <?php echo $form->error($model, 'total'); ?>
+                        <?php echo $form->labelEx($model, 'total'); ?>
+                        <?php echo $form->error($model, 'total'); ?>
                     </td>
                     <td>
                         <div id="doctotal"></div>
@@ -390,22 +347,22 @@ if ($model->docType->isdoc) {
 
             <tbody class="docTarget">
 
-    <?php
-    $i = 0;
-    if (count($model->docDetailes) != 0)
-    //$docdetails=array(new Docdetails);
-        foreach ($model->docDetailes as $docdetail) {
-            echo $this->renderPartial('docdetial', array('model' => $docdetail, 'form' => $form, 'i' => "{$i}"));
-            $i++;
-        }
-    ?>
+                <?php
+                $i = 0;
+                if (count($model->docDetailes) != 0)
+                //$docdetails=array(new Docdetails);
+                    foreach ($model->docDetailes as $docdetail) {
+                        echo $this->renderPartial('docdetial', array('model' => $docdetail, 'form' => $form, 'i' => "{$i}"));
+                        $i++;
+                    }
+                ?>
             </tbody>
 
 
         </table><!-- doc detiales -->
 
 
-<?php } ?>
+    <?php } ?>
 
 
     <?php
@@ -437,14 +394,14 @@ if ($model->docType->isdoc) {
                 <tr>
                     <td colspan='8'>
                         <textarea id="rcpt" style='display:none;'>       
-    <?php
-    echo $this->renderPartial('rcptdetial', array('model' => new Doccheques, 'form' => $form, 'i' => 'ABC'));
-    ?>
+                            <?php
+                            echo $this->renderPartial('rcptdetial', array('model' => new Doccheques, 'form' => $form, 'i' => 'ABC'));
+                            ?>
                         </textarea>      
                     </td>
                     <td>
-                            <?php echo $form->labelEx($model, 'src_tax'); ?>
-    <?php echo $form->error($model, 'src_tax'); ?>
+                        <?php echo $form->labelEx($model, 'src_tax'); ?>
+                        <?php echo $form->error($model, 'src_tax'); ?>
                     </td>
 
                     <td>
@@ -459,29 +416,29 @@ if ($model->docType->isdoc) {
 
                     </td>
                     <td>
-    <?php echo $form->labelEx($model, 'sub_total'); ?>
-    <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));  ?>
-    <?php echo $form->error($model, 'sub_total'); ?>
+                        <?php echo $form->labelEx($model, 'sub_total'); ?>
+                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));  ?>
+                        <?php echo $form->error($model, 'sub_total'); ?>
                     </td>
 
                     <td>
                         <div id="rcptSum"></div>
-    <?php echo $form->hiddenField($model, "rcptsum"); ?>    
-    <?php //echo CHTML::hiddenField('rcptsum');  ?>
+                        <?php echo $form->hiddenField($model, "rcptsum"); ?>    
+                        <?php //echo CHTML::hiddenField('rcptsum');  ?>
                     </td>
                 </tr>
             </tfoot>	
 
             <tbody class="rcptTarget">
 
-    <?php
-    $i = 0;
-    if (count($model->docCheques) != 0)
-        foreach ($model->docCheques as $rcptdetail) {
-            echo $this->renderPartial('rcptdetial', array('model' => $rcptdetail, 'form' => $form, 'i' => "{$i}"));
-            $i++;
-        }
-    ?>
+                <?php
+                $i = 0;
+                if (count($model->docCheques) != 0)
+                    foreach ($model->docCheques as $rcptdetail) {
+                        echo $this->renderPartial('rcptdetial', array('model' => $rcptdetail, 'form' => $form, 'i' => "{$i}"));
+                        $i++;
+                    }
+                ?>
             </tbody>
 
 
@@ -489,7 +446,7 @@ if ($model->docType->isdoc) {
 
         </table><!-- doc recipet -->
 
-<?php } ?>
+    <?php } ?>
     <?php
     if ($model->docType->iscontract) {
         echo 'contract';
@@ -656,14 +613,14 @@ if ($model->docType->isdoc) {
 
         function refNum(doc) {//
 
-            
+
             $("#choseRefDoc").dialog("close");
 
             $('#Docsrefnum').html($('#Docsrefnum').html() + ", " + doc.doctype + " #" + doc.docnum);
             $('#Docs_refnum').val($('#Docs_refnum').val() + doc.id + ",");
 
 
-            
+
             $('#Docs_account_id').val(doc.account_id);
             $("#Docs_account_id").trigger("liszt:updated");
 
@@ -676,7 +633,7 @@ if ($model->docType->isdoc) {
             $("#Docs_currency_id").trigger("liszt:updated");
 
 
-            if($('#Doccheques_0_sum').val()==''){
+            if ($('#Doccheques_0_sum').val() == '') {
                 $('#Doccheques_0_sum').val('0');
             }
             $('#Doccheques_0_sum').val(parseFloat($('#Doccheques_0_sum').val()) + parseFloat(doc.total));
@@ -766,7 +723,7 @@ if ($model->docType->isdoc) {
         function TypeSelChange(index) {
             var val = $('#Doccheques_' + index + '_type').val();
 
-            //$('#Doccheques_'+index+"#banksel"+num).parent().append("<?php //echo PrintBankSelect(); ?>");
+            //$('#Doccheques_'+index+"#banksel"+num).parent().append("<?php //echo PrintBankSelect();  ?>");
             $('#Doccheques_' + index + "_cheque_acct").attr('placeholder', '');
             $('#Doccheques_' + index + "_cheque_num").attr('placeholder', '');
             $('#Doccheques_' + index + "_branch").attr('placeholder', '');
@@ -796,7 +753,7 @@ if ($model->docType->isdoc) {
                 $('#Doccheques_' + index + "_date").show();
                 $('#Doccheques_' + index + "_banksel").hide();
 
-                $('#Doccheques_' + index + "_bank").parent().append('<?php //echo PrintCreditCompany(); ?>');
+                $('#Doccheques_' + index + "_bank").parent().append('<?php //echo PrintCreditCompany();  ?>');
                 $('#Doccheques_' + index + "_bank").remove();
 
                 $('#Doccheques_' + index + "_branch").show();
@@ -815,22 +772,25 @@ if ($model->docType->isdoc) {
             var part = $('#Docdetails_' + index + '_item_id').val();
             $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "item/JSON", "id": part},
             function(data) {
-                //console.log(data[0]);
-                data[0] = jQuery.parseJSON(data[0]);
-                data[1] = jQuery.parseJSON(data[1]);
-                $('#Docdetails_' + index + '_name').val(data[0].name);
+                //console.log(data);
+                //data = jQuery.parseJSON(data);
+                //console.log(data);
+                //data[1] = jQuery.parseJSON(data[1]);
+                $('#Docdetails_' + index + '_name').val(data.name);
                 //$('#Docdetails_'+index+'_name').trigger("liszt:updated");
+                $('#Docdetails_' + index + '_description').val(data.description);
+                $('#Docdetails_' + index + '_unit_price_org').val(data.saleprice);
+                $('#Docdetails_' + index + '_unit_price').val(data.saleprice);
 
-                $('#Docdetails_' + index + '_description').val(data[0].description);
-                $('#Docdetails_' + index + '_unit_price_org').val(data[0].saleprice);
-                $('#Docdetails_' + index + '_unit_price').val(data[0].saleprice);
-
-                $('#Docdetails_' + index + '_currency_id').val(data[0].currency_id);
+                $('#Docdetails_' + index + '_currency_id').val(data.currency_id);
                 $('#Docdetails_' + index + '_currency_id').trigger("liszt:updated");
                 currChange(index);
 
-                $('#Docdetails_' + index + '_accvat').val(data[1].vat);
-
+                $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "item/VatJSON", "id": part},
+                function(smalldata) {
+                    smalldata = jQuery.parseJSON(smalldata);
+                    $('#Docdetails_' + index + '_accvat').val(smalldata.vat);
+                });
                 $('#Docdetails_' + index + '_rate').val("1");
                 if ($('#Docdetails_' + index + '_qty').val() == 0)
                     $('#Docdetails_' + index + '_qty').val("1");
@@ -1087,24 +1047,24 @@ if ($model->docType->isdoc) {
         }
     </script>
     <p>
-<?php echo $form->labelEx($model, 'description'); ?>
-<?php
-echo $form->textArea($model, 'description', array(
-    'rows' => 6, 'cols' => 50,
-    'class' => 'form-control wysihtml5-editor'
-));
-?>
+        <?php echo $form->labelEx($model, 'description'); ?>
+        <?php
+        echo $form->textArea($model, 'description', array(
+            'rows' => 6, 'cols' => 50,
+            'class' => 'form-control wysihtml5-editor'
+        ));
+        ?>
         <?php echo $form->error($model, 'description'); ?>
     </p>
 
     <p>
         <?php echo $form->labelEx($model, 'comments'); ?>
-<?php
-echo $form->textArea($model, 'comments', array(
-    'rows' => 6, 'cols' => 50,
-    'class' => 'form-control wysihtml5-editor'
-));
-?>
+        <?php
+        echo $form->textArea($model, 'comments', array(
+            'rows' => 6, 'cols' => 50,
+            'class' => 'form-control wysihtml5-editor'
+        ));
+        ?>
         <?php echo $form->error($model, 'comments'); ?>
     </p>
 
@@ -1112,7 +1072,7 @@ echo $form->textArea($model, 'comments', array(
         <!--</div>
         
         <div class="row buttons">-->
-<?php //echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save');  ?>
+        <?php //echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save');  ?>
         <?php
         $this->widget('bootstrap.widgets.TbButton', array(
             'label' => Yii::t('app', 'Preview'),
@@ -1146,7 +1106,7 @@ echo $form->textArea($model, 'comments', array(
         ));
         ?>
 
-<?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name')); //Docstatus::model()->findAll(); ?>
+        <?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name')); //Docstatus::model()->findAll(); ?>
         <!--</div>-->
     </div>
 

@@ -30,7 +30,7 @@ class DoctypeController extends RightsController
 		{
 			$model->attributes=$_POST['Doctype'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('admin','id'=>$model->id));
 		}
 
 		$this->render('create',array(
@@ -54,7 +54,7 @@ class DoctypeController extends RightsController
 		{
 			$model->attributes=$_POST['Doctype'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('admin','id'=>$model->id));
 		}
 
 		$this->render('update',array(

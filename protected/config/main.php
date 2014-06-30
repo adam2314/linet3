@@ -123,7 +123,10 @@ return CMap::mergeArray(
                         'download/<id:\d+>' => 'data/download',
                         'download/<company:\w+>/<hash:\d+>' => 'data/downloadpublic',
                         
+                        
+                        '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
                         '<controller:\w+>/<action:\w+>/<id:\w+>' => '<controller>/<action>',
+                        
                     ),
                 ),
                 //'clientScript'=>array(

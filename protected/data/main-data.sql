@@ -479,7 +479,7 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`) VALUES
 (36, 'insert Asstes outcome', 'docs/create/14', NULL, 32),
 (37, 'Register', NULL, 'glyphicon glyphicon-usd', 0),
 (38, 'Receipt', 'docs/create/8', NULL, 37),
-(39, 'Bank deposits', 'deposit&amp;type=2', NULL, 37),
+(39, 'Bank deposits', 'deposit/admin', NULL, 37),
 (40, 'Payment', 'outcome/create', NULL, 37),
 (41, 'VAT payment', 'outcome/create/1', 'type=>1', 37),
 (42, 'Nat. Ins. payment', 'outcome/create/2', 'type=>2', 37),
@@ -512,7 +512,11 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`) VALUES
 (69, 'Manage Permissons', 'rights/authItem/permissions', NULL, 1),
 (70, 'Stock transaction', 'reports/stockAction', NULL, 49),
 (71, 'Id6111 Admin', 'accId6111/admin', NULL, 1),
-(72, 'Mail Template', 'mailTemplate/admin', NULL, 1);
+(72, 'Mail Template', 'mailTemplate/admin', NULL, 1),
+(73, 'Stock', 'reports/stock', NULL, 49);
+
+
+
 INSERT INTO `openformat` (`id`, `description`, `type`, `size`, `record`, `export`, `import`, `type_id`) VALUES
 (1000, 'קוד רשומה', 's', 4, 1, 'A000', 'A000', 'A000'),
 (1001, 'נתנוים עתדיים', 's', 5, 1, 'NA', 'NA', 'A000'),

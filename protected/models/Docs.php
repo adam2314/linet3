@@ -37,6 +37,7 @@ class Docs extends fileRecord {
     public $rcptsum = 0;
     public $issue_from;
     public $issue_to;
+    public $stockSwitch = 1;
     private $dateDBformat = true;
 
     /*
@@ -173,13 +174,20 @@ class Docs extends fileRecord {
         //$this->docType->stockAction;
         if (!is_null($attributes))
             return $a;
-        if ($a) {
-            $this->saveDet();
-            $this->saveCheq();
 
-            if (isset($this->docStatus)) {
-                if ($this->docStatus->action != 0) {
-                    $this->transaction((int) $this->docStatus->action);
+        if ($a) { //if switch no save
+            if (!$this->action) {
+                
+                
+                $this->saveDet();
+                $this->saveCheq();
+
+                if (isset($this->docStatus)) {
+                    if ($this->docStatus->action != 0) {
+                        $this->action=1;
+                        $a = parent::save($runValidation, $attributes);
+                        $this->transaction((int) $this->docStatus->action);
+                    }
                 }
             }
         }
@@ -251,6 +259,12 @@ class Docs extends fileRecord {
         if (Yii::app()->user->settings['company.stock']) {// remove from stock.
             $stockAction = $this->docType->stockAction;
             if ($stockAction) {
+
+                if ($this->docType->stockSwitch) {//if has check box
+                    if (!$this->stockSwitch)//if not checked
+                        return;
+                }
+
                 if ((int) $this->oppt_account_id != 0) {
                     $account_id = $this->account_id;
                     $oppt_account_id = $this->oppt_account_id;
@@ -375,7 +389,7 @@ class Docs extends fileRecord {
             return 0;
         }
 
-        if ($this->docnum == 0) {
+        if (!$this->docnum) {
             $this->docType->last_docnum = $this->docType->last_docnum + 1;
             $this->docType->save();
             return $this->docType->last_docnum;
@@ -399,7 +413,7 @@ class Docs extends fileRecord {
         // will receive user inputs.
         return array(
             array('account_id', 'required'),
-            array('status, printed, owner', 'numerical', 'integerOnly' => true),
+            array('stockSwitch, status, printed, owner', 'numerical', 'integerOnly' => true),
             array('city', 'length', 'max' => 40),
             array('doctype, docnum, oppt_account_id, account_id, zip, vatnum', 'length', 'max' => 11),
             array('company, address', 'length', 'max' => 80),
@@ -521,12 +535,12 @@ class Docs extends fileRecord {
 
         if (!empty($this->issue_from) && empty($this->issue_to)) {
             $this->issue_from = date("Y-m-d", CDateTimeParser::parse($this->issue_from, Yii::app()->locale->getDateFormat('yiishort')));
-            
+
             $criteria->addCondition("issue_date>=:date_from");
             $criteria->params[':date_from'] = $this->issue_from;
         } elseif (!empty($this->issue_to) && empty($this->issue_from)) {
             $this->issue_to = date("Y-m-d", CDateTimeParser::parse($this->issue_to, Yii::app()->locale->getDateFormat('yiishort')));
-            
+
             $criteria->addCondition("issue_date>=:date_to");
             $criteria->params[':date_to'] = $this->issue_to;
         } elseif (!empty($this->issue_to) && !empty($this->issue_from)) {
@@ -537,13 +551,14 @@ class Docs extends fileRecord {
             $criteria->addCondition("issue_date<=:date_to");
             $criteria->params[':date_from'] = $this->issue_from;
             $criteria->params[':date_to'] = $this->issue_to;
-            
         }
 
-
+        $sort = new CSort();
+        $sort->defaultOrder = 'issue_date DESC';
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
+            'sort' => $sort,
         ));
     }
 

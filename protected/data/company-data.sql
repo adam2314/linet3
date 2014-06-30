@@ -397,7 +397,7 @@ INSERT INTO `config` (`id`, `value`, `eavType`, `hidden`) VALUES
 ('server.Latest', '', '', 1),
 ('server.Version', '3.0', '', 1),
 ('server.wkhtmltopdf', 'xvfb-run -a -s "-screen 0 1024x768x16" wkhtmltopdf', 'string', 0),
-('system.auth', '179402', 'string', 1),
+('system.auth', '179403', 'string', 1),
 ('system.name', 'Linet 3.0', 'string', 1),
 ('system.vendor.name', 'Speedcomp', 'string', 1),
 ('system.vendor.vatnum', '069924504', 'string', 1),
@@ -459,22 +459,22 @@ INSERT INTO `docStatus` (`num`, `doc_type`, `name`, `looked`, `action`) VALUES
 (4, 9, 'מבוטל', 1, '1'),
 (4, 10, 'מבוטל', 1, '1');
 
-INSERT INTO `docType` (`id`, `name`, `openformat`, `isdoc`, `isrecipet`, `iscontract`, `looked`, `stockAction`, `account_type`, `docStatus_id`, `last_docnum`, `oppt_account_type`, `transactionType_id`, `vat_acc_id`, `header`, `footer`) VALUES
-(1, 'Proforma',                 300,    1, 0, 0, 1, -1, 0, 2, 1, NULL, NULL, 3, '', ''),
-(2, 'Delivery doc.',            200,    1, 0, 0, 0, -1, 0, 2, 1, NULL, NULL, 3, '', ''),
-(3, 'Invoice',                  305,    1, 0, 0, 1, -1, 0, 2, 1, NULL, 1, 3, '', ''),
-(4, 'Credit invoice',           330,    1, 0, 0, 0, 1, 0, 2, 1, NULL, 17, 3, '', ''),
-(5, 'Return document',          210,    1, 0, 0, 0, 1, 0, 2, 1, NULL, 19, 3, '', ''),
-(6, 'Quote',                    0,      1, 0, 0, 0, 0, 0, 2, 1, NULL, NULL, 3, '', ''),
-(7, 'Sales Order',              0,      1, 0, 0, 0, 0, 0, 2, 1, NULL, NULL, 3, '', ''),
-(8, 'Receipt',                  400,    0, 1, 0, 1, 0, 0, 1, 1, NULL, 3, 3, '', ''),
-(9, 'Invoice Receipt',          320,    1, 1, 0, 1, -1, 0, 2, 1, NULL, 18, 3, '', ''),
-(10, 'Purchase Order',          500,    1, 0, 0, 0, 0, 1, 2, 1, NULL, NULL, 3, '', ''),
-(11, 'Manual invoice',          0,      1, 0, 0, 1, 1, 1, 1, 1, NULL, 11, 3, '', ''),
-(12, 'Manual receipt',          0,      1, 0, 0, 1, 1, 1, 1, 1, NULL, 12, 3, '', ''),
-(13, 'Buisness outcome',        0,      1, 0, 0, 0, 1, 1, 1, 1, 2, 5, 1, '', ''),
-(14, 'Asstes outcome',          0,      1, 0, 0, 0, 1, 1, 1, 1, 4, 5, 2, '', ''),
-(15, 'Warehouse transaction',   830,    1, 0, 0, 0, 1, 0, 0, 1, 8, NULL, 0, '', '');
+INSERT INTO `docType` (`id`, `name`, `openformat`, `isdoc`, `isrecipet`, `iscontract`, `looked`, `stockAction`, `account_type`, `docStatus_id`, `last_docnum`, `oppt_account_type`, `transactionType_id`, `vat_acc_id`, `header`, `footer`, `stockSwitch`) VALUES
+(1, 'Proforma',                 300,    1, 0, 0, 1, -1, 0, 2, 1, NULL, NULL, 3, '', '', 0),
+(2, 'Delivery doc.',            200,    1, 0, 0, 0, -1, 0, 2, 1, NULL, NULL, 3, '', '', 0),
+(3, 'Invoice',                  305,    1, 0, 0, 1, -1, 0, 2, 1, NULL, 1, 3, '', '', 1),
+(4, 'Credit invoice',           330,    1, 0, 0, 0, 1, 0, 2, 1, NULL, 17, 3, '', '', 1),
+(5, 'Return document',          210,    1, 0, 0, 0, 1, 0, 2, 1, NULL, 19, 3, '', '', 1),
+(6, 'Quote',                    0,      1, 0, 0, 0, 0, 0, 2, 1, NULL, NULL, 3, '', '', 0),
+(7, 'Sales Order',              0,      1, 0, 0, 0, 0, 0, 2, 1, NULL, NULL, 3, '', '', 0),
+(8, 'Receipt',                  400,    0, 1, 0, 1, 0, 0, 2, 1, NULL, 3, 3, '', '', 0),
+(9, 'Invoice Receipt',          320,    1, 1, 0, 1, -1, 0, 2, 1, NULL, 18, 3, '', '', 1),
+(10, 'Purchase Order',          500,    1, 0, 0, 0, 0, 1, 2, 1, NULL, NULL, 3, '', '', 0),
+(11, 'Manual invoice',          0,      1, 0, 0, 1, 1, 1, 1, 1, NULL, 11, 3, '', '', 1),
+(12, 'Manual receipt',          0,      1, 0, 0, 1, 1, 1, 1, 1, NULL, 12, 3, '', '', 0),
+(13, 'Buisness outcome',        0,      1, 0, 0, 0, 1, 1, 1, 1, 2, 5, 1, '', '', 0),
+(14, 'Asstes outcome',          0,      1, 0, 0, 0, 1, 1, 1, 1, 4, 5, 2, '', '', 0),
+(15, 'Warehouse transaction',   830,    1, 0, 0, 0, 1, 0, 1, 1, 8, NULL, 0, '', '', 0);
 
 INSERT INTO `itemCategories` (`id`, `name`, `profit`) VALUES
 (1, 'כללי', 1);

@@ -205,6 +205,7 @@ CREATE TABLE `docType` (
   `vat_acc_id` int(11) NOT NULL,
   `header` text NOT NULL,
   `footer` text NOT NULL,
+  `stockSwitch` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -234,6 +235,7 @@ CREATE TABLE `docs` (
   `comments` text,
   `description` text NOT NULL,
   `oppt_account_id` int(11) DEFAULT NULL,
+  `action` tinyint(1) NOT NULL,
   `owner` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );

@@ -36,7 +36,7 @@
         ?>
         <?php echo $form->error($model, 'src_date'); ?>
 
-        <?php echo $form->textFieldRow($model, 'src_tax', array('class' => 'span5', 'maxlength' => 80)); ?>
+        <?php //echo $form->textFieldRow($model, 'src_tax', array('class' => 'span5', 'maxlength' => 80)); ?>
 <?php echo $form->textFieldRow($model, 'contact', array('class' => 'span5', 'maxlength' => 80)); ?>
         <?php echo $form->textFieldRow($model, 'department', array('class' => 'span5', 'maxlength' => 60)); ?>
         <?php echo $form->textFieldRow($model, 'vatnum', array('class' => 'span5', 'maxlength' => 20)); ?>

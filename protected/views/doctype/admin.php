@@ -42,7 +42,11 @@ $this->beginWidget('MiniForm',array(
 		
 		//'stockAction',
 		//'account_type',
-		'docStatus_id',
+                array(
+                    'name'=>'docStatus_id',
+                    'value'=>'$data->docStatus->name'
+                ),
+		
 		'last_docnum',
 		
 		array(

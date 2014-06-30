@@ -47,6 +47,7 @@ class Item extends fileRecord {
         if ($model !== null) {
             $incomeMap = UserIncomeMap::model()->findByPk(array('user_id' => Yii::app()->user->id, 'itemVatCat_id' => $model->itemVatCat_id));
             if($incomeMap!==null){
+                    
                 $model->vat = Accounts::model()->getSrcTax($incomeMap->account_id);
             }else{
                 $model->vat=0;
