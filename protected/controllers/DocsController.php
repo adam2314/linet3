@@ -124,19 +124,19 @@ class DocsController extends RightsController
 		$type=(isset($_POST['Docs']['doctype']))? (int)$_POST['Docs']['doctype']:$type;
 		$model=new Docs();
 		
-		$model->doctype=$type;
-                $model->docType=Doctype::model()->findByPk($type);
-                $model->status=$model->docType->docStatus_id;
-                $model->issue_date=date(Yii::app()->locale->getDateFormat('phpdatetimes'));
-                $model->due_date=date(Yii::app()->locale->getDateFormat('phpdatetimes'));
-                $model->description=$model->docType->footer;
+		
+                
+                //$model->issue_date=date(Yii::app()->locale->getDateFormat('phpdatetimes'));
+                //$model->due_date=date(Yii::app()->locale->getDateFormat('phpdatetimes'));
+                
 		//$doctype =$model->docType;
 		// Uncomment the following line if AJAX validation is needed
 		 $this->performAjaxValidation($model);
 
 		if(isset($_POST['Docs'])){
 			$model->attributes=$_POST['Docs'];
-                        
+                        //$model->issue_date=$model->issue_date.":00";
+                        //$model->due_date=$model->due_date.":00";
                         
                         if(isset($_POST['Docdetails'])) $model->docDet=$_POST['Docdetails'];
                         if(isset($_POST['Doccheques'])) $model->docCheq=$_POST['Doccheques'];
@@ -165,7 +165,10 @@ class DocsController extends RightsController
                         
 		}
 		
-		
+                $model->doctype=$type;
+                $model->docType=Doctype::model()->findByPk($type);
+                $model->status=$model->docType->docStatus_id;
+		$model->description=$model->docType->footer;
 		$this->render('create',array(
 			'model'=>$model,//'type'=>$doctype,
 		));
@@ -183,8 +186,8 @@ class DocsController extends RightsController
 		$model=$this->loadModel($id);
 
 			
-		$docdetails =$model->docDetailes;
-		$doctype =$model->docType;
+		//$docdetails =$model->docDetailes;
+		//$doctype =$model->docType;
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
@@ -195,7 +198,11 @@ class DocsController extends RightsController
                     }
 		if(isset($_POST['Docs'])){
 			$model->attributes=$_POST['Docs'];
-			
+			//$model->issue_date=$model->issue_date.":00";
+                        //$model->due_date=$model->due_date.":00";
+                        
+                        //echo $model->due_date;
+                        //xit;
 			if(isset($_POST['Docdetails'])) $model->docDet=$_POST['Docdetails'];
                         if(isset($_POST['Doccheques'])) $model->docCheq=$_POST['Doccheques'];
                         //echo $_POST['subType'];
@@ -225,7 +232,7 @@ class DocsController extends RightsController
 
 		
 		$this->render('update',array(
-			'model'=>$model,'type'=>$doctype,
+			'model'=>$model,//'type'=>$doctype,
 		));
 	}
 

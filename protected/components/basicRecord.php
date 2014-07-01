@@ -21,7 +21,19 @@ class basicRecord extends CActiveRecord{
         return json_encode($vars);
     }
     
-    
+    public static function getConstants($token,$objectClass) {
+        $tokenLen = strlen($token);
+ 
+        $reflection = new ReflectionClass($objectClass); //php built-in 
+        $allConstants = $reflection->getConstants(); //constants as array
+ 
+        $tokenConstants = array(); 
+        foreach($allConstants as $name => $val) {
+        if ( substr($name,0,$tokenLen) != $token ) continue;
+        $tokenConstants[] = array('id'=>$val,'name'=>Yii::t('app',$name));
+        }
+        return $tokenConstants;
+    }
     
 
     protected function fieldvalue($str,$type,$action){

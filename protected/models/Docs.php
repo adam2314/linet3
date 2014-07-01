@@ -34,12 +34,17 @@ class Docs extends fileRecord {
     //public $lang;
     public $docDet = NULL;
     public $docCheq = NULL;
+    public $docDocs= NULL;
     public $rcptsum = 0;
     public $issue_from;
     public $issue_to;
     public $stockSwitch = 1;
+    public $refnum_ids ='';
     private $dateDBformat = true;
-
+    
+    const STATUS_OPEN=0;
+    const STATUS_CLOSED=1;
+    const STATUS_DRAFT=3;
     /*
       public function __construct($arg = NULL) {
       //    public function __construct($type=0) {
@@ -64,6 +69,29 @@ class Docs extends fileRecord {
         return Docs::model()->findByAttributes(array('docnum' => $docnum, 'doctype' => $doctype));
     }
 
+    public function getRef(){
+        $this->refnum_ids='';
+        $this->docDocs=Docs::model()->findAllByAttributes(array('refnum' => $this->id));
+        if($this->docDocs!==null){
+            foreach($this->docDocs as $doc)
+                $this->refnum_ids.=$doc->id.", ";
+        }
+    }
+    
+    
+     public static function getRefStatuses() {
+        return self::getConstants('STATUS_', __CLASS__);
+    }
+
+    public function getRefStatus() {
+        $list = $this->getRefStatuses();
+        //print_r($list);
+        //return "";
+        return Yii::t('app', $list[$this->refstatus]['name']);
+    }
+    
+    
+    
     public function getType($type = '') {
         if ($type == '') {
             return isset($this->docType) ? $this->docType->openformat : "";
@@ -123,10 +151,9 @@ class Docs extends fileRecord {
 
     public function beforeSave() {
         if ($this->isNewRecord) {
-            //$this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetime'));
             $this->dateDBformat = false;
         }
-        $this->modified = date(Yii::app()->locale->getDateFormat('phpdatetime'));
+        $this->modified = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
 
         //echo Yii::app()->locale->getDateFormat('yiishort');
         //echo $this->due_date;
@@ -135,9 +162,9 @@ class Docs extends fileRecord {
         //echo $this->due_date.";".$this->issue_date.";".$this->modified."<br>";
         if (!$this->dateDBformat) {
             $this->dateDBformat = true;
-            $this->due_date = date("Y-m-d H:m:s", CDateTimeParser::parse($this->due_date, Yii::app()->locale->getDateFormat('yiidatetime')));
-            $this->issue_date = date("Y-m-d H:m:s", CDateTimeParser::parse($this->issue_date, Yii::app()->locale->getDateFormat('yiidatetime')));
-            $this->modified = date("Y-m-d H:m:s", CDateTimeParser::parse($this->modified, Yii::app()->locale->getDateFormat('yiidatetimesec')));
+            $this->due_date = date("Y-m-d H:i:s", CDateTimeParser::parse($this->due_date, Yii::app()->locale->getDateFormat('yiidatetime')));
+            $this->issue_date = date("Y-m-d H:i:s", CDateTimeParser::parse($this->issue_date, Yii::app()->locale->getDateFormat('yiidatetime')));
+            $this->modified = date("Y-m-d H:i:s", CDateTimeParser::parse($this->modified, Yii::app()->locale->getDateFormat('yiidatetime')));
         }
         //return true;
         //echo $this->due_date.";".$this->issue_date.";".$this->modified;
@@ -150,7 +177,7 @@ class Docs extends fileRecord {
             $this->dateDBformat = false;
             $this->due_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->due_date));
             $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->issue_date));
-            $this->modified = date(Yii::app()->locale->getDateFormat('phpdatetime'), strtotime($this->modified));
+            $this->modified = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->modified));
         }
         return parent::afterSave();
     }
@@ -160,8 +187,10 @@ class Docs extends fileRecord {
             $this->dateDBformat = false;
             $this->due_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->due_date));
             $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->issue_date));
-            $this->modified = date(Yii::app()->locale->getDateFormat('phpdatetime'), strtotime($this->modified));
+            $this->modified = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->modified));
         }
+        
+        
         return parent::afterFind();
     }
 
@@ -177,11 +206,13 @@ class Docs extends fileRecord {
 
         if ($a) { //if switch no save
             if (!$this->action) {
-                
+                $this->docStatus=  Docstatus::model()->findByPk(array('num'=>$this->status, 'doc_type'=>$this->doctype));
                 
                 $this->saveDet();
                 $this->saveCheq();
-
+                
+                $this->saveRef();//load docs and re-save them
+                //EXIT;
                 if (isset($this->docStatus)) {
                     if ($this->docStatus->action != 0) {
                         $this->action=1;
@@ -189,9 +220,43 @@ class Docs extends fileRecord {
                         $this->transaction((int) $this->docStatus->action);
                     }
                 }
+                
+                //exit;
             }
         }
         return $a;
+    }
+    
+    
+    public function saveRef(){
+        $str=$this->refnum_ids;//save new values
+        
+        $this->getRef();    //load old
+        
+        if($str==$this->refnum_ids) //if the same skip
+            return true;
+        if($this->docDocs!==null){
+            foreach ($this->docDocs as $doc){
+                //echo 'clear';
+                $doc->refstatus=Docs::STATUS_OPEN;
+                $doc->refnum='';
+                $doc->save();
+            }
+            
+        }
+        $tmp=explode(",",$str);
+        foreach($tmp as $id){
+            if($id==$this->id)
+                throw new CHttpException(500,Yii::t('app','You cannot save doc as a refnum'));
+            $doc=Docs::model()->findByPk((int)$id);
+            if($doc!==null){
+                //echo ';';
+                $doc->refstatus=Docs::STATUS_CLOSED;
+                $doc->refnum=$this->id;
+                $doc->save();
+            }
+        }
+        $this->refnum_ids=$str;
     }
 
     /*     * *********************doc******************* */
@@ -423,7 +488,7 @@ class Docs extends fileRecord {
             //array('vatnum', 'length', 'min'=>9),
             array('vatnum', 'vatnumVal'),
             array('rcptsum, discount, sub_total, novat_total, vat, total, src_tax', 'length', 'max' => 20),
-            array('issue_date, due_date, comments, description', 'safe'),
+            array('issue_date, due_date, comments, description, refnum_ids, refstatus', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe', 'on' => 'search'),
@@ -491,6 +556,8 @@ class Docs extends fileRecord {
             'comments' => Yii::t('labels', 'Hidden internal comments'),
             'owner' => Yii::t('labels', 'Owner'),
             'discount' => Yii::t('labels', 'Discount'),
+            'refstatus'=>Yii::t('labels','Refarence Status'),
+            
         );
     }
 

@@ -23,7 +23,7 @@ $form = $this->beginWidget('CActiveForm', array(
     <?php echo CHTML::hiddenField("doc_items", count($model->docDetailes)); ?>
     <?php echo CHTML::hiddenField("rcpt_items", count($model->docCheques)); ?>
     <div><!--Company block-->
-        <div class="col-md-1">
+        <div class="col-md-2">
             <p>
                 <?php echo $form->labelEx($model, 'account_id'); ?>
                 <?php echo $form->dropDownList($model, 'account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => $model->docType->account_type)), 'id', 'name')); ?>
@@ -39,7 +39,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 ?>
             </p>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
             <div>
                 <?php echo $form->labelEx($model, 'oppt_account_id'); ?>
                 <?php echo $form->dropDownList($model, 'oppt_account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => $model->docType->oppt_account_type)), 'id', 'name')); ?>
@@ -54,7 +54,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 <?php echo $form->error($model, 'company'); ?>
             </p>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
             <?php echo $form->labelEx($model, 'vatnum'); ?>
             <?php echo $form->textField($model, 'vatnum', array('size' => 10, 'maxlength' => 10)); ?>
             <?php echo $form->error($model, 'vatnum'); ?>
@@ -62,7 +62,7 @@ $form = $this->beginWidget('CActiveForm', array(
 
     </div><!--block-->
     <div class="row"><!--Address block-->
-        <div class="col-md-3">
+        <div class="col-md-2">
             <?php echo $form->labelEx($model, 'address'); ?>
             <?php echo $form->textField($model, 'address', array('size' => 30, 'maxlength' => 80)); ?>
             <?php echo $form->error($model, 'address'); ?>
@@ -101,33 +101,41 @@ $form = $this->beginWidget('CActiveForm', array(
             <?php echo $form->labelEx($model, 'refnum'); ?>
             <div id="Docsrefnum">
                 <?php
+                
+                $model->getRef();
+                if ($model->docDocs !== null) {
+                    foreach ($model->docDocs as $doc) {
+                        echo CHtml::link($doc->docType->name . " #" . $doc->docnum, array('docs/view', "id" => $doc->id)) . "<br />";
+                    }
+                }
+                /*
                 $perent = Docs::model()->findByPk($model->refnum);
                 if ($perent) {
                     echo CHtml::link($perent->docType->name . " #" . $perent->docnum, array('docs/view', "id" => $model->refnum));
-                }
+                }*/
                 ?>
             </div>
-            <?php echo CHtml::link(Yii::t('app', 'Clear refnum'), '#', array('onclick' => '$("#Docs_refnum").val("");$("#Docsrefnum").html(""); return false;',)); ?>
+            <?php echo CHtml::link(Yii::t('app', 'Clear refnum'), '#', array('onclick' => '$("#Docs_refnum_ids").val("");$("#Docsrefnum").html(""); return false;',)); ?>
             <br />
             <?php echo CHtml::link(Yii::t('app', 'Choose Doc'), '#', array('onclick' => '$("#choseRefDoc").dialog("open"); return false;',)); ?>
 
-            <?php echo $form->hiddenField($model, 'refnum', array('size' => 20, 'maxlength' => 20)); ?>
-            <?php echo $form->error($model, 'refnum'); ?>
+            <?php echo $form->hiddenField($model, 'refnum_ids', array('size' => 20, 'maxlength' => 20)); ?>
+            <?php echo $form->error($model, 'refnum_ids'); ?>
         </div>
-        
-        <div class="col-md-1">
-            <?php if($model->docType->stockSwitch){?>
-            <?php echo $form->labelEx($model, 'stockSwitch'); ?>
-            
 
-            <?php echo $form->checkBox($model, 'stockSwitch'); ?>
-            <?php echo $form->error($model, 'stockSwitch'); ?>
-            
+        <div class="col-md-1">
+            <?php if ($model->docType->stockSwitch) { ?>
+                <?php echo $form->labelEx($model, 'stockSwitch'); ?>
+
+
+                <?php echo $form->checkBox($model, 'stockSwitch'); ?>
+                <?php echo $form->error($model, 'stockSwitch'); ?>
+
             <?php } ?>
         </div>
-        
-        
-        
+
+
+
 
         <div class="col-md-3">
 
@@ -186,7 +194,8 @@ $form = $this->beginWidget('CActiveForm', array(
         <div><!--date block-->
             <div class="col-md-2">
                 <?php echo $form->labelEx($model, 'issue_date'); ?>
-                <?php $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker', array(
+                <?php
+                $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker', array(
                     'model' => $model, //Model object
                     'attribute' => 'issue_date', //attribute name
                     'mode' => 'datetime',
@@ -202,7 +211,8 @@ $form = $this->beginWidget('CActiveForm', array(
 
             <div class="col-md-2">
                 <?php echo $form->labelEx($model, 'due_date'); ?>
-                <?php $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker', array(
+                <?php
+                $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker', array(
                     'model' => $model, //Model object
                     'attribute' => 'due_date', //attribute name
                     'mode' => 'datetime',
@@ -293,7 +303,7 @@ $form = $this->beginWidget('CActiveForm', array(
                     <td></td>
                     <td>
                         <?php echo $form->labelEx($model, 'sub_total'); ?>
-                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));  ?>
+                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));   ?>
                         <?php echo $form->error($model, 'sub_total'); ?>
                     </td>
                     <td>
@@ -318,8 +328,8 @@ $form = $this->beginWidget('CActiveForm', array(
                     <td></td>
                     <td></td>
                     <td>
-                        <?php //echo $form->labelEx($model,'novat_total');  ?>
-                        <?php //echo $form->error($model,'novat_total');  ?>
+                        <?php //echo $form->labelEx($model,'novat_total');   ?>
+                        <?php //echo $form->error($model,'novat_total');   ?>
                     </td>
                     <td>
                         <?php echo $form->hiddenField($model, 'novat_total'); ?>
@@ -350,7 +360,6 @@ $form = $this->beginWidget('CActiveForm', array(
                 <?php
                 $i = 0;
                 if (count($model->docDetailes) != 0)
-                //$docdetails=array(new Docdetails);
                     foreach ($model->docDetailes as $docdetail) {
                         echo $this->renderPartial('docdetial', array('model' => $docdetail, 'form' => $form, 'i' => "{$i}"));
                         $i++;
@@ -417,14 +426,14 @@ $form = $this->beginWidget('CActiveForm', array(
                     </td>
                     <td>
                         <?php echo $form->labelEx($model, 'sub_total'); ?>
-                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));  ?>
+                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));   ?>
                         <?php echo $form->error($model, 'sub_total'); ?>
                     </td>
 
                     <td>
                         <div id="rcptSum"></div>
                         <?php echo $form->hiddenField($model, "rcptsum"); ?>    
-                        <?php //echo CHTML::hiddenField('rcptsum');  ?>
+                        <?php //echo CHTML::hiddenField('rcptsum');   ?>
                     </td>
                 </tr>
             </tfoot>	
@@ -617,7 +626,7 @@ $form = $this->beginWidget('CActiveForm', array(
             $("#choseRefDoc").dialog("close");
 
             $('#Docsrefnum').html($('#Docsrefnum').html() + ", " + doc.doctype + " #" + doc.docnum);
-            $('#Docs_refnum').val($('#Docs_refnum').val() + doc.id + ",");
+            $('#Docs_refnum_ids').val($('#Docs_refnum_ids').val() + doc.id + ",");
 
 
 
@@ -723,7 +732,7 @@ $form = $this->beginWidget('CActiveForm', array(
         function TypeSelChange(index) {
             var val = $('#Doccheques_' + index + '_type').val();
 
-            //$('#Doccheques_'+index+"#banksel"+num).parent().append("<?php //echo PrintBankSelect();  ?>");
+            //$('#Doccheques_'+index+"#banksel"+num).parent().append("<?php //echo PrintBankSelect();    ?>");
             $('#Doccheques_' + index + "_cheque_acct").attr('placeholder', '');
             $('#Doccheques_' + index + "_cheque_num").attr('placeholder', '');
             $('#Doccheques_' + index + "_branch").attr('placeholder', '');
@@ -753,7 +762,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 $('#Doccheques_' + index + "_date").show();
                 $('#Doccheques_' + index + "_banksel").hide();
 
-                $('#Doccheques_' + index + "_bank").parent().append('<?php //echo PrintCreditCompany();  ?>');
+                $('#Doccheques_' + index + "_bank").parent().append('<?php //echo PrintCreditCompany();    ?>');
                 $('#Doccheques_' + index + "_bank").remove();
 
                 $('#Doccheques_' + index + "_branch").show();
@@ -1092,6 +1101,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 array('items' => array(
                         //array('icon'=>'envelope','label'=>Yii::t('app','Email'), 'url'=>'javascript:sendForm("email");',),
                         array('icon' => 'glyphicon glyphicon-save', 'label' => Yii::t('app', 'PDF'), 'url' => 'javascript:sendForm("pdf");',),
+                        array('icon' => 'glyphicon glyphicon-save', 'label' => Yii::t('app', 'Save'), 'url' => 'javascript:sendForm("save");',),
                     )),
             ),
         ));
@@ -1106,7 +1116,7 @@ $form = $this->beginWidget('CActiveForm', array(
         ));
         ?>
 
-        <?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name')); //Docstatus::model()->findAll(); ?>
+        <?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name')); //Docstatus::model()->findAll();  ?>
         <!--</div>-->
     </div>
 

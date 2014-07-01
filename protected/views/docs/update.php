@@ -29,10 +29,10 @@ if($model->doctype==2){//Delivery doc
 $this->menu=$actions;
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Update") . " " . Yii::t('app',$type->name) . " " . $model->docnum,
+    'haeder' => Yii::t('app',"Update") . " " . Yii::t('app',$model->docType->name) . " " . $model->docnum,
     //'width' => '800',
 )); 
- echo $this->renderPartial('_form', array('model'=>$model,'type'=>$type)); 
+ echo $this->renderPartial('_form', array('model'=>$model)); 
 
 $this->endWidget(); 
 ?>

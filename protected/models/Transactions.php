@@ -123,7 +123,7 @@ class Transactions extends basicRecord {
 
     public function beforeSave() {
         $this->num = $this->newNum();
-        $this->date = date("Y-m-d H:m:s");
+        $this->date = date("Y-m-d H:i:s");
 
         $cur = Yii::app()->user->settings['company.cur'];
         $acc = Accounts::model()->findByPk($this->account_id);

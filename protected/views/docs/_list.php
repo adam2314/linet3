@@ -79,6 +79,14 @@ $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridVie
                         //'filter'=>CHtml::listData(Docstatus::model()->findAllByAttributes(array('doc_type'=>$data->doctype)), 'num', 'name'),
                         'value'=>'$data->docStatus->name'
                 ),
+            array(
+                    'name'=>'refstatus',
+                     //'filter'=>$filter,
+                        'filter'=>CHtml::listData(Docs::model()->getRefStatuses(), 'id', 'name'),
+                        'value'=>'$data->getRefStatus()'
+                ),
+            
+            
 		'docnum',
 		'account_id',
 		'company',

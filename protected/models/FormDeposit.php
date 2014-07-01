@@ -22,7 +22,7 @@ class FormDeposit  extends CFormModel{
     
     
     public function beforeSave(){
-            $this->date=date("Y-m-d H:m:s",CDateTimeParser::parse($this->date,Yii::app()->locale->getDateFormat('yiishort')));
+            $this->date=date("Y-m-d H:i:s",CDateTimeParser::parse($this->date,Yii::app()->locale->getDateFormat('yiishort')));
             
             //return true;
             return parent::beforeSave();

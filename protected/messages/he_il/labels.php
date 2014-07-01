@@ -72,7 +72,7 @@ return array (
   'Dir Phone' => 'טלפון ישיר',
   'Doc' => 'מסמך',
   'Documenet Type' => 'סוג מסמך',
-  'Due Date' => 'תאריך פקיעת תוקף',
+  'Due Date' => 'תאריך ערך',
   'Eav Fields' => 'שדות מותאמים',
   'Email' => 'דוא"ל',
   'Expire' => 'פג',

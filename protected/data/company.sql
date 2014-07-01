@@ -134,6 +134,7 @@ CREATE TABLE `config` (
   `value` text NOT NULL,
   `eavType` varchar(255) NOT NULL,
   `hidden` tinyint(1) NOT NULL,
+  `priority` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 );
 
