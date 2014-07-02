@@ -32,7 +32,7 @@ class Bankbook extends CActiveRecord{
 	 */
 	public function rules(){
 		return array(
-			array('id, account_id, date, sum, total', 'required'),
+			array('account_id, date, sum', 'required'),
 			array('id, account_id', 'numerical', 'integerOnly'=>true),
 			array('details, refnum', 'length', 'max'=>255),
                         array('date', 'safe'),

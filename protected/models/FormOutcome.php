@@ -64,10 +64,36 @@ class FormOutcome extends CFormModel{
         $line++;
         //print_r($vat->attributes);
         $num=$opt_tran->save();
-       
+        $this->saveRef($num,$this->sum);
    }
         
+   public function saveRef($id,$total){
+        $str=$this->refnum;//save new values
+        
 
+        $sum=0;
+        $tmp=explode(",",rtrim($str, ","));
+        foreach($tmp as $id){//lets do this
+            //if($id==$this->id){
+            //    throw new CHttpException(500,Yii::t('app','You cannot save doc as a refnum'));
+            //}
+            $doc=Docs::model()->findByPk((int)$id);
+            if($doc!==null){
+                $sum+=$doc->total;//adam: need to multi currency!
+                if($sum<=$total){
+                    $doc->refstatus=Docs::STATUS_CLOSED;
+                }else{
+                    $doc->refstatus=Docs::STATUS_OPEN;
+                }
+                $doc->refnum=$id;
+                $doc->save();
+            }
+        }
+        //$this->refnum=$str;
+    }
+   
+   
+   
 }
 
 ?>

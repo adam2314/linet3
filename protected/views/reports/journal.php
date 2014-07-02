@@ -74,14 +74,14 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         array(
             'name' => 'account_id',
             //'type' => 'raw',
-            'value' => 'CHtml::link(CHtml::encode($data->Account->name),Yii::app()->createAbsoluteUrl("/accounts/transaction/id/".$data->account_id))',
+            'value' => 'CHtml::link(CHtml::encode(isset($data->Account)?$data->Account->name:$data->account_id),Yii::app()->createAbsoluteUrl("/accounts/transaction/id/".$data->account_id))',
             'type' => 'raw',
         //'value' => '$data->getOptAcc()',
         ),
         //'',
         array(
             'name' => 'refnum1',
-            'value' => 'CHtml::link(CHtml::encode($data->refnum1),Yii::app()->createAbsoluteUrl("/docs/view/$data->refnum1"))',
+            'value' => '$data->refnumDocsLink()',
             'type' => 'raw',
         ),
         array(

@@ -233,25 +233,34 @@ class Docs extends fileRecord {
         
         $this->getRef();    //load old
         
-        if($str==$this->refnum_ids) //if the same skip
-            return true;
-        if($this->docDocs!==null){
+        
+        //no skipping is allowed anymore if cur,total change...
+        //if($str==$this->refnum_ids) //if the same skip
+        //    return true;
+        
+        
+        if($this->docDocs!==null){//clear!
             foreach ($this->docDocs as $doc){
-                //echo 'clear';
                 $doc->refstatus=Docs::STATUS_OPEN;
                 $doc->refnum='';
                 $doc->save();
             }
             
         }
+        $sum=0;
         $tmp=explode(",",$str);
-        foreach($tmp as $id){
-            if($id==$this->id)
+        foreach($tmp as $id){//lets do this
+            if($id==$this->id){
                 throw new CHttpException(500,Yii::t('app','You cannot save doc as a refnum'));
+            }
             $doc=Docs::model()->findByPk((int)$id);
             if($doc!==null){
-                //echo ';';
-                $doc->refstatus=Docs::STATUS_CLOSED;
+                $sum+=$doc->total;//adam: need to multi currency!
+                if($sum<=$this->total){
+                    $doc->refstatus=Docs::STATUS_CLOSED;
+                }else{
+                    $doc->refstatus=Docs::STATUS_OPEN;
+                }
                 $doc->refnum=$this->id;
                 $doc->save();
             }

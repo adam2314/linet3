@@ -52,7 +52,23 @@ class Transactions extends basicRecord {
     }
 
 //*/
-
+    public function refnumDocsLink(){
+        $str='';
+        $array=explode(",",$this->refnum1);
+        
+        foreach($array as $docid){
+            $doc=Docs::model()->findByPk($docid);
+            if($doc!==null){
+                $str.= CHtml::link(CHtml::encode($doc->docType->name. " #".$doc->docnum),Yii::app()->createAbsoluteUrl("/docs/view/$docid"));
+            }else{
+                $str.=$docid;
+            }
+            $str.=",";
+            //echo $docid;
+        }
+        
+        return rtrim($str, ",");
+    }
     /**
      * @return string the associated database table name
      */
