@@ -17,7 +17,6 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-    'Add' => 'הוסף',
   'Add User' => 'הוסף משתמש',
   'Admin' => 'מנהל מערכת',
   'Busness ID No.' => 'מספר ח"פ/ע"מ של העסק',
@@ -423,7 +422,7 @@ return array (
   'Precision' => 'דיוק',
   'Item Category' => 'קטגורית פריט',
   'Purchase Order' => 'הזמנת רכש',
-  '' => '',
+  'Add' => 'הוסף',
   '' => '',
   '' => '',
   '' => '',

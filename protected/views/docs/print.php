@@ -1,6 +1,14 @@
 <?php
 
 
+if($preview==3){
+    $configPath=Yii::app()->user->settings["company.path"];
+ $logopath=Yii::app()->basePath."/files/$configPath/".Yii::app()->user->settings['company.logo'];
+        
+}      //Yii::app()->basePath."protected/files/download/".Yii::app()->user->settings['company.logo'];
+else
+    $logopath=Yii::app()->createAbsoluteUrl("download/".Yii::app()->user->settings['company.logo']);
+
 //$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View Document ") ." " .$model->id,));
 ?>
 
@@ -19,7 +27,7 @@
 
                 <td>
                     
-                <img width="100px" alt="logo" src="<?php echo Yii::app()->createAbsoluteUrl("download/".Yii::app()->user->settings['company.logo']);?>">
+                <img width="100px" alt="logo" src="<?php echo $logopath;?>">
                 
                 </td>
         </tr>

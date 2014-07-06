@@ -474,7 +474,7 @@ INSERT INTO `docType` (`id`, `name`, `openformat`, `isdoc`, `isrecipet`, `iscont
 (12, 'Manual receipt',          0,      1, 0, 0, 1, 1, 1, 1, 1, NULL, 12, 3, '', '', 0, 1),
 (13, 'Buisness outcome',        0,      1, 0, 0, 0, 1, 1, 1, 1, 2, 5, 1, '', '', 0, 0),
 (14, 'Asstes outcome',          0,      1, 0, 0, 0, 1, 1, 1, 1, 4, 5, 2, '', '', 0, 0),
-(15, 'Warehouse transaction',   830,    1, 0, 0, 0, 1, 0, 1, 1, 8, NULL, 0, '', '', 0, 1);
+(15, 'Warehouse transaction',   830,    1, 0, 0, 0, 1, 8, 1, 1, 8, NULL, 0, '', '', 0, 1);
 
 INSERT INTO `itemCategories` (`id`, `name`, `profit`) VALUES
 (1, 'כללי', 1);

@@ -69,7 +69,7 @@ echo $this->renderPartial('print', array('model'=>$model,'preview'=>1));
         
         $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'id'=>'docs-form',
-        'action'=>Yii::app()->CreateURL('docs/print/id/'.$model->id),
+        'action'=>Yii::app()->CreateURL('docs/view/id/'.$model->id),
 	'enableAjaxValidation'=>false,
 )); ?>
 

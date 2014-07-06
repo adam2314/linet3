@@ -9,7 +9,7 @@ $this->menu=array(
 
 <?php 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Create Account" ." ". Yii::t('app',$model->accType->desc)),
+    'haeder' => Yii::t('app',"Create Account") .": ". Yii::t('app',$model->accType->desc),
 )); 
 echo $this->renderPartial('_form', array('model'=>$model)); 
  $this->endWidget(); 
