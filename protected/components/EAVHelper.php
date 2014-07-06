@@ -16,11 +16,62 @@ class EAVHelper {
     
     public static function addRow($key, $value, $sModel) {
     
-
+        /**Settings**/
     return self::label($key).self::field($key, $value, $sModel).self::error($key);
 }
 
 
+public static function addField($name,$value,$model){
+    
+    
+   return self::field($name,$value, $model);
+    
+}
+
+
+
+private static function field($key, $value, $sModel){
+    
+    if (strpos($sModel->eavType, "list(") === 0) {
+        $modelName = str_replace("list(", "", $sModel->eavType);
+        $modelName = str_replace(")", "", $modelName);
+        $temp = CHtml::listData($modelName::model()->findAll(), 'id', 'name');
+        $temp[''] = Yii::t('app', 'None');
+        //$label = Yii::t('app', $sModel->id) ;
+        $field = CHtml::dropDownList('Settings[' . $key . '][value]', $value, $temp);
+    } elseif (strpos($sModel->eavType, "select(") === 0) {
+        $list = str_replace("select(", "", $sModel->eavType);
+        $list = CJSON::decode(str_replace(")", "", $list));
+        foreach ($list as &$item) {
+            //print $item;
+            $item = Yii::t('app', $item);
+        }
+        //$temp = CHtml::listData(CJSON::decode($list), 'id', 'name');
+        $temp[''] = Yii::t('app', 'None');
+        //$label = Yii::t('app', $sModel->id);
+        $field = CHtml::dropDownList('Settings[' . $key . '][value]', $value, $list);
+    } elseif ($sModel->eavType == 'file') {
+
+
+        //$label = Yii::t('app', $sModel->id) ;
+        $field = CHtml::fileField('Settings[' . $key . '][value]', $value) .
+                CHtml::hiddenField('Settings[' . $key . '][value]', $value) .
+                "<a href='javascript:del();'>" . Yii::t('app', 'Delete') . "</a><br />";
+    } elseif ($sModel->eavType == 'boolean') {
+
+        //$label = Yii::t('app', $sModel->id);
+
+        $field = CHtml::checkbox('Settings[' . $key . '][value]', $value) .
+                CHtml::hiddenField('Settings[' . $key . '][value]', $value);
+    } else {
+        //$label = Yii::t('app', $sModel->id);
+        $field = CHtml::textField('Settings[' . $key . '][value]', $value);
+    }
+    return $field;
+}
+
+/*
+ * 
 private static function field($key, $value, $sModel){
     
     if (strpos($sModel->eavType, "list(") === 0) {
@@ -60,6 +111,12 @@ private static function field($key, $value, $sModel){
     }
     return $field;
 }
+ * 
+ * 
+ */
+
+
+
 
 private static function label($id){
     return "<label for='$id'>".Yii::t('app', $id)."</label>";

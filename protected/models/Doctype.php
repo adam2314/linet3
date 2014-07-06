@@ -15,129 +15,155 @@
  * @property integer $docStatus_id
  * @property integer $last_docnum
  */
-class Doctype extends CActiveRecord{
-	const table='{{docType}}';
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return Doctype the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
-        public function getOpenType($key){
-            //$this->find
-            $tmp=$this->findByAttributes(array('openformat'=>$key));
-            if($tmp!==null)
-                return Yii::t('app',$tmp->name);
-            else {
-                Yii::log("OpenFormat Import: no type:".$key,'error','app');
-                //Yii::app()->end();
-                return '';
-            }
-            // return isset($this->docType)?$this->docType->openformat:"";
-         }
-	
-	public function primaryKey(){
-		return 'id';
-	}
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName(){
-		return self::table;
-	}
+class Doctype extends CActiveRecord {
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('name, openformat, isdoc, isrecipet, iscontract, stockAction, account_type, docStatus_id, last_docnum', 'required'),
-			array('openformat, isdoc, isrecipet, iscontract, stockAction, account_type, docStatus_id, last_docnum', 'numerical', 'integerOnly'=>true),
-			array('name', 'length', 'max'=>255),
-                    
-                        array('header, footer', 'safe'),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, name, openformat, isdoc, isrecipet, iscontract, stockAction, account_type, docStatus_id, last_docnum', 'safe', 'on'=>'search'),
-		);
-	}
-
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.);
-	
-		return array(
-                    'docStatus'=>array(self::BELONGS_TO, 'Docstatus', array('docStatus_id'=>'num','id'=>'doc_type')),
-		);
-	}
-	public function getType($name){
-		$model=Doctype::model()->find('name=:name',array(':name'=>ucfirst($name)));
-		//$post=Post::model()->find('postID=:postID', array(':postID'=>10));
-		return $model->id;
-	}
+    public static function getList($const=null){
+        //if($const===null){
+            $arr= self::model()->findAll();
+            
+            //
+        //}
         
-        public function getOType($type){
-		$model=Doctype::model()->find('openformat=:openformat',array(':openformat'=>$type));
-		//$post=Post::model()->find('postID=:postID', array(':postID'=>10));
-                if($model===null)
-                    return 0;
-                
-		return $model->id;
-	}
+        foreach($arr as &$item){
+            $item->name=Yii::t('app',$item->name);
+        }
         
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'id' => Yii::t('labels','ID'),
-			'name' => Yii::t('labels','Name'),
-			'openformat' => Yii::t('labels','Open Format'),
-			'isdoc' => Yii::t('labels','Is Document'),
-			'isrecipet' => Yii::t('labels','Is Recipet'),
-			'iscontract' => Yii::t('labels','Is Contract'),
-			'stockAction' => Yii::t('labels','Stock Action'),
-			'account_type' => Yii::t('labels','Account Type'),
-			'docStatus_id' => Yii::t('labels','Document Status'),
-			'last_docnum' => Yii::t('labels','Last Document num'),
-		);
-	}
+        
+        return CHtml::listData($arr, 'id', 'name');
+    }
+    
+    
+    const table = '{{docType}}';
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+    /**
+     * Returns the static model of the specified AR class.
+     * @param string $className active record class name.
+     * @return Doctype the static model class
+     */
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
+    }
 
-		$criteria=new CDbCriteria;
+    public function getOpenType($key) {
+        //$this->find
+        $tmp = $this->findByAttributes(array('openformat' => $key));
+        if ($tmp !== null)
+            return Yii::t('app', $tmp->name);
+        else {
+            Yii::log("OpenFormat Import: no type:" . $key, 'error', 'app');
+            //Yii::app()->end();
+            return '';
+        }
+        // return isset($this->docType)?$this->docType->openformat:"";
+    }
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('openformat',$this->openformat);
-		$criteria->compare('isdoc',$this->isdoc);
-		$criteria->compare('isrecipet',$this->isrecipet);
-		$criteria->compare('iscontract',$this->iscontract);
-		$criteria->compare('stockAction',$this->stockAction);
-		$criteria->compare('account_type',$this->account_type);
-		$criteria->compare('docStatus_id',$this->docStatus_id);
-		$criteria->compare('last_docnum',$this->last_docnum);
+    public function primaryKey() {
+        return 'id';
+    }
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
+    /**
+     * @return string the associated database table name
+     */
+    public function delete() {
+        if ($this->id >= 16) {//protect all sys docs
+            return parent::delete();
+        } else {
+            return false;
+        }
+    }
+
+    public function tableName() {
+        return self::table;
+    }
+
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules() {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            array('name, openformat, isdoc, isrecipet, iscontract, stockAction, account_type, docStatus_id, last_docnum', 'required'),
+            array('openformat, isdoc, isrecipet, iscontract, stockAction, account_type, docStatus_id, last_docnum', 'numerical', 'integerOnly' => true),
+            array('name', 'length', 'max' => 255),
+            array('header, footer', 'safe'),
+            // The following rule is used by search().
+            // Please remove those attributes that should not be searched.
+            array('id, name, openformat, isdoc, isrecipet, iscontract, stockAction, account_type, docStatus_id, last_docnum', 'safe', 'on' => 'search'),
+        );
+    }
+
+    /**
+     * @return array relational rules.
+     */
+    public function relations() {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.);
+
+        return array(
+            'docStatus' => array(self::BELONGS_TO, 'Docstatus', array('docStatus_id' => 'num', 'id' => 'doc_type')),
+        );
+    }
+
+    public function getType($name) {
+        $model = Doctype::model()->find('name=:name', array(':name' => ucfirst($name)));
+        //$post=Post::model()->find('postID=:postID', array(':postID'=>10));
+        return $model->id;
+    }
+
+    public function getOType($type) {
+        $model = Doctype::model()->find('openformat=:openformat', array(':openformat' => $type));
+        //$post=Post::model()->find('postID=:postID', array(':postID'=>10));
+        if ($model === null)
+            return 0;
+
+        return $model->id;
+    }
+
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels() {
+        return array(
+            'id' => Yii::t('labels', 'ID'),
+            'name' => Yii::t('labels', 'Name'),
+            'openformat' => Yii::t('labels', 'Open Format'),
+            'isdoc' => Yii::t('labels', 'Is Document'),
+            'isrecipet' => Yii::t('labels', 'Is Recipet'),
+            'iscontract' => Yii::t('labels', 'Is Contract'),
+            'stockAction' => Yii::t('labels', 'Stock Action'),
+            'account_type' => Yii::t('labels', 'Account Type'),
+            'docStatus_id' => Yii::t('labels', 'Document Status'),
+            'last_docnum' => Yii::t('labels', 'Last Document num'),
+            'header' => Yii::t('labels', 'Header'),
+            'footer' => Yii::t('labels', 'Footer'),
+        );
+    }
+
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+     */
+    public function search() {
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
+
+        $criteria = new CDbCriteria;
+
+        $criteria->compare('id', $this->id);
+        $criteria->compare('name', $this->name, true);
+        $criteria->compare('openformat', $this->openformat);
+        $criteria->compare('isdoc', $this->isdoc);
+        $criteria->compare('isrecipet', $this->isrecipet);
+        $criteria->compare('iscontract', $this->iscontract);
+        $criteria->compare('stockAction', $this->stockAction);
+        $criteria->compare('account_type', $this->account_type);
+        $criteria->compare('docStatus_id', $this->docStatus_id);
+        $criteria->compare('last_docnum', $this->last_docnum);
+
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+        ));
+    }
+
 }

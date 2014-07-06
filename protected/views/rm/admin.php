@@ -5,19 +5,6 @@ $this->menu=array(
 	array('label'=>Yii::t('app','Create Account Contact History'),'url'=>array('create')),
 );
 
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('acctype-grid', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
-
  $this->beginWidget('MiniForm',array(
     'haeder' => Yii::t('app',"Manage Account Contact History"),
 
@@ -31,9 +18,17 @@ $('.search-form form').submit(function(){
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'account_id',
+		array(
+                    'name'=>'account_id',
+                    'value'=>'$data->Account->name',
+                ),
 		'dt',
-		'details',
+		array(
+                    'name'=>'details',
+                    'value'=>'$data->details',
+                     'type'=>'raw',
+                         
+                ),
 		
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',

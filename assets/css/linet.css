@@ -103,14 +103,7 @@ div.container-fluid.outer{
 }
 
 
-.topnav{
-    float:right;
-    padding: 10px;
-}
 
-.navbar{
-    margin-bottom: 0px;
-}
 
 
 
@@ -192,7 +185,9 @@ div #chose{
   margin-top: 5px;
 }
 
-
+input[type="checkbox"] {
+ width:20px;   
+}
 
 input {
     display: block;
@@ -212,13 +207,65 @@ input {
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 
-#footer {
-    height: 65px;
-    text-align: center;
-    
-   
+
+
+
+.topnav{
+    float:right;
+    padding: 10px;
+}
+
+.navbar{
+    margin-bottom: 0px;
+}
+
+
+.wrapper{
+    margin: 0 auto;
+    min-height: 100%;
+    /*position:relative;*/
+}
+.content{
+    float: right;
+    display: block;
+    /*height: 100%;*/
+    width:100%;
+    /*position: absolute;*/
+    /*position: absolute;*/
     
 }
+
+#content{
+    /*float: left;*/
+    display: block;
+    /*min-height: 100%;*/
+    /*position: static;*/
+    /*position: absolute;*/
+    
+}
+#left{
+    /*min-height: 100%;*/
+    float: left;
+    
+    
+}
+#footer {
+    clear:both;
+    height: 65px;
+    text-align: center;
+    bottom:0;
+   position:relative;
+   width:100%;
+   /*z-index: 10;*/
+    
+}
+
+.body{
+    
+min-height: 500px;
+}
+
+
 .ui-tabs .ui-tabs-panel {
     overflow: auto;
 }
@@ -300,11 +347,7 @@ input {
     
 }
 
-#left{
-   /* position:fixed;*/
-    
-    
-}
+
 .shdowleft{
     
 }

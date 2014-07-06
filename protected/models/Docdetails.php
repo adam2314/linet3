@@ -142,6 +142,7 @@ class Docdetails extends basicRecord{
 			'description' => Yii::t('labels','Description'),
 			'qty' => Yii::t('labels','Qty'),
 			'unit_price' => Yii::t('labels','Unit Price'),
+                        'unit_id' => Yii::t('labels','Unit id'),
 			'currency_id' => Yii::t('labels','Currency'),
 			'price' => Yii::t('labels','Price'),
 			'invprice' => Yii::t('labels','invoice Price'),

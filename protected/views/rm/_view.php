@@ -4,16 +4,16 @@
 	<?php echo CHtml::link(CHtml::encode($data->id),array('view','id'=>$data->id)); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('name')); ?>:</b>
-	<?php echo CHtml::encode($data->name); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('dt')); ?>:</b>
+	<?php echo CHtml::encode($data->dt); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('desc')); ?>:</b>
-	<?php echo CHtml::encode($data->desc); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('details')); ?>:</b>
+	<?php echo $data->details; ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('openformat')); ?>:</b>
-	<?php echo CHtml::encode($data->openformat); ?>
+	<b><?php //echo CHtml::encode($data->getAttributeLabel('openformat')); ?>:</b>
+	<?php //echo CHtml::encode($data->openformat); ?>
 	<br />
 
 

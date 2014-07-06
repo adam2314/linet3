@@ -47,8 +47,9 @@ $model->password='';
 //$tzlist = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 //print_r($list);
 echo $form->dropDownListRow($model,'timezone',Timezone::makeList());?>
-
-<table  data-role="table" class="formtable" ><!-- docdetalies -->
+<div class="row">
+<div class="col-lg-4">
+<table  data-role="table" class="table" ><!-- docdetalies -->
         <thead>
             <tr  class="head1">
                 <th><?php echo $form->labelEx($model,'ItemVatCat'); ?></th>
@@ -79,8 +80,8 @@ echo $form->dropDownListRow($model,'timezone',Timezone::makeList());?>
 
 
     </table><!-- doc detiales -->
-    
-    
+</div>    
+</div>
         <div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType'=>'submit',

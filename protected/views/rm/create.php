@@ -1,7 +1,7 @@
 <?php
 $this->menu=array(
-	array('label'=>'List Account Contact History','url'=>array('index')),
-	array('label'=>'Manage Account Contact History','url'=>array('admin')),
+	//array('label'=>'List Account Contact History','url'=>array('index')),
+	array('label'=>Yii::t('app','Manage Account Contact History'),'url'=>array('admin')),
 );
 
 

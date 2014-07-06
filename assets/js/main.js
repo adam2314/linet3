@@ -40,8 +40,12 @@ $(function () {
     $('#menu').metisMenu();
     
     
-    
 });
+
+
+    
+    
+
 function metisButton() {
     window.prettyPrint && prettyPrint();
     $.each($('.inner a.btn'), function () {

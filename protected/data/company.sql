@@ -207,6 +207,7 @@ CREATE TABLE `docType` (
   `header` text NOT NULL,
   `footer` text NOT NULL,
   `stockSwitch` tinyint(1) NOT NULL,
+  `copy` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 );
 

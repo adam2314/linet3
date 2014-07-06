@@ -1,14 +1,14 @@
 <?php
 
 $this->menu=array(
-	array('label'=>'List Acctype','url'=>array('index')),
-	array('label'=>'Create Acctype','url'=>array('create')),
-	array('label'=>'View Acctype','url'=>array('view','id'=>$model->id)),
-	array('label'=>'Manage Acctype','url'=>array('admin')),
+	//array('label'=>Yii::t('app','List Account Contact History'),'url'=>array('index')),
+	array('label'=>Yii::t('app','Create Account Contact History'),'url'=>array('create')),
+	//array('label'=>Yii::t('app','View Account Contact History'),'url'=>array('view','id'=>$model->id)),
+	array('label'=>Yii::t('app','Manage Account Contact History'),'url'=>array('admin')),
 );
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => "Update Account Type ". $model->id,
+    'haeder' => Yii::t('app',"Update Account Contact History") ." ". $model->id,
     //'width' => '800',
 )); 
 

@@ -9,7 +9,7 @@ and open the template in the editor.
 */
 
 * {
-direction:rtl;
+    direction:rtl;
 }
 /*
 .chzn-rtl, .chosen-single, .chosen-container, .chosen-drop, .chosen-search, .chosen-results{
@@ -22,24 +22,24 @@ direction:rtl;
 
 .pagination>li>a, .pagination>li>span {
     float: right;
-    
+
 }
 
 
 #left {
-float: right;
+    float: right;
 }
 
 .user-media .user-link {
-float: right;
+    float: right;
 }
 
 .navbar-header {
-float: right;
+    float: right;
 }
 
 .navbar-nav {
-float: right;
+    float: right;
 }
 @media (min-width: 1164px){
     .nav > li {
@@ -48,39 +48,42 @@ float: right;
 }
 .dropdown-menu {
     right:0;
-    
+
 }
 
 
 
 .user-media .media-body{
     float: right; 
-    
-    
+
+
 }
 .box header .icons, .box header h5, .box header .toolbar {
-   float: right; 
+    float: right; 
 }
 
 .box header .toolbar{
     float: left; 
-    
-    
+
+
 }
 
 #menu > li > a {
-text-align: right;
+    text-align: right;
 }
 
 th {
-text-align: right;
+    text-align: right;
 }
 
-.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
-float: right;
+.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12,
+.col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 
+
+{
+    float: right;
 }
 
 
 .ui-tabs .ui-tabs-nav li {
-float: right;
+    float: right;
 }

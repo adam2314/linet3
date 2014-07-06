@@ -23,7 +23,12 @@ if($model->doctype==3){//Invoice
 if($model->doctype==2){//Delivery doc
     $actions[]=array('label'=>Yii::t('app','Convert to Return document'), 'url'=>array('duplicate','id'=>$model->id,'type'=>5));//Return document
 }
-
+if($model->doctype==7){//Sales Order
+    $actions[]=array('label'=>Yii::t('app','Convert to Proforma'), 'url'=>array('duplicate','id'=>$model->id,'type'=>1));//Proforma
+    $actions[]=array('label'=>Yii::t('app','Convert to Delivery doc'), 'url'=>array('duplicate','id'=>$model->id,'type'=>2));//Delivery doc
+    $actions[]=array('label'=>Yii::t('app','Convert to Invoice'), 'url'=>array('duplicate','id'=>$model->id,'type'=>3));//Invoice
+    $actions[]=array('label'=>Yii::t('app','Convert to Invoice Receipt'), 'url'=>array('duplicate','id'=>$model->id,'type'=>9));//Invoice Receipt 
+}
 
 
 $this->menu=$actions;

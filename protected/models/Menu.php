@@ -113,7 +113,7 @@ class Menu extends mainRecord{
             return $menu=array(array('label'=>Yii::t('app','Login'), 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest));
         }
 			
-        $known=Menu::model()->findAll();
+        $known=Menu::model()->findAll(array('order'=>'parent'));
         $menu=array();
         foreach($known as $item){
             if($item->parent==0){

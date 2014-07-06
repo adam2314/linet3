@@ -74,8 +74,13 @@ class BankbookController extends RightsController{
     public function actionAdmin(){
 		$model=new Bankbook('search');
 		$model->unsetAttributes();  // clear any default values
-		//if(isset($_POST['Bankbook']))
-		//	$model->attributes=$_GET['Currates'];
+                //
+                //
+		if(isset($_POST['Bankbook']['file'])){
+                    
+			$model->import((int)$_POST['Bankbook']['account_id']);
+                        //Yii::app()->end();
+                }
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -86,8 +91,10 @@ class BankbookController extends RightsController{
             $model=new Bankbook('search');
             $model->unsetAttributes();
             //$model->account_id=$account_id;
-            if(isset($_POST['Bankbook']))
+            if(isset($_POST['Bankbook'])){
                     $model->attributes=$_POST['Bankbook'];
+                    
+            }
             $this->renderPartial('ajax',array( 'model'=>$model,   ));
     }
     

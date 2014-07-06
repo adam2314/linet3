@@ -24,33 +24,11 @@
 
         <?php echo $form->textFieldRow($model,'subject',array('maxlength'=>255)); ?>
 
-        <?php 
-        
-        $this->widget('ext.tinymce.TinyMce', array(
+        <?php $this->widget('ext.tinymce.TinyMce', array(
             'model' => $model,
             'attribute' => 'body',
-            // Optional config
-            //'spellcheckerUrl' => array('tinyMce/spellchecker'),
-            // or use yandex spell: http://api.yandex.ru/speller/doc/dg/tasks/how-to-spellcheck-tinymce.xml
             'spellcheckerUrl' => 'http://speller.yandex.net/services/tinyspell',
-            //'fileManager' => array(
-                //'class' => 'ext.tinymce.TinyMceFileManager',
-                //'connectorRoute'=>'admin/elfinder/connector',
-            //),
-            'htmlOptions' => array(
-                'rows' => 6,
-                'cols' => 60,
-            ),
-        ));
-
-        
-        
-        
-        
-        //echo $form->textAreaRow($model,'body',array('maxlength'=>40)); 
-        
-        
-        ?>
+        )); ?>
 
 	<?php //echo $form->textFieldRow($model,'openformat',array('class'=>'span5','maxlength'=>5)); ?>
 

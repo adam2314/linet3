@@ -6,13 +6,20 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List EavFields','url'=>array('index')),
-	array('label'=>'Create EavFields','url'=>array('create')),
-	array('label'=>'View EavFields','url'=>array('view','id'=>$model->id)),
-	array('label'=>'Manage EavFields','url'=>array('admin')),
+	//array('label'=>'List EavFields','url'=>array('index')),
+	array('label'=>Yii::t('app','Create EavFields'),'url'=>array('create')),
+	//array('label'=>Yii::t('app','View EavFields'),'url'=>array('view','id'=>$model->id)),
+	array('label'=>Yii::t('app','Manage EavFields'),'url'=>array('admin')),
 );
+
+$this->beginWidget('MiniForm',array(
+    'haeder' => Yii::t('app',"Update Eav Fields")." ".$model->id,
+    //'width' => '800',
+)); 
+
 ?>
 
-<h1>Update EavFields <?php echo $model->id; ?></h1>
 
 <?php echo $this->renderPartial('_form',array('model'=>$model)); ?>
+
+<?php $this->endWidget(); ?>

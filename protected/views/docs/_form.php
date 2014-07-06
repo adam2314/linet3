@@ -54,7 +54,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 <?php echo $form->error($model, 'company'); ?>
             </p>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
             <?php echo $form->labelEx($model, 'vatnum'); ?>
             <?php echo $form->textField($model, 'vatnum', array('size' => 10, 'maxlength' => 10)); ?>
             <?php echo $form->error($model, 'vatnum'); ?>
@@ -68,7 +68,7 @@ $form = $this->beginWidget('CActiveForm', array(
             <?php echo $form->error($model, 'address'); ?>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-1">
             <?php echo $form->labelEx($model, 'city'); ?>
             <?php echo $form->textField($model, 'city', array('size' => 30, 'maxlength' => 40)); ?>
             <?php echo $form->error($model, 'city'); ?>
@@ -98,36 +98,26 @@ $form = $this->beginWidget('CActiveForm', array(
         </div>
 
         <div class="col-md-1">
-            <?php echo $form->labelEx($model, 'refnum'); ?>
-            <div id="Docsrefnum">
-                <?php
-                
-                $model->getRef();
-                if ($model->docDocs !== null) {
-                    foreach ($model->docDocs as $doc) {
-                        echo CHtml::link($doc->docType->name . " #" . $doc->docnum, array('docs/view', "id" => $doc->id)) . "<br />";
-                    }
-                }
-                /*
-                $perent = Docs::model()->findByPk($model->refnum);
-                if ($perent) {
-                    echo CHtml::link($perent->docType->name . " #" . $perent->docnum, array('docs/view', "id" => $model->refnum));
-                }*/
+            <?php /*
+                $this->widget('widgetRefnum', array(
+                    'model' => $model, //Model object
+                    'attribute' => 'refnum', //attribute name
+                    //'mode' => 'datetime',
+                    //'language' => substr(Yii::app()->language, 0, 2),
+                    //'options' => array(
+                    //    'showAnim' => 'fold',
+                    //    'dateFormat' => Yii::app()->locale->getDateFormat('short'),
+                    //) // jquery plugin options
+                ));*/
                 ?>
-            </div>
-            <?php echo CHtml::link(Yii::t('app', 'Clear refnum'), '#', array('onclick' => '$("#Docs_refnum_ids").val("");$("#Docsrefnum").html(""); return false;',)); ?>
-            <br />
-            <?php echo CHtml::link(Yii::t('app', 'Choose Doc'), '#', array('onclick' => '$("#choseRefDoc").dialog("open"); return false;',)); ?>
-
-            <?php echo $form->hiddenField($model, 'refnum_ids', array('size' => 20, 'maxlength' => 20)); ?>
-            <?php echo $form->error($model, 'refnum_ids'); ?>
+            
+            
+            refnum
         </div>
 
         <div class="col-md-1">
             <?php if ($model->docType->stockSwitch) { ?>
                 <?php echo $form->labelEx($model, 'stockSwitch'); ?>
-
-
                 <?php echo $form->checkBox($model, 'stockSwitch'); ?>
                 <?php echo $form->error($model, 'stockSwitch'); ?>
 
@@ -138,7 +128,7 @@ $form = $this->beginWidget('CActiveForm', array(
 
 
         <div class="col-md-3">
-
+            <label><?php echo Yii::t('labels','Attached Files');?></label>
 
             <?php
             $this->widget('CMultiFileUpload', array(
@@ -290,7 +280,12 @@ $form = $this->beginWidget('CActiveForm', array(
                     </td>
                     <td></td>
                     <td class="docadd">
-                        <?php echo Yii::t('app', 'New'); ?>
+                        <?php
+                        $this->widget('bootstrap.widgets.TbButton', array(
+                            'label' => Yii::t('app', 'Add'),
+                            'icon' => 'glyphicon glyphicon-plus',
+                        ));
+                        ?>
                     </td>
                 </tr>
 
@@ -417,7 +412,13 @@ $form = $this->beginWidget('CActiveForm', array(
                         <?php echo $form->textField($model, 'src_tax', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
                     </td>
                     <td></td>
-                    <td class="rcptadd"><?php echo Yii::t('app', 'New'); ?>
+                    <td class="rcptadd">
+                        <?php
+                        $this->widget('bootstrap.widgets.TbButton', array(
+                            'label' => Yii::t('app', 'Add'),
+                            'icon' => 'glyphicon glyphicon-plus',
+                        ));
+                        ?>
                     </td>
                 </tr>
                 <tr>
@@ -1057,23 +1058,25 @@ $form = $this->beginWidget('CActiveForm', array(
     </script>
     <p>
         <?php echo $form->labelEx($model, 'description'); ?>
-        <?php
-        echo $form->textArea($model, 'description', array(
-            'rows' => 6, 'cols' => 50,
-            'class' => 'form-control wysihtml5-editor'
-        ));
-        ?>
+        <?php $this->widget('ext.tinymce.TinyMce', array(
+            'model' => $model,
+            'attribute' => 'description',
+            'spellcheckerUrl' => 'http://speller.yandex.net/services/tinyspell',
+        )); ?>
         <?php echo $form->error($model, 'description'); ?>
+        
+        
+        
+        
     </p>
 
     <p>
         <?php echo $form->labelEx($model, 'comments'); ?>
-        <?php
-        echo $form->textArea($model, 'comments', array(
-            'rows' => 6, 'cols' => 50,
-            'class' => 'form-control wysihtml5-editor'
-        ));
-        ?>
+                <?php $this->widget('ext.tinymce.TinyMce', array(
+            'model' => $model,
+            'attribute' => 'comments',
+            'spellcheckerUrl' => 'http://speller.yandex.net/services/tinyspell',
+        )); ?>
         <?php echo $form->error($model, 'comments'); ?>
     </p>
 

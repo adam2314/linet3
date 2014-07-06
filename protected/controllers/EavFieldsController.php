@@ -121,6 +121,13 @@ class EavFieldsController extends RightsController
 		return $model;
 	}
 
+        public function actionAjax($id){
+            //$model;
+            
+            $this->renderPartial('ajax',array("model"=>$this->loadModel($id)));
+        }
+        
+        
 	/**
 	 * Performs the AJAX validation.
 	 * @param CModel the model to be validated

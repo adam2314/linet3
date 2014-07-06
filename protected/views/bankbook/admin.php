@@ -2,7 +2,7 @@
 
 $this->menu=array(
 	//array('label'=>'List Doctype', 'url'=>array('index')),
-	//array('label'=>'Create Doctype', 'url'=>array('create')),
+	array('label'=>Yii::t('app','Create Bankbook'), 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -27,6 +27,7 @@ $this->beginWidget('MiniForm',array(
  $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'user-form',
 	'enableAjaxValidation'=>false,
+     'htmlOptions' => array('enctype' => 'multipart/form-data'),
         )
     );
  

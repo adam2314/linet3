@@ -44,7 +44,7 @@ class Docs extends fileRecord {
     
     const STATUS_OPEN=0;
     const STATUS_CLOSED=1;
-    const STATUS_DRAFT=3;
+    //const STATUS_DRAFT=3;
     /*
       public function __construct($arg = NULL) {
       //    public function __construct($type=0) {
@@ -54,7 +54,12 @@ class Docs extends fileRecord {
       //$this->doctype=$type;
 
       }// */
-
+    public function init(){
+        $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
+        $this->due_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
+        return parent::init();
+    }
+            
     public function findAllByType($doctype) {
 
         return Docs::model()->findByAttributes(array('doctype' => $doctype));
@@ -565,7 +570,8 @@ class Docs extends fileRecord {
             'comments' => Yii::t('labels', 'Hidden internal comments'),
             'owner' => Yii::t('labels', 'Owner'),
             'discount' => Yii::t('labels', 'Discount'),
-            'refstatus'=>Yii::t('labels','Refarence Status'),
+            'refstatus'=>Yii::t('labels','Reference Status'),
+            'stockSwitch'=>Yii::t('labels','Stock Switch'),
             
         );
     }

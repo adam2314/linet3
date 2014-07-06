@@ -18,10 +18,11 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
                 'constrainInput' => 'false',
             ),
             'htmlOptions' => array(
-                'style' => 'height:20px;width:70px;',
+                //'style' => 'height:20px;width:70px;',
+                'placeholder'=>Yii::t('app','From Date'),
             ),
 // DONT FORGET TO ADD TRUE this will create the datepicker return as string
-                ), true) . '<br> To <br> ' . $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                ), true)  . $this->widget('zii.widgets.jui.CJuiDatePicker', array(
             // 'model'=>$model,
             'name' => 'Transactions[to_date]',
             'language' => substr(Yii::app()->language, 0, 2),
@@ -35,7 +36,8 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
                 'constrainInput' => 'false',
             ),
             'htmlOptions' => array(
-                'style' => 'height:20px;width:70px',
+                //'style' => 'height:20px;width:70px',
+                'placeholder'=>Yii::t('app','To Date'),
             ),
 // DONT FORGET TO ADD TRUE this will create the datepicker return as string
                 ), true);
@@ -86,7 +88,8 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
         array(
             'name' => 'refnum2',
-            'value' => 'CHtml::link(CHtml::encode($data->refnum2),Yii::app()->createAbsoluteUrl("/docs/view/$data->refnum2"))',
+            //'value' => 'CHtml::link(CHtml::encode($data->refnum2),Yii::app()->createAbsoluteUrl("/docs/view/$data->refnum2"))',
+            'value' => 'CHtml::encode($data->refnum2)',
             'type' => 'raw',
         ),
         'details',

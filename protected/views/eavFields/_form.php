@@ -7,7 +7,14 @@
 
 	<?php echo $form->textFieldRow($model,'name',array('class'=>'span5','maxlength'=>255)); ?>
 
-	<?php echo $form->textFieldRow($model,'eavType',array('class'=>'span5','maxlength'=>255)); ?>
+
+
+<?php echo $form->dropDownListRow($model, 'eavType', CHtml::listData(EavFields::model()->getTypes(), 'id', 'name')); ?>
+	<?php 
+        
+        //CHtml::listData(, 'id', 'name');
+        
+        //echo $form->textFieldRow($model,'eavType',array('class'=>'span5','maxlength'=>255)); ?>
 
 	<?php echo $form->textFieldRow($model,'min',array('class'=>'span5')); ?>
 

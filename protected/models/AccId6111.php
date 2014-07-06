@@ -36,7 +36,7 @@ class AccId6111 extends CActiveRecord{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, name, percentage', 'required'),
+			array('id, name', 'required'),
 			array('id, percentage', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().

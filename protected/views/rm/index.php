@@ -1,13 +1,21 @@
 <?php
 $this->menu=array(
-	array('label'=>'Create Account Type','url'=>array('create')),
-	array('label'=>'Manage Accounts Type','url'=>array('admin')),
+	array('label'=>Yii::t("app",'Create Account Contact History'),'url'=>array('create')),
+	array('label'=>Yii::t("app",'Manage Accounts Contact History'),'url'=>array('admin')),
 );
-?>
 
-<h1>Account Types</h1>
+ $this->beginWidget('MiniForm',array(
+    'haeder' => Yii::t("app","Account Contact History"),
+)); 
+
+?>
 
 <?php $this->widget('bootstrap.widgets.TbListView',array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
-)); ?>
+)); 
+
+
+ $this->endWidget(); 
+
+?>

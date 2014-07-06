@@ -108,8 +108,8 @@ class CurratesController extends RightsController
 	{
 		$model=new Currates('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Currates']))
-			$model->attributes=$_GET['Currates'];
+		if(isset($_POST['Currates']))
+			$model->attributes=$_POST['Currates'];
 
 		$this->render('admin',array(
 			'model'=>$model,

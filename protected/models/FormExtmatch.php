@@ -4,7 +4,7 @@
  *
  * @author adam
  */
-class FormExtmatch  extends CFormModel{
+class FormExtmatch extends CFormModel{
     public $account_id=0;
     //public $refnum=0;
     public $currency_id='';

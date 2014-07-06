@@ -60,7 +60,14 @@
                                                                     ?>
                                                                     <div id="Docdetails_<?php echo $i; ?>_vatlabel" ></div
                                                                     </td>
-    <td class="remove"><?php echo Yii::t('app', 'Remove'); ?>
+    <td class="remove">
+        <?php
+                        $this->widget('bootstrap.widgets.TbButton', array(
+                            'label' => Yii::t('app', 'Remove'),
+                            'icon' => 'glyphicon glyphicon-remove',
+                        ));
+                        ?>
+        
         <input type="hidden" class="rowIndex" value="<?php echo $i; ?>" />
         <input id="Docdetails_<?php echo $i; ?>_unit_price_org" type="hidden" value="" />
         <input id="Docdetails_<?php echo $i; ?>_src_tax" type="hidden" value="" />

@@ -5,7 +5,7 @@
 //);
 
 $this->menu=array(
-	array('label'=>Yii::t('app','List documents'), 'url'=>array('index')),
+	//array('label'=>Yii::t('app','List documents'), 'url'=>array('index')),
 	array('label'=>Yii::t('app','Create document'), 'url'=>array('create')),
 );
 

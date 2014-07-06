@@ -1,17 +1,22 @@
 <?php
 $this->breadcrumbs=array(
-	'Itemcategories',
+	'Item Categories',
 );
 
 $this->menu=array(
-	array('label'=>'Create Itemcategory', 'url'=>array('create')),
-	array('label'=>'Manage Itemcategory', 'url'=>array('admin')),
+	array('label'=>Yii::t('app','Create Item Category'), 'url'=>array('create')),
+	array('label'=>Yii::t('app','Manage Item Categories'), 'url'=>array('admin')),
 );
-?>
 
-<h1>Itemcategories</h1>
+$this->beginWidget('MiniForm',array(
+    'haeder' => Yii::t('app',"Item Categories"),
+)); 
+?>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
-)); ?>
+));
+
+ $this->endWidget(); 
+?>

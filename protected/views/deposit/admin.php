@@ -5,20 +5,9 @@ $this->menu=array(
 	//array('label'=>'Create Doctype', 'url'=>array('create')),
 );
 
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('doctype-grid', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
+
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Manage Bankbooks"),
+    'haeder' => Yii::t('app',"Create deposit"),
 )); 
 ?>
 
@@ -97,14 +86,21 @@ $this->beginWidget('MiniForm',array(
 ?>
     
 </div>
-<?php
-        echo $form->labelEx($model,'sum'); 
-        echo $form->textField($model,'sum',array('size'=>60,'maxlength'=>100));
-        echo $form->error($model,'sum'); 
+<div id="sum">
+</div>
+
+<div>
+<?php echo $form->textFieldRow($model,'sum',array('maxlength'=>100)); ?>
+</div>
 
 
-
-echo CHtml::submitButton('Go'); ?>
+<div class="form-actions">
+            <?php $this->widget('bootstrap.widgets.TbButton', array(
+                    'buttonType'=>'submit',
+                    'type'=>'primary',
+                    'label'=>Yii::t('app',"Deposit"),
+            )); ?>
+    </div>
 <?php
  $this->endWidget();
  $this->endWidget();
@@ -135,13 +131,15 @@ echo CHtml::submitButton('Go'); ?>
 	var total = $("[id^=FormDeposit_Total]");
 	size = vals.length;
 	//console.log("Length: " + size);
-	sum = parseFloat("0.0");
+	cashsum=chqsum=sum = parseFloat("0.0");
+        
 	if(size) {
                 for (x in vals){
                         //console.log("value: " + x + vals[x].checked);
 			if(vals[x].checked) {
 				//console.log("value: " + total[x].value);
 				sum += parseFloat(total[x].value);
+                                
 			}
 		}
 	}

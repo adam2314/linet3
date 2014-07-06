@@ -46,6 +46,7 @@ class CJuiDateTimePicker extends CJuiDatePicker
 
 		if (isset($this->language)){
 			$this->registerScriptFile($this->i18nScriptFile);
+                        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/datepicker-he.js'), CClientScript::POS_END);
 			$js = "jQuery('#{$id}').{$this->mode}picker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['{$this->language}'], {$options}));";
 		}
 

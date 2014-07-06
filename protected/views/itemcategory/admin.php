@@ -1,26 +1,14 @@
 <?php
 $this->breadcrumbs=array(
-	'Itemcategories'=>array('index'),
-	'Manage',
+	Yii::t('app','Item Categories')=>array('index'),
+	Yii::t('app','Manage'),
 );
 
 $this->menu=array(
-	array('label'=>'List Item Category', 'url'=>array('index')),
-	array('label'=>'Create Item Category', 'url'=>array('create')),
+	array('label'=>Yii::t('app','List Item Category'), 'url'=>array('index')),
+	array('label'=>Yii::t('app','Create Item Category'), 'url'=>array('create')),
 );
 
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('itemcategory-grid', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
 
 $this->beginWidget('MiniForm',array(
     'haeder' => Yii::t('app',"Manage Item Categories"),

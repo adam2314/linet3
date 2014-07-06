@@ -5,22 +5,10 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List EavFields','url'=>array('index')),
-	array('label'=>'Create EavFields','url'=>array('create')),
+	//array('label'=>'List EavFields','url'=>array('index')),
+	array('label'=>Yii::t('app','Create EavFields'),'url'=>array('create')),
 );
 
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('eav-fields-grid', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
  $this->beginWidget('MiniForm',array(
     'haeder' => Yii::t('app',"Manage Eav Fields"),
     //'width' => '800',

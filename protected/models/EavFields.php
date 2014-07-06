@@ -10,8 +10,42 @@
  * @property integer $min
  * @property integer $max
  */
-class EavFields extends CActiveRecord{
+class EavFields extends basicRecord{
     const table='{{eavFields}}';
+    
+    const TYPE_STRING='string';
+    const TYPE_SELECT='select(X)';//json_encode
+    const TYPE_INT='integer';
+    const TYPE_LIST='list(X)';
+    const TYPE_BOOLEAN='boolean';
+    const TYPE_FILE='file';
+    const TYPE_URL='url';
+    
+    public function getTypes() {
+        return  self::getConstants('TYPE_', __CLASS__);
+        //print_r($list);
+        //return "";
+        return Yii::t('app', $list[$this->refstatus]['name']);
+    }
+    
+
+    public function getType() {
+        $list = $this->getTypes();
+        //print_r($list);
+        //return "";
+        return Yii::t('app', $list[$this->refstatus]['name']);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -63,11 +97,11 @@ class EavFields extends CActiveRecord{
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'name' => 'Name',
-			'eavType' => 'Eav Type',
-			'min' => 'Min',
-			'max' => 'Max',
+			'id' => Yii::t('labels','ID'),
+			'name' => Yii::t('labels','Name'),
+			'eavType' => Yii::t('labels','Eav Type'),
+			'min' => Yii::t('labels','Min'),
+			'max' => Yii::t('labels','Max'),
 		);
 	}
 

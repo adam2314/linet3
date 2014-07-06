@@ -8,15 +8,15 @@
     ));
     ?>
 
-        <?php echo $form->errorSummary($model); ?>
-
+    <?php echo $form->errorSummary($model); ?>
+    <?php echo $form->hiddenField($model, 'type'); ?>
     <div class="col-md-4">
         <?php echo $form->textFieldRow($model, 'name', array('class' => 'span5', 'maxlength' => 200)); ?>
-        <?php echo $form->dropDownListRow($model, 'type', CHtml::listData(Acctype::model()->findAll(), 'id', 'name')); ?>
+        <?php //echo $form->dropDownListRow($model, 'type', CHtml::listData(Acctype::model()->findAll(), 'id', 'name')); ?>
         <br />
         <?php echo $form->dropDownListRow($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency ?>
         <br />
-<?php echo $form->dropDownListRow($model, 'id6111', CHtml::listData(AccId6111::model()->findAll(), 'id', 'name')); ?>
+        <?php echo $form->dropDownListRow($model, 'id6111', CHtml::listData(AccId6111::model()->findAll(), 'id', 'name')); ?>
         <br />
 
 
@@ -37,7 +37,7 @@
         <?php echo $form->error($model, 'src_date'); ?>
 
         <?php //echo $form->textFieldRow($model, 'src_tax', array('class' => 'span5', 'maxlength' => 80)); ?>
-<?php echo $form->textFieldRow($model, 'contact', array('class' => 'span5', 'maxlength' => 80)); ?>
+        <?php echo $form->textFieldRow($model, 'contact', array('class' => 'span5', 'maxlength' => 80)); ?>
         <?php echo $form->textFieldRow($model, 'department', array('class' => 'span5', 'maxlength' => 60)); ?>
         <?php echo $form->textFieldRow($model, 'vatnum', array('class' => 'span5', 'maxlength' => 20)); ?>
     </div>
@@ -52,9 +52,9 @@
         <?php echo $form->textFieldRow($model, 'web', array('class' => 'span5', 'maxlength' => 60)); ?>
         <?php echo $form->textFieldRow($model, 'address', array('class' => 'span5', 'maxlength' => 80)); ?>
         <?php echo $form->textFieldRow($model, 'city', array('class' => 'span5', 'maxlength' => 40)); ?>
-<?php echo $form->textFieldRow($model, 'zip', array('class' => 'span5', 'maxlength' => 10)); ?>
+        <?php echo $form->textFieldRow($model, 'zip', array('class' => 'span5', 'maxlength' => 10)); ?>
 
-<?php echo $form->textAreaRow($model, 'comments', array('rows' => 6, 'cols' => 50)); ?>
+        <?php echo $form->textAreaRow($model, 'comments', array('rows' => 6, 'cols' => 50)); ?>
     </div>
 
 
@@ -62,31 +62,33 @@
         <div>
 
             <?php
-            $this->beginWidget('application.modules.eav.components.eavProp', array(
-                'name' => get_class($model),
-                'attr' => $model->getEavAttributes(),
-            ));
+            if (!$model->isNewRecord) {
+                $this->beginWidget('application.modules.eav.components.eavProp', array(
+                    'name' => get_class($model),
+                    'attr' => $model->getEavAttributes(),
+                ));
 
-            $this->endWidget();
+                $this->endWidget();
+            }
             ?>
         </div>
 
 
+
+
         <?php
-        $this->widget('CMultiFileUpload', array(
+        if (!$model->isNewRecord) {
+            echo "<h2>" . Yii::t('app', 'Attached files') . "</h2>";
+            
+            $this->widget('CMultiFileUpload', array(
             'name' => 'Files',
             'model' => $model,
             'id' => 'Files',
             'accept' => '*', // useful for verifying files
             'duplicate' => 'Duplicate file!', // useful, i think
             'denied' => 'Invalid file type', // useful, i think
-            
         ));
-        ?>
-        
-        <?php
-        if (!$model->isNewRecord) {
-            echo "<h2>" . Yii::t('app','Attached files') . "</h2>";
+            
             $files = new Files('search');
             $files->unsetAttributes();
             $files->parent_type = get_class($model);
@@ -123,12 +125,14 @@
             ));
         }
         ?>
-
+        <?php
+        
+        ?>
     </div>
 
-<?php //echo $form->labelEx($model,'owner');  ?>
-<?php //adam: echo $form->dropDownList($model,'owner',CHtml::listData(User::model()->findAll(), 'id', 'username'));  ?>
-<?php //echo $form->error($model,'owner');  ?>
+    <?php //echo $form->labelEx($model,'owner');   ?>
+    <?php //adam: echo $form->dropDownList($model,'owner',CHtml::listData(User::model()->findAll(), 'id', 'username'));  ?>
+    <?php //echo $form->error($model,'owner');  ?>
 
 
 
@@ -143,6 +147,6 @@
         ?>
     </div>
 
-<?php $this->endWidget(); ?>
+    <?php $this->endWidget(); ?>
 
 </div><!-- form -->

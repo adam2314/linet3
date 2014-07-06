@@ -24,15 +24,15 @@ class DocsController extends RightsController
 	}
 
         public function actionPdf($id,$preview=1,$model=null){//usd for print*/
-            if(isset($_POST['language']))
+            /*if(isset($_POST['language']))
                 Yii::app()->language=$_POST['language'];
             //Yii::app()->language='he_il';
             $this->layout='print';
             
             if(is_null($model))
                 $model=$this->loadModel($id);
-            
-            $file=$this->render('print',array('model'=>$model,'preview'=>$preview,),true);
+            */
+            $file=$this->actionPrint($id,$preview,$model,true);
             
             
             $yiiBasepath=Yii::app()->basePath;
@@ -101,7 +101,7 @@ class DocsController extends RightsController
         
         
         
-        public function actionPrint($id,$preview=0,$model=null){//usd for print*/
+        public function actionPrint($id,$preview=0,$model=null,$return=false){//usd for print*/
             if(isset($_POST['language']))
                 Yii::app()->language=$_POST['language'];
             //Yii::app()->language='he_il';
@@ -110,7 +110,10 @@ class DocsController extends RightsController
             if(is_null($model))
                 $model=$this->loadModel($id);
             
-            $model->printDoc();
+            if(!$preview)
+                $model->printDoc();
+            if($return)
+                return $this->render('print',array('model'=>$model,'preview'=>$preview,),$return);
             $this->render('print',array(
                     'model'=>$model,'preview'=>$preview,
             ));
@@ -159,7 +162,8 @@ class DocsController extends RightsController
                                 //$this->actionPrint($model->id,  $model);
                                 return;
                             case 'pdf':
-                                $this->actionPdf($model->id);
+                                if($model->save())
+                                    $this->actionPdf($model->id);
                                 return;
                         }
                         
@@ -224,7 +228,8 @@ class DocsController extends RightsController
                                 //$this->actionPrint($model->id,  $model);
                                 return;
                             case 'pdf':
-                                $this->actionPdf($model->id);
+                                if($model->save())
+                                    $this->actionPdf($model->id);
                                 return;
                         }
 		}

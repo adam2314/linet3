@@ -44,7 +44,8 @@ class TransactionController extends RightsController{
                     }
                     //save subs
                     //$line++;
-                    $this->redirect(array('create'));
+                    Yii::app()->user->setFlash('success', Yii::t('app','Transavtion saved'));
+                    //$this->redirect(array('create'));
 
 
                 }
@@ -101,8 +102,8 @@ class TransactionController extends RightsController{
                 }
 	
 
-
-            $this->redirect(array('OpenBalance'));
+                Yii::app()->user->setFlash('success', Yii::t('app','Open Balance saved'));
+            //$this->redirect(array('OpenBalance'));
 
 
             

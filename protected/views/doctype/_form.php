@@ -18,10 +18,10 @@
 
 		<?php echo $form->checkboxRow($model,'isrecipet'); ?>
 	
-		<?php echo $form->checkboxRow($model,'iscontract'); ?>
+		<?php //echo $form->checkboxRow($model,'iscontract'); ?>
 	
 
-		<?php echo $form->textFieldRow($model,'stockAction'); ?>
+		<?php //echo $form->textFieldRow($model,'stockAction'); ?>
 	
 		<?php echo $form->dropDownListRow($model,'account_type',CHtml::listData(Acctype::model()->findAll(), 'id', 'name'));?>
                 <br />
@@ -29,16 +29,21 @@
 	<br />
 		<?php echo $form->textFieldRow($model,'last_docnum'); ?>
 	
+        <?php echo $form->labelEx($model,'header');?>
+        <?php 
+        $this->widget('ext.tinymce.TinyMce', array(
+            'model' => $model,
+            'attribute' => 'header',
+        ));
+        ?>
         
-        <?php echo $form->textAreaRow($model,'header',array(
-                            'rows'=>6, 'cols'=>50,
-                            'class'=>'form-control wysihtml5-editor'
-                            )); ?>
-        
-        <?php echo $form->textAreaRow($model,'footer',array(
-                            'rows'=>6, 'cols'=>50,
-                            'class'=>'form-control wysihtml5-editor'
-                            )); ?>
+        <?php echo $form->labelEx($model,'footer');?>
+        <?php 
+        $this->widget('ext.tinymce.TinyMce', array(
+            'model' => $model,
+            'attribute' => 'footer',
+        ));
+        ?>
     
         
         

@@ -22,11 +22,10 @@ class AccountsController extends RightsController
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate($type=0)
-	{
-		$model=new Accounts($type);
+	public function actionCreate($type=0){
+		$model=new Accounts;
 		
-		
+                
 		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Accounts']))
@@ -40,6 +39,8 @@ class AccountsController extends RightsController
 				$this->redirect(array('index','id'=>$model->id));
 		}
 
+                $model->accType=  Acctype::model()->findByPk((int)$type);
+                $model->type=$type;
 		$this->render('create',array(
 			'model'=>$model,
 		));

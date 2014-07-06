@@ -1,26 +1,39 @@
 <?php
 $this->breadcrumbs=array(
-	'Acctypes'=>array('index'),
-	$model->name,
+	Yii::t('app','Account History')=>array('index'),
+	$model->id,
 );
 
 $this->menu=array(
-	array('label'=>'List Acctype','url'=>array('index')),
-	array('label'=>'Create Acctype','url'=>array('create')),
-	array('label'=>'Update Acctype','url'=>array('update','id'=>$model->id)),
-	array('label'=>'Delete Acctype','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Acctype','url'=>array('admin')),
+	array('label'=>Yii::t('app','List Account History'),'url'=>array('index')),
+	array('label'=>Yii::t('app','Create Account History'),'url'=>array('create')),
+	array('label'=>Yii::t('app','Update Account History'),'url'=>array('update','id'=>$model->id)),
+	array('label'=>Yii::t('app','Delete Account History'),'url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	array('label'=>Yii::t('app','Manage Account History'),'url'=>array('admin')),
 );
-?>
 
-<h1>View Acctype #<?php echo $model->id; ?></h1>
+ $this->beginWidget('MiniForm',array(
+    'haeder' => Yii::t('app',"View Account History")." ". $model->id,
+    //'width' => '800',
+)); 
+
+?>
 
 <?php $this->widget('bootstrap.widgets.TbDetailView',array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
-		'name',
-		'desc',
-		'openformat',
+		'dt',
+                array(
+                    'name'=>'details',
+                    'value'=>$model->details,
+                     'type'=>'raw',
+                         
+                ),
+		
+		//'openformat',
 	),
-)); ?>
+)); 
+
+ $this->endWidget(); 
+?>

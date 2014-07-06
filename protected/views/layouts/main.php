@@ -67,7 +67,7 @@
           
 
 	</nav>
-    <div>
+    <div class="content">
         <div id="left">
             <?php if(!Yii::app()->user->isGuest){
 			

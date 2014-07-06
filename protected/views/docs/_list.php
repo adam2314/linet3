@@ -15,10 +15,11 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 					'constrainInput' => 'false',
 				    ),
 				    'htmlOptions'=>array(
-					'style'=>'height:20px;width:70px;',
+					//'style'=>'height:20px;width:70px;',
+                                        'placeholder'=>Yii::t('app','From Date'),
 				    ),
 // DONT FORGET TO ADD TRUE this will create the datepicker return as string
-				),true) . '<br> To <br> ' . $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+				),true)  . $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 					// 'model'=>$model,
 				    'name' => 'Docs[issue_to]',
 				    'language' => substr(Yii::app()->language,0,2),
@@ -32,7 +33,8 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 					'constrainInput' => 'false',
 				    ),
 				    'htmlOptions'=>array(
-					'style'=>'height:20px;width:70px',
+					//'style'=>'height:20px;width:70px',
+                                        'placeholder'=>Yii::t('app','To Date'),
 				    ),
 // DONT FORGET TO ADD TRUE this will create the datepicker return as string
 				),true);
@@ -70,8 +72,8 @@ $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridVie
 		//'doctype',
                 array(
                     'name'=>'doctype',
-                        'filter'=>CHtml::listData(Doctype::model()->findAll(), 'id', 'name'),
-                        'value'=>'$data->docType->name'
+                        'filter'=>Doctype::model()->getList(),
+                        'value'=>'Yii::t("app",$data->docType->name)'
                 ),
                  array(
                     'name'=>'status',

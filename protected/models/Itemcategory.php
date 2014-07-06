@@ -62,9 +62,9 @@ class Itemcategory extends CActiveRecord{
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'name' => 'Name',
-			'profit' => 'Profit',
+			'id' => Yii::t('labels','ID'),
+			'name' => Yii::t('labels','Name'),
+			'profit' => Yii::t('labels','Profit'),
 		);
 	}
 

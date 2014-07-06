@@ -10,7 +10,9 @@ $this->beginWidget('MiniForm', array(
     'haeder' => Yii::t('app', "Accounts"),
 ));
 
+?>
 
+<?php
 
 
 
@@ -18,8 +20,10 @@ $types = Acctype::model()->findAll();
 $list = array();
 foreach ($types as $type1)
     $list[Yii::t('app', $type1->desc)] = array(
+        //'label'=>,
+        'id'=>$type1->id,
         'ajax' => $this->createUrl('accounts/index?ajax=accounts-grid&type=' . $type1->id),
-        'tooltip' =>'',
+        //'data' =>'$type1->id',
             //'ui-tooltip'
                 
                 
@@ -29,9 +33,11 @@ foreach ($types as $type1)
 $this->widget('zii.widgets.jui.CJuiTabs', array(
     'tabs' => $list,
     // additional javascript options for the tabs plugin
-    'headerTemplate' => '<li><a href="{url}" title="{title}">{title}</a></li>',
+    'headerTemplate' => '<li><a id="{id}" href="{url}" title="{title}">{title}</a></li>',
+    // 'id'=>'MyTab-Menu1',
     'options' => array(
         'selected' => $type,
+        //'data'
     //'class'=>'nav nav-tabs',
     
 
@@ -40,6 +46,8 @@ $this->widget('zii.widgets.jui.CJuiTabs', array(
 ));
 $this->endWidget();
 ?>
+<?php echo CHTML::hiddenField("accType", $type); ?>
+
 <script type="text/javascript" src="<?php echo Yii::app()->createAbsoluteUrl('/assets/8b529727/jquery.ba-bbq.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->createAbsoluteUrl('/assets/460bb703/gridview/jquery.yiigridview.js'); ?>"></script>
 
@@ -55,7 +63,40 @@ $this->endWidget();
                 return false;
             }
     );
-  
+    
+    $('#menu > li  > a').live("click",
+            function(e) {
+                //console.log(this.href);
+                //console.log(this.id.replace("#",''));
+                //$('#accType').val(this.id.replace("#",''));
+                
+                
+                window.location ="<?php echo Yii::app()->createAbsoluteUrl('/accounts/create'); ?>/"+ $('#accType').val();
+                return false;
+                
+            }
+    );
+    
+    
+  $('.ui-tabs-anchor').live("click",
+            function(e) {
+                
+                console.log(this.href);
+                console.log(this.id.replace("#",''));
+                $('#accType').val(this.id.replace("#",''));
+                
+                return false;
+                
+                
+                
+                //var id=($(this).parent().parent().parent().parent().parent().attr("id"));
+                
+                //$.fn.yiiGridView.update(id);
+                //$('#'+id).yiiGridView('update', {url: $(this).attr('href')});
+                
+                //return false;
+            }
+    );
 /*
     $('.filter-container > input').on("change",
             function(e) {

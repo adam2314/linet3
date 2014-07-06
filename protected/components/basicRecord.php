@@ -35,7 +35,7 @@ class basicRecord extends CActiveRecord{
         return $tokenConstants;
     }
     
-
+    
     protected function fieldvalue($str,$type,$action){
 	switch ($type){
 		case "date":

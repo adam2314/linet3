@@ -126,7 +126,7 @@ class User extends mainRecord {
         return $res;
     }
 
-    public function delete() {
+    //public function delete() {
         /*
           $users=User::model()->findAll();
 
@@ -139,7 +139,7 @@ class User extends mainRecord {
           } */
         //no user delete only disable
         //parent::delete();
-    }
+    //}
 
     /**
      * @return array customized attribute labels (name=>label)
@@ -158,6 +158,13 @@ class User extends mainRecord {
             'salt' => Yii::t('labels', 'Salt'),
             'email' => Yii::t('labels', 'Email'),
             'language' => Yii::t('labels', 'Language'),
+            'warehouse' => Yii::t('labels', 'Warehouse'),
+            'timezone' => Yii::t('labels', 'Timezone'),
+            'theme' => Yii::t('labels', 'Theme'),
+            'passwd' => Yii::t('labels', 'New Password'),
+            'ItemVatCat' => Yii::t('labels', 'Item VAT Catagory'),
+            'account_id' => Yii::t('labels', 'Account id'),
+            
         );
     }
 

@@ -59,7 +59,14 @@
     <td><b><?php echo $form->labelEx($model, 'sum'); ?></b><?php echo $form->textField($model, "[$i]sum", array('maxlength' => 8)); ?></td>
     <td><b><?php echo $form->labelEx($model, 'dep_date'); ?></b><?php echo $form->hiddenField($model, "[$i]dep_date", array('maxlength' => 8));  ?></td>
     
-    <td class="remove"><?php echo Yii::t('app', 'Remove'); ?>
+    <td class="remove">
+        <?php
+                        $this->widget('bootstrap.widgets.TbButton', array(
+                            'label' => Yii::t('app', 'Remove'),
+                            'icon' => 'glyphicon glyphicon-remove',
+                        ));
+                        ?>
+
 
     </td>
 <script type="text/javascript">
