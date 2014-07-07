@@ -223,6 +223,11 @@ class Docs extends fileRecord {
                         $this->action=1;
                         $a = parent::save($runValidation, $attributes);
                         $this->transaction((int) $this->docStatus->action);
+                        if (is_null($this->docType->transactionType_id)) {//only if !transaction stock
+                         foreach ($this->docDetailes as $docdetail) {
+                            $this->stock($docdetail->item_id, $docdetail->qty);
+                         }
+                        }
                     }
                 }
                 
@@ -343,13 +348,14 @@ class Docs extends fileRecord {
                     if (!$this->stockSwitch)//if not checked
                         return;
                 }
-
+                
+                $account_id = Yii::app()->user->warehouse;
+                $oppt_account_id = $this->account_id;
                 if ((int) $this->oppt_account_id != 0) {
-                    $account_id = $this->account_id;
-                    $oppt_account_id = $this->oppt_account_id;
-                } else {
-                    $account_id = Yii::app()->user->warehouse;
-                    $oppt_account_id = $this->account_id;
+                    if($this->doctype==15){//only if transfer //mybe shuld be only if oppt_account_type==8 wherehouse
+                        $account_id = $this->account_id;
+                        $oppt_account_id = $this->oppt_account_id;
+                    }
                 }
                 return stockAction::newTransaction($this->id, $account_id, $oppt_account_id, $item_id, $qty * $stockAction);
             }
@@ -365,6 +371,9 @@ class Docs extends fileRecord {
         $num = 0;
         $line = 1;
         $tranType = $this->docType->transactionType_id;
+        
+        
+        
         if (!is_null($tranType)) {//has trans action!
             if ($this->docType->isdoc) {
                 $vat = new Transactions();
@@ -385,6 +394,7 @@ class Docs extends fileRecord {
                 $accout->valuedate = $valuedate;
                 $accout->details = $this->company;
                 $accout->currency_id = $this->currency_id;
+                $accout->sum=$accout->sum*-1;
                 $accout->owner_id = $this->owner;
                 $accout->linenum = $line;
                 $line++;

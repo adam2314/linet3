@@ -98,7 +98,18 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             'filter' => $dateisOn,
             'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->date,"' . $yiidbdatetime . '"))'
         ),
-        'sum',
+          array(
+              'header'=>Yii::t('app','Debit'),
+                    'name'=>'sum',
+                    'filter' => '',
+                    'value'=>'($data->sum<0)?$data->sum:""'
+                ),
+            array(
+                'header'=>Yii::t('app','Credit'),
+                    'name'=>'sum',
+                    'filter' => '',
+                    'value'=>'($data->sum>0)?$data->sum:""'
+                ),
     ),
 ));
 

@@ -83,7 +83,8 @@ class DocsController extends RightsController {
         }
         set_include_path($oldpath);
         spl_autoload_register(array('YiiBase', 'autoload'));
-
+        
+        return Yii::app()->getRequest()->sendFile($model->docType->name."-".$model->docnum."-signed.pdf", $myPdfS);
 
 
         header("Pragma: public");

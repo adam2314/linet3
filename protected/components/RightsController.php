@@ -61,7 +61,8 @@ class RightsController extends RController {
                 Yii::app()->end();
             }
         } else {
-            Company::model()->loadComp();
+            $database=  Company::model()->findByPk(Yii::app()->user->Company);
+            Company::model()->loadComp($database);
         }
 
 

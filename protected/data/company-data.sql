@@ -348,10 +348,10 @@ INSERT INTO `bankName` (`id`, `name`) VALUES
 (99, 'בנק ישראל');
 
 
-INSERT INTO `config` (`id`, `value`, `eavType`, `hidden`) VALUES
+INSERT INTO `config` (`id`, `value`, `eavType`, `hidden`, `priority`) VALUES
 ('company.1.warehouse', '115', 'integer', 1, 40),
 ('company.acc.assetvat', '3', 'integer', 1, 40),
-('company.acc.buyvat', '1', 'integer', 1),
+('company.acc.buyvat', '1', 'integer', 1, 40),
 ('company.acc.custtax', '8', 'integer', 1, 40),
 ('company.acc.irs', '16', 'integer', 1, 40),
 ('company.acc.natinspay', '14', 'integer', 1, 40),
@@ -459,7 +459,7 @@ INSERT INTO `docStatus` (`num`, `doc_type`, `name`, `looked`, `action`) VALUES
 (4, 9, 'מבוטל', 1, '1'),
 (4, 10, 'מבוטל', 1, '1');
 
-INSERT INTO `docType` (`id`, `name`, `openformat`, `isdoc`, `isrecipet`, `iscontract`, `looked`, `stockAction`, `account_type`, `docStatus_id`, `last_docnum`, `oppt_account_type`, `transactionType_id`, `vat_acc_id`, `header`, `footer`, `stockSwitch`) VALUES
+INSERT INTO `docType` (`id`, `name`, `openformat`, `isdoc`, `isrecipet`, `iscontract`, `looked`, `stockAction`, `account_type`, `docStatus_id`, `last_docnum`, `oppt_account_type`, `transactionType_id`, `vat_acc_id`, `header`, `footer`, `stockSwitch`, `copy`) VALUES
 (1, 'Proforma',                 300,    1, 0, 0, 1, -1, 0, 2, 1, NULL, NULL, 3, '', '', 0, 1),
 (2, 'Delivery doc.',            200,    1, 0, 0, 0, -1, 0, 2, 1, NULL, NULL, 3, '', '', 0, 1),
 (3, 'Invoice',                  305,    1, 0, 0, 1, -1, 0, 2, 1, NULL, 1, 3, '', '', 1, 1),

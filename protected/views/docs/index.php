@@ -20,7 +20,7 @@ for (var i=0; i<elements.length; i++) {
                 array(
                         'name'=>'doctype',
                         'filter'=>CHtml::listData(Doctype::model()->findAll(), 'id', 'name'),
-                        'value'=>'$data->docType->name'
+                        'value'=>'Yii::t("app",$data->docType->name)'
                 ),
                 array(
                     'name'=>'docnum', 

@@ -98,21 +98,13 @@ $form = $this->beginWidget('CActiveForm', array(
         </div>
 
         <div class="col-md-1">
-            <?php /*
+            <?php ///*
                 $this->widget('widgetRefnum', array(
                     'model' => $model, //Model object
                     'attribute' => 'refnum', //attribute name
-                    //'mode' => 'datetime',
-                    //'language' => substr(Yii::app()->language, 0, 2),
-                    //'options' => array(
-                    //    'showAnim' => 'fold',
-                    //    'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-                    //) // jquery plugin options
-                ));*/
+                ));//*/
                 ?>
             
-            
-            refnum
         </div>
 
         <div class="col-md-1">
@@ -616,17 +608,17 @@ $form = $this->beginWidget('CActiveForm', array(
                 //$('.formtable tr th:nth-child(9)').hide();
                 //$('.formtable tr td:nth-child(9)').hide();
             } else {
-                $('#Docs_oppt_account_id').parent().hide();
-
+                //$('#Docs_oppt_account_id').parent().hide();
+                $('#Docs_oppt_account_id').parent().remove();
             }
         }
 
         function refNum(doc) {//
 
 
-            $("#choseRefDoc").dialog("close");
+            $("#choseDocs_refnum").dialog("close");
 
-            $('#Docsrefnum').html($('#Docsrefnum').html() + ", " + doc.doctype + " #" + doc.docnum);
+            $('#Docs_refnum_div').html($('#Docs_refnum_div').html() + ", " + doc.doctype + " #" + doc.docnum);
             $('#Docs_refnum_ids').val($('#Docs_refnum_ids').val() + doc.id + ",");
 
 
@@ -1104,7 +1096,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 array('items' => array(
                         //array('icon'=>'envelope','label'=>Yii::t('app','Email'), 'url'=>'javascript:sendForm("email");',),
                         array('icon' => 'glyphicon glyphicon-save', 'label' => Yii::t('app', 'PDF'), 'url' => 'javascript:sendForm("pdf");',),
-                        array('icon' => 'glyphicon glyphicon-save', 'label' => Yii::t('app', 'Save'), 'url' => 'javascript:sendForm("save");',),
+                        array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save'), 'url' => 'javascript:sendForm("save");',),
                     )),
             ),
         ));
@@ -1129,6 +1121,7 @@ $form = $this->beginWidget('CActiveForm', array(
 
 
 <?php
+/*
 $this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
     'id' => 'choseRefDoc',
     'options' => array(
@@ -1141,5 +1134,5 @@ $dataProvider = new CActiveDataProvider('Docs');
 echo $this->renderPartial('index');
 //echo $this->renderPartial('index', array('dataProvider'=>$dataProvider,)); 
 
-$this->endWidget('zii.widgets.jui.CJuiDialog');
+$this->endWidget('zii.widgets.jui.CJuiDialog');*/
 ?>

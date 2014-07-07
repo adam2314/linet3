@@ -52,23 +52,24 @@ class Transactions extends basicRecord {
     }
 
 //*/
-    public function refnumDocsLink(){
-        $str='';
-        $array=explode(",",$this->refnum1);
-        
-        foreach($array as $docid){
-            $doc=Docs::model()->findByPk($docid);
-            if($doc!==null){
-                $str.= CHtml::link(CHtml::encode($doc->docType->name. " #".$doc->docnum),Yii::app()->createAbsoluteUrl("/docs/view/$docid"));
-            }else{
+    public function refnumDocsLink() {
+        $str = '';
+        $array = explode(",", $this->refnum1);
+
+        foreach ($array as $docid) {
+            $doc = Docs::model()->findByPk($docid);
+            if ($doc !== null) {
+                $str.= CHtml::link(CHtml::encode(Yii::t('app', $doc->docType->name) . " #" . $doc->docnum), Yii::app()->createAbsoluteUrl("/docs/view/$docid"));
+            } else {
                 $str.=$docid;
             }
             $str.=",";
             //echo $docid;
         }
-        
+
         return rtrim($str, ",");
     }
+
     /**
      * @return string the associated database table name
      */
@@ -83,6 +84,23 @@ class Transactions extends basicRecord {
             return 1;
     }
 
+    public function getBalance(){
+        $criteria = new CDbCriteria;
+        $criteria->condition = "num <= :num";
+        $criteria->addCondition("account_id=:account_id");
+        $criteria->params = array(
+            ':num' => $this->num,
+            ':account_id' => $this->account_id,
+        );
+        $models = Transactions::model()->findAll($criteria);
+        $balance=0;
+        foreach ($models as $model) {
+            $balance+=$model->sum;
+        }
+        
+        return $balance;
+    }
+    
     public function getOptAccId() {
 
         $criteria = new CDbCriteria;
@@ -97,21 +115,23 @@ class Transactions extends basicRecord {
         $models = Transactions::model()->findAll($criteria);
         $retacc = 0;
         $maxsum = 0;
-        foreach ($models as $model)
-            if ($this->sum <= 0.0) {
-                if ($model->sum > 0.0)
-                    if ($model->sum > $maxsum) {
-                        $maxsum = $model->sum;
-                        $retacc = $model->account_id;
-                    }
-            } else {
-                if ($model->sum < 0.0)
-                    if ($model->sum < $maxsum) {
-                        $maxsum = $model->sum;
-                        $retacc = $model->account_id;
-                    }
+        foreach ($models as $model) {
+            if ((!$retacc) && (!$maxsum)) {
+                $maxsum = $model->sum;
+                $retacc = $model->account_id;
             }
-
+            if ($this->sum >= 0.0) {
+                if ($model->sum > $maxsum) {
+                    $maxsum = $model->sum;
+                    $retacc = $model->account_id;
+                }
+            } else {
+                if ($model->sum < $maxsum) {
+                    $maxsum = $model->sum;
+                    $retacc = $model->account_id;
+                }
+            }
+        }
 
         return $retacc;
     }

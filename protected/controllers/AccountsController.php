@@ -16,7 +16,7 @@ class AccountsController extends RightsController
 		$transactions= new Transactions('search');
                 $transactions->unsetAttributes();
 		$transactions->account_id=$id;
-		$this->render('transaction',array('model'=>$transactions,));
+		$this->render('transaction',array('model'=>$transactions,'account'=>$this->loadModel($id)));
 	}
 	/**
 	 * Creates a new model.

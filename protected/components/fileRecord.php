@@ -31,6 +31,7 @@ class fileRecord extends basicRecord{
                 $tmps = CUploadedFile::getInstancesByName('Files');
                 // proceed if the images have been set
                 if (isset($tmps) && count($tmps) > 0) {
+                    Yii::log('saved','info', 'app');
                     // go through each uploaded image
                     $yiiBasepath=Yii::app()->basePath;
                     $configPath=Yii::app()->user->settings["company.path"];
@@ -53,6 +54,16 @@ class fileRecord extends basicRecord{
                             echo 'Cannot upload!';
                         }
                     }
+                    
+                    
+                    
+                    
+                if(isset($_FILES)) {
+                    Yii::log(print_r($_FILES,true),'debug', 'app');
+                    unset($_FILES);
+                    $tmps = CUploadedFile::reset();
+                    
+                }
                 //}
             
             }

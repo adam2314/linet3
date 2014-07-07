@@ -76,14 +76,16 @@ class User extends mainRecord {
         );
     }
 
-    public function afterFind() {
+    
+    private function getWarehouse() {
         if (Yii::app()->user->Company != 0) {
             $a = Settings::model()->findByPk("company." . $this->id . ".warehouse");
-            if ($a) {
+            if ($a!==null) {
                 $this->warehouse = $a->value;
             }
+            
         }
-        return parent::afterFind();
+        return $this->warehouse;
     }
 
     public function saveAttr() {
@@ -102,14 +104,15 @@ class User extends mainRecord {
             $catagories = ItemVatCat::model()->findAll();
             if ($res) {
                 $model = Settings::model()->findByPk("company." . $this->id . ".warehouse");
-                if (!$model) {
+                if ($model===null) {
                     $model = new Settings();
                     $model->id = "company." . $this->id . ".warehouse";
                     $model->eavType = 'integer';
                     $model->hidden = 1;
+                    $model->value = $this->warehouse;
+                    $model->save();
                 }
-                $model->value = $this->warehouse;
-                $model->save();
+                $this->warehouse=$model->value;
 
 
                 foreach ($catagories as $catagory) {
@@ -232,7 +235,7 @@ class User extends mainRecord {
         Yii::app()->user->setState('fname', $this->fname);
         Yii::app()->user->setState('lname', $this->lname);
         Yii::app()->user->setState('username', $this->username);
-        Yii::app()->user->setState('warehouse', $this->warehouse);
+        Yii::app()->user->setState('warehouse', $this->getWarehouse());
     }
 
 }

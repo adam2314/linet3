@@ -90,7 +90,7 @@ class stockAction extends CActiveRecord {
             'id' => Yii::t('labels', 'ID'),
             'doc_id' => Yii::t('labels', 'Documenet'),
             'account_id' => Yii::t('labels', 'Account'),
-            'oppt_account_id' => Yii::t('labels', 'Oppiste Account'),
+            'oppt_account_id' => Yii::t('labels', 'Counter Account'),
             'item_id' => Yii::t('labels', 'Item'),
             'serial' => Yii::t('labels', 'Serial No.'),
             'qty' => Yii::t('labels', 'Qty'),

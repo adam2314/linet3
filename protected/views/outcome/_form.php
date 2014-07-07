@@ -41,16 +41,12 @@
     
         <?php //echo $form->textFieldRow($model, 'refnum', array('size' => 5, 'maxlength' => 5)); ?>
     <div class="col-md-2">
-            <?php echo $form->labelEx($model, 'refnum'); ?>
-        <div id="Docsrefnum">
-            
-        </div>
-        <?php echo CHtml::link(Yii::t('app', 'Clear refnum'), '#', array('onclick' => '$("#Docs_refnum_ids").val("");$("#Docsrefnum").html(""); return false;',)); ?>
-        <br />
-        <?php echo CHtml::link(Yii::t('app', 'Choose Doc'), '#', array('onclick' => '$("#choseRefDoc").dialog("open"); return false;',)); ?>
-
-        <?php echo $form->hiddenField($model, 'refnum', array('size' => 20, 'maxlength' => 20)); ?>
-        <?php echo $form->error($model, 'refnum'); ?>
+        <?php
+        $this->widget('widgetRefnum', array(
+                    'model' => $model, //Model object
+                    'attribute' => 'refnum', //attribute name
+                ));//*/
+        ?>
     </div>
     
     
