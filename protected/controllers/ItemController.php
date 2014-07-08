@@ -64,7 +64,7 @@ class ItemController extends RightsController {
             $model->attributes = $_POST['Item'];
             if ($model->save())
             //$model->pic->saveAs('/to/localFile');
-                $this->redirect(array('view', 'id' => $model->id));
+                $this->redirect(array('admin', 'id' => $model->id));
         }
 
         $cat = CHtml::listData(Itemcategory::model()->findAll(), 'id', 'name');

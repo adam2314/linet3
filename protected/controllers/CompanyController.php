@@ -11,6 +11,11 @@ class CompanyController extends RightsController{//Controller
     public function actionIndex(){
         if(isset($_POST['Company'])){
             //if has access
+            $database= Company::model()->findByPk((int)$_POST['Company']);
+            Yii::log((int)$_POST['Company'],'info','app');
+            Yii::app()->user->setState('Database',$database );
+            Yii::app()->user->setState('Company',$database->id);
+            
             Company::model()->select((int)$_POST['Company']);
            
             
@@ -37,8 +42,9 @@ class CompanyController extends RightsController{//Controller
         if(isset($_POST['Company'])){
             //if has access
             $database= Company::model()->findByPk((int)$_POST['Company']);
+            Yii::log((int)$_POST['Company'],'info','app');
             Yii::app()->user->setState('Database',$database );
-            Yii::app()->user->setState('Company',1);
+            Yii::app()->user->setState('Company',$database->id);
             //redirect
 
             Yii::app()->end();

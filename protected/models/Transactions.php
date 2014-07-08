@@ -25,6 +25,15 @@ class Transactions extends basicRecord {
     public $from_date;
     public $to_date;
 
+    public $Docs= NULL;
+    public $refnum1_ids ='';
+    
+    public function getRef(){
+        return array();//
+        
+    }
+    
+    
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -234,7 +243,7 @@ class Transactions extends basicRecord {
             array('num, account_id, owner_id, linenum', 'numerical', 'integerOnly' => true),
             array('refnum1, refnum2, details', 'length', 'max' => 255),
             array('sum, leadsum', 'length', 'max' => 20),
-            array('date', 'safe'),
+            array('date, refnum1_ids', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('type, from_date, to_date, id, num, account_id, type, refnum1, refnum2, valuedate, date, details, currency_id, sum, leadsum, owner_id, linenum', 'safe', 'on' => 'search'),

@@ -221,7 +221,7 @@ CREATE TABLE `docs` (
   `city` varchar(40) DEFAULT NULL,
   `zip` varchar(10) DEFAULT NULL,
   `vatnum` varchar(10) DEFAULT NULL,
-  `refnum` varchar(20) DEFAULT NULL,
+  `refnum` varchar(20)  NOT NULL,
   `issue_date` timestamp NULL DEFAULT NULL,
   `due_date` timestamp NULL DEFAULT NULL,
   `modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -238,6 +238,7 @@ CREATE TABLE `docs` (
   `description` text NOT NULL,
   `oppt_account_id` int(11) DEFAULT NULL,
   `action` tinyint(1) NOT NULL,
+  `refstatus` int(11) NOT NULL,
   `owner` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );

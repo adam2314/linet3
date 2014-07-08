@@ -14,9 +14,9 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 
 <div class="col-md-3">
-    <?php echo $form->labelEx($model, 'details'); ?>
-    <?php echo $form->textField($model, 'details'); ?>
-    <?php echo $form->error($model, 'details'); ?>
+    <?php //echo $form->labelEx($model, 'details'); ?>
+    <?php echo $form->textFieldRow($model, 'details'); ?>
+    <?php //echo $form->error($model, 'details'); ?>
 
     <?php echo $form->error($model, 'valuedate'); ?> 
     <?php echo $form->labelEx($model, 'valuedate'); ?>
@@ -34,17 +34,26 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 </div>
 
 <div class="col-md-3">   
-    <?php echo $form->labelEx($model, 'refnum1'); ?>
-    <?php echo $form->textField($model, 'refnum1'); ?>
-    <?php echo $form->error($model, 'refnum1'); ?>
 
-    <?php echo $form->labelEx($model, 'refnum2'); ?>
-    <?php echo $form->textField($model, 'refnum2'); ?>
-    <?php echo $form->error($model, 'refnum2'); ?>
+    <div>
+        <?php
+        $this->widget('widgetRefnum', array(
+            'model' => $model, //Model object
+            'attribute' => 'refnum1', //attribute name
+        )); //*/
+        ?>
+    </div>
+    <?php //echo $form->labelEx($model, 'refnum1'); ?>
+    <?php //echo $form->textField($model, 'refnum1'); ?>
+    <?php //echo $form->error($model, 'refnum1'); ?>
 
-    <?php echo $form->labelEx($model, 'currency_id'); ?>
-    <?php echo $form->dropDownList($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency  ?>
-    <?php echo $form->error($model, 'currency_id'); ?>
+    <?php //echo $form->labelEx($model, 'refnum2'); ?>
+    <?php echo $form->textFieldRow($model, 'refnum2'); ?>
+    <?php //echo $form->error($model, 'refnum2'); ?>
+
+    <?php //echo $form->labelEx($model, 'currency_id'); ?>
+    <?php echo $form->dropDownListRow($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency  ?>
+    <?php //echo $form->error($model, 'currency_id'); ?>
 </div>
 <div class="row">
     <div class="col-md-12">   
@@ -150,7 +159,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
                 $("#transaction-form").submit(function() {
 
-                    
+
                     if (Number($('#balance').val()) != 0) {
                         alert("sum is not 0");
                         return false;
@@ -273,7 +282,20 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                 .error(function() {
                 });
     }
+    function refNum(doc) {//
 
+
+        $("#choseTransactions_refnum1").dialog("close");
+
+        $('#Transactions_refnum1_div').html($('#Transactions_refnum1_div').html() + ", " + doc.doctype + " #" + doc.docnum);
+        $('#Transactions_refnum1_ids').val($('#Transactions_refnum1_ids').val() + doc.id + ",");
+
+
+
+        return false;
+
+
+    }
 
 
 
@@ -293,7 +315,18 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
  * 
  */
 ?>  
-<?php echo CHtml::submitButton(Yii::t('app', "Save")); ?>    
+
+<div class="form-actions">
+    <?php
+    $this->widget('bootstrap.widgets.TbButton', array(
+        'buttonType' => 'submit',
+        'type' => 'primary',
+        'label' => Yii::t('app', "Save"),
+    ));
+    ?>
+</div>
+
+<?php //echo CHtml::submitButton(Yii::t('app', "Save")); ?>    
 <?php $this->endWidget(); ?>
 
 

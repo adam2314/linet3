@@ -1,5 +1,6 @@
 <div class="form">
-
+<div class="row">
+    <div class="col-md-3">
     <?php
     $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         'id' => 'outcome-form',
@@ -13,24 +14,13 @@
 
 
 
-    <?php echo $form->labelEx($model, 'account_id'); ?>
-    <?php
-    $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
-        'name' => 'FormOutcome[account_id]',
-        'id' => 'FormOutcome_account_id',
-        'value' => "$model->account_id",
-        'source' => $this->createUrl('/accounts/autocomplete', array('type' => 1)),
-        'options' => array(
-            'minLength' => 0,
-            'showAnim' => 'fold',
-        ),
-    ));
-    ?>
-<?php echo $form->error($model, 'account_id'); ?>
+   
+    <?php echo $form->dropDownListRow($model, 'account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => 1)), 'id', 'name'));//supplieres ?>
+   
 
 
 
-<?php echo $form->dropDownList($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency  ?>
+<?php echo $form->dropDownListRow($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency  ?>
 
     <br />
 
@@ -40,7 +30,7 @@
     
     
         <?php //echo $form->textFieldRow($model, 'refnum', array('size' => 5, 'maxlength' => 5)); ?>
-    <div class="col-md-2">
+    <div>
         <?php
         $this->widget('widgetRefnum', array(
                     'model' => $model, //Model object
@@ -64,7 +54,7 @@
     ?>
     <?php echo $form->error($model, 'date'); ?>
 
-<?php echo $form->dropDownListRow($model, 'opp_account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => 7)), 'id', 'name')); ?>
+<?php echo $form->dropDownListRow($model, 'opp_account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => 7)), 'id', 'name'));//7=banks ?>
 
 
 
@@ -79,5 +69,24 @@
     </div>
 
 <?php $this->endWidget(); ?>
-
+</div>
+    </div>
 </div><!-- form -->
+
+
+<script type="text/javascript">
+function refNum(doc) {//
+
+
+            $("#choseFormOutcome_refnum").dialog("close");
+
+            $('#FormOutcome_refnum_div').html($('#FormOutcome_refnum_div').html() + ", " + doc.doctype + " #" + doc.docnum);
+            $('#FormOutcome_refnum_ids').val($('#FormOutcome_refnum_ids').val() + doc.id + ",");
+
+
+
+            return false;
+
+
+        }
+        </script>

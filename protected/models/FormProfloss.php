@@ -18,6 +18,16 @@ class FormProfloss extends CFormModel
     public $to_date;
     
     
+    public function init(){
+        $yiidatetimesec=Yii::app()->locale->getDateFormat('yiidatetimesec');
+        $phpdatetime=Yii::app()->locale->getDateFormat('phpdatetimes');
+        
+        $this->from_date=date($phpdatetime,CDateTimeParser::parse('01/01/'.date('Y').' 00:00:00',$yiidatetimesec));
+        $this->to_date=date($phpdatetime);
+        return parent::init();
+    }
+
+
     public function rules()
 	{
 		// NOTE: you should only define rules for those attributes that
@@ -43,7 +53,7 @@ class FormProfloss extends CFormModel
         $data=array();
         foreach($accounts as $account){
                 
-                $sum=$account->getTotal($this->from_date.":00",$this->to_date.":00"); 
+                $sum=$account->getTotal($this->from_date.":00",$this->to_date.":59"); 
                 if($sum!=0)
                     $data[]=array('id'=>$account->id,'name'=>$account->name,'sum'=>$sum,'id6111'=>$account->id6111);
         }

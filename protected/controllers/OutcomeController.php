@@ -17,7 +17,7 @@ class OutcomeController extends RightsController{
 
 
         // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+         $this->performAjaxValidation($model);
         if (isset($_POST['FormOutcome'])) {
             $model->attributes = $_POST['FormOutcome'];
             $model->transaction();
@@ -27,7 +27,12 @@ class OutcomeController extends RightsController{
             'model' => $model,
         ));
     }
-
+    protected function performAjaxValidation($model) {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'outcome-form') {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
+    }
 }
 
 ?>

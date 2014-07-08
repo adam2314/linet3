@@ -20,8 +20,11 @@ $years=array();
 
 for($min = $year - 2; $min <= $max; $min++) 
     $years[$min]=$min;
+?>
 
-
+<div class='row'>
+<div class='col-md-3'>
+<?php
 echo Yii::t('app','From Date');
 
 
@@ -33,8 +36,25 @@ echo "<br>";
 echo Yii::t('app','To Date');
 echo $form->dropDownList($model,'to_month',Yii::app()->locale->monthNames);
 //echo $form->dropDownList($model,'to_year', $years);  
-echo CHtml::submitButton('Go',array('onclick'=>'send();')); 
+//echo CHtml::submitButton('Go',array('onclick'=>'send();')); 
+?>
+    <div class="row form-actions">
+        <?php
+        $this->widget('bootstrap.widgets.TbButton', array(
+            //'buttonType' => 'submit',
+            'htmlOptions' => array('onclick' => 'return send();',),
+            'type' => 'primary',
+            'label' => Yii::t('app', "Go"),
+        ));
+        ?>
+    </div>
 
+
+
+</div>
+</div>
+    
+    <?php
  $this->endWidget(); 
 
 $this->endWidget(); 

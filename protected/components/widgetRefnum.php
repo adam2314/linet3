@@ -40,8 +40,8 @@ class widgetRefnum extends CWidget {
         $text='';
         //if(function_exists(getRef())){
             $this->model->getRef();
-            if ($this->model->docDocs !== null) {
-                foreach ($this->model->docDocs as $doc) {
+            if ($this->model->Docs !== null) {
+                foreach ($this->model->Docs as $doc) {
                     //echo CHtml::link($doc->docType->name . " #" . $doc->docnum, array('docs/view', "id" => $doc->id)) . "<br />";
                     $text.="<a href='".Yii::app()->createAbsoluteUrl("docs/view/$doc->id")."' >" . $doc->docType->name . ' #' . $doc->docnum . "</a><br />";
                 }
@@ -68,9 +68,9 @@ class widgetRefnum extends CWidget {
                 'width' => '600px',
             ),
         ));
-        $dataProvider = new CActiveDataProvider('Docs');
-        echo $this->controller->renderPartial('index');
-//echo $this->renderPartial('index', array('dataProvider'=>$dataProvider,)); 
+        
+        echo $this->controller->renderPartial('application.views.docs.index');
+
 
         $this->endWidget('zii.widgets.jui.CJuiDialog');
 

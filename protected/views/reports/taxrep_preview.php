@@ -14,9 +14,10 @@ $form=$this->beginWidget('CActiveForm', array(
                                'onkeypress'=>" if(event.keyCode == 13){ send(); } " /* Do ajax call when user presses enter key */
             ),
 )); 
-
-
-
+?>
+<div class='row'>
+<div class='col-md-3'>
+<?php
 echo Yii::t('app','From Date');
 
 echo $form->hiddenField($model,'step');
@@ -29,7 +30,7 @@ echo Yii::t('app','To Date');
 echo $form->hiddenField($model,'to_month');
 //echo $form->hiddenField($model,'to_year'); 
 
-
+echo "<br>";
 //echo $form->hiddenField($model,'selvat_acc');  
 
 
@@ -71,8 +72,26 @@ echo $form->textField($model,'tax_total');
 //echo $form->labelEx($model,'payvat_total'); 
 //echo $form->textField($model,'payvat_total');
 
-echo CHtml::submitButton('Pay',array('onclick'=>'send();')); 
+//echo CHtml::submitButton('Pay',array('onclick'=>'send();')); 
+?>
+     <div class="row form-actions">
+        <?php
+        $this->widget('bootstrap.widgets.TbButton', array(
+            //'buttonType' => 'submit',
+            'htmlOptions' => array('onclick' => 'return send();',),
+            'type' => 'primary',
+            'label' => Yii::t('app', "Pay"),
+        ));
+        ?>
+    </div>
 
+
+
+</div>
+</div>
+    
+    
+    <?php
  $this->endWidget(); 
 
 $this->endWidget(); 

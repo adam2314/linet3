@@ -22,6 +22,7 @@ class TransactionController extends RightsController{
                 //$model->sum=$docdetail->price*$action;
                 $model->owner_id=Yii::app()->user->id;
                 $model->linenum=$line;
+                $model->refnum1=$model->refnum1_ids;
                 $line++;
                 if($model->save()){
                     foreach($_POST['ops'] as $acc){
@@ -31,6 +32,7 @@ class TransactionController extends RightsController{
                         $submodel->type=Yii::app()->user->settings['transactionType.manual'];
                         $submodel->num=$model->num;
                         $submodel->account_id=$acc;
+                        $submodel->refnum1=$model->refnum1_ids;
                         if(isset($_POST['sumpos'][$i]) && (float)$_POST['sumpos'][$i]!=0)
                             $submodel->sum=$_POST['sumpos'][$i];
                         else 

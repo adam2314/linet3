@@ -48,7 +48,7 @@ class Company extends mainRecord {
     public function select($id) {
         $database = Company::model()->findByPk($id);
         Yii::app()->user->setState('Database', $database);
-        Yii::app()->user->setState('Company', 1);
+        Yii::app()->user->setState('Company', $database->id);
         unset(Yii::app()->user->settings);
         $this->loadComp($database);
 

@@ -161,8 +161,8 @@ class ReportsController extends RightsController
         public function actionVat(){
             $model=new FormReportVat();
 
-            if(isset($_POST['ReportVat'])){
-                $model->attributes=$_POST['ReportVat'];
+            if(isset($_POST['FormReportVat'])){
+                $model->attributes=$_POST['FormReportVat'];
                 if($model->step==1){                  
                     $model->pay();
                 }

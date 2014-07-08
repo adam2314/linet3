@@ -4,15 +4,16 @@ $this->menu=array(
 	//array('label'=>'List Config','url'=>array('index')),
 	//array('label'=>'View Config','url'=>array('view','id'=>$model->id)),
 );
-$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Create Open Balance"))); 
+$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Balance Report"))); 
 ?>
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'balance-form',
 	'enableAjaxValidation'=>false,
 )); 
-
-
-
+?>
+<div class='row'>
+<div class='col-md-3'>
+<?php
 echo Yii::t('app','From Date');
 
 Yii::import('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker');
@@ -29,8 +30,6 @@ $this->widget('CJuiDateTimePicker',array(
 
 
 ?>
-
-<br />
 <?php
 
 echo Yii::t('app','To Date');
@@ -48,10 +47,23 @@ $this->widget('CJuiDateTimePicker',array(
         
     ) // jquery plugin options
 ));
-echo CHtml::submitButton(Yii::t('app','Search')); 
+//echo CHtml::submitButton(Yii::t('app','Search')); 
 ?>
 
+<div class="row form-actions">
+        <?php
+        $this->widget('bootstrap.widgets.TbButton', array(
+            'buttonType' => 'submit',
+            'type' => 'primary',
+            'label' => Yii::t('app', "Search"),
+        ));
+        ?>
+    </div>
 
+
+
+</div>
+</div>
 
 
 <div id ="result">

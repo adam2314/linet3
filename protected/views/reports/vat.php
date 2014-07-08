@@ -33,7 +33,19 @@ echo "<br>";
 echo Yii::t('app','To Date');
 echo $form->dropDownList($model,'to_month',Yii::app()->locale->monthNames);
 //echo $form->dropDownList($model,'to_year', $years);  
-echo CHtml::submitButton('Go',array('onclick'=>'send();')); 
+?>
+<div class="row form-actions">
+        <?php
+        $this->widget('bootstrap.widgets.TbButton', array(
+            //'buttonType' => 'submit',
+            'htmlOptions' => array('onclick' => 'return send();',),
+            'type' => 'primary',
+            'label' => Yii::t('app', "Go"),
+        ));
+        ?>
+    </div>
+<?php
+//echo CHtml::submitButton('Go',array('onclick'=>'send();')); 
 
  $this->endWidget(); 
 
@@ -63,7 +75,7 @@ success:function(data){
  
   dataType:'html'
   });
- 
+ return false;
 }
  
 </script>

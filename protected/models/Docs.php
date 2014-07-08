@@ -34,7 +34,7 @@ class Docs extends fileRecord {
     //public $lang;
     public $docDet = NULL;
     public $docCheq = NULL;
-    public $docDocs= NULL;
+    public $Docs= NULL;
     public $rcptsum = 0;
     public $issue_from;
     public $issue_to;
@@ -76,9 +76,9 @@ class Docs extends fileRecord {
 
     public function getRef(){
         $this->refnum_ids='';
-        $this->docDocs=Docs::model()->findAllByAttributes(array('refnum' => $this->id));
-        if($this->docDocs!==null){
-            foreach($this->docDocs as $doc)
+        $this->Docs=Docs::model()->findAllByAttributes(array('refnum' => $this->id));
+        if($this->Docs!==null){
+            foreach($this->Docs as $doc)
                 $this->refnum_ids.=$doc->id.", ";
         }
     }
@@ -249,8 +249,8 @@ class Docs extends fileRecord {
         //    return true;
         
         
-        if($this->docDocs!==null){//clear!
-            foreach ($this->docDocs as $doc){
+        if($this->Docs!==null){//clear!
+            foreach ($this->Docs as $doc){
                 $doc->refstatus=Docs::STATUS_OPEN;
                 $doc->refnum='';
                 $doc->save();
@@ -381,7 +381,8 @@ class Docs extends fileRecord {
 
                 foreach ($this->docDetailes as $docdetail) {
                     $refnum2 = $this->stock($docdetail->item_id, $docdetail->qty);
-                    $num = $docdetail->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->docType->oppt_account_type, $tranType);
+                    //$num = $docdetail->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->docType->oppt_account_type, $tranType);
+                    $num = $docdetail->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->oppt_account_id, $tranType);
                     $line++;
                     $accout->sum+=($docdetail->invprice + $docdetail->vat) * $action;
                     $vat->sum+= $docdetail->vat * $action;

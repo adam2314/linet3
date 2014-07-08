@@ -16,7 +16,11 @@ class FormOutcome extends CFormModel{
     public $date;
     public $sum;
     public $detailes;
+    
     public $refnum;
+    public $Docs= NULL;
+    public $refnum_ids ='';
+    
     //public $user_id;//?
     public $opp_account_id;
     public function rules(){
@@ -24,11 +28,13 @@ class FormOutcome extends CFormModel{
 		// will receive user inputs.
 		return array(
                         array('account_id, currency_id, date, sum, opp_account_id', 'required'),
-                        array('account_id, currency_id, date, sum, opp_account_id', 'safe'),
+                        array('account_id, currency_id, date, sum, opp_account_id, refnum_ids, detailes', 'safe'),
                     	);
 	}
         
-        
+        public function getRef(){
+            return array();//stub function for refnum widget...
+        }
    public function transaction(){
         $valuedate=date("Y-m-d H:m:s",CDateTimeParser::parse($this->date,Yii::app()->locale->getDateFormat('yiidatetime')));
         $num=0;
@@ -40,7 +46,7 @@ class FormOutcome extends CFormModel{
         $tran->num=$num;
         $tran->account_id=$this->account_id;
         $tran->type=$tranType;
-        $tran->refnum1=$this->refnum;
+        $tran->refnum1=$this->refnum_ids;
         $tran->valuedate=$valuedate;
         $tran->details=$this->detailes;
         $tran->currency_id=$this->currency_id;
@@ -54,7 +60,7 @@ class FormOutcome extends CFormModel{
         //$vat->account_id=Yii::app()->user->settings['company.acc.vatacc'];
         $opt_tran->account_id=$this->opp_account_id;
         $opt_tran->type=$tranType;
-        $opt_tran->refnum1=$this->refnum;
+        $opt_tran->refnum1=$this->refnum_ids;
         $opt_tran->valuedate=$valuedate;
         $opt_tran->details=$this->detailes;
         $opt_tran->currency_id=$this->currency_id;

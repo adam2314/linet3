@@ -3,16 +3,19 @@
 $this->menu=array(
 	//array('label'=>'List Config','url'=>array('index')),
 	//array('label'=>'View Config','url'=>array('view','id'=>$model->id)),
-);
-$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Create Open Balance"))); 
+);?>
+
+<?php
+$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Profit & Loss report"))); 
 ?>
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'profloss-form',
 	'enableAjaxValidation'=>false,
 )); 
-
-
-
+?>
+<div class='row'>
+<div class='col-md-3'>
+<?php
 echo Yii::t('app','From Date');
 
 Yii::import('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker');
@@ -48,15 +51,28 @@ $this->widget('CJuiDateTimePicker',array(
         
     ) // jquery plugin options
 ));
-echo CHtml::submitButton(Yii::t('app','Search')); 
+//echo CHtml::submitButton(Yii::t('app','Search')); 
 ?>
 
+<div class="row form-actions">
+        <?php
+        $this->widget('bootstrap.widgets.TbButton', array(
+            'buttonType' => 'submit',
+            'type' => 'primary',
+            'label' => Yii::t('app', "Search"),
+        ));
+        ?>
+    </div>
 
 
 
-<div id ="result">
+</div>
 </div>
 
+<div class='row'>
+<div id ="result">
+</div>
+</div>
 
 
 <?php $this->endWidget(); ?>
