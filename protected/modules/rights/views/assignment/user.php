@@ -5,12 +5,10 @@
 ); ?>
 
 <div id="userAssignments">
-
-	<h2><?php echo Rights::t('core', 'Assignments for :username', array(
-		':username'=>$model->getName()
-	)); ?></h2>
+    <?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Assignments for :username', array(':username'=>$model->getName())))); ?>
 	
-	<div class="assignments span-12 first">
+	
+	<div class="">
 
 		<?php $this->widget('zii.widgets.grid.CGridView', array(
 			'dataProvider'=>$dataProvider,
@@ -44,7 +42,7 @@
 
 	</div>
 
-	<div class="add-assignment span-11 last">
+	<div class="">
 
 		<h3><?php echo Rights::t('core', 'Assign item'); ?></h3>
 
@@ -66,5 +64,5 @@
 		<?php endif; ?>
 
 	</div>
-
+    <?php $this->endWidget();?>
 </div>

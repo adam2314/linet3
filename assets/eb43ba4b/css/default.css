@@ -11,7 +11,7 @@
 /**
 * Default style.
 */
-
+/*
 #rights * { font-family:Trebuchet MS, Verdana, san-serif !important; }
 #rights a { color:#666699; font-weight:bold; text-decoration:none; }
 #rights a:hover { color:#666699; text-decoration:underline; }
@@ -51,9 +51,7 @@
 #rights .form input[type=submit] { padding:2px 5px; }
 #rights .form span.required { color:#ff0000; }
 
-/**
-* Grid view and table styles.
-*/
+
 
 #rights .grid-view table.items { border:0; margin:0 0 20px 0; }
 #rights .grid-view table.items * { font-size:12px; }
@@ -75,9 +73,7 @@
 #rights .grid-view table.mini th, #rights .miniTable td { padding:8px; }
 #rights .grid-view table.mini .odd td { background:#e8edff; }
 
-/**
-* Pager style.
-*/
+
 
 #rights .pager { color:#ffffff; }
 #rights .pager li { margin:0; padding:0; }
@@ -105,8 +101,8 @@
 #rights .permission-table .inherited-item { cursor:pointer; font-style:italic; }
 #rights .child-count { font-weight:bold; }
 
-/**
-* Jquery UI style.
-*/
+
 
 .ui-widget * { font-family:Trebuchet MS, Verdana, san-serif !important; font-size:11px; }
+
+*/

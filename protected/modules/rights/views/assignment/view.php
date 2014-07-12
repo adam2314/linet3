@@ -4,8 +4,8 @@
 ); ?>
 
 <div id="assignments">
-
-	<h2><?php echo Rights::t('core', 'Assignments'); ?></h2>
+        <?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Assignments'))); ?>
+	
 
 	<p>
 		<?php echo Rights::t('core', 'Here you can view which permissions has been assigned to each user.'); ?>
@@ -15,7 +15,7 @@
 	    'dataProvider'=>$dataProvider,
 	    'template'=>"{items}\n{pager}",
 	    'emptyText'=>Rights::t('core', 'No users found.'),
-	    'htmlOptions'=>array('class'=>'grid-view assignment-table'),
+	    'htmlOptions'=>array('class'=>'table'),
 	    'columns'=>array(
     		array(
     			'name'=>'name',
@@ -47,5 +47,5 @@
     		),
 	    )
 	)); ?>
-
+    <?php $this->endWidget();?>
 </div>

@@ -17,7 +17,7 @@
  */
 class Docdetails extends basicRecord{
     const table='{{docDetails}}';
-    
+    public $iTotalVat;
     
     
     /*
@@ -107,12 +107,12 @@ class Docdetails extends basicRecord{
 			array('line, unit_id', 'numerical', 'integerOnly'=>true),
 			array('doc_id, item_id, currency_id', 'length', 'max'=>10),
 			array('name', 'length', 'max'=>255),
-			array('vat, unit_price, price, invprice, qty', 'length', 'max'=>20),
+			array('ihTotal, ihItem, iItem, iTotal, iVatRate, qty', 'length', 'max'=>20),
                         
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('doc_id, item_id, name, description, qty, unit_price, unit_id, currency_id, vat, price, invprice, line', 'safe', 'on'=>'search'),
+			array('doc_id, item_id, name, description, qty, unit_id, currency_id, ihTotal, ihItem, iItem, iTotal, iVatRate, line', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -141,11 +141,12 @@ class Docdetails extends basicRecord{
 			'name' => Yii::t('labels','Name'),
 			'description' => Yii::t('labels','Description'),
 			'qty' => Yii::t('labels','Qty'),
-			'unit_price' => Yii::t('labels','Unit Price'),
+			'iItem' => Yii::t('labels','Unit Price'),
                         'unit_id' => Yii::t('labels','Unit id'),
 			'currency_id' => Yii::t('labels','Currency'),
-			'price' => Yii::t('labels','Price'),
-			'invprice' => Yii::t('labels','invoice Price'),
+			'iTotal' => Yii::t('labels','Price'),
+                        'ihItem' => Yii::t('labels','invoice Unit Price'),
+			'ihTotal' => Yii::t('labels','invoice Price'),
 			'line' => Yii::t('labels','Line'),
 		);
 	}

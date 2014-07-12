@@ -26,6 +26,7 @@ class User extends mainRecord {
 
     public $warehouse = 117;
     public $passwd;
+    public $certfile;
 
     /**
      * Returns the static model of the specified AR class.
@@ -76,14 +77,12 @@ class User extends mainRecord {
         );
     }
 
-    
     private function getWarehouse() {
         if (Yii::app()->user->Company != 0) {
             $a = Settings::model()->findByPk("company." . $this->id . ".warehouse");
-            if ($a!==null) {
+            if ($a !== null) {
                 $this->warehouse = $a->value;
             }
-            
         }
         return $this->warehouse;
     }
@@ -100,48 +99,67 @@ class User extends mainRecord {
             $this->password = $this->hashPassword($this->passwd, $this->salt);
 
         $res = parent::save($runValidation, $attributes);
-        if (Yii::app()->user->Company != 0) {
-            $catagories = ItemVatCat::model()->findAll();
-            if ($res) {
-                $model = Settings::model()->findByPk("company." . $this->id . ".warehouse");
-                if ($model===null) {
-                    $model = new Settings();
-                    $model->id = "company." . $this->id . ".warehouse";
-                    $model->eavType = 'integer';
-                    $model->hidden = 1;
-                    $model->value = $this->warehouse;
-                    $model->save();
-                }
-                $this->warehouse=$model->value;
-
-
-                foreach ($catagories as $catagory) {
-                    if (!UserIncomeMap::model()->findByPk(array('user_id' => $this->id, 'itemVatCat_id' => $catagory->id))) {//'user_id', 'itemVatCat_id'
-                        $model = new UserIncomeMap;
-                        $attr = array("user_id" => $this->id, "itemVatCat_id" => $catagory->id, "account_id" => 100);
-                        $model->attributes = $attr;
-                        if (!$model->save())
-                            return false;
-                    }
-                }
-            }
+        if ((Yii::app()->user->Company != 0) && ($res)) {
+            $this->compSave();
         }
         return $res;
     }
 
+    private function compSave() {
+        $catagories = ItemVatCat::model()->findAll();
+        $model = Settings::model()->findByPk("company." . $this->id . ".warehouse");
+        if ($model === null) {
+            $model = new Settings();
+            $model->id = "company." . $this->id . ".warehouse";
+            $model->eavType = 'integer';
+            $model->hidden = 1;
+            $model->value = $this->warehouse;
+            $model->save();
+        }
+        $this->warehouse = $model->value;
+
+
+        foreach ($catagories as $catagory) {
+            if (!UserIncomeMap::model()->findByPk(array('user_id' => $this->id, 'itemVatCat_id' => $catagory->id))) {//'user_id', 'itemVatCat_id'
+                $model = new UserIncomeMap;
+                $attr = array("user_id" => $this->id, "itemVatCat_id" => $catagory->id, "account_id" => 100);
+                $model->attributes = $attr;
+                if (!$model->save())
+                    return false;
+            }
+        }
+
+
+        Yii::log('user save catagory', 'info', 'app');
+
+        $tmps = CUploadedFile::getInstanceByName('User[certfile]');
+        if ($tmps) {
+            Yii::log('saved', 'info', 'app');
+            $yiiBasepath = Yii::app()->basePath;
+            $configPath = Yii::app()->user->settings["company.path"];
+
+            if ($tmps->saveAs($yiiBasepath . "/files/" . $configPath . "/cert/" . Yii::app()->user->id . ".p12")) {
+                // add it to the main model now
+            } else {
+                echo 'Cannot upload!';
+            }
+            //}
+        }
+    }
+
     //public function delete() {
-        /*
-          $users=User::model()->findAll();
+    /*
+      $users=User::model()->findAll();
 
-          foreach ($users as $user){
-          $IncomeMap=UserIncomeMap::model()->findByPk(array('user_id'=>$user->id, 'itemVatCat_id'=>$this->id));
-          if($IncomeMap){//'user_id', 'itemVatCat_id'
-          $IncomeMap->delete();
-          }
+      foreach ($users as $user){
+      $IncomeMap=UserIncomeMap::model()->findByPk(array('user_id'=>$user->id, 'itemVatCat_id'=>$this->id));
+      if($IncomeMap){//'user_id', 'itemVatCat_id'
+      $IncomeMap->delete();
+      }
 
-          } */
-        //no user delete only disable
-        //parent::delete();
+      } */
+    //no user delete only disable
+    //parent::delete();
     //}
 
     /**
@@ -167,7 +185,7 @@ class User extends mainRecord {
             'passwd' => Yii::t('labels', 'New Password'),
             'ItemVatCat' => Yii::t('labels', 'Item VAT Catagory'),
             'account_id' => Yii::t('labels', 'Account id'),
-            
+            'certfile' => Yii::t('labels', 'Certificate file'),
         );
     }
 

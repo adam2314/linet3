@@ -14,7 +14,7 @@ $this->menu=array(
 
 $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View User ") ." " .$model->username,));
 ?>
-
+<div class="col-md-4">
 
 <?php $this->widget('bootstrap.widgets.TbDetailView',array(
 	'data'=>$model,
@@ -35,9 +35,10 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View User ") ." " 
 
 
 			?>
-
-        <table class="templateFrame grid" cellspacing="0">
-            <thead class="templateHead">
+</div>
+<div class="col-md-4">
+        <table class="table">
+            <thead>
                 <tr>
 
                     <td><?php echo Yii::t("app","Tax Catagory") ?></td>
@@ -51,7 +52,7 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View User ") ." " 
                         <td colspan="2">     	</td>
                     </tr>
              </tfoot>
-            <tbody class="templateTarget">
+            <tbody>
                 <?php $i=0;
                                 foreach ($model->userIncomeMaps as $userIncome){
                                         echo $this->renderPartial('userIncomeMapview', array('model'=>$userIncome,'i'=>$i,)); 
@@ -60,7 +61,7 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View User ") ." " 
                  ?>
             </tbody>
         </table>
-
+</div>
 	<?php		
 			
 	

@@ -112,7 +112,8 @@ return CMap::mergeArray(
                         
                         
                         //'minify/<group:[^\/]+>'=>'minify/index',
-                        //'<controller:\w+>/<id:\d+>'=>'<controller>/view',
+                        '<module>/authItem/<action:\w+>' => '<module>/authItem/<action>',
+                        '<module:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>'=>'<module>/<controller>/<action:\w+>',
                         '<controller:\w+>/create/<type:\d+>' => '<controller>/create', //mainly for doc, acc,outcome creating
                         //'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
                         //'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',

@@ -39,7 +39,7 @@ class widgetRefnum extends CWidget {
         //$baseUrl = Yii::app()->request->baseUrl;
         $text='';
         //if(function_exists(getRef())){
-            $this->model->getRef();
+            //$this->model->getRef();
             if ($this->model->Docs !== null) {
                 foreach ($this->model->Docs as $doc) {
                     //echo CHtml::link($doc->docType->name . " #" . $doc->docnum, array('docs/view', "id" => $doc->id)) . "<br />";

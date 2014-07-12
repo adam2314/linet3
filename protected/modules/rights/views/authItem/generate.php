@@ -4,8 +4,8 @@
 ); ?>
 
 <div id="generator">
-
-	<h2><?php echo Rights::t('core', 'Generate items'); ?></h2>
+<?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Generate items'))); ?>
+	
 
 	<p><?php echo Rights::t('core', 'Please select which items you wish to generate.'); ?></p>
 
@@ -59,5 +59,5 @@
 		<?php $this->endWidget(); ?>
 
 	</div>
-
+<?php $this->endWidget();?>
 </div>

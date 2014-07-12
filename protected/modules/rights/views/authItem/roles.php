@@ -5,9 +5,8 @@
 ?>
 
 <div id="roles">
-
-	<h2><?php echo Rights::t('core', 'Roles'); ?></h2>
-
+        <?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Roles'))); ?>
+	
 	<p>
 		<?php echo Rights::t('core', 'A role is group of permissions to perform a variety of tasks and operations, for example the authenticated user.'); ?><br />
 		<?php echo Rights::t('core', 'Roles exist at the top of the authorization hierarchy and can therefore inherit from other roles, tasks and/or operations.'); ?>
@@ -21,7 +20,7 @@
 	    'dataProvider'=>$dataProvider,
 	    'template'=>'{items}',
 	    'emptyText'=>Rights::t('core', 'No roles found.'),
-	    'htmlOptions'=>array('class'=>'grid-view role-table'),
+	    'htmlOptions'=>array('class'=>'table'),
 	    'columns'=>array(
     		array(
     			'name'=>'name',
@@ -60,5 +59,5 @@
 	)); ?>
 
 	<p class="info"><?php echo Rights::t('core', 'Values within square brackets tell how many children each item has.'); ?></p>
-
+        <?php $this->endWidget();?>
 </div>

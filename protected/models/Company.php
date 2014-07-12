@@ -142,6 +142,7 @@ class Company extends mainRecord {
             mkdir($folder . "settings/"); //settings
             mkdir($folder . "cert/"); //cert
             mkdir($folder . "docs/"); //docs
+            mkdir($folder . "items/"); //items
             mkdir($folder . "openformat/"); //openformat
             mkdir($folder . "files/"); //openformat
             //add permisstions

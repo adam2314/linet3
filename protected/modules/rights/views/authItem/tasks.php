@@ -4,8 +4,7 @@
 ); ?>
 
 <div id="tasks">
-
-	<h2><?php echo Rights::t('core', 'Tasks'); ?></h2>
+        <?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Tasks'))); ?>
 
 	<p>
 		<?php echo Rights::t('core', 'A task is a permission to perform multiple operations, for example accessing a group of controller action.'); ?><br />
@@ -20,7 +19,7 @@
 	    'dataProvider'=>$dataProvider,
 	    'template'=>'{items}',
 	    'emptyText'=>Rights::t('core', 'No tasks found.'),
-	    'htmlOptions'=>array('class'=>'grid-view task-table'),
+	    'htmlOptions'=>array('class'=>'table'),
 	    'columns'=>array(
     		array(
     			'name'=>'name',
@@ -59,5 +58,5 @@
 	)); ?>
 
 	<p class="info"><?php echo Rights::t('core', 'Values within square brackets tell how many children each item has.'); ?></p>
-
+        <?php $this->endWidget();?>
 </div>

@@ -83,7 +83,7 @@ class RightsController extends RController {
      */
     public function accessDenied($message = null) {
         if ($message === null)
-            $message = Rights::t('app', 'You are not authorized to perform this action.?');
+            $message = Rights::t('app', 'No sufficient permissions for current user to perform this action');
 
         $user = Yii::app()->getUser();
         if ($user->isGuest === true)

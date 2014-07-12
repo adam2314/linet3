@@ -4,8 +4,7 @@
 ); ?>
 
 <div id="operations">
-
-	<h2><?php echo Rights::t('core', 'Operations'); ?></h2>
+        <?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Operations'))); ?>
 
 	<p>
 		<?php echo Rights::t('core', 'An operation is a permission to perform a single operation, for example accessing a certain controller action.'); ?><br />
@@ -20,7 +19,7 @@
 	    'dataProvider'=>$dataProvider,
 	    'template'=>'{items}',
 	    'emptyText'=>Rights::t('core', 'No operations found.'),
-	    'htmlOptions'=>array('class'=>'grid-view operation-table sortable-table'),
+	    'htmlOptions'=>array('class'=>'table'),
 	    'columns'=>array(
 	    	array(
     			'name'=>'name',
@@ -59,5 +58,5 @@
 	)); ?>
 
 	<p class="info"><?php echo Rights::t('core', 'Values within square brackets tell how many children each item has.'); ?></p>
-
+        <?php $this->endWidget();?>
 </div>

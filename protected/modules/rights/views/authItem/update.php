@@ -31,7 +31,7 @@
 					'template'=>'{items}',
 					'hideHeader'=>true,
 					'emptyText'=>Rights::t('core', 'This item has no parents.'),
-					'htmlOptions'=>array('class'=>'grid-view parent-table mini'),
+					'htmlOptions'=>array('class'=>'table'),
 					'columns'=>array(
     					array(
     						'name'=>'name',

@@ -6,24 +6,28 @@ $actions[] = array('label' => Yii::t('app', 'View Document'), 'url' => array('vi
 $actions[] = array('label' => Yii::t('app', 'Manage Documents'), 'url' => array('admin'));
 $actions[] = array('label' => Yii::t('app', 'Duplicate Document'), 'url' => array('duplicate', 'id' => $model->id));
 
-if ($model->doctype == 6) {//Quote
-    $actions[] = array('label' => Yii::t('app', 'Convert to Invoice'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 3)); //Invoice
-    $actions[] = array('label' => Yii::t('app', 'Convert to Sales Order'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 7)); //Sales Order
-    $actions[] = array('label' => Yii::t('app', 'Convert to Invoice Receipt'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 9)); //Invoice Receipt
-}
+
 
 if (($model->doctype == 1) || ($model->doctype == 2)) {//Proforma || Delivery doc
     $actions[] = array('label' => Yii::t('app', 'Convert to Invoice'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 3)); //Invoice
     $actions[] = array('label' => Yii::t('app', 'Convert to Invoice Receipt'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 9)); //Invoice Receipt 
 }
-
-if ($model->doctype == 3) {//Invoice
-    $actions[] = array('label' => Yii::t('app', 'Convert to Credit Invoice'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 4)); //Credit Invoice
-}
 if ($model->doctype == 2) {//Delivery doc
     $actions[] = array('label' => Yii::t('app', 'Convert to Return document'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 5)); //Return document
 }
-
+if ($model->doctype == 3) {//Invoice
+    $actions[] = array('label' => Yii::t('app', 'Convert to Credit Invoice'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 4)); //Credit Invoice
+}
+if ($model->doctype == 4) {//Credit Invoice
+    $actions[] = array('label' => Yii::t('app', 'Convert to Invoice'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 3)); //Invoice
+}
+if ($model->doctype == 6) {//Quote
+    $actions[] = array('label' => Yii::t('app', 'Convert to Proforma'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 1)); //Proforma
+    $actions[] = array('label' => Yii::t('app', 'Convert to Delivery doc'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 2)); //Delivery doc
+    $actions[] = array('label' => Yii::t('app', 'Convert to Invoice'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 3)); //Invoice
+    $actions[] = array('label' => Yii::t('app', 'Convert to Sales Order'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 7)); //Sales Order
+    $actions[] = array('label' => Yii::t('app', 'Convert to Invoice Receipt'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 9)); //Invoice Receipt
+}
 if ($model->doctype == 7) {//Sales Order
     $actions[] = array('label' => Yii::t('app', 'Convert to Proforma'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 1)); //Proforma
     $actions[] = array('label' => Yii::t('app', 'Convert to Delivery doc'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 2)); //Delivery doc
@@ -35,7 +39,7 @@ $this->menu = $actions;
 
 
 
-$this->beginWidget('MiniForm', array('haeder' => Yii::t("app", "View Document ") . " " . $model->id,));
+$this->beginWidget('MiniForm', array('haeder' => Yii::t("app", "View Document") . " " . $model->id,));
 ?>
 <script type="text/javascript">
     jQuery(document).ready(function() {
@@ -153,7 +157,8 @@ $this->widget('bootstrap.widgets.TbButtonGroup', array(
         array('items' => array(
                 //array('icon'=>'envelope','label'=>Yii::t('app','Email'), 'url'=>'javascript:sendForm("email");',),
                 array('icon' => 'glyphicon glyphicon-save', 'label' => Yii::t('app', 'PDF'), 'url' => 'javascript:sendForm("pdf");',),
-                array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save'), 'url' => 'javascript:sendForm("save");',),
+                array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save Draft'), 'url' => 'javascript:sendForm("saveDraft");',),
+                //array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save'), 'url' => 'javascript:sendForm("save");',),
             )),
     ),
 ));

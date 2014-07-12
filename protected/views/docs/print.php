@@ -74,12 +74,17 @@ else
                             
                             <?php 
                             if($model->docType->copy){
-                                echo ($model->printed==1)? Yii::t('app','Source'):Yii::t('app','Copy');
+                                if($model->action==0){
+                                    echo Yii::t('app','Draft');
+                                }else{
+                                    echo ($model->printed==1)? Yii::t('app','Source'):Yii::t('app','Copy');
+                                }
                             }
                             ?></h1></div>
                 </td>
         </tr>
 </table>
+
 <?php
 /******************************************************************************************************************************/
 
@@ -120,13 +125,13 @@ if(count($model->docDetailes)!=0){
                     <td class='Description'>$docdetail->description</td>
                         
                     
-                    <td class='UntPrice'>$docdetail->unit_price</td>
+                    <td class='UntPrice'>$docdetail->iItem</td>
                     <td class='Unit'>".$docdetail->ItemUnit->name."</td>
                     <td class='Qty'>$docdetail->qty</td>    
-                    <td class='Price'>$docdetail->price</td>
+                    <td class='Price'>".$docdetail->qty*$docdetail->iItem."</td>
                     <td class='Currency'>$docdetail->currency_id</td>
-                    <td class='Total'>$docdetail->invprice</td>
-                    <td class='VAT'>$docdetail->vat</td>
+                    <td class='Total'>$docdetail->iTotal</td>
+                    <td class='VAT'>$docdetail->iVatRate</td>
                  </tr>
 
                 ";
@@ -175,10 +180,11 @@ if(count($model->docDetailes)!=0){
                 <td class='VAT'></td>
         </tr>		
 </table>
+
 <?php
 }
 
-echo count($model->docCheques);
+//echo count($model->docCheques);
 /******************************************************************************************************************************/
 if(count($model->docCheques)!=0){
 

@@ -4,8 +4,8 @@
 ); ?>
 
 <div id="permissions">
+        <?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Permissions'))); ?>
 
-	<h2><?php echo Rights::t('core', 'Permissions'); ?></h2>
 
 	<p>
 		<?php echo Rights::t('core', 'Here you can view and manage the permissions assigned to each role.'); ?><br />
@@ -24,7 +24,7 @@
 		'dataProvider'=>$dataProvider,
 		'template'=>'{items}',
 		'emptyText'=>Rights::t('core', 'No authorization items found.'),
-		'htmlOptions'=>array('class'=>'grid-view permission-table'),
+		'htmlOptions'=>array('class'=>'table'),
 		'columns'=>$columns,
 	)); ?>
 
@@ -49,5 +49,5 @@
 		});
 
 	</script>
-
+    <?php $this->endWidget();?>
 </div>

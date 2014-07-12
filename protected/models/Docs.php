@@ -57,6 +57,7 @@ class Docs extends fileRecord {
     public function init(){
         $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
         $this->due_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
+        
         return parent::init();
     }
             
@@ -65,6 +66,14 @@ class Docs extends fileRecord {
         return Docs::model()->findByAttributes(array('doctype' => $doctype));
     }
 
+    public function draftSave(){
+        $status=  Docstatus::model()->findByAttributes(array('looked' => 0,'doc_type' => $this->doctype));
+        if($status!==null){
+            $this->status=$status->num;
+        }
+        
+    }
+    
     /*
      * for open format export 
      */
@@ -195,12 +204,12 @@ class Docs extends fileRecord {
             $this->modified = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->modified));
         }
         
-        
+        $this->getRef();
         return parent::afterFind();
     }
 
     public function save($runValidation = true, $attributes = NULL) {
-        $this->docnum = $this->newNum();
+        
         $this->owner = Yii::app()->user->id;
         if ($this->total == 0)
             $this->total = $this->rcptsum;
@@ -210,16 +219,16 @@ class Docs extends fileRecord {
             return $a;
 
         if ($a) { //if switch no save
+            $this->saveRef();//load docs and re-save them
             if (!$this->action) {
                 $this->docStatus=  Docstatus::model()->findByPk(array('num'=>$this->status, 'doc_type'=>$this->doctype));
                 
                 $this->saveDet();
                 $this->saveCheq();
                 
-                $this->saveRef();//load docs and re-save them
-                //EXIT;
                 if (isset($this->docStatus)) {
                     if ($this->docStatus->action != 0) {
+                        $this->docnum = $this->newNum();//get num 
                         $this->action=1;
                         $a = parent::save($runValidation, $attributes);
                         $this->transaction((int) $this->docStatus->action);
@@ -231,7 +240,7 @@ class Docs extends fileRecord {
                     }
                 }
                 
-                //exit;
+                
             }
         }
         return $a;
@@ -247,7 +256,7 @@ class Docs extends fileRecord {
         //no skipping is allowed anymore if cur,total change...
         //if($str==$this->refnum_ids) //if the same skip
         //    return true;
-        
+        //echo $str;
         
         if($this->Docs!==null){//clear!
             foreach ($this->Docs as $doc){
@@ -588,7 +597,9 @@ class Docs extends fileRecord {
     }
 
     public function printDoc() {
-        $this->printed = (int) $this->printed + 1;
+        
+        if($this->action==1)
+            $this->printed = (int) $this->printed + 1;
         $this->save(false, false);
     }
 

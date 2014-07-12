@@ -98,13 +98,14 @@ $form = $this->beginWidget('CActiveForm', array(
         </div>
 
         <div class="col-md-1">
-            <?php ///*
-                $this->widget('widgetRefnum', array(
-                    'model' => $model, //Model object
-                    'attribute' => 'refnum', //attribute name
-                ));//*/
-                ?>
-            
+            <?php
+            ///*
+            $this->widget('widgetRefnum', array(
+                'model' => $model, //Model object
+                'attribute' => 'refnum', //attribute name
+            )); //*/
+            ?>
+
         </div>
 
         <div class="col-md-1">
@@ -120,7 +121,7 @@ $form = $this->beginWidget('CActiveForm', array(
 
 
         <div class="col-md-3">
-            <label><?php echo Yii::t('labels','Attached Files');?></label>
+            <label><?php echo Yii::t('labels', 'Attached Files'); ?></label>
 
             <?php
             $this->widget('CMultiFileUpload', array(
@@ -220,7 +221,7 @@ $form = $this->beginWidget('CActiveForm', array(
             <!--<div class="row">-->
             <thead>
                 <tr  class="head1">
-                    <?php //echo $form->labelEx($model,'doc_id');  ?>
+                    <?php //echo $form->labelEx($model,'doc_id');   ?>
                     <th class="item_id">
                         <?php echo Yii::t('labels', 'Item'); ?>
                         <?php
@@ -316,7 +317,7 @@ $form = $this->beginWidget('CActiveForm', array(
                     <td></td>
                     <td>
                         <?php //echo $form->labelEx($model,'novat_total');   ?>
-                        <?php //echo $form->error($model,'novat_total');   ?>
+                        <?php //echo $form->error($model,'novat_total');    ?>
                     </td>
                     <td>
                         <?php echo $form->hiddenField($model, 'novat_total'); ?>
@@ -426,7 +427,6 @@ $form = $this->beginWidget('CActiveForm', array(
                     <td>
                         <div id="rcptSum"></div>
                         <?php echo $form->hiddenField($model, "rcptsum"); ?>    
-                        <?php //echo CHTML::hiddenField('rcptsum');   ?>
                     </td>
                 </tr>
             </tfoot>	
@@ -456,6 +456,54 @@ $form = $this->beginWidget('CActiveForm', array(
     ?>
     <!--</div>-->
     <script type="text/javascript">
+        /*
+         
+        function CalcDueDate(valdate, pay_terms) {
+            var em = 0;
+            pay_terms = parseInt(pay_terms);
+            if (pay_terms >= 0) {
+                em = 0;
+            } else {
+                em = 1;
+                pay_terms = pay_terms * -1;
+            }
+            //var duedate = $('#Docs_due_date');//document.form1.due_date;
+            var dstr = valdate;
+            var darr = dstr.split("-");
+            var day = parseInt(darr[0]);
+            var month = parseFloat(darr[1]);
+            var year = parseInt(darr[2]);
+
+            if (em) {
+                month += 1;
+                if (month > 12) {
+                    month = 1;
+                    year += 1;
+                }
+                day = 1;
+
+            }
+
+            D = new Date(year, month - 1, day);
+            D.setDate(D.getDate() + pay_terms);
+            day = D.getDate();
+            month = D.getMonth() + 1;
+            year = D.getFullYear();
+            if (month >= 12) {
+                month = 1;
+                year += 1;
+            }
+            //aler
+            $('#Docs_due_date').val(day + "-" + month + "-" + year);
+        }
+
+*/
+ 
+
+        
+        
+        
+        
 
         $("#Docs_account_id").change(function() {
             var idate = $('#Docs_issue_date').val();
@@ -513,13 +561,6 @@ $form = $this->beginWidget('CActiveForm', array(
                 $('#doc_items').val(i + 1);
                 // start specific commands
 
-
-
-
-
-                //console.clear();
-                //console.log('lets Build');
-                //console.log($('#doc_items').val());
                 calcLines();
                 // end specific commands
             });
@@ -540,9 +581,6 @@ $form = $this->beginWidget('CActiveForm', array(
                 $('#Doccheques_<?php echo $i; ?>_type').val(0);
                 $('#Doccheques_<?php echo $i; ?>_type').trigger("liszt:updated");
 
-                //console.clear();
-                //console.log('lets Build');
-                //console.log($('#rcpt_items').val());
                 rcptcalcLines();
                 // end specific commands
             });
@@ -575,10 +613,8 @@ $form = $this->beginWidget('CActiveForm', array(
 
             $('#language_chosen').hide();
 
-        });/*******************end ready*****************************/
-        //function hideEmptyHeaders(){
-        //	$('.templateTarget').filter(function(){return $.trim($(this).text())===''}).siblings('.templateHead').hide();
-        //}
+        });
+        /*******************end ready*****************************/
 
         function changeFileds() {//
             var type = <?php echo (int) $model->docType->oppt_account_type; ?>;
@@ -639,82 +675,12 @@ $form = $this->beginWidget('CActiveForm', array(
                 $('#Doccheques_0_sum').val('0');
             }
             $('#Doccheques_0_sum').val(parseFloat($('#Doccheques_0_sum').val()) + parseFloat(doc.total));
-
+            rcptSum();
             return false;
 
 
         }
-        $('#Docs_currency_id').change(function() {
-            var currency = $('#Docs_currency_id').val();
 
-            $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "Currates/Getrate", "id": currency},
-            function(data) {
-                $('#doc_rate').val(data);
-                var elements = $('.currSelect');
-                for (var i = 0; i < elements.length; i++) {
-                    index = elements[i].id.replace("Docdetails_", '').replace("_currency_id", '');
-                    CalcPrice(index);
-                }
-
-            }, "json")
-                    .error(function() {
-                    });
-
-        });
-
-
-        $('#Docs_discount').change(function() {
-            total = $('#Docs_total').val();
-            discount = $('#Docs_discount').val();
-
-
-            if ($('#Docdiscount').attr('checked')) {
-                per = discount / 100;
-            } else {
-                per = (discount / total);
-            }
-
-            var elements = $('[id^=Docdetails][id$=invprice]');
-            //console.log(per);
-            for (var i = 0; i < elements.length; i++) {
-                var linesum = Number($('#Docdetails_' + i + '_invprice').val());
-
-                linesum = (linesum) - (linesum * per)
-                $('#Docdetails_' + i + '_invprice').val(linesum.toFixed(2));
-                sumChange(i, false);
-            }
-            CalcPriceSum(true);
-        });
-
-
-
-        $('#Docs_total').change(function() {
-            //console.log('go');
-            $('#doctotal').html($('#Docs_total').val());
-        });
-        $('#Docs_sub_total').change(function() {
-            //console.log('go');
-            $('#docsub_total').html($('#Docs_sub_total').val());
-        });
-        $('#Docs_vat').change(function() {
-            //console.log('go');
-            $('#docvat').html($('#Docs_vat').val());
-        });
-
-
-        function currChange(index) {
-            var currency = $('#Docdetails_' + index + '_currency_id').val();
-            //console.log(currency);
-            $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "Currates/Getrate", "id": currency},
-            function(data) {
-                $('#Docdetails_' + index + '_rate').val(data);
-                CalcPrice(index);
-            }, "json")
-                    .error(function() {
-                    });
-
-
-        }
         /*
          function nameChange(index) {
          var item_id = $('#Docdetails_'+index+'_name').val();
@@ -725,7 +691,7 @@ $form = $this->beginWidget('CActiveForm', array(
         function TypeSelChange(index) {
             var val = $('#Doccheques_' + index + '_type').val();
 
-            //$('#Doccheques_'+index+"#banksel"+num).parent().append("<?php //echo PrintBankSelect();    ?>");
+            //$('#Doccheques_'+index+"#banksel"+num).parent().append("<?php //echo PrintBankSelect();                ?>");
             $('#Doccheques_' + index + "_cheque_acct").attr('placeholder', '');
             $('#Doccheques_' + index + "_cheque_num").attr('placeholder', '');
             $('#Doccheques_' + index + "_branch").attr('placeholder', '');
@@ -755,7 +721,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 $('#Doccheques_' + index + "_date").show();
                 $('#Doccheques_' + index + "_banksel").hide();
 
-                $('#Doccheques_' + index + "_bank").parent().append('<?php //echo PrintCreditCompany();    ?>');
+                $('#Doccheques_' + index + "_bank").parent().append('<?php //echo PrintCreditCompany();                ?>');
                 $('#Doccheques_' + index + "_bank").remove();
 
                 $('#Doccheques_' + index + "_branch").show();
@@ -770,32 +736,50 @@ $form = $this->beginWidget('CActiveForm', array(
         }
 
 
+        /******************************************************docs calcs********************/
+        function currChange(index) {
+            var currency = $('#Docdetails_' + index + '_currency_id').val();
+            //console.log(currency);
+            $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "Currates/Getrate", "id": currency},
+            function(data) {
+                $('#Docdetails_' + index + '_rate').val(data);
+                CalcPrice(index);
+            }, "json")
+                    .error(function() {
+                    });
+
+
+        }
+
         function itemChange(index) {
             var part = $('#Docdetails_' + index + '_item_id').val();
             $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "item/JSON", "id": part},
             function(data) {
-                //console.log(data);
-                //data = jQuery.parseJSON(data);
-                //console.log(data);
-                //data[1] = jQuery.parseJSON(data[1]);
+
                 $('#Docdetails_' + index + '_name').val(data.name);
                 //$('#Docdetails_'+index+'_name').trigger("liszt:updated");
                 $('#Docdetails_' + index + '_description').val(data.description);
-                $('#Docdetails_' + index + '_unit_price_org').val(data.saleprice);
-                $('#Docdetails_' + index + '_unit_price').val(data.saleprice);
-
+                $('#Docdetails_' + index + '_ihItem').val(data.saleprice);
+                $('#Docdetails_' + index + '_iItem').val(data.saleprice);
                 $('#Docdetails_' + index + '_currency_id').val(data.currency_id);
                 $('#Docdetails_' + index + '_currency_id').trigger("liszt:updated");
-                currChange(index);
+                //currChange(index);
+
+                $('#Docdetails_' + index + '_rate').val("1");
+                if ($('#Docdetails_' + index + '_qty').val() == 0) {
+                    $('#Docdetails_' + index + '_qty').val("1");
+
+                }
 
                 $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "item/VatJSON", "id": part},
                 function(smalldata) {
                     smalldata = jQuery.parseJSON(smalldata);
-                    $('#Docdetails_' + index + '_accvat').val(smalldata.vat);
+                    $('#Docdetails_' + index + '_iVatRate').val(smalldata.vat);
+                    CalcPrice(index,true);
                 });
-                $('#Docdetails_' + index + '_rate').val("1");
-                if ($('#Docdetails_' + index + '_qty').val() == 0)
-                    $('#Docdetails_' + index + '_qty').val("1");
+
+
+
                 //$('#Docdetails_'+index+'_qty').focus();
             }, "json")
                     .error(function() {
@@ -803,164 +787,65 @@ $form = $this->beginWidget('CActiveForm', array(
         }
 
 
-        function detChange(index) {
-            CalcPrice(index);
-        }
-        function vatChange(index) {
 
-
-            var linesum = Number($('#Docdetails_' + index + '_invprice').val());
-            var vat = Number($('#Docdetails_' + index + '_vat').val());
-
-
-            if ($('#Docdetails_' + index + '_inclodeVat').attr('checked')) {
-                $('#Docdetails_' + index + '_invprice').val(linesum + vat);
-            } else {
-                CalcPrice(index);
-            }
-
-            //CalcPriceSum();
-        }
-        function sumChange(index, calc) {
-            calc = typeof calc !== 'undefined' ? calc : true;
-
-            var qty = Number($('#Docdetails_' + index + '_qty').val());
-            var uprice = Number($('#Docdetails_' + index + '_unit_price').val());
-            var price = Number($('#Docdetails_' + index + '_price').val());
-            var rate = Number($('#Docdetails_' + index + '_rate').val());
-            var doc_rate = Number($('#doc_rate').val());
-            var vatrate = Number($('#Docdetails_' + index + '_accvat').val());
-            var linesum = Number($('#Docdetails_' + index + '_invprice').val());
-            var vat = Number($('#Docdetails_' + index + '_vat').val());
-
-            if ($('#Docdetails_' + index + '_inclodeVat').attr('checked')) {
-                //console.log($('#Docdetails_'+index+'_inclodeVat'));
-                vat = linesum * (vatrate / 100);
-                price = (linesum - vat) / (doc_rate * rate);
-                uprice = price / qty;
-                //console.log(uprice);
-            } else {
-                vat = linesum * (vatrate / 100);
-                price = (linesum) / (doc_rate * rate);
-                uprice = price / qty;
-
-            }
-
-            $('#Docdetails_' + index + '_vat').val(vat.toFixed(2));//
-            $('#Docdetails_' + index + '_vatlabel').html((linesum * (vat / 100)).toFixed(2) + " (%" + vatrate + ")");
-            $('#Docdetails_' + index + '_price').val(price.toFixed(2));//
-            $('#Docdetails_' + index + '_unit_price').val(uprice.toFixed(2));//
-            if (calc)
-                CalcPriceSum();
-        }
-
-        function priceChange(index) {
-            var qty = Number($('#Docdetails_' + index + '_qty').val());
-            var uprice = Number($('#Docdetails_' + index + '_unit_price').val());
-            var price = Number($('#Docdetails_' + index + '_price').val());
-            var rate = Number($('#Docdetails_' + index + '_rate').val());
-            var doc_rate = Number($('#doc_rate').val());
-            var vatrate = Number($('#Docdetails_' + index + '_accvat').val());
-            var linesum = Number($('#Docdetails_' + index + '_invprice').val());
-            var vat = Number($('#Docdetails_' + index + '_vat').val());
-
-
-            linesum = price * (rate / doc_rate);
-            vat = (price * (rate / doc_rate)) * (vatrate / 100);
-            uprice = price / qty;
-
-
-            //console.log(uprice);
-
-            $('#Docdetails_' + index + '_vat').val(vat.toFixed(2));//
-            $('#Docdetails_' + index + '_vatlabel').html((linesum * (vat / 100)).toFixed(2) + " (%" + vatrate + ")");
-            $('#Docdetails_' + index + '_invprice').val(linesum.toFixed(2));//
-            $('#Docdetails_' + index + '_unit_price').val(uprice.toFixed(2));//
-            CalcPriceSum();
-        }
-        $('input').blur(function() {
-            //
-            if (this.id == 'Docs_oppt_account_id') {
-                $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "/accounts/JSON", "id": $("#Docs_oppt_account_id").val()},
-                function(data) {
-                    //$("#Docs_company").val(data.name);
-                    $('#Docs_oppt_account_id').parent().children('p').html(data.name);
-                }, "json")
-                        .error(function() {
-                        });
-            }//end oppt_account_id
-
-
-            if (this.id == 'Docs_account_id') {
-
-            }//end account_id
-
-        });
-
-        function CalcPrice(index, org) {
-            var qty = $('#Docdetails_' + index + '_qty').val();
-            //console.log("org:"+org);
-            var uprice = $('#Docdetails_' + index + '_unit_price').val();
-            if (org)
-                uprice = $('#Docdetails_' + index + '_unit_price_org').val();
-
-            var rate = $('#Docdetails_' + index + '_rate').val();
-            var doc_rate = $('#doc_rate').val();
-            var vat = $('#Docdetails_' + index + '_accvat').val();
-            var itemtotal;
-
-            var price = (uprice * qty).toFixed(2);
-            $('#Docdetails_' + index + '_price').val(price);
-
-
-            if (rate != doc_rate) {
-                itemtotal = price * (rate / doc_rate);
-
-            } else {
-                itemtotal = price;
-
-            }
-
-
-            $('#Docdetails_' + index + '_vat').val((itemtotal * (vat / 100)).toFixed(2));
-            $('#Docdetails_' + index + '_vatlabel').html((itemtotal * (vat / 100)).toFixed(2) + " (%" + vat + ")");
-            $('#Docdetails_' + index + '_invprice').val(itemtotal);
-            if (org)
-                return itemtotal;//smart:>
-            else
-                CalcPriceSum();
-        }
-
-        function calcLines() {
+        function calcLines() {//count doc lines
             var elements = $('[id^=Docdetails][id$=line]');
-            //var i=1;
 
             for (var i = 0; i < elements.length; i++) {
-
-                //console.log(elements[i].id);
                 $('#' + elements[i].id).val(i + 1);
-                //i++;
             }
-
         }
+
+function CalcPrice(index,hChange) {//.org
+          hChange = typeof hChange !== 'undefined' ? hChange : true;
+          var qty = $('#Docdetails_' + index + '_qty').val();
+          var iItem = $('#Docdetails_' + index + '_iItem').val();
+          var ihItem = $('#Docdetails_' + index + '_ihItem').val();
+          var rate = $('#Docdetails_' + index + '_rate').val();
+          var doc_rate = $('#doc_rate').val();
+          var vat = $('#Docdetails_' + index + '_iVatRate').val();
+          var itemtotal;
+
+          var iTotal = (iItem * qty).toFixed(2);//qty
+          
+          iTotal = iTotal * (rate / doc_rate);//rate
+          
+          $('#Docdetails_' + index + '_iTotallabel').html(iTotal.toFixed(2));
+          $('#Docdetails_' + index + '_iTotalVat').val((iTotal*((vat/100)+1)).toFixed(2));
+
+
+          if (hChange){
+              $('#Docdetails_' + index + '_ihTotal').val(iTotal);
+              
+          }else{
+              var ihTotal = (ihItem * qty).toFixed(2);//qty
+              ihTotal = ihTotal * (rate / doc_rate);//rate
+              $('#Docdetails_' + index + '_ihTotal').val(ihTotal);
+              return ihTotal;
+          }
+          
+          return CalcPriceSum();
+      }
+
+
+        
         function CalcPriceSum(org) {
-            var elements = $('[id^=Docdetails][id$=invprice]');
-            var selements = $('[id^=Docdetails][id$=_vat]');
+            var elements = $('[id^=Docdetails][id$=ihTotal]');
+            var selements = $('[id^=Docdetails][id$=_iVatRate]');
             var vattotal = 0;
             var subtotal = 0;
             //var novat_total=0;
             for (var i = 0; i < elements.length; i++) {
                 //console.log(elements[i].id);
-                if (org)
-                    CalcPrice(i, org);
+                //if (org)
+                //    CalcPrice(i, org);
                 var itemtotal = Number($('#' + elements[i].id).val());
-
                 var vat = Number($('#' + selements[i].id).val());
                 //console.log(vat);
                 //console.log(selements[i].id);
                 //if(vatper!=0){
                 subtotal += itemtotal;
-                vattotal += vat;
+                vattotal += (vat / 100) * itemtotal;
                 //}else{
                 //novat_total+=itemtotal;
                 //}
@@ -970,44 +855,112 @@ $form = $this->beginWidget('CActiveForm', array(
             $('#Docs_novat_total').val(subtotal.toFixed(2));
             $('#Docs_total').val((subtotal + vattotal).toFixed(2)).trigger('change');//novat_total
         }
-        function CalcDueDate(valdate, pay_terms) {
-            var em = 0;
-            pay_terms = parseInt(pay_terms);
-            if (pay_terms >= 0) {
-                em = 0;
-            } else {
-                em = 1;
-                pay_terms = pay_terms * -1;
-            }
-            //var duedate = $('#Docs_due_date');//document.form1.due_date;
-            var dstr = valdate;
-            var darr = dstr.split("-");
-            var day = parseInt(darr[0]);
-            var month = parseFloat(darr[1]);
-            var year = parseInt(darr[2]);
+        
+        
+        function totalChange(index, calc) {
+            calc = typeof calc !== 'undefined' ? calc : true;
 
-            if (em) {
-                month += 1;
-                if (month > 12) {
-                    month = 1;
-                    year += 1;
-                }
-                day = 1;
+            var qty = Number($('#Docdetails_' + index + '_qty').val());
+            var ihTotal = Number($('#Docdetails_' + index + '_ihTotal').val());
+            var rate = Number($('#Docdetails_' + index + '_rate').val());
+            var doc_rate = Number($('#doc_rate').val());
+            var iVatRate = Number($('#Docdetails_' + index + '_iVatRate').val());
 
-            }
 
-            D = new Date(year, month - 1, day);
-            D.setDate(D.getDate() + pay_terms);
-            day = D.getDate();
-            month = D.getMonth() + 1;
-            year = D.getFullYear();
-            if (month >= 12) {
-                month = 1;
-                year += 1;
-            }
-            //aler
-            $('#Docs_due_date').val(day + "-" + month + "-" + year);
+
+            ihItem = (ihTotal / qty) * (rate / doc_rate);
+
+            $('#Docdetails_' + index + '_iItem').val(ihItem.toFixed(2));//
+            if (calc)
+               return CalcPrice(index,true);
+            return ihItem;
         }
+
+        //total + vat change
+        function totalVatChange(index,calc) {
+            calc = typeof calc !== 'undefined' ? calc : true;
+            var iVatRate = Number($('#Docdetails_' + index + '_iVatRate').val());      
+            var iTotalVat= Number($('#Docdetails_' + index + '_iTotalVat').val());
+            if(calc){
+                ihTotal=$('#Docdetails_' + index + '_ihTotal').val();
+            }
+
+            ihTotal = iTotalVat-(iTotalVat*(iVatRate/100))/(1+(iVatRate/100));
+
+            $('#Docdetails_' + index + '_ihTotal').val(ihTotal.toFixed(2));
+            //$('#Docdetails_' + index + '_iTotal').val(ihTotal.toFixed(2));
+            $('#Docdetails_' + index + '_iTotallabel').html(ihTotal.toFixed(2));
+            //totalChange(index);
+            
+            return totalChange(index);
+        }
+
+        /**********************************Discount*****************************/
+        $('#Docs_discount').blur(function() {
+            total = $('#Docs_sub_total').val();
+            discount = $('#Docs_discount').val();
+            var iTotals = $('[id^=Docdetails][id$=ihTotal]');
+            for (var i = 0; i < iTotals.length; i++) {
+
+                //if ($('#Docdiscount').attr('checked')) {
+                //    per = discount / 100;
+                //} else {
+                //    per = (discount / total);
+                //}
+                //var iVatRate = Number($('#Docdetails_' + i + '_iVatRate').val());
+
+                var ihTotal = CalcPrice(i,false);//get ihtotal with vat:)
+                
+                //ihVat = iTotal * (iVatRate / 100);
+                ihTotal = ihTotal - ((ihTotal/total) * discount);
+
+                $('#Docdetails_' + i + '_ihTotal').val(ihTotal.toFixed(2));
+                console.log(ihTotal);
+                totalVatChange(i, false);
+            }
+
+            //console.log(per);
+
+            //CalcPriceSum(true);
+        });
+
+        /**********************************CurChange****************************/
+        $('#Docs_currency_id').change(function() {
+            var currency = $('#Docs_currency_id').val();
+
+            $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "Currates/Getrate", "id": currency},
+            function(data) {
+                $('#doc_rate').val(data);
+                var elements = $('.currSelect');
+                for (var i = 0; i < elements.length; i++) {
+                    index = elements[i].id.replace("Docdetails_", '').replace("_currency_id", '');
+                    CalcPrice(index);
+                }
+
+            }, "json")
+                    .error(function() {
+                    });
+
+        });
+
+        $('#Docs_total').change(function() {
+            //console.log('go');
+            $('#doctotal').html($('#Docs_total').val());
+        });
+
+        $('#Docs_sub_total').change(function() {
+            //console.log('go');
+            $('#docsub_total').html($('#Docs_sub_total').val());
+        });
+
+        $('#Docs_vat').change(function() {
+            //console.log('go');
+            $('#docvat').html($('#Docs_vat').val());
+        });
+
+
+
+
         /**********************************doc end******************************/
 
         function rcptSum() {
@@ -1050,25 +1003,29 @@ $form = $this->beginWidget('CActiveForm', array(
     </script>
     <p>
         <?php echo $form->labelEx($model, 'description'); ?>
-        <?php $this->widget('ext.tinymce.TinyMce', array(
+        <?php
+        $this->widget('ext.tinymce.TinyMce', array(
             'model' => $model,
             'attribute' => 'description',
             'spellcheckerUrl' => 'http://speller.yandex.net/services/tinyspell',
-        )); ?>
+        ));
+        ?>
         <?php echo $form->error($model, 'description'); ?>
-        
-        
-        
-        
+
+
+
+
     </p>
 
     <p>
         <?php echo $form->labelEx($model, 'comments'); ?>
-                <?php $this->widget('ext.tinymce.TinyMce', array(
+        <?php
+        $this->widget('ext.tinymce.TinyMce', array(
             'model' => $model,
             'attribute' => 'comments',
             'spellcheckerUrl' => 'http://speller.yandex.net/services/tinyspell',
-        )); ?>
+        ));
+        ?>
         <?php echo $form->error($model, 'comments'); ?>
     </p>
 
@@ -1096,7 +1053,8 @@ $form = $this->beginWidget('CActiveForm', array(
                 array('items' => array(
                         //array('icon'=>'envelope','label'=>Yii::t('app','Email'), 'url'=>'javascript:sendForm("email");',),
                         array('icon' => 'glyphicon glyphicon-save', 'label' => Yii::t('app', 'PDF'), 'url' => 'javascript:sendForm("pdf");',),
-                        array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save'), 'url' => 'javascript:sendForm("save");',),
+                        array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save Draft'), 'url' => 'javascript:sendForm("saveDraft");',),
+                    //array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save'), 'url' => 'javascript:sendForm("save");',),
                     )),
             ),
         ));
@@ -1111,7 +1069,7 @@ $form = $this->beginWidget('CActiveForm', array(
         ));
         ?>
 
-        <?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name')); //Docstatus::model()->findAll();  ?>
+        <?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name')); //Docstatus::model()->findAll();   ?>
         <!--</div>-->
     </div>
 
@@ -1122,17 +1080,17 @@ $form = $this->beginWidget('CActiveForm', array(
 
 <?php
 /*
-$this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
-    'id' => 'choseRefDoc',
-    'options' => array(
-        'title' => Yii::t('app', 'Chose Refernce Documenet'),
-        'autoOpen' => false,
-        'width' => '600px',
-    ),
-));
-$dataProvider = new CActiveDataProvider('Docs');
-echo $this->renderPartial('index');
-//echo $this->renderPartial('index', array('dataProvider'=>$dataProvider,)); 
+  $this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
+  'id' => 'choseRefDoc',
+  'options' => array(
+  'title' => Yii::t('app', 'Chose Refernce Documenet'),
+  'autoOpen' => false,
+  'width' => '600px',
+  ),
+  ));
+  $dataProvider = new CActiveDataProvider('Docs');
+  echo $this->renderPartial('index');
+  //echo $this->renderPartial('index', array('dataProvider'=>$dataProvider,));
 
-$this->endWidget('zii.widgets.jui.CJuiDialog');*/
+  $this->endWidget('zii.widgets.jui.CJuiDialog'); */
 ?>

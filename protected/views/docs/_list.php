@@ -127,7 +127,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridVie
 		        (
                             'label'=>'<i class="glyphicon glyphicon-edit"></i>',
 		            //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
-		            'url'=>'Yii::app()->createUrl("docs/update", array("id"=>$data->id,"preview"=>0))',
+		            'url'=>'Yii::app()->createUrl("docs/update", array("id"=>$data->id))',
 		        	
 		        ),
 		        'delete' => array

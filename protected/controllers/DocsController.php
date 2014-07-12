@@ -13,8 +13,10 @@ class DocsController extends RightsController {
         }
 
         
-        if(isset($_POST['subType']))
+        if(isset($_POST['subType'])){
+            $model->refnum_ids=$_POST['Docs']['refnum_ids'];
             return $this->doc($model);
+        }
         //$docdetails =$model->docDetailes;
         //$doctype =$model->docType;
 
@@ -111,7 +113,7 @@ class DocsController extends RightsController {
         if (is_null($model))
             $model = $this->loadModel($id);
 
-        if ($preview!=0)
+        if ($preview!=1)//preview
             $model->printDoc();
         if ($return)
             return $this->render('print', array('model' => $model, 'preview' => $preview,), $return);
@@ -157,6 +159,19 @@ class DocsController extends RightsController {
                 if ($model->save())
                     $this->redirect(array('admin'));
                 return;
+            case 'saveDraft':
+                if ($model->isNewRecord){
+                  //find status not looked
+                    $model->draftSave();
+                }else {
+                  if(!$model->docStatus->looked){//status looked
+                //      find status not looked
+                      $model->draftSave();
+                  }
+                }
+                if ($model->save())
+                    $this->redirect(array('admin'));
+                return;    
             case 'print':
                 if ($model->save())
                     $this->redirect(array('print', 'id' => $model->id));
@@ -217,7 +232,8 @@ class DocsController extends RightsController {
 
         if (!is_null($type))
             $model->doctype = (int) $type;
-        $model->refnum = $id;
+        $model->refnum = '';
+        $model->refnum_ids='';
         $model->status = $model->docType->docStatus_id; //switch status back to defult for doc
         //$docstatus =Docstatus::model()->findByPk($model1->status);
         // Uncomment the following line if AJAX validation is needed
@@ -228,7 +244,7 @@ class DocsController extends RightsController {
           } */
         if (isset($_POST['Docs'])) {
 
-            $this->actionCreate(0);
+            $this->actionCreate();
         }
 
 

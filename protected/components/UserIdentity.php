@@ -28,6 +28,7 @@ class UserIdentity extends CUserIdentity
 			$this->_id=$user->id;
 			$this->username=$user->username;
 			$this->errorCode=self::ERROR_NONE;
+                        Yii::app()->user->setState('Company', 0);//must
                         $user->loadUser();
                         
 		}
