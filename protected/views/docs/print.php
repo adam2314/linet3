@@ -131,7 +131,7 @@ if(count($model->docDetailes)!=0){
                     <td class='Price'>".$docdetail->qty*$docdetail->iItem."</td>
                     <td class='Currency'>$docdetail->currency_id</td>
                     <td class='Total'>$docdetail->iTotal</td>
-                    <td class='VAT'>".$docdetail->iVatRate*$docdetail->qty*$docdetail->iItem."</td>
+                    <td class='VAT'>".($docdetail->iVatRate/100)*$docdetail->qty*$docdetail->iItem."</td>
                  </tr>
 
                 ";
@@ -150,7 +150,20 @@ if(count($model->docDetailes)!=0){
                 <td class='Price'></td>
                 <td class='Currency'><?php echo Yii::t('app','Subtotal tax excluded'); ?></td>
                 <td class='Total'><?php echo $model->sub_total; ?></td>
-                <td class='VAT'><?php echo $model->vat; ?></td>
+                <td class='VAT'><?php //echo $model->vat; ?></td>
+        <tr>
+            <tr>
+                <td class='line'></td>
+                <td class='Itemid'></td>
+                <td class='Name'></td>
+                <td class='Description'></td>
+                <td class='UntPrice'></td>
+                <td class='Unit'></td>
+                <td class='Qty'></td>
+                <td class='Price'></td>
+                <td class='Currency'><?php echo Yii::t('app','Subtotal tax'); ?></td>
+                <td class='Total'><?php echo $model->vat; ?></td>
+                <td class='VAT'></td>
         <tr>
         <tr>
                 <td class='line'></td>
@@ -165,7 +178,19 @@ if(count($model->docDetailes)!=0){
                 <td class='Total'><?php echo $model->novat_total; ?></td>
                 <td class='VAT'></td>
         </tr>
-        
+        <tr>
+                <td class='line'></td>
+                <td class='Itemid'></td>
+                <td class='Name'></td>
+                <td class='Description'></td>
+                <td class='UntPrice'></td>
+                <td class='Unit'></td>
+                <td class='Qty'></td>
+                <td class='Price'></td>
+                <td class='Currency'><?php echo Yii::t('labels','Discount'); ?></td>
+                <td class='Total'><?php echo $model->discount; ?></td>
+                <td class='VAT'><?php //echo $model->vat; ?></td>
+        <tr>
         <tr>
                 <td class='line'></td>
                 <td class='Itemid'></td>
