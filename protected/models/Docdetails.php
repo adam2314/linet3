@@ -67,7 +67,7 @@ class Docdetails extends basicRecord{
 
             $income->details=$details;
             $income->currency_id=$this->currency_id;
-            $income->sum=$this->price*$action;
+            $income->sum=$this->ihTotal*$action;
             $income->owner_id=Yii::app()->user->id;
             $income->linenum=$line;
             return $income->save();

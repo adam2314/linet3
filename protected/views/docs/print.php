@@ -131,7 +131,7 @@ if(count($model->docDetailes)!=0){
                     <td class='Price'>".$docdetail->qty*$docdetail->iItem."</td>
                     <td class='Currency'>$docdetail->currency_id</td>
                     <td class='Total'>$docdetail->iTotal</td>
-                    <td class='VAT'>$docdetail->iVatRate</td>
+                    <td class='VAT'>".$docdetail->iVatRate*$docdetail->qty*$docdetail->iItem."</td>
                  </tr>
 
                 ";

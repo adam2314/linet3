@@ -71,8 +71,9 @@
                         ?>
         
         <input type="hidden" class="rowIndex" value="<?php echo $i; ?>" />
-        <input id="Docdetails_<?php echo $i; ?>_ihItem" type="hidden" value="" />
-        <input id="Docdetails_<?php echo $i; ?>_ihTotal" type="hidden" value="" />
+        <input id="Docdetails_<?php echo $i; ?>_ihItem" name="Docdetails[<?php echo $i; ?>][ihItem]" type="hidden" value="" />
+        <input id="Docdetails_<?php echo $i; ?>_iTotal"name="Docdetails[<?php echo $i; ?>][iTotal]" type="hidden" value="" />
+        <input id="Docdetails_<?php echo $i; ?>_ihTotal"name="Docdetails[<?php echo $i; ?>][ihTotal]" type="hidden" value="" />
         <input id="Docdetails_<?php echo $i; ?>_rate" type="hidden" value="1" />
     </td>
 </tr>

@@ -393,8 +393,9 @@ class Docs extends fileRecord {
                     //$num = $docdetail->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->docType->oppt_account_type, $tranType);
                     $num = $docdetail->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->oppt_account_id, $tranType);
                     $line++;
-                    $accout->sum+=($docdetail->invprice + $docdetail->vat) * $action;
-                    $vat->sum+= $docdetail->vat * $action;
+                    $iVat= $docdetail->ihTotal*($docdetail->iVatRate/100);
+                    $accout->sum+=($docdetail->ihTotal +$iVat) * $action;
+                    $vat->sum+= $iVat * $action;
                 }
 
                 $accout->num = $num;

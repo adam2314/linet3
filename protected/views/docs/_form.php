@@ -800,7 +800,7 @@ function CalcPrice(index,hChange) {//.org
           hChange = typeof hChange !== 'undefined' ? hChange : true;
           var qty = $('#Docdetails_' + index + '_qty').val();
           var iItem = $('#Docdetails_' + index + '_iItem').val();
-          var ihItem = $('#Docdetails_' + index + '_ihItem').val();
+          //var ihItem = $('#Docdetails_' + index + '_ihItem').val();
           var rate = $('#Docdetails_' + index + '_rate').val();
           var doc_rate = $('#doc_rate').val();
           var vat = $('#Docdetails_' + index + '_iVatRate').val();
@@ -811,6 +811,7 @@ function CalcPrice(index,hChange) {//.org
           iTotal = iTotal * (rate / doc_rate);//rate
           
           $('#Docdetails_' + index + '_iTotallabel').html(iTotal.toFixed(2));
+          $('#Docdetails_' + index + '_iTotal').val(iTotal.toFixed(2));
           $('#Docdetails_' + index + '_iTotalVat').val((iTotal*((vat/100)+1)).toFixed(2));
 
 
@@ -818,7 +819,7 @@ function CalcPrice(index,hChange) {//.org
               $('#Docdetails_' + index + '_ihTotal').val(iTotal);
               
           }else{
-              var ihTotal = (ihItem * qty).toFixed(2);//qty
+              var ihTotal = (iItem * qty).toFixed(2);//qty
               ihTotal = ihTotal * (rate / doc_rate);//rate
               $('#Docdetails_' + index + '_ihTotal').val(ihTotal);
               return ihTotal;
@@ -890,6 +891,7 @@ function CalcPrice(index,hChange) {//.org
             $('#Docdetails_' + index + '_ihTotal').val(ihTotal.toFixed(2));
             //$('#Docdetails_' + index + '_iTotal').val(ihTotal.toFixed(2));
             $('#Docdetails_' + index + '_iTotallabel').html(ihTotal.toFixed(2));
+            $('#Docdetails_' + index + '_iTotal').val(ihTotal.toFixed(2));
             //totalChange(index);
             
             return totalChange(index);
@@ -900,6 +902,8 @@ function CalcPrice(index,hChange) {//.org
             total = $('#Docs_sub_total').val();
             discount = $('#Docs_discount').val();
             var iTotals = $('[id^=Docdetails][id$=ihTotal]');
+            var sum=vatSum=0;
+            
             for (var i = 0; i < iTotals.length; i++) {
 
                 //if ($('#Docdiscount').attr('checked')) {
@@ -910,14 +914,22 @@ function CalcPrice(index,hChange) {//.org
                 //var iVatRate = Number($('#Docdetails_' + i + '_iVatRate').val());
 
                 var ihTotal = CalcPrice(i,false);//get ihtotal with vat:)
-                
+                var vatRate=$('#Docdetails_' + i + '_iVatRate').val()/100;
                 //ihVat = iTotal * (iVatRate / 100);
                 ihTotal = ihTotal - ((ihTotal/total) * discount);
 
                 $('#Docdetails_' + i + '_ihTotal').val(ihTotal.toFixed(2));
+                
+                sum+=ihTotal;
+                vatSum+=(ihTotal*(vatRate));
                 console.log(ihTotal);
-                totalVatChange(i, false);
+                //totalVatChange(i, false);
             }
+
+            $('#Docs_vat').val(vatSum.toFixed(2)).trigger('change');
+            $('#Docs_sub_total').val(sum.toFixed(2)).trigger('change');
+            $('#Docs_novat_total').val(sum.toFixed(2));
+            $('#Docs_total').val((vatSum + sum).toFixed(2)).trigger('change');//novat_total
 
             //console.log(per);
 
