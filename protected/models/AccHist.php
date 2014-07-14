@@ -25,6 +25,15 @@ class AccHist extends CActiveRecord {
         return self::table;
     }
 
+    public function brief() {
+        if (strlen($this->details) > 50) {
+            $str=CHtml::link(CHtml::encode("[".Yii::t('app','Read More')."]"),Yii::app()->createAbsoluteUrl("/rm/update/".$this->id));
+            return substr($this->details, 0, 50) . "...$str";
+        } else {
+            return $this->details;
+        }
+    }
+
     public function beforeSave() {
         if ($this->isNewRecord) {
             $this->dateDBformat = false;

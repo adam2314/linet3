@@ -4,68 +4,76 @@ class docReport extends MiniForm{
     public $help = 'none';
     public $collapse=false;
     public $fullscreen=false;
+    
+    private function search($doc) {
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
+
+        $criteria = new CDbCriteria;
+
+        //$criteria->compare('doctype', 7);//7 salesorder
+        
+        //$criteria->compare('due_date', $doc->due_date, true);
+       
+        
+        $criteria->addCondition("due_date<=:date_to");
+        $criteria->params[':date_to'] = date("Y-m-d")." 23:59:59";
+        $criteria->compare('refstatus', 0);
+        //$criteria->compare('status', $doc->status);
+        
+       
+
+        $sort = new CSort();
+        $sort->defaultOrder = 'due_date DESC';
+
+        return new CActiveDataProvider($doc, array(
+            'criteria' => $criteria,
+            'sort' => $sort,
+            'pagination' => array('pageSize' => 4),
+        ));
+    }
+    
+    
      public function init()  {
         $docs=new Docs('search');
         //$docs->=status=?? open??
         $this->content=$this->widget('bootstrap.widgets.TbGridView', array(
                 'id'=>'docs-grid',
-                'dataProvider'=>$docs->search(),
+                'dataProvider'=>$this->search($docs),
                 'template' => '{items}{pager}',
                 'columns'=>array(
 
-                        /*array(
+                        array(
                                 'name'=>'doctype',
                                 //'filter'=>CHtml::listData(Doctype::model()->findAll(), 'id', 'name'),
-                                'value'=>'isset($data->docType)?$data->docType->name:""'
-                        ),*/
-                    /*
+                                //'value'=>'',
+                                'value' => 'CHtml::link(CHtml::encode((isset($data->docType)?Yii::t("app",$data->docType->name):"")." #".$data->docnum),Yii::app()->createAbsoluteUrl("/docs/view/".$data->id))',
+                                'type' => 'raw',
+                        ),//*/
+
                         array(
-                            'name'=>'docnum', 
-                            'value'=>'CHtml::link(CHtml::encode($data->docnum),"#", array(  "onclick"=>\'refNum("\'.$data->id.\'","\'.$data->docnum.\'","\'.$data->docType->name.\'")\',))',
-                            'type'=>'raw',
+                                'name'=>'account_id',
+                            
+                                'value' => 'CHtml::link(CHtml::encode($data->company),Yii::app()->createAbsoluteUrl("/accounts/transaction/id/".$data->account_id))',
+                                'type' => 'raw',
 
-
-
-                        ),*/
-                        'company',
-                        //array(  'onclick'=>""refNum(\"".$data->id.",".$data->docnum.",".$data->docType->name.")",
-                        /*array(
-                                //'name'=>'account_id',
-                                'header'=>'Account',
-                                'class'=>'CLinkColumn',
-                                //'filter'=>CHtml::listData(Doctype::model()->findAll(), 'id', 'name'),
-                                'labelExpression'=>'"".$data->company',
-                                 //'url'=>'accouts/view&id=$data->account_id',
-                                  'urlExpression'=>'"users/view&id=".$data->account_id',
-                        ),*/
+                        ),//*/
                     
-                    /*
-                        array(
+                    
+                      
+
+                        'total',
+                      array(
                                 'name'=>'status',
                                 'value' => 'isset($data->docStatus)?$data->docStatus->name:""'
 
-                        ),*/
-
-                        'total',
+                        ),//*/
 
                 ),
         ),true); 
         //parent::init();
     }
-    /*
-     public function run(){//style="width:'.($this->width-$this->titlewidth-28).'px;"
-                    $newform='
-        <div class="'.$this->class.'">
-                    <h5>'.$this->haeder.'</h5>
-                <div id="div-2" class="body">
-                    '.$this->content.'
-                </div>
-        </div>
-';
-                
-                
-		echo $newform;
-    }*/
+
 }
 
 

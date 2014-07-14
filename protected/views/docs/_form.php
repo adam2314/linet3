@@ -244,7 +244,7 @@ $form = $this->beginWidget('CActiveForm', array(
                     <th class="currency_id"><?php echo Yii::t('labels', 'Currency'); ?></th>
                     <th class="price"><?php echo Yii::t('labels', 'Price'); ?></th>
                     <!--<th class="invprice"><?php echo Yii::t('labels', 'Invprice'); ?></th>-->
-                    <th class="vat"><?php echo Yii::t('labels', 'VAT'); ?></th>
+                    <th class="vat"><?php echo Yii::t('labels', 'VAT included'); ?></th>
                     <th class="actions"><?php echo Yii::t('labels', 'Action'); ?></th>
                 </tr>
             </thead>	
@@ -266,12 +266,12 @@ $form = $this->beginWidget('CActiveForm', array(
                         <?php echo $form->labelEx($model, 'discount'); ?>
                         <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));  ?>
                         <?php echo $form->error($model, 'discount'); ?>
-                        <?php echo CHTML::checkBox("Docdiscount", '', array('value' => 1, 'uncheckValue' => 0)); ?>
+                        
                     </td>
                     <td>
                         <?php echo $form->textField($model, 'discount', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
                     </td>
-                    <td></td>
+                    <td><?php echo "<label>".Yii::t('app',"in percentage")."</label>".CHTML::checkBox("Docdiscount", '', array('value' => 1, 'uncheckValue' => 0)); ?></td>
                     <td class="docadd">
                         <?php
                         $this->widget('bootstrap.widgets.TbButton', array(
@@ -298,13 +298,27 @@ $form = $this->beginWidget('CActiveForm', array(
                         <div id="docsub_total"></div>
                         <?php echo $form->hiddenField($model, 'sub_total', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
                     </td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <label><?php echo Yii::t('app','Subtotal VAT'); ?></label>
+                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));   ?>
+                        <?php //echo $form->error($model, 'sub_total'); ?>
+                    </td>
                     <td>
                         <div id="docvat"></div>
                         <?php echo $form->hiddenField($model, 'vat', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
                     </td>
+                    <td></td>
                 </tr>
-
-
 
 
 
@@ -916,7 +930,14 @@ function CalcPrice(index,hChange) {//.org
                 var ihTotal = CalcPrice(i,false);//get ihtotal with vat:)
                 var vatRate=$('#Docdetails_' + i + '_iVatRate').val()/100;
                 //ihVat = iTotal * (iVatRate / 100);
-                ihTotal = ihTotal - ((ihTotal/total) * discount);
+                
+                if ($('#Docdiscount').attr('checked')) {
+                    ihTotal = ihTotal - ((ihTotal/100) * discount);
+                } else {
+                    ihTotal = ihTotal - ((ihTotal/total) * discount);
+                }
+
+
 
                 $('#Docdetails_' + i + '_ihTotal').val(ihTotal.toFixed(2));
                 

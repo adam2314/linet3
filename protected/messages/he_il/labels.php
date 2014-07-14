@@ -190,6 +190,8 @@ return array (
   'Account Id' => 'מזהה חשבון',
   'Currency Id' => 'מטבע',
   'Manage Items' => 'נהל תפקידים',
+  'VAT included' => 'כולל מע"מ',
+  'Subtotal to pay' => 'סה"כ לתשלום',
   '' => '',
   '' => '',
   '' => '',

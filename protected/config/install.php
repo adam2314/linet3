@@ -1,4 +1,5 @@
 <?php
+
 return array(
     'language' => 'he_il',
     'params' => array(
@@ -7,8 +8,8 @@ return array(
     'components' => array(
         'db' => array(
             'connectionString' => 'mysql:host=localhost;dbname=linetmain',
-                        'username' => 'root',
-                        'password' => 'VBy7t6r5',
+            'username' => 'root',
+            'password' => 'VBy7t6r5',
             'emulatePrepare' => true,
             'charset' => 'utf8',
             'tablePrefix' => '',
@@ -17,8 +18,8 @@ return array(
         ),
         'dbMain' => array(
             'connectionString' => 'mysql:host=localhost;dbname=linetmain',
-                        'username' => 'root',
-                        'password' => 'VBy7t6r5',
+            'username' => 'root',
+            'password' => 'VBy7t6r5',
             'emulatePrepare' => true,
             'charset' => 'utf8',
             'tablePrefix' => '',

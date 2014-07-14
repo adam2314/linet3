@@ -29,7 +29,11 @@ class FormMprofloss extends CFormModel
 			array('to_date, from_date, year', 'safe', 'on'=>'search'),
 		);
 	}
-    
+   
+        
+        
+        
+        
     private function calc($account_type){
         $criteria=new CDbCriteria;
         $criteria->condition="type = :type";

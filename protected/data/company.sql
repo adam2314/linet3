@@ -165,18 +165,18 @@ CREATE TABLE `docCheques` (
 );
 
 CREATE TABLE `docDetails` (
-  `doc_id` int(11)  NOT NULL DEFAULT '0',
-  `item_id` int(11)  DEFAULT NULL,
+  `doc_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `item_id` int(11) unsigned DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `description` text,
   `qty` decimal(5,2) DEFAULT NULL,
-  `unit_price` decimal(20,2) DEFAULT NULL,
-  `unit_price_usr` decimal(20,2) DEFAULT NULL,
+  `iItem` decimal(20,2) DEFAULT NULL,
+  `ihItem` decimal(20,2) DEFAULT NULL,
   `unit_id` int(11) NOT NULL,
   `currency_id` varchar(3) NOT NULL,
-  `price` decimal(20,2) DEFAULT NULL,
-  `invprice` decimal(20,2) DEFAULT NULL,
-  `vat` decimal(20,2) NOT NULL,
+  `iTotal` decimal(20,2) DEFAULT NULL,
+  `ihTotal` decimal(20,2) DEFAULT NULL,
+  `iVatRate` decimal(20,2) NOT NULL,
   `line` int(11) NOT NULL,
   PRIMARY KEY (`doc_id`,`line`)
 );

@@ -58,7 +58,7 @@ class User extends mainRecord {
             array('password', 'length', 'max' => 41),
             array('cookie, hash', 'length', 'max' => 32),
             array('certpasswd, salt, email', 'length', 'max' => 255),
-            array('lastlogin, theme, warehouse, passwd', 'safe'),
+            array('lastlogin, theme, warehouse, passwd, certfile', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('id, username, fname, lname, password, lastlogin, cookie, hash, certpasswd, salt, email, language', 'safe', 'on' => 'search'),
@@ -77,6 +77,49 @@ class User extends mainRecord {
         );
     }
 
+    public function saveWidget($widget){
+        
+            
+
+            $model = Settings::model()->findByPk("company." . $this->id . ".widget");
+            if ($model === null) {
+                $model = new Settings();
+                $model->id = "company." . $this->id . ".widget";
+                $model->eavType = 'integer';
+                $model->hidden = 1;
+                $model->value=CJSON::encode(array());
+                
+            }//
+            
+            
+            
+            //$model->value = !$model->value;
+            
+            
+            $key = $this->getWidgets();
+            if(isset($key[$widget])){
+                $key[$widget]=!$key[$widget];
+            }else{
+                $key[$widget]=false;
+            }
+            
+            $model->value=CJSON::encode($key);
+            $model->save();
+            Yii::app()->user->setState('widget', $this->getWidgets());
+    }
+    
+    private function getWidgets() {
+        if (Yii::app()->user->Company != 0) {
+            $a = Settings::model()->findByPk("company." . $this->id . ".widget");
+            
+            if ($a !== null) {
+                return CJSON::decode($a->value);
+            }
+        }
+        return array();
+    }
+    
+    
     private function getWarehouse() {
         if (Yii::app()->user->Company != 0) {
             $a = Settings::model()->findByPk("company." . $this->id . ".warehouse");
@@ -101,23 +144,30 @@ class User extends mainRecord {
         $res = parent::save($runValidation, $attributes);
         if ((Yii::app()->user->Company != 0) && ($res)) {
             $this->compSave();
+            //echo $this->warehouse;
+            //exit;
+            $this->warehouseSave($this->warehouse);
         }
         return $res;
     }
-
-    private function compSave() {
-        $catagories = ItemVatCat::model()->findAll();
+    
+    private function warehouseSave($id){
         $model = Settings::model()->findByPk("company." . $this->id . ".warehouse");
         if ($model === null) {
             $model = new Settings();
             $model->id = "company." . $this->id . ".warehouse";
             $model->eavType = 'integer';
             $model->hidden = 1;
-            $model->value = $this->warehouse;
-            $model->save();
         }
+        $model->value = $id;
         $this->warehouse = $model->value;
+        
+        $model->save();
+        
+    }
 
+    private function compSave() {
+        $catagories = ItemVatCat::model()->findAll();
 
         foreach ($catagories as $catagory) {
             if (!UserIncomeMap::model()->findByPk(array('user_id' => $this->id, 'itemVatCat_id' => $catagory->id))) {//'user_id', 'itemVatCat_id'
@@ -254,6 +304,8 @@ class User extends mainRecord {
         Yii::app()->user->setState('lname', $this->lname);
         Yii::app()->user->setState('username', $this->username);
         Yii::app()->user->setState('warehouse', $this->getWarehouse());
+        Yii::app()->user->setState('widget', $this->getWidgets());
+        
     }
 
 }

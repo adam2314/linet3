@@ -3,9 +3,9 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
-/* 
-    Created on : Feb 27, 2014, 5:42:19 PM
-    Author     : adam
+/*
+Created on : Feb 27, 2014, 5:42:19 PM
+Author : adam
 */
 
 @media (max-width: 770px){
@@ -15,8 +15,8 @@ and open the template in the editor.
 }
 
 @media print
-  {
-  .topnav,.noPrint {
+{
+    .topnav,.noPrint {
         display:none;
     }
     #left {
@@ -27,13 +27,13 @@ and open the template in the editor.
     }
     div.page{
         page-break-after:always;
-        
+
     }
     .box{
         border:none;
     }
-    
-  }
+
+}
 @media (min-width: 1164px){
     .dropdown-menu li:hover .sub-menu {
         visibility: visible;
@@ -56,10 +56,10 @@ and open the template in the editor.
     width:7%;
 }
 .formtable .unit_id{
-    width:8%; 
+    width:8%;
 }
 .formtable .unit_price{
-    width:6%; 
+    width:6%;
 }
 .formtable .currency_id{
     width:8%;
@@ -68,7 +68,7 @@ and open the template in the editor.
     width:8%;
 }
 /*.formtable .invprice{
-    width:8%;
+width:8%;
 }*/
 .formtable .vat{
     width:7%;
@@ -87,19 +87,19 @@ and open the template in the editor.
 }
 
 div.container-fluid.outer{
-        padding:0px;
-        
-    }
+    padding:0px;
+
+}
 
 .chosen-container,.chosen-with-drop .chosen-drop {
-  display:block;
+    display:block;
 }
 .chosen-container-single.chosen-container-single-nosearch .chosen-search {
-  left: 0px;
+    left: 0px;
 }
 .chosen-rtl.chosen-container-single-nosearch .chosen-search,
 .chosen-rtl .chosen-drop {
-      left: 0px;
+    left: 0px;
 }
 
 
@@ -113,80 +113,80 @@ div #chose{
 }
 
 .alert {
-  padding: 8px 35px 8px 14px;
-  margin-bottom: 20px;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-  background-color: #fcf8e3;
-  border: 1px solid #fbeed5;
-  -webkit-border-radius: 4px;
-     -moz-border-radius: 4px;
-          border-radius: 4px;
+    padding: 8px 35px 8px 14px;
+    margin-bottom: 20px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    background-color: #fcf8e3;
+    border: 1px solid #fbeed5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
 }
 
 .alert,
 .alert h4 {
-  color: #c09853;
+    color: #c09853;
 }
 
 .alert h4 {
-  margin: 0;
+    margin: 0;
 }
 
 .alert .close {
-  position: relative;
-  top: -2px;
-  right: -21px;
-  line-height: 20px;
+    position: relative;
+    top: -2px;
+    right: -21px;
+    line-height: 20px;
 }
 
 .alert-success {
-  color: #468847;
-  background-color: #dff0d8;
-  border-color: #d6e9c6;
+    color: #468847;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
 }
 
 .alert-success h4 {
-  color: #468847;
+    color: #468847;
 }
 
 .alert-danger,
 .alert-error {
-  color: #b94a48;
-  background-color: #f2dede;
-  border-color: #eed3d7;
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7;
 }
 
 .alert-danger h4,
 .alert-error h4 {
-  color: #b94a48;
+    color: #b94a48;
 }
 
 .alert-info {
-  color: #3a87ad;
-  background-color: #d9edf7;
-  border-color: #bce8f1;
+    color: #3a87ad;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
 }
 
 .alert-info h4 {
-  color: #3a87ad;
+    color: #3a87ad;
 }
 
 .alert-block {
-  padding-top: 14px;
-  padding-bottom: 14px;
+    padding-top: 14px;
+    padding-bottom: 14px;
 }
 
 .alert-block > p,
 .alert-block > ul {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .alert-block p + p {
-  margin-top: 5px;
+    margin-top: 5px;
 }
 
 input[type="checkbox"] {
- width:20px;   
+    width:20px;
 }
 
 input {
@@ -232,7 +232,7 @@ input {
     width:100%;
     /*position: absolute;*/
     /*position: absolute;*/
-    
+
 }
 
 #content{
@@ -241,28 +241,28 @@ input {
     /*min-height: 100%;*/
     /*position: static;*/
     /*position: absolute;*/
-    
+
 }
 #left{
     /*min-height: 100%;*/
     float: left;
-    
-    
+
+
 }
 #footer {
     clear:both;
     height: 65px;
     text-align: center;
     bottom:0;
-   position:relative;
-   width:100%;
-   /*z-index: 10;*/
-    
+    position:relative;
+    width:100%;
+    /*z-index: 10;*/
+
 }
 
 .body{
-    
-min-height: 500px;
+
+    min-height: 420px;
 }
 
 
@@ -274,10 +274,10 @@ min-height: 500px;
     border-radius: 5px 5px 5px 5px;
     margin: 0;
     padding: 20px;
-   /* background: none;*/
+    /* background: none;*/
 }
 .ui-tabs-nav{
-    background: none; 
+    background: none;
     border: medium none;
 }
 
@@ -297,10 +297,10 @@ min-height: 500px;
 }
 /*
 .ui-tabs-nav > li > a, .nav-pills > li > a {
-    line-height: 14px;
-    margin-right: 2px;
-    padding-left: 12px;
-    padding-right: 12px;
+line-height: 14px;
+margin-right: 2px;
+padding-left: 12px;
+padding-right: 12px;
 }*/
 .ui-tabs-nav > li > a {
     display: block;
@@ -310,22 +310,21 @@ min-height: 500px;
 
 
 .ui-tabs {
-     background: none; 
-     border: medium none;
- /*   border: none;
-    color: #222222;
-    
+    background: none;
+    border: medium none;
+    /* border: none;
+   color: #222222;
     */
-    
+
 }
 
 .headerA{
     height:40px;
-    
+
 }
 
 
-.items tbody > tr:nth-child(2n+1) > td, 
+.items tbody > tr:nth-child(2n+1) > td,
 .items tbody > tr:nth-child(2n+1) > th {
     background-color: #F9F9F9;
 }
@@ -344,73 +343,73 @@ min-height: 500px;
 
 .form-actions{
     text-align: center;
-    
+
 }
 
 
 .shdowleft{
-    
+
 }
 
-#menu > li > a {                
-        font-size: 15px;        
+#menu > li > a {
+    font-size: 15px;
 }
 .formtable{
-    /*display:  table;
-    width:auto;*/
-    
+    /*display: table;
+width:auto;*/
+
 }
 
 
 /*.formtable > .head1,*/
 .formtable > .templateTarget> .templateContent {
     /*display: table-row;*/
-    
+
 }
 .formtable > .head1 > div,
 .formtable > .templateTarget >.templateContent > div{
-   /* display: table-cell;*/
-    
+    /* display: table-cell;*/
+
 }
 
 .chzn-container{
     top:-5px;
-    
+
 }
 
 
 @media only all {
-    .formtable thead td, 
-	.formtable thead th {
-		display: none;
-	}
+    .formtable thead td,
+    .formtable thead th {
+        display: none;
+    }
     .formtable td,
-	.formtable th { 
-		/*text-align: left;*/
-		display: block;
-	}
-    
+    .formtable th {
+        /*text-align: left;*/
+        display: block;
+    }
+
     .formtable tbody th {
-		margin-top: 3em;
-	}
-	/* Make the label elements a percentage width */ 
-	.formtable td .ui-table-cell-label,
-	.formtable th .ui-table-cell-label { 
-		padding: .4em; 
-		min-width: 30%; 
-		display: inline-block;
-		margin: -.4em 1em -.4em -.4em;
-	}
-	/* For grouped headers, have a different style to visually separate the levels by classing the first label in each col group */ 
-	.formtable th .ui-table-cell-label-top,
-	.formtable td .ui-table-cell-label-top {
-		display: block;
-		padding: .4em 0;
-		margin: .4em 0;
-		text-transform: uppercase;
-		font-size: .9em;
-		font-weight: normal;
-	}
+        margin-top: 3em;
+    }
+    /* Make the label elements a percentage width */
+    .formtable td .ui-table-cell-label,
+    .formtable th .ui-table-cell-label {
+        padding: .4em;
+        min-width: 30%;
+        display: inline-block;
+        margin: -.4em 1em -.4em -.4em;
+    }
+    /* For grouped headers, have a different style to visually separate the levels by classing the first label in each col group */
+    .formtable th .ui-table-cell-label-top,
+    .formtable td .ui-table-cell-label-top {
+        display: block;
+        padding: .4em 0;
+        margin: .4em 0;
+        text-transform: uppercase;
+        font-size: .9em;
+        font-weight: normal;
+    }
 }
 
 @media (min-width: 992px){
@@ -421,13 +420,13 @@ min-height: 500px;
 
 
 @media (max-width: 980px){
-    
+
     .box header{
         display:none;
-        
+
     }
-    
-    
+
+
     div.col-lg-12{
         padding:0;
     }
@@ -437,30 +436,26 @@ min-height: 500px;
 
 
 @media ( min-width: 700px ) {
-	/* Show the table header rows and set all cells to display: table-cell */ 
-	.formtable td,
-	.formtable th,
-	.formtable tbody th,
-	.formtable tbody td,
-	.formtable thead td,
-	.formtable thead th {
-		display: table-cell;
-		margin: 0;
-	}
-	/* Hide the labels in each cell */ 
-	.formtable td .ui-table-cell-label,
-	.formtable th .ui-table-cell-label,
-        .formtable td b{ 
-		display: none;
-	}
+    /* Show the table header rows and set all cells to display: table-cell */
+    .formtable td,
+    .formtable th,
+    .formtable tbody th,
+    .formtable tbody td,
+    .formtable thead td,
+    .formtable thead th {
+        display: table-cell;
+        margin: 0;
+    }
+    /* Hide the labels in each cell */
+    .formtable td .ui-table-cell-label,
+    .formtable th .ui-table-cell-label,
+    .formtable td b{
+        display: none;
+    }
 }
 /*
 @media (min-width: 1200px){
-    .container, .navbar-static-top .container, .navbar-fixed-top .container, .navbar-fixed-bottom .container {
+.container, .navbar-static-top .container, .navbar-fixed-top .container, .navbar-fixed-bottom .container {
 width: 1200px;
 }
-    
-    
-    
-    
-    }*/
+}*/

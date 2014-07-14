@@ -549,7 +549,7 @@ class Docs extends fileRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'docAccount_id' => array(self::BELONGS_TO, 'Account', 'id'),
+            'Account' => array(self::BELONGS_TO, 'Accounts', 'account_id'),
             'docCheques' => array(self::HAS_MANY, 'Doccheques', 'doc_id'),
             'docDetailes' => array(self::HAS_MANY, 'Docdetails', 'doc_id'),
             'docType' => array(self::BELONGS_TO, 'Doctype', 'doctype'),
@@ -582,7 +582,7 @@ class Docs extends fileRecord {
             'sub_total' => Yii::t('labels', 'Sub Total'),
             'novat_total' => Yii::t('labels', 'No VAT Total'),
             'vat' => Yii::t('labels', 'VAT'),
-            'total' => Yii::t('labels', 'Total'),
+            'total' => Yii::t('labels', 'Subtotal to pay'),
             'currency_id' => Yii::t('labels', 'Currency'),
             'src_tax' => Yii::t('labels', 'Src Tax'),
             'status' => Yii::t('labels', 'Status'),

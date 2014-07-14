@@ -1,8 +1,8 @@
 <?php
 
-$this->menu=array(
-	array('label'=>Yii::t('app','List Account types'),'url'=>array('index')),
-	array('label'=>Yii::t('app','Create Account types'),'url'=>array('create')),
+$this->menu = array(
+    array('label' => Yii::t('app', 'List Account types'), 'url' => array('index')),
+    array('label' => Yii::t('app', 'Create Account types'), 'url' => array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "

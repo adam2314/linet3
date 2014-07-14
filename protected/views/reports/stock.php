@@ -1,4 +1,5 @@
 <?php
+
 $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
             // 'model'=>$model,
             'name' => 'stockAction[from_date]',
@@ -36,55 +37,50 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
                 ), true);
 ?>
 
-<?php 
- $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Stock Sum"),
-    //'width' => '800',
-)); 
- 
-  
- 
-$yiidbdatetime=Yii::app()->locale->getDateFormat('yiidbdatetime');
-$phpdatetime=Yii::app()->locale->getDateFormat('phpdatetime');
- 
+<?php
+
+$this->beginWidget('MiniForm', array(
+    'haeder' => Yii::t('app', "Stock Sum"),
+        //'width' => '800',
+));
+
+
+
+$yiidbdatetime = Yii::app()->locale->getDateFormat('yiidbdatetime');
+$phpdatetime = Yii::app()->locale->getDateFormat('phpdatetime');
+
 $this->widget('bootstrap.widgets.TbGridView', array(
-	'id'=>'stockAction-grid',
-	'dataProvider'=>$model->sum(),
-        //'enablePagination'=> false,
-        'ajaxUpdate'=>true,
-        'ajaxType'=>'POST',
-	'filter'=>$model,
-	'columns'=>array(
-		//'id',
-                
-		
-                array(
-                       'name'=>'account_id',
-                       //'filter'=>CHtml::dropDownList('Transactions[type]', $model->type,CHtml::listData(TransactionType::model()->findAll(), 'id', 'name')),
-                    'filter'=>CHtml::listData(Accounts::model()->findAll(), 'id', 'name'),
-                       'value'=>'$data->Account->name'
-                   ),
-            
-            
-                        
-            'item_id',
-            array(
-                    'name'=>'item_id',
-                    'filter'=>CHtml::listData(Item::model()->findAll(), 'id', 'name'),
-                    'value'=>'$data->Item->name'
-                ),
-            array(
-                'name'=>'qty',
-                'value'=>  '$data->getItemSum()',
-                
-               )
-            
-            //'qtySum',
-            
+    'id' => 'stockAction-grid',
+    'dataProvider' => $model->sum(),
+    //'enablePagination'=> false,
+    'ajaxUpdate' => true,
+    'ajaxType' => 'POST',
+    'filter' => $model,
+    'columns' => array(
+        //'id',
 
-	),
-)); 
 
- 
-  $this->endWidget(); //miniform
- ?>
+        array(
+            'name' => 'account_id',
+            //'filter'=>CHtml::dropDownList('Transactions[type]', $model->type,CHtml::listData(TransactionType::model()->findAll(), 'id', 'name')),
+            'filter' => CHtml::listData(Accounts::model()->findAll(), 'id', 'name'),
+            'value' => '$data->Account->name'
+        ),
+        'item_id',
+        array(
+            'name' => 'item_id',
+            'filter' => CHtml::listData(Item::model()->findAll(), 'id', 'name'),
+            'value' => '$data->Item->name'
+        ),
+        array(
+            'name' => 'qty',
+            'value' => '$data->getItemSum()',
+        )
+
+    //'qtySum',
+    ),
+));
+
+
+$this->endWidget(); //miniform
+?>

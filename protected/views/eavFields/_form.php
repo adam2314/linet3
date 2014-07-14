@@ -1,7 +1,10 @@
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'eav-fields-form',
 	'enableAjaxValidation'=>false,
-)); ?>
+)); 
+$model->min=0;
+$model->max=255;
+?>
 
 	<?php echo $form->errorSummary($model); ?>
 
@@ -16,9 +19,9 @@
         
         //echo $form->textFieldRow($model,'eavType',array('class'=>'span5','maxlength'=>255)); ?>
 
-	<?php echo $form->textFieldRow($model,'min',array('class'=>'span5')); ?>
+	<?php echo $form->hiddenField($model,'min'); ?>
 
-	<?php echo $form->textFieldRow($model,'max',array('class'=>'span5')); ?>
+	<?php echo $form->hiddenField($model,'max'); ?>
 
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(

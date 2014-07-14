@@ -161,7 +161,7 @@ if(count($model->docDetailes)!=0){
                 <td class='Unit'></td>
                 <td class='Qty'></td>
                 <td class='Price'></td>
-                <td class='Currency'><?php echo Yii::t('app','Subtotal tax'); ?></td>
+                <td class='Currency'><?php echo Yii::t('app','Subtotal VAT'); ?></td>
                 <td class='Total'><?php echo $model->vat; ?></td>
                 <td class='VAT'></td>
         <tr>
@@ -200,7 +200,7 @@ if(count($model->docDetailes)!=0){
                 <td class='Unit'></td>
                 <td class='Qty'></td>
                 <td class='Price'></td>
-                <td class='Currency'><?php echo Yii::t('app','Subtotal to pay'); ?></td>
+                <td class='Currency'><?php echo Yii::t('labels','Subtotal to pay'); ?></td>
                 <td class='Total'><?php echo $model->total; ?></td>
                 <td class='VAT'></td>
         </tr>		

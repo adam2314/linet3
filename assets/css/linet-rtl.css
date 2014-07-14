@@ -3,9 +3,9 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
-/* 
-    Created on : Feb 27, 2014, 5:42:19 PM
-    Author     : adam
+/*
+Created on : Feb 27, 2014, 5:42:19 PM
+Author : adam
 */
 
 * {
@@ -13,8 +13,7 @@ and open the template in the editor.
 }
 /*
 .chzn-rtl, .chosen-single, .chosen-container, .chosen-drop, .chosen-search, .chosen-results{
-    direction:ltr;
-    
+direction:ltr;
 }*/
 .chosen-drop {
     left:0;
@@ -54,16 +53,16 @@ and open the template in the editor.
 
 
 .user-media .media-body{
-    float: right; 
+    float: right;
 
 
 }
 .box header .icons, .box header h5, .box header .toolbar {
-    float: right; 
+    float: right;
 }
 
 .box header .toolbar{
-    float: left; 
+    float: left;
 
 
 }
@@ -77,7 +76,7 @@ th {
 }
 
 .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12,
-.col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 
+.col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12
 
 {
     float: right;

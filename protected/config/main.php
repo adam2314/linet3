@@ -109,11 +109,9 @@ return CMap::mergeArray(
                         array('api/update', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'POST'),
                         array('api/delete', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'DELETE'),
                         array('api/create', 'pattern' => 'api/<model:\w+>', 'verb' => 'POST'),
-                        
-                        
                         //'minify/<group:[^\/]+>'=>'minify/index',
                         '<module>/authItem/<action:\w+>' => '<module>/authItem/<action>',
-                        '<module:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>'=>'<module>/<controller>/<action:\w+>',
+                        '<module:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>' => '<module>/<controller>/<action:\w+>',
                         '<controller:\w+>/create/<type:\d+>' => '<controller>/create', //mainly for doc, acc,outcome creating
                         //'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
                         //'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
@@ -123,11 +121,8 @@ return CMap::mergeArray(
                         'docs/view/<id:\d+>' => 'docs/view',
                         'download/<id:\d+>' => 'data/download',
                         'download/<company:\w+>/<hash:\d+>' => 'data/downloadpublic',
-                        
-                        
                         '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
                         '<controller:\w+>/<action:\w+>/<id:\w+>' => '<controller>/<action>',
-                        
                     ),
                 ),
                 //'clientScript'=>array(
@@ -142,21 +137,21 @@ return CMap::mergeArray(
                     'routes' => array(
                         array(
                             'class' => 'CWebLogRoute',
-                            'levels' => 'info,error,warning',
-                            //'levels'=>'trace, info, error, warning, application',
-                            'categories' => 'system.db.*, application',
-                            'filter' => array(
-                                'class' => 'CLogFilter',
-                                'prefixSession' => true,
-                                'prefixUser' => false,
-                                'logUser' => false,
-                                'logVars' => array(),
-                            ),
+                        //'levels' => 'database,db,all,app,info,error,warning',
+                        //'levels'=>'trace, info, error, warning, application',
+                        //'categories' => 'system.db.*, application',
+                        //'filter' => array(
+                        //     'class' => 'CLogFilter',
+                        //    'prefixSession' => true,
+                        //    'prefixUser' => false,
+                        //     'logUser' => false,
+                        //     'logVars' => array(),
+                        // ),
                         ),
                         array(
                             'class' => 'CFileLogRoute',
                             'levels' => 'trace, info, error, warning',
-                        'categories'=>'app',
+                            'categories' => 'app',
                         //'categories'=>'*',
                         ),
                     /* array(

@@ -1,13 +1,13 @@
 /* -----------------------------------------------------------------------
 
 
- Blueprint CSS Framework 1.0.1
- http://blueprintcss.org
+Blueprint CSS Framework 1.0.1
+http://blueprintcss.org
 
-   * Copyright (c) 2007-Present. See LICENSE for more info.
-   * See README for instructions on how to use Blueprint.
-   * For credits and origins, see AUTHORS.
-   * This is a compressed file. See the sources in the 'src' directory.
+* Copyright (c) 2007-Present. See LICENSE for more info.
+* See README for instructions on how to use Blueprint.
+* For credits and origins, see AUTHORS.
+* This is a compressed file. See the sources in the 'src' directory.
 
 ----------------------------------------------------------------------- */
 
@@ -42,54 +42,53 @@ table{width:100%}
 
 table.doc thead tr th:last-child{border-radius:15px 0px 0px 0px;}
 table.doc thead tr th:first-child{border-radius:0px 15px 0px 0px;}
-table { 
-	font-size: 14px; 
-	font-family: arial, sans-serif;
-	border-collapse:collapse;
+table {
+font-size: 14px;
+font-family: arial, sans-serif;
+border-collapse:collapse;
 }
   
 .table {
     display: table;
     width:100%;
-    	font-size: 14px; 
-	font-family: arial, sans-serif;
+     font-size: 14px;
+font-family: arial, sans-serif;
     }
 
   .row {
     display: table-row;
     }
 .rhdata{
-	background-color:#ececec;
+background-color:#ececec;
    
     display: table-cell;
     border: 1px solid #b1b1b1;
     padding:10px
-	}
-	.row.hrow div:first-child{
-		 border-radius:0px 15px 0px 0px;
-	}
-	.row.hrow div:last-child{
-		 border-radius:15px 0px 0px 0px;
-	}
+}
+.row.hrow div:first-child{
+border-radius:0px 15px 0px 0px;
+}
+.row.hrow div:last-child{
+border-radius:15px 0px 0px 0px;
+}
   .rdata{
     display: table-cell;
     border: 1px solid #b1b1b1;
     padding:5px;
     }
-    .row.frow  div.clear{
+    .row.frow div.clear{
      border: 0px solid #b1b1b1;
     }
     
  .printme{
  /*background-color:#6077DB;
-  border-radius: 0 0 15px 15px;
-   
-    padding: 4px 10px 10px;*/
+border-radius: 0 0 15px 15px;
+padding: 4px 10px 10px;*/
      left: 50%;
     position: fixed;
     text-align: center;
     top: 0;
- }   
+ }
  
  
  /*,.Description*/
