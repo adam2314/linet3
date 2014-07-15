@@ -396,14 +396,14 @@ $form = $this->beginWidget('CActiveForm', array(
                     <th class="cheque_date"><?php echo Yii::t('labels', 'Cheque Date'); ?></th>
                     <th class="currency_id"><?php echo Yii::t('labels', 'Currency'); ?></th>
                     <th class="sum"><?php echo Yii::t('labels', 'Sum'); ?></th>
-                    <th class="dep_date"><?php echo Yii::t('labels', 'Dep Date'); ?></th>
+                    
 
                     <th class="actions"><?php echo Yii::t('labels', 'Action'); ?></th>
                 </tr>
             </thead>	
             <tfoot>
                 <tr>
-                    <td colspan='8'>
+                    <td colspan='7'>
                         <textarea id="rcpt" style='display:none;'>       
                             <?php
                             echo $this->renderPartial('rcptdetial', array('model' => new Doccheques, 'form' => $form, 'i' => 'ABC'));
@@ -429,7 +429,7 @@ $form = $this->beginWidget('CActiveForm', array(
                     </td>
                 </tr>
                 <tr>
-                    <td colspan='8'>
+                    <td colspan='7'>
 
                     </td>
                     <td>
@@ -710,30 +710,43 @@ $form = $this->beginWidget('CActiveForm', array(
             $('#Doccheques_' + index + "_cheque_num").attr('placeholder', '');
             $('#Doccheques_' + index + "_branch").attr('placeholder', '');
             $('#Doccheques_' + index + "_banksel").remove();
-            if ((val == 1) || (val == 3)) {
-                $('#Doccheques_' + index + "_date").hide();
-                $('#Doccheques_' + index + "_banksel").hide();
-                $('#Doccheques_' + index + "_cheque_num").hide();
-                $('#Doccheques_' + index + "_bank").hide();
-                $('#Doccheques_' + index + "_branch").hide();
-                $('#Doccheques_' + index + "_cheque_acct").hide();
-            } else if (val == 2) {
-                $('#Doccheques_' + index + "_date").show();
-                $('#Doccheques_' + index + "_banksel").hide();
+            
+            $('#Doccheques_' + index + "_refnum").hide();
+            $('#Doccheques_' + index + "_creditcompany").hide();
+            $('#Doccheques_' + index + "_cheque_num").hide();
+            
+            $('#Doccheques_' + index + "_bank").hide();
+            $('#Doccheques_' + index + "_branch").hide();
+            $('#Doccheques_' + index + "_cheque_acct").hide();
+            $('#Doccheques_' + index + "_cheque_date").hide();
+              
+            
+            //$('#Doccheques_' + index + "_bank_chosen").hide();
+            
+            
+            
+            
+            
+            if ((val == 1) || (val == 3)) {//cash, credit
+               
+            } else if (val == 2) {//cheque
+                $('#Doccheques_' + index + "_cheque_date").show();
                 $('#Doccheques_' + index + "_cheque_num").show();
                 $('#Doccheques_' + index + "_bank").show();
                 $('#Doccheques_' + index + "_branch").show();
                 $('#Doccheques_' + index + "_cheque_acct").show();
-            } else if (val == 4) {
-                $('#Doccheques_' + index + "_date").show();
-                $('#Doccheques_' + index + "_banksel").show();
+            } else if ((val == 4)|| (val == 5))  {//bank transfer
+                $('#Doccheques_' + index + "_cheque_date").show();
                 $('#Doccheques_' + index + "_cheque_num").show();
+                $('#Doccheques_' + index + "_cheque_num").attr('placeholder', 'Reference');
                 $('#Doccheques_' + index + "_bank").show();
                 $('#Doccheques_' + index + "_branch").show();
+                $('#Doccheques_' + index + "_creditcompany").show();
                 $('#Doccheques_' + index + "_cheque_acct").show();
-            } else if (val == 5) {
-                $('#Doccheques_' + index + "_date").show();
-                $('#Doccheques_' + index + "_banksel").hide();
+            } else if (val == 5) {//manuel credit
+              
+                /*
+                $('#Doccheques_' + index + "_cheque_date").show();
 
                 $('#Doccheques_' + index + "_bank").parent().append('<?php //echo PrintCreditCompany();                ?>');
                 $('#Doccheques_' + index + "_bank").remove();
@@ -746,7 +759,8 @@ $form = $this->beginWidget('CActiveForm', array(
                 $('#Doccheques_' + index + "_branch").attr('placeholder', 'Number of payments');
                 $('#Doccheques_' + index + "_cheque_num").show();
                 $('#Doccheques_' + index + "_cheque_acct").attr('placeholder', 'last four digits of credit card');
-            }
+                */
+            }//*/
         }
 
 

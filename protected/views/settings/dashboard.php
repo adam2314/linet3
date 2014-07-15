@@ -20,7 +20,7 @@ $this->menu = array(
             array('docReport', "Treat Needed Documents", 'col-lg-5'),
         );
         foreach ($widgets as $widget) {
-            
+
             if (isset(Yii::app()->user->widget[$widget[0]])) {
                 if (Yii::app()->user->widget[$widget[0]]) {
                     $this->widget($widget[0], array('haeder' => Yii::t("app", $widget[1]), 'height' => 350, 'class' => $widget[2]));
@@ -30,7 +30,6 @@ $this->menu = array(
             }
         }
     }
-
     ?>
 </div>
 
@@ -43,7 +42,6 @@ $this->menu = array(
 
 <script type="text/javascript">
     $(function() {
-
         $('body').toggleClass('hide-sidebar');
     });
 
@@ -51,9 +49,7 @@ $this->menu = array(
     function send(str) {
         $.post("<?php echo $this->createUrl('/'); ?>/settings/dashboard", {"Widget": str},
         function(data) {
-
-
+            window.location = "<?php echo Yii::app()->createAbsoluteUrl('/settings/dashboard'); ?>";
         });
-
     }
 </script>
