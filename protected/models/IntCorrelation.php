@@ -12,6 +12,8 @@
 class IntCorrelation extends CActiveRecord
 {
     const table='{{intCorrelation}}';
+    public $date_from;
+    public $date_to;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -20,6 +22,9 @@ class IntCorrelation extends CActiveRecord
 		return self::table;
 	}
 
+        
+        
+        
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -28,11 +33,11 @@ class IntCorrelation extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('in, out, owner', 'required'),
-			array('owner', 'numerical', 'integerOnly'=>true),
+			array('owner', 'required'),
+			array('account_id, owner', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, in, out, owner', 'safe', 'on'=>'search'),
+			array('id, owner', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -44,6 +49,10 @@ class IntCorrelation extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'Transactions' => array(self::HAS_MANY, 'Transactions', 'intCorrelation'),
+                    
+                    'Account' => array(self::BELONGS_TO, 'Accounts', 'account_id'),
+                    'Owner' => array(self::BELONGS_TO, 'User', 'owner'),
 		);
 	}
 
@@ -54,12 +63,21 @@ class IntCorrelation extends CActiveRecord
 	{
 		return array(
 			'id' => Yii::t('labels','ID'),
-			'in' => Yii::t('labels','In'),
-			'out' => Yii::t('labels','Out'),
 			'owner' => Yii::t('labels','Owner'),
 		);
 	}
 
+        public function delete(){
+            foreach ($this->Transactions as $transaction){
+                $transaction->intCorrelation=0;
+                $transaction->intType=0;
+                $transaction->save();
+            }
+                        
+            return parent::delete();
+        }
+        
+        
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *
@@ -79,8 +97,8 @@ class IntCorrelation extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('in',$this->in,true);
-		$criteria->compare('out',$this->out,true);
+		//$criteria->compare('in',$this->in,true);
+		//$criteria->compare('out',$this->out,true);
 		$criteria->compare('owner',$this->owner);
 
 		return new CActiveDataProvider($this, array(

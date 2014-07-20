@@ -149,7 +149,9 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     </div>
 </div>
 <script type="text/javascript">
-    $(document).ready(
+    <?php
+    Yii::app()->clientScript->registerScript('search', "
+$(document).ready(
             function() {
                 addItem(0);
                 $('#Transactions_account_id').blur(function() {
@@ -157,11 +159,11 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                 });
 
 
-                $("#transaction-form").submit(function() {
+                $('#transaction-form').submit(function() {
 
 
                     if (Number($('#balance').val()) != 0) {
-                        alert("sum is not 0");
+                        alert('sum is not 0');
                         return false;
                     }
 
@@ -171,6 +173,11 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
     );
 
+");
+    
+    
+    ?>
+    
     function CalcSum() {
         var value = -1 * parseFloat($("#sourceneg").val()).toFixed(2);
         if (value == 0) {
@@ -231,6 +238,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         CalcSum();
     }
     function addItem(last) {
+        console.log("fire!");
         var ni = document.getElementById('det');
         var num = last + 1;
         var IdName = "My" + num;
@@ -297,24 +305,10 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
     }
 
-
+//*/
 
 </script>
 
-
-<?php
-/*
-  foreach($models as $model){
-  echo $form->errorSummary($model);
-
-  echo "<p>".Yii::t('app',$model->id);
-  echo $form->textField($model,'['.$model->id.']value',array('size'=>30,'maxlength'=>80))."</p>";
-
-
-  }
- * 
- */
-?>  
 
 <div class="form-actions">
     <?php
@@ -326,7 +320,6 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     ?>
 </div>
 
-<?php //echo CHtml::submitButton(Yii::t('app', "Save")); ?>    
 <?php $this->endWidget(); ?>
 
 

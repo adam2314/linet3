@@ -513,7 +513,7 @@ class Docs extends fileRecord {
         // will receive user inputs.
         return array(
             array('account_id', 'required'),
-            array('stockSwitch, status, printed, owner', 'numerical', 'integerOnly' => true),
+            array('stockSwitch, disType, status, printed, owner', 'numerical', 'integerOnly' => true),
             array('city', 'length', 'max' => 40),
             array('doctype, docnum, oppt_account_id, account_id, zip, vatnum', 'length', 'max' => 11),
             array('company, address', 'length', 'max' => 80),
@@ -554,7 +554,7 @@ class Docs extends fileRecord {
             'docDetailes' => array(self::HAS_MANY, 'Docdetails', 'doc_id'),
             'docType' => array(self::BELONGS_TO, 'Doctype', 'doctype'),
             'docStatus' => array(self::BELONGS_TO, 'Docstatus', array('status', 'doctype')),
-            'docOwner' => array(self::BELONGS_TO, 'Users', 'owner'),
+            'docOwner' => array(self::BELONGS_TO, 'User', 'owner'),
                 //'Files'=>array(self::HAS_MANY, 'Files',array('parent_id'=>'id','parent_type'=>'Docs')),
                 //'Currency' => array(self::BELONGS_TO, 'Currecies', 'currency_id'),
         //

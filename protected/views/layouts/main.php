@@ -10,9 +10,9 @@
 </head>
 
 <body>
-    <div id="modal" class="modal hide fade in" style="display: none; ">
+    <div id="modal" class="modal hide fade" tabindex="-1" data-width="760">
         <div id="modal-header" class="modal-header">
-            <a class="close" data-dismiss="modal">×</a>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3>Modal Heading</h3>
         </div>
         <div id="modal-body" class="modal-body">

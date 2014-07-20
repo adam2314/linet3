@@ -10,9 +10,9 @@
                 array(
                     'type'=>'raw',
                      'value'=>
-                        'CHtml::hiddenField("FormDeposit[Total][$data->doc_id,$data->line]","$data->sum")',
+                        'CHtml::hiddenField("FormDeposit[Total][$data->doc_id,$data->line]","$data->sum").CHtml::hiddenField("FormDeposit[Type][$data->doc_id,$data->line]","$data->type")',
                     ),
-                'type',
+                //'type',
 		'bank',
                 'branch',
                 'cheque_acct',

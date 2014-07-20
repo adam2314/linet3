@@ -7,7 +7,7 @@
                 array(
                     'type'=>'raw',
                     'value'=>
-                        'CHtml::checkBox("FormExtmatch[Bankbook][match][$data->id]",null,array( "onchange"=>"CalcSum()"))',
+                        'CHtml::checkBox("FormExtmatch[Bankbook][match][$data->id]",null,array( "onchange"=>"CalcMatchSum()"))',
                     ),
                 array(
                     'type'=>'raw',
@@ -40,7 +40,7 @@
                 array(
                     'type'=>'raw',
                     'value'=>
-                        'CHtml::checkBox("FormExtmatch[Trans][match][$data->id]",null,array( "onchange"=>"CalcSum()"))',
+                        'CHtml::checkBox("FormExtmatch[Trans][match][$data->id]",null,array( "onchange"=>"CalcMatchSum()"))',
                     ),
                 array(
                     'type'=>'raw',

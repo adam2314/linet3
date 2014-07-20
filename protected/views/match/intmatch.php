@@ -1,45 +1,49 @@
 <?php
-$this->menu = array(
-        //array('label'=>'List Doctype', 'url'=>array('index')),
-        //array('label'=>'Create Doctype', 'url'=>array('create')),
+
+$this->menu=array(
+	//array('label'=>'List Doctype', 'url'=>array('index')),
+	//array('label'=>'Create Doctype', 'url'=>array('create')),
 );
 
 
-$this->beginWidget('MiniForm', array(
-    'haeder' => Yii::t('app', "Bankbooks"),
-));
+$this->beginWidget('MiniForm',array(
+    'haeder' => Yii::t('app',"Reconciliations"),
+)); 
 ?>
 
-<?php
-$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-    'id' => 'extmatch-form',
-    'enableAjaxValidation' => false,
-    'clientOptions' => array(
-        'validateOnSubmit' => true,
-    //'submitHandler'=>'js: go()',
-    ),
+ <?php 
+ 
+ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
+	'id'=>'intmatch-form',
+	'enableAjaxValidation'=>false,
+        'clientOptions'=>array(
+               'validateOnSubmit'=>true,
+               //'submitHandler'=>'js: go()',
+            ),
         )
-);
-
-$temp = CHtml::listData(Accounts::model()->AutoComplete('', 7), 'value', 'label');
-$temp[0] = Yii::t('app', 'Chose Bank');
-$model->account_id = 0;
-echo $form->error($extmatch, 'account_id');
-echo $form->dropDownList($extmatch, "account_id", $temp, array('class' => ''));
-echo $form->error($extmatch, 'account_id');
-?>
+    );
+    //$temp=CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => 1)), 'id', 'name');
+    //$temp=CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => 0)), 'id', 'name');
+    $temp=  array_merge(Accounts::model()->findAllByAttributes(array('type' => 1)),Accounts::model()->findAllByAttributes(array('type' => 0)));
+    $temp=CHtml::listData($temp, 'id', 'name');
+    $temp[0]=Yii::t('app','Chose Account');
+    $model->account_id=0;
+        echo $form->error($model,'account_id'); 
+        echo $form->dropDownList($model, "account_id", $temp,array('class'=>''));
+        echo $form->error($model,'account_id'); 
+        ?>
 <div id ="result">
 </div>
 <div class="row">
     <div class="col-md-3">
         <?php
-        echo $form->labelEx($extmatch, 'ext_total');
-        echo $form->textField($extmatch, 'ext_total', array('size' => 60, 'maxlength' => 100));
-        echo $form->error($extmatch, 'ext_total');
+        echo $form->labelEx($model, 'in_total');
+        echo $form->textField($model, 'in_total', array('size' => 60, 'maxlength' => 100));
+        echo $form->error($model, 'in_total');
 
-        echo $form->labelEx($extmatch, 'int_total');
-        echo $form->textField($extmatch, 'int_total', array('size' => 60, 'maxlength' => 100));
-        echo $form->error($extmatch, 'int_total');
+        echo $form->labelEx($model, 'out_total');
+        echo $form->textField($model, 'out_total', array('size' => 60, 'maxlength' => 100));
+        echo $form->error($model, 'out_total');
         ?>
     </div>  
 </div>
@@ -52,14 +56,13 @@ $this->widget('bootstrap.widgets.TbButton', array(
 ));
 ?>
 </div>
-
 <?php
-$this->endWidget();
-$this->endWidget();
-
-
-
-
+ $this->endWidget();
+ $this->endWidget();
+ 
+ 
+ 
+ 
 $this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
     'id' => "transactionDiag",
     'options' => array(
@@ -79,15 +82,15 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
 
 <script type="text/javascript">
     jQuery(document).ready(function() {
-        $("#extmatch-form").submit(function(e) {
+        $("#intmatch-form").submit(function(e) {
             go(e);
         });
 
 
 
-        $("#FormExtmatch_account_id").change(function() {
-            var value = $("#FormExtmatch_account_id").val();
-            $.post("<?php echo $this->createUrl('/bankbook/extmatchajax'); ?>", {FormExtmatch: {account_id: value}}).done(
+        $("#FormIntmatch_account_id").change(function() {
+            var value = $("#FormIntmatch_account_id").val();
+            $.post("<?php echo $this->createUrl('/match/intmatchajax'); ?>", {FormIntmatch: {account_id: value}}).done(
                     function(data) {
                         $("#result").html(data);
                     }
@@ -102,7 +105,7 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
 
     function ajaxSubmit(e) {
         e.preventDefault();
-        var postData = $("#extmatch-form").serializeArray();
+        var postData = $("#intmatch-form").serializeArray();
         //console.log(postData);
         //location.reload();
     }
@@ -110,9 +113,10 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
 
     function go(e) {
 
-        var extsum=parseFloat($('#FormExtmatch_ext_total').val());
-        var intsum =parseFloat($('#FormExtmatch_int_total').val());
-        var diff=extsum - intsum;
+        var insum=parseFloat($('#FormIntmatch_in_total').val());
+        var outsum =parseFloat($('#FormIntmatch_out_total').val());
+        var diff=insum + outsum;
+        //console.log($('#FormIntmatch_out_total').val());
         if (diff != 0) {
             e.preventDefault();
             var sum = (-1) * (diff);
@@ -125,7 +129,7 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
             //$(#modal).modal('show');
             
             
-            $("#Transactions_account_id").val($('#FormExtmatch_account_id').val());//bank_id
+            $("#Transactions_account_id").val($('#FormIntmatch_account_id').val());//bank_id
             $("#valuedate").val('<?php echo date(Yii::app()->locale->getDateFormat("phpshort"));?>');//=date
             $("#Transactions_refnum2").val();//=refnum
             if(diff<0){
@@ -153,16 +157,16 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
 
     
      function CalcMatchSum() {
-     var extsum = CalcExtSum();
-     var intsum = CalcIntSum();
+     var insum = CalcInSum();
+     var outsum = CalcOutSum();
      
      
-     console.log("sum: " + (extsum - intsum));
+     console.log("sum: " + (insum + outsum));
      }
      //*/
-    function CalcExtSum() {
-        var vals = $("[id^=FormExtmatch_Bankbook_match]");
-        var sum = $("[id^=FormExtmatch_Bankbook_total]");
+    function CalcInSum() {
+        var vals = $("[id^=FormIntmatch_In_match]");
+        var sum = $("[id^=FormIntmatch_In_total]");
 
         total = parseFloat("0.0");
 
@@ -173,13 +177,13 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
         }
 
         total = Math.round(total * 100) / 100;
-        $("#FormExtmatch_ext_total").val(total);
+        $("#FormIntmatch_in_total").val(total);
         return total;
     }
 
-    function CalcIntSum() {
-        var vals = $("[id^=FormExtmatch_Trans_match]");
-        var sum = $("[id^=FormExtmatch_Trans_total]");
+    function CalcOutSum() {
+        var vals = $("[id^=FormIntmatch_Out_match]");
+        var sum = $("[id^=FormIntmatch_Out_total]");
 
         total = parseFloat("0.0");
         for (x in vals) {
@@ -188,7 +192,7 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
             }
         }
         total = Math.round(total * 100) / 100;
-        $("#FormExtmatch_int_total").val(total);
+        $("#FormIntmatch_out_total").val(total);
         return total;
     }
 

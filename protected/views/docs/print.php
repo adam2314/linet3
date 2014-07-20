@@ -188,7 +188,7 @@ if(count($model->docDetailes)!=0){
                 <td class='Qty'></td>
                 <td class='Price'></td>
                 <td class='Currency'><?php echo Yii::t('labels','Discount'); ?></td>
-                <td class='Total'><?php echo $model->discount; ?></td>
+                <td class='Total'><?php echo (($model->disType)?"%":"") .$model->discount; ?></td>
                 <td class='VAT'><?php //echo $model->vat; ?></td>
         <tr>
         <tr>

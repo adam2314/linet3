@@ -53,7 +53,7 @@ class DocsController extends RightsController {
 
         // mPDF
         $mPDF1 = Yii::app()->ePdf->mpdf();
-        $mPDF1 = Yii::app()->ePdf->mpdf('', 'A5');
+        //$mPDF1 = Yii::app()->ePdf->mpdf('', 'A5');
         $mPDF1->WriteHTML($file);
         $mPDF1->Output($myPdf, 'F');
 
@@ -82,26 +82,19 @@ class DocsController extends RightsController {
             //here the digital certificate is inserted inside of the PDF document
             $renderedPdf = $pdf->render();
             file_put_contents($myPdfS, $renderedPdf);
+        }else{
+            
+            Yii::app()->end();
         }
         set_include_path($oldpath);
         spl_autoload_register(array('YiiBase', 'autoload'));
         
-        return Yii::app()->getRequest()->sendFile($model->docType->name."-".$model->docnum."-signed.pdf", $myPdfS);
+        return Yii::app()->getRequest()->sendFile($model->docType->name."-".$model->docnum."-signed.pdf", $renderedPdf);
 
 
-        header("Pragma: public");
-        header("Expires: 0");
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Cache-Control: public");
-        header("Content-Description: File Transfer");
-        header("Content-Type: application/pdf");
-        header("Content-Disposition: attachment; filename=\"$model->doctype-$model->docnum-signed.pdf\"");
-        header("Content-Transfer-Encoding: binary");
-
-        readfile($myPdfS);
 
         //*/
-        Yii::app()->end();
+        
     }
 
     public function actionPrint($id, $preview = 0, $model = null, $return = false) {//usd for print*/

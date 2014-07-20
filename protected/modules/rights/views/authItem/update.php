@@ -8,11 +8,11 @@
 ?>
 
 <div id="updatedAuthItem">
-
-	<h2><?php echo Rights::t('core', 'Update :name', array(
+        <?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Update :name', array(
 		':name'=>$model->name,
 		':type'=>Rights::getAuthItemTypeName($model->type),
-	)); ?></h2>
+	)))); ?>
+	
 
 	<?php $this->renderPartial('_form', array('model'=>$formModel)); ?>
 
@@ -123,7 +123,7 @@
 		<?php endif; ?>
 
 	</div>
-
+    <?php $this->endWidget();?>
 </div>
 
 

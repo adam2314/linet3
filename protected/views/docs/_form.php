@@ -271,7 +271,10 @@ $form = $this->beginWidget('CActiveForm', array(
                     <td>
                         <?php echo $form->textField($model, 'discount', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
                     </td>
-                    <td><?php echo "<label>".Yii::t('app',"in percentage")."</label>".CHTML::checkBox("Docdiscount", '', array('value' => 1, 'uncheckValue' => 0)); ?></td>
+                    <td><?php 
+                        echo "<label>".Yii::t('app',"in percentage")."</label>".
+                                $form->checkBox($model,"disType", '', array('value' => 1, 'uncheckValue' => 0)); ?>
+                    </td>
                     <td class="docadd">
                         <?php
                         $this->widget('bootstrap.widgets.TbButton', array(
@@ -544,8 +547,8 @@ $form = $this->beginWidget('CActiveForm', array(
             $("#docs-form").submit(function() {
 
                 if (($('#Docs_total').length) && ($('#Docs_rcptsum').length)) {
-                    if (Number($('#Docs_total').val()) != Number($('Docs_rcptsum').val())) {
-                        alert("sum is not equil");
+                    if (Number($('#Docs_total').val()) != Number($('#Docs_rcptsum').val())) {
+                        alert("<?php echo Yii::t('app','Sum is not equal');?>");
                         return false;
                     }
                 }
@@ -861,8 +864,8 @@ function CalcPrice(index,hChange) {//.org
         function CalcPriceSum(org) {
             var elements = $('[id^=Docdetails][id$=ihTotal]');
             var selements = $('[id^=Docdetails][id$=_iVatRate]');
-            var vattotal = 0;
-            var subtotal = 0;
+            var vattotal = novattotal =subtotal = 0;
+            //var  = 0;
             //var novat_total=0;
             for (var i = 0; i < elements.length; i++) {
                 //console.log(elements[i].id);
@@ -874,14 +877,17 @@ function CalcPrice(index,hChange) {//.org
                 //console.log(selements[i].id);
                 //if(vatper!=0){
                 subtotal += itemtotal;
-                vattotal += (vat / 100) * itemtotal;
+                if(vat!=0)
+                    vattotal += (vat / 100) * itemtotal;
+                else
+                    novattotal += itemtotal;
                 //}else{
                 //novat_total+=itemtotal;
                 //}
             }
             $('#Docs_vat').val(vattotal.toFixed(2)).trigger('change');
             $('#Docs_sub_total').val(subtotal.toFixed(2)).trigger('change');
-            $('#Docs_novat_total').val(subtotal.toFixed(2));
+            $('#Docs_novat_total').val(novattotal.toFixed(2));
             $('#Docs_total').val((subtotal + vattotal).toFixed(2)).trigger('change');//novat_total
         }
         
@@ -930,11 +936,11 @@ function CalcPrice(index,hChange) {//.org
             total = $('#Docs_sub_total').val();
             discount = $('#Docs_discount').val();
             var iTotals = $('[id^=Docdetails][id$=ihTotal]');
-            var sum=vatSum=0;
+            var sum=vatSum=novatSum=0;
             
             for (var i = 0; i < iTotals.length; i++) {
 
-                //if ($('#Docdiscount').attr('checked')) {
+                //if ($('#Docs_disType').attr('checked')) {
                 //    per = discount / 100;
                 //} else {
                 //    per = (discount / total);
@@ -945,7 +951,7 @@ function CalcPrice(index,hChange) {//.org
                 var vatRate=$('#Docdetails_' + i + '_iVatRate').val()/100;
                 //ihVat = iTotal * (iVatRate / 100);
                 
-                if ($('#Docdiscount').attr('checked')) {
+                if ($('#Docs_disType').attr('checked')) {
                     ihTotal = ihTotal - ((ihTotal/100) * discount);
                 } else {
                     ihTotal = ihTotal - ((ihTotal/total) * discount);
@@ -956,14 +962,17 @@ function CalcPrice(index,hChange) {//.org
                 $('#Docdetails_' + i + '_ihTotal').val(ihTotal.toFixed(2));
                 
                 sum+=ihTotal;
+                if(vatRate!=0)
                 vatSum+=(ihTotal*(vatRate));
+                else
+                    novatSum+=ihTotal;
                 console.log(ihTotal);
                 //totalVatChange(i, false);
             }
 
             $('#Docs_vat').val(vatSum.toFixed(2)).trigger('change');
             $('#Docs_sub_total').val(sum.toFixed(2)).trigger('change');
-            $('#Docs_novat_total').val(sum.toFixed(2));
+            $('#Docs_novat_total').val(novatSum.toFixed(2));
             $('#Docs_total').val((vatSum + sum).toFixed(2)).trigger('change');//novat_total
 
             //console.log(per);

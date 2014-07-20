@@ -287,6 +287,27 @@ class Transactions extends basicRecord {
         );
     }
 
+    
+    public function searchIn(){
+        //account_id,intCorrelation!=0,sum<0
+        $cDataProvider=$this->search();
+        
+        $cDataProvider->criteria->addCondition("sum>0");
+        $cDataProvider->criteria->addCondition("intCorrelation=0");
+            
+        return $cDataProvider;
+    }
+     public function searchOut(){
+        //account_id,intCorrelation!=0,sum<0
+        $cDataProvider=$this->search();
+        
+        $cDataProvider->criteria->addCondition("sum<0");
+        $cDataProvider->criteria->addCondition("intCorrelation=0");
+            
+        return $cDataProvider;
+    }
+    
+    
     /**
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
@@ -309,6 +330,8 @@ class Transactions extends basicRecord {
         $criteria->compare('currency_id', $this->currency_id);
         $criteria->compare('sum', $this->sum, true);
         $criteria->compare('leadsum', $this->leadsum, true);
+        $criteria->compare('extCorrelation', $this->extCorrelation);
+        $criteria->compare('intCorrelation', $this->intCorrelation);
         $criteria->compare('owner_id', $this->owner_id);
         $criteria->compare('linenum', $this->linenum);
 

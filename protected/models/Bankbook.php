@@ -40,7 +40,7 @@ class Bankbook extends CActiveRecord {
             array('date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, account_id, date, sum, total, cor_num, details, refnum', 'safe', 'on' => 'search'),
+            array('id, account_id, date, sum, total, extCorrelation, details, refnum', 'safe', 'on' => 'search'),
         );
     }
 
@@ -60,7 +60,7 @@ class Bankbook extends CActiveRecord {
     public function attributeLabels() {
         return array(
             'id' => Yii::t('labels', 'ID'),
-            'details' => Yii::t('labels', 'Details'), //, , , , , cor_num 
+            'details' => Yii::t('labels', 'Details'), //, , , , , extCorrelation 
             'account_id' => Yii::t('labels', 'Account id'),
             'date' => Yii::t('labels', 'Date'),
             'sum' => Yii::t('labels', 'Sum'),
@@ -80,7 +80,7 @@ class Bankbook extends CActiveRecord {
         $criteria->compare('date', $this->date, true);
         $criteria->compare('sum', $this->sum, true);
         $criteria->compare('total', $this->total, true);
-        $criteria->compare('cor_num', $this->cor_num);
+        $criteria->compare('extCorrelation', $this->extCorrelation);
         $criteria->compare('details', $this->details, true);
         $criteria->compare('refnum', $this->refnum, true);
         $criteria->order = 'id';
@@ -156,7 +156,7 @@ class Bankbook extends CActiveRecord {
             $bank->sum = $zachot - $hova;
             $bank->total = ltrim(substr($line, 65, 14), ' ');
             //if (!$bank->searchBankbook()) {
-                $bank->cor_num = 0;
+                $bank->extCorrelation = 0;
                 //mybe save output? num
                 return $bank->save();
             //}
@@ -181,7 +181,7 @@ class Bankbook extends CActiveRecord {
             //$bank->total=ltrim(substr($line,65,14),' ');
             if (!$bank->searchBankbook()) {
                 //mybe save output? num
-                $bank->cor_num = 0;
+                $bank->extCorrelation = 0;
                 //print_r($bank);
                 return $bank->save();
             }
@@ -207,7 +207,7 @@ class Bankbook extends CActiveRecord {
             $bank->total = (ltrim(substr($line, 47, 12), '0 ')) * $sighn;
             if (!$bank->searchBankbook()) {
                 //mybe save output? num
-                $bank->cor_num = 0;
+                $bank->extCorrelation = 0;
                 return $bank->save();
             }
         }

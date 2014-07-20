@@ -16,7 +16,7 @@ class FormDeposit  extends CFormModel{
     public $refnum=0;
     public $currency_id='';
     public $date;
-    public $sum=0;
+    public $cheq_sum=0;
     public $cash_sum=0;
     public $Deposit=array();
     public $Total=array();

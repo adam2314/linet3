@@ -15,6 +15,24 @@ class basicRecord extends CActiveRecord{
     public function tableName() {
         return (Yii::app()->db->tablePrefix . self::table);
     }*/
+    
+    public static function getList($const=null){
+        //if($const===null){
+            $arr= self::model()->findAll();
+            
+            //
+        //}
+        
+        foreach($arr as &$item){
+            $item->name=Yii::t('app',$item->name);
+        }
+        
+        
+        return CHtml::listData($arr, 'id', 'name');
+    }
+    
+    
+    
     public function __toString()
     {
         $vars = $this->getAttributes();

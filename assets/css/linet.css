@@ -25,6 +25,12 @@ Author : adam
     #footer {
         display:none;
     }
+    .button-column{
+        display: none;
+    }
+    input{
+        border: none;
+    }
     div.page{
         page-break-after:always;
 
@@ -32,6 +38,11 @@ Author : adam
     .box{
         border:none;
     }
+    a:link, a:visited {background:transparent;font-weight:700;text-decoration:underline;}
+    /*a:link:after, a:visited:after {content:" (" attr(href) ")";font-size:90%;}*/
+     a[href]:after {
+    content: "";
+  }
 
 }
 @media (min-width: 1164px){

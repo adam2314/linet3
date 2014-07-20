@@ -15,22 +15,9 @@
  * @property integer $docStatus_id
  * @property integer $last_docnum
  */
-class Doctype extends CActiveRecord {
+class Doctype extends basicRecord {
 
-    public static function getList($const=null){
-        //if($const===null){
-            $arr= self::model()->findAll();
-            
-            //
-        //}
-        
-        foreach($arr as &$item){
-            $item->name=Yii::t('app',$item->name);
-        }
-        
-        
-        return CHtml::listData($arr, 'id', 'name');
-    }
+    
     
     
     const table = '{{docType}}';

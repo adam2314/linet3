@@ -5,13 +5,13 @@
  *
  * The followings are the available columns in table 'extCorrelation':
  * @property integer $id
- * @property string $in
- * @property string $out
  * @property integer $owner
  */
 class ExtCorrelation extends CActiveRecord
 {
     const table='{{extCorrelation}}';
+    public $date_from;
+    public $date_to;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -20,6 +20,22 @@ class ExtCorrelation extends CActiveRecord
 		return self::table;
 	}
 
+        
+        
+        public function delete(){
+            foreach ($this->Transactions as $transaction){
+                $transaction->extCorrelation=0;
+                $transaction->save();
+            }
+            foreach ($this->Bankbooks as $bankbook){
+                $bankbook->extCorrelation=0;
+                $bankbook->save();
+            }
+            
+            
+            return parent::delete();
+        }
+        
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -28,11 +44,11 @@ class ExtCorrelation extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('in, out, owner', 'required'),
-			array('owner', 'numerical', 'integerOnly'=>true),
+			//array('in, out, owner', 'required'),
+			array('account_id, owner', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, in, out, owner', 'safe', 'on'=>'search'),
+			array('id, owner', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -44,6 +60,10 @@ class ExtCorrelation extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'Transactions' => array(self::HAS_MANY, 'Transactions', 'extCorrelation'),
+                    'Bankbooks' => array(self::HAS_MANY, 'Bankbook', 'extCorrelation'),
+                    'Account' => array(self::BELONGS_TO, 'Accounts', 'account_id'),
+                    'Owner' => array(self::BELONGS_TO, 'User', 'owner'),
 		);
 	}
 
@@ -54,8 +74,6 @@ class ExtCorrelation extends CActiveRecord
 	{
 		return array(
 			'id' => Yii::t('labels','ID'),
-			'in' => Yii::t('labels','In'),
-			'out' => Yii::t('labels','Out'),
 			'owner' => Yii::t('labels','Owner'),
 		);
 	}
@@ -79,8 +97,6 @@ class ExtCorrelation extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('in',$this->in,true);
-		$criteria->compare('out',$this->out,true);
 		$criteria->compare('owner',$this->owner);
 
 		return new CActiveDataProvider($this, array(
@@ -88,6 +104,7 @@ class ExtCorrelation extends CActiveRecord
 		));
 	}
 
+        
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

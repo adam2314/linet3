@@ -74,7 +74,10 @@ class Doccheques extends basicRecord {
 
         $out = new Transactions();
         $out->num = $num;
-        $out->account_id = $this->Type->oppt_account_id;
+        if($this->Type->oppt_account_id!=0)
+            $out->account_id = $this->Type->oppt_account_id;
+        else
+            $out->account_id = $this->creditcompany;
         $out->type = $tranType;
         $out->refnum1 = $refnum;
         $out->valuedate = $valuedate;

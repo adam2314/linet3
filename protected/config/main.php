@@ -135,24 +135,11 @@ return CMap::mergeArray(
                 'log' => array(
                     'class' => 'CLogRouter',
                     'routes' => array(
-                        array(
-                            'class' => 'CWebLogRoute',
-                        //'levels' => 'database,db,all,app,info,error,warning',
-                        //'levels'=>'trace, info, error, warning, application',
-                        //'categories' => 'system.db.*, application',
-                        //'filter' => array(
-                        //     'class' => 'CLogFilter',
-                        //    'prefixSession' => true,
-                        //    'prefixUser' => false,
-                        //     'logUser' => false,
-                        //     'logVars' => array(),
-                        // ),
-                        ),
+                        //array('class' => 'CWebLogRoute',),
                         array(
                             'class' => 'CFileLogRoute',
                             'levels' => 'trace, info, error, warning',
                             'categories' => 'app',
-                        //'categories'=>'*',
                         ),
                     /* array(
                       'class'=>'CEmailLogRoute',

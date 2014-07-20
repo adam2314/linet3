@@ -115,10 +115,10 @@ CREATE TABLE `bankbook` (
   `account_id` int(11) DEFAULT NULL,
   `date` timestamp NULL DEFAULT NULL,
   `details` varchar(60) DEFAULT NULL,
-  `refnum` char(10) DEFAULT NULL,
+  `refnum` char(255) DEFAULT NULL,
   `sum` decimal(8,2) DEFAULT NULL,
   `total` decimal(8,2) DEFAULT NULL,
-  `cor_num` varchar(30) DEFAULT NULL,
+  `extCorrelation` int(11) DEFAULT NULL,
   `currency_id` varchar(3) NOT NULL,
   PRIMARY KEY (`id`)
 );
@@ -227,6 +227,7 @@ CREATE TABLE `docs` (
   `due_date` timestamp NULL DEFAULT NULL,
   `modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `discount` decimal(20,2) NOT NULL,
+  `disType` tinyint(1) NOT NULL,
   `sub_total` decimal(20,2) DEFAULT NULL,
   `novat_total` decimal(20,2) DEFAULT NULL,
   `vat` decimal(20,2) DEFAULT NULL,
@@ -259,8 +260,7 @@ CREATE TABLE `eavFields` (
 );
 CREATE TABLE `extCorrelation` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `in` text NOT NULL,
-  `out` text NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
   `owner` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 );
@@ -279,8 +279,7 @@ CREATE TABLE `files` (
 
 CREATE TABLE `intCorrelation` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `in` text NOT NULL,
-  `out` text NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
   `owner` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 );
@@ -392,6 +391,9 @@ CREATE TABLE `transactions` (
   `type` int(11) NOT NULL,
   `refnum1` varchar(255) NOT NULL,
   `refnum2` varchar(255) NOT NULL,
+  `intCorrelation` int(11) NOT NULL,
+  `intType` tinyint(1) NOT NULL,
+  `extCorrelation` int(11) NOT NULL,
   `valuedate` timestamp NOT NULL ,
   `date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `details` varchar(255) NOT NULL,
