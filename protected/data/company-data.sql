@@ -405,7 +405,11 @@ INSERT INTO `config` (`id`, `value`, `eavType`, `hidden`, `priority`) VALUES
 ('transactionType.chequedeposit', '4', 'integer', 1, 40),
 ('transactionType.manual', '0', 'integer', 1, 40),
 ('transactionType.openBalance', '16', 'integer', 1, 40),
-('transactionType.supplierPayment', '5', 'integer', 1, 40);
+('transactionType.supplierPayment', '5', 'integer', 1, 40),
+('pelecard.userName', '', 'string', 0, 40), 
+('pelecard.password', '', 'string', 0, 40), 
+('pelecard.termNo', '', 'string', 0, 40), 
+('pelecard.shopNo', '', 'string', 0, 40);
 
 
 INSERT INTO `curRates` (`id`, `currency_id`, `date`, `value`) VALUES
@@ -482,9 +486,10 @@ INSERT INTO `itemVatCat` (`id`, `name`) VALUES
 INSERT INTO `paymentType` (`id`, `name`, `value`, `oppt_account_id`) VALUES
 (1, 'Cash', '', 10),
 (2, 'Cheque', '', 7),
-(3, 'Credit card', '', 11),
+(3, 'Credit card', 'DebitRegularType', 11),
 (4, 'Bank transfer', '', 0),
-(5, 'Manual Credit', '', 11);
+(5, 'Manual Credit', '', 11),
+(6, 'Credit card - payments', 'DebitPaymntsType', 11);
 
 INSERT INTO `Rights` (`itemname`, `type`, `weight`) VALUES
 ('Authenticated', 2, 1),

@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS `AuthItemChild` (
 
 DROP TABLE IF EXISTS `creditErrorCode`;
 CREATE TABLE IF NOT EXISTS `creditErrorCode` (
-  `ErrorID` int(3) NOT NULL DEFAULT '0',
-  `ErrorText` varchar(158) DEFAULT NULL,
+  `id` varchar(3) NOT NULL DEFAULT '000',
+  `ErrorText` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ErrorID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

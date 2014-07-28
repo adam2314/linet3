@@ -54,6 +54,7 @@
             
              <div class="navbar-collapse navbar-ex1-collapse collapse" style="height: 1px;">
                 <?php Yii::app()->bootstrap->register();?>
+                 <?php Yii::app()->tinymce->register();?>
                  <?php 
                  if(!Yii::app()->user->isGuest){
 			$this->widget('bootstrap.widgets.TbMenu', array('items'=>Yii::app()->user->menu,'htmlOptions'=>array('class'=>'navbar-nav')));

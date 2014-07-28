@@ -9,8 +9,8 @@
 
         <?php 
         $list=array(
-            array('id'=>'Acctype','name'=>'Account type'),
-            array('id'=>'Doctype','name'=>'Documenet type'),
+            array('id'=>'Accounts','name'=>'Account type'),
+            array('id'=>'Docs','name'=>'Documenet type'),
         );
         
         
@@ -27,7 +27,6 @@
         <?php $this->widget('ext.tinymce.TinyMce', array(
             'model' => $model,
             'attribute' => 'body',
-            'spellcheckerUrl' => 'http://speller.yandex.net/services/tinyspell',
         )); ?>
 
 	<?php //echo $form->textFieldRow($model,'openformat',array('class'=>'span5','maxlength'=>5)); ?>

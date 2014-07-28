@@ -425,12 +425,23 @@ CREATE TABLE `mailTemplate` (
   `subject` varchar(255) NOT NULL,
   `cc` varchar(255) NOT NULL,
   `bcc` varchar(255) NOT NULL,
-  `entity_type` int(11) NOT NULL,
+  `entity_type` varchar(255) NOT NULL,
   `entity_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 );
 
-
-
+CREATE TABLE IF NOT EXISTS `mail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `to` varchar(255) NOT NULL,
+  `from` varchar(255) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `cc` varchar(255) NOT NULL,
+  `bcc` varchar(255) NOT NULL,
+  `body` text NOT NULL,
+  `files` int(11) NOT NULL,
+  `create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+);
 
 SET FOREIGN_KEY_CHECKS=1;

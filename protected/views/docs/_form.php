@@ -266,14 +266,15 @@ $form = $this->beginWidget('CActiveForm', array(
                         <?php echo $form->labelEx($model, 'discount'); ?>
                         <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));  ?>
                         <?php echo $form->error($model, 'discount'); ?>
-                        
+
                     </td>
                     <td>
                         <?php echo $form->textField($model, 'discount', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
                     </td>
-                    <td><?php 
-                        echo "<label>".Yii::t('app',"in percentage")."</label>".
-                                $form->checkBox($model,"disType", '', array('value' => 1, 'uncheckValue' => 0)); ?>
+                    <td><?php
+                        echo "<label>" . Yii::t('app', "in percentage") . "</label>" .
+                        $form->checkBox($model, "disType", '', array('value' => 1, 'uncheckValue' => 0));
+                        ?>
                     </td>
                     <td class="docadd">
                         <?php
@@ -312,9 +313,9 @@ $form = $this->beginWidget('CActiveForm', array(
                     <td></td>
                     <td></td>
                     <td>
-                        <label><?php echo Yii::t('app','Subtotal VAT'); ?></label>
+                        <label><?php echo Yii::t('app', 'Subtotal VAT'); ?></label>
                         <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));   ?>
-                        <?php //echo $form->error($model, 'sub_total'); ?>
+                        <?php //echo $form->error($model, 'sub_total');  ?>
                     </td>
                     <td>
                         <div id="docvat"></div>
@@ -334,7 +335,7 @@ $form = $this->beginWidget('CActiveForm', array(
                     <td></td>
                     <td>
                         <?php //echo $form->labelEx($model,'novat_total');   ?>
-                        <?php //echo $form->error($model,'novat_total');    ?>
+                        <?php //echo $form->error($model,'novat_total');     ?>
                     </td>
                     <td>
                         <?php echo $form->hiddenField($model, 'novat_total'); ?>
@@ -391,7 +392,7 @@ $form = $this->beginWidget('CActiveForm', array(
                     <th class="type"><?php echo Yii::t('labels', 'Type'); ?></th>   
                     <th class="refnum"><?php echo Yii::t('labels', 'Refnum'); ?></th>
 
-                    <th class="creditcompany"><?php echo Yii::t('labels', 'Credit Company'); ?></th>
+                    <th class="creditcompany"><?php echo Yii::t('labels', 'Credit Company/Bank'); ?></th>
                     <th class="cheque_num"><?php echo Yii::t('labels', 'Cheque No.'); ?></th>
                     <th class="bank"><?php echo Yii::t('labels', 'Bank'); ?></th>
                     <th class="branch"><?php echo Yii::t('labels', 'Branch'); ?></th>
@@ -399,7 +400,7 @@ $form = $this->beginWidget('CActiveForm', array(
                     <th class="cheque_date"><?php echo Yii::t('labels', 'Cheque Date'); ?></th>
                     <th class="currency_id"><?php echo Yii::t('labels', 'Currency'); ?></th>
                     <th class="sum"><?php echo Yii::t('labels', 'Sum'); ?></th>
-                    
+
 
                     <th class="actions"><?php echo Yii::t('labels', 'Action'); ?></th>
                 </tr>
@@ -470,57 +471,74 @@ $form = $this->beginWidget('CActiveForm', array(
     if ($model->docType->iscontract) {
         echo 'contract';
     }
+
+
+
+
+    $this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
+        'id' => "paymenetDialog",
+        'options' => array(
+            'title' => Yii::t('app', 'Pay'),
+            'autoOpen' => false,
+            'width' => '600px',
+        ),
+    ));
+    ?>
+    <div id="paymenetForm"></div>    
+    <div id="paymenetResult"></div>
+    <?php
+    $this->endWidget('zii.widgets.jui.CJuiDialog');
     ?>
     <!--</div>-->
     <script type="text/javascript">
         /*
          
-        function CalcDueDate(valdate, pay_terms) {
-            var em = 0;
-            pay_terms = parseInt(pay_terms);
-            if (pay_terms >= 0) {
-                em = 0;
-            } else {
-                em = 1;
-                pay_terms = pay_terms * -1;
-            }
-            //var duedate = $('#Docs_due_date');//document.form1.due_date;
-            var dstr = valdate;
-            var darr = dstr.split("-");
-            var day = parseInt(darr[0]);
-            var month = parseFloat(darr[1]);
-            var year = parseInt(darr[2]);
+         function CalcDueDate(valdate, pay_terms) {
+         var em = 0;
+         pay_terms = parseInt(pay_terms);
+         if (pay_terms >= 0) {
+         em = 0;
+         } else {
+         em = 1;
+         pay_terms = pay_terms * -1;
+         }
+         //var duedate = $('#Docs_due_date');//document.form1.due_date;
+         var dstr = valdate;
+         var darr = dstr.split("-");
+         var day = parseInt(darr[0]);
+         var month = parseFloat(darr[1]);
+         var year = parseInt(darr[2]);
+         
+         if (em) {
+         month += 1;
+         if (month > 12) {
+         month = 1;
+         year += 1;
+         }
+         day = 1;
+         
+         }
+         
+         D = new Date(year, month - 1, day);
+         D.setDate(D.getDate() + pay_terms);
+         day = D.getDate();
+         month = D.getMonth() + 1;
+         year = D.getFullYear();
+         if (month >= 12) {
+         month = 1;
+         year += 1;
+         }
+         //aler
+         $('#Docs_due_date').val(day + "-" + month + "-" + year);
+         }
+         
+         */
 
-            if (em) {
-                month += 1;
-                if (month > 12) {
-                    month = 1;
-                    year += 1;
-                }
-                day = 1;
 
-            }
 
-            D = new Date(year, month - 1, day);
-            D.setDate(D.getDate() + pay_terms);
-            day = D.getDate();
-            month = D.getMonth() + 1;
-            year = D.getFullYear();
-            if (month >= 12) {
-                month = 1;
-                year += 1;
-            }
-            //aler
-            $('#Docs_due_date').val(day + "-" + month + "-" + year);
-        }
 
-*/
- 
+        var billed = [];
 
-        
-        
-        
-        
 
         $("#Docs_account_id").change(function() {
             var idate = $('#Docs_issue_date').val();
@@ -545,14 +563,28 @@ $form = $this->beginWidget('CActiveForm', array(
 
         jQuery(document).ready(function() {
             $("#docs-form").submit(function() {
-
-                if (($('#Docs_total').length) && ($('#Docs_rcptsum').length)) {
-                    if (Number($('#Docs_total').val()) != Number($('#Docs_rcptsum').val())) {
-                        alert("<?php echo Yii::t('app','Sum is not equal');?>");
-                        return false;
-                    }
+                var go = true;
+                for (var i = 0; i < billed.length; i++) {
+                    console.log("billed:" + i + "," + billed[i]);
+                    if (!billed[i])
+                        go = false;
                 }
+                if (go)
+                    return true;
+                else
+                    return false;
+
+                //else
+                //    return rcptBill();
             });
+
+
+            function submitDoc() {
+
+
+
+            }
+
 
             //hideEmptyHeaders();
             $(".docadd").click(function() {
@@ -633,6 +665,70 @@ $form = $this->beginWidget('CActiveForm', array(
         });
         /*******************end ready*****************************/
 
+        function makeRcpt(i) {
+            billed[0] = true;
+            $('#docs-form').submit();
+
+        }
+
+
+
+        function sendBill() {
+            var str = $("#billForm").serializeArray();
+            var type = $("#Payment_id").val();
+            $.post("<?php echo $this->createUrl('/payment/bill'); ?>/" + type, str,
+                    function(data) {
+                        //$("#paymenetDialog").show();
+                        off = false;
+                        //console.log(data);
+                        //alert(data);
+                        //$('#paymenetDialog').dialog('open');
+                        //show popup 
+
+                        $('#paymenetResult').html(data[1]);
+
+                    }, "json");//
+
+            //console.log(str);
+        }
+
+
+
+        function rcptBill() {
+
+
+            var elements = $('[id^=Doccheques_][id$=_type]');
+            var sums = $('[id^=Doccheques_][id$=_sum]');
+            var off = false;
+            for (var i = 0; i < elements.length; i++) {
+
+                billed[i] = false;
+
+                $.post("<?php echo $this->createUrl('/payment/form'); ?>/" + elements[i].value, {"bill": {"sum": $(sums[i]).val(), "line": [i]}}, //"bill"
+                function(data) {
+                    //$("#paymenetDialog").show();
+                    off = true;
+                    //console.log(data);
+                    if (!data[1]) {
+                        billed[data[0]] = true;
+
+                        $('#docs-form').submit();
+                    } else {
+                        //   return true;
+                        $('#paymenetDialog').dialog('open');
+                        //show popup 
+                        var tmp = "<input type='hidden' id='bill_line' value='" + i + "'/>";
+                        $('#paymenetForm').html(tmp + data[1]);
+                    }
+                }, "json");//
+                //move values
+
+                //save
+            }
+            return false;//off;
+        }
+
+
         function changeFileds() {//
             var type = <?php echo (int) $model->docType->oppt_account_type; ?>;
             if (type >= 1) {
@@ -708,61 +804,61 @@ $form = $this->beginWidget('CActiveForm', array(
         function TypeSelChange(index) {
             var val = $('#Doccheques_' + index + '_type').val();
 
-            //$('#Doccheques_'+index+"#banksel"+num).parent().append("<?php //echo PrintBankSelect();                ?>");
+            //$('#Doccheques_'+index+"#banksel"+num).parent().append("<?php //echo PrintBankSelect();                      ?>");
             $('#Doccheques_' + index + "_cheque_acct").attr('placeholder', '');
             $('#Doccheques_' + index + "_cheque_num").attr('placeholder', '');
             $('#Doccheques_' + index + "_branch").attr('placeholder', '');
             $('#Doccheques_' + index + "_banksel").remove();
-            
+
             $('#Doccheques_' + index + "_refnum").hide();
             $('#Doccheques_' + index + "_creditcompany").hide();
             $('#Doccheques_' + index + "_cheque_num").hide();
-            
+
             $('#Doccheques_' + index + "_bank").hide();
             $('#Doccheques_' + index + "_branch").hide();
             $('#Doccheques_' + index + "_cheque_acct").hide();
             $('#Doccheques_' + index + "_cheque_date").hide();
-              
-            
+
+
             //$('#Doccheques_' + index + "_bank_chosen").hide();
-            
-            
-            
-            
-            
+
+
+
+
+
             if ((val == 1) || (val == 3)) {//cash, credit
-               
+
             } else if (val == 2) {//cheque
                 $('#Doccheques_' + index + "_cheque_date").show();
                 $('#Doccheques_' + index + "_cheque_num").show();
                 $('#Doccheques_' + index + "_bank").show();
                 $('#Doccheques_' + index + "_branch").show();
                 $('#Doccheques_' + index + "_cheque_acct").show();
-            } else if ((val == 4)|| (val == 5))  {//bank transfer
+            } else if ((val == 4) || (val == 5)) {//bank transfer
                 $('#Doccheques_' + index + "_cheque_date").show();
-                $('#Doccheques_' + index + "_cheque_num").show();
+                $('#Doccheques_' + index + "_refnum").show();
                 $('#Doccheques_' + index + "_cheque_num").attr('placeholder', 'Reference');
                 $('#Doccheques_' + index + "_bank").show();
                 $('#Doccheques_' + index + "_branch").show();
                 $('#Doccheques_' + index + "_creditcompany").show();
                 $('#Doccheques_' + index + "_cheque_acct").show();
             } else if (val == 5) {//manuel credit
-              
+
                 /*
-                $('#Doccheques_' + index + "_cheque_date").show();
-
-                $('#Doccheques_' + index + "_bank").parent().append('<?php //echo PrintCreditCompany();                ?>');
-                $('#Doccheques_' + index + "_bank").remove();
-
-                $('#Doccheques_' + index + "_branch").show();
-                $('#Doccheques_' + index + "_cheque_num").attr('placeholder', 'Reference');
-
-
-                $('#Doccheques_' + index + "_cheque_acct").show();
-                $('#Doccheques_' + index + "_branch").attr('placeholder', 'Number of payments');
-                $('#Doccheques_' + index + "_cheque_num").show();
-                $('#Doccheques_' + index + "_cheque_acct").attr('placeholder', 'last four digits of credit card');
-                */
+                 $('#Doccheques_' + index + "_cheque_date").show();
+                 
+                 $('#Doccheques_' + index + "_bank").parent().append('<?php //echo PrintCreditCompany();                      ?>');
+                 $('#Doccheques_' + index + "_bank").remove();
+                 
+                 $('#Doccheques_' + index + "_branch").show();
+                 $('#Doccheques_' + index + "_cheque_num").attr('placeholder', 'Reference');
+                 
+                 
+                 $('#Doccheques_' + index + "_cheque_acct").show();
+                 $('#Doccheques_' + index + "_branch").attr('placeholder', 'Number of payments');
+                 $('#Doccheques_' + index + "_cheque_num").show();
+                 $('#Doccheques_' + index + "_cheque_acct").attr('placeholder', 'last four digits of credit card');
+                 */
             }//*/
         }
 
@@ -806,7 +902,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 function(smalldata) {
                     smalldata = jQuery.parseJSON(smalldata);
                     $('#Docdetails_' + index + '_iVatRate').val(smalldata.vat);
-                    CalcPrice(index,true);
+                    CalcPrice(index, true);
                 });
 
 
@@ -827,44 +923,44 @@ $form = $this->beginWidget('CActiveForm', array(
             }
         }
 
-function CalcPrice(index,hChange) {//.org
-          hChange = typeof hChange !== 'undefined' ? hChange : true;
-          var qty = $('#Docdetails_' + index + '_qty').val();
-          var iItem = $('#Docdetails_' + index + '_iItem').val();
-          //var ihItem = $('#Docdetails_' + index + '_ihItem').val();
-          var rate = $('#Docdetails_' + index + '_rate').val();
-          var doc_rate = $('#doc_rate').val();
-          var vat = $('#Docdetails_' + index + '_iVatRate').val();
-          var itemtotal;
+        function CalcPrice(index, hChange) {//.org
+            hChange = typeof hChange !== 'undefined' ? hChange : true;
+            var qty = $('#Docdetails_' + index + '_qty').val();
+            var iItem = $('#Docdetails_' + index + '_iItem').val();
+            //var ihItem = $('#Docdetails_' + index + '_ihItem').val();
+            var rate = $('#Docdetails_' + index + '_rate').val();
+            var doc_rate = $('#doc_rate').val();
+            var vat = $('#Docdetails_' + index + '_iVatRate').val();
+            var itemtotal;
 
-          var iTotal = (iItem * qty).toFixed(2);//qty
-          
-          iTotal = iTotal * (rate / doc_rate);//rate
-          
-          $('#Docdetails_' + index + '_iTotallabel').html(iTotal.toFixed(2));
-          $('#Docdetails_' + index + '_iTotal').val(iTotal.toFixed(2));
-          $('#Docdetails_' + index + '_iTotalVat').val((iTotal*((vat/100)+1)).toFixed(2));
+            var iTotal = (iItem * qty).toFixed(2);//qty
 
+            iTotal = iTotal * (rate / doc_rate);//rate
 
-          if (hChange){
-              $('#Docdetails_' + index + '_ihTotal').val(iTotal);
-              
-          }else{
-              var ihTotal = (iItem * qty).toFixed(2);//qty
-              ihTotal = ihTotal * (rate / doc_rate);//rate
-              $('#Docdetails_' + index + '_ihTotal').val(ihTotal);
-              return ihTotal;
-          }
-          
-          return CalcPriceSum();
-      }
+            $('#Docdetails_' + index + '_iTotallabel').html(iTotal.toFixed(2));
+            $('#Docdetails_' + index + '_iTotal').val(iTotal.toFixed(2));
+            $('#Docdetails_' + index + '_iTotalVat').val((iTotal * ((vat / 100) + 1)).toFixed(2));
 
 
-        
+            if (hChange) {
+                $('#Docdetails_' + index + '_ihTotal').val(iTotal);
+
+            } else {
+                var ihTotal = (iItem * qty).toFixed(2);//qty
+                ihTotal = ihTotal * (rate / doc_rate);//rate
+                $('#Docdetails_' + index + '_ihTotal').val(ihTotal);
+                return ihTotal;
+            }
+
+            return CalcPriceSum();
+        }
+
+
+
         function CalcPriceSum(org) {
             var elements = $('[id^=Docdetails][id$=ihTotal]');
             var selements = $('[id^=Docdetails][id$=_iVatRate]');
-            var vattotal = novattotal =subtotal = 0;
+            var vattotal = novattotal = subtotal = 0;
             //var  = 0;
             //var novat_total=0;
             for (var i = 0; i < elements.length; i++) {
@@ -877,7 +973,7 @@ function CalcPrice(index,hChange) {//.org
                 //console.log(selements[i].id);
                 //if(vatper!=0){
                 subtotal += itemtotal;
-                if(vat!=0)
+                if (vat != 0)
                     vattotal += (vat / 100) * itemtotal;
                 else
                     novattotal += itemtotal;
@@ -890,8 +986,8 @@ function CalcPrice(index,hChange) {//.org
             $('#Docs_novat_total').val(novattotal.toFixed(2));
             $('#Docs_total').val((subtotal + vattotal).toFixed(2)).trigger('change');//novat_total
         }
-        
-        
+
+
         function totalChange(index, calc) {
             calc = typeof calc !== 'undefined' ? calc : true;
 
@@ -907,27 +1003,27 @@ function CalcPrice(index,hChange) {//.org
 
             $('#Docdetails_' + index + '_iItem').val(ihItem.toFixed(2));//
             if (calc)
-               return CalcPrice(index,true);
+                return CalcPrice(index, true);
             return ihItem;
         }
 
         //total + vat change
-        function totalVatChange(index,calc) {
+        function totalVatChange(index, calc) {
             calc = typeof calc !== 'undefined' ? calc : true;
-            var iVatRate = Number($('#Docdetails_' + index + '_iVatRate').val());      
-            var iTotalVat= Number($('#Docdetails_' + index + '_iTotalVat').val());
-            if(calc){
-                ihTotal=$('#Docdetails_' + index + '_ihTotal').val();
+            var iVatRate = Number($('#Docdetails_' + index + '_iVatRate').val());
+            var iTotalVat = Number($('#Docdetails_' + index + '_iTotalVat').val());
+            if (calc) {
+                ihTotal = $('#Docdetails_' + index + '_ihTotal').val();
             }
 
-            ihTotal = iTotalVat-(iTotalVat*(iVatRate/100))/(1+(iVatRate/100));
+            ihTotal = iTotalVat - (iTotalVat * (iVatRate / 100)) / (1 + (iVatRate / 100));
 
             $('#Docdetails_' + index + '_ihTotal').val(ihTotal.toFixed(2));
             //$('#Docdetails_' + index + '_iTotal').val(ihTotal.toFixed(2));
             $('#Docdetails_' + index + '_iTotallabel').html(ihTotal.toFixed(2));
             $('#Docdetails_' + index + '_iTotal').val(ihTotal.toFixed(2));
             //totalChange(index);
-            
+
             return totalChange(index);
         }
 
@@ -936,8 +1032,8 @@ function CalcPrice(index,hChange) {//.org
             total = $('#Docs_sub_total').val();
             discount = $('#Docs_discount').val();
             var iTotals = $('[id^=Docdetails][id$=ihTotal]');
-            var sum=vatSum=novatSum=0;
-            
+            var sum = vatSum = novatSum = 0;
+
             for (var i = 0; i < iTotals.length; i++) {
 
                 //if ($('#Docs_disType').attr('checked')) {
@@ -947,25 +1043,25 @@ function CalcPrice(index,hChange) {//.org
                 //}
                 //var iVatRate = Number($('#Docdetails_' + i + '_iVatRate').val());
 
-                var ihTotal = CalcPrice(i,false);//get ihtotal with vat:)
-                var vatRate=$('#Docdetails_' + i + '_iVatRate').val()/100;
+                var ihTotal = CalcPrice(i, false);//get ihtotal with vat:)
+                var vatRate = $('#Docdetails_' + i + '_iVatRate').val() / 100;
                 //ihVat = iTotal * (iVatRate / 100);
-                
+
                 if ($('#Docs_disType').attr('checked')) {
-                    ihTotal = ihTotal - ((ihTotal/100) * discount);
+                    ihTotal = ihTotal - ((ihTotal / 100) * discount);
                 } else {
-                    ihTotal = ihTotal - ((ihTotal/total) * discount);
+                    ihTotal = ihTotal - ((ihTotal / total) * discount);
                 }
 
 
 
                 $('#Docdetails_' + i + '_ihTotal').val(ihTotal.toFixed(2));
-                
-                sum+=ihTotal;
-                if(vatRate!=0)
-                vatSum+=(ihTotal*(vatRate));
+
+                sum += ihTotal;
+                if (vatRate != 0)
+                    vatSum += (ihTotal * (vatRate));
                 else
-                    novatSum+=ihTotal;
+                    novatSum += ihTotal;
                 console.log(ihTotal);
                 //totalVatChange(i, false);
             }
@@ -1053,6 +1149,27 @@ function CalcPrice(index,hChange) {//.org
             $('#subType').val(value);
             if (value == 'preview')
                 $("#docs-form").attr('target', '_BLANK');
+
+
+
+
+
+            if (($('#Docs_total').length) && ($('#Docs_rcptsum').length)) {
+                if (Number($('#Docs_total').val()) != Number($('#Docs_rcptsum').val())) {
+                    alert("<?php echo Yii::t('app', 'Sum is not equal'); ?>");
+                    return false;
+                }
+            }
+            rcptBill();
+
+
+
+
+
+
+
+
+
             $('#docs-form').submit();
             //return false;
         }
@@ -1063,7 +1180,6 @@ function CalcPrice(index,hChange) {//.org
         $this->widget('ext.tinymce.TinyMce', array(
             'model' => $model,
             'attribute' => 'description',
-            'spellcheckerUrl' => 'http://speller.yandex.net/services/tinyspell',
         ));
         ?>
         <?php echo $form->error($model, 'description'); ?>
@@ -1079,7 +1195,6 @@ function CalcPrice(index,hChange) {//.org
         $this->widget('ext.tinymce.TinyMce', array(
             'model' => $model,
             'attribute' => 'comments',
-            'spellcheckerUrl' => 'http://speller.yandex.net/services/tinyspell',
         ));
         ?>
         <?php echo $form->error($model, 'comments'); ?>
@@ -1089,7 +1204,7 @@ function CalcPrice(index,hChange) {//.org
         <!--</div>
         
         <div class="row buttons">-->
-        <?php //echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save');  ?>
+        <?php //echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save');   ?>
         <?php
         $this->widget('bootstrap.widgets.TbButton', array(
             'label' => Yii::t('app', 'Preview'),
@@ -1125,7 +1240,7 @@ function CalcPrice(index,hChange) {//.org
         ));
         ?>
 
-        <?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name')); //Docstatus::model()->findAll();   ?>
+        <?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name')); //Docstatus::model()->findAll();    ?>
         <!--</div>-->
     </div>
 

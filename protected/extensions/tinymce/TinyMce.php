@@ -49,7 +49,7 @@ class TinyMce extends CInputWidget
 
 
     private static $defaultSettings = array(
-        'language' => 'ru',
+        'language' => 'he_IL',
         'plugins' => array(
             "advlist autolink lists link image charmap print preview hr anchor pagebreak",
             "searchreplace visualblocks visualchars code fullscreen",
@@ -64,7 +64,7 @@ class TinyMce extends CInputWidget
 
         'relative_urls' => false,
 
-        'spellchecker_languages' => "+Русский=ru",
+        //'spellchecker_languages' => "+Русский=ru",
     );
     /** @var array Widget settings will override defaultSettings */
     public $settings = array();
@@ -118,6 +118,15 @@ class TinyMce extends CInputWidget
 
     private function registerScripts($id)
     {
+        $cs=$this->register();
+
+        $settings = CJavaScript::encode($this->settings);
+
+        $cs->registerScript("{$id}_tinyMce_init", "$('#{$id}').tinymce({$settings});");
+    }
+    
+    public function register(){
+        
         $cs = Yii::app()->getClientScript();
         $cs->registerCoreScript('jquery');
         if ($this->compressorRoute === false) {
@@ -141,9 +150,7 @@ class TinyMce extends CInputWidget
             $fm->init();
             $this->settings['file_browser_callback'] = $fm->getFileBrowserCallback();
         }
-
-        $settings = CJavaScript::encode($this->settings);
-
-        $cs->registerScript("{$id}_tinyMce_init", "$('#{$id}').tinymce({$settings});");
+        
+        return $cs;
     }
 }

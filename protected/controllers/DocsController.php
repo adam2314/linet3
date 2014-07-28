@@ -8,7 +8,7 @@ class DocsController extends RightsController {
         } else {
             $model = Docs::model()->findByNum($doctype, $docnum);
             if ($model === null) {
-                throw new CHttpException(404, Yii::t('app', 'The requested page does not exist1.'));
+                throw new CHttpException(404, Yii::t('app', 'The requested page does not exist.'));
             }
         }
 
@@ -26,17 +26,7 @@ class DocsController extends RightsController {
         ));
     }
 
-    public function actionPdf($model = null) {//usd for print*/
-        /* if(isset($_POST['language']))
-          Yii::app()->language=$_POST['language'];
-          //Yii::app()->language='he_il';
-          $this->layout='print';
-
-          if(is_null($model))
-          $model=$this->loadModel($id);
-         */
-        
-        
+    public function actionPdf($model = null,$return=true) {//usd for print*/
         $file = $this->actionPrint($model->id, 3, $model, true);
         //echo $file;
         //Yii::app()->end();
@@ -46,9 +36,9 @@ class DocsController extends RightsController {
         $configCertpasswd = Yii::app()->user->certpasswd;
 
 
-
-        $myPdf = $yiiBasepath . "/files/" . $configPath . "/docs/$model->doctype-$model->docnum.pdf";
-        $myPdfS = $yiiBasepath . "/files/" . $configPath . "/docs/$model->doctype-$model->docnum-signed.pdf";
+        $mypath =$yiiBasepath . "/files/" . $configPath . "/docs/";
+        $myPdf = $mypath . $model->docType->name."-$model->docnum.pdf";
+        $myPdfS = $mypath . $model->docType->name."-$model->docnum-signed.pdf";
 
 
         // mPDF
@@ -83,17 +73,25 @@ class DocsController extends RightsController {
             $renderedPdf = $pdf->render();
             file_put_contents($myPdfS, $renderedPdf);
         }else{
-            
             Yii::app()->end();
         }
         set_include_path($oldpath);
         spl_autoload_register(array('YiiBase', 'autoload'));
         
-        return Yii::app()->getRequest()->sendFile($model->docType->name."-".$model->docnum."-signed.pdf", $renderedPdf);
+        if($return){
+            return Yii::app()->getRequest()->sendFile($model->docType->name."-".$model->docnum."-signed.pdf", $renderedPdf);
+        }else{
+            
+            $doc_file = new Files();
+            $doc_file->name = $model->docType->name."-".$model->docnum."-signed.pdf"; //it might be $img_add->name for you, filename is just what I chose to call it in my model
+            $doc_file->path= "docs/";
+            $doc_file->parent_type=get_class($this);
+            $doc_file->parent_id = $this->id; // this links your picture model to the main model (like your user, or profile model)
 
+            $doc_file->save(); // DONE
+            echo CJSON::encode($doc_file->id);
+        }
 
-
-        //*/
         
     }
 
@@ -174,8 +172,10 @@ class DocsController extends RightsController {
                 $this->actionPrint($model->id, 1, $model);
                 return;
             case 'email':
-                //$this->actionPrint($model->id,  $model);
-                return;
+                if ($model->save())
+                    
+                    $this->actionPdf($model,false);
+                break;    
             case 'pdf':
                 if ($model->save())
                     $this->actionPdf($model);

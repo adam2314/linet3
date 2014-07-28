@@ -11,25 +11,46 @@
  *
  * @author adam
  */
-class MailController extends RightsController{
-    
-    
-    
-    public function actionCreate($id)	{
-		$model=new MailForm;
-                
-		// Uncomment the following line if AJAX validation is needed
-		//$this->performAjaxValidation($model);
+class MailController extends RightsController {
 
-		if(isset($_POST['MailForm']))		{
-			$model->attributes=$_POST['MailForm'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
-		}
+    public function actionCreate() {
+        $model = new Mail;
 
-		$this->render('create',array(
-			'model'=>$model,
-		));
-	}
+        // Uncomment the following line if AJAX validation is needed
+        //$this->performAjaxValidation($model);
+
+        if (isset($_POST['Mail'])) {
+            $model->attributes = $_POST['Mail'];
+            if ($model->save())
+                echo "done";
+                //$this->redirect(array('view', 'id' => $model->id));
+        }
+
+        $this->render('create', array(
+            'model' => $model,
+        ));
+    }
+/*
+    public function actionForm($id) {
+        
+        $type=$_POST['Mail']['obj'];
+        
+        $id=$_POST['Mail']['type'];
+        $model = MailTemplate::model()->findByTypeId($type,$id);
+        //echo CJSON::encode("echo ".$model->value);
+
+        if ($model->value == '') {
+            echo CJSON::encode(array($_POST['bill']['line'], false));
+            Yii::app()->end();
+        }
+
+
+        $form = new $model->value;
+        $form->type = $id;
+        $form->sum = $_POST['bill']['sum'];
+        $form->line = $_POST['bill']['line'];
+        echo CJSON::encode(array($form->line, $form->stoppage()));
+    }
+*/
     //put your code here
 }

@@ -67,13 +67,16 @@ class Bootstrap extends CApplicationComponent {
      * @since 0.9.11
      */
     public function registerYiiCss() {
-        Yii::app()->clientScript->registerCssFile($this->getAssetsUrl() . '/css/yii.css');
+        $cs = Yii::app()->getClientScript();
+        
+        
+        $cs->registerCssFile($this->getAssetsUrl() . '/css/yii.css');
 
 
-        Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/bootstrap/css/bootstrap.min.css'));
-        Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/Font-Awesome/css/font-awesome.min.css'));
-        Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/chosen/chosen.min.css'));
-        Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/jasny/css/jasny-bootstrap.min.css'));
+        $cs->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/bootstrap/css/bootstrap.min.css'));
+        $cs->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/Font-Awesome/css/font-awesome.min.css'));
+        $cs->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/chosen/chosen.min.css'));
+        $cs->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/jasny/css/jasny-bootstrap.min.css'));
 
 
         Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/main.css'));
@@ -91,7 +94,8 @@ class Bootstrap extends CApplicationComponent {
         Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/screenfull/screenfull.js'), CClientScript::POS_END);
         Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/main.js'), CClientScript::POS_END);
 
-
+        //$cs->registerScriptFile($this->assetsDir . '/js/tinymce/tinymce.min.js');
+        //$cs->registerScriptFile($this->assetsDir . '/js/tinymce/jquery.tinymce.min.js');
 
         Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/linet.js'), CClientScript::POS_HEAD);
     }

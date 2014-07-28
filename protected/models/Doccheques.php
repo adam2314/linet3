@@ -147,7 +147,7 @@ class Doccheques extends basicRecord {
         return array(
             'doc_id' => Yii::t('labels', 'Refnum'),
             'type' => Yii::t('labels', 'Type'),
-            'creditcompany' => Yii::t('labels', 'Creditcompany'),
+            'creditcompany' => Yii::t('labels', 'Credit Company/Bank'),
             'cheque_num' => Yii::t('labels', 'Cheque No.'),
             'bank' => Yii::t('labels', 'Bank'),
             'branch' => Yii::t('labels', 'Branch'),

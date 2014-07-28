@@ -31,6 +31,22 @@ class Doctype extends basicRecord {
         return parent::model($className);
     }
 
+     public static function getList($const=null){
+        //if($const===null){
+            $arr= self::model()->findAll();
+            
+            //
+        //}
+        
+        foreach($arr as &$item){
+            $item->name=Yii::t('app',$item->name);
+        }
+        
+        
+        return CHtml::listData($arr, 'id', 'name');
+    }
+    
+    
     public function getOpenType($key) {
         //$this->find
         $tmp = $this->findByAttributes(array('openformat' => $key));

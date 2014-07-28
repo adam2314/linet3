@@ -5,6 +5,7 @@
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
+Yii::setPathOfAlias('tinymce', dirname(__FILE__) . '/../extensions/tinymce');
 return CMap::mergeArray(
                 include(dirname(__FILE__) . '/install.php'), array(
             'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
@@ -21,6 +22,7 @@ return CMap::mergeArray(
                 'application.models.*',
                 'application.components.*',
                 'application.components.dashboard.*',
+                'application.components.payments.*',
                 'application.modules.rights.*',
                 'application.modules.rights.components.*',
             //'application.extensions.debugtoolbar.*',
@@ -47,8 +49,8 @@ return CMap::mergeArray(
                 'Smtpmail' => array(
                     'class' => 'application.extensions.smtpmail.PHPMailer',
                     'Host' => "smtp.gmail.com",
-                    'Username' => 'your@gmail.com',
-                    'Password' => 'password here',
+                    'Username' => '12@gmail.com',
+                    'Password' => '12',
                     'Mailer' => 'smtp',
                     'Port' => 587,
                     'SMTPAuth' => true,
@@ -66,6 +68,9 @@ return CMap::mergeArray(
                 ),
                 'bootstrap' => array(
                     'class' => 'bootstrap.components.Bootstrap',
+                ),
+                'tinymce' => array(
+                    'class' => 'tinymce.TinyMce',
                 ),
                 //'cache'=>array(
                 //        'class'=>'CApcCache',

@@ -73,8 +73,8 @@ class MailTemplate extends CActiveRecord {
             'bcc' => Yii::t('labels', 'Bcc'),
             'cc' => Yii::t('labels', 'cc'),
             'body' => Yii::t('labels', 'Body'),
-            //'id' => Yii::t('labels', 'ID'),
-            //'name' => Yii::t('labels', 'Name'),
+                //'id' => Yii::t('labels', 'ID'),
+                //'name' => Yii::t('labels', 'Name'),
         );
     }
 
@@ -96,10 +96,23 @@ class MailTemplate extends CActiveRecord {
         ));
     }
 
-    public static function AutoComplete($name = '') {
-        $sql = 'SELECT id as value, name AS label FROM ' . BankName::table . ' WHERE name LIKE :name';
-        $name = $name . '%';
-        return Yii::app()->db->createCommand($sql)->queryAll(true, array(':name' => $name));
+    public function templateRplc($data) {
+        //subject
+        //body
+
+        if (preg_match_all('~%([^%]*?)%~', $this->body, $arr)) {
+            foreach ($arr as $result) {
+                if ($data->hasAttribute(str_replace("%", "", $result[0])))
+                    $this->body = str_replace($result[0], $data->{str_replace("%", "", $result[0])}, $this->body);
+            }
+        }
+        
+        if (preg_match_all('~%([^%]*?)%~', $this->subject, $arr)) {
+            foreach ($arr as $result) {
+                if ($data->hasAttribute(str_replace("%", "", $result[0])))
+                    $this->subject = str_replace($result[0], $data->{str_replace("%", "", $result[0])}, $this->subject);
+            }
+        }
     }
 
 }

@@ -42,8 +42,8 @@ class RightsController extends RController {
     }
 
     public function render($view, $data = NULL, $return = false) {
-        if (isset($_POST['minmal'])) {
-            return parent::renderPartial($view, $data, $return);
+        if (isset($_POST['minimal'])) {
+            echo CJSON::encode(parent::renderPartial($view, $data, true));
         } else {
             return parent::render($view, $data, $return);
         }
