@@ -4,8 +4,11 @@
 // Yii::setPathOfAlias('local','path/to/local-folder');
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
+
+//needs to move!
 Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
 Yii::setPathOfAlias('tinymce', dirname(__FILE__) . '/../extensions/tinymce');
+
 return CMap::mergeArray(
                 include(dirname(__FILE__) . '/install.php'), array(
             'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
@@ -159,6 +162,8 @@ return CMap::mergeArray(
             'params' => array(
                 // this is used in contact page
                 'adminEmail' => 'adam@speedcomp.co.il',
+                'updatesrv'=>'https://update.linet.org.il/linet3/',
+                'version'=>'3.0beta',
             //'tablePrefix' => ''
             ),
                 )//end main

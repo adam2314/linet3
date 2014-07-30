@@ -503,7 +503,7 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`) VALUES
 (61, 'Backup restore', 'data/restore', NULL, 57),
 (62, 'PCN874', 'data/pcn874', NULL, 57),
 (63, 'Support', NULL, 'glyphicon glyphicon-info-sign', 0),
-(64, 'Update', 'site/update/', NULL, 63),
+(64, 'Update', 'update/', NULL, 63),
 (65, 'Paid Support', 'site/support', NULL, 63),
 (66, 'About', 'site/about', NULL, 63),
 (67, 'Bug Report', 'site/bug', NULL, 63),
