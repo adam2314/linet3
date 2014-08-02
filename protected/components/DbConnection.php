@@ -8,10 +8,10 @@ class DbConnection extends CDbConnection
         } catch(CDbException $e) {
             //reset db access
            //
-            $model=new InstallConfig();
-            $model->make();
+            //$model=new InstallConfig();
+            //$model->make();
             
-            Yii::app()->request->redirect('install');
+            Yii::app()->request->redirect('/install');
         }
     }
 }

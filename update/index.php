@@ -2,27 +2,25 @@
 /* update writen by Adam BH */
 //$_GET['lang'] = 'he';
 $update = 1;
-$yii=dirname(__FILE__).'/../../yii/framework/yii.php';
+$yii = dirname(__FILE__) . '/../../yii/framework/yii.php';
 require_once($yii);
-$config=include '../protected/config/main.php';
+$config = include '../protected/config/main.php';
 include '../protected/components/dbDump.php';
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 
 //include '../private/include/i18n.inc.php';
-
 //include '../private/include/const.inc.php';
 //include '../private/include/core.inc.php';
 //include '../private/include/version.inc.php';
 //include('../private/include/func.inc.php');
-
 //session_start();
 
-$steps = array(1 => Yii::t('update','Version Verify'),
-    2 => Yii::t('update','Backup'),
-    3 => Yii::t('update','Update'),
-    4 => Yii::t('update','Finish'));
+$steps = array(1 => Yii::t('update', 'Version Verify'),
+    2 => Yii::t('update', 'Backup'),
+    3 => Yii::t('update', 'Update'),
+    4 => Yii::t('update', 'Finish'));
 $allowcancel = true;
 //$cookietime = time() + 60*60*24*30;
 //setcookie("lang", 'he', $cookietime);
@@ -48,17 +46,17 @@ $loggedin = false;
 if (!empty($name) && ($name != '')) {
     //$loggedin = 1;
     //$name = urldecode($name);
-    global $permissionstbl;
-    $name = urldecode($name);
-    $query = "SELECT * FROM $permissionstbl WHERE name='$name' AND company='*'";
+    //global $permissionstbl;
+    //$name = urldecode($name);
+    //$query = "SELECT * FROM $permissionstbl WHERE name='$name' AND company='*'";
     //$link = mysql_connect($host,$user,$pswd);
     //mysql_select_db($database,$link);
 
-    
+
     $dbConfig = $config["components"]["dbMain"];
 
     $db = new PDO($dbConfig['connectionString'] . ";" . $dbConfig['charset'], $dbConfig['username'], $dbConfig['password']);
-    
+
 
 
     //$result = mysql_query($query);
@@ -67,12 +65,12 @@ if (!empty($name) && ($name != '')) {
         $loggedin = true;
     } else
     if (isset($_POST['non']))
-        print Yii::t('update','This User has no permssion to update the system');
+        print Yii::t('update', 'This User has no permssion to update the system');
 }elseif (isset($_POST['non'])) {
     //print Yii::t('update',"You Must login to Update the system") . "<br />" . '<a href="../">׳³ג€”׳³ג€“׳³ג€¢׳³ֲ¨ ׳³ן¿½׳³ן¿½׳³ג„¢׳³ֲ ׳³ֻ�</a>';
     //$step = 0;
     //$nextStep = 0;
-    $loggedin=true;
+    $loggedin = true;
 }
 
 if (isset($_POST['non'])) {
@@ -95,35 +93,33 @@ if (isset($_POST['non'])) {
 //print $name.$data;
 //print $step<>count($steps);
 /* load page */
-$title = Yii::t('update',"Linet Update ");
+$title = Yii::t('update', "Linet Update ");
 if ($loggedin) {
     if (($step == 1) && (isset($_POST['non']))) {
-        $sversion = 3.0;//getVersion();//from server
+        $sversion = getVersion($config); //;//from server
         $version = $config['params']['version'];
-        $_SESSION['ServerVersion'] = $sversion;
-        $_SESSION['Version'] = $version;
         $nextStep = 2;
         print "<div class=\"updatetext\">";
-        print Yii::t('update',"Welcome To Linet update wizard your system version is: ") . $version . "<br />" . Yii::t('update',"The current version is: ") . $sversion . "<br />";
+        print Yii::t('update', "Welcome To Linet update wizard your system version is: ") . $version . "<br />" . Yii::t('update', "The current version is: ") . $sversion . "<br />";
         if ($version != $sversion)
-            print Yii::t('update',"You need to update your system.");
+            print Yii::t('update', "You need to update your system.");
         print "</div>";
         //if ($nextStep) print "<a href=javascript:postwith('index.php',{step:'".$nextStep."'})>׳³ג€�׳³ג€˜׳³ן¿½</a>";//bla
 
-        print '<div class="control"><a class="btn btn-primary" onclick="document.location.href=\'../../\'" >' . Yii::t('update',"Cancel") . '</a>';
+        print '<div class="control"><a class="btn btn-primary" onclick="document.location.href=\'../../\'" >' . Yii::t('update', "Cancel") . '</a>';
         //if($version!=$sversion)
-        print '<a class="btn btn-primary" onclick="loadDoc(' . $nextStep . ')" >' . Yii::t('update',"Next") . '</a>';
+        print '<a class="btn btn-primary" onclick="loadDoc(' . $nextStep . ')" >' . Yii::t('update', "Next") . '</a>';
         print '</div>';
     }else {
-        $content = Yii::t('update',"Please Wait"); //error
+        $content = Yii::t('update', "Please Wait"); //error
     }
     /* backup */
     if (($step == 2) && (isset($_POST['non']))) {
         include 'Backup.php';
         print "<div class=\"updatetext\">";
         if (is_writeable($config['basePath'] . "/backup")) {
-            print Yii::t('update',"Backup system and database, it is heighly advised to save a local copy of the backup files") . "<br />";
-            print Yii::t('update',"Backuping system files") . "...<br />";
+            print Yii::t('update', "Backup system and database, it is heighly advised to save a local copy of the backup files") . "<br />";
+            print Yii::t('update', "Backuping system files") . "...<br />";
             /* delete old files */
             if ($handle = opendir($config['basePath'] . "/backup")) {
                 while (false !== ($file = readdir($handle))) {
@@ -131,63 +127,69 @@ if ($loggedin) {
                         unlink($config['basePath'] . "/backup/" . $file);
                 }
             }
-            
+
             //adam: Zip($config['basePath'] . "/", $config['basePath'] . '/backup/files' . date('dmY') . '.zip');
-            print Yii::t('update',"Done") . "<br />";
-            print "<a href='../backup/files" . date('dmY') . ".zip'>" . Yii::t('update',"Downlod System Files") . "</a><br />";
-            print Yii::t('update',"Backuping database") . "...<br />";
+            print Yii::t('update', "Done") . "<br />";
+            print "<a href='../backup/files" . date('dmY') . ".zip'>" . Yii::t('update', "Downlod System Files") . "</a><br />";
+            print Yii::t('update', "Backuping database") . "...<br />";
             $bkfile = $config['basePath'] . '/backup/db' . date('dmY') . '.sql'; //'.date('Ymd').'
             dbBackup($bkfile);
-            print Yii::t('update',"Done") . "<br />";
+            print Yii::t('update', "Done") . "<br />";
 
-            print "<a href='../backup/db" . date('dmY') . ".sql'>" . Yii::t('update',"Download Database file") . "</a><br />";
+            print "<a href='../backup/db" . date('dmY') . ".sql'>" . Yii::t('update', "Download Database file") . "</a><br />";
         }else {
-            print "Error: Unable to write into Backup folder please check permissions:<br />" .$config['basePath'] . "/backup";
+            print "Error: Unable to write into Backup folder please check permissions:<br />" . $config['basePath'] . "/backup";
             $nextStep = 0;
         }
         print "</div>";
 
-        print '<div class="control"><a class="btn btn-primary" onclick="document.location.href=\'../\'" >' . Yii::t('update',"Cancel") . '</a>';
-        print '<a class="btn btn-primary" onclick="loadDoc(' . $nextStep . ')" >' . Yii::t('update',"Next") . '</a></div>';
+        print '<div class="control"><a class="btn btn-primary" onclick="document.location.href=\'../\'" >' . Yii::t('update', "Cancel") . '</a>';
+        print '<a class="btn btn-primary" onclick="loadDoc(' . $nextStep . ')" >' . Yii::t('update', "Next") . '</a></div>';
         //print "<a href=javascript:postwith('index.php',{step:'".$nextStep."'})>׳³ג€�׳³ג€˜׳³ן¿½</a>";//bla
     }
     /* update */
     if (($step == 3) && (isset($_POST['non']))) {
-        print Yii::t('update',"asking file list for update") . "<br />";
+        print Yii::t('update', "asking file list for update") . "<br />";
         $nextStep = 0;
 
-        print Yii::t('update',"checking permissions") . ".<br />";
+        print Yii::t('update', "checking permissions") . ".<br />";
         $logfile = $config['basePath'] . "/backup/updatelog" . date('dmY') . '.txt';
         if (permisionChk($logfile)) {
             $log = fopen($logfile, 'w') or die("can't open file");
             fwrite($log, "Start Loging: " . date('d/m/y H:m') . "\n");
             $updatefile = GetList($config);
+            
             $safty = true;
         } else {
             $safty = false;
-            print Yii::t('update',"Error: cant write log file") . ".<br />";
+            print Yii::t('update', "Error: cant write log file") . ".<br />";
         }
+        /*
         foreach ($updatefile as $value) {
-            $value = $config['path'] . "/" . $value;
+            $value = $config['basePath'] . "/../" . $value;
             if (permisionChk($value)) {
                 
             } else {
                 $safty = false;
-                print Yii::t('update',"-Please check write permissions to: ") . $value . ".<br />";
+                print Yii::t('update', "-Please check write permissions to: ") . $value . ".<br />";
             }
-        }
-        $safty=false;
+        }*/
+        //exit;
+        //$safty = false;
         if ($safty) {//update all the files
-            print Yii::t('update',"Finished permission check") . "<br />" . Yii::t('update',"Begin updating files") . "<br />";
+            print Yii::t('update', "Finished permission check") . "<br />" . Yii::t('update', "Begin updating files") . "<br />";
+            $sversion = getVersion($config);
             foreach ($updatefile as $value) {
                 //log: trying to ge file
                 fwrite($log, "-GetFile:" . $value . "\n");
-                $file = getFile($value, $_SESSION['ServerVersion']);
+                $file = getFile($value, $config);
+                //echo 'exit';
+                //exit;
                 if ($file == '') {
                     print 'error empty file!';
                     exit;
                 }
-                $value = $config['basePath'] . "/" . $value;
+                $value = $config['basePath'] . "/../" . $value;
 
                 print "+Writing file: $value<br />";
                 $fh = fopen($value, 'w') or die("can't open file");
@@ -200,11 +202,11 @@ if ($loggedin) {
             //log:end
 
             fwrite($log, "Finished updating files" . "\n");
-            print Yii::t('update',"Finished updating files") . ".<br />";
+            print Yii::t('update', "Finished updating files") . ".<br />";
             /* update db */
-            print Yii::t('update',"aksing database update") . "<br />";
+            print Yii::t('update', "asksing database update") . "<br />";
             fwrite($log, "Get database update" . "\n");
-            $command = getSQL($_SESSION['Version']);
+            $command = getSQL($config);
             fwrite($log, "Got DB updae" . "\n");
             if ($command <> '') {
                 //connect mysql server
@@ -224,21 +226,22 @@ if ($loggedin) {
             }
             //unzip upgrade.zip
             $zip = new ZipArchive;
-            $res = $zip->open('upgrade.zip');
+            $res = $zip->open($config['basePath'].'/../upgrade.zip');
             if ($res === TRUE) {
-                $zip->extractTo($config['path'] . "/");
+                $zip->extractTo($config['basePath'] . "/../");
                 $zip->close();
                 echo 'ok';
             } else {
                 echo 'failed';
             }
+            echo "<br />";
             //new add costum commands
-            if (file_exists('upgrade.php')) {
-                include 'upgrade.php';
-                rename('upgrade.php', 'upgrade.php.done');
+            if (file_exists($config['basePath'].'/../upgrade.php')) {
+                include $config['basePath'].'/../upgrade.php';
+                rename($config['basePath'].'/../upgrade.php', $config['basePath'].'/../upgrade.php.done');
             }
         } else {
-            print Yii::t('update',"Can Not Continue Without!") . "<br />";
+            print Yii::t('update', "Can Not Continue Without!") . "<br />";
         }
         fwrite($log, "End Loging: " . date('d/m/y H:m') . "\n");
         fclose($log);
@@ -246,15 +249,15 @@ if ($loggedin) {
         if ($nextStep)
         //print '<a class="btnaction" href="javascript:loadDoc('.$nextStep.')">'.Yii::t('update',"Next").'</a>';
         //print '<div class="control"><input type="button" class="btnaction" onclick="document.location.href=\'../../\'" value="'.Yii::t('update',"Cancel").'" />';
-            print '<a class="btn btn-primary" onclick="loadDoc(' . $nextStep . ')" >' . Yii::t('update',"Next") . '</a>';
+            print '<a class="btn btn-primary" onclick="loadDoc(' . $nextStep . ')" >' . Yii::t('update', "Next") . '</a>';
         //print "<a href=javascript:postwith('index.php',{step:'".$nextStep."'})>׳³ג€�׳³ג€˜׳³ן¿½</a>";//bla
     }
     /* end */
     if (($step == 4) && (isset($_POST['non']))) {
-        print Yii::t('update',"Linet has been successfully updated") . "<br />";
-        print '<a href="../private/backup/updatelog' . date('dmY') . '.txt">' . Yii::t('update',"log file") . '</a><br />';
+        print Yii::t('update', "Linet has been successfully updated") . "<br />";
+        print '<a href="../private/backup/updatelog' . date('dmY') . '.txt">' . Yii::t('update', "log file") . '</a><br />';
 //print '<a class="btnaction" href="../../">'.Yii::t('update',"Finished").'</a>';
-        print '<a class="btn btn-primary" onclick="document.location.href=\'../../\'" >' . Yii::t('update',"Finished") . '</a>';
+        print '<a class="btn btn-primary" onclick="document.location.href=\'../\'" >' . Yii::t('update', "Finished") . '</a>';
 //print '<input type="button" class="btnaction" onclick="loadDoc('.$nextStep.')" value="'.Yii::t('update',"Next").'" /></div>';
     }
 }
@@ -268,9 +271,8 @@ if (!isset($_POST['non']))
  */
 
 function getSQL($config) {
-    $updatesrv=$config['params']['updatesrv'];
-    $version=$config['params']['version'];
-    //print $updatesrv.'?GetSql&Version='.$version;
+    $updatesrv = $config['params']['updatesrv'];
+    $version = $config['params']['version'];
     if ($fp = fopen($updatesrv . '?GetSql&Version=' . $version, 'r')) {
         $content = fread($fp, 1024);
         while ($line = fread($fp, 1024)) {
@@ -281,36 +283,26 @@ function getSQL($config) {
 }
 
 function getFile($fileName, $config) {
-    $updatesrv=$config['params']['updatesrv'];
-    $version=$config['params']['version'];
-    /* 	if ($fp = fopen($updatesrv.'?GetFile='.base64_encode($fileName).'&Version='.$version, 'r')) {
-      $content = fread($fp, 1024);
-      while ($line = fread($fp, 1024)) {
-      $content .= $line;
-      }
-      } */
-
+    $updatesrv = $config['params']['updatesrv'];
+    $version = $config['params']['version'];
     $content = file_get_contents($updatesrv . '?GetFile=' . base64_encode($fileName) . '&Version=' . $version);
+    
+    echo $updatesrv . '?GetFile=' . base64_encode($fileName) . '&Version=' . $version;
     return base64_decode($content);
 }
 
-/*
-  function getVersion(){
-  global $updatesrv;
-  global $version;
-  //print $updatesrv.'?GetLateset';
-  if ($fp = fopen($updatesrv."?GetLateset&ver=$version", 'r')) {
-  $content = fread($fp, 1024);
-  // keep reading until there's nothing left
-
-  return $content;
-  }
-  } */
+function getVersion($config) {
+    $updatesrv = $config['params']['updatesrv']; 
+    $version = $config['params']['version'];
+    if ($fp = fopen($updatesrv . "?GetLateset&ver=$version", 'r')) {
+        $content = fread($fp, 1024);
+        return $content;
+    }
+}
 
 function getList($config) {
-    $updatesrv=$config['params']['updatesrv'];
-    $version=$config['params']['version'];
-    //print $updatesrv.'?GetList&Version='.$version;
+    $updatesrv = $config['params']['updatesrv'];
+    $version = $config['params']['version'];
     if ($fp = fopen($updatesrv . '?GetList&Version=' . $version, 'r')) {
         $content = fread($fp, 1024);
         while ($line = fread($fp, 1024)) {
@@ -318,11 +310,14 @@ function getList($config) {
         }
     }
     $filelist = explode('<br />', $content);
-    $a = array_pop($filelist);
+    array_pop($filelist);
+    //print_r($filelist);
     return $filelist;
 }
 
 function permisionChk($filename) {
+    //echo $filename.'<br />\n';
+    
     if (file_exists($filename)) {
         if (is_writeable($filename)) {
             return true;
@@ -330,7 +325,7 @@ function permisionChk($filename) {
             return false;
         }
     } else {
-        print dirname($filename);
+        //print dirname($filename);
         if (is_writeable(dirname($filename))) {
             return true;
         } else {

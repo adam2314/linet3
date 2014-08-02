@@ -27,7 +27,7 @@
     </head>
     <body class="login" onload="loadDoc(1)" dir="rtl">
 
-        <br /><br /><br /><br /><br /><br />
+        <br /><br /><br /><br />
         <div class='col-lg-6'>
             <div class="box dark">
                 <header>

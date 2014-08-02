@@ -109,7 +109,7 @@ class AuthItemController extends RightsController {
         foreach ($roles as $roleName => $role) {
             $columns[] = array(
                 'name' => strtolower($roleName),
-                'header' => $role->getNameText(),
+                'header' => $role->getName(),
                 'type' => 'raw',
                 'htmlOptions' => array(
                     'class' => 'role-column',

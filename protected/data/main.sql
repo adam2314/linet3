@@ -36,7 +36,7 @@ DROP TABLE IF EXISTS `creditErrorCode`;
 CREATE TABLE IF NOT EXISTS `creditErrorCode` (
   `id` varchar(3) NOT NULL DEFAULT '000',
   `ErrorText` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`ErrorID`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `currencies`;

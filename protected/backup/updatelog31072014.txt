@@ -1,0 +1,12 @@
+Start Loging: 31/07/14 10:07
+-GetFile:upgrade.php
++Writing file: /var/www/linet3/protected/config/../../upgrade.php
++Wrote file: /var/www/linet3/protected/config/../../upgrade.php
+-GetFile:upgrade.zip
++Writing file: /var/www/linet3/protected/config/../../upgrade.zip
++Wrote file: /var/www/linet3/protected/config/../../upgrade.zip
+Finished updating files
+Get database update
+Got DB updae
+no sql
+End Loging: 31/07/14 10:07

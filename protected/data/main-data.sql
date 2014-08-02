@@ -726,7 +726,7 @@ INSERT INTO `openformat` (`id`, `description`, `type`, `size`, `record`, `export
 (1465, 'נתונים עתדיים', 's', 50, 7, 'NA', 'NA', 'M100');
 
 
-INSERT INTO `creditErrorCode` (`id`, `text`) VALUES
+INSERT INTO `creditErrorCode` (`id`, `ErrorText`) VALUES
 ('000', 'עסקה תקינה.'),
 ('001', 'חסום החרם כרטיס.'),
 ('002', 'גנוב החרם כרטיס.'),

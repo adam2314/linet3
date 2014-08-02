@@ -8,11 +8,11 @@
 class InstallConfig extends CFormModel {
 
     public $dbtype = 'sqlite';
-    public $dbname = 'linet.db';
-    public $dbuser = 'linet';
+    public $dbname = 'linet';
+    public $dbuser = 'root';
     public $dbpassword = 'linet';
     public $dbhost = 'localhost';
-    public $dbstring = 'sqlite:protected/data/linet.db';
+    public $dbstring = 'mysql:protected/linet';
 
     public function make() {
         //make conf file

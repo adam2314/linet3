@@ -14,8 +14,9 @@ class Linet3 {
         if (!Yii::app()->user->isGuest) {
             self::setAppData();
             //self::setUserData();
-            
         }
+        //check db
+        self::checkDb();
         //}
         /* } else {
 
@@ -40,18 +41,28 @@ class Linet3 {
         }
     }
 
+    private static function checkDb() {
+        $install = substr(Yii::app()->request->url, 0, strlen('/install')) === '/install';
+        if (!$install) {
+            try {
+                $user = User::model()->findByPk(1);
+            } catch (Exception $e) {
+                //echo 'Caught exception: ', $e->getMessage(), "\n";
+                Yii::app()->request->redirect('/install');
+                Yii::app()->end();
+            }
+        }
+    }
+
     private static function setUserData() {
         //out!
         //if (!isset(Yii::app()->user->OrgDatabase)) {
         //    $org = array('string' => Yii::app()->db->connectionString, 'prefix' => Yii::app()->db->tablePrefix);
         //    Yii::app()->user->setState('OrgDatabase', $org);
         //}
-
         //if (!isset(Yii::app()->user->menu)) {//company select needs to trigger
         //    Yii::app()->user->setState('menu', Menu::model()->buildUserMenu());
         //}
-
-
         //no more in the controller level
         //if (isset(Yii::app()->user->Database)) {
         //Company::model()->loadComp();
