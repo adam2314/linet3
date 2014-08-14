@@ -41,51 +41,13 @@ echo Yii::t('app',"Select Company");
         'htmlOptions'=>array('class'=>'clean'),
 	'columns'=>array(
 		array('value'=>'$data->id'),
-		//'string',
                 array(
-                    
-                    
-                    //'value'=>'$data->getName()',
+
                     'value'=>'CHtml::link(CHtml::encode($data->getName()),"#", array(  "onclick"=>\'chose("\'.$data->id.\'")\',))',
-                    // echo CHtml::link(CHtml::encode($data->id),'#', array(  'onclick'=>'refNum("'.$data->id.'","'.$data->docnum.'","'.$data->docType->name.'")',));
                     'type'=>'raw',
-                    
                     
                     ),
 
-                //array('value'=>'$data->level->level_id'),
-            
-            
-  
-                /*
-                array(
-                        //'text'=>'Action',
-			'class'=>'CButtonColumn',
-			'template'=>'{edit}{remove}',
-			'buttons'=>array(
-                            'edit' => array(
-                                'label'=>'',
-                                //'url'=>'function(){chose("$data->id"); return false;}',
-                                'url'=>'$data->id',
-                                 //'click'=>'function(){chose("open"); return false;}',
-                                 'options' => array(
-                                    'class'=>'glyphicon glyphicon-edit' ,
-                                    'onclick'=>'edit(this);return false;',
-                                  ),
-                                
-                                
-                                'imageUrl' => false,
-
-                            ),
-                            'remove' => array(
-                                'label'=>'<i class="glyphicon glyphicon-remove"></i>',
-                                //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
-                                 //   'url'=>'Yii::app()->createUrl("accounts/delete", array("id"=>$data->id))',
-                                //'url'=>'Yii::app()->createUrl("users/email", array("id"=>$data->id))',
-                            ),
-                            
-		    ),
-		),//*/
 	),
 )); 
 

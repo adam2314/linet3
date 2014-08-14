@@ -1,6 +1,6 @@
 <?php
 
-class CompanyController extends Controller{// //RightsController
+class CompanyController extends RightsController{// //RightsController
     public $defaultAction = 'index';
     public $layout='//layouts/clean';
 

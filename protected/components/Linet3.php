@@ -6,7 +6,8 @@ class Linet3 {
 //Yii::app()->user->logout();
         //if (!isset(Yii::app()->user->install)) {//new install?
         //if (!Yii::app()->params['newInstall']) {//install process
-        ini_set('date.timezone', 'Asia/Tel_Aviv');
+        date_default_timezone_set('Asia/Tel_Aviv');
+        
         if (!isset(Yii::app()->user->Company)) {
             Yii::app()->user->setState('Company', 0);
         }
@@ -31,7 +32,8 @@ class Linet3 {
 
     private static function setAppData() {
         if (isset(Yii::app()->user->timezone)) {
-            ini_set('date.timezone', Yii::app()->user->timezone);
+            //ini_set('date.timezone', Yii::app()->user->timezone);
+            date_default_timezone_set(Yii::app()->user->timezone);
         }
         if (isset(Yii::app()->user->language)) {
             Yii::app()->language = Yii::app()->user->language;
