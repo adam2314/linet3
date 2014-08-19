@@ -1,19 +1,13 @@
 <?php
-
 /**
- * Description of en_US
+ * Description of en
  *
  * @author adam
  */
-
 return CMap::mergeArray(
 	require(dirname($GLOBALS['yii']).'/i18n/data/'.basename(__FILE__)),
 	array(
 		'dateFormats' =>  array (
-
-                    
-                    
-                    
                         'yiishort'=>'dd/MM/yyyy',
                         'yiidatetime'=>'dd/MM/yyyy HH:mm',
                         'yiidatetimesec'=>'dd/MM/yyyy HH:mm:ss',

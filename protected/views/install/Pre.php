@@ -12,7 +12,7 @@ $this->beginWidget('MiniForm',array(
 
 <div style=" width: 40%; display: inline-block; margin-right: 150px; ">
     <?php $this->widget('bootstrap.widgets.TbGridView', array(
-	'id'=>'balance-grid',
+	'id'=>'pre-grid',
 	'dataProvider'=>$model->report(),
 	//'filter'=>$model,
 	'columns'=>array(
@@ -68,6 +68,7 @@ success:function(data){
                 $('.col-lg-12').html(data);
               },
    error: function(data) { // if error occured
+       console.log(data);
          alert(data);
     },
  

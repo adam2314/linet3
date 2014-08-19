@@ -22,5 +22,3 @@ class FormBackupFile extends CFormModel{
     }
     //put your code here
 }
-
-?>

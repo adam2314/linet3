@@ -7,7 +7,7 @@ $this->menu=array(
 );
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Import open Format Files"),
+    'haeder' => Yii::t('app',"Import Companay From Linet 2.0"),
 )); 
 ?>
 <div class="form">
@@ -21,11 +21,9 @@ $this->menu=array(
 ?>
     <?php //echo Yii::t('app','Worrinng:').Yii::t('app','All current compnay data will be removed:'); ?>
 		
-		<?php echo $form->fileFieldRow($model,'iniFile'); ?>
+		<?php echo $form->fileFieldRow($model,'file'); ?>
 		
-		<?php echo $form->fileFieldRow($model,'bkmvFile'); ?>
-	
-    
+		
     <div class="form-actions">
             <?php $this->widget('bootstrap.widgets.TbButton', array(
                     'buttonType'=>'submit',
@@ -34,9 +32,6 @@ $this->menu=array(
             )); ?>
     </div>
 <?php $this->endWidget(); ?>
-    
-    
-    
 </div><!-- form -->
 
 <div id ="result">

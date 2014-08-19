@@ -202,5 +202,37 @@ class DataController extends RightsController{
             $this->render('openfrmtimport',array('model'=>$model,));
             //echo $model->read();
         }
+        
+        public function actionLinet2Import(){
+            $model=new FormLinet2Import;
+            if(isset($_POST['FormLinet2Import'])){
+                
+                $yiiBasepath=Yii::app()->basePath;
+                //$yiiUser=Yii::app()->user->id;
+                $configPath=Yii::app()->user->settings["company.path"];
+     
+                $file = $yiiBasepath."/files/".$configPath."/linet2.bak";
+                
+                $model->file = $_POST['FormLinet2Import']['file'];
+                $model->file = CUploadedFile::getInstance($model,'file');
+                if($model->file->saveAs($file)){
+                    $model->file=$file;
+                    
+                    $model->import();
+                    //$model->read();
+                }
+                
+                
+            }
+            /*
+            $yiiBasepath=Yii::app()->basePath;
+            $configPath=Yii::app()->user->settings["company.path"];
+            $file = $yiiBasepath."/files/".$configPath."/linet2.bak";
+            $model->file=$file;
+            $model->import();
+            //*/
+            $this->render('linet2Import',array('model'=>$model,));
+            Yii::app()->end();
+        }
 }
 ?>

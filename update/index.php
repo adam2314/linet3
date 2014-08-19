@@ -2,7 +2,7 @@
 /* update writen by Adam BH */
 //$_GET['lang'] = 'he';
 $update = 1;
-$yii = dirname(__FILE__) . '/../../yii/framework/yii.php';
+require_once('../protected/config/yii.php');
 require_once($yii);
 $config = include '../protected/config/main.php';
 include '../protected/components/dbDump.php';

@@ -43,8 +43,14 @@ $this->widget('CJuiDateTimePicker',array(
 
     ) // jquery plugin options
 ));
-echo CHtml::submitButton(Yii::t('app','Search')); 
 ?>
+    <div class="form-actions">
+            <?php $this->widget('bootstrap.widgets.TbButton', array(
+                    'buttonType'=>'submit',
+                    'type'=>'primary',
+                    'label'=>Yii::t('app',"Search") ,
+            )); ?>
+    </div>
 
 
 

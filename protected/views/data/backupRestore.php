@@ -25,10 +25,14 @@ $this->menu=array(
 		<?php echo $form->fileField($model,'file'); ?>
 		<?php echo $form->error($model,'file'); ?>
 		</div><!-- row -->	
-<?php
-	echo CHtml::submitButton(Yii::t('app', 'Upload'));
-	$this->endWidget();
-?>
+    <div class="form-actions">
+            <?php $this->widget('bootstrap.widgets.TbButton', array(
+                    'buttonType'=>'submit',
+                    'type'=>'primary',
+                    'label'=>Yii::t('app',"Upload") ,
+            )); ?>
+    </div>
+<?php $this->endWidget(); ?>
 </div><!-- form -->
 
 
