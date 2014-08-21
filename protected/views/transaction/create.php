@@ -69,7 +69,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                             <thead>
                                 <tr>
                                     <td><?php echo Yii::t('app', 'Account id'); ?></td>
-                                    <td style="width:200px;"><?php echo Yii::t('app', 'Account Name'); ?></td>
+                                    <td style=""><?php //echo Yii::t('app', 'Account Name'); ?></td>
                                     <td><?php echo Yii::t('app', 'Credit'); ?></td>
                                     <td><?php echo Yii::t('app', 'Debit'); ?></td>
                                 </tr>
@@ -77,8 +77,9 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                             <tbody>
                                 <tr>
                                     <td>
-
+                                        <?php echo $form->dropDownList($model, 'account_id', CHtml::listData(Accounts::model()->findAll(), 'id', 'name')); ?>
                                         <?php
+                                        /*
                                         $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
                                             'name' => 'Transactions[account_id]',
                                             'id' => 'Transactions_account_id',
@@ -89,7 +90,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                                                 'showAnim' => 'fold',
                                             //'onblur'=>"onChange('Transactions_account_id')",
                                             ),
-                                        ));
+                                        ));*/
                                         ?>
                                         <?php echo $form->error($model, 'account_id'); ?>
                                     </td>
@@ -154,9 +155,9 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 $(document).ready(
             function() {
                 addItem(0);
-                $('#Transactions_account_id').blur(function() {
-                    onChange('Transactions_account_id');
-                });
+                //$('#Transactions_account_id').blur(function() {
+                //    onChange('Transactions_account_id');
+                //});
 
 
                 $('#transaction-form').submit(function() {

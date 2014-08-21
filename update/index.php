@@ -2,6 +2,8 @@
 /* update writen by Adam BH */
 //$_GET['lang'] = 'he';
 $update = 1;
+
+
 require_once('../protected/config/yii.php');
 require_once($yii);
 $config = include '../protected/config/main.php';

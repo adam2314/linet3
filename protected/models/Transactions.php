@@ -342,21 +342,21 @@ class Transactions extends basicRecord {
         if (!empty($this->from_date) && empty($this->to_date)) {
             $date_from = date($phpdbdatetime, CDateTimeParser::parse($this->from_date, $yiidate));
 
-            $criteria->addCondition("date>=:date_from");
+            $criteria->addCondition("valuedate>=:date_from");
             $criteria->params[':date_from'] = $date_from;
         } elseif (!empty($this->to_date) && empty($this->from_date)) {
             $date_to = date($phpdbdatetime, CDateTimeParser::parse($this->to_date, $yiidate));
             //print $this->to_date.";".$date_to;
 
-            $criteria->addCondition("date>=:date_to");
+            $criteria->addCondition("valuedate>=:date_to");
             $criteria->params[':date_to'] = $date_to;
         } elseif (!empty($this->to_date) && !empty($this->from_date)) {
             $date_from = date($phpdbdatetime, CDateTimeParser::parse($this->from_date, $yiidate));
             $date_to = date($phpdbdatetime, CDateTimeParser::parse($this->to_date, $yiidate));
 
 
-            $criteria->addCondition("date>=:date_from");
-            $criteria->addCondition("date<=:date_to");
+            $criteria->addCondition("valuedate>=:date_from");
+            $criteria->addCondition("valuedate<=:date_to");
             $criteria->params[':date_from'] = $date_from;
             $criteria->params[':date_to'] = $date_to;
         }

@@ -280,7 +280,7 @@ class FormLinet2Import extends CFormModel {
             //echo $doc."<br />";
             $transaction = str_replace("'" . $prefix . "',", "", $transaction);
             //$doc= $this->parseLine($doc);
-            $keys = "`num`, `type`, `account_id`, `refnum1`, `refnum2`, `date`, `details`, `leadsum`, `intCorrelation`, `linenum`, `owner_id`";
+            $keys = "`num`, `type`, `account_id`, `refnum1`, `refnum2`, `valuedate`, `details`, `leadsum`, `intCorrelation`, `linenum`, `owner_id`";
 
             //$values="'$item[0]', '$item[3]', '$item[4]', '$item[5]', '$item[6]', '$item[7]', '$item[8]', '$item[9]', '$item[10]'";
             $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "transactions` ($keys) VALUES $transaction;");

@@ -512,8 +512,8 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`) VALUES
 (70, 'Stock transaction', 'reports/stockAction', NULL, 49),
 (71, 'Id6111 Admin', 'accId6111/admin', NULL, 1),
 (72, 'Mail Template', 'mailTemplate/admin', NULL, 1),
-(73, 'Stock', 'reports/stock', NULL, 49);
-
+(73, 'Stock', 'reports/stock', NULL, 49),
+(74, 'Linet 2 Import', 'data/linet2Import', NULL, 57);
 
 
 INSERT INTO `openformat` (`id`, `description`, `type`, `size`, `record`, `export`, `import`, `type_id`) VALUES

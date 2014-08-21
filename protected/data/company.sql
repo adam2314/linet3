@@ -261,6 +261,7 @@ CREATE TABLE `eavFields` (
 CREATE TABLE `extCorrelation` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `account_id` int(11) DEFAULT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `owner` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 );
@@ -280,6 +281,7 @@ CREATE TABLE `files` (
 CREATE TABLE `intCorrelation` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `account_id` int(11) DEFAULT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `owner` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 );

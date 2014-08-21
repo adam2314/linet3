@@ -94,9 +94,9 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
         'details',
         array(
-            'name' => 'date',
+            'name' => 'valuedate',
             'filter' => $dateisOn,
-            'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->date,"' . $yiidbdatetime . '"))'
+            'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->valuedate,"' . $yiidbdatetime . '"))'
         ),
           array(
               'header'=>Yii::t('app','Debit'),
