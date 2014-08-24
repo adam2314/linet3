@@ -1,0 +1,5 @@
+Start Loging: 24/08/14 09:08
+-GetFile:upgrade.php
++Writing file: /var/www/linet3/protected/config/../../upgrade.php
++Wrote file: /var/www/linet3/protected/config/../../upgrade.php
+-GetFile:upgrade.zip
