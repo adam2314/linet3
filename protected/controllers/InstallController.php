@@ -5,7 +5,9 @@ class InstallController extends Controller {
     public $layout = '//layouts/clean';
 
     public function actionIndex($step = 0) {
-
+        if(isset(Yii::app()->dbMain)) {
+            return;
+        }
         if (isset($_POST['InstallConfig'])) {
             $model = new InstallConfig();
             $model->attributes = $_POST['InstallConfig'];

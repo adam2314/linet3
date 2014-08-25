@@ -46,10 +46,7 @@ class Linet3 {
     private static function checkDb() {
         $install = substr(Yii::app()->request->url, 0, strlen('/install')) === '/install';
         if (!$install) {
-            try {
-                $user = User::model()->findByPk(1);
-            } catch (Exception $e) {
-                //echo 'Caught exception: ', $e->getMessage(), "\n";
+            if(!isset(Yii::app()->dbMain)) {
                 Yii::app()->request->redirect('/install');
                 Yii::app()->end();
             }

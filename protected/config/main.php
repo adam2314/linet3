@@ -164,6 +164,7 @@ return CMap::mergeArray(
                 'adminEmail' => 'adam@speedcomp.co.il',
                 'updatesrv'=>'https://update.linet.org.il/linet3/',
                 'version'=>'3.0beta',
+                'timezone'=>'Asia/Tel_Aviv',
             //'tablePrefix' => ''
             ),
                 )//end main

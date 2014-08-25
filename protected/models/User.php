@@ -51,7 +51,7 @@ class User extends mainRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('username, lname, certpasswd, email, timezone', 'required'),
+            array('username, lname, email, timezone', 'required'),
             array('username', 'length', 'max' => 100),
             array('fname, lname, certpasswd, salt, email', 'length', 'max' => 255),
             array('language', 'length', 'max' => 10),
@@ -137,7 +137,7 @@ class User extends mainRecord {
     public function save($runValidation = true, $attributes = NULL) {
         //$this->id=0;
         if ($this->salt == '')
-            $this->salt = sha1(rand());
+            $this->salt = $this->generateSalt();
         if ($this->passwd != '')
             $this->password = $this->hashPassword($this->passwd, $this->salt);
 
@@ -281,7 +281,7 @@ class User extends mainRecord {
      * @param string salt
      * @return string hash
      */
-    public function hashPassword($password, $salt) {
+    public static function hashPassword($password, $salt) {
         return md5($salt . $password);
     }
 
@@ -289,7 +289,7 @@ class User extends mainRecord {
      * Generates a salt that can be used to generate a password hash.
      * @return string the salt
      */
-    protected function generateSalt() {
+    public static function generateSalt() {
         return uniqid('', true);
     }
 

@@ -122,10 +122,10 @@ class chequeReport extends MiniForm {
                         
            ),
       'series' => array(
-         array('name' => Yii::t('app','Income'), 'data' => $this->reach(3,date("Y"))),
-         array('name' => Yii::t('app','Income-Last Year'), 'data' => $this->reach(3,date("Y")-1)),
-         array('name' => Yii::t('app','Expenses'), 'data' => $this->reach(2,date("Y"))),
-         array('name' => Yii::t('app','Expenses-Last Year'), 'data' => $this->reach(2,date("Y")-1))
+         array('name' => Yii::t('app','Income'), 'data' => $this->reach(3,date("Y"))),//3
+         array('name' => Yii::t('app','Income-Last Year'), 'data' => $this->reach(3,date("Y")-1)),//3
+         array('name' => Yii::t('app','Expenses'), 'data' => $this->reach(2,date("Y"))),//2
+         array('name' => Yii::t('app','Expenses-Last Year'), 'data' => $this->reach(2,date("Y")-1))//2
       ),
        'chart' => array(
         //'plotBackgroundColor' => '#ffffff',

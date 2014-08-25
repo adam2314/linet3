@@ -215,6 +215,9 @@ class DataController extends RightsController{
                 
                 $model->file = $_POST['FormLinet2Import']['file'];
                 $model->file = CUploadedFile::getInstance($model,'file');
+                
+                if($model->file===null)
+			throw new CHttpException(501,Yii::t('app','Error in request.'));//no file
                 if($model->file->saveAs($file)){
                     $model->file=$file;
                     

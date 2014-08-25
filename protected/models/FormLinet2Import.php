@@ -260,16 +260,16 @@ class FormLinet2Import extends CFormModel {
     //transactions
     /*
      *  prefix
-     *  	num         -
-     *  	type        -
-     *  	account     account_id
-     *  	refnum1     -
-     *  	refnum2     -
-     *  	date        -
-     *  	details     -
-     *  	sum         leadsum
-     *  	cor_num     intCorrelation
-     *  	id          linenum
+     *  	num         -1
+     *  	type        -2
+     *  	account     account_id3
+     *  	refnum1     -4
+     *  	refnum2     -5
+     *  	date        -6
+     *  	details     -7
+     *  	sum         leadsum8
+     *  	cor_num     intCorrelation9
+     *  	id          linenum10
      *  	owner       owner_id
      *      
      * 
@@ -278,12 +278,16 @@ class FormLinet2Import extends CFormModel {
         $this->sqlExec('DELETE FROM `' . Yii::app()->db->tablePrefix . "transactions` WHERE 1");
         foreach ($transactions as $transaction) {
             //echo $doc."<br />";
-            $transaction = str_replace("'" . $prefix . "',", "", $transaction);
-            //$doc= $this->parseLine($doc);
-            $keys = "`num`, `type`, `account_id`, `refnum1`, `refnum2`, `valuedate`, `details`, `leadsum`, `intCorrelation`, `linenum`, `owner_id`";
+            //$transaction = str_replace("'" . $prefix . "',", "", $transaction);
+            $item= $this->parseLine($transaction);
+            $keys = "`num`, `type`, `account_id`, `refnum1`, `refnum2`, `valuedate`, `details`, `sum`, `currency_id`, `leadsum`, `intCorrelation`, `linenum`, `owner_id`";
 
-            //$values="'$item[0]', '$item[3]', '$item[4]', '$item[5]', '$item[6]', '$item[7]', '$item[8]', '$item[9]', '$item[10]'";
-            $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "transactions` ($keys) VALUES $transaction;");
+            if($item[2]==2){//major incompatibility BugFix Linet2.0
+                $item[8]=$item[8]*-1;
+            }
+            $values="'$item[1]', '$item[2]', '$item[3]', '$item[4]', '$item[5]', '$item[6]', '$item[7]', '$item[8]', 'ILS', '$item[8]',"
+                    . "'$item[9]', '$item[10]', '$item[11]'";
+            $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "transactions` ($keys) VALUES ($values);");
             //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
         }
     }

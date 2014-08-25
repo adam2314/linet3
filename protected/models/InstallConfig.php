@@ -35,6 +35,12 @@ class InstallConfig extends CFormModel {
         fclose($handle);
 
         //make main db
+        $this->makeDB();
+        
+       return true;
+    }
+    
+    private function makeDB(){
         try {
             Yii::app()->db->setActive(false);
             Yii::app()->db->connectionString = $this->dbstring;
@@ -51,9 +57,8 @@ class InstallConfig extends CFormModel {
             $message = $e->getMessage();
             print $message;
         }
-        
-       return true;
     }
+    
 
     public function rules() {
         return array(
