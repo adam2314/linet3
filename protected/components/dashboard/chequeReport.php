@@ -62,6 +62,8 @@ class chequeReport extends MiniForm {
             if($result==0){
                 array_push($sums, "0");
             }else{
+                if($type==2)
+                    $result=$result*-1;
             array_push($sums, round($result));
             }
         }

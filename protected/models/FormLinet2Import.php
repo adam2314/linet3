@@ -282,9 +282,9 @@ class FormLinet2Import extends CFormModel {
             $item= $this->parseLine($transaction);
             $keys = "`num`, `type`, `account_id`, `refnum1`, `refnum2`, `valuedate`, `details`, `sum`, `currency_id`, `leadsum`, `intCorrelation`, `linenum`, `owner_id`";
 
-            if($item[2]==2){//major incompatibility BugFix Linet2.0
+            /*if($item[2]==2){//major incompatibility BugFix Linet3.0
                 $item[8]=$item[8]*-1;
-            }
+            }*/
             $values="'$item[1]', '$item[2]', '$item[3]', '$item[4]', '$item[5]', '$item[6]', '$item[7]', '$item[8]', 'ILS', '$item[8]',"
                     . "'$item[9]', '$item[10]', '$item[11]'";
             $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "transactions` ($keys) VALUES ($values);");
@@ -386,7 +386,8 @@ class FormLinet2Import extends CFormModel {
             $this->imprtCorrelations($array['correlation'],$prefix);
 
 
-
+        //get transaction num
+        //get docnums
 
 
 

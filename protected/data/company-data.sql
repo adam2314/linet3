@@ -976,8 +976,8 @@ INSERT INTO `docStatus` (`num`, `doc_type`, `name`, `looked`, `action`) VALUES
 (2, 10, 'הופק', 0, '1'),
 (2, 11, 'הופק', 1, '1'),
 (2, 12, 'הופק', 1, '1'),
-(2, 13, 'הופק', 1, '1'),
-(2, 14, 'הופק', 1, '1'),
+(2, 13, 'הופק', 1, '-1'),
+(2, 14, 'הופק', 1, '-1'),
 (2, 15, 'הופק', 1, '1');
 
 INSERT INTO `docType` (`id`, `name`, `openformat`, `isdoc`, `isrecipet`, `iscontract`, `looked`, `stockAction`, `account_type`, `docStatus_id`, `last_docnum`, `oppt_account_type`, `transactionType_id`, `vat_acc_id`, `header`, `footer`, `stockSwitch`, `copy`) VALUES
@@ -993,8 +993,8 @@ INSERT INTO `docType` (`id`, `name`, `openformat`, `isdoc`, `isrecipet`, `iscont
 (10, 'Purchase Order',          500,    1, 0, 0, 0, 0, 1, 2, 1, NULL, NULL, 3, '', '', 0, 1),
 (11, 'Manual invoice',          0,      1, 0, 0, 1, 1, 1, 2, 1, NULL, 11, 3, '', '', 1, 1),
 (12, 'Manual receipt',          0,      1, 0, 0, 1, 1, 1, 2, 1, NULL, 12, 3, '', '', 0, 1),
-(13, 'Buisness outcome',        0,      1, 0, 0, 0, 1, 1, 2, 1, 2, 5, 1, '', '', 0, 0),
-(14, 'Asstes outcome',          0,      1, 0, 0, 0, 1, 1, 2, 1, 4, 5, 2, '', '', 0, 0),
+(13, 'Buisness outcome',        0,      1, 0, 0, 0, 1, 1, 2, 1, 2, 2, 1, '', '', 0, 0),
+(14, 'Asstes outcome',          0,      1, 0, 0, 0, 1, 1, 2, 1, 4, 2, 2, '', '', 0, 0),
 (15, 'Warehouse transaction',   830,    1, 0, 0, 0, 1, 8, 2, 1, 8, NULL, 0, '', '', 0, 1);
 
 INSERT INTO `itemCategories` (`id`, `name`, `profit`) VALUES
