@@ -41,6 +41,7 @@ class Docs extends fileRecord {
     public $stockSwitch = 1;
     public $refnum_ids ='';
     private $dateDBformat = true;
+    public $maxDocnum;
     
     const STATUS_OPEN=0;
     const STATUS_CLOSED=1;
@@ -498,6 +499,18 @@ class Docs extends fileRecord {
         }
     }
 
+    public static function getMax($type_id){
+        $model = new Docs;
+        $criteria=new CDbCriteria;
+        $criteria->select='max(docnum) AS maxDocnum';
+        $criteria->condition = "doctype = :type_id";
+        $criteria->params = array(':type_id' => $type_id);
+        $row = $model->model()->find($criteria);
+        return $row['maxDocnum'];
+        
+    }
+    
+    
     /**
      * @return string the associated database table name
      */

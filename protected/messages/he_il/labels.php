@@ -133,7 +133,7 @@ return array (
   'Sum' => 'סכום',
   'Symbol' => 'סמל',
   'System Account' => 'חשבון מערכת',
-  'Tax Auth Date' => 'תאריך פקיעת תוקף אישור ניקוי מס במקור',
+  'Tax Auth Date' => 'תאריך פקיעת תוקף אישור ניכוי מס במקור',
   'Tax Rate' => 'שעור מע"מ',
   'Timestamp' => 'תאריך אירוע',
   'Total' => 'סך',

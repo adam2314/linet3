@@ -127,10 +127,10 @@ class Bankbook extends CActiveRecord {
                         $this->readlineHashDos($line, $account);
                         break;
                     case 'HashWin':
-                        readlineHashWin($line, $account);
+                        $this->readlineHashWin($line, $account);
                         break;
                     case 'leumi':
-                        readlineLeumi($line, $account);
+                        $this->readlineLeumi($line, $account);
                         break;
                 } else {
                 throw new CHttpException(500, Yii('app', 'bankbook Import Unkown file format'));

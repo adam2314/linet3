@@ -28,6 +28,8 @@ class Transactions extends basicRecord {
     public $Docs= NULL;
     public $refnum1_ids ='';
     
+    public $maxNum;
+    
     public function getRef(){
         return array();//
         
@@ -164,6 +166,15 @@ class Transactions extends basicRecord {
         } else {
             return (int) $this->num;
         }
+    }
+    
+    public static function getMax(){
+        $model = new Transactions;
+        $criteria=new CDbCriteria;
+        $criteria->select='max(num) AS maxNum';
+        $row = $model->model()->find($criteria);
+        return $row['maxNum'];
+        
     }
 
     public function beforeSave() {

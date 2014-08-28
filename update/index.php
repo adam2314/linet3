@@ -2,7 +2,7 @@
 /* update writen by Adam BH */
 //$_GET['lang'] = 'he';
 $update = 1;
-
+date_default_timezone_set('Asia/Tel_Aviv');
 
 require_once('../protected/config/yii.php');
 require_once($yii);

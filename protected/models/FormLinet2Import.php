@@ -361,11 +361,12 @@ class FormLinet2Import extends CFormModel {
         $this->saveSetting('company.fax', $company[8]);
         $this->saveSetting('company.website', $company[9]);
         $this->saveSetting('company.tax.rate', $company[10]);
-        //$this->saveSetting('company.tax.repirs', $company[11]);
+        $this->saveSetting('company.tax.irs', $company[11]);
         //$this->saveSetting('account.100.srctax', $company[12]);
-        ////$this->saveSetting('company.tax.vat', $company[13]);
+        $this->saveSetting('company.tax.vat', $company[13]);
+        
         //exit;
-
+        ///*
         if (isset($array['accounts']))
             $this->imprtAccounts($array['accounts'],$prefix);
 
@@ -384,11 +385,26 @@ class FormLinet2Import extends CFormModel {
             $this->imprtBankbooks($array['bankbook'],$prefix);
         if (isset($array['correlation']))
             $this->imprtCorrelations($array['correlation'],$prefix);
+//*/
 
-
+        
+        //vat rate
+        $acc=  Accounts::model()->findByPk(100);
+        $acc->src_tax=$company[12];
+        $acc->save();
+        $acc=  Accounts::model()->findByPk(101);
+        $acc->src_tax=$company[12];
+        $acc->save();
+        
+        
         //get transaction num
+        $this->saveSetting('company.transaction', Transactions::getMax()+1);
         //get docnums
-
+        $types=  Doctype::model()->findAll();
+        foreach($types as $type){
+            $type->last_docnum=Docs::getMax($type->id);
+            $type->save();
+        }
 
 
 
