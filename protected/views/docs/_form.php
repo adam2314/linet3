@@ -551,7 +551,8 @@ $form = $this->beginWidget('CActiveForm', array(
                 $("#Docs_vatnum").val(data.vatnum);
                 $("#Docs_currency_id").val(data.currency_id);
                 $("#Docs_currency_id").trigger("liszt:updated");
-
+                
+                $("#Docs_vatnum").trigger("change");
                 var pay_terms = data.pay_terms;
                 //CalcDueDate(idate, pay_terms);
             }, "json")
@@ -627,8 +628,8 @@ $form = $this->beginWidget('CActiveForm', array(
                 $('.rcptTarget').append(template);
                 $('#rcpt_items').val(i + 1);
                 // start specific commands
-                $('#Doccheques_<?php echo $i; ?>_type').val(0);
-                $('#Doccheques_<?php echo $i; ?>_type').trigger("liszt:updated");
+                //$('#Doccheques_<?php echo $i; ?>_type').val(0);
+                //$('#Doccheques_<?php echo $i; ?>_type').trigger("liszt:updated");
 
                 rcptcalcLines();
                 // end specific commands
@@ -666,7 +667,7 @@ $form = $this->beginWidget('CActiveForm', array(
         /*******************end ready*****************************/
 
         function makeRcpt(i) {
-            billed[0] = true;
+            billed[i] = true;
             $('#docs-form').submit();
 
         }
@@ -703,7 +704,7 @@ $form = $this->beginWidget('CActiveForm', array(
             for (var i = 0; i < elements.length; i++) {
 
                 billed[i] = false;
-
+                console.log(elements[i].value);
                 $.post("<?php echo $this->createUrl('/payment/form'); ?>/" + elements[i].value, {"bill": {"sum": $(sums[i]).val(), "line": [i]}}, //"bill"
                 function(data) {
                     //$("#paymenetDialog").show();

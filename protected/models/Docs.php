@@ -62,9 +62,9 @@ class Docs extends fileRecord {
         return parent::init();
     }
             
-    public function findAllByType($doctype) {
+    public static function findAllByType($doctype) {
 
-        return Docs::model()->findByAttributes(array('doctype' => $doctype));
+        return Docs::model()->findAllByAttributes(array('doctype' => $doctype));
     }
 
     public function draftSave(){

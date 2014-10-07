@@ -275,6 +275,10 @@ class User extends mainRecord {
         return $this->hashPassword($password, $this->salt) === $this->password;
     }
 
+    public function validateHash($hash) {
+        return $hash === $this->hash;
+    }
+    
     /**
      * Generates the password hash.
      * @param string password

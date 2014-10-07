@@ -1,9 +1,9 @@
-﻿<?php
+<?php
 /* update writen by Adam BH */
 //$_GET['lang'] = 'he';
 $update = 1;
-date_default_timezone_set('Asia/Tel_Aviv');
 
+date_default_timezone_set('Asia/Tel_Aviv');
 require_once('../protected/config/yii.php');
 require_once($yii);
 $config = include '../protected/config/main.php';
@@ -158,9 +158,9 @@ if ($loggedin) {
         $logfile = $config['basePath'] . "/backup/updatelog" . date('dmY') . '.txt';
         if (permisionChk($logfile)) {
             $log = fopen($logfile, 'w') or die("can't open file");
-            fwrite($log, "Start Loging: " . date('d/m/y H:m') . "\n");
+            logMe("Start Loging: " ,$log );
             $updatefile = GetList($config);
-            
+            logMe("Got File list ",$log);
             $safty = true;
         } else {
             $safty = false;
@@ -183,8 +183,12 @@ if ($loggedin) {
             $sversion = getVersion($config);
             foreach ($updatefile as $value) {
                 //log: trying to ge file
-                fwrite($log, "-GetFile:" . $value . "\n");
-                $file = getFile($value, $config);
+                logMe("GetFile:" . $value ,$log);
+				
+				
+                //$file = getFile($value, $config);
+				$file=';';
+				
                 //echo 'exit';
                 //exit;
                 if ($file == '') {
@@ -193,26 +197,28 @@ if ($loggedin) {
                 }
                 $value = $config['basePath'] . "/../" . $value;
 
-                print "+Writing file: $value<br />";
+                print "+Got file: $value<br />";
                 $fh = fopen($value, 'w') or die("can't open file");
-                fwrite($log, "+Writing file: " . $value . "\n");
+				logMe("Writing file: " . $value ,$log );
                 //print "<hr />$file<hr />";
                 fwrite($fh, $file); //^better large files support
-                fwrite($log, "+Wrote file: " . $value . "\n");
+				logMe("Wrote file: " . $value ,$log );
                 fclose($fh);
             }
             //log:end
 
-            fwrite($log, "Finished updating files" . "\n");
+            
+			logMe("Finished updating files",$log );
             print Yii::t('update', "Finished updating files") . ".<br />";
             /* update db */
             print Yii::t('update', "asksing database update") . "<br />";
-            fwrite($log, "Get database update" . "\n");
-            $command = getSQL($config);
-            fwrite($log, "Got DB updae" . "\n");
+			logMe("Get database update",$log );
+            $command = ';';//getSQL($config);
+			logMe("Got DB updae",$log );
             if ($command <> '') {
                 //connect mysql server
                 fwrite($log, "Connect to MySql Server" . "\n");
+				logMe("Got DB updae",$log );
                 $link = mysql_connect($host, $user, $pswd);
                 //select db
                 fwrite($log, "Select Database" . "\n");
@@ -245,7 +251,7 @@ if ($loggedin) {
         } else {
             print Yii::t('update', "Can Not Continue Without!") . "<br />";
         }
-        fwrite($log, "End Loging: " . date('d/m/y H:m') . "\n");
+		logMe("End Loging",$log );
         fclose($log);
         $nextStep = 4;
         if ($nextStep)
@@ -287,39 +293,88 @@ function getSQL($config) {
 function getFile($fileName, $config) {
     $updatesrv = $config['params']['updatesrv'];
     $version = $config['params']['version'];
-    $content = file_get_contents($updatesrv . '?GetFile=' . base64_encode($fileName) . '&Version=' . $version);
+	
+	$content=requ($updatesrv . '?GetFile=' . base64_encode($fileName) . '&Version=' . $version);
+	/*if ($fp = fopen($updatesrv . '?GetFile=' . base64_encode($fileName) . '&Version=' . $version, 'r')) {
+        $content = fread($fp, 1024);
+        while ($line = fread($fp, 1024)) {
+            $content .= $line;
+        }
+    }*/
+	
+    //$content = file_get_contents($updatesrv . '?GetFile=' . base64_encode($fileName) . '&Version=' . $version);
     
-    echo $updatesrv . '?GetFile=' . base64_encode($fileName) . '&Version=' . $version;
+    //echo $updatesrv . '?GetFile=' . base64_encode($fileName) . '&Version=' . $version;
+	
+	
     return base64_decode($content);
 }
 
 function getVersion($config) {
     $updatesrv = $config['params']['updatesrv']; 
     $version = $config['params']['version'];
-    if ($fp = fopen($updatesrv . "?GetLateset&ver=$version", 'r')) {
-        $content = fread($fp, 1024);
-        return $content;
-    }
+    //if ($fp = fopen($updatesrv . "?GetLateset&ver=$version", 'r')) {
+    //   $content = fread($fp, 1024);
+     //   return $content;
+    //}
+	
+	
+	
+	$ctx=stream_context_create(array('http'=>
+    array(
+	'timeout' => 5 // 30 sec
+    )
+	));
+	
+	//$conetnt = file_get_contents('http://example.com',false,$ctx);
+	return file_get_contents($updatesrv . "?GetLateset&ver=$version",false,$ctx);
 }
 
 function getList($config) {
     $updatesrv = $config['params']['updatesrv'];
     $version = $config['params']['version'];
-    if ($fp = fopen($updatesrv . '?GetList&Version=' . $version, 'r')) {
+    /*if ($fp = fopen($updatesrv . '?GetList&Version=' . $version, 'r')) {
         $content = fread($fp, 1024);
         while ($line = fread($fp, 1024)) {
             $content .= $line;
         }
     }
+	*/
+	$content=requ($updatesrv . '?GetList&Version=' . $version);
     $filelist = explode('<br />', $content);
     array_pop($filelist);
     //print_r($filelist);
     return $filelist;
 }
 
+function logMe($text,$log=null){
+	if($log===null)
+		global $log;
+	fwrite($log, date('d/m/Y H:i:s').":\t" . $text . "\n");
+	
+	
+	
+}
+
+function requ($url,$log=null){
+	if($log===null)
+		global $log;
+	logMe("Making Requst: ".$url,$log=null);
+	
+	if ($fp = fopen($url, 'r')) {
+        $line = fread($fp, 1024);
+        while ($line!="<EOF>") {
+            $line = fread($fp, 1024);
+            $content .= $line;
+        }
+	}
+	logMe("End Requst: ".$url,$log=null);
+	return $content;
+}
+
 function permisionChk($filename) {
     //echo $filename.'<br />\n';
-    
+    return true;
     if (file_exists($filename)) {
         if (is_writeable($filename)) {
             return true;

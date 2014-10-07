@@ -112,6 +112,9 @@ return CMap::mergeArray(
                         'api/logout' => 'api/logout',
                         'api/select/<id:\d+>' => 'api/select',
                         'api/search/<model:\w+>' => 'api/search',
+                        'api/count/<model:\w+>' => 'api/count',
+                        'api/countSum/<model:\w+>' => 'api/countSum',
+                        
                         array('api/list', 'pattern' => 'api/<model:\w+>', 'verb' => 'GET'),
                         array('api/view', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'GET'),
                         array('api/update', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'POST'),

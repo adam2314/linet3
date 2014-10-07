@@ -4,7 +4,7 @@ $this->beginWidget('MiniForm',array(
     'haeder' => Yii::t('app',"Vat Report"),
 )); 
 
-$form=$this->beginWidget('CActiveForm', array(
+$form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'reportvat-form',
     //'enableAjaxValidation'=>true,
     
@@ -18,7 +18,7 @@ $form=$this->beginWidget('CActiveForm', array(
 <div class='row'>
 <div class='col-md-3'>
 <?php
-echo Yii::t('app','From Date');
+echo Yii::t('app','From Date').$model->from_month;
 
 echo $form->hiddenField($model,'step');
 echo $form->hiddenField($model,'from_month');
@@ -26,24 +26,24 @@ echo $form->hiddenField($model,'year');
 
 echo "<br>";
 
-echo Yii::t('app','To Date');
+echo Yii::t('app','To Date').$model->to_month;
 echo $form->hiddenField($model,'to_month');
 //echo $form->hiddenField($model,'to_year');  
-
+echo "<br>";
 echo $form->hiddenField($model,'selvat_acc');  
-echo $form->textField($model,'selvat_total');
-echo $form->textField($model,'income_sum');
-echo $form->textField($model,'income_sum_novat');
+echo $form->textFieldRow($model,'selvat_total');
+echo $form->textFieldRow($model,'income_sum');
+echo $form->textFieldRow($model,'income_sum_novat');
 echo '<br />';
 
 
 
 echo $form->hiddenField($model,'assetvat_acc');  
-echo $form->textField($model,'assetvat_total');
+echo $form->textFieldRow($model,'assetvat_total');
 
 echo $form->hiddenField($model,'buyvat_acc');  
-echo $form->textField($model,'buyvat_total');
-echo $form->textField($model,'payvat_total');
+echo $form->textFieldRow($model,'buyvat_total');
+echo $form->textFieldRow($model,'payvat_total');
 
 //echo CHtml::submitButton('',array('onclick'=>'send();')); 
 ?>

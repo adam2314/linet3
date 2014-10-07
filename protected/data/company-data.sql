@@ -881,7 +881,7 @@ INSERT INTO `bankName` (`id`, `name`) VALUES
 
 INSERT INTO `config` (`id`, `value`, `eavType`, `hidden`, `priority`) VALUES
 ('company.1.warehouse', '115', 'integer', 1, 40),
-('company.acc.assetvat', '3', 'integer', 1, 40),
+('company.acc.assetvat', '2', 'integer', 1, 40),
 ('company.acc.buyvat', '1', 'integer', 1, 40),
 ('company.acc.custtax', '8', 'integer', 1, 40),
 ('company.acc.irs', '16', 'integer', 1, 40),

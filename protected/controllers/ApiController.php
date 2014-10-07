@@ -45,7 +45,7 @@ class ApiController extends Controller {//RightsController
         'itemunit' => 'Itemunit',
         'itemvatcat' => 'ItemVatCat',
         'userincomemap' => 'UserIncomeMap',
-        'transaction' => 'Transaction',
+        'transactions' => 'Transactions',
         'files' => 'Files',
     );
 
@@ -83,13 +83,14 @@ class ApiController extends Controller {//RightsController
 
             $model = new FormLogin;
             $model->attributes = $entityBody;
-            if ($model->validate() && $model->login()) {
+            if ($model->apiLogin()) {
                 $this->_sendResponse(200, CJSON::encode("ok"));
             } else {
                 $this->_sendResponse(500, CJSON::encode("not ok"));
 
             }
         }
+        //$this->_sendResponse(200, CJSON::encode("empty"));
         Yii::app()->end();
     }
 
@@ -249,6 +250,58 @@ class ApiController extends Controller {//RightsController
      * 
      */
 
+    public function actionCountSum($model) {//docs,account,user,
+        if ($this->hasAccess($model . '/countSum')) {
+            $modelName = $this->translate[$model];
+            //$loadedModel = new $modelName;
+        } else {
+            $this->_sendResponse(403, sprintf(
+                            'Mode <b>create</b> is not implemented for model <b>%s</b>', $model));
+            Yii::app()->end();
+        }
+        
+        $companys=  Company::model()->findAll();
+        $sum=0;
+        foreach($companys as $company){
+            //$this->actionSelect();
+            Company::model()->select($company->id);
+            //echo $company->id.';';
+            $modelName::model()->refreshMetaData();
+            $sum+=count($modelName::model()->findAll());
+        }
+        $this->_sendResponse(200, CJSON::encode($sum));
+    }
+    
+    
+    public function actionCount($model,$type=null) {//docs,account,user,
+        if ($this->hasAccess($model . '/count')) {
+            $modelName = $this->translate[$model];
+            $loadedModel = new $modelName;
+        } else {
+            $this->_sendResponse(403, sprintf(
+                            'Mode <b>create</b> is not implemented for model <b>%s</b>', $model));
+            Yii::app()->end();
+        }
+        
+        
+        if(($modelName=='Docs')&&($type != null)){
+            $models = $modelName::model()->findAllByType($type);
+            //$models =Docs::model()->findByAttributes(array('doctype' => 8));
+        } else {
+            $models = $modelName::model()->findAll();
+        }
+        $this->_sendResponse(200, CJSON::encode(count($models)));
+
+    }
+    
+    
+    
+    /*
+     * 
+     * Api Create
+     * 
+     */
+
     public function actionCreate($model) {
         if ($this->hasAccess($model . '/create')) {
             $modelName = $this->translate[$model];
@@ -372,7 +425,7 @@ class ApiController extends Controller {//RightsController
             $this->_sendResponse(500, sprintf("Error: Couldn't delete model <b>%s</b> with ID <b>%s</b>.", $model, $id));
     }
 
-    private function _sendResponse($status = 200, $body = '', $content_type = 'text/html') {
+    private function _sendResponse($status = 200, $body = '', $content_type = 'application/json') {
         // set the status
         $status_header = 'HTTP/1.1 ' . $status . ' ' . $this->_getStatusCodeMessage($status);
         header($status_header);

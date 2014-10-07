@@ -46,13 +46,13 @@ class FormReportVat extends CFormModel
 	}
     
         public function calcPay(){
-             $criteria=new CDbCriteria;
+             /*$criteria=new CDbCriteria;
                 $criteria->condition="type = :type";
                 $criteria->params=array(
-                    ':type' => 3,
-                  );
-
-                $incomes= Accounts::model()->findAll($criteria);
+                    ':type' => 3,//Receipt
+                  );*/
+                
+                $incomes= Accounts::model()->findAllByType(3);//incomes
                     foreach($incomes as $account){
                         //echo $transaction->date.','.$transaction->sum.'<br>';
                         if($account->src_tax==0)
@@ -69,7 +69,7 @@ class FormReportVat extends CFormModel
                 
                 $this->buyvat_acc=Yii::app()->user->settings['company.acc.buyvat'];
                 $buyvat=  Accounts::model()->findByPk($this->buyvat_acc);
-                $this->buyvat_total=$buyvat->getTotal($this->from_date,$this->to_date);
+                $this->buyvat_total=$buyvat->getTotal($this->from_date,$this->to_date)*-1;//hAS TO INVERT
                 
                 $this->assetvat_acc=Yii::app()->user->settings['company.acc.assetvat'];
                 $assetvat=  Accounts::model()->findByPk($this->assetvat_acc);
