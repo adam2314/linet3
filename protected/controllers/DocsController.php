@@ -2,7 +2,7 @@
 
 class DocsController extends RightsController {
 
-    public function actionView($id = 0, $docnum = 0, $doctype = 0) {// used in the refnum selection
+    public function actionView($id = 0, $docnum = 0, $doctype = 0, $mail=0) {// used in the refnum selection
         if ((int) $id != 0) {
             $model = $this->loadModel($id);
         } else {
@@ -15,7 +15,7 @@ class DocsController extends RightsController {
         
         if(isset($_POST['subType'])){
             $model->refnum_ids=$_POST['Docs']['refnum_ids'];
-            return $this->doc($model);
+            return $this->doc($model,$mail);
         }
         //$docdetails =$model->docDetailes;
         //$doctype =$model->docType;
@@ -23,6 +23,7 @@ class DocsController extends RightsController {
 
         $this->render('view', array(
             'model' => $model,
+            'mail' => $mail
         ));
     }
 
@@ -60,6 +61,7 @@ class DocsController extends RightsController {
 
         $cerfile = $yiiBasepath . "/files/" . $configPath . "/cert/" . $yiiUser . ".p12";
         //echo $cerfile;
+        
         if (file_exists($cerfile)) {
             $certificate = file_get_contents($cerfile);
             //password for the certificate
@@ -72,18 +74,21 @@ class DocsController extends RightsController {
             //here the digital certificate is inserted inside of the PDF document
             $renderedPdf = $pdf->render();
             file_put_contents($myPdfS, $renderedPdf);
+            $addon="-signed.pdf";
         }else{
-            Yii::app()->end();
+            Yii::app()->user->setFlash('error', Yii::t('app','No Certifcate cannt sign'));
+            //Yii::app()->end();
+            $addon=".pdf";
         }
         set_include_path($oldpath);
         spl_autoload_register(array('YiiBase', 'autoload'));
         
         if($return){
-            return Yii::app()->getRequest()->sendFile($model->docType->name."-".$model->docnum."-signed.pdf", $renderedPdf);
+            return Yii::app()->getRequest()->sendFile($model->docType->name."-"."$model->docnum".$addon, $renderedPdf);
         }else{
             
             $doc_file = new Files();
-            $doc_file->name = $model->docType->name."-".$model->docnum."-signed.pdf"; //it might be $img_add->name for you, filename is just what I chose to call it in my model
+            $doc_file->name = $model->docType->name."-"."$model->docnum".$addon; //it might be $img_add->name for you, filename is just what I chose to call it in my model
             $doc_file->path= "docs/";
             $doc_file->parent_type=get_class($this);
             $doc_file->parent_id = $this->id; // this links your picture model to the main model (like your user, or profile model)
@@ -144,11 +149,11 @@ class DocsController extends RightsController {
         ));
     }
 
-    private function doc($model) {
+    private function doc($model,$mail=0) {
         switch ($_POST['subType']) {
             case 'save':
                 if ($model->save())
-                    $this->redirect(array('admin'));
+                    $this->redirect(array('view','id'=>$model->id));
                 return;
             case 'saveDraft':
                 if ($model->isNewRecord){
@@ -175,6 +180,14 @@ class DocsController extends RightsController {
                 if ($model->save())
                     
                     $this->actionPdf($model,false);
+                    //echo ";$mail;";
+                    if($mail==0)
+                        $this->redirect(array('view', 'id' => $model->id,"mail"=>1));
+                    //$mail=new Mail();
+                    //$mail->loadTemplate();
+                    //$mail->to=$model->Account->mail;
+                    //$mail->files=File::id();
+                
                 break;    
             case 'pdf':
                 if ($model->save())

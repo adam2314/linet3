@@ -551,7 +551,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 $("#Docs_vatnum").val(data.vatnum);
                 $("#Docs_currency_id").val(data.currency_id);
                 $("#Docs_currency_id").trigger("liszt:updated");
-                
+
                 $("#Docs_vatnum").trigger("change");
                 var pay_terms = data.pay_terms;
                 //CalcDueDate(idate, pay_terms);
@@ -805,7 +805,7 @@ $form = $this->beginWidget('CActiveForm', array(
         function TypeSelChange(index) {
             var val = $('#Doccheques_' + index + '_type').val();
 
-            //$('#Doccheques_'+index+"#banksel"+num).parent().append("<?php //echo PrintBankSelect();                      ?>");
+            //$('#Doccheques_'+index+"#banksel"+num).parent().append("<?php //echo PrintBankSelect();                       ?>");
             $('#Doccheques_' + index + "_cheque_acct").attr('placeholder', '');
             $('#Doccheques_' + index + "_cheque_num").attr('placeholder', '');
             $('#Doccheques_' + index + "_branch").attr('placeholder', '');
@@ -848,7 +848,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 /*
                  $('#Doccheques_' + index + "_cheque_date").show();
                  
-                 $('#Doccheques_' + index + "_bank").parent().append('<?php //echo PrintCreditCompany();                      ?>');
+                 $('#Doccheques_' + index + "_bank").parent().append('<?php //echo PrintCreditCompany();                       ?>');
                  $('#Doccheques_' + index + "_bank").remove();
                  
                  $('#Doccheques_' + index + "_branch").show();
@@ -1161,19 +1161,20 @@ $form = $this->beginWidget('CActiveForm', array(
                     return false;
                 }
             }
+
+
             rcptBill();
-
-
-
-
-
-
 
 
 
             $('#docs-form').submit();
             //return false;
         }
+        
+        
+         
+        
+        
     </script>
     <p>
         <?php echo $form->labelEx($model, 'description'); ?>
@@ -1224,6 +1225,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 array('icon' => 'glyphicon glyphicon-print', 'label' => Yii::t('app', 'Print'), 'htmlOptions' => array('onclick' => 'return sendForm("print");'),),
                 array('items' => array(
                         //array('icon'=>'envelope','label'=>Yii::t('app','Email'), 'url'=>'javascript:sendForm("email");',),
+                        array('icon' => 'glyphicon glyphicon-envelope', 'label' => Yii::t('app', 'Email'), 'url' => 'javascript:sendForm("email");',),
                         array('icon' => 'glyphicon glyphicon-save', 'label' => Yii::t('app', 'PDF'), 'url' => 'javascript:sendForm("pdf");',),
                         array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save Draft'), 'url' => 'javascript:sendForm("saveDraft");',),
                     //array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save'), 'url' => 'javascript:sendForm("save");',),

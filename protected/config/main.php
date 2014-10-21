@@ -51,13 +51,13 @@ return CMap::mergeArray(
                 //),
                 'Smtpmail' => array(
                     'class' => 'application.extensions.smtpmail.PHPMailer',
-                    'Host' => "smtp.gmail.com",
-                    'Username' => '12@gmail.com',
-                    'Password' => '12',
+                    'Host' => "127.0.0.1",
+                    //'Username' => '',
+                    //'Password' => '',
                     'Mailer' => 'smtp',
-                    'Port' => 587,
-                    'SMTPAuth' => true,
-                    'SMTPSecure' => 'tls',
+                    'Port' => 25,
+                    'SMTPAuth' => false,
+                    'SMTPSecure' => '',
                 ),
                 'curl' => array(
                     'class' => 'ext.curl.Curl',
@@ -90,6 +90,7 @@ return CMap::mergeArray(
                     'assignmentTable' => '{{AuthAssignment}}',
                     'rightsTable' => '{{Rights}}',
                 ),
+                /*
                 'ePdf' => array(
                     'class' => 'ext.yii-pdf.EYiiPdf',
                     'params' => array(
@@ -101,7 +102,7 @@ return CMap::mergeArray(
                             'class' => 'mpdf',
                         )
                     )
-                ), //ePdf
+                ), //ePdf*/
                 // uncomment the following to enable URLs in path-format
                 'urlManager' => array(
                     'urlFormat' => 'path',
@@ -147,11 +148,11 @@ return CMap::mergeArray(
                     'class' => 'CLogRouter',
                     'routes' => array(
                         //array('class' => 'CWebLogRoute',),
-                        array(
-                            'class' => 'CFileLogRoute',
-                            'levels' => 'trace, info, error, warning',
-                            'categories' => 'app',
-                        ),
+                        //array(
+                        //    'class' => 'CFileLogRoute',
+                        //    'levels' => 'trace, info, error, warning',
+                        //    'categories' => 'app',
+                        //),
                     /* array(
                       'class'=>'CEmailLogRoute',
                       'levels'=>'error, warning',

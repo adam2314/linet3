@@ -14,7 +14,7 @@
  * @property string $entity_id
  */
 class MailTemplate extends CActiveRecord {
-
+    //public $to;
     const table = '{{mailTemplate}}';
 
     /**
@@ -43,7 +43,7 @@ class MailTemplate extends CActiveRecord {
             array('name', 'required'),
             array('id', 'numerical', 'integerOnly' => true),
             array('name', 'length', 'max' => 255),
-            array('name, bcc, cc, subject, body, entity_type, entity_id', 'safe'),
+            array('to, name, bcc, cc, subject, body, entity_type, entity_id', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('id, name', 'safe', 'on' => 'search'),
@@ -99,18 +99,22 @@ class MailTemplate extends CActiveRecord {
     public function templateRplc($data) {
         //subject
         //body
-
+        
+        
+        
         if (preg_match_all('~%([^%]*?)%~', $this->body, $arr)) {
-            foreach ($arr as $result) {
-                if ($data->hasAttribute(str_replace("%", "", $result[0])))
-                    $this->body = str_replace($result[0], $data->{str_replace("%", "", $result[0])}, $this->body);
+            //print_r($arr);
+            foreach ($arr[0] as $result) {
+                
+                if ($data->hasAttribute(str_replace("%", "", $result)))
+                    $this->body = str_replace($result, $data->{str_replace("%", "", $result)}, $this->body);
             }
         }
         
         if (preg_match_all('~%([^%]*?)%~', $this->subject, $arr)) {
-            foreach ($arr as $result) {
-                if ($data->hasAttribute(str_replace("%", "", $result[0])))
-                    $this->subject = str_replace($result[0], $data->{str_replace("%", "", $result[0])}, $this->subject);
+            foreach ($arr[0] as $result) {
+                if ($data->hasAttribute(str_replace("%", "", $result)))
+                    $this->subject = str_replace($result, $data->{str_replace("%", "", $result)}, $this->subject);
             }
         }
     }

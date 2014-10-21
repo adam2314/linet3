@@ -331,6 +331,43 @@ class Accounts extends fileRecord {//CActiveRecord
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
+    public function owes() {
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
+
+        $filter=1;//small change
+
+
+
+        //$type = (int) $this->type;
+
+        $accounts = $this->findAllByType($this->type);
+        // or using: $rawData=User::model()->findAll();
+        $list=array();
+        foreach ($accounts as $account) {
+            $tmp=$account->getBalance();
+            if(($tmp>$filter)||($tmp<$filter*-1))
+                $list[]=array( 'id'=>$account->id,'name'=>$account->name, 'sum'=>$tmp);
+            
+        }
+
+
+        $dataProvider = new CArrayDataProvider($list, array(
+            'id' => 'user',
+            'sort' => array(
+                'attributes' => array(
+                    'id', 'name', 'sum',
+                ),
+            ),
+            'pagination' => array(
+                'pageSize' => 10,
+            ),
+        ));
+
+        return $dataProvider;
+// $dataProvider->getData() will return a list of arrays.
+    }
+
     public function search() {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
@@ -358,7 +395,7 @@ class Accounts extends fileRecord {//CActiveRecord
         $criteria->compare('city', $this->city, true);
         $criteria->compare('zip', $this->zip, true);
         $criteria->compare('comments', $this->comments, true);
-        $criteria->compare('comments', $this->currency_id, true);
+        $criteria->compare('currency_id', $this->currency_id, true);
         //$criteria->compare('system_acc',$this->system_acc,true);
         $criteria->compare('owner', $this->owner);
 
@@ -380,4 +417,21 @@ class Accounts extends fileRecord {//CActiveRecord
         //$type = $type;
     }
 
+    
+    public function validatePassword($password) {
+        return $this->hashPassword($password, $this->salt) === $this->password;
+    }
+    
+    public static function hashPassword($password, $salt) {
+        return md5($salt . $password);
+    }
+
+    /**
+     * Generates a salt that can be used to generate a password hash.
+     * @return string the salt
+     */
+    public static function generateSalt() {
+        return uniqid('', true);
+    }
+    
 }

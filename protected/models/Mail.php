@@ -23,7 +23,7 @@ class Mail extends CActiveRecord {
     private function mailsend(){
         $mail=Yii::app()->Smtpmail;
         $mail->CharSet = 'utf-8';  
-        $mail->SetFrom($this->from);
+        //$mail->SetFrom($this->from);
         //echo $this->files;
         if($this->files!=''){
             $file=  Files::model()->findByPk($this->files);
@@ -36,20 +36,23 @@ class Mail extends CActiveRecord {
                     
         }
         //$mail->SetFrom('adam@speedcomp.co.il', 'Adam Ben Hour');
+        $mail->SetFrom(Yii::app()->user->settings['company.mail.address']);
         //$mail->AddReplyTo('adam@speedcomp.co.il', 'Adam Ben Hour');
         $mail->AddCC($this->cc);//.$this->cc
-        $mail->Bcc    = $this->bcc;
+        $mail->AddBcc($this->bcc);
         $mail->Subject    = $this->subject;
         $mail->MsgHTML($this->body);
         $mail->AddAddress($this->to, "");
         ///*
         if(!$mail->Send()) {
-            echo "Mailer Error: " . $mail->ErrorInfo;
+            //echo "Mailer Error: " . $mail->ErrorInfo;
+             throw new CHttpException(501, Yii::t('app', "Mailer Error: "). $mail->ErrorInfo);
         }else {
-            echo "Message sent!";
+            Yii::app()->user->setFlash('success', Yii::t('app','Message sent!'));
+            //echo "Message sent!";
         }//*/
         
-        Yii::app()->end();
+        //Yii::app()->end();
     }
     
     public function save($runValidation = true, $attributes = NULL){
@@ -82,7 +85,7 @@ class Mail extends CActiveRecord {
         return array(
             array('id', 'numerical', 'integerOnly' => true),
             array('from, to ,bcc, cc, subject', 'length', 'max' => 255),
-            array('text, body, files', 'safe'),
+            array('from, to ,bcc, cc, subject, text, body, files', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('id, from, to ,bcc, cc, subject, text, body', 'safe', 'on' => 'search'),

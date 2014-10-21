@@ -7,21 +7,18 @@ $this->beginWidget('MiniForm', array(
 
 $this->widget('bootstrap.widgets.TbGridView', array(
     'id' => 'accounts-grid',
-    'dataProvider' => $model->search(),
+    'dataProvider' => $model->owes(),
     //'filter'=>$model,
     'columns' => array(
         'id',
         array(
             'name' => 'name',
             'type' => 'raw',
-            'value' => 'CHtml::link(CHtml::encode($data->name), "index.php?r=accounts/update&id=".CHtml::encode($data->id))',
+            'value' => 'CHtml::link(CHtml::encode($data["name"]), Yii::app()->createAbsoluteUrl("/accounts/transaction/id/".CHtml::encode($data["id"])))',
         ),
         //'type',
-        array(
-            'name' => 'sum',
-            'filter' => '',
-            'value' => '$data->getBalance()'
-        ),
+         'sum',
+          
     ),
 ));
 

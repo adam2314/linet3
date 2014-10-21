@@ -26,7 +26,7 @@ $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View User ") ." " 
 		//'password',
 		'lastlogin',
 		//'cookie',
-		//'hash',
+		'hash',
 		//'certpasswd',
 		//'salt',
 		'email',

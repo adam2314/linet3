@@ -114,8 +114,8 @@ class FormLinet2Import extends CFormModel {
         $this->sqlExec('DELETE FROM `' . Yii::app()->db->tablePrefix . "accounts` WHERE 1");
         foreach ($accounts as $account) {
             //echo $account."<br />";
-            $account = str_replace("'" . $prefix . "',", "", $account);
-            $keys = "`id`, `type`, `id6111`, `pay_terms`, `src_tax`, `src_date`, `parent_account_id`, `name`, `contact`, `department`, `vatnum`, `email`, `phone`, `dir_phone`, `cellular`, `fax`, `web`, `address`, `city`, `zip`, `comments`, `owner`";
+            $account = str_replace("'" . $prefix . "',", "'ILS',", $account);
+            $keys = "`id`, `currency_id`, `type`, `id6111`, `pay_terms`, `src_tax`, `src_date`, `parent_account_id`, `name`, `contact`, `department`, `vatnum`, `email`, `phone`, `dir_phone`, `cellular`, `fax`, `web`, `address`, `city`, `zip`, `comments`, `owner`";
             //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."accounts` ($keys) VALUES $account;";
             $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "accounts` ($keys) VALUES $account;");
         }

@@ -41,112 +41,14 @@ $this->menu = $actions;
 
 $this->beginWidget('MiniForm', array('haeder' => Yii::t("app", "View Document") . " " . $model->id,));
 ?>
-<script type="text/javascript">
-    jQuery(document).ready(function() {
-
-        $('#language_chosen').hide();
-
-    });
 
 
-    function hideMe() {
-        $('#printLink').hide();
-        $('#language_chosen').show();
-        return false;
-    }
-
-
-    function sendForm(value) {//preview,print,mail,pdf,save
-        $('#subType').val(value);
-        if (value == 'preview')
-            $("#docs-form").attr('target', '_BLANK');
-        if (value == 'email'){
-            return showMail();
-            
-        }
-        $('#docs-form').submit();
-
-        //return false;
-    }
-    
-    function getFile(){//only for docs
-        //get file
-        //post....
-        var url = $('#docs-form').attr("action");
-        var parms = $('#docs-form').serializeArray();
-        $.post(url, parms, 
-                function(data) {
-                     console.log(data);
-                     $('#Mail_files').val(data);
-                     //callback
-                        //get template
-                        //doc,type
-                     
-                }, "json");
-            
-                    //callback
-                        //show template
-        
-        //send mail
-        
-    }
-    
-    function getMailForm(){
-        $.post("<?php echo $this->createUrl('/mail/create'); ?>", {"minimal":"true"}, 
-                function(data) {
-                    
-                    //console.log(data);
-                    $('#mailForm').html(data);
-                    
-                    getTemplate('Docs',$("#Docs_doctype").val(),$("#Docs_id").val());
-                    getFile();
-                    
-                    
-                    $('#Mail_body').tinymce({'language':'en','plugins':['advlist autolink lists link image charmap print preview hr anchor pagebreak','searchreplace visualblocks visualchars code fullscreen','insertdatetime media nonbreaking save table contextmenu directionality','template paste textcolor'],'toolbar':'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor','toolbar_items_size':'small','image_advtab':true,'relative_urls':false,'spellchecker_languages':'+Русский=ru'});
-
-                }, "json");//
-        
-    }
-    
-    
-    
-    function getTemplate(obj,type,id){
-        $.post("<?php echo $this->createUrl('/mailTemplate/json'); ?>", {"MailTemplate": {"obj": obj, "type": type, "id": id}}, 
-                function(data) {
-                    
-                    //console.log(data[0].subject);
-                    
-                    $('#Mail_from').val();
-                    $('#Mail_to').val();
-                    $('#Mail_cc').val(data[0].cc);
-                    $('#Mail_bcc').val(data[0].bcc);
-                    $('#Mail_subject').val(data[0].subject);
-                    $('#Mail_body').val(data[0].body);
-
-                    
-                    
-                    
-                }, "json");//
-    }
-    
-    function showMail(){
-        $('#mailDialog').dialog('open');
-        getMailForm();
-        
-        
-        
-        return ;
-    }
-    
-    
-</script>
-
-<?php
-echo $this->renderPartial('print', array('model' => $model, 'preview' => 1));?>
+<?php echo $this->renderPartial('print', array('model' => $model, 'preview' => 1)); ?>
 
 <label for="Docs_comments"><?php echo $model->getAttributeLabel('comments'); ?></label>
 
-<?php echo $model->comments;
+<?php
+echo $model->comments;
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id' => 'docs-form',
     'action' => Yii::app()->CreateURL('docs/view/id/' . $model->id),
@@ -160,14 +62,15 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 <div class="row">
     <div class="col-md-1">
-            <?php ///*
-                $this->widget('widgetRefnum', array(
-                    'model' => $model, //Model object
-                    'attribute' => 'refnum', //attribute name
-                ));//*/
-                ?>
-            
-        </div>
+        <?php
+        ///*
+        $this->widget('widgetRefnum', array(
+            'model' => $model, //Model object
+            'attribute' => 'refnum', //attribute name
+        )); //*/
+        ?>
+
+    </div>
     <div class="col-md-5">
 
 
@@ -222,68 +125,199 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 </div>
 <div class="btn">
 
-<?php
-echo CHTML::hiddenField("subType", "print");
-echo CHTML::hiddenField("Docs[id]", $model->id);
-echo CHTML::hiddenField("Docs[doctype]", $model->doctype);
-$this->widget('bootstrap.widgets.TbButtonGroup', array(
-    'type' => 'primary', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
-    'buttons' => array(
-        array('icon' => 'glyphicon glyphicon-print', 'label' => Yii::t('app', 'Print'), 'htmlOptions' => array('onclick' => 'return sendForm("print");'),),
-        array('items' => array(
-                array('icon' => 'glyphicon glyphicon-envelope','label'=>Yii::t('app','Email'), 'url'=>'javascript:sendForm("email");',),
-                array('icon' => 'glyphicon glyphicon-save', 'label' => Yii::t('app', 'PDF'), 'url' => 'javascript:sendForm("pdf");',),
-                array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save Draft'), 'url' => 'javascript:sendForm("saveDraft");',),
-                //array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save'), 'url' => 'javascript:sendForm("save");',),
-            )),
-    ),
-));
-
-$this->widget('bootstrap.widgets.TbButton', array(
-    'label' => Yii::t('app', 'Change language'),
-    'icon' => 'glyphicon glyphicon-globe',
-    'type' => 'primary',
-    'htmlOptions' => array('id' => 'printLink', 'onclick' => 'return hideMe();'),
-));
-echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));
-//echo CHtml::dropDownList('language',Yii::app()->user->getLanguage(),CHtml::listData(Language::model()->findAll(), 'id', 'name'));
-?>
-</div>
-<br /><br /><br /><br />
     <?php
-    $this->endWidget();
-    $this->endWidget();
-    
-    
-    
-       $this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
-        'id' => "mailDialog",
-        'options' => array(
-            'title' => Yii::t('app', 'Send Mail'),
-            'autoOpen' => false,
-            'width' => '600px',
+    echo CHTML::hiddenField("subType", "print");
+    echo CHTML::hiddenField("Docs[id]", $model->id);
+    echo CHTML::hiddenField("Docs[doctype]", $model->doctype);
+    $this->widget('bootstrap.widgets.TbButtonGroup', array(
+        'type' => 'primary', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+        'buttons' => array(
+            array('icon' => 'glyphicon glyphicon-print', 'label' => Yii::t('app', 'Print'), 'htmlOptions' => array('onclick' => 'return sendForm("print");'),),
+            array('items' => array(
+                    array('icon' => 'glyphicon glyphicon-envelope', 'label' => Yii::t('app', 'Email'), 'url' => 'javascript:sendForm("email");',),
+                    array('icon' => 'glyphicon glyphicon-save', 'label' => Yii::t('app', 'PDF'), 'url' => 'javascript:sendForm("pdf");',),
+                    array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save Draft'), 'url' => 'javascript:sendForm("saveDraft");',),
+                //array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save'), 'url' => 'javascript:sendForm("save");',),
+                )),
         ),
     ));
+
+    $this->widget('bootstrap.widgets.TbButton', array(
+        'label' => Yii::t('app', 'Change language'),
+        'icon' => 'glyphicon glyphicon-globe',
+        'type' => 'primary',
+        'htmlOptions' => array('id' => 'printLink', 'onclick' => 'return hideMe();'),
+    ));
+    echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));
+//echo CHtml::dropDownList('language',Yii::app()->user->getLanguage(),CHtml::listData(Language::model()->findAll(), 'id', 'name'));
     ?>
-    <div id="mailForm"></div>    
-    <?php
-    $this->endWidget('zii.widgets.jui.CJuiDialog');
-    ?>
-    
+</div>
+<br /><br /><br /><br />
+<?php
+$this->endWidget();
+$this->endWidget();
+
+
+
+$this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
+    'id' => "mailDialog",
+    'options' => array(
+        'title' => Yii::t('app', 'Send Mail'),
+        'autoOpen' => false,
+        'width' => '600px',
+    ),
+));
+?>
+<div id="mailForm"></div>    
+<?php
+$this->endWidget('zii.widgets.jui.CJuiDialog');
+?>
+
 
 
 <script type="text/javascript">
     function refNum(doc) {//
 
 
-            $("#choseDocs_refnum").dialog("close");
+        $("#choseDocs_refnum").dialog("close");
 
-            $('#Docs_refnum_div').html($('#Docs_refnum_div').html() + ", " + doc.doctype + " #" + doc.docnum);
-            $('#Docs_refnum_ids').val($('#Docs_refnum_ids').val() + doc.id + ",");
+        $('#Docs_refnum_div').html($('#Docs_refnum_div').html() + ", " + doc.doctype + " #" + doc.docnum);
+        $('#Docs_refnum_ids').val($('#Docs_refnum_ids').val() + doc.id + ",");
 
 
-            return false;
+        return false;
 
+
+    }
+</script>
+
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+
+        $('#language_chosen').hide();
+        if ("1"=="<?php echo $mail; ?>") {
+            $('#subType').val('email');
+            showMail();
+        }
+    });
+/*
+$( document ).on( "pageinit", document, function( event ) {
+    // toastr.info( "Initializing " + this.id );
+    showMail();
+});*/
+    function hideMe() {
+        $('#printLink').hide();
+        $('#language_chosen').show();
+        return false;
+    }
+
+
+    function sendForm(value) {//preview,print,mail,pdf,save
+        $('#subType').val(value);
+        if (value == 'preview')
+            $("#docs-form").attr('target', '_BLANK');
+        if (value == 'email') {
+            return showMail();
 
         }
-        </script>
+        $('#docs-form').submit();
+
+        //return false;
+    }
+
+    function getFile() {//only for docs
+        //get file
+        //post....
+        var url = "<?php echo $this->createUrl("/docs/view/id/$model->id?mail=1" ); ?>";//$("#docs-form").attr("action"); //
+        var parms = $('#docs-form').serializeArray();
+        $.post(url, parms,
+                function(data) {
+                    console.log(data);
+                    $('#Mail_files').val(data);
+                    //callback
+                    //get template
+                    //doc,type
+
+                }, "json");
+
+        //callback
+        //show template
+
+        //send mail
+
+    }
+
+        function getAddress() {//only for docs
+        //get file
+        //post....
+        var url = "<?php echo $this->createUrl("/accounts/JSON/$model->account_id" ); ?>";//$("#docs-form").attr("action"); //
+        var parms = $('#docs-form').serializeArray();
+        $.post(url, parms,
+                function(data) {
+                    console.log(data);
+                    $('#Mail_to').val(data.email);
+                    //callback
+                    //get template
+                    //doc,type
+
+                }, "json");
+
+        //callback
+        //show template
+
+        //send mail
+
+    }
+
+
+    function getMailForm() {
+        $.post("<?php echo $this->createUrl('/mail/create'); ?>", {"minimal": "true"},
+        function(data) {
+
+            //console.log(data);
+            $('#mailForm').html(data);
+            getFile();
+            getTemplate('Docs', $("#Docs_doctype").val(), $("#Docs_id").val());
+            getAddress();
+
+
+            $('#Mail_body').tinymce({'language': 'en', 'plugins': ['advlist autolink lists link image charmap print preview hr anchor pagebreak', 'searchreplace visualblocks visualchars code fullscreen', 'insertdatetime media nonbreaking save table contextmenu directionality', 'template paste textcolor'], 'toolbar': 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor', 'toolbar_items_size': 'small', 'image_advtab': true, 'relative_urls': false, 'spellchecker_languages': '+Русский=ru'});
+
+        }, "json");//
+
+    }
+
+
+
+    function getTemplate(obj, type, id) {
+        $.post("<?php echo $this->createUrl('/mailTemplate/json'); ?>", {"MailTemplate": {"obj": obj, "type": type, "id": id}},
+        function(data) {
+
+            //console.log(data[0].subject);
+
+            $('#Mail_from').val();
+            $('#Mail_to').val();
+            $('#Mail_cc').val(data[0].cc);
+            $('#Mail_bcc').val(data[0].bcc);
+            $('#Mail_subject').val(data[0].subject);
+            $('#Mail_body').val(data[0].body);
+            
+
+
+
+        }, "json");//
+    }
+
+    function showMail() {
+        $('#mailDialog').dialog();
+        $('#mailDialog').dialog('open');
+        getMailForm();
+
+
+
+        return;
+    }
+
+
+</script>

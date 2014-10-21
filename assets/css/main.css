@@ -2694,7 +2694,8 @@ body.error .logo h1 {
 }
 .login .form-signin input[type="text"],
 .login .form-signin input[type="password"],
-.login .form-signin input[type="email"] {
+.login .form-signin input[type="email"],
+.login .form-signin select{
   position: relative;
   font-size: 16px;
   height: auto;

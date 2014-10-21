@@ -276,7 +276,7 @@ class User extends mainRecord {
     }
 
     public function validateHash($hash) {
-        return $hash === $this->hash;
+        return $this->hashPassword($hash, $this->salt) === $this->hash;
     }
     
     /**

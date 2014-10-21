@@ -432,7 +432,7 @@ CREATE TABLE `mailTemplate` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `mail` (
+CREATE TABLE `mail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `to` varchar(255) NOT NULL,
   `from` varchar(255) NOT NULL,
