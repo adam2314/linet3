@@ -7,6 +7,7 @@
  * @property string $id
  * @property string $itemVatCat_id
  * @property string $name
+ * @property string $sku
  * @property integer $category_id
  * @property integer $parent_item_id
  * @property integer $isProduct
@@ -124,7 +125,7 @@ class Item extends fileRecord {
             array('name', 'length', 'max' => 100),
             array('purchaseprice, saleprice', 'length', 'max' => 20),
             array('currency_id', 'length', 'max' => 3),
-            array('description', 'safe'),
+            array('description, sku', 'safe'),
             //array('src_tax', 'length', 'max'=>5),
             array('pic', 'file', 'types' => 'jpg, gif, png', 'allowEmpty' => true),
             // The following rule is used by search().
@@ -159,6 +160,7 @@ class Item extends fileRecord {
             'name' => Yii::t('labels', 'Name'),
             'unit_id' => Yii::t('labels', 'Unit'),
             'extcatnum' => Yii::t('labels', 'Extrnal No.'),
+            'sku' => Yii::t('labels', 'SKU'),
             'manufacturer' => Yii::t('labels', 'Manufacturer'),
             'saleprice' => Yii::t('labels', 'Sale Price'),
             'currency_id' => Yii::t('labels', 'Currency'),
@@ -188,6 +190,7 @@ class Item extends fileRecord {
         $criteria->compare('id', $this->id, true);
         $criteria->compare('itemVatCat_id', $this->itemVatCat_id, true);
         $criteria->compare('name', $this->name, true);
+        $criteria->compare('sku', $this->sku, true);
         $criteria->compare('description', $this->description, true);
         $criteria->compare('category_id', $this->category_id);
         $criteria->compare('parent_item_id', $this->parent_item_id);

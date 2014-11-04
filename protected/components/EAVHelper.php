@@ -60,9 +60,9 @@ private static function field($key, $value, $sModel){
     } elseif ($sModel->eavType == 'boolean') {
 
         //$label = Yii::t('app', $sModel->id);
-
-        $field = CHtml::checkbox('Settings[' . $key . '][value]', $value) .
-                CHtml::hiddenField('Settings[' . $key . '][value]', $value);
+        
+        $field = CHtml::checkbox('Settings[' . $key . '][value]', ($value=='true')?true:false);// .
+                //CHtml::hiddenField('Settings[' . $key . '][value]', $value);
     } else {
         //$label = Yii::t('app', $sModel->id);
         $field = CHtml::textField('Settings[' . $key . '][value]', $value);

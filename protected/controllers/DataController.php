@@ -1,8 +1,11 @@
 <?php
 
-class DataController extends RightsController{
-	public function actionBackup()	{
-            $comp=  Company::model()->findByPk(Yii::app()->user->Company);
+class DataController extends RightsController{//
+	public function actionBackup($id=null)	{
+            if($id==null){
+                $id=Yii::app()->user->Company;
+            }
+            $comp=  Company::model()->findByPk($id);//chkAccess
             $comp->backup();
             
             //if(isset($_POST['name'])){
@@ -20,11 +23,10 @@ class DataController extends RightsController{
             $model = new FormBackupFile;
             
             if(isset($_POST['FormBackupFile'])){
-                $yiiBasepath=Yii::app()->basePath;
-                $yiiUser=Yii::app()->user->id;
+                //$yiiUser=Yii::app()->user->id;
                 $configPath=Yii::app()->user->settings["company.path"];
      
-                $mysql = $yiiBasepath."/files/".$configPath."/tmp.sql";
+                $mysql = Yii::app()->params["filePath"].$configPath."/tmp.sql";
                 
                 $model->file = $_POST['FormBackupFile']['file'];
                 $model->file = CUploadedFile::getInstance($model,'file');
@@ -168,11 +170,10 @@ class DataController extends RightsController{
             }
             if(isset($_POST['FormOpenfrmt'])){
                 
-                $yiiBasepath=Yii::app()->basePath;
                 //$yiiUser=Yii::app()->user->id;
                 $configPath=Yii::app()->user->settings["company.path"];
      
-                $file = $yiiBasepath."/files/".$configPath."/ini.txt";
+                $file = Yii::app()->params["filePath"].$configPath."/ini.txt";
                 
                 $model->iniFile = $_POST['FormOpenfrmt']['iniFile'];
                 $model->iniFile = CUploadedFile::getInstance($model,'iniFile');
@@ -181,7 +182,7 @@ class DataController extends RightsController{
                     //$model->read();
                 }
                 
-                $file= $yiiBasepath."/files/".$configPath."/bkmv.txt";
+                $file= Yii::app()->params["filePath"].$configPath."/bkmv.txt";
                 $model->bkmvFile = $_POST['FormOpenfrmt']['bkmvFile'];
                 $model->bkmvFile = CUploadedFile::getInstance($model,'bkmvFile');
                 if($model->bkmvFile->saveAs($file)){
@@ -207,11 +208,9 @@ class DataController extends RightsController{
             $model=new FormLinet2Import;
             if(isset($_POST['FormLinet2Import'])){
                 
-                $yiiBasepath=Yii::app()->basePath;
-                //$yiiUser=Yii::app()->user->id;
                 $configPath=Yii::app()->user->settings["company.path"];
      
-                $file = $yiiBasepath."/files/".$configPath."/linet2.bak";
+                $file = Yii::app()->params["filePath"].$configPath."/linet2.bak";
                 
                 $model->file = $_POST['FormLinet2Import']['file'];
                 $model->file = CUploadedFile::getInstance($model,'file');
@@ -227,13 +226,6 @@ class DataController extends RightsController{
                 
                 
             }
-            /*
-            $yiiBasepath=Yii::app()->basePath;
-            $configPath=Yii::app()->user->settings["company.path"];
-            $file = $yiiBasepath."/files/".$configPath."/linet2.bak";
-            $model->file=$file;
-            $model->import();
-            //*/
             $this->render('linet2Import',array('model'=>$model,));
             Yii::app()->end();
         }

@@ -22,6 +22,7 @@ class Company extends mainRecord {
 
         Yii::app()->user->setState('settings', $settings);
         Yii::app()->user->setState('menu', Menu::model()->buildUserMenu());
+
     }
 
     public function loadComp($database = '') {
@@ -38,14 +39,16 @@ class Company extends mainRecord {
         Yii::app()->db->password = $database->password;
         Yii::app()->db->charset = 'utf8';
         Yii::app()->db->setActive(true);
-
-        if (!isset(Yii::app()->user->settings)) { //adam: shuld be cached in memory
-            //echo 'run';
+        //if (!isset(Yii::app()->user->settings)) { //adam: shuld be cached in memory
+       
+            
             $this->loadSettings();
-        }
+        //}
     }
 
     public function select($id) {
+        //echo 'run';
+        
         $database = Company::model()->findByPk($id);
         Yii::app()->user->setState('Database', $database);
         Yii::app()->user->setState('Company', $database->id);
@@ -58,7 +61,7 @@ class Company extends mainRecord {
             $user->loadUser();
             return $user->save();
         }
-
+        //Yii::app()->end();
         //exit;
     }
 
@@ -80,9 +83,9 @@ class Company extends mainRecord {
         }
         //delete folders
 
-        $yiiBasepath = Yii::app()->basePath;
+        //$yiiBasepath = Yii::app()->basePath;
         $configPath = $this->prefix;
-        $folder = $yiiBasepath . "/files/" . $configPath . "/";
+        $folder = Yii::app()->params["filePath"] . $configPath . "/";
         //rmdir($folder);
         //delete db perms
 
@@ -137,9 +140,9 @@ class Company extends mainRecord {
             $a->value = $this->prefix;
             $a->save();
 
-            $yiiBasepath = Yii::app()->basePath;
+            //$yiiBasepath = Yii::app()->basePath;
             $configPath = $this->prefix;
-            $folder = $yiiBasepath . "/files/" . $configPath . "/";
+            $folder = Yii::app()->params["filePath"] . $configPath . "/";
             mkdir($folder);
             mkdir($folder . "settings/"); //settings
             mkdir($folder . "cert/"); //cert

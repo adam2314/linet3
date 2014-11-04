@@ -97,7 +97,7 @@ class Bankbook extends CActiveRecord {
         //echo 'not file';
         if (is_object($file) && get_class($file) === 'CUploadedFile') {
             //echo 'is file';
-            $filename = Yii::app()->basePath . "/files/" . Yii::app()->user->settings["company.path"] . "/TNout"; //x
+            $filename = Yii::app()->params["filePath"] . Yii::app()->user->settings["company.path"] . "/TNout"; //x
             if ($file->saveAs($filename)) {
                 //read file...
                 $fp = fopen($filename, 'r');

@@ -133,7 +133,7 @@ echo Yii::t('app',"Select Company");
 
 <script type="text/javascript">
     function edit(obj){
-        var id = obj.getAttribute("href")
+        var id = obj.getAttribute("href");
         $.post( "<?php echo Yii::app()->createAbsoluteUrl('/company/index');?>",{ Company: id }, function( data ) {
             //alert( "Data Loaded: " + data );
             window.location = "<?php echo Yii::app()->createAbsoluteUrl('/settings/admin');?>";

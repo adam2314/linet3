@@ -83,7 +83,7 @@ class Files extends CActiveRecord{
 	}
         public function getFullPath(){
             $configPath=Yii::app()->user->settings["company.path"];
-            return Yii::app()->basePath."/files/$configPath/".$this->path;
+            return Yii::app()->params["filePath"]."$configPath/".$this->path;
         }
 	/**
 	 * @return array relational rules.

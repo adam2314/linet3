@@ -50,15 +50,13 @@ class Settings extends basicRecord {
     public function save($runValidation = true, $attributes = NULL) {
         //adam:
         if ($this->eavType == 'boolean') {
-            if ($this->value == 'true')
+            if ($this->value == '1')
                 $this->value = 'true';
             else
                 $this->value = 'false';
         }else if ($this->eavType == 'file') {
 
 
-            $yiiBasepath = Yii::app()->basePath;
-            $yiiUser = Yii::app()->user->id;
             $configPath = Yii::app()->user->settings["company.path"];
 
 
@@ -80,7 +78,7 @@ class Settings extends basicRecord {
                 $id = $logo->save(); // DONE
                 //echo $logo->id;
                 //Yii::app()->end();
-                if ($this->value->saveAs($yiiBasepath . "/files/" . $configPath . "/settings/" . $logo->id)) {
+                if ($this->value->saveAs(Yii::app()->params["filePath"] . $configPath . "/settings/" . $logo->id)) {
                     $this->value = $logo->id; //"/files/".$configPath."/settings/".$this->id.".".$ext;
                 }
 

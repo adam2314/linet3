@@ -308,7 +308,7 @@ CREATE TABLE `itemEav` (
 CREATE TABLE `itemTemplate` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `Itemcatagory_id` int(11) NOT NULL,
+  `Itemcategory_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 );
 CREATE TABLE `itemTemplateItem` (
@@ -335,8 +335,9 @@ CREATE TABLE `items` (
   `name` varchar(100) DEFAULT NULL,
   `itemVatCat_id` int(11) NOT NULL,
   `unit_id` int(11) DEFAULT NULL,
-  `extcatnum` varchar(30) DEFAULT NULL,
-  `manufacturer` varchar(40) DEFAULT NULL,
+  `extcatnum` varchar(255) DEFAULT NULL,
+  `sku` varchar(255) DEFAULT NULL,
+  `manufacturer` varchar(255) DEFAULT NULL,
   `saleprice` decimal(20,2) DEFAULT NULL,
   `currency_id` varchar(3) DEFAULT NULL,
   `ammount` int(11) DEFAULT NULL,
@@ -351,7 +352,8 @@ CREATE TABLE `items` (
   `stockType` int(1) NOT NULL,
   `modified` timestamp NOT NULL ,
   `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sku` (`sku`)
 );
 
 CREATE TABLE `language` (

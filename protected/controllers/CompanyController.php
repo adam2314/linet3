@@ -9,14 +9,21 @@ class CompanyController extends RightsController{// //RightsController
      * @param integer $id the ID of the model to be displayed
      */
     public function actionIndex(){
+        
+        //echo CJSON::encode("ok");
+        //Yii::app()->end();
         if(isset($_POST['Company'])){
+            $id=(int)$_POST['Company'];
+            
+            //
+            
             //if has access
-            $database= Company::model()->findByPk((int)$_POST['Company']);
-            Yii::log((int)$_POST['Company'],'info','app');
+            $database= Company::model()->findByPk($id);
+            Yii::log($id,'info','app');
             Yii::app()->user->setState('Database',$database );
             Yii::app()->user->setState('Company',$database->id);
             
-            Company::model()->select((int)$_POST['Company']);
+            Company::model()->select($id);
            
             
             //redirect

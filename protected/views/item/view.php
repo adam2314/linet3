@@ -37,6 +37,7 @@ $this->beginWidget('MiniForm',array(
 		'parent_item_id',
 		'isProduct',
 		'profit',
+                'sku',
                 array(
                     'name'=>'unit_id',
                     'value'=>$model->Unit->name,

@@ -51,7 +51,7 @@ $this->beginWidget('MiniForm', array('haeder' => Yii::t("app", "View Document") 
 echo $model->comments;
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id' => 'docs-form',
-    'action' => Yii::app()->CreateURL('docs/view/id/' . $model->id),
+    'action' => Yii::app()->CreateURL('docs/view/' . $model->id),
     'enableAjaxValidation' => false,
     'htmlOptions' => array('enctype' => 'multipart/form-data'),
         ));
@@ -158,19 +158,29 @@ $this->endWidget();
 $this->endWidget();
 
 
+/*
+  $this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
+  'id' => "mailDialog",
+  'options' => array(
+  'title' => Yii::t('app', 'Send Mail'),
+  'autoOpen' => false,
+  'width' => '600px',
+  ),
+  ));
+  ?>
+  <div id="mailForm"></div>
+  <?php
+  $this->endWidget('zii.widgets.jui.CJuiDialog'); */
 
-$this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
-    'id' => "mailDialog",
-    'options' => array(
-        'title' => Yii::t('app', 'Send Mail'),
-        'autoOpen' => false,
-        'width' => '600px',
-    ),
+$this->widget('widgetMail', array(
+    'urlFile' => Yii::app()->createAbsoluteUrl("docs/view/".$model->id."?mail=1"),
+    'urlAddress' => Yii::app()->createAbsoluteUrl("accounts/JSON/".$model->account_id),
+    'urlMailForm' => Yii::app()->createAbsoluteUrl('mail/create'),
+    'urlTemplate' => Yii::app()->createAbsoluteUrl('mailTemplate/json'),
+    'obj' =>'Docs',
+    'type'=>$model->doctype,
+    'id'=>$model->id
 ));
-?>
-<div id="mailForm"></div>    
-<?php
-$this->endWidget('zii.widgets.jui.CJuiDialog');
 ?>
 
 
@@ -189,23 +199,19 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
 
 
     }
-</script>
-
-
-<script type="text/javascript">
     jQuery(document).ready(function() {
 
         $('#language_chosen').hide();
-        if ("1"=="<?php echo $mail; ?>") {
+        if ("1" == "<?php echo $mail; ?>") {
             $('#subType').val('email');
             showMail();
         }
     });
-/*
-$( document ).on( "pageinit", document, function( event ) {
-    // toastr.info( "Initializing " + this.id );
-    showMail();
-});*/
+    /*
+     $( document ).on( "pageinit", document, function( event ) {
+     // toastr.info( "Initializing " + this.id );
+     showMail();
+     });*/
     function hideMe() {
         $('#printLink').hide();
         $('#language_chosen').show();
@@ -226,98 +232,7 @@ $( document ).on( "pageinit", document, function( event ) {
         //return false;
     }
 
-    function getFile() {//only for docs
-        //get file
-        //post....
-        var url = "<?php echo $this->createUrl("/docs/view/id/$model->id?mail=1" ); ?>";//$("#docs-form").attr("action"); //
-        var parms = $('#docs-form').serializeArray();
-        $.post(url, parms,
-                function(data) {
-                    console.log(data);
-                    $('#Mail_files').val(data);
-                    //callback
-                    //get template
-                    //doc,type
 
-                }, "json");
-
-        //callback
-        //show template
-
-        //send mail
-
-    }
-
-        function getAddress() {//only for docs
-        //get file
-        //post....
-        var url = "<?php echo $this->createUrl("/accounts/JSON/$model->account_id" ); ?>";//$("#docs-form").attr("action"); //
-        var parms = $('#docs-form').serializeArray();
-        $.post(url, parms,
-                function(data) {
-                    console.log(data);
-                    $('#Mail_to').val(data.email);
-                    //callback
-                    //get template
-                    //doc,type
-
-                }, "json");
-
-        //callback
-        //show template
-
-        //send mail
-
-    }
-
-
-    function getMailForm() {
-        $.post("<?php echo $this->createUrl('/mail/create'); ?>", {"minimal": "true"},
-        function(data) {
-
-            //console.log(data);
-            $('#mailForm').html(data);
-            getFile();
-            getTemplate('Docs', $("#Docs_doctype").val(), $("#Docs_id").val());
-            getAddress();
-
-
-            $('#Mail_body').tinymce({'language': 'en', 'plugins': ['advlist autolink lists link image charmap print preview hr anchor pagebreak', 'searchreplace visualblocks visualchars code fullscreen', 'insertdatetime media nonbreaking save table contextmenu directionality', 'template paste textcolor'], 'toolbar': 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor', 'toolbar_items_size': 'small', 'image_advtab': true, 'relative_urls': false, 'spellchecker_languages': '+Русский=ru'});
-
-        }, "json");//
-
-    }
-
-
-
-    function getTemplate(obj, type, id) {
-        $.post("<?php echo $this->createUrl('/mailTemplate/json'); ?>", {"MailTemplate": {"obj": obj, "type": type, "id": id}},
-        function(data) {
-
-            //console.log(data[0].subject);
-
-            $('#Mail_from').val();
-            $('#Mail_to').val();
-            $('#Mail_cc').val(data[0].cc);
-            $('#Mail_bcc').val(data[0].bcc);
-            $('#Mail_subject').val(data[0].subject);
-            $('#Mail_body').val(data[0].body);
-            
-
-
-
-        }, "json");//
-    }
-
-    function showMail() {
-        $('#mailDialog').dialog();
-        $('#mailDialog').dialog('open');
-        getMailForm();
-
-
-
-        return;
-    }
 
 
 </script>

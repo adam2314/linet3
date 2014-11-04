@@ -50,8 +50,6 @@ class FormOpenfrmt extends CFormModel{
     }
     
     private function sortBkmvFile($data=2){
-        $yiiBasepath=Yii::app()->basePath;
-        $configPath=Yii::app()->user->settings["company.path"];
      
         //$bkmv = $yiiBasepath."/files/".$configPath."/openformt/bkmvdata.txt";
         $bkmv=$this->bkmvFile;
@@ -242,8 +240,6 @@ function typeline($str, $filter){
         
         
         Yii::log('start Openimport','info','app');
-        $yiiBasepath=Yii::app()->basePath;
-        $configPath=Yii::app()->user->settings["company.path"];
         //$bkmv = $yiiBasepath."/files/".$configPath."/openformt/bkmvdata.txt-sorted";
         $bkmv = $this->bkmvFile."-sorted";
         

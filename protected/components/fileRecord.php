@@ -33,7 +33,6 @@ class fileRecord extends basicRecord{
                 if (isset($tmps) && count($tmps) > 0) {
                     Yii::log('saved','info', 'app');
                     // go through each uploaded image
-                    $yiiBasepath=Yii::app()->basePath;
                     $configPath=Yii::app()->user->settings["company.path"];
                     
                     
@@ -46,7 +45,7 @@ class fileRecord extends basicRecord{
 
                         $img_add->save(); // DONE
                         
-                        if ($pic->saveAs($yiiBasepath."/files/".$configPath."/files/".$img_add->id)) {
+                        if ($pic->saveAs(Yii::app()->params["filePath"].$configPath."/files/".$img_add->id)) {
                             // add it to the main model now
                             
                         }

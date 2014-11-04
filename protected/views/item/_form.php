@@ -14,7 +14,8 @@
             <?php echo $form->dropDownListRow($model, 'itemVatCat_id', CHtml::listData(ItemVatCat::model()->findAll(), 'id', 'name')); ?>
             <br />
             <?php echo $form->textFieldRow($model, 'name', array('class' => 'span5', 'maxlength' => 100)); ?>
-
+            
+            <?php echo $form->textFieldRow($model, 'sku', array('maxlength' => 255)); ?>
             <?php echo $form->dropDownListRow($model, 'category_id', $cat); ?>
             <br />
 

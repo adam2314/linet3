@@ -4,7 +4,6 @@
 // Yii::setPathOfAlias('local','path/to/local-folder');
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
-
 //needs to move!
 Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
 Yii::setPathOfAlias('tinymce', dirname(__FILE__) . '/../extensions/tinymce');
@@ -91,18 +90,18 @@ return CMap::mergeArray(
                     'rightsTable' => '{{Rights}}',
                 ),
                 /*
-                'ePdf' => array(
-                    'class' => 'ext.yii-pdf.EYiiPdf',
-                    'params' => array(
-                        'mpdf' => array(
-                            'librarySourcePath' => 'ext.yii-pdf.mpdf57.*',
-                            'constants' => array(
-                                '_MPDF_TEMP_PATH' => Yii::getPathOfAlias('application.runtime'),
-                            ),
-                            'class' => 'mpdf',
-                        )
-                    )
-                ), //ePdf*/
+                  'ePdf' => array(
+                  'class' => 'ext.yii-pdf.EYiiPdf',
+                  'params' => array(
+                  'mpdf' => array(
+                  'librarySourcePath' => 'ext.yii-pdf.mpdf57.*',
+                  'constants' => array(
+                  '_MPDF_TEMP_PATH' => Yii::getPathOfAlias('application.runtime'),
+                  ),
+                  'class' => 'mpdf',
+                  )
+                  )
+                  ), //ePdf */
                 // uncomment the following to enable URLs in path-format
                 'urlManager' => array(
                     'urlFormat' => 'path',
@@ -115,26 +114,27 @@ return CMap::mergeArray(
                         'api/search/<model:\w+>' => 'api/search',
                         'api/count/<model:\w+>' => 'api/count',
                         'api/countSum/<model:\w+>' => 'api/countSum',
-                        
+                        'api/countSumMounth/<model:\w+>' => 'api/countSumMounth',
                         array('api/list', 'pattern' => 'api/<model:\w+>', 'verb' => 'GET'),
                         array('api/view', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'GET'),
                         array('api/update', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'POST'),
                         array('api/delete', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'DELETE'),
                         array('api/create', 'pattern' => 'api/<model:\w+>', 'verb' => 'POST'),
                         //'minify/<group:[^\/]+>'=>'minify/index',
-                        '<module>/authItem/<action:\w+>' => '<module>/authItem/<action>',
-                        '<module:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>' => '<module>/<controller>/<action:\w+>',
-                        '<controller:\w+>/create/<type:\d+>' => '<controller>/create', //mainly for doc, acc,outcome creating
-                        //'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
-                        //'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-                        '<controller:\w+>/index/<type:\d+>' => '<controller>/index',
                         'install/<step:\d+>' => 'install/index',
                         'docs/view/<doctype:\d+>/<docnum:\d+>' => 'docs/view',
                         'docs/view/<id:\d+>' => 'docs/view',
                         'download/<id:\d+>' => 'data/download',
                         'download/<company:\w+>/<hash:\d+>' => 'data/downloadpublic',
+                        '<controller:\w+>/create/<type:\d+>' => '<controller>/create', //mainly for doc, acc,outcome creating
+                        //'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+                        //'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+                        '<controller:\w+>/index/<type:\d+>' => '<controller>/index',
                         '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
                         '<controller:\w+>/<action:\w+>/<id:\w+>' => '<controller>/<action>',
+                        '<module>/authItem/<action:\w+>' => '<module>/authItem/<action>',
+                        '<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
+                        '<module:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>' => '<module>/<controller>/<action>',
                     ),
                 ),
                 //'clientScript'=>array(
@@ -147,12 +147,12 @@ return CMap::mergeArray(
                 'log' => array(
                     'class' => 'CLogRouter',
                     'routes' => array(
-                        //array('class' => 'CWebLogRoute',),
-                        //array(
-                        //    'class' => 'CFileLogRoute',
-                        //    'levels' => 'trace, info, error, warning',
-                        //    'categories' => 'app',
-                        //),
+                    //array('class' => 'CWebLogRoute',),
+                    //array(
+                    //    'class' => 'CFileLogRoute',
+                    //    'levels' => 'trace, info, error, warning',
+                    //    'categories' => 'app',
+                    //),
                     /* array(
                       'class'=>'CEmailLogRoute',
                       'levels'=>'error, warning',
@@ -166,9 +166,10 @@ return CMap::mergeArray(
             'params' => array(
                 // this is used in contact page
                 'adminEmail' => 'adam@speedcomp.co.il',
-                'updatesrv'=>'https://update.linet.org.il/linet3/',
-                'version'=>'3.0beta',
-                'timezone'=>'Asia/Tel_Aviv',
+                'updatesrv' => 'https://update.linet.org.il/linet3/',
+                'version' => '3.0beta',
+                'timezone' => 'Asia/Tel_Aviv',
+                'filePath' => Yii::app()->basePath . "/files/",
             //'tablePrefix' => ''
             ),
                 )//end main

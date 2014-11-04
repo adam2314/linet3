@@ -77,49 +77,44 @@ class User extends mainRecord {
         );
     }
 
-    public function saveWidget($widget){
-        
-            
+    public function saveWidget($widget) {
 
-            $model = Settings::model()->findByPk("company." . $this->id . ".widget");
-            if ($model === null) {
-                $model = new Settings();
-                $model->id = "company." . $this->id . ".widget";
-                $model->eavType = 'integer';
-                $model->hidden = 1;
-                $model->value=CJSON::encode(array());
-                
-            }//
-            
-            
-            
-            //$model->value = !$model->value;
-            
-            
-            $key = $this->getWidgets();
-            if(isset($key[$widget])){
-                $key[$widget]=!$key[$widget];
-            }else{
-                $key[$widget]=false;
-            }
-            
-            $model->value=CJSON::encode($key);
-            $model->save();
-            Yii::app()->user->setState('widget', $this->getWidgets());
+
+
+        $model = Settings::model()->findByPk("company." . $this->id . ".widget");
+        if ($model === null) {
+            $model = new Settings();
+            $model->id = "company." . $this->id . ".widget";
+            $model->eavType = 'integer';
+            $model->hidden = 1;
+            $model->value = CJSON::encode(array());
+        }//
+        //$model->value = !$model->value;
+
+
+        $key = $this->getWidgets();
+        if (isset($key[$widget])) {
+            $key[$widget] = !$key[$widget];
+        } else {
+            $key[$widget] = false;
+        }
+
+        $model->value = CJSON::encode($key);
+        $model->save();
+        Yii::app()->user->setState('widget', $this->getWidgets());
     }
-    
+
     private function getWidgets() {
         if (Yii::app()->user->Company != 0) {
             $a = Settings::model()->findByPk("company." . $this->id . ".widget");
-            
+
             if ($a !== null) {
                 return CJSON::decode($a->value);
             }
         }
         return array();
     }
-    
-    
+
     private function getWarehouse() {
         if (Yii::app()->user->Company != 0) {
             $a = Settings::model()->findByPk("company." . $this->id . ".warehouse");
@@ -150,8 +145,8 @@ class User extends mainRecord {
         }
         return $res;
     }
-    
-    private function warehouseSave($id){
+
+    private function warehouseSave($id) {
         $model = Settings::model()->findByPk("company." . $this->id . ".warehouse");
         if ($model === null) {
             $model = new Settings();
@@ -161,9 +156,8 @@ class User extends mainRecord {
         }
         $model->value = $id;
         $this->warehouse = $model->value;
-        
+
         $model->save();
-        
     }
 
     private function compSave() {
@@ -185,10 +179,9 @@ class User extends mainRecord {
         $tmps = CUploadedFile::getInstanceByName('User[certfile]');
         if ($tmps) {
             Yii::log('saved', 'info', 'app');
-            $yiiBasepath = Yii::app()->basePath;
             $configPath = Yii::app()->user->settings["company.path"];
 
-            if ($tmps->saveAs($yiiBasepath . "/files/" . $configPath . "/cert/" . Yii::app()->user->id . ".p12")) {
+            if ($tmps->saveAs(Yii::app()->params["filePath"] . $configPath . "/cert/" . Yii::app()->user->id . ".p12")) {
                 // add it to the main model now
             } else {
                 echo 'Cannot upload!';
@@ -276,9 +269,9 @@ class User extends mainRecord {
     }
 
     public function validateHash($hash) {
-        return $this->hashPassword($hash, $this->salt) === $this->hash;
+        return $hash === $this->hash;
     }
-    
+
     /**
      * Generates the password hash.
      * @param string password
@@ -309,7 +302,6 @@ class User extends mainRecord {
         Yii::app()->user->setState('username', $this->username);
         Yii::app()->user->setState('warehouse', $this->getWarehouse());
         Yii::app()->user->setState('widget', $this->getWidgets());
-        
     }
 
 }

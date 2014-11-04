@@ -48,7 +48,7 @@ $model->password = '';
 
         <?php echo $form->dropDownListRow($model, 'warehouse', CHtml::listData(Accounts::model()->AutoComplete('', 8), 'value', 'label')); ?>
         
-        <?php echo $form->dropDownListRow($model, 'theme', array()); ?>
+        <?php echo $form->dropDownListRow($model, 'theme', Yii::app()->themeManager->themeNames); ?>
         
         <?php echo $form->dropDownListRow($model, 'timezone', Timezone::makeList()); ?>
 

@@ -2,7 +2,7 @@
 
 class DocsController extends RightsController {
 
-    public function actionView($id = 0, $docnum = 0, $doctype = 0, $mail=0) {// used in the refnum selection
+    public function actionView($id = 0, $docnum = 0, $doctype = 0, $mail = 0) {// used in the refnum selection
         if ((int) $id != 0) {
             $model = $this->loadModel($id);
         } else {
@@ -12,10 +12,10 @@ class DocsController extends RightsController {
             }
         }
 
-        
-        if(isset($_POST['subType'])){
-            $model->refnum_ids=$_POST['Docs']['refnum_ids'];
-            return $this->doc($model,$mail);
+
+        if (isset($_POST['subType'])) {
+            $model->refnum_ids = $_POST['Docs']['refnum_ids'];
+            return $this->doc($model, $mail);
         }
         //$docdetails =$model->docDetailes;
         //$doctype =$model->docType;
@@ -27,21 +27,23 @@ class DocsController extends RightsController {
         ));
     }
 
-    public function actionPdf($model = null,$return=true) {//usd for print*/
-        $file = $this->actionPrint($model->id, 3, $model, true);
+    public function actionPdf($model = null, $return = true) {//usd for print*/
+        $file = $this->actionPrint($model->id, 2, $model, true);
         //echo $file;
         //Yii::app()->end();
+        echo "help;";
         $yiiBasepath = Yii::app()->basePath;
         $yiiUser = Yii::app()->user->id;
         $configPath = Yii::app()->user->settings["company.path"];
         $configCertpasswd = Yii::app()->user->certpasswd;
 
 
-        $mypath =$yiiBasepath . "/files/" . $configPath . "/docs/";
-        $myPdf = $mypath . $model->docType->name."-$model->docnum.pdf";
-        $myPdfS = $mypath . $model->docType->name."-$model->docnum-signed.pdf";
+        $mypath = Yii::app()->params["filePath"] . $configPath . "/docs/";
+        $myPdf = $mypath . $model->docType->name . "-$model->docnum.pdf";
+        $myPdfS = $mypath . $model->docType->name . "-$model->docnum-signed.pdf";
 
-
+        //echo $mypath;
+        //exit;
         // mPDF
         $mPDF1 = Yii::app()->ePdf->mpdf();
         //$mPDF1 = Yii::app()->ePdf->mpdf('', 'A5');
@@ -59,9 +61,9 @@ class DocsController extends RightsController {
         $pdf = Farit_Pdf::load($myPdf);
 
 
-        $cerfile = $yiiBasepath . "/files/" . $configPath . "/cert/" . $yiiUser . ".p12";
+        $cerfile = Yii::app()->params["filePath"] . $configPath . "/cert/" . $yiiUser . ".p12";
         //echo $cerfile;
-        
+
         if (file_exists($cerfile)) {
             $certificate = file_get_contents($cerfile);
             //password for the certificate
@@ -74,30 +76,31 @@ class DocsController extends RightsController {
             //here the digital certificate is inserted inside of the PDF document
             $renderedPdf = $pdf->render();
             file_put_contents($myPdfS, $renderedPdf);
-            $addon="-signed.pdf";
-        }else{
-            Yii::app()->user->setFlash('error', Yii::t('app','No Certifcate cannt sign'));
+            $addon = "-signed.pdf";
+        } else {
+            Yii::app()->user->setFlash('error', Yii::t('app', 'No Certifcate cannt sign'));
             //Yii::app()->end();
-            $addon=".pdf";
+            $addon = ".pdf";
         }
         set_include_path($oldpath);
         spl_autoload_register(array('YiiBase', 'autoload'));
-        
-        if($return){
-            return Yii::app()->getRequest()->sendFile($model->docType->name."-"."$model->docnum".$addon, $renderedPdf);
-        }else{
-            
+
+        if ($return) {
+            if ($addon == ".pdf")
+                return Yii::app()->getRequest()->sendFile($model->docType->name . "-" . "$model->docnum" . $addon, $mPDF1->Output());
+            else
+                return Yii::app()->getRequest()->sendFile($model->docType->name . "-" . "$model->docnum" . $addon, $renderedPdf);
+        }else {
+
             $doc_file = new Files();
-            $doc_file->name = $model->docType->name."-"."$model->docnum".$addon; //it might be $img_add->name for you, filename is just what I chose to call it in my model
-            $doc_file->path= "docs/";
-            $doc_file->parent_type=get_class($this);
+            $doc_file->name = $model->docType->name . "-" . "$model->docnum" . $addon; //it might be $img_add->name for you, filename is just what I chose to call it in my model
+            $doc_file->path = "docs/";
+            $doc_file->parent_type = get_class($this);
             $doc_file->parent_id = $this->id; // this links your picture model to the main model (like your user, or profile model)
 
             $doc_file->save(); // DONE
             echo CJSON::encode($doc_file->id);
         }
-
-        
     }
 
     public function actionPrint($id, $preview = 0, $model = null, $return = false) {//usd for print*/
@@ -108,14 +111,12 @@ class DocsController extends RightsController {
 
         if (is_null($model))
             $model = $this->loadModel($id);
-
-        if ($preview!=1)//preview
+        
+        if ($preview != 1)//preview
             $model->printDoc();
         if ($return)
             return $this->render('print', array('model' => $model, 'preview' => $preview,), $return);
-        $this->render('print', array(
-            'model' => $model, 'preview' => $preview,
-        ));
+        $this->render('print', array('model' => $model, 'preview' => $preview,));
     }
 
     /**
@@ -149,25 +150,25 @@ class DocsController extends RightsController {
         ));
     }
 
-    private function doc($model,$mail=0) {
+    private function doc($model, $mail = 0) {
         switch ($_POST['subType']) {
             case 'save':
                 if ($model->save())
-                    $this->redirect(array('view','id'=>$model->id));
+                    $this->redirect(array('view', 'id' => $model->id));
                 return;
             case 'saveDraft':
-                if ($model->isNewRecord){
-                  //find status not looked
+                if ($model->isNewRecord) {
+                    //find status not looked
                     $model->draftSave();
-                }else {
-                  if(!$model->docStatus->looked){//status looked
-                //      find status not looked
-                      $model->draftSave();
-                  }
+                } else {
+                    if (!$model->docStatus->looked) {//status looked
+                        //      find status not looked
+                        $model->draftSave();
+                    }
                 }
                 if ($model->save())
                     $this->redirect(array('admin'));
-                return;    
+                return;
             case 'print':
                 if ($model->save())
                     $this->redirect(array('print', 'id' => $model->id));
@@ -178,17 +179,16 @@ class DocsController extends RightsController {
                 return;
             case 'email':
                 if ($model->save())
-                    
-                    $this->actionPdf($model,false);
-                    //echo ";$mail;";
-                    if($mail==0)
-                        $this->redirect(array('view', 'id' => $model->id,"mail"=>1));
-                    //$mail=new Mail();
-                    //$mail->loadTemplate();
-                    //$mail->to=$model->Account->mail;
-                    //$mail->files=File::id();
-                
-                break;    
+                    $this->actionPdf($model, false);
+                //echo ";$mail;";
+                if ($mail == 0)
+                    $this->redirect(array('view', 'id' => $model->id, "mail" => 1));
+                //$mail=new Mail();
+                //$mail->loadTemplate();
+                //$mail->to=$model->Account->mail;
+                //$mail->files=File::id();
+
+                break;
             case 'pdf':
                 if ($model->save())
                     $this->actionPdf($model);
@@ -239,7 +239,7 @@ class DocsController extends RightsController {
         if (!is_null($type))
             $model->doctype = (int) $type;
         $model->refnum = '';
-        $model->refnum_ids='';
+        $model->refnum_ids = '';
         $model->status = $model->docType->docStatus_id; //switch status back to defult for doc
         //$docstatus =Docstatus::model()->findByPk($model1->status);
         // Uncomment the following line if AJAX validation is needed

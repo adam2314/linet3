@@ -418,20 +418,6 @@ class Accounts extends fileRecord {//CActiveRecord
     }
 
     
-    public function validatePassword($password) {
-        return $this->hashPassword($password, $this->salt) === $this->password;
-    }
     
-    public static function hashPassword($password, $salt) {
-        return md5($salt . $password);
-    }
-
-    /**
-     * Generates a salt that can be used to generate a password hash.
-     * @return string the salt
-     */
-    public static function generateSalt() {
-        return uniqid('', true);
-    }
     
 }

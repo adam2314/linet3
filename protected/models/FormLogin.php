@@ -77,7 +77,7 @@ class FormLogin extends CFormModel {
             $this->_identity->apiAuthenticate($this->id, $this->hash);
         }
         if ($this->_identity->errorCode === UserIdentity::ERROR_NONE) {
-            $duration = 0; // 30 days
+            $duration = 0; // 1 Hour
             Yii::app()->user->login($this->_identity, $duration);
             return true;
         }

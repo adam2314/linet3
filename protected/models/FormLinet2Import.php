@@ -189,13 +189,15 @@ class FormLinet2Import extends CFormModel {
             $doc = $this->parseLine($doc);
 
             //refnum-out
-            $keys = "`id`, `doctype`, `docnum`, `account_id`, `company`, `address`, `city`, `zip`, `vatnum`, `issue_date`, `due_date`, `sub_total`, `novat_total`, `vat`, `total`, `src_tax`, `status`, `printed`, `description`, `owner`";
+            $keys = "`id`, `doctype`, `docnum`, `account_id`, `company`, `address`, `city`, `zip`, `vatnum`, `issue_date`, `due_date`, `sub_total`, `novat_total`, `vat`, `total`, `src_tax`, `status`, `printed`, `description`, `owner`, `currency_id`";
 
             $values = "'$doc[0]', '$doc[2]', '$doc[3]', '$doc[4]', '$doc[5]', '$doc[6]', '$doc[7]', '$doc[8]', '$doc[9]'";
-            $values.=", '$doc[11]', '$doc[12]', '$doc[13]', '$doc[14]', '$doc[15]', '$doc[16]', '$doc[17]', '2', '$doc[19]', '$doc[20]', '$doc[21]'";
+            $values.=", '$doc[11]', '$doc[12]', '$doc[13]', '$doc[14]', '$doc[15]', '$doc[16]', '$doc[17]', '2', '$doc[19]', '$doc[20]', '$doc[21]', 'ILS'";
             $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "docs` ($keys) VALUES ($values);");
             //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
         }
+        
+        
     }
 
     //cheques
@@ -254,6 +256,7 @@ class FormLinet2Import extends CFormModel {
             $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "docDetails` ($keys) VALUES $docdetail;");
             //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
         }
+        $this->sqlExec('UPDATE `' . Yii::app()->db->tablePrefix . "docDetails` SET `currency_id` = 'ILS', `iVatRate` = '18.00';");
     }
 
     //

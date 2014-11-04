@@ -62,6 +62,14 @@
         <div>
 
             <?php
+            if (Yii::app()->hasModule('cp'))
+                //echo "yes"; //widgetCpUser
+                ///*
+                  $this->widget('application.modules.cp.components.widgetCpUser', array(
+                  'model' => $model, //Model object
+                  //'attribute' => 'refnum', //attribute name
+                  )); // */
+
             if (!$model->isNewRecord) {
                 $this->beginWidget('application.modules.eav.components.eavProp', array(
                     'name' => get_class($model),
@@ -79,16 +87,16 @@
         <?php
         if (!$model->isNewRecord) {
             echo "<h2>" . Yii::t('app', 'Attached files') . "</h2>";
-            
+
             $this->widget('CMultiFileUpload', array(
-            'name' => 'Files',
-            'model' => $model,
-            'id' => 'Files',
-            'accept' => '*', // useful for verifying files
-            'duplicate' => 'Duplicate file!', // useful, i think
-            'denied' => 'Invalid file type', // useful, i think
-        ));
-            
+                'name' => 'Files',
+                'model' => $model,
+                'id' => 'Files',
+                'accept' => '*', // useful for verifying files
+                'duplicate' => 'Duplicate file!', // useful, i think
+                'denied' => 'Invalid file type', // useful, i think
+            ));
+
             $files = new Files('search');
             $files->unsetAttributes();
             $files->parent_type = get_class($model);
@@ -126,27 +134,26 @@
         }
         ?>
         <?php
-        
         ?>
     </div>
 
-    <?php //echo $form->labelEx($model,'owner');   ?>
-    <?php //adam: echo $form->dropDownList($model,'owner',CHtml::listData(User::model()->findAll(), 'id', 'username'));  ?>
+<?php //echo $form->labelEx($model,'owner');    ?>
+    <?php //adam: echo $form->dropDownList($model,'owner',CHtml::listData(User::model()->findAll(), 'id', 'username'));   ?>
     <?php //echo $form->error($model,'owner');  ?>
 
 
 
 
     <div class="row form-actions">
-        <?php
-        $this->widget('bootstrap.widgets.TbButton', array(
-            'buttonType' => 'submit',
-            'type' => 'primary',
-            'label' => $model->isNewRecord ? Yii::t('app', "Create") : Yii::t('app', "Save"),
-        ));
-        ?>
+<?php
+$this->widget('bootstrap.widgets.TbButton', array(
+    'buttonType' => 'submit',
+    'type' => 'primary',
+    'label' => $model->isNewRecord ? Yii::t('app', "Create") : Yii::t('app', "Save"),
+));
+?>
     </div>
 
-    <?php $this->endWidget(); ?>
+<?php $this->endWidget(); ?>
 
 </div><!-- form -->
