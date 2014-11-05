@@ -39,11 +39,9 @@ class Company extends mainRecord {
         Yii::app()->db->password = $database->password;
         Yii::app()->db->charset = 'utf8';
         Yii::app()->db->setActive(true);
-        //if (!isset(Yii::app()->user->settings)) { //adam: shuld be cached in memory
-       
-            
+        if (!isset(Yii::app()->user->settings)) { //adam: shuld be cached in memory
             $this->loadSettings();
-        //}
+        }
     }
 
     public function select($id) {

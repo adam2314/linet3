@@ -240,6 +240,11 @@ class ReportsController extends RightsController
         }
         
         
+        public function actionAccounts(){
+            
+            
+        }
+        
         public function actionInout(){
             $model= new FormReportInout('search');
 

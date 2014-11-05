@@ -89,19 +89,18 @@ return CMap::mergeArray(
                     'assignmentTable' => '{{AuthAssignment}}',
                     'rightsTable' => '{{Rights}}',
                 ),
-                /*
-                  'ePdf' => array(
-                  'class' => 'ext.yii-pdf.EYiiPdf',
-                  'params' => array(
-                  'mpdf' => array(
-                  'librarySourcePath' => 'ext.yii-pdf.mpdf57.*',
-                  'constants' => array(
-                  '_MPDF_TEMP_PATH' => Yii::getPathOfAlias('application.runtime'),
-                  ),
-                  'class' => 'mpdf',
-                  )
-                  )
-                  ), //ePdf */
+                'ePdf' => array(
+                    'class' => 'ext.yii-pdf.EYiiPdf',
+                    'params' => array(
+                        'mpdf' => array(
+                            'librarySourcePath' => 'ext.yii-pdf.mpdf57.*',
+                            'constants' => array(
+                                '_MPDF_TEMP_PATH' => Yii::getPathOfAlias('application.runtime'),
+                            ),
+                            'class' => 'mpdf',
+                        )
+                    )
+                ), //ePdf 
                 // uncomment the following to enable URLs in path-format
                 'urlManager' => array(
                     'urlFormat' => 'path',
@@ -113,13 +112,13 @@ return CMap::mergeArray(
                         'api/select/<id:\d+>' => 'api/select',
                         'api/search/<model:\w+>' => 'api/search',
                         'api/count/<model:\w+>' => 'api/count',
+                        'api/countSumMonth/<model:\w+>' => 'api/countSumMonth',
                         'api/countSum/<model:\w+>' => 'api/countSum',
-                        'api/countSumMounth/<model:\w+>' => 'api/countSumMounth',
-                        array('api/list', 'pattern' => 'api/<model:\w+>', 'verb' => 'GET'),
-                        array('api/view', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'GET'),
-                        array('api/update', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'POST'),
-                        array('api/delete', 'pattern' => 'api/<model:\w+>/<id:\d+>', 'verb' => 'DELETE'),
-                        array('api/create', 'pattern' => 'api/<model:\w+>', 'verb' => 'POST'),
+                        'api/list/<model:\w+>' => 'api/list',
+                        'api/view/<model:\w+>/<id:\d+>' => 'api/view',
+                        'api/update/<model:\w+>/<id:\d+>' => 'api/update',
+                        'api/delete/<model:\w+>/<id:\d+>' => 'api/delete',
+                        'api/create/<model:\w+>' => 'api/create',
                         //'minify/<group:[^\/]+>'=>'minify/index',
                         'install/<step:\d+>' => 'install/index',
                         'docs/view/<doctype:\d+>/<docnum:\d+>' => 'docs/view',
@@ -169,7 +168,7 @@ return CMap::mergeArray(
                 'updatesrv' => 'https://update.linet.org.il/linet3/',
                 'version' => '3.0beta',
                 'timezone' => 'Asia/Tel_Aviv',
-                'filePath' => Yii::app()->basePath . "/files/",
+                'filePath' => dirname(__FILE__) . '/../files/',
             //'tablePrefix' => ''
             ),
                 )//end main

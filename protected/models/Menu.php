@@ -109,7 +109,7 @@ class Menu extends mainRecord {
         $known = Menu::model()->findAll(array('order' => 'parent'));
         $menu = array();
         foreach ($known as $item) {
-            if ((($item->id == 43) || ($item->parent == 43)) && (Yii::app()->user->settings['company.doublebook'] == 'false')){
+            if ((($item->id == 43) ||($item->id == 43) || ($item->parent == 43)) && (Yii::app()->user->settings['company.doublebook'] == 'false')){
                     continue;
             }
             if ($item->parent == 0) {
