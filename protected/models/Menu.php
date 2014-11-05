@@ -105,7 +105,6 @@ class Menu extends mainRecord {
         if (Yii::app()->user->isGuest) {
             return $menu = array(array('label' => Yii::t('app', 'Login'), 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest));
         }
-        //echo 'run1'.Yii::app()->user->settings['company.doublebook'];
         $known = Menu::model()->findAll(array('order' => 'parent'));
         $menu = array();
         foreach ($known as $item) {

@@ -241,8 +241,16 @@ class ReportsController extends RightsController
         
         
         public function actionAccounts(){
+            $model= new FormReportAccounts();
+            if(isset($_POST["FormReportAccounts"])){
+                $model->attributes=$_POST['FormReportAccounts'];
+                
+                $this->renderPartial('accountsAjax',array('model'=>$model ));
+                
+                Yii::app()->end();
+            }
             
-            
+            $this->render('accounts',array('model'=>$model,));
         }
         
         public function actionInout(){

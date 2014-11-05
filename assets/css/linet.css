@@ -18,7 +18,9 @@ Author : adam
 
 @media print
 {
-    .topnav,.noPrint {
+    .topnav,.noPrint,
+    .form-actions
+    {
         display:none;
     }
     #left {

@@ -6,7 +6,7 @@ class m141105_102024_0003 extends CDbMigration
 	{
             
 
-                $this->insert('menu', array("id"=>75,"label"=>"Bulk Balance","url"=>"report/accounts","parent"=>49)); 
+                $this->insert('menu', array("id"=>75,"label"=>"Bulk Balance","url"=>"reports/accounts","parent"=>49)); 
 
 	}
 

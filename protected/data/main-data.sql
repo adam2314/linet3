@@ -514,7 +514,7 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`) VALUES
 (72, 'Mail Template', 'mailTemplate/admin', NULL, 1),
 (73, 'Stock', 'reports/stock', NULL, 49),
 (74, 'Linet 2 Import', 'data/linet2Import', NULL, 57);
-(75, 'Bulk Balance', 'report/accounts', NULL, 49);
+(75, 'Bulk Balance', 'reports/accounts', NULL, 49);
 
 INSERT INTO `openformat` (`id`, `description`, `type`, `size`, `record`, `export`, `import`, `type_id`) VALUES
 (1000, 'קוד רשומה', 's', 4, 1, 'A000', 'A000', 'A000'),
