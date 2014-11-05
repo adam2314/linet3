@@ -140,3 +140,11 @@ CREATE TABLE IF NOT EXISTS `bug` (
   `body` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `tbl_migration`;
+CREATE TABLE IF NOT EXISTS `tbl_migration` (
+  `version` varchar(255) NOT NULL,
+  `apply_time` int(11) DEFAULT NULL,
+  PRIMARY KEY (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

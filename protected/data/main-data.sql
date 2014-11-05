@@ -513,7 +513,7 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`) VALUES
 (71, 'Id6111 Admin', 'accId6111/admin', NULL, 1),
 (72, 'Mail Template', 'mailTemplate/admin', NULL, 1),
 (73, 'Stock', 'reports/stock', NULL, 49),
-(74, 'Linet 2 Import', 'data/linet2Import', NULL, 57);
+(74, 'Linet 2 Import', 'data/linet2Import', NULL, 57),
 (75, 'Bulk Balance', 'reports/accounts', NULL, 49);
 
 INSERT INTO `openformat` (`id`, `description`, `type`, `size`, `record`, `export`, `import`, `type_id`) VALUES
@@ -1058,3 +1058,10 @@ INSERT INTO `currencies` (`id`, `code`, `name`, `symbol`) VALUES
 ('ZAR', '710', 'South African rand', 'R'),
 ('ZMK', '894', 'Kwacha', 'ZK'),
 ('ZWD', '716', 'Zimbabwe dollar', '$');
+
+
+
+INSERT INTO `tbl_migration` (`version`, `apply_time`) VALUES
+('m000000_000000_base', 1412110593),
+('m140930_204124_0002', 1412110593),
+('m141105_102024_0003', 1412110593);
