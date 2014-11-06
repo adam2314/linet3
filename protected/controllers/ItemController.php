@@ -66,7 +66,7 @@ class ItemController extends RightsController {
             //$model->pic->saveAs('/to/localFile');
                 $this->redirect(array('admin', 'id' => $model->id));
         }
-
+        $model->sku=$model->maxId()+1;
         $cat = CHtml::listData(Itemcategory::model()->findAll(), 'id', 'name');
         $units = CHtml::listData(Itemunit::model()->findAll(), 'id', 'name');
         $model->parent_item_id = 0;

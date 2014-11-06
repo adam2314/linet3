@@ -119,13 +119,14 @@ class Item extends fileRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('name, category_id, parent_item_id, isProduct, stockType', 'required'),
+            array('sku, name, category_id, parent_item_id, isProduct, stockType', 'required'),
             array('category_id, parent_item_id, isProduct, profit, unit_id, owner, stockType', 'numerical', 'integerOnly' => true),
             array('itemVatCat_id', 'length', 'max' => 10),
             array('name', 'length', 'max' => 100),
             array('purchaseprice, saleprice', 'length', 'max' => 20),
             array('currency_id', 'length', 'max' => 3),
-            array('description, sku', 'safe'),
+            array('sku', 'unique','message'=>'Sku already exists!'),       
+            array('description', 'safe'),
             //array('src_tax', 'length', 'max'=>5),
             array('pic', 'file', 'types' => 'jpg, gif, png', 'allowEmpty' => true),
             // The following rule is used by search().
@@ -213,6 +214,14 @@ class Item extends fileRecord {
         $sql = 'SELECT id as value, name AS label FROM ' . Item::table . ' WHERE name LIKE :name';
         $name = $name . '%';
         return Yii::app()->db->createCommand($sql)->queryAll(true, array(':name' => $name));
+    }
+    
+    
+    public function maxId(){
+        $criteria = new CDbCriteria;
+        $criteria->select = 'max(id)';
+        $id = $this->commandBuilder->createFindCommand($this->tableName(), $criteria)->queryScalar();
+        return $id;
     }
 
 }

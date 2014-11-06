@@ -28,62 +28,61 @@ class DocsController extends RightsController {
     }
 
     public function actionPdf($model = null, $return = true) {//usd for print*/
-        $file = $this->actionPrint($model->id, 2, $model, true);
-        //echo $file;
-        //Yii::app()->end();
-        echo "help;";
         $yiiBasepath = Yii::app()->basePath;
         $yiiUser = Yii::app()->user->id;
         $configPath = Yii::app()->user->settings["company.path"];
         $configCertpasswd = Yii::app()->user->certpasswd;
-
-
         $mypath = Yii::app()->params["filePath"] . $configPath . "/docs/";
         $myPdf = $mypath . $model->docType->name . "-$model->docnum.pdf";
         $myPdfS = $mypath . $model->docType->name . "-$model->docnum-signed.pdf";
+        $addon = ".pdf";
 
+        if (!file_exists($myPdf)) {
+            $file = $this->actionPrint($model->id, 2, $model, true);
+            $mPDF1 = Yii::app()->ePdf->mpdf();
+            //$mPDF1 = Yii::app()->ePdf->mpdf('', 'A5');
+            $mPDF1->WriteHTML($file);
+            $mPDF1->Output($myPdf, 'F');
+        }
+
+        if (!file_exists($myPdfs)) {
+            spl_autoload_unregister(array('YiiBase', 'autoload'));
+            $oldpath = get_include_path();
+            set_include_path($yiiBasepath . '/modules/zend_pdf_certificate/');
+
+            include_once('Pdf.php');
+            include_once('ElementRaw.php');
+            //loads a sample PDF file
+            $pdf = Farit_Pdf::load($myPdf);
+
+            $cerfile = Yii::app()->params["filePath"] . $configPath . "/cert/" . $yiiUser . ".p12";
+
+            if (file_exists($cerfile)) {
+                $certificate = file_get_contents($cerfile);
+                //password for the certificate
+
+                $certificatePassword = $configCertpasswd;
+                if (empty($certificate)) {
+                    throw new Zend_Pdf_Exception('Cannot open the certificate file');
+                }
+                $pdf->attachDigitalCertificate($certificate, $certificatePassword);
+                //here the digital certificate is inserted inside of the PDF document
+                $renderedPdf = $pdf->render();
+                file_put_contents($myPdfS, $renderedPdf);
+                $addon = "-signed.pdf";
+            } else {
+                Yii::app()->user->setFlash('error', Yii::t('app', 'No Certifcate cannt sign'));
+                //Yii::app()->end();
+                
+            }
+            set_include_path($oldpath);
+            spl_autoload_register(array('YiiBase', 'autoload'));
+        }
         //echo $mypath;
         //exit;
         // mPDF
-        $mPDF1 = Yii::app()->ePdf->mpdf();
-        //$mPDF1 = Yii::app()->ePdf->mpdf('', 'A5');
-        $mPDF1->WriteHTML($file);
-        $mPDF1->Output($myPdf, 'F');
-
         //add digi sign
-        spl_autoload_unregister(array('YiiBase', 'autoload'));
-        $oldpath = get_include_path();
-        set_include_path($yiiBasepath . '/modules/zend_pdf_certificate/');
 
-        include_once('Pdf.php');
-        include_once('ElementRaw.php');
-        //loads a sample PDF file
-        $pdf = Farit_Pdf::load($myPdf);
-
-
-        $cerfile = Yii::app()->params["filePath"] . $configPath . "/cert/" . $yiiUser . ".p12";
-        //echo $cerfile;
-
-        if (file_exists($cerfile)) {
-            $certificate = file_get_contents($cerfile);
-            //password for the certificate
-
-            $certificatePassword = $configCertpasswd;
-            if (empty($certificate)) {
-                throw new Zend_Pdf_Exception('Cannot open the certificate file');
-            }
-            $pdf->attachDigitalCertificate($certificate, $certificatePassword);
-            //here the digital certificate is inserted inside of the PDF document
-            $renderedPdf = $pdf->render();
-            file_put_contents($myPdfS, $renderedPdf);
-            $addon = "-signed.pdf";
-        } else {
-            Yii::app()->user->setFlash('error', Yii::t('app', 'No Certifcate cannt sign'));
-            //Yii::app()->end();
-            $addon = ".pdf";
-        }
-        set_include_path($oldpath);
-        spl_autoload_register(array('YiiBase', 'autoload'));
 
         if ($return) {
             if ($addon == ".pdf")
@@ -111,7 +110,7 @@ class DocsController extends RightsController {
 
         if (is_null($model))
             $model = $this->loadModel($id);
-        
+
         if ($preview != 1)//preview
             $model->printDoc();
         if ($return)
@@ -178,17 +177,21 @@ class DocsController extends RightsController {
                 $this->actionPrint($model->id, 1, $model);
                 return;
             case 'email':
-                if ($model->save())
-                    $this->actionPdf($model, false);
-                //echo ";$mail;";
-                if ($mail == 0)
+                $model->save();
+                //if ($model->save())
+                //    $this->actionPdf($model, false);
+
+                if ($mail == 0) {
                     $this->redirect(array('view', 'id' => $model->id, "mail" => 1));
+                } else {
+                    $this->actionPdf($model, false);
+                }
                 //$mail=new Mail();
                 //$mail->loadTemplate();
                 //$mail->to=$model->Account->mail;
                 //$mail->files=File::id();
 
-                break;
+                return;
             case 'pdf':
                 if ($model->save())
                     $this->actionPdf($model);
@@ -239,17 +242,11 @@ class DocsController extends RightsController {
         if (!is_null($type))
             $model->doctype = (int) $type;
         $model->refnum = '';
+        $model->printed = '';
         $model->refnum_ids = '';
         $model->status = $model->docType->docStatus_id; //switch status back to defult for doc
-        //$docstatus =Docstatus::model()->findByPk($model1->status);
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-        /* if(isset($docstatus))
-          if($docstatus->looked){
-          $this->redirect(array('view','id'=>$model->id));
-          } */
-        if (isset($_POST['Docs'])) {
 
+        if (isset($_POST['Docs'])) {
             $this->actionCreate();
         }
 
