@@ -241,13 +241,15 @@ if (count($model->docCheques) != 0) {
 
 
     foreach ($model->docCheques as $rcptdetail) {
-
+        $cmp=  Accounts::model()->findByPk($rcptdetail->creditcompany)->name;
+        
+        
         echo "
                 <tr>
-                    <td class='Type'>$rcptdetail->type</td>
+                    <td class='Type'>".Yii::t("app",$rcptdetail->Type->name)."</td>
                     <td class='Line'>$rcptdetail->line</td>
                     <td class='Refnum'>$rcptdetail->refnum</td>
-                    <td class='CreditCompany'>$rcptdetail->creditcompany</td>
+                    <td class='CreditCompany'>$cmp</td>
                     <td class='ChequeNo'>$rcptdetail->cheque_num</td>
                         
                     <td class='Bank'>" . $rcptdetail->bank . "</td>

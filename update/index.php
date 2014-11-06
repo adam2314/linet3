@@ -1,4 +1,5 @@
 <?php
+
 /* update writen by Adam BH */
 //$_GET['lang'] = 'he';
 $update = 1;
@@ -119,28 +120,28 @@ if ($loggedin) {
     if (($step == 2) && (isset($_POST['non']))) {
         include 'Backup.php';
         print "<div class=\"updatetext\">";
-        if (is_writeable($config['basePath'] . "/backup")) {
+        if (is_writeable($config['basePath'] . "/files")) {
             print Yii::t('update', "Backup system and database, it is heighly advised to save a local copy of the backup files") . "<br />";
             print Yii::t('update', "Backuping system files") . "...<br />";
             /* delete old files */
-            if ($handle = opendir($config['basePath'] . "/backup")) {
+            if ($handle = opendir($config['basePath'] . "/files")) {
                 while (false !== ($file = readdir($handle))) {
                     if ((strpos($file, ".zip")) || (strpos($file, ".sql")))
-                        unlink($config['basePath'] . "/backup/" . $file);
+                        unlink($config['basePath'] . "/files/" . $file);
                 }
             }
 
-            //adam: Zip($config['basePath'] . "/", $config['basePath'] . '/backup/files' . date('dmY') . '.zip');
+            //adam: Zip($config['basePath'] . "/", $config['basePath'] . '/files/files' . date('dmY') . '.zip');
             print Yii::t('update', "Done") . "<br />";
-            print "<a href='../backup/files" . date('dmY') . ".zip'>" . Yii::t('update', "Downlod System Files") . "</a><br />";
+            print "<a href='../files/files" . date('dmY') . ".zip'>" . Yii::t('update', "Downlod System Files") . "</a><br />";
             print Yii::t('update', "Backuping database") . "...<br />";
-            $bkfile = $config['basePath'] . '/backup/db' . date('dmY') . '.sql'; //'.date('Ymd').'
+            $bkfile = $config['basePath'] . '/files/db' . date('dmY') . '.sql'; //'.date('Ymd').'
             dbBackup($bkfile);
             print Yii::t('update', "Done") . "<br />";
 
-            print "<a href='../backup/db" . date('dmY') . ".sql'>" . Yii::t('update', "Download Database file") . "</a><br />";
+            print "<a href='../files/db" . date('dmY') . ".sql'>" . Yii::t('update', "Download Database file") . "</a><br />";
         }else {
-            print "Error: Unable to write into Backup folder please check permissions:<br />" . $config['basePath'] . "/backup";
+            print "Error: Unable to write into Backup folder please check permissions:<br />" . $config['basePath'] . "/files";
             $nextStep = 0;
         }
         print "</div>";
@@ -155,27 +156,27 @@ if ($loggedin) {
         $nextStep = 0;
 
         print Yii::t('update', "checking permissions") . ".<br />";
-        $logfile = $config['basePath'] . "/backup/updatelog" . date('dmY') . '.txt';
+        $logfile = $config['basePath'] . "/files/updatelog" . date('dmY') . '.txt';
         if (permisionChk($logfile)) {
             $log = fopen($logfile, 'w') or die("can't open file");
-            logMe("Start Loging: " ,$log );
+            logMe("Start Loging: ", $log);
             $updatefile = GetList($config);
-            logMe("Got File list ",$log);
+            logMe("Got File list ", $log);
             $safty = true;
         } else {
             $safty = false;
             print Yii::t('update', "Error: cant write log file") . ".<br />";
         }
         /*
-        foreach ($updatefile as $value) {
-            $value = $config['basePath'] . "/../" . $value;
-            if (permisionChk($value)) {
-                
-            } else {
-                $safty = false;
-                print Yii::t('update', "-Please check write permissions to: ") . $value . ".<br />";
-            }
-        }*/
+          foreach ($updatefile as $value) {
+          $value = $config['basePath'] . "/../" . $value;
+          if (permisionChk($value)) {
+
+          } else {
+          $safty = false;
+          print Yii::t('update', "-Please check write permissions to: ") . $value . ".<br />";
+          }
+          } */
         //exit;
         //$safty = false;
         if ($safty) {//update all the files
@@ -183,12 +184,12 @@ if ($loggedin) {
             $sversion = getVersion($config);
             foreach ($updatefile as $value) {
                 //log: trying to ge file
-                logMe("GetFile:" . $value ,$log);
-				
-				
+                logMe("GetFile:" . $value, $log);
+
+
                 //$file = getFile($value, $config);
-				$file=';';
-				
+                $file = ';';
+
                 //echo 'exit';
                 //exit;
                 if ($file == '') {
@@ -199,26 +200,26 @@ if ($loggedin) {
 
                 print "+Got file: $value<br />";
                 $fh = fopen($value, 'w') or die("can't open file");
-				logMe("Writing file: " . $value ,$log );
+                logMe("Writing file: " . $value, $log);
                 //print "<hr />$file<hr />";
                 fwrite($fh, $file); //^better large files support
-				logMe("Wrote file: " . $value ,$log );
+                logMe("Wrote file: " . $value, $log);
                 fclose($fh);
             }
             //log:end
 
-            
-			logMe("Finished updating files",$log );
+
+            logMe("Finished updating files", $log);
             print Yii::t('update', "Finished updating files") . ".<br />";
             /* update db */
             print Yii::t('update', "asksing database update") . "<br />";
-			logMe("Get database update",$log );
-            $command = ';';//getSQL($config);
-			logMe("Got DB updae",$log );
+            logMe("Get database update", $log);
+            $command = ';'; //getSQL($config);
+            logMe("Got DB updae", $log);
             if ($command <> '') {
                 //connect mysql server
                 fwrite($log, "Connect to MySql Server" . "\n");
-				logMe("Got DB updae",$log );
+                logMe("Got DB updae", $log);
                 $link = mysql_connect($host, $user, $pswd);
                 //select db
                 fwrite($log, "Select Database" . "\n");
@@ -234,7 +235,7 @@ if ($loggedin) {
             }
             //unzip upgrade.zip
             $zip = new ZipArchive;
-            $res = $zip->open($config['basePath'].'/../upgrade.zip');
+            $res = $zip->open($config['basePath'] . '/../upgrade.zip');
             if ($res === TRUE) {
                 $zip->extractTo($config['basePath'] . "/../");
                 $zip->close();
@@ -244,14 +245,14 @@ if ($loggedin) {
             }
             echo "<br />";
             //new add costum commands
-            if (file_exists($config['basePath'].'/../upgrade.php')) {
-                include $config['basePath'].'/../upgrade.php';
-                rename($config['basePath'].'/../upgrade.php', $config['basePath'].'/../upgrade.php.done');
+            if (file_exists($config['basePath'] . '/../upgrade.php')) {
+                include $config['basePath'] . '/../upgrade.php';
+                rename($config['basePath'] . '/../upgrade.php', $config['basePath'] . '/../upgrade.php.done');
             }
         } else {
             print Yii::t('update', "Can Not Continue Without!") . "<br />";
         }
-		logMe("End Loging",$log );
+        logMe("End Loging", $log);
         fclose($log);
         $nextStep = 4;
         if ($nextStep)
@@ -263,7 +264,7 @@ if ($loggedin) {
     /* end */
     if (($step == 4) && (isset($_POST['non']))) {
         print Yii::t('update', "Linet has been successfully updated") . "<br />";
-        print '<a href="../private/backup/updatelog' . date('dmY') . '.txt">' . Yii::t('update', "log file") . '</a><br />';
+        print '<a href="../private/files/updatelog' . date('dmY') . '.txt">' . Yii::t('update', "log file") . '</a><br />';
 //print '<a class="btnaction" href="../../">'.Yii::t('update',"Finished").'</a>';
         print '<a class="btn btn-primary" onclick="document.location.href=\'../\'" >' . Yii::t('update', "Finished") . '</a>';
 //print '<input type="button" class="btnaction" onclick="loadDoc('.$nextStep.')" value="'.Yii::t('update',"Next").'" /></div>';
@@ -293,83 +294,79 @@ function getSQL($config) {
 function getFile($fileName, $config) {
     $updatesrv = $config['params']['updatesrv'];
     $version = $config['params']['version'];
-	
-	$content=requ($updatesrv . '?GetFile=' . base64_encode($fileName) . '&Version=' . $version);
-	/*if ($fp = fopen($updatesrv . '?GetFile=' . base64_encode($fileName) . '&Version=' . $version, 'r')) {
-        $content = fread($fp, 1024);
-        while ($line = fread($fp, 1024)) {
-            $content .= $line;
-        }
-    }*/
-	
+
+    $content = requ($updatesrv . '?GetFile=' . base64_encode($fileName) . '&Version=' . $version);
+    /* if ($fp = fopen($updatesrv . '?GetFile=' . base64_encode($fileName) . '&Version=' . $version, 'r')) {
+      $content = fread($fp, 1024);
+      while ($line = fread($fp, 1024)) {
+      $content .= $line;
+      }
+      } */
+
     //$content = file_get_contents($updatesrv . '?GetFile=' . base64_encode($fileName) . '&Version=' . $version);
-    
     //echo $updatesrv . '?GetFile=' . base64_encode($fileName) . '&Version=' . $version;
-	
-	
+
+
     return base64_decode($content);
 }
 
 function getVersion($config) {
-    $updatesrv = $config['params']['updatesrv']; 
+    $updatesrv = $config['params']['updatesrv'];
     $version = $config['params']['version'];
     //if ($fp = fopen($updatesrv . "?GetLateset&ver=$version", 'r')) {
     //   $content = fread($fp, 1024);
-     //   return $content;
+    //   return $content;
     //}
-	
-	
-	
-	$ctx=stream_context_create(array('http'=>
-    array(
-	'timeout' => 5 // 30 sec
-    )
-	));
-	
-	//$conetnt = file_get_contents('http://example.com',false,$ctx);
-	return file_get_contents($updatesrv . "?GetLateset&ver=$version",false,$ctx);
+
+
+
+    $ctx = stream_context_create(array('http' =>
+        array(
+            'timeout' => 5 // 30 sec
+        )
+    ));
+
+    //$conetnt = file_get_contents('http://example.com',false,$ctx);
+    return file_get_contents($updatesrv . "?GetLateset&ver=$version", false, $ctx);
 }
 
 function getList($config) {
     $updatesrv = $config['params']['updatesrv'];
     $version = $config['params']['version'];
-    /*if ($fp = fopen($updatesrv . '?GetList&Version=' . $version, 'r')) {
-        $content = fread($fp, 1024);
-        while ($line = fread($fp, 1024)) {
-            $content .= $line;
-        }
-    }
-	*/
-	$content=requ($updatesrv . '?GetList&Version=' . $version);
+    /* if ($fp = fopen($updatesrv . '?GetList&Version=' . $version, 'r')) {
+      $content = fread($fp, 1024);
+      while ($line = fread($fp, 1024)) {
+      $content .= $line;
+      }
+      }
+     */
+    $content = requ($updatesrv . '?GetList&Version=' . $version);
     $filelist = explode('<br />', $content);
     array_pop($filelist);
     //print_r($filelist);
     return $filelist;
 }
 
-function logMe($text,$log=null){
-	if($log===null)
-		global $log;
-	fwrite($log, date('d/m/Y H:i:s').":\t" . $text . "\n");
-	
-	
-	
+function logMe($text, $log = null) {
+    if ($log === null)
+        global $log;
+    fwrite($log, date('d/m/Y H:i:s') . ":\t" . $text . "\n");
 }
 
-function requ($url,$log=null){
-	if($log===null)
-		global $log;
-	logMe("Making Requst: ".$url,$log=null);
-	
-	if ($fp = fopen($url, 'r')) {
+function requ($url, $log = null) {
+    if ($log === null)
+        global $log;
+    logMe("Making Requst: " . $url, $log = null);
+
+    if ($fp = fopen($url, 'r')) {
         $line = fread($fp, 1024);
-        while ($line!="<EOF>") {
+        while ($line != "<EOF>") {
             $line = fread($fp, 1024);
             $content .= $line;
         }
-	}
-	logMe("End Requst: ".$url,$log=null);
-	return $content;
+    }
+    logMe("End Requst: " . $url, $log = null);
+    return $content;
 }
 
 function permisionChk($filename) {
@@ -390,4 +387,5 @@ function permisionChk($filename) {
         }
     }
 }
+
 ?>

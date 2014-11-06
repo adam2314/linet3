@@ -33,7 +33,9 @@ class InstallConfig extends CFormModel {
         $handle = fopen('protected/config/install.php', 'w');
         fwrite($handle, $new);
         fclose($handle);
-
+        if(!is_dir("protected/files/")){
+            mkdir("protected/files/");
+        }
         //make main db
         $this->makeDB();
         

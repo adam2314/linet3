@@ -35,7 +35,7 @@ class DocsController extends RightsController {
         $mypath = Yii::app()->params["filePath"] . $configPath . "/docs/";
         $myPdf = $mypath . $model->docType->name . "-$model->docnum.pdf";
         $myPdfS = $mypath . $model->docType->name . "-$model->docnum-signed.pdf";
-        $addon = ".pdf";
+        
 
         if (!file_exists($myPdf)) {
             $file = $this->actionPrint($model->id, 2, $model, true);
@@ -45,7 +45,7 @@ class DocsController extends RightsController {
             $mPDF1->Output($myPdf, 'F');
         }
 
-        if (!file_exists($myPdfs)) {
+        if (!file_exists($myPdfS)) {
             spl_autoload_unregister(array('YiiBase', 'autoload'));
             $oldpath = get_include_path();
             set_include_path($yiiBasepath . '/modules/zend_pdf_certificate/');
@@ -69,7 +69,7 @@ class DocsController extends RightsController {
                 //here the digital certificate is inserted inside of the PDF document
                 $renderedPdf = $pdf->render();
                 file_put_contents($myPdfS, $renderedPdf);
-                $addon = "-signed.pdf";
+                
             } else {
                 Yii::app()->user->setFlash('error', Yii::t('app', 'No Certifcate cannt sign'));
                 //Yii::app()->end();
@@ -78,17 +78,18 @@ class DocsController extends RightsController {
             set_include_path($oldpath);
             spl_autoload_register(array('YiiBase', 'autoload'));
         }
-        //echo $mypath;
-        //exit;
-        // mPDF
-        //add digi sign
 
+         if (file_exists($myPdfS)) {
+             $addon = "-signed.pdf";
+         }else{
+             $addon = ".pdf";
+         }
 
         if ($return) {
             if ($addon == ".pdf")
-                return Yii::app()->getRequest()->sendFile($model->docType->name . "-" . "$model->docnum" . $addon, $mPDF1->Output());
+                return Yii::app()->getRequest()->sendFile($model->docType->name . "-" . "$model->docnum" . $addon, file_get_contents($myPdf));
             else
-                return Yii::app()->getRequest()->sendFile($model->docType->name . "-" . "$model->docnum" . $addon, $renderedPdf);
+                return Yii::app()->getRequest()->sendFile($model->docType->name . "-" . "$model->docnum" . $addon, file_get_contents($myPdfS));
         }else {
 
             $doc_file = new Files();
