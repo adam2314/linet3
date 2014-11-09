@@ -51,7 +51,7 @@ class RUserBehavior extends CModelBehavior
 	*/
 	public function getAssignmentNameLink()
 	{
-		return CHtml::link($this->getName(), array('assignment/user', 'id'=>$this->getId()));
+		return CHtml::link($this->getName(), array('assignment/user/'.$this->getId()));
 	}
 	
 	/**

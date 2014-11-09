@@ -75,8 +75,8 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
         array(
             'name' => 'account_id',
-            //'type' => 'raw',
-            'value' => 'CHtml::link(CHtml::encode(isset($data->Account)?$data->Account->name:$data->account_id),Yii::app()->createAbsoluteUrl("/accounts/transaction/id/".$data->account_id))',
+            'filter' => CHtml::listData(Accounts::model()->findAll(), 'id', 'name'),
+            'value' => 'CHtml::link(CHtml::encode(isset($data->Account)?$data->Account->name:$data->account_id),Yii::app()->createAbsoluteUrl("/accounts/transaction/".$data->account_id))',
             'type' => 'raw',
         //'value' => '$data->getOptAcc()',
         ),
