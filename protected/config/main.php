@@ -1,9 +1,5 @@
 <?php
 
-// uncomment the following to define a path alias
-// Yii::setPathOfAlias('local','path/to/local-folder');
-// This is the main Web application configuration. Any writable
-// CWebApplication properties can be configured here.
 //needs to move!
 Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
 Yii::setPathOfAlias('tinymce', dirname(__FILE__) . '/../extensions/tinymce');
@@ -27,15 +23,11 @@ return CMap::mergeArray(
                 'application.components.payments.*',
                 'application.modules.rights.*',
                 'application.modules.rights.components.*',
-            //'application.extensions.debugtoolbar.*',
             ),
             'modules' => array(
-                //'auth'=>array(),
                 'rights' => array(
                     'debug' => true,
-                    //'install'=>true,
                     'enableBizRuleData' => true,
-                //'superuserName'=>'admin',
                 ),
                 'eav' => array(),
                 'forum' => array(),
@@ -45,9 +37,6 @@ return CMap::mergeArray(
             ),
             // application components
             'components' => array(
-                //'localtime'=>array(
-                //    'class'=>'LocalTime',
-                //),
                 'Smtpmail' => array(
                     'class' => 'application.extensions.smtpmail.PHPMailer',
                     'Host' => "127.0.0.1",
@@ -74,11 +63,8 @@ return CMap::mergeArray(
                 'tinymce' => array(
                     'class' => 'tinymce.TinyMce',
                 ),
-                //'cache'=>array(
-                //        'class'=>'CApcCache',
-                //),
                 'user' => array(
-                    'class' => 'RWebUser', //rights
+                    'class' => 'RWebUser',
                 ),
                 'authManager' => array(
                     'class' => 'RDbAuthManager',
@@ -88,6 +74,7 @@ return CMap::mergeArray(
                     'itemChildTable' => '{{AuthItemChild}}',
                     'assignmentTable' => '{{AuthAssignment}}',
                     'rightsTable' => '{{Rights}}',
+                    'defaultRoles' => array('Guest'),
                 ),
                 'ePdf' => array(
                     'class' => 'ext.yii-pdf.EYiiPdf',
@@ -136,27 +123,12 @@ return CMap::mergeArray(
                         '<module:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>' => '<module>/<controller>/<action>',
                     ),
                 ),
-                //'clientScript'=>array(
-                //    'class'=>'application.extensions.CClientScriptMinify',
-                //    'minifyController'=>'../minify',
-                //),		
                 'errorHandler' => array(
                     'errorAction' => 'site/error',
                 ),
                 'log' => array(
                     'class' => 'CLogRouter',
                     'routes' => array(
-                    //array('class' => 'CWebLogRoute',),
-                    //array(
-                    //    'class' => 'CFileLogRoute',
-                    //    'levels' => 'trace, info, error, warning',
-                    //    'categories' => 'app',
-                    //),
-                    /* array(
-                      'class'=>'CEmailLogRoute',
-                      'levels'=>'error, warning',
-                      'emails'=>'adam@speedcomp.co.il',
-                      ), */
                     ),
                 ), //end log
             ),
@@ -169,7 +141,6 @@ return CMap::mergeArray(
                 'version' => '3.0beta',
                 'timezone' => 'Asia/Tel_Aviv',
                 'filePath' => dirname(__FILE__) . '/../files/',
-            //'tablePrefix' => ''
             ),
                 )//end main
 ); //end merge
