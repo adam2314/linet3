@@ -926,4 +926,5 @@ INSERT INTO `currencies` (`id`, `code`, `name`, `symbol`) VALUES
 INSERT INTO `tbl_migration` (`version`, `apply_time`) VALUES
 ('m000000_000000_base', 1412110593),
 ('m140930_204124_0002', 1412110593),
-('m141105_102024_0003', 1412110593);
+('m141105_102024_0003', 1412110593),
+('m141109_102024_0004', 1412110593);
