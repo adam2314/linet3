@@ -55,14 +55,14 @@ class ApiController extends Controller {//RightsController
         $entityBody = CJSON::decode(file_get_contents('php://input')); //CJSON::decode
         //var_dump($entityBody);
         //exit;
-        
+
         if (isset($entityBody["login_id"])) {
             $model = new FormLogin;
             $model->id = $entityBody['login_id'];
             $model->hash = $entityBody['login_hash'];
             //$model->company= $entityBody['login_company'];
             //return true;
-            
+
             if ($model->apiLogin()) {
                 if ((int) $entityBody['login_company'] == 0)
                     return true; //no company
@@ -92,30 +92,30 @@ class ApiController extends Controller {//RightsController
 
     /*
 
-    public function actionLogin() {
-        $entityBody = CJSON::decode(file_get_contents('php://input'));
-        if (isset($entityBody)) {
+      public function actionLogin() {
+      $entityBody = CJSON::decode(file_get_contents('php://input'));
+      if (isset($entityBody)) {
 
-            $model = new FormLogin;
-            $model->attributes = $entityBody;
-            if ($model->apiLogin()) {
-                $this->_sendResponse(200, "ok");
-            } else {
-                $this->_sendResponse(401, "not ok");
-            }
-        }
-        $this->_sendResponse(200, "empty");
-    }
+      $model = new FormLogin;
+      $model->attributes = $entityBody;
+      if ($model->apiLogin()) {
+      Response::send(200, "ok");
+      } else {
+      Response::send(401, "not ok");
+      }
+      }
+      Response::send(200, "empty");
+      }
 
-//*/
+      // */
     /*
 
       public function actionSelect($id) {
       if ($this->hasAccess('/select')) {
       if (Company::model()->select((int) $id))//need to chk perm
-      $this->_sendResponse(200, "ok");
+      Response::send(200, "ok");
       else {
-      $this->_sendResponse(401, "not ok");
+      Response::send(401, "not ok");
       }
       }
       }
@@ -128,7 +128,7 @@ class ApiController extends Controller {//RightsController
 
       public function actionLogout() {
       Yii::app()->user->logout();
-      $this->_sendResponse(200, "ok");
+      Response::send(200, "ok");
       }
 
       // */
@@ -154,6 +154,7 @@ class ApiController extends Controller {//RightsController
 
       return $modelName::model()->findAllByAttributes($find);
       } */
+
     private function getVar() {
         $entityBody = CJSON::decode(file_get_contents('php://input'));
         unset($entityBody['login_id']);
@@ -181,26 +182,26 @@ class ApiController extends Controller {//RightsController
                     $find[$var] = $value;
                     //echo $value;
                 } else
-                    $this->_sendResponse(500, sprintf('Parameter <b>%s</b> is not allowed for model <b>%s</b>', $var, $model));
+                    Response::send(500, sprintf('Parameter <b>%s</b> is not allowed for model <b>%s</b>', $var, $model));
             }
 
             $models = $modelName::model()->findAllByAttributes($find);
         } else {
-            $this->_sendResponse(403, sprintf(
+            Response::send(403, sprintf(
                             'Error: Mode <b>Search</b> is not implemented for model <b>%s</b>', $model));
         }
 
         // Did we get some results?
         if (empty($models)) {
             // No
-            $this->_sendResponse(200, sprintf('No items where found for model <b>%s</b>', $_GET['model']));
+            Response::send(200, sprintf('No items where found for model <b>%s</b>', $_GET['model']));
         } else {
             // Prepare response
             $rows = array();
             foreach ($models as $submodel)
                 $rows[] = $submodel->attributes;
             // Send the response
-            $this->_sendResponse(200, $rows);
+            Response::send(200, $rows);
         }
     }
 
@@ -214,17 +215,17 @@ class ApiController extends Controller {//RightsController
 
             if (empty($models)) {
                 // No
-                $this->_sendResponse(200, sprintf('No items where found for model <b>%s</b>', $_GET['model']));
+                Response::send(200, sprintf('No items where found for model <b>%s</b>', $_GET['model']));
             } else {
                 // Prepare response
                 $rows = array();
                 foreach ($models as $submodel)
                     $rows[] = $submodel->attributes;
                 // Send the response
-                $this->_sendResponse(200, $rows);
+                Response::send(200, $rows);
             }
         } else {
-            $this->_sendResponse(403, sprintf(
+            Response::send(403, sprintf(
                             'Error: Mode <b>list</b> is not implemented for model <b>%s</b>', $model));
         }
 
@@ -243,15 +244,15 @@ class ApiController extends Controller {//RightsController
 
         if ($this->hasAccess($model . '/view')) {
             if (!isset($id))
-                $this->_sendResponse(403, 'Error: Parameter <b>id</b> is missing');
+                Response::send(403, 'Error: Parameter <b>id</b> is missing');
             $modelName = $this->translate[$model];
             $loadedModel = $modelName::model()->findByPk($id);
             if ($model === null)
-                $this->_sendResponse(404, 'No Item found with id ' . $id);
+                Response::send(404, 'No Item found with id ' . $id);
             else
-                $this->_sendResponse(200, $loadedModel);
+                Response::send(200, $loadedModel);
         } else {
-            $this->_sendResponse(501, sprintf(
+            Response::send(501, sprintf(
                             'Mode <b>view</b> is not implemented for model <b>%s</b>', $model));
         }
 
@@ -278,15 +279,15 @@ class ApiController extends Controller {//RightsController
                 $modelName::model()->refreshMetaData();
                 $sum+=scount($modelName::model()->findAll());
             }
-            $this->_sendResponse(200, $sum);
+            Response::send(200, $sum);
         } else {
-            $this->_sendResponse(403, sprintf(
+            Response::send(403, sprintf(
                             'Mode <b>create</b> is not implemented for model <b>%s</b>', $model));
         }
     }
 
     public function actionCountSumMonth($model) {//docs,account,user,
-        $this->_sendResponse(200, "no Way");
+        Response::send(200, "no Way");
         if ($this->hasAccess($model . '/countSumMonth')) {
             $modelName = $this->translate[$model];
             $companys = Company::model()->findAll();
@@ -304,9 +305,9 @@ class ApiController extends Controller {//RightsController
                 $criteria->addBetweenCondition('issue_date', $start, $end);
                 $sum+=count($modelName::model()->findAllByAttributes(array(), $criteria));
             }//*/
-            $this->_sendResponse(200, $sum);
+            Response::send(200, $sum);
         } else {
-            $this->_sendResponse(403, sprintf(
+            Response::send(403, sprintf(
                             'Mode <b>create</b> is not implemented for model <b>%s</b>', $model));
         }
     }
@@ -321,9 +322,9 @@ class ApiController extends Controller {//RightsController
             } else {
                 $models = $modelName::model()->findAll();
             }
-            $this->_sendResponse(200, count($models));
+            Response::send(200, count($models));
         } else {
-            $this->_sendResponse(403, sprintf(
+            Response::send(403, sprintf(
                             'Mode <b>create</b> is not implemented for model <b>%s</b>', $model));
         }
     }
@@ -348,28 +349,34 @@ class ApiController extends Controller {//RightsController
                     $loadedModel->$var = $value;
                     //echo $value;
                 } else
-                    $this->_sendResponse(500, sprintf('Parameter <b>%s</b> is not allowed for model <b>%s</b>', $var, $model));
+                    Response::send(500, sprintf('Parameter <b>%s</b> is not allowed for model <b>%s</b>', $var, $model));
             }
             // Try to save the model
-            if ($loadedModel->save())
-                $this->_sendResponse(200, $loadedModel);
-            else {
-                // Errors occurred
-                $msg = "<h1>Error</h1>";
-                $msg .= sprintf("Couldn't create model <b>%s</b>", $_GET['model']);
-                $msg .= "<ul>";
-                foreach ($loadedModel->errors as $attribute => $attr_errors) {
-                    $msg .= "<li>Attribute: $attribute</li>";
+
+            try {
+                if ($loadedModel->save())
+                    Response::send(200, $loadedModel);
+                else {
+                    // Errors occurred
+                    $msg = "<h1>Error</h1>";
+                    $msg .= sprintf("Couldn't create model <b>%s</b>", $_GET['model']);
                     $msg .= "<ul>";
-                    foreach ($attr_errors as $attr_error)
-                        $msg .= "<li>$attr_error</li>";
+                    foreach ($loadedModel->errors as $attribute => $attr_errors) {
+                        $msg .= "<li>Attribute: $attribute</li>";
+                        $msg .= "<ul>";
+                        foreach ($attr_errors as $attr_error)
+                            $msg .= "<li>$attr_error</li>";
+                        $msg .= "</ul>";
+                    }
                     $msg .= "</ul>";
+                    Response::send(500, $msg);
                 }
-                $msg .= "</ul>";
-                $this->_sendResponse(500, $msg);
+            } catch (Exception $e) {
+                Response::send(500, $e->getMessage());
+                //echo 'Caught exception: ', , "\n";
             }
         } else {
-            $this->_sendResponse(403, sprintf(
+            Response::send(403, sprintf(
                             'Mode <b>create</b> is not implemented for model <b>%s</b>', $model));
         }
     }
@@ -393,7 +400,7 @@ class ApiController extends Controller {//RightsController
 
             // Did we find the requested model? If not, raise an error
             if ($loadedModel === null)
-                $this->_sendResponse(400, sprintf("Error: Didn't find any model <b>%s</b> with ID <b>%s</b>.", $model, $id));
+                Response::send(400, sprintf("Error: Didn't find any model <b>%s</b> with ID <b>%s</b>.", $model, $id));
 
             $entityBody = $this->getVar();
             // Try to assign PUT parameters to attributes
@@ -402,19 +409,19 @@ class ApiController extends Controller {//RightsController
                 if ($loadedModel->hasAttribute($var))
                     $loadedModel->$var = $value;
                 else {
-                    $this->_sendResponse(500, sprintf('Parameter <b>%s</b> is not allowed for model <b>%s</b>', $var, $model));
+                    Response::send(500, sprintf('Parameter <b>%s</b> is not allowed for model <b>%s</b>', $var, $model));
                 }
             }
             // Try to save the model
             if ($loadedModel->save())
-                $this->_sendResponse(200, $loadedModel);
+                Response::send(200, $loadedModel);
             else
             // prepare the error $msg
             // see actionCreate
             // ...
-                $this->_sendResponse(500, $msg);
+                Response::send(500, $msg);
         } else {
-            $this->_sendResponse(403, sprintf(
+            Response::send(403, sprintf(
                             'Error: Mode <b>update</b> is not implemented for model <b>%s</b>', $model));
         }
     }
@@ -432,46 +439,22 @@ class ApiController extends Controller {//RightsController
 
             // Was a model found? If not, raise an error
             if ($loadedModel === null)
-                $this->_sendResponse(400, sprintf("Error: Didn't find any model <b>%s</b> with ID <b>%s</b>.", $model, $id));
+                Response::send(400, sprintf("Error: Didn't find any model <b>%s</b> with ID <b>%s</b>.", $model, $id));
 
             // Delete the model
             $num = $loadedModel->delete();
             if ($num > 0)
-                $this->_sendResponse(200, $num);    //this is the only way to work with backbone
+                Response::send(200, $num);    //this is the only way to work with backbone
             else
-                $this->_sendResponse(500, sprintf("Error: Couldn't delete model <b>%s</b> with ID <b>%s</b>.", $model, $id));
+                Response::send(500, sprintf("Error: Couldn't delete model <b>%s</b> with ID <b>%s</b>.", $model, $id));
         } else {
-            $this->_sendResponse(403, sprintf(
+            Response::send(403, sprintf(
                             'Error: Mode <b>delete</b> is not implemented for model <b>%s</b>', $model));
         }
     }
 
-    private function _sendResponse($status = 200, $body = '', $content_type = 'application/json') {
-        // set the status
-        $status_header = 'HTTP/1.1 ' . $status . ' ' . $this->_getStatusCodeMessage($status);
-        header($status_header);
-        // and the content type
-        header('Content-type: ' . $content_type);
+   
 
-
-        echo CJSON::encode(array("status" => $status, "text" => $this->_getStatusCodeMessage($status), "body" => $body));
-
-
-        Yii::app()->end();
-    }
-
-    private function _getStatusCodeMessage($status) {
-        $codes = Array(
-            200 => 'OK',
-            400 => 'Bad Request',
-            401 => 'Unauthorized',
-            402 => 'Payment Required',
-            403 => 'Forbidden',
-            404 => 'Not Found',
-            500 => 'Internal Server Error',
-            501 => 'Not Implemented',
-        );
-        return (isset($codes[$status])) ? $codes[$status] : '';
-    }
+   
 
 }

@@ -53,8 +53,11 @@ class Docdetails extends basicRecord{
     
         public function transaction($num,$refnum,$valuedate,$details,$action,$line,$optacc,$tranType){
             if(is_null($optacc)){
-                $vatcat=  Item::model()->findByPk($this->item_id)->itemVatCat_id;
-                $incomeacc= UserIncomeMap::model()->findByPk(array('user_id'=>Yii::app()->user->id,'itemVatCat_id'=>$vatcat))->account_id;
+                $vatcat =  Item::model()->findByPk($this->item_id)->itemVatCat_id;
+                $vatCatAcc = UserIncomeMap::model()->findByPk(array('user_id'=>Yii::app()->user->id,'itemVatCat_id'=>$vatcat));
+                if($vatCatAcc===null)
+                    throw new CHttpException(500,'The item '.$this->item_id .' does not have a vat catagory.');
+                $incomeacc= $vatCatAcc->account_id;
             }else {
                 $incomeacc=$optacc;
             }

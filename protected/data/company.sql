@@ -78,6 +78,7 @@ CREATE TABLE `accounts` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `type` int(11) DEFAULT NULL,
   `id6111` int(10)  DEFAULT NULL,
+  `cat_id` int(11)  DEFAULT NULL,
   `pay_terms` int(11) DEFAULT NULL,
   `src_tax` decimal(5,2) DEFAULT NULL,
   `src_date` timestamp NULL DEFAULT NULL,
@@ -447,5 +448,13 @@ CREATE TABLE `mail` (
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 );
+
+
+CREATE TABLE `accCat` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `type_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8
 
 SET FOREIGN_KEY_CHECKS=1;

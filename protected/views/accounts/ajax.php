@@ -31,7 +31,13 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 	        ),
 		//'type',
 		'id6111',
-		'pay_terms',
+            array(
+	            'name' => 'cat_id',
+	            'type' => 'raw',
+	            'value' => 'CHtml::encode(isset($data->Catagory)?$data->Catagory->name: "")',
+                    'filter' => CHtml::listData(AccCat::model()->findAllByAttributes(array("type_id"=>$model->type)), 'id', 'name'),
+	        ),
+		//'pay_terms',
 		'src_tax',
 		/*
 		'src_date',

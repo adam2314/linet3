@@ -18,7 +18,7 @@
         <br />
         <?php echo $form->dropDownListRow($model, 'id6111', CHtml::listData(AccId6111::model()->findAll(), 'id', 'name')); ?>
         <br />
-
+        <?php echo $form->dropDownListRow($model, 'cat_id', CHtml::listData(AccCat::model()->findAllByAttributes(array("type_id"=>$model->type)), 'id', 'name')); ?>
 
         <?php echo $form->textFieldRow($model, 'pay_terms', array('class' => 'span5', 'maxlength' => 40)); ?>
         <?php echo $form->textFieldRow($model, 'src_tax', array('class' => 'span5', 'maxlength' => 40)); ?>

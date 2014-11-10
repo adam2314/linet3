@@ -110,9 +110,13 @@ class basicRecord extends CActiveRecord {
     }
 
     public function save($runValidation = true, $attributes = NULL) {
-        if (!Yii::app()->params['readOnly'])
-            return parent::save($runValidation, $attributes);
-        else
+        
+        if (!Yii::app()->params['readOnly']){
+            $a= parent::save($runValidation, $attributes);
+            Yii::log("Saving Model: " . var_export($this->getErrors(), true), CLogger::LEVEL_INFO, __METHOD__);
+            return $a;
+        }else
+            throw new CHttpException(401, Yii::t('app', 'System is in read only mode.'));
             return false;
     }
 

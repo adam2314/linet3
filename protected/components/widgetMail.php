@@ -47,15 +47,19 @@ function getFile() {//only for docs
         //post....
         var url = '". $this->urlFile . "';
         var parms = $('#docs-form').serializeArray();
-        $.post(url, parms,
-                function(data) {
-                    console.log(data);
-                    $('#Mail_files').val(data);
-                    //callback
-                    //get template
-                    //doc,type
+        $.post(url, parms)
+         .done(function(data) {
+            if(data.status!=200){
+                alert(data.text);
+            }
+            $('#Mail_files').val(data.body);
+        })
+        .fail(function(data) {
+            alert(data.responseText);
+            console.log(data);
+        });
 
-                }, 'json');
+
 
         //callback
         //show template

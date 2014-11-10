@@ -34,17 +34,18 @@ class Docs extends fileRecord {
     //public $lang;
     public $docDet = NULL;
     public $docCheq = NULL;
-    public $Docs= NULL;
+    public $Docs = NULL;
     public $rcptsum = 0;
     public $issue_from;
     public $issue_to;
     public $stockSwitch = 1;
-    public $refnum_ids ='';
+    public $refnum_ids = '';
     private $dateDBformat = true;
     public $maxDocnum;
-    
-    const STATUS_OPEN=0;
-    const STATUS_CLOSED=1;
+
+    const STATUS_OPEN = 0;
+    const STATUS_CLOSED = 1;
+
     //const STATUS_DRAFT=3;
     /*
       public function __construct($arg = NULL) {
@@ -55,26 +56,33 @@ class Docs extends fileRecord {
       //$this->doctype=$type;
 
       }// */
-    public function init(){
+
+    public function hasAttribute($name) {
+        if ($name == "docDet" || $name == "docCheq")
+            return true;
+        else
+            return parent::hasAttribute($name);
+    }
+
+    public function init() {
         $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
         $this->due_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
-        
+
         return parent::init();
     }
-            
+
     public static function findAllByType($doctype) {
 
         return Docs::model()->findAllByAttributes(array('doctype' => $doctype));
     }
 
-    public function draftSave(){
-        $status=  Docstatus::model()->findByAttributes(array('looked' => 0,'doc_type' => $this->doctype));
-        if($status!==null){
-            $this->status=$status->num;
+    public function draftSave() {
+        $status = Docstatus::model()->findByAttributes(array('looked' => 0, 'doc_type' => $this->doctype));
+        if ($status !== null) {
+            $this->status = $status->num;
         }
-        
     }
-    
+
     /*
      * for open format export 
      */
@@ -84,17 +92,16 @@ class Docs extends fileRecord {
         return Docs::model()->findByAttributes(array('docnum' => $docnum, 'doctype' => $doctype));
     }
 
-    public function getRef(){
-        $this->refnum_ids='';
-        $this->Docs=Docs::model()->findAllByAttributes(array('refnum' => $this->id));
-        if($this->Docs!==null){
-            foreach($this->Docs as $doc)
-                $this->refnum_ids.=$doc->id.", ";
+    public function getRef() {
+        $this->refnum_ids = '';
+        $this->Docs = Docs::model()->findAllByAttributes(array('refnum' => $this->id));
+        if ($this->Docs !== null) {
+            foreach ($this->Docs as $doc)
+                $this->refnum_ids.=$doc->id . ", ";
         }
     }
-    
-    
-     public static function getRefStatuses() {
+
+    public static function getRefStatuses() {
         return self::getConstants('STATUS_', __CLASS__);
     }
 
@@ -104,9 +111,7 @@ class Docs extends fileRecord {
         //return "";
         return Yii::t('app', $list[$this->refstatus]['name']);
     }
-    
-    
-    
+
     public function getType($type = '') {
         if ($type == '') {
             return isset($this->docType) ? $this->docType->openformat : "";
@@ -204,88 +209,89 @@ class Docs extends fileRecord {
             $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->issue_date));
             $this->modified = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->modified));
         }
-        
+
         $this->getRef();
         return parent::afterFind();
     }
 
     public function save($runValidation = true, $attributes = NULL) {
-        
         $this->owner = Yii::app()->user->id;
         if ($this->total == 0)
             $this->total = $this->rcptsum;
-        $a = parent::save($runValidation, $attributes);
-        //$this->docType->stockAction;
+        $a = parent::save(false);
         if (!is_null($attributes))
             return $a;
 
+
+
+
+
         if ($a) { //if switch no save
-            $this->saveRef();//load docs and re-save them
+            $this->saveRef(); //load docs and re-save them
             if (!$this->action) {
-                $this->docStatus=  Docstatus::model()->findByPk(array('num'=>$this->status, 'doc_type'=>$this->doctype));
-                
+                if ($this->status === null)
+                    throw new CHttpException(500, Yii::t('app', 'No status recived'));
+                $this->docStatus = Docstatus::model()->findByPk(array('num' => $this->status, 'doc_type' => $this->doctype));
+                if ($this->docStatus === null)
+                    throw new CHttpException(500, Yii::t('app', 'Status is Invalid'));
                 $this->saveDet();
                 $this->saveCheq();
-                
                 if (isset($this->docStatus)) {
                     if ($this->docStatus->action != 0) {
-                        $this->docnum = $this->newNum();//get num 
-                        $this->action=1;
+                        $this->docnum = $this->newNum(); //get num 
+                        $this->action = 1;
                         $a = parent::save($runValidation, $attributes);
                         $this->transaction((int) $this->docStatus->action);
                         if (is_null($this->docType->transactionType_id)) {//only if !transaction stock
-                         foreach ($this->docDetailes as $docdetail) {
-                            $this->stock($docdetail->item_id, $docdetail->qty);
-                         }
+                            foreach ($this->docDetailes as $docdetail) {
+                                $this->stock($docdetail->item_id, $docdetail->qty);
+                            }
                         }
                     }
                 }
-                
-                
             }
+        } else {
+            throw new CHttpException(500, Yii::t('app', 'Uneable to save document'));
         }
         return $a;
     }
-    
-    
-    public function saveRef(){
-        $str=$this->refnum_ids;//save new values
-        
+
+
+    public function saveRef() {
+        $str = $this->refnum_ids; //save new values
+
         $this->getRef();    //load old
-        
-        
         //no skipping is allowed anymore if cur,total change...
         //if($str==$this->refnum_ids) //if the same skip
         //    return true;
         //echo $str;
-        
-        if($this->Docs!==null){//clear!
-            foreach ($this->Docs as $doc){
-                $doc->refstatus=Docs::STATUS_OPEN;
-                $doc->refnum='';
+
+        if ($this->Docs !== null) {//clear!
+            foreach ($this->Docs as $doc) {
+                $doc->refstatus = Docs::STATUS_OPEN;
+                $doc->refnum = '';
                 $doc->save();
             }
-            
         }
-        $sum=0;
-        $tmp=explode(",",$str);
-        foreach($tmp as $id){//lets do this
-            if($id==$this->id){
-                throw new CHttpException(500,Yii::t('app','You cannot save doc as a refnum'));
+        $sum = 0;
+        $tmp = explode(",", $str);
+        foreach ($tmp as $id) {//lets do this
+            if ($id == $this->id) {
+                throw new CHttpException(500, Yii::t('app', 'You cannot save doc as a refnum'));
             }
-            $doc=Docs::model()->findByPk((int)$id);
-            if($doc!==null){
-                $sum+=$doc->total;//adam: need to multi currency!
-                if($sum<=$this->total){
-                    $doc->refstatus=Docs::STATUS_CLOSED;
-                }else{
-                    $doc->refstatus=Docs::STATUS_OPEN;
+            $doc = Docs::model()->findByPk((int) $id);
+            if ($doc !== null) {
+                $sum+=$doc->total; //adam: need to multi currency!
+                if ($sum <= $this->total) {
+                    $doc->refstatus = Docs::STATUS_CLOSED;
+                } else {
+                    $doc->refstatus = Docs::STATUS_OPEN;
                 }
-                $doc->refnum=$this->id;
+                $doc->refnum = $this->id;
                 $doc->save();
             }
         }
-        $this->refnum_ids=$str;
+        $this->refnum_ids = $str;
     }
 
     /*     * *********************doc******************* */
@@ -358,11 +364,11 @@ class Docs extends fileRecord {
                     if (!$this->stockSwitch)//if not checked
                         return;
                 }
-                
+
                 $account_id = Yii::app()->user->warehouse;
                 $oppt_account_id = $this->account_id;
                 if ((int) $this->oppt_account_id != 0) {
-                    if($this->doctype==15){//only if transfer //mybe shuld be only if oppt_account_type==8 wherehouse
+                    if ($this->doctype == 15) {//only if transfer //mybe shuld be only if oppt_account_type==8 wherehouse
                         $account_id = $this->account_id;
                         $oppt_account_id = $this->oppt_account_id;
                     }
@@ -381,9 +387,9 @@ class Docs extends fileRecord {
         $num = 0;
         $line = 1;
         $tranType = $this->docType->transactionType_id;
-        
-        
-        
+
+
+
         if (!is_null($tranType)) {//has trans action!
             if ($this->docType->isdoc) {
                 $vat = new Transactions();
@@ -394,8 +400,8 @@ class Docs extends fileRecord {
                     //$num = $docdetail->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->docType->oppt_account_type, $tranType);
                     $num = $docdetail->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->oppt_account_id, $tranType);
                     $line++;
-                    $iVat= $docdetail->ihTotal*($docdetail->iVatRate/100);
-                    $accout->sum+=($docdetail->ihTotal +$iVat) * $action;
+                    $iVat = $docdetail->ihTotal * ($docdetail->iVatRate / 100);
+                    $accout->sum+=($docdetail->ihTotal + $iVat) * $action;
                     $vat->sum+= $iVat * $action;
                 }
 
@@ -406,7 +412,7 @@ class Docs extends fileRecord {
                 $accout->valuedate = $valuedate;
                 $accout->details = $this->company;
                 $accout->currency_id = $this->currency_id;
-                $accout->sum=$accout->sum*-1;
+                $accout->sum = $accout->sum * -1;
                 $accout->owner_id = $this->owner;
                 $accout->linenum = $line;
                 $line++;
@@ -470,10 +476,24 @@ class Docs extends fileRecord {
         //Yii::app()->end();
     }
 
+    public function delete(){
+        if($this->action==0){
+            foreach($this->docDetailes as $detail){
+                $detail->delete();
+            }
+            foreach($this->docCheques as $detail){
+                $detail->delete();
+            }
+            return parent::delete();
+        }else{
+            return false;
+        }
+        
+    }
+    
+    
     public function primaryKey() {
         return 'id';
-        // For composite primary key, return an array like the following
-        //return array('prefix', 'num');
     }
 
     /**
@@ -499,18 +519,16 @@ class Docs extends fileRecord {
         }
     }
 
-    public static function getMax($type_id){
+    public static function getMax($type_id) {
         $model = new Docs;
-        $criteria=new CDbCriteria;
-        $criteria->select='max(docnum) AS maxDocnum';
+        $criteria = new CDbCriteria;
+        $criteria->select = 'max(docnum) AS maxDocnum';
         $criteria->condition = "doctype = :type_id";
         $criteria->params = array(':type_id' => $type_id);
         $row = $model->model()->find($criteria);
         return $row['maxDocnum'];
-        
     }
-    
-    
+
     /**
      * @return string the associated database table name
      */
@@ -532,11 +550,10 @@ class Docs extends fileRecord {
             array('company, address', 'length', 'max' => 80),
             array('currency_id', 'length', 'max' => 3),
             array('refnum', 'length', 'max' => 20),
-            //array('vatnum', 'length', 'max'=>9),
-            //array('vatnum', 'length', 'min'=>9),
             array('vatnum', 'vatnumVal'),
             array('rcptsum, discount, sub_total, novat_total, vat, total, src_tax', 'length', 'max' => 20),
             array('issue_date, due_date, comments, description, refnum_ids, refstatus', 'safe'),
+            //array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe', 'on' => 'search'),
@@ -604,15 +621,14 @@ class Docs extends fileRecord {
             'comments' => Yii::t('labels', 'Hidden internal comments'),
             'owner' => Yii::t('labels', 'Owner'),
             'discount' => Yii::t('labels', 'Discount'),
-            'refstatus'=>Yii::t('labels','Reference Status'),
-            'stockSwitch'=>Yii::t('labels','Stock Switch'),
-            
+            'refstatus' => Yii::t('labels', 'Reference Status'),
+            'stockSwitch' => Yii::t('labels', 'Stock Switch'),
         );
     }
 
     public function printDoc() {
-        
-        if($this->action==1)
+
+        if ($this->action == 1)
             $this->printed = (int) $this->printed + 1;
         $this->save(false, false);
     }

@@ -25,6 +25,7 @@
  * @property string $city
  * @property string $zip
  * @property string $comments
+ * @property integer $cat_id
  * @property integer $currency_id
  * @property integer $system_acc
  * @property integer $owner
@@ -245,7 +246,7 @@ class Accounts extends fileRecord {//CActiveRecord
         // will receive user inputs.
         return array(
             array('name, type', 'required'),
-            array('type, pay_terms, parent_account_id, system_acc, owner', 'numerical', 'integerOnly' => true),
+            array('cat_id, type, pay_terms, parent_account_id, system_acc, owner', 'numerical', 'integerOnly' => true),
             //array('vatnum', 'length', 'max'=>9),
             //array('vatnum', 'length', 'min'=>9),
             array('vatnum', 'vatnumVal'),
@@ -260,7 +261,7 @@ class Accounts extends fileRecord {//CActiveRecord
             array('src_date, comments, web, department', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, type, id6111, pay_terms, src_tax, src_date, parent_account_id, company, contact, department, vatnum, email, phone, dir_phone, cellular, fax, web, address, currency_id, city, zip, comments, owner', 'safe', 'on' => 'search'),
+            array('id, type, cat_id, id6111, pay_terms, src_tax, src_date, parent_account_id, company, contact, department, vatnum, email, phone, dir_phone, cellular, fax, web, address, currency_id, city, zip, comments, owner', 'safe', 'on' => 'search'),
         );
     }
 
@@ -284,6 +285,7 @@ class Accounts extends fileRecord {//CActiveRecord
         // class name for the relations automatically generated below.
         return array(
             'accType' => array(self::BELONGS_TO, 'Acctype', 'type'),
+            'Catagory' => array(self::BELONGS_TO, 'AccCat', 'cat_id'),
             'accId6111' => array(self::BELONGS_TO, 'Id6111', 'id6111'),
             'accOwner' => array(self::BELONGS_TO, 'Users', 'owner'),
             'Currency' => array(self::BELONGS_TO, 'Currecies', 'currency_id'),
@@ -303,6 +305,7 @@ class Accounts extends fileRecord {//CActiveRecord
             'id' => Yii::t('labels', 'ID'),
             'type' => Yii::t('labels', 'Type'),
             'id6111' => Yii::t('labels', 'Id6111'),
+            'cat_id' => Yii::t('labels', 'Catagory'), 
             'pay_terms' => Yii::t('labels', 'Pay Terms'),
             'src_tax' => Yii::t('labels', 'Tax Rate'),
             'src_date' => Yii::t('labels', 'Tax Auth Date'),
@@ -376,6 +379,7 @@ class Accounts extends fileRecord {//CActiveRecord
 
         $criteria->compare('id', $this->id, true);
         $criteria->compare('type', $this->type);
+        $criteria->compare('cat_id', $this->cat_id);
         $criteria->compare('id6111', $this->id6111, true);
         $criteria->compare('pay_terms', $this->pay_terms);
         $criteria->compare('src_tax', $this->src_tax, true);

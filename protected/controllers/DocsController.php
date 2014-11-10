@@ -35,7 +35,6 @@ class DocsController extends RightsController {
         $mypath = Yii::app()->params["filePath"] . $configPath . "/docs/";
         $myPdf = $mypath . $model->docType->name . "-$model->docnum.pdf";
         $myPdfS = $mypath . $model->docType->name . "-$model->docnum-signed.pdf";
-        
 
         if (!file_exists($myPdf)) {
             $file = $this->actionPrint($model->id, 2, $model, true);
@@ -44,7 +43,6 @@ class DocsController extends RightsController {
             $mPDF1->WriteHTML($file);
             $mPDF1->Output($myPdf, 'F');
         }
-
         if (!file_exists($myPdfS)) {
             spl_autoload_unregister(array('YiiBase', 'autoload'));
             $oldpath = get_include_path();
@@ -69,21 +67,30 @@ class DocsController extends RightsController {
                 //here the digital certificate is inserted inside of the PDF document
                 $renderedPdf = $pdf->render();
                 file_put_contents($myPdfS, $renderedPdf);
-                
             } else {
-                Yii::app()->user->setFlash('error', Yii::t('app', 'No Certifcate cannt sign'));
+                set_include_path($oldpath);
+                spl_autoload_register(array('YiiBase', 'autoload'));
+                $link = "";
+
+                $text = Yii::t('app', "Error! <br />
+It is not possible to create a digitally signed PDF file and/or send it by mail without having certificate file located at current users' configuration page.
+You should make a certificate file with third party software and import it through 'certificate file' field, separately for each user, within configuration zone of the user. You also should input the password for the certificate file in 'password for digital signature certificate' field in the above mentioned user configuration page.
+You can find instructions for making self signed certificate file with Acrobat reader (One of the options. There are many applications able to make such a certificate out there)  here: ");
+
+
+
+                throw new CHttpException(404, $text);
                 //Yii::app()->end();
-                
             }
             set_include_path($oldpath);
             spl_autoload_register(array('YiiBase', 'autoload'));
         }
 
-         if (file_exists($myPdfS)) {
-             $addon = "-signed.pdf";
-         }else{
-             $addon = ".pdf";
-         }
+        if (file_exists($myPdfS)) {
+            $addon = "-signed.pdf";
+        } else {
+            $addon = ".pdf";
+        }
 
         if ($return) {
             if ($addon == ".pdf")
@@ -97,9 +104,11 @@ class DocsController extends RightsController {
             $doc_file->path = "docs/";
             $doc_file->parent_type = get_class($this);
             $doc_file->parent_id = $this->id; // this links your picture model to the main model (like your user, or profile model)
-
-            $doc_file->save(); // DONE
-            echo CJSON::encode($doc_file->id);
+            if ($doc_file->save()) {
+                Response::send(200, $doc_file->id);
+            } else {
+                Response::send(500, "error saving file");
+            }
         }
     }
 
@@ -155,6 +164,9 @@ class DocsController extends RightsController {
             case 'save':
                 if ($model->save())
                     $this->redirect(array('view', 'id' => $model->id));
+                else {
+                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet'));
+                }
                 return;
             case 'saveDraft':
                 if ($model->isNewRecord) {
@@ -168,14 +180,25 @@ class DocsController extends RightsController {
                 }
                 if ($model->save())
                     $this->redirect(array('admin'));
+                else {
+                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet'));
+                }
                 return;
             case 'print':
                 if ($model->save())
                     $this->redirect(array('print', 'id' => $model->id));
+                else {
+                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet'));
+                }
                 //$this->redirect(array('update','id'=>$model->id));
                 return;
             case 'preview':
+
+                //$model->loadDet();
+                $model->draftSave();
+                $model->save();
                 $this->actionPrint($model->id, 1, $model);
+                $model->delete();
                 return;
             case 'email':
                 $model->save();
@@ -194,8 +217,12 @@ class DocsController extends RightsController {
 
                 return;
             case 'pdf':
-                if ($model->save())
+                if ($model->save()) {
                     $this->actionPdf($model);
+                } else {
+                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet'));
+                }
+
                 return;
         }
     }

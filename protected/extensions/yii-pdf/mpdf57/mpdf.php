@@ -30230,7 +30230,7 @@ function magic_reverse_dir(&$chunk, $join=true, $dir) {
 				}
 				else { 
 					// Reverse numerals only to RTL
-					$bit = preg_replace("/([\x{0660}-\x{066C}0-9]+[\x{0660}-\x{066C}0-9\.,:\/]*[\x{0660}-\x{066C}0-9]+)/ue", '$this->reverse_letters(\'\\1\')', $bit );	// mPDF 5.6.32 // mPDF 5.6.46
+					
 					$bit = preg_replace_callback("/([\x{0660}-\x{066C}0-9]+[\x{0660}-\x{066C}0-9\.,:\/]*[\x{0660}-\x{066C}0-9]+)/u", array($this, 'reverse_letters_preg_callback'), $bit );	// mPDF 5.7+
 					$bits[$bitkey] = $bit; 
 				}

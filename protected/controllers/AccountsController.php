@@ -103,12 +103,6 @@ class AccountsController extends RightsController {
             if (!$this->loadModel($id)->delete())
                 Yii::app()->user->setFlash('error', Yii::t('app', "unable to delete, the account has transactions"));
         }
-        // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-        //if(!isset($_GET['ajax']))
-        //	$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-        //}else{
-        //Yii::app()->user->setFlash('error', "Invalid request. Please do not repeat this request again.");
-        //}
 
         $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
         //$this->actionIndex($model->);
@@ -121,21 +115,12 @@ class AccountsController extends RightsController {
     }
 
     public function actionJSON($id = 0) {
-        //$this->
-        //$model=new Accounts('search');
-        //$model->id=$id;
         $model = Accounts::model()->findByPk($id);
-        //$params =array( 'model'=>$model,   );//array('dataProvider'=>$dataProvider,)
-        //$this->renderPartial('ajax',$params);
         echo CJSON::encode($model);
         Yii::app()->end(); //*/
     }
 
-    /*
-      public function actionAjax($type=10){
-      //$this->
-
-      } */
+ 
 
     /**
      * Lists all models.
