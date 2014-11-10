@@ -34,7 +34,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             array(
 	            'name' => 'cat_id',
 	            'type' => 'raw',
-	            'value' => 'CHtml::encode(isset($data->Catagory)?$data->Catagory->name: "")',
+	            'value' => 'CHtml::encode(isset($data->Category)?$data->Category->name: "")',
                     'filter' => CHtml::listData(AccCat::model()->findAllByAttributes(array("type_id"=>$model->type)), 'id', 'name'),
 	        ),
 		//'pay_terms',

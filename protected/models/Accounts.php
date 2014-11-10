@@ -285,7 +285,7 @@ class Accounts extends fileRecord {//CActiveRecord
         // class name for the relations automatically generated below.
         return array(
             'accType' => array(self::BELONGS_TO, 'Acctype', 'type'),
-            'Catagory' => array(self::BELONGS_TO, 'AccCat', 'cat_id'),
+            'Category' => array(self::BELONGS_TO, 'AccCat', 'cat_id'),
             'accId6111' => array(self::BELONGS_TO, 'Id6111', 'id6111'),
             'accOwner' => array(self::BELONGS_TO, 'Users', 'owner'),
             'Currency' => array(self::BELONGS_TO, 'Currecies', 'currency_id'),
@@ -305,7 +305,7 @@ class Accounts extends fileRecord {//CActiveRecord
             'id' => Yii::t('labels', 'ID'),
             'type' => Yii::t('labels', 'Type'),
             'id6111' => Yii::t('labels', 'Id6111'),
-            'cat_id' => Yii::t('labels', 'Catagory'), 
+            'cat_id' => Yii::t('labels', 'Category'), 
             'pay_terms' => Yii::t('labels', 'Pay Terms'),
             'src_tax' => Yii::t('labels', 'Tax Rate'),
             'src_date' => Yii::t('labels', 'Tax Auth Date'),

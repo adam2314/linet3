@@ -1,16 +1,16 @@
 <?php
 $this->breadcrumbs=array(
-	Yii::t('app','Account Catagories')=>array('index'),
+	Yii::t('app','Account Categories')=>array('index'),
 	Yii::t('app','Manage'),
 );
 
 $this->menu=array(
 	//array('label'=>'List Id6111','url'=>array('index')),
-	array('label'=>Yii::t('app','Create Account Catagory'),'url'=>array('create')),
+	array('label'=>Yii::t('app','Create Account Category'),'url'=>array('create')),
 );
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Manage Account Catagories"),
+    'haeder' => Yii::t('app',"Manage Account Categories"),
 
 )); 
 
