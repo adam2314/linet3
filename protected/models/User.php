@@ -55,7 +55,8 @@ class User extends mainRecord {
             array('username', 'length', 'max' => 100),
             array('fname, lname, certpasswd, salt, email', 'length', 'max' => 255),
             array('language', 'length', 'max' => 10),
-            array('password', 'length', 'max' => 41),
+            array('password', 'length', 'max' => 255),
+            array('passwd', 'required', 'on'=>'create'),
             array('cookie, hash', 'length', 'max' => 32),
             array('certpasswd, salt, email', 'length', 'max' => 255),
             array('lastlogin, theme, warehouse, passwd, certfile', 'safe'),
@@ -64,6 +65,7 @@ class User extends mainRecord {
             array('id, username, fname, lname, password, lastlogin, cookie, hash, certpasswd, salt, email, language', 'safe', 'on' => 'search'),
         );
     }
+
 
     /**
      * @return array relational rules.
@@ -225,7 +227,7 @@ class User extends mainRecord {
             'warehouse' => Yii::t('labels', 'Warehouse'),
             'timezone' => Yii::t('labels', 'Timezone'),
             'theme' => Yii::t('labels', 'Theme'),
-            'passwd' => Yii::t('labels', 'New Password'),
+            'passwd' => Yii::t('labels', 'Set Password'),
             'ItemVatCat' => Yii::t('labels', 'Item VAT Catagory'),
             'account_id' => Yii::t('labels', 'Account id'),
             'certfile' => Yii::t('labels', 'Certificate file'),

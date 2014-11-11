@@ -33,7 +33,7 @@ class InstallController extends Controller {
 
         if (isset($_POST['User'])) {
             $model = new User;
-
+            $model->scenario ='create';
             Yii::app()->user->setState('Company', 0);
             $model->attributes = $_POST['User'];
 
@@ -63,6 +63,7 @@ class InstallController extends Controller {
         }
         if ($step == 3) {//user
             $model = new User();
+            $model->scenario ='create';
             $this->renderPartial('user', array('model' => $model));
         }
         if ($step == 4) {//finsih

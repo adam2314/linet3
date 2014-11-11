@@ -8,36 +8,22 @@ class chequeReport extends MiniForm {
     public $fullscreen = false;
 
     public function sum($cheques, $type,$date_from,$date_to) {
-        // Warning: Please modify the following code to remove attributes that
-        // should not be searched.
-        //$yaer = date("Y");
         //$date_from = "01-01-$yaer 00:00:00";
         //$date_to = "31-12-$yaer 23:59:59";
 
         $criteria = new CDbCriteria;
 
         $criteria->select = "sum(leadsum) AS lead,a.type,t.date";
-
         $criteria->join = 'LEFT JOIN {{accounts}} `a` ON a.id=t.account_id';
-
         $criteria->group = "a.type";
-        //  $criteria->select='SUM(qty)';
-
-
-
+        
         $criteria->addCondition("a.type = :type");
-
-
-        //$criteria->addCondition='Client.businessId='. Yii::app()->userInfo->business;
-
         $criteria->addCondition("t.valuedate>=:date_from");
         $criteria->addCondition("t.valuedate<=:date_to");
-        //$criteria->addCondition('bank_refnum IS NULL');
+
         $criteria->params[':date_from'] = $date_from;
         $criteria->params[':date_to'] = $date_to;
         $criteria->params[':type'] = $type;
-        //$criteria->params[':type'] = $date_to;
-
 
 
         return $cheques->commandBuilder->createFindCommand($cheques->getTableSchema(), $criteria)->queryScalar();
@@ -58,7 +44,7 @@ class chequeReport extends MiniForm {
             while (!checkdate($x, $last, date("Y"))) {
                 $last--;
             }
-            $result=$this->sum($cheques,$type,$yaer."-$a-01". "00:00:00", $yaer."-$a-$last"." 23:59:59");
+            $result=$this->sum($cheques,$type,$yaer."-$a-01". " 00:00:00", $yaer."-$a-$last"." 23:59:59");
             if($result==0){
                 array_push($sums, "0");
             }else{

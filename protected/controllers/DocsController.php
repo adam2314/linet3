@@ -102,10 +102,10 @@ You can find instructions for making self signed certificate file with Acrobat r
             $doc_file = new Files();
             $doc_file->name = $model->docType->name . "-" . "$model->docnum" . $addon; //it might be $img_add->name for you, filename is just what I chose to call it in my model
             $doc_file->path = "docs/";
-            $doc_file->parent_type = get_class($this);
-            $doc_file->parent_id = $this->id; // this links your picture model to the main model (like your user, or profile model)
+            $doc_file->parent_type = get_class($model);
+            $doc_file->parent_id = $model->id; // this links your picture model to the main model (like your user, or profile model)
             if ($doc_file->save()) {
-                Response::send(200, $doc_file->id);
+                Response::send(200, $doc_file);
             } else {
                 Response::send(500, "error saving file");
             }

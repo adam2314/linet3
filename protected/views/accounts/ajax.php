@@ -60,8 +60,13 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 		*/
 		array(
 			'class'=>'CButtonColumn',
-			'template'=>'{display}{edit}{delete}',
+			'template'=>'{create}{display}{edit}{delete}',
 			'buttons'=>array(
+                            'create' => array(
+                                'label'=>'<i class="glyphicon glyphicon-file"></i>',
+                                'url'=>'Yii::app()->createUrl("docs/create", array("id"=>$data->id))',
+
+                            ),
                             'edit' => array(
                                 'label'=>'<i class="glyphicon glyphicon-pencil"></i>',
                                 'url'=>'Yii::app()->createUrl("accounts/update", array("id"=>$data->id))',

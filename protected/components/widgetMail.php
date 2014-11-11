@@ -51,8 +51,10 @@ function getFile() {//only for docs
          .done(function(data) {
             if(data.status!=200){
                 alert(data.text);
+            }else{
+            $('#files').html('<i class=\"glyphicon glyphicon-paperclip\"></i> '+data.body.name);
+            $('#Mail_files').val(data.body.id);
             }
-            $('#Mail_files').val(data.body);
         })
         .fail(function(data) {
             alert(data.responseText);

@@ -7,7 +7,7 @@ $this->beginWidget('MiniForm',array(
 ///*
 $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'user-form',
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
 )); 
 
 

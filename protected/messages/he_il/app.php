@@ -366,7 +366,7 @@ return array (
   'Timezone' => 'אזור זמן',
   'Warehouse' => 'מחסן',
   'Account IdItem Vat Cat' => 'שיוך חשבון הכנסות לקטגוריית מעמ עבור המשתמש',
-  'Passwd' => 'שינוי סיסמא',
+  'Set Password' => 'קבע סיסמא',
   'Manage Mail Templates' => 'נהל תבניות דוא"ל',
   'Mail Template' => 'תבניות דואל',
   'Create Mail Templates' => 'צור תבנית דוא"ל',

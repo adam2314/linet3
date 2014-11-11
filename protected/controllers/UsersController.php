@@ -22,9 +22,10 @@ class UsersController extends RightsController
 	public function actionCreate()
 	{
 		$model=new User;
+                $model->scenario ='create';
                 $userincomemap =$model->userIncomeMaps;
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['User'])){
 			$model->attributes=$_POST['User'];
@@ -87,7 +88,7 @@ class UsersController extends RightsController
 		$model=$this->loadModel($id);
                 $userincomemap =$model->userIncomeMaps;
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		 $this->performAjaxValidation($model);
 
 		if(isset($_POST['User']))
 		{

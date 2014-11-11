@@ -17,7 +17,7 @@
 	<?php echo $form->textFieldRow($model,'cc',array('maxlength'=>255)); ?>
 
         <?php echo $form->textFieldRow($model,'bcc',array('maxlength'=>255)); ?>
-
+        <div id="files"></div>
         <?php echo $form->textFieldRow($model,'subject',array('maxlength'=>255)); ?>
 
         <?php $this->widget('ext.tinymce.TinyMce', array(
