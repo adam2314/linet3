@@ -277,17 +277,16 @@ class ApiController extends Controller {//RightsController
                 Company::model()->select($company->id);
                 //echo $company->id.';';
                 $modelName::model()->refreshMetaData();
-                $sum+=scount($modelName::model()->findAll());
+                $sum+=count($modelName::model()->findAll());
             }
             Response::send(200, $sum);
         } else {
             Response::send(403, sprintf(
-                            'Mode <b>create</b> is not implemented for model <b>%s</b>', $model));
+                            'Mode <b>CountSum</b> is not implemented for model <b>%s</b>', $model));
         }
     }
 
     public function actionCountSumMonth($model) {//docs,account,user,
-        Response::send(200, "no Way");
         if ($this->hasAccess($model . '/countSumMonth')) {
             $modelName = $this->translate[$model];
             $companys = Company::model()->findAll();
@@ -308,7 +307,7 @@ class ApiController extends Controller {//RightsController
             Response::send(200, $sum);
         } else {
             Response::send(403, sprintf(
-                            'Mode <b>create</b> is not implemented for model <b>%s</b>', $model));
+                            'Mode <b>CountSumMonth</b> is not implemented for model <b>%s</b>', $model));
         }
     }
 
@@ -325,7 +324,7 @@ class ApiController extends Controller {//RightsController
             Response::send(200, count($models));
         } else {
             Response::send(403, sprintf(
-                            'Mode <b>create</b> is not implemented for model <b>%s</b>', $model));
+                            'Mode <b>Count</b> is not implemented for model <b>%s</b>', $model));
         }
     }
 

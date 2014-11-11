@@ -14,7 +14,7 @@ class chequeReport extends MiniForm {
         $criteria = new CDbCriteria;
 
         $criteria->select = "sum(leadsum) AS lead,a.type,t.date";
-        $criteria->join = 'LEFT JOIN {{accounts}} `a` ON a.id=t.account_id';
+        $criteria->join = 'LEFT JOIN `{{accounts}}` `a` ON a.id=t.account_id';
         $criteria->group = "a.type";
         
         $criteria->addCondition("a.type = :type");
