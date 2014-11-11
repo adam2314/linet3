@@ -126,16 +126,16 @@ class RDbAuthManager extends CDbAuthManager
 			if( $type===null && $userId===null )
 			{
 				$sql = "SELECT name,t1.type,description,t1.bizrule,t1.data,weight
-					FROM {$this->itemTable} t1
-					LEFT JOIN {$this->rightsTable} t2 ON name=itemname
+					FROM `{$this->itemTable}` t1
+					LEFT JOIN `{$this->rightsTable}` t2 ON name=itemname
 					ORDER BY t1.type DESC, weight ASC";
 				$command=$this->db->createCommand($sql);
 			}
 			else if( $userId===null )
 			{
 				$sql = "SELECT name,t1.type,description,t1.bizrule,t1.data,weight
-					FROM {$this->itemTable} t1
-					LEFT JOIN {$this->rightsTable} t2 ON name=itemname
+					FROM `{$this->itemTable}` t1
+					LEFT JOIN `{$this->rightsTable}` t2 ON name=itemname
 					WHERE t1.type=:type
 					ORDER BY t1.type DESC, weight ASC";
 				$command=$this->db->createCommand($sql);
@@ -144,9 +144,9 @@ class RDbAuthManager extends CDbAuthManager
 			else if( $type===null )
 			{
 				$sql = "SELECT name,t1.type,description,t1.bizrule,t1.data,weight
-					FROM {$this->itemTable} t1
-					LEFT JOIN {$this->assignmentTable} t2 ON name=t2.itemname
-					LEFT JOIN {$this->rightsTable} t3 ON name=t3.itemname
+					FROM `{$this->itemTable}` t1
+					LEFT JOIN `{$this->assignmentTable}` t2 ON name=t2.itemname
+					LEFT JOIN `{$this->rightsTable}` t3 ON name=t3.itemname
 					WHERE userid=:userid
 					ORDER BY t1.type DESC, weight ASC";
 				$command=$this->db->createCommand($sql);
@@ -155,9 +155,9 @@ class RDbAuthManager extends CDbAuthManager
 			else
 			{
 				$sql = "SELECT name,t1.type,description,t1.bizrule,t1.data,weight
-					FROM {$this->itemTable} t1
-					LEFT JOIN {$this->assignmentTable} t2 ON name=t2.itemname
-					LEFT JOIN {$this->rightsTable} t3 ON name=t3.itemname
+					FROM `{$this->itemTable}` t1
+					LEFT JOIN `{$this->assignmentTable}` t2 ON name=t2.itemname
+					LEFT JOIN `{$this->rightsTable}` t3 ON name=t3.itemname
 					WHERE t1.type=:type AND userid=:userid
 					ORDER BY t1.type DESC, weight ASC";
 				$command=$this->db->createCommand($sql);
@@ -239,7 +239,7 @@ class RDbAuthManager extends CDbAuthManager
 
 	public function getAssignmentsByItemName($name)
 	{
-		$sql = "SELECT * FROM {$this->assignmentTable} WHERE itemname=:itemname";
+		$sql = "SELECT * FROM `{$this->assignmentTable}` WHERE itemname=:itemname";
 		$command = $this->db->createCommand($sql);
 		$command->bindValue(':itemname', $name);
 
@@ -263,7 +263,7 @@ class RDbAuthManager extends CDbAuthManager
 	{
 		foreach( $result as $weight=>$itemname )
 		{
-			$sql = "SELECT COUNT(*) FROM {$this->rightsTable}
+			$sql = "SELECT COUNT(*) FROM `{$this->rightsTable}`
 				WHERE itemname=:itemname";
 			$command = $this->db->createCommand($sql);
 			$command->bindValue(':itemname', $itemname);
@@ -271,7 +271,7 @@ class RDbAuthManager extends CDbAuthManager
 			// Check if the item already has a weight.
 			if( $command->queryScalar()>0 )
 			{
-				$sql = "UPDATE {$this->rightsTable}
+				$sql = "UPDATE `{$this->rightsTable}`
 					SET weight=:weight
 					WHERE itemname=:itemname";
 				$command = $this->db->createCommand($sql);
@@ -284,7 +284,7 @@ class RDbAuthManager extends CDbAuthManager
 			{
 				if( ($item = $this->getAuthItem($itemname))!==null )
 				{
-					$sql = "INSERT INTO {$this->rightsTable} (itemname, type, weight)
+					$sql = "INSERT INTO `{$this->rightsTable}` (itemname, type, weight)
 						VALUES (:itemname, :type, :weight)";
 					$command = $this->db->createCommand($sql);
 					$command->bindValue(':itemname', $itemname);

@@ -109,7 +109,7 @@ class RInstaller extends CApplicationComponent
             $roles = $this->getUniqueRoles();
             foreach( $roles as $roleName )
             {
-                $sql = "INSERT INTO {$itemTable} (name, type, data)
+                $sql = "INSERT INTO `{$itemTable}` (name, type, data)
                     VALUES (:name, :type, :data)";
                 $command = $this->db->createCommand($sql);
                 $command->bindValue(':name', $roleName);
@@ -119,7 +119,7 @@ class RInstaller extends CApplicationComponent
             }
 
             // Assign the logged in user the superusers role.
-            $sql = "INSERT INTO {$assignmentTable} (itemname, userid, data)
+            $sql = "INSERT INTO `{$assignmentTable}` (itemname, userid, data)
                 VALUES (:itemname, :userid, :data)";
             $command = $this->db->createCommand($sql);
             $command->bindValue(':itemname', $this->superuserName);
@@ -166,10 +166,10 @@ class RInstaller extends CApplicationComponent
 		else
 		{
             $schema = array(
-                "SELECT COUNT(*) FROM {$this->_authManager->itemTable}",
-                "SELECT COUNT(*) FROM {$this->_authManager->itemChildTable}",
-                "SELECT COUNT(*) FROM {$this->_authManager->assignmentTable}",
-                "SELECT COUNT(*) FROM {$this->_authManager->rightsTable}",
+                "SELECT COUNT(*) FROM `{$this->_authManager->itemTable}`",
+                "SELECT COUNT(*) FROM `{$this->_authManager->itemChildTable}`",
+                "SELECT COUNT(*) FROM `{$this->_authManager->assignmentTable}`",
+                "SELECT COUNT(*) FROM `{$this->_authManager->rightsTable}`",
             );
 
 			try

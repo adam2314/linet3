@@ -53,7 +53,7 @@ class RGenerator extends CApplicationComponent
 					if( $authManager->getAuthItem($name)===null )
 					{
 						// Insert item
-						$sql = "INSERT INTO {$itemTable} (name, type, data)
+						$sql = "INSERT INTO `{$itemTable}` (name, type, data)
 							VALUES (:name, :type, :data)";
 						$command = $this->db->createCommand($sql);
 						$command->bindValue(':name', $name);
