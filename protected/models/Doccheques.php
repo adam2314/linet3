@@ -230,11 +230,6 @@ class Doccheques extends basicRecord {
         return parent::afterFind();
     }
 
-    public function save($runValidation = true, $attributes = NULL) {
-
-        $a = parent::save($runValidation, $attributes);
-        Yii::log($a, 'info', 'app');
-        return $a;
-    }
+   
 
 }

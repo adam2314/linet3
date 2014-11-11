@@ -412,10 +412,10 @@ class Accounts extends fileRecord {//CActiveRecord
     public static function AutoComplete($name = '', $type = 1) {
         $name = $name . '%';
         if ($type != 'all') {
-            $sql = 'SELECT id as value, name AS label FROM ' . Accounts::table . ' WHERE name LIKE :name AND type=:type';
+            $sql = 'SELECT id as value, name AS label FROM `' . Accounts::table . '` WHERE name LIKE :name AND type=:type';
             return Yii::app()->db->createCommand($sql)->queryAll(true, array(':name' => $name, ':type' => $type));
         } else {
-            $sql = 'SELECT id as value, name AS label FROM ' . Accounts::table . ' WHERE name LIKE :name';
+            $sql = 'SELECT id as value, name AS label FROM `' . Accounts::table . '` WHERE name LIKE :name';
             return Yii::app()->db->createCommand($sql)->queryAll(true, array(':name' => $name));
         }
         //$type = $type;

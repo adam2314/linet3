@@ -6,7 +6,7 @@
  */
 
 /**
- * Description of FormBackupFile
+ * Description of FormLinet2Import
  *
  * @author adam
  */
@@ -196,8 +196,6 @@ class FormLinet2Import extends CFormModel {
             $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "docs` ($keys) VALUES ($values);");
             //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
         }
-        
-        
     }
 
     //cheques
@@ -282,13 +280,13 @@ class FormLinet2Import extends CFormModel {
         foreach ($transactions as $transaction) {
             //echo $doc."<br />";
             //$transaction = str_replace("'" . $prefix . "',", "", $transaction);
-            $item= $this->parseLine($transaction);
+            $item = $this->parseLine($transaction);
             $keys = "`num`, `type`, `account_id`, `refnum1`, `refnum2`, `valuedate`, `details`, `sum`, `currency_id`, `leadsum`, `intCorrelation`, `linenum`, `owner_id`";
 
-            /*if($item[2]==2){//major incompatibility BugFix Linet3.0
-                $item[8]=$item[8]*-1;
-            }*/
-            $values="'$item[1]', '$item[2]', '$item[3]', '$item[4]', '$item[5]', '$item[6]', '$item[7]', '$item[8]', 'ILS', '$item[8]',"
+            /* if($item[2]==2){//major incompatibility BugFix Linet3.0
+              $item[8]=$item[8]*-1;
+              } */
+            $values = "'$item[1]', '$item[2]', '$item[3]', '$item[4]', '$item[5]', '$item[6]', '$item[7]', '$item[8]', 'ILS', '$item[8]',"
                     . "'$item[9]', '$item[10]', '$item[11]'";
             $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "transactions` ($keys) VALUES ($values);");
             //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
@@ -367,45 +365,43 @@ class FormLinet2Import extends CFormModel {
         $this->saveSetting('company.tax.irs', $company[11]);
         //$this->saveSetting('account.100.srctax', $company[12]);
         $this->saveSetting('company.tax.vat', $company[13]);
-        
+
         //exit;
         ///*
         if (isset($array['accounts']))
-            $this->imprtAccounts($array['accounts'],$prefix);
+            $this->imprtAccounts($array['accounts'], $prefix);
 
         if (isset($array['items']))
-            $this->imprtItems($array['items'],$prefix);
+            $this->imprtItems($array['items'], $prefix);
 
         if (isset($array['docs']))
-            $this->imprtDocs($array['docs'],$prefix);
+            $this->imprtDocs($array['docs'], $prefix);
         if (isset($array['cheques']))
-            $this->imprtCheques($array['cheques'],$prefix);
+            $this->imprtCheques($array['cheques'], $prefix);
         if (isset($array['docdetails']))
-            $this->imprtDocdetails($array['docdetails'],$prefix);
+            $this->imprtDocdetails($array['docdetails'], $prefix);
         if (isset($array['transactions']))
-            $this->imprtTransactions($array['transactions'],$prefix);
+            $this->imprtTransactions($array['transactions'], $prefix);
         if (isset($array['bankbook']))
-            $this->imprtBankbooks($array['bankbook'],$prefix);
+            $this->imprtBankbooks($array['bankbook'], $prefix);
         if (isset($array['correlation']))
-            $this->imprtCorrelations($array['correlation'],$prefix);
+            $this->imprtCorrelations($array['correlation'], $prefix);
 //*/
-
-        
         //vat rate
-        $acc=  Accounts::model()->findByPk(100);
-        $acc->src_tax=$company[12];
+        $acc = Accounts::model()->findByPk(100);
+        $acc->src_tax = $company[12];
         $acc->save();
-        $acc=  Accounts::model()->findByPk(101);
-        $acc->src_tax=$company[12];
+        $acc = Accounts::model()->findByPk(101);
+        $acc->src_tax = $company[12];
         $acc->save();
-        
-        
+
+
         //get transaction num
-        $this->saveSetting('company.transaction', Transactions::getMax()+1);
+        $this->saveSetting('company.transaction', Transactions::getMax() + 1);
         //get docnums
-        $types=  Doctype::model()->findAll();
-        foreach($types as $type){
-            $type->last_docnum=Docs::getMax($type->id);
+        $types = Doctype::model()->findAll();
+        foreach ($types as $type) {
+            $type->last_docnum = Docs::getMax($type->id);
             $type->save();
         }
 

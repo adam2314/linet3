@@ -211,7 +211,7 @@ class Item extends fileRecord {
     }
 
     public static function AutoComplete($name = '') {
-        $sql = 'SELECT id as value, name AS label FROM ' . Item::table . ' WHERE name LIKE :name';
+        $sql = 'SELECT id as value, name AS label FROM `' . Item::table . '` WHERE name LIKE :name';
         $name = $name . '%';
         return Yii::app()->db->createCommand($sql)->queryAll(true, array(':name' => $name));
     }
