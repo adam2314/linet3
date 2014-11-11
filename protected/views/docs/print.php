@@ -241,9 +241,12 @@ if (count($model->docCheques) != 0) {
 
 
     foreach ($model->docCheques as $rcptdetail) {
-        $cmp=  Accounts::model()->findByPk($rcptdetail->creditcompany)->name;
-        
-        
+        $cmp=  Accounts::model()->findByPk($rcptdetail->creditcompany);
+        if($cmp!==null){
+            $cmp=$cmp->name;
+        }else {
+            $cmp=$rcptdetail->creditcompany;
+        }
         echo "
                 <tr>
                     <td class='Type'>".Yii::t("app",$rcptdetail->Type->name)."</td>

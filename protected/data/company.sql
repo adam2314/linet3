@@ -455,6 +455,6 @@ CREATE TABLE `accCat` (
   `name` varchar(255) NOT NULL,
   `type_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+);
 
 SET FOREIGN_KEY_CHECKS=1;
