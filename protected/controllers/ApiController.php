@@ -47,12 +47,28 @@ class ApiController extends Controller {//RightsController
         if (Yii::app()->user->Company != 0) {
             Company::model()->loadComp();
         }
-        return parent::init();
+        parent::init();
+
+        Yii::app()->errorHandler->errorAction = 'api/error';
+    }
+
+    public function actionError() {
+
+        Response::send(500, 'Unknown error');
+    }
+
+    private function translate($item) {
+        if (isset($this->translate[$item]))
+            return $this->translate[$item];
+        Response::send(501, 'Model does not exstis');
     }
 
     private function hasAccess($path) {
         //echo file_get_contents('php://input');
         $entityBody = CJSON::decode(file_get_contents('php://input')); //CJSON::decode
+        Yii::log("input jsond: " . CJSON::encode($entityBody), 'info', 'app');
+        Yii::log("input: " . file_get_contents('php://input'), 'info', 'app');
+        //
         //var_dump($entityBody);
         //exit;
 
@@ -90,71 +106,6 @@ class ApiController extends Controller {//RightsController
         return array();
     }
 
-    /*
-
-      public function actionLogin() {
-      $entityBody = CJSON::decode(file_get_contents('php://input'));
-      if (isset($entityBody)) {
-
-      $model = new FormLogin;
-      $model->attributes = $entityBody;
-      if ($model->apiLogin()) {
-      Response::send(200, "ok");
-      } else {
-      Response::send(401, "not ok");
-      }
-      }
-      Response::send(200, "empty");
-      }
-
-      // */
-    /*
-
-      public function actionSelect($id) {
-      if ($this->hasAccess('/select')) {
-      if (Company::model()->select((int) $id))//need to chk perm
-      Response::send(200, "ok");
-      else {
-      Response::send(401, "not ok");
-      }
-      }
-      }
-
-      ///*
-
-
-
-
-
-      public function actionLogout() {
-      Yii::app()->user->logout();
-      Response::send(200, "ok");
-      }
-
-      // */
-
-
-    /*
-     * 
-     * Api List (get without id)
-     * 
-     */
-    /*
-
-      private function search($attr, $modelName) {
-      $model = new $modelName;
-      $find = array();
-      foreach ($attr as $var => $value) {
-      if ($model->hasAttribute($var)) {
-      $find[$var] = $value;
-      }//else throw unkown field?
-
-      }
-
-
-      return $modelName::model()->findAllByAttributes($find);
-      } */
-
     private function getVar() {
         $entityBody = CJSON::decode(file_get_contents('php://input'));
         unset($entityBody['login_id']);
@@ -167,13 +118,11 @@ class ApiController extends Controller {//RightsController
 
 
         if ($this->hasAccess($model . '/search')) {
-            $modelName = $this->translate[$model];
+            $modelName = $this->translate($model);
             $loadedModel = new $modelName;
 
 
             $entityBody = $this->getVar();
-            //print_r($entityBody);
-            //exit;
             // Try to assign POST values to attributes
             foreach ($entityBody as $var => $value) {
                 // Does the model have this attribute? If not raise an error
@@ -192,9 +141,8 @@ class ApiController extends Controller {//RightsController
         }
 
         // Did we get some results?
-        if (empty($models)) {
-            // No
-            Response::send(200, sprintf('No items where found for model <b>%s</b>', $_GET['model']));
+        if (empty($models)) {// No
+            Response::send(200, "", 1000);
         } else {
             // Prepare response
             $rows = array();
@@ -208,14 +156,14 @@ class ApiController extends Controller {//RightsController
     public function actionList($model) {
         // Get the respective model instance
         if ($this->hasAccess($model . '/list')) {
-            $modelName = $this->translate[$model];
+            $modelName = $this->translate($model);
 
             $models = $modelName::model()->findAll();
 
 
             if (empty($models)) {
                 // No
-                Response::send(200, sprintf('No items where found for model <b>%s</b>', $_GET['model']));
+                Response::send(200, "", 1000);
             } else {
                 // Prepare response
                 $rows = array();
@@ -245,10 +193,10 @@ class ApiController extends Controller {//RightsController
         if ($this->hasAccess($model . '/view')) {
             if (!isset($id))
                 Response::send(403, 'Error: Parameter <b>id</b> is missing');
-            $modelName = $this->translate[$model];
+            $modelName = $this->translate($model);
             $loadedModel = $modelName::model()->findByPk($id);
-            if ($model === null)
-                Response::send(404, 'No Item found with id ' . $id);
+            if ($loadedModel === null)
+                Response::send(404, 'No ' . $model . ' found with id ' . $id);
             else
                 Response::send(200, $loadedModel);
         } else {
@@ -260,6 +208,25 @@ class ApiController extends Controller {//RightsController
 
         // Did we find the requested model? If not, raise an error
     }
+    
+    public function actionPrint($model, $id) {
+        if ($this->hasAccess($model . '/view')) {
+            $modelName = $this->translate($model);
+            $loadedModel = $modelName::model()->findByPk($id);
+            if ($loadedModel === null)
+                Response::send(404, 'No ' . $model . ' found with id ' . $id);
+            else
+                Response::send(200, $loadedModel->pdf());
+        } else {
+            Response::send(501, sprintf(
+                            'Mode <b>Print</b> is not implemented for model <b>%s</b>', $model));
+        }
+
+
+
+        // Did we find the requested model? If not, raise an error
+    }
+    
 
     /*
      * 
@@ -269,7 +236,7 @@ class ApiController extends Controller {//RightsController
 
     public function actionCountSum($model) {//docs,account,user,
         if ($this->hasAccess($model . '/countSum')) {
-            $modelName = $this->translate[$model];
+            $modelName = $this->translate($model);
             $companys = Company::model()->findAll();
             $sum = 0;
             foreach ($companys as $company) {
@@ -288,7 +255,7 @@ class ApiController extends Controller {//RightsController
 
     public function actionCountSumMonth($model) {//docs,account,user,
         if ($this->hasAccess($model . '/countSumMonth')) {
-            $modelName = $this->translate[$model];
+            $modelName = $this->translate($model);
             $companys = Company::model()->findAll();
             $sum = 0;
             ///*
@@ -313,7 +280,7 @@ class ApiController extends Controller {//RightsController
 
     public function actionCount($model, $type = null) {//docs,account,user,
         if ($this->hasAccess($model . '/count')) {
-            $modelName = $this->translate[$model];
+            $modelName = $this->translate($model);
             $loadedModel = new $modelName;
             if (($modelName == 'Docs') && ($type != null)) {
                 $models = $modelName::model()->findAllByType($type);
@@ -336,7 +303,7 @@ class ApiController extends Controller {//RightsController
 
     public function actionCreate($model) {
         if ($this->hasAccess($model . '/create')) {
-            $modelName = $this->translate[$model];
+            $modelName = $this->translate($model);
             $loadedModel = new $modelName;
 
             $entityBody = $this->getVar();
@@ -353,9 +320,9 @@ class ApiController extends Controller {//RightsController
             // Try to save the model
 
             try {
-                if ($loadedModel->save())
+                if ($loadedModel->save()){
                     Response::send(200, $loadedModel);
-                else {
+                }else {
                     // Errors occurred
                     $msg = "<h1>Error</h1>";
                     $msg .= sprintf("Couldn't create model <b>%s</b>", $_GET['model']);
@@ -368,9 +335,9 @@ class ApiController extends Controller {//RightsController
                         $msg .= "</ul>";
                     }
                     $msg .= "</ul>";
-                    Response::send(500, $msg);
+                    Response::send(200, $msg,1001);
                 }
-            } catch (Exception $e) {
+            } catch (CHttpException $e) {
                 Response::send(500, $e->getMessage());
                 //echo 'Caught exception: ', , "\n";
             }
@@ -393,7 +360,7 @@ class ApiController extends Controller {//RightsController
 
 
         if ($this->hasAccess($model . '/update')) {
-            $modelName = $this->translate[$model];
+            $modelName = $this->translate($model);
             $loadedModel = $modelName::model()->findByPk($id);
 
 
@@ -433,7 +400,7 @@ class ApiController extends Controller {//RightsController
     public function actionDelete($model, $id) {
 
         if ($this->hasAccess($model . '/delete')) {
-            $modelName = $this->translate[$model];
+            $modelName = $this->translate($model);
             $loadedModel = $modelName::model()->findByPk($id);
 
             // Was a model found? If not, raise an error
@@ -451,9 +418,5 @@ class ApiController extends Controller {//RightsController
                             'Error: Mode <b>delete</b> is not implemented for model <b>%s</b>', $model));
         }
     }
-
-   
-
-   
 
 }

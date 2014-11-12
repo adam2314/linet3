@@ -16,6 +16,13 @@ Author : adam
     }
 }
 
+@media screen{
+    
+    #stamp{
+         display: none;
+     }
+}
+
 @media print
 {
     .topnav,.noPrint,

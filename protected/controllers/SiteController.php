@@ -80,4 +80,21 @@ class SiteController extends Controller {
         $this->redirect(Yii::app()->homeUrl);
     }
 
+    public function actionDownload($id) {
+        $model=Download::model()->findByPk($id);
+        if($model==null)
+            throw new CHttpException(404, 'The requested page does not exist.');
+        
+        $comp=  Company::model()->findByPk($model->company_id);
+        $comp->select($model->company_id);
+        
+        $id = (int) $model->file_id;
+        $model = Files::model()->findByPk($id);
+        if ($model === null) {
+            throw new CHttpException(404, 'The requested page does not exist.');
+        }
+        $file = $model->getFullPath() . $model->id; 
+        return Yii::app()->getRequest()->sendFile($model->name, file_get_contents($file));
+    }
+
 }

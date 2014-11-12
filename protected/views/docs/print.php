@@ -75,7 +75,7 @@ echo date(Yii::app()->locale->getDateFormat('phpshort'), CDateTimeParser::parse(
     <tr>
         <td colspan="4">
             <div align="center"><h1><?php echo Yii::t('app', $model->docType->name); ?> <span style="font-size:25px;"> <?php echo Yii::t('app', 'No.'); ?> <?php echo $model->docnum; ?> </span>
-
+ <span id='stamp'> 
 <?php
 if ($model->docType->copy) {
     if ($model->action == 0) {
@@ -84,7 +84,9 @@ if ($model->docType->copy) {
         echo ($model->printed == 1) ? Yii::t('app', 'Source') : Yii::t('app', 'Copy');
     }
 }
-?></h1></div>
+?>
+     </span>           
+                </h1></div>
         </td>
     </tr>
 </table>

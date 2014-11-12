@@ -695,5 +695,13 @@ class Docs extends fileRecord {
             'sort' => $sort,
         ));
     }
+    
+    
+    
+    public function pdf(){
+        
+        
+        return PrintDoc::pdfDoc($this);
+    }
 
 }

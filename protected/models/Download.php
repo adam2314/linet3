@@ -5,12 +5,12 @@
  *
  * The followings are the available columns in table 'currencies':
  * @property string $id
- * @property string $code
- * @property string $name
- * @property string $symbol
+ * @property string $company_id
+ * @property string $file_id
+
  */
-class Currecies extends mainRecord{
-        const table='currencies';
+class Download extends mainRecord{
+        const table='download';
         public function primaryKey()     {
                 return 'id';
                 // For composite primary key, return an array like the following
@@ -42,12 +42,11 @@ class Currecies extends mainRecord{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, code', 'length', 'max'=>3),
-			array('name', 'length', 'max'=>255),
-			array('symbol', 'length', 'max'=>17),
+			array('id', 'length', 'max'=>255),
+			array('company_id, file_id', 'length', 'max'=>11),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, code, name, symbol', 'safe', 'on'=>'search'),
+			array('id, company_id, file_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -77,9 +76,8 @@ class Currecies extends mainRecord{
 	{
 		return array(
 			'id'=>Yii::t('labels','ID'),
-                        'code'=>Yii::t('labels','Code'),
-                        'name'=>Yii::t('labels','Name'),
-                        'symbol'=>Yii::t('labels','Symbol'),
+                        'company_id'=>Yii::t('labels','Company'),
+                        'file_id'=>Yii::t('labels','File'),
 		);
 	}
 
@@ -92,31 +90,13 @@ class Currecies extends mainRecord{
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
-		$criteria->compare('code',$this->num,true);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('symbol',$this->symbol,true);
+		$criteria->compare('company_id',$this->company_id,true);
+		$criteria->compare('file_id',$this->file_id,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
         
-        
-        
-        public static function AutoComplete($name='') {
-	    $res =array();
-	 
 
-            $qtxt ="SELECT id ,name as label FROM `".Self::table."` WHERE name LIKE :term";
-            $command =Yii::app()->db->createCommand($qtxt);
-            $command->bindValue(":term", '%'.$name.'%', PDO::PARAM_STR);
-            //$command->bindValue(":prefix", $this->prefix, PDO::PARAM_STR);
-           // $command->bindValue(":type", $type, PDO::PARAM_STR);
-
-            return $command->queryAll();
-
-
-	    //return CJSON::encode($res);
-	    //Yii::app()->end();//*/
-	}
 }

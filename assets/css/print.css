@@ -94,3 +94,16 @@ padding: 4px 10px 10px;*/
  /*,.Description*/
  
  .line,.Itemid { display: none; }
+
+ @media(print){
+     #stamp{
+         /*display: none;*/
+     }
+     
+ }
+ @media(screen){
+     #stamp{
+         display: none;
+     }
+     
+ }

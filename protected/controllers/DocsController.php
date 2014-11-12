@@ -28,87 +28,11 @@ class DocsController extends RightsController {
     }
 
     public function actionPdf($model = null, $return = true) {//usd for print*/
-        $yiiBasepath = Yii::app()->basePath;
-        $yiiUser = Yii::app()->user->id;
-        $configPath = Yii::app()->user->settings["company.path"];
-        $configCertpasswd = Yii::app()->user->certpasswd;
-        $mypath = Yii::app()->params["filePath"] . $configPath . "/docs/";
-        $myPdf = $mypath . $model->docType->name . "-$model->docnum.pdf";
-        $myPdfS = $mypath . $model->docType->name . "-$model->docnum-signed.pdf";
-
-        if (!file_exists($myPdf)) {
-            $file = $this->actionPrint($model->id, 2, $model, true);
-            $mPDF1 = Yii::app()->ePdf->mpdf();
-            //$mPDF1 = Yii::app()->ePdf->mpdf('', 'A5');
-            $mPDF1->WriteHTML($file);
-            $mPDF1->Output($myPdf, 'F');
-        }
-        if (!file_exists($myPdfS)) {
-            spl_autoload_unregister(array('YiiBase', 'autoload'));
-            $oldpath = get_include_path();
-            set_include_path($yiiBasepath . '/modules/zend_pdf_certificate/');
-
-            include_once('Pdf.php');
-            include_once('ElementRaw.php');
-            //loads a sample PDF file
-            $pdf = Farit_Pdf::load($myPdf);
-
-            $cerfile = Yii::app()->params["filePath"] . $configPath . "/cert/" . $yiiUser . ".p12";
-
-            if (file_exists($cerfile)) {
-                $certificate = file_get_contents($cerfile);
-                //password for the certificate
-
-                $certificatePassword = $configCertpasswd;
-                if (empty($certificate)) {
-                    throw new Zend_Pdf_Exception('Cannot open the certificate file');
-                }
-                $pdf->attachDigitalCertificate($certificate, $certificatePassword);
-                //here the digital certificate is inserted inside of the PDF document
-                $renderedPdf = $pdf->render();
-                file_put_contents($myPdfS, $renderedPdf);
-            } else {
-                set_include_path($oldpath);
-                spl_autoload_register(array('YiiBase', 'autoload'));
-                $link = "";
-
-                $text = Yii::t('app', "Error! <br />
-It is not possible to create a digitally signed PDF file and/or send it by mail without having certificate file located at current users' configuration page.
-You should make a certificate file with third party software and import it through 'certificate file' field, separately for each user, within configuration zone of the user. You also should input the password for the certificate file in 'password for digital signature certificate' field in the above mentioned user configuration page.
-You can find instructions for making self signed certificate file with Acrobat reader (One of the options. There are many applications able to make such a certificate out there)  here: ");
-
-
-
-                throw new CHttpException(404, $text);
-                //Yii::app()->end();
-            }
-            set_include_path($oldpath);
-            spl_autoload_register(array('YiiBase', 'autoload'));
-        }
-
-        if (file_exists($myPdfS)) {
-            $addon = "-signed.pdf";
-        } else {
-            $addon = ".pdf";
-        }
-
+        $this->layout = 'print';
         if ($return) {
-            if ($addon == ".pdf")
-                return Yii::app()->getRequest()->sendFile($model->docType->name . "-" . "$model->docnum" . $addon, file_get_contents($myPdf));
-            else
-                return Yii::app()->getRequest()->sendFile($model->docType->name . "-" . "$model->docnum" . $addon, file_get_contents($myPdfS));
-        }else {
-
-            $doc_file = new Files();
-            $doc_file->name = $model->docType->name . "-" . "$model->docnum" . $addon; //it might be $img_add->name for you, filename is just what I chose to call it in my model
-            $doc_file->path = "docs/";
-            $doc_file->parent_type = get_class($model);
-            $doc_file->parent_id = $model->id; // this links your picture model to the main model (like your user, or profile model)
-            if ($doc_file->save()) {
-                Response::send(200, $doc_file);
-            } else {
-                Response::send(500, "error saving file");
-            }
+            return Yii::app()->getRequest()->sendFile($model->docType->name . "-" . "$model->docnum.pdf", $model->pdf()->readFile());
+        } else {
+            Response::send(200, $model->pdf());
         }
     }
 

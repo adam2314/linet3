@@ -30,7 +30,7 @@ class Mail extends CActiveRecord {
             if($file!=null){
                 //echo $file->getFullPath().";;".$file->name;
                 
-                $mail->AddAttachment($file->getFullPath().$file->name);
+                $mail->AddAttachment($file->getFullFilePath(),$file->name);
             }
                     
                     
