@@ -19,6 +19,7 @@ class PrintDoc {
     }
 
     public static function printMe($model, $preview = 0) {
+        Yii::app()->controller->layout = 'print';
         return Yii::app()->controller->render('//docs/print', array('model' => $model, 'preview' => $preview), true);
     }
 

@@ -8,7 +8,7 @@ Created on : Feb 27, 2014, 5:42:19 PM
 Author : adam
 */
 .grid-view .button-column{
-    width:80px;
+    width:100px;
 }
 @media (max-width: 770px){
     .topnav {

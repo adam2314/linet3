@@ -210,6 +210,7 @@ class ApiController extends Controller {//RightsController
     }
     
     public function actionPrint($model, $id) {
+        
         if ($this->hasAccess($model . '/view')) {
             $modelName = $this->translate($model);
             $loadedModel = $modelName::model()->findByPk($id);

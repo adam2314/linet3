@@ -114,9 +114,17 @@ $this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridVie
         array(
             'class' => 'bootstrap.widgets.TbButtonColumn',
             'htmlOptions' => array('style' => 'width:80px'),
-            'template' => '{print}{edit}{delete}{display}',
+            'template' => '{duplicate}{print}{edit}{delete}{display}',
             'buttons' => array
                 (
+                'duplicate' => array
+                    (
+                    'label' => '<i class="glyphicon glyphicon-plus-sign"></i>',//
+                    //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
+                    'url' => 'Yii::app()->createUrl("docs/duplicate/". $data->id)',
+                ),
+                
+                
                 'edit' => array
                     (
                     'label' => '<i class="glyphicon glyphicon-edit"></i>',

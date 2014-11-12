@@ -24,13 +24,13 @@ class Files extends CActiveRecord {
     public function save($runValidation = true, $attributes = NULL) {
         
         $a = parent::save($runValidation, $attributes);
-        if(($this->public)&&($this->hash='')){
+        if(($this->public)&&($this->hash=='')){
             
             $download=new Download;
             $download->file_id=$this->id;
             $download->company_id=Yii::app()->user->Company;
-            $download->id=md5(mt_rand());
-            $this->hash=$download->id;
+            $this->hash=$download->id=md5(mt_rand());
+            
             $download->save();
         }
 
