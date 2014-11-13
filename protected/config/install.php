@@ -7,7 +7,7 @@ return array(
     ),
     'components' => array(
         'db' => array(
-            'connectionString' => 'mysql:host=localhost;dbname=multiTest',
+            'connectionString' => 'mysql:host=localhost;dbname=multiRoy',
             'username' => 'root',
             'password' => 'VBy7t6r5',
             'emulatePrepare' => true,
@@ -17,7 +17,7 @@ return array(
             'class' => 'CDbConnection'
         ),
         'dbMain' => array(
-            'connectionString' => 'mysql:host=localhost;dbname=multiTest',
+            'connectionString' => 'mysql:host=localhost;dbname=multiRoy',
             'username' => 'root',
             'password' => 'VBy7t6r5',
             'emulatePrepare' => true,

@@ -29,6 +29,7 @@ class ApiController extends Controller {//RightsController
         'acctype' => 'Acctype',
         'accid6111' => 'AccId6111',
         'acchist' => 'AccHist',
+        'currates' => 'Currates',
         'docs' => 'Docs',
         'docctype' => 'Doctype',
         'docdetails' => 'Docdetails',
@@ -41,6 +42,7 @@ class ApiController extends Controller {//RightsController
         'userincomemap' => 'UserIncomeMap',
         'transactions' => 'Transactions',
         'files' => 'Files',
+        'paymenttype'=>'PaymentType',
     );
 
     public function init() {

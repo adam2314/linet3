@@ -45,11 +45,10 @@ class DocsController extends RightsController {
         if (is_null($model))
             $model = $this->loadModel($id);
 
-        if ($preview != 1)//preview
-            $model->printDoc();
+        $tmp=$model->printDoc();
         if ($return)
-            return $this->render('print', array('model' => $model, 'preview' => $preview,), $return);
-        $this->render('print', array('model' => $model, 'preview' => $preview,));
+            return $tmp;
+        echo $tmp;
     }
 
     /**

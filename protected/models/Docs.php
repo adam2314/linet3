@@ -626,7 +626,7 @@ class Docs extends fileRecord {
         );
     }
 
-    public function printDoc() {
+    public function printedDoc() {
 
         if ($this->action == 1)
             $this->printed = (int) $this->printed + 1;
@@ -696,7 +696,9 @@ class Docs extends fileRecord {
         ));
     }
     
-    
+    public function printDoc(){
+        return PrintDoc::printMe($this);
+    }
     
     public function pdf(){
         

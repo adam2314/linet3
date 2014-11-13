@@ -45,7 +45,7 @@ class fileRecord extends basicRecord{
 
                         $img_add->save(); // DONE
                         
-                        if ($pic->saveAs(Yii::app()->params["filePath"].$configPath."/files/".$img_add->id)) {
+                        if ($pic->saveAs($img_add->getFullFilePath())) {
                             // add it to the main model now
                             
                         }
@@ -58,7 +58,7 @@ class fileRecord extends basicRecord{
                     
                     
                 if(isset($_FILES)) {
-                    Yii::log(print_r($_FILES,true),'debug', 'app');
+                    Yii::log(print_r($_FILES,true),'info', 'app');
                     unset($_FILES);
                     $tmps = CUploadedFile::reset();
                     
