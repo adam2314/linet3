@@ -20,7 +20,8 @@ class OutcomeController extends RightsController{
          $this->performAjaxValidation($model);
         if (isset($_POST['FormOutcome'])) {
             $model->attributes = $_POST['FormOutcome'];
-            $model->transaction();
+            if($model->transaction())
+                Yii::app()->user->setFlash('success', Yii::t('app','transaction Success'));
         }
 
         $this->render('create', array(

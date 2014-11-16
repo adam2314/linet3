@@ -71,6 +71,8 @@ class FormOutcome extends CFormModel{
         //print_r($vat->attributes);
         $num=$opt_tran->save();
         $this->saveRef($num,$this->sum);
+        
+        return true;
    }
         
    public function saveRef($id,$total){
