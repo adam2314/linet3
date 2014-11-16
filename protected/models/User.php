@@ -191,6 +191,13 @@ class User extends mainRecord {
             //}
         }
     }
+    
+    function hasCert(){
+        $configPath = Yii::app()->user->settings["company.path"];
+        return file_exists(Yii::app()->params["filePath"] . $configPath . "/cert/" . Yii::app()->user->id . ".p12");
+        
+    }
+    
 
     //public function delete() {
     /*

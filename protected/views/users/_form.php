@@ -26,8 +26,12 @@ $model->password = '';
         <?php echo $form->textFieldRow($model, 'cookie', array('maxlength' => 32)); ?>
 
         <?php //echo $form->textFieldRow($model,'hash',array('maxlength'=>32));  ?>
-
+        
+        
+        
         <?php echo $form->fileFieldRow($model, 'certfile', array('maxlength' => 255)); ?>
+        
+        <?php echo ($model->hasCert()? Yii::t('app',"Has certifcate file"):'')."<br>"; ?>
         
         <?php echo $form->textFieldRow($model, 'certpasswd', array( 'maxlength' => 255)); ?>
 
