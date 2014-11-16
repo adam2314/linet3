@@ -267,7 +267,7 @@ class basicRecord extends CActiveRecord {
 
         $value = htmlentities($value);
         $value = str_replace("&amp;", "&", $value);
-        $value = iconv("UTF-8", "CP1255", $value);
+        $value = @iconv("UTF-8", "CP1255", $value);
         //$value=mb_convert_encoding($value, "windows-1255",'utf-8');
         $value = substr($value, 0, $field->size);
         return sprintf($template, $value);

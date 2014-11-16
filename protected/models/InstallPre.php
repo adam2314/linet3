@@ -52,7 +52,7 @@ class InstallPre extends CFormModel {
                 array('id'=>'PHP CURL','value'=>$this->phpchk("curl")),
                 array('id'=>'PHP PDO Mysql','value'=>$this->phpchk("pdo_mysql")),
                 array('id'=>'PHP PDO Sqlite','value'=>$this->phpchk("pdo_sqlite")),
-
+                array('id'=>'PHP OpenSSL','value'=>$this->phpchk("openssl")),
                 array('id'=>'Apache mod Rewrite','value'=>$this->apachechk("mod_rewrite")),
                 
                 //array('id'=>'Apache mod Rewrite','value'=>$this->filechk("private/")),
