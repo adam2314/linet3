@@ -218,7 +218,7 @@ class RDbAuthManager extends CDbAuthManager
 			}
 
 			$sql = "SELECT name, type, description, bizrule, data
-				FROM {$this->itemTable}, {$this->itemChildTable}
+				FROM `{$this->itemTable}`, `{$this->itemChildTable}`
 				WHERE {$condition} AND name=child";
 			$children = array();
 			foreach( $this->db->createCommand($sql)->queryAll() as $row )
