@@ -6,9 +6,20 @@
 	'columns'=>array(
                'id' ,
                 'name',
-                'neg',
-                'pos',
-                'sum',
+            array(
+            'cssClassExpression' => "'number'",
+            'name'=>'neg',
+        ),
+            array(
+            'cssClassExpression' => "'number'",
+            'name'=>'pos',
+        ),
+            array(
+            'cssClassExpression' => "'number'",
+            'name'=>'sum',
+        ),
+            
+             
                 'id6111',
 	),
 )); 

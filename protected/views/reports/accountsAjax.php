@@ -7,14 +7,12 @@ $phpdatetime = Yii::app()->locale->getDateFormat('phpdatetime');
 
 
 foreach ($model->accounts() as $account) {
-    echo "<h3>". $account." " .Accounts::model()->findByPk($account)->name."</h3>";
+    echo "<h3>" . $account . " " . Accounts::model()->findByPk($account)->name . "</h3>";
     $this->widget('bootstrap.widgets.TbGridView', array(
         'id' => 'transactions-grid',
         'dataProvider' => $model->search($account),
-
         'columns' => array(
             'num',
-
             array(
                 'value' => 'CHtml::link(CHtml::encode($data->getOptAccName()),Yii::app()->createAbsoluteUrl("/accounts/transaction/id/".$data->getOptAccId()))',
                 'type' => 'raw',
@@ -43,18 +41,21 @@ foreach ($model->accounts() as $account) {
                 'header' => Yii::t('app', 'Debit'),
                 'name' => 'sum',
                 'filter' => '',
+                'cssClassExpression' => "'number'",
                 'value' => '($data->sum<0)?$data->sum:""'
             ),
             array(
                 'header' => Yii::t('app', 'Credit'),
                 'name' => 'sum',
                 'filter' => '',
+                'cssClassExpression' => "'number'",
                 'value' => '($data->sum>0)?$data->sum:""'
             ),
             array(
                 'header' => Yii::t('app', 'Balance'),
                 'name' => 'sum',
                 'filter' => '',
+                'cssClassExpression' => "'number'",
                 'value' => '$data->getBalance()'
             ),
         ),

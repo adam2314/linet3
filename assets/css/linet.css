@@ -130,7 +130,9 @@ div.container-fluid.outer{
 
 
 
-
+.number{
+    direction: ltr;
+}
 
 div #chose{
     /*background-color: azure;*/

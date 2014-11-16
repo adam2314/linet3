@@ -19,10 +19,10 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
             ),
             'htmlOptions' => array(
                 //'style' => 'height:20px;width:70px;',
-                'placeholder'=>Yii::t('app','From Date'),
+                'placeholder' => Yii::t('app', 'From Date'),
             ),
 // DONT FORGET TO ADD TRUE this will create the datepicker return as string
-                ), true)  . $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                ), true) . $this->widget('zii.widgets.jui.CJuiDatePicker', array(
             // 'model'=>$model,
             'name' => 'Transactions[to_date]',
             'language' => substr(Yii::app()->language, 0, 2),
@@ -37,7 +37,7 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
             ),
             'htmlOptions' => array(
                 //'style' => 'height:20px;width:70px',
-                'placeholder'=>Yii::t('app','To Date'),
+                'placeholder' => Yii::t('app', 'To Date'),
             ),
 // DONT FORGET TO ADD TRUE this will create the datepicker return as string
                 ), true);
@@ -60,9 +60,9 @@ $this->widget('bootstrap.widgets.TbGridView', array(
     //'enablePagination'=> false,
     'ajaxUpdate' => true,
     'ajaxType' => 'POST',
-    'afterAjaxUpdate'=>"function() {
-						jQuery('#Transactions_from_date').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['".substr(Yii::app()->language,0,2)."'], {'showAnim':'fold','dateFormat':'".Yii::app()->locale->getDateFormat('short')."','changeMonth':'true','showButtonPanel':'true','changeYear':'true','constrainInput':'false'}));
-						jQuery('#Transactions_to_date').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['".substr(Yii::app()->language,0,2)."'], {'showAnim':'fold','dateFormat':'".Yii::app()->locale->getDateFormat('short')."','changeMonth':'true','showButtonPanel':'true','changeYear':'true','constrainInput':'false'}));
+    'afterAjaxUpdate' => "function() {
+						jQuery('#Transactions_from_date').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['" . substr(Yii::app()->language, 0, 2) . "'], {'showAnim':'fold','dateFormat':'" . Yii::app()->locale->getDateFormat('short') . "','changeMonth':'true','showButtonPanel':'true','changeYear':'true','constrainInput':'false'}));
+						jQuery('#Transactions_to_date').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['" . substr(Yii::app()->language, 0, 2) . "'], {'showAnim':'fold','dateFormat':'" . Yii::app()->locale->getDateFormat('short') . "','changeMonth':'true','showButtonPanel':'true','changeYear':'true','constrainInput':'false'}));
                                 }",
     'filter' => $model,
     'columns' => array(
@@ -98,18 +98,20 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             'filter' => $dateisOn,
             'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->valuedate,"' . $yiidbdatetime . '"))'
         ),
-          array(
-              'header'=>Yii::t('app','Debit'),
-                    'name'=>'sum',
-                    'filter' => '',
-                    'value'=>'($data->sum<0)?$data->sum:""'
-                ),
-            array(
-                'header'=>Yii::t('app','Credit'),
-                    'name'=>'sum',
-                    'filter' => '',
-                    'value'=>'($data->sum>0)?$data->sum:""'
-                ),
+        array(
+            'header' => Yii::t('app', 'Debit'),
+            'cssClassExpression' => "'number'",
+            'name' => 'sum',
+            'filter' => '',
+            'value' => '($data->sum<0)?$data->sum:""'
+        ),
+        array(
+            'header' => Yii::t('app', 'Credit'),
+            'cssClassExpression' => "'number'",
+            'name' => 'sum',
+            'filter' => '',
+            'value' => '($data->sum>0)?$data->sum:""'
+        ),
     ),
 ));
 

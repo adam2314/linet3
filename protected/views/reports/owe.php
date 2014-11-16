@@ -17,7 +17,11 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             'value' => 'CHtml::link(CHtml::encode($data["name"]), Yii::app()->createAbsoluteUrl("/accounts/transaction/id/".CHtml::encode($data["id"])))',
         ),
         //'type',
-         'sum',
+         
+        array(
+            'cssClassExpression' => "'number'",
+            'name'=>'sum',
+        )
           
     ),
 ));
