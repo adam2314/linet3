@@ -17,7 +17,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         )
 );
 
-$temp = CHtml::listData(Accounts::model()->AutoComplete('', 7), 'value', 'label');
+$temp = CHtml::listData(Accounts::model()->findAllByType(7), 'id', 'name');
 $temp[0] = Yii::t('app', 'Chose Bank');
 $model->account_id = 0;
 ?>

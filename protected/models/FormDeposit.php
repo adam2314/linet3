@@ -50,6 +50,10 @@ class FormDeposit  extends CFormModel{
             $num=0;
             $linenum=1;
             $tranType=Settings::model()->findByPk('transactionType.chequedeposit')->value;
+            if(($this->refnum=='')||($this->date=='')||!is_array($this->Deposit)){
+                return false;
+            }
+            
             foreach($this->Deposit as $line=>$val){
                 list($a, $b ) =  explode(',', $line);
                 $cheq=  Doccheques::model()->findByPk(array("doc_id"=>$a,"line"=>$b));
