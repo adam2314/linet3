@@ -55,7 +55,8 @@ class ApiController extends Controller {//RightsController
     }
 
     public function actionError() {
-
+        if($error=Yii::app()->errorHandler->error)
+                Response::send($error["code"], $error["message"]);
         Response::send(500, 'Unknown error');
     }
 
