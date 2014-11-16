@@ -36,7 +36,7 @@ class FormOutcome extends CFormModel{
             return array();//stub function for refnum widget...
         }
    public function transaction(){
-        $valuedate=date("Y-m-d H:m:s",CDateTimeParser::parse($this->date,Yii::app()->locale->getDateFormat('yiidatetime')));
+        $valuedate=date("Y-m-d H:m:s",CDateTimeParser::parse($this->date,Yii::app()->locale->getDateFormat('yiishort')));
         $num=0;
         $line=1;
         $tranType=  Yii::app()->user->settings["transactionType.supplierPayment"];
