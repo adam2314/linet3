@@ -119,7 +119,7 @@ class Item extends fileRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('sku, name, category_id, parent_item_id, isProduct, stockType, itemVatCat_id', 'required'),
+            array('sku, name, category_id, parent_item_id, isProduct, stockType, itemVatCat_id, unit_id', 'required'),
             array('category_id, parent_item_id, isProduct, profit, unit_id, owner, stockType', 'numerical', 'integerOnly' => true),
             array('itemVatCat_id', 'length', 'max' => 10),
             array('name', 'length', 'max' => 100),

@@ -24,7 +24,7 @@ $model->account_id = 0;
 <div class='col-md-3'>
 
     <?php
-    echo $form->dropDownList($model, "account_id", $temp, array('class' => ''));
+    echo $form->dropDownListRow($model, "account_id", $temp, array('class' => ''));
 
 
     echo $form->labelEx($model, 'refnum');

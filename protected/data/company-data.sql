@@ -1030,7 +1030,7 @@ INSERT INTO `Rights` (`itemname`, `type`, `weight`) VALUES
 INSERT INTO `transactionType` (`id`, `name`) VALUES
 (0, 'Manual'),
 (1, 'Invoice'),
-(2, 'Supplier Invoicve'),
+(2, 'Supplier Invoice'),
 (3, 'Receipt'),
 (4, 'CHEQUEDEPOSIT'),
 (5, 'Supplier Payment'),

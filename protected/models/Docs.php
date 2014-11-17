@@ -256,7 +256,6 @@ class Docs extends fileRecord {
         return $a;
     }
 
-
     public function saveRef() {
         $str = $this->refnum_ids; //save new values
 
@@ -400,7 +399,12 @@ class Docs extends fileRecord {
                     //$num = $docdetail->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->docType->oppt_account_type, $tranType);
                     $num = $docdetail->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->oppt_account_id, $tranType);
                     $line++;
-                    $iVat = $docdetail->ihTotal * ($docdetail->iVatRate / 100);
+                    $multi = 1;
+                    if (!is_null($this->oppt_account_id))
+                        if ($oppt = Accounts::model()->findByPk($this->oppt_account_id))
+                            $multi = $oppt->src_tax / 100;
+
+                    $iVat = ($docdetail->ihTotal * ($docdetail->iVatRate / 100)) * $multi;
                     $accout->sum+=($docdetail->ihTotal + $iVat) * $action;
                     $vat->sum+= $iVat * $action;
                 }
@@ -418,19 +422,21 @@ class Docs extends fileRecord {
                 $line++;
                 $num = $accout->save();
 
-                $vat->num = $num;
-                //$vat->account_id=Yii::app()->user->settings['company.acc.vatacc'];
-                $vat->account_id = $this->docType->vat_acc_id;
-                $vat->type = $tranType;
-                $vat->refnum1 = $this->id;
-                $vat->valuedate = $valuedate;
-                $vat->details = $this->company;
-                $vat->currency_id = $this->currency_id;
-                $vat->owner_id = $this->owner;
-                $vat->linenum = $line;
-                $line++;
-                //print_r($vat->attributes);
-                $num = $vat->save();
+                if ((double) $vat->sum != 0) {
+                    $vat->num = $num;
+                    //$vat->account_id=Yii::app()->user->settings['company.acc.vatacc'];
+                    $vat->account_id = $this->docType->vat_acc_id;
+                    $vat->type = $tranType;
+                    $vat->refnum1 = $this->id;
+                    $vat->valuedate = $valuedate;
+                    $vat->details = $this->company;
+                    $vat->currency_id = $this->currency_id;
+                    $vat->owner_id = $this->owner;
+                    $vat->linenum = $line;
+                    $line++;
+                    //print_r($vat->attributes);
+                    $num = $vat->save();
+                }
             }
 
             if ($this->docType->isrecipet) {
@@ -476,22 +482,20 @@ class Docs extends fileRecord {
         //Yii::app()->end();
     }
 
-    public function delete(){
-        if($this->action==0){
-            foreach($this->docDetailes as $detail){
+    public function delete() {
+        if ($this->action == 0) {
+            foreach ($this->docDetailes as $detail) {
                 $detail->delete();
             }
-            foreach($this->docCheques as $detail){
+            foreach ($this->docCheques as $detail) {
                 $detail->delete();
             }
             return parent::delete();
-        }else{
+        } else {
             return false;
         }
-        
     }
-    
-    
+
     public function primaryKey() {
         return 'id';
     }
@@ -695,14 +699,14 @@ class Docs extends fileRecord {
             'sort' => $sort,
         ));
     }
-    
-    public function printDoc(){
+
+    public function printDoc() {
         return PrintDoc::printMe($this);
     }
-    
-    public function pdf(){
-        
-        
+
+    public function pdf() {
+
+
         return PrintDoc::pdfDoc($this);
     }
 
