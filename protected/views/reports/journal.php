@@ -71,7 +71,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             'name' => 'type',
             //'filter'=>CHtml::dropDownList('Transactions[type]', $model->type,CHtml::listData(TransactionType::model()->findAll(), 'id', 'name')),
             'filter' => CHtml::listData(TransactionType::model()->findAll(), 'id', 'name'),
-            'value' => '$data->Type->name'
+            'value' => 'Yii::t("app",$data->Type->name)'
         ),
         array(
             'name' => 'account_id',

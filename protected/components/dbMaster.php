@@ -41,10 +41,13 @@ class dbMaster{
 
             $transaction = Yii::app()->db->beginTransaction();
             try {
-                $sqlArray = explode(";\n", $sqlCmd);
+                $sqlArray = explode(";\r\n", $sqlCmd);
+                $text='';
                 foreach ($sqlArray as $line) {
-
-                    Yii::app()->db->createCommand($line.";")->execute();
+                    $text.=$line."\n";
+                    if(($line!='')&&(strpos($line, '--')!==0)&&(strpos($line, '/*')!==0))
+                     
+                        Yii::app()->db->createCommand($line . ";")->execute();
                 }
 
 
@@ -52,7 +55,7 @@ class dbMaster{
             } catch (Exception $e) { // an exception is raised if a query fails
                 $transaction->rollback();
                 $message = $e->getMessage();
-                echo $line."<br />";
+                echo $text . "<br />";
                 print $message;
                 Yii::app()->end();
             }

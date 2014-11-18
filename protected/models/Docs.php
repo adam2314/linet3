@@ -402,10 +402,12 @@ class Docs extends fileRecord {
                     $multi = 1;
                     if (!is_null($this->oppt_account_id))
                         if ($oppt = Accounts::model()->findByPk($this->oppt_account_id))
-                            $multi = $oppt->src_tax / 100;
+                            $multi = ($oppt->src_tax / 100);
 
-                    $iVat = ($docdetail->ihTotal * ($docdetail->iVatRate / 100)) * $multi;
+                    $iVat = ($docdetail->ihTotal * ($docdetail->iVatRate / 100));
                     $accout->sum+=($docdetail->ihTotal + $iVat) * $action;
+                    
+                    $iVat*=$multi;
                     $vat->sum+= $iVat * $action;
                 }
 

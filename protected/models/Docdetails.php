@@ -54,7 +54,7 @@ class Docdetails extends basicRecord {
     }
 
     public function transaction($num, $refnum, $valuedate, $details, $action, $line, $optacc, $tranType) {
-        $multi = 1;
+        
 
         if (is_null($this->Item)) {
             throw new CHttpException(500, 'The item ' . $this->item_id . ' does not exsits.');
@@ -66,16 +66,36 @@ class Docdetails extends basicRecord {
 
 
 
+        
+        $income = new Transactions();
+        
         if (is_null($optacc)) {
 
             $incomeacc = $vatCatAcc->account_id;
+            
+            $income->sum = ($this->ihTotal * $action);
         } else {
             $incomeacc = $optacc;
 
+            
+            
             if ($oppt = Accounts::model()->findByPk($vatCatAcc->account_id))
-                $multi += ($oppt->src_tax / 100);
+                $multi = ($oppt->src_tax / 100);
+            
+            $vat=$this->ihTotal*$multi;
+            
+            if ($oppt = Accounts::model()->findByPk($incomeacc))
+                $multi = 1-($oppt->src_tax / 100);
+            $vat=$vat*$multi;
+            
+            
+            //$multi=$this->iTotalVat*$multi;
+            Yii::log($this, CLogger::LEVEL_INFO, __METHOD__);
+            Yii::log($multi, CLogger::LEVEL_INFO, __METHOD__);
+            $income->sum = (($this->ihTotal+ $vat) * $action) ;
         }
-        $income = new Transactions();
+        
+        
         $income->num = $num;
         $income->account_id = $incomeacc;
         $income->type = $tranType;
@@ -84,7 +104,7 @@ class Docdetails extends basicRecord {
 
         $income->details = $details;
         $income->currency_id = $this->currency_id;
-        $income->sum = ($this->ihTotal * $action) * $multi;
+        
         $income->owner_id = Yii::app()->user->id;
         $income->linenum = $line;
         return $income->save();

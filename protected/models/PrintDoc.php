@@ -47,6 +47,7 @@ class PrintDoc {
             $file->path = "docs/";
             $file->parent_type = get_class($model);
             $file->parent_id = $model->id;
+            $file->hidden=1;
             $file->save();
             $file->writeFile($mPDF1->Output("bla", "S"));
         }

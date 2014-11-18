@@ -89,6 +89,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         $files->unsetAttributes();
         $files->parent_type = get_class($model);
         $files->parent_id = $model->id;
+        $files->hidden = 0;
         $this->widget('bootstrap.widgets.TbGridView', array(
             'id' => 'acc-template-grid',
             'dataProvider' => $files->search(),

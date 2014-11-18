@@ -64,7 +64,7 @@ class RightsController extends RController {
             $database=  Company::model()->findByPk(Yii::app()->user->Company);
             
             
-            Yii::log( Yii::app()->user->Company,'info','app');
+            Yii::log("Selected Company ID: ". Yii::app()->user->Company,'trace','app');
             Company::model()->loadComp($database);
         }
 

@@ -7,6 +7,7 @@
  * @property integer $id
  * @property string $name
  * @property string $path
+ * @property string $hidden
  * @property string $public
  * @property integer $parent_id
  * @property string $parent_type //parent module name Items,Docs,Accounts...
@@ -91,11 +92,11 @@ class Files extends CActiveRecord {
         // will receive user inputs.
         return array(
             array('name, path', 'required'),
-            array('id, expire', 'numerical', 'integerOnly' => true),
+            array('id, expire,hidden', 'numerical', 'integerOnly' => true),
             array('name, path, parent_type, parent_id, hash', 'length', 'max' => 255),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, name, path, public, parent_id, parent_type, date, expire, hash', 'safe', 'on' => 'search'),
+            array('id, name, path, hidden, public, parent_id, parent_type, date, expire, hash', 'safe', 'on' => 'search'),
         );
     }
 
@@ -127,6 +128,7 @@ class Files extends CActiveRecord {
             'id' => Yii::t('labels', 'ID'),
             'name' => Yii::t('labels', 'Name'),
             'path' => Yii::t('labels', 'Path'),
+            'hidden' => Yii::t('labels', 'Hidden'),
             'public' => Yii::t('labels', 'Public'),
             'parent_id' => Yii::t('labels', 'Parent ID'),
             'parent_type' => Yii::t('labels', 'Parent Type'),
@@ -149,6 +151,7 @@ class Files extends CActiveRecord {
         $criteria->compare('id', $this->id);
         $criteria->compare('name', $this->name, true);
         $criteria->compare('path', $this->path, true);
+        $criteria->compare('hidden', $this->hidden);
         $criteria->compare('public', $this->public);
         $criteria->compare('parent_id', $this->parent_id);
         $criteria->compare('parent_type', $this->parent_type, true);
