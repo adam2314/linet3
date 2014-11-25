@@ -332,7 +332,21 @@ class Docs extends fileRecord {
                     $submodel = new Doccheques;
                 }
 
-                $submodel->attributes = $rcpt;
+                
+                //go throw attr if no save new
+                foreach($rcpt as $key=>$value){
+                    if($submodel->hasAttribute($key))
+                        $submodel->$key=$value;
+                    else{
+                        $eav=new DocchequesEav;
+                        $eav->line=$rcpt['line'];
+                        $eav->doc_id= $this->id;
+                        $eav->attribute=$key;
+                        $eav->value=$value['value'];
+                        $eav->save();
+                    }
+                }
+                //$submodel->attributes = $rcpt;
                 $submodel->doc_id = $this->id;
                 if ((int) $rcpt["type"] != 0) {
                     if ($submodel->save()) {
@@ -558,8 +572,13 @@ class Docs extends fileRecord {
             array('refnum', 'length', 'max' => 20),
             array('vatnum', 'vatnumVal'),
             array('rcptsum, discount, sub_total, novat_total, vat, total, src_tax', 'length', 'max' => 20),
+            
+            
+            
             array('issue_date, due_date, comments, description, refnum_ids, refstatus', 'safe'),
             //array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe'),
+            array('total', 'compare', 'compareAttribute'=>'rcptsum','on' => 'invrcpt'),
+            array('oppt_account_id', 'required','on' => 'opppt_req'), 
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe', 'on' => 'search'),

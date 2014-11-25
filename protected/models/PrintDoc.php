@@ -57,7 +57,7 @@ class PrintDoc {
         $doc_file = PrintDoc::findFile($model, $name);
         if (!$doc_file) {
 
-
+            //'digi';//
 
             spl_autoload_unregister(array('YiiBase', 'autoload'));
             $oldpath = get_include_path();
@@ -77,11 +77,14 @@ class PrintDoc {
             if (file_exists($cerfile)) {
                 $certificate = file_get_contents($cerfile);
                 if (empty($certificate)) {
+                    set_include_path($oldpath);
+                    spl_autoload_register(array('YiiBase', 'autoload'));
                     throw new CHttpException('Cannot open the certificate file');
                 }
 
                 $pdf->attachDigitalCertificate($certificate, $configCertpasswd);
                 $docfile = $pdf->render();
+                
                 set_include_path($oldpath);
                 spl_autoload_register(array('YiiBase', 'autoload'));
 

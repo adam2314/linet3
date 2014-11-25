@@ -114,7 +114,7 @@
                         
                         
                         <li>
-                            <a href="<?php echo Yii::app()->createAbsoluteUrl('/users/update/id/'.Yii::app()->user->id);?>"><?php echo Yii::app()->user->fname." ".Yii::app()->user->lname; ?></a>
+                            <a href="<?php echo Yii::app()->createAbsoluteUrl('/users/update/'.Yii::app()->user->id);?>"><?php echo Yii::app()->user->fname." ".Yii::app()->user->lname; ?></a>
                         </li>
                         <!--
                         

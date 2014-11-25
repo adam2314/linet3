@@ -14,10 +14,13 @@
 class EAVHelper {
     
     
-    public static function addRow($key, $value, $sModel) {
+    public static function addRow($key, $value, $sModel,$model="Settings") {
     
         /**Settings**/
-    return self::label($key).self::field($key, $value, $sModel).self::error($key);
+    if(isset($sModel->eavType))
+        $sModel=$sModel->eavType;
+        
+    return self::label($key).self::field($key, $value, $sModel,$model).self::error($key,$model);
 }
 
 
@@ -30,17 +33,29 @@ public static function addField($name,$value,$model){
 
 
 
-private static function field($key, $value, $sModel){
+private static function field($key, $value, $sModel,$model){
     
-    if (strpos($sModel->eavType, "list(") === 0) {
-        $modelName = str_replace("list(", "", $sModel->eavType);
+    if (strpos($sModel, "listT(") === 0) {
+        $modelName = str_replace("listT(", "", $sModel);
+        $modelName = str_replace(")", "", $modelName);
+        $type= substr($modelName,strpos($modelName, '[')+1,strpos($modelName, '[')-strpos($modelName, ']')+1);
+        //echo $type;
+        //exit;
+        
+        $modelName = str_replace("[".$type."]", "", $modelName);
+        $temp = CHtml::listData($modelName::model()->findAllByType($type), 'id', 'name');
+        $temp[''] = Yii::t('app', 'None');
+        //$label = Yii::t('app', $sModel->id) ;
+        $field = CHtml::dropDownList($model.'[' . $key . '][value]', $value, $temp)."<br/>";
+    } elseif (strpos($sModel, "list(") === 0) {
+        $modelName = str_replace("list(", "", $sModel);
         $modelName = str_replace(")", "", $modelName);
         $temp = CHtml::listData($modelName::model()->findAll(), 'id', 'name');
         $temp[''] = Yii::t('app', 'None');
         //$label = Yii::t('app', $sModel->id) ;
-        $field = CHtml::dropDownList('Settings[' . $key . '][value]', $value, $temp);
-    } elseif (strpos($sModel->eavType, "select(") === 0) {
-        $list = str_replace("select(", "", $sModel->eavType);
+        $field = CHtml::dropDownList($model.'[' . $key . '][value]', $value, $temp)."<br/>";
+    } elseif (strpos($sModel, "select(") === 0) {
+        $list = str_replace("select(", "", $sModel);
         $list = CJSON::decode(str_replace(")", "", $list));
         foreach ($list as &$item) {
             //print $item;
@@ -49,23 +64,23 @@ private static function field($key, $value, $sModel){
         //$temp = CHtml::listData(CJSON::decode($list), 'id', 'name');
         $temp[''] = Yii::t('app', 'None');
         //$label = Yii::t('app', $sModel->id);
-        $field = CHtml::dropDownList('Settings[' . $key . '][value]', $value, $list);
-    } elseif ($sModel->eavType == 'file') {
+        $field = CHtml::dropDownList($model.'[' . $key . '][value]', $value, $list)."<br/>";
+    } elseif ($sModel == 'file') {
 
 
         //$label = Yii::t('app', $sModel->id) ;
-        $field = CHtml::fileField('Settings[' . $key . '][value]', $value) .
-                CHtml::hiddenField('Settings[' . $key . '][value]', $value) .
+        $field = CHtml::fileField($model.'[' . $key . '][value]', $value) .
+                CHtml::hiddenField($model.'[' . $key . '][value]', $value) .
                 "<a href='javascript:del();'>" . Yii::t('app', 'Delete') . "</a><br />";
-    } elseif ($sModel->eavType == 'boolean') {
+    } elseif ($sModel == 'boolean') {
 
         //$label = Yii::t('app', $sModel->id);
         
-        $field = CHtml::hiddenField('Settings[' . $key . '][value]', false) .
-                CHtml::checkbox('Settings[' . $key . '][value]', ($value=='true')?true:false);
+        $field = CHtml::hiddenField($model.'[' . $key . '][value]', false) .
+                CHtml::checkbox($model.'[' . $key . '][value]', ($value=='true')?true:false);
     } else {
         //$label = Yii::t('app', $sModel->id);
-        $field = CHtml::textField('Settings[' . $key . '][value]', $value);
+        $field = CHtml::textField($model.'[' . $key . '][value]', $value);
     }
     return $field;
 }
@@ -122,8 +137,8 @@ private static function label($id){
     return "<label for='$id'>".Yii::t('app', $id)."</label>";
     
 }
-private static function error($id){
-    return '<span style="display: none" id="Settings_' . $id . '_em" class="help-block error"></span>';
+private static function error($id,$model){
+    return '<span style="display: none" id="'.$model.'_' . $id . '_em" class="help-block error"></span>';
 }
     //put your code here
 }

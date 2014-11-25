@@ -1,5 +1,5 @@
 <?php
-
+exit;
 class DocchequesController extends RightsController {
 
     /**

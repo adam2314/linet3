@@ -46,10 +46,13 @@ class FormProfloss extends CFormModel
         $data=array();
         foreach($accounts as $account){
                 
-                $sum=$account->getTotal($this->from_date.":00",$this->to_date.":59"); 
-                if($sum!=0)
-                    $data[]=array('id'=>$account->id,'name'=>$account->name,'sum'=>$sum,'id6111'=>$account->id6111);
+                $line=$account->getTotal($this->from_date.":00",$this->to_date.":59"); 
+                if($line!=0){
+                    $data[]=array('id'=>$account->id,'name'=>$account->name,'sum'=>$line,'id6111'=>$account->id6111);
+                    $sum+=$line;
+                }
         }
+        $data[]=array('id'=>'','name'=>Yii::t('app','Total'),'sum'=>$sum,'id6111'=>'');
         return $data;
     }
     
@@ -57,7 +60,7 @@ class FormProfloss extends CFormModel
         
         
         $data=$this->calc(3);//incomes
-        $data=array_merge($data,$this->calc(4));//outcomes
+        $data=array_merge($data,$this->calc(2));//outcomes
         
         
         return new CArrayDataProvider($data,

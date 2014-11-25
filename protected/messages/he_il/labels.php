@@ -93,7 +93,7 @@ return array (
   'Last Login' => 'תאריך התחברות אחרון',
   'Last Name' => 'שם משפחה',
   'Lead Sum' => 'סך מטבע מוביל',
-  'Line' => 'קו',
+  'Line' => 'שורה',
   'Line No.' => 'שורה מס\'',
   'Manufacturer' => 'יצרן',
   'Mobile No.' => 'מס\' סלולרי',

@@ -83,7 +83,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                                 'label'=>'<i class="glyphicon glyphicon-transfer"></i>',
                                 'url'=>'Yii::app()->createUrl("accounts/transaction", array("id"=>$data->id))',
                                 //'visible'=>'$data->score > 0',
-                                'click'=>'function(){alert("Going down!");}',
+                                //'click'=>'function(){alert("Going down!");}',
                             ),
 		    ),
 		),

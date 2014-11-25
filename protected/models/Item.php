@@ -22,11 +22,21 @@
  * @property integer $vat
  */
 class Item extends fileRecord {
-
+    const STOCK_NO = 0;
+    const STOCK_QTY = 1;
+    const STOCK_INSTANCE=2;
+    
     const table = '{{items}}';
 
     public $vat; //loads vat from user by cat
 
+    
+    
+    public static function getStocks() {
+        return self::getConstants('STOCK', __CLASS__);
+    }
+    
+    
     public function openfrmt($line) {
         $itms = '';
 

@@ -130,27 +130,28 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     echo CHTML::hiddenField("subType", "print");
     echo CHTML::hiddenField("Docs[id]", $model->id);
     echo CHTML::hiddenField("Docs[doctype]", $model->doctype);
-    $this->widget('bootstrap.widgets.TbButtonGroup', array(
-        'type' => 'primary', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
-        'buttons' => array(
-            array('icon' => 'glyphicon glyphicon-print', 'label' => Yii::t('app', 'Print'), 'htmlOptions' => array('onclick' => 'return sendForm("print");'),),
-            array('items' => array(
-                    array('icon' => 'glyphicon glyphicon-envelope', 'label' => Yii::t('app', 'Email'), 'url' => 'javascript:sendForm("email");',),
-                    array('icon' => 'glyphicon glyphicon-save', 'label' => Yii::t('app', 'PDF'), 'url' => 'javascript:sendForm("pdf");',),
-                    array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save Draft'), 'url' => 'javascript:sendForm("saveDraft");',),
-                //array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save'), 'url' => 'javascript:sendForm("save");',),
-                )),
-        ),
-    ));
+    if (($model->doctype != 13) && ($model->doctype != 14)) {
+        $this->widget('bootstrap.widgets.TbButtonGroup', array(
+            'type' => 'primary', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+            'buttons' => array(
+                array('icon' => 'glyphicon glyphicon-print', 'label' => Yii::t('app', 'Print'), 'htmlOptions' => array('onclick' => 'return sendForm("print");'),),
+                array('items' => array(
+                        array('icon' => 'glyphicon glyphicon-envelope', 'label' => Yii::t('app', 'Email'), 'url' => 'javascript:sendForm("email");',),
+                        array('icon' => 'glyphicon glyphicon-save', 'label' => Yii::t('app', 'PDF'), 'url' => 'javascript:sendForm("pdf");',),
+                        array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save Draft'), 'url' => 'javascript:sendForm("saveDraft");',),
+                    //array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save'), 'url' => 'javascript:sendForm("save");',),
+                    )),
+            ),
+        ));
 
-    $this->widget('bootstrap.widgets.TbButton', array(
-        'label' => Yii::t('app', 'Change language'),
-        'icon' => 'glyphicon glyphicon-globe',
-        'type' => 'primary',
-        'htmlOptions' => array('id' => 'printLink', 'onclick' => 'return hideMe();'),
-    ));
-    echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));
-//echo CHtml::dropDownList('language',Yii::app()->user->getLanguage(),CHtml::listData(Language::model()->findAll(), 'id', 'name'));
+        $this->widget('bootstrap.widgets.TbButton', array(
+            'label' => Yii::t('app', 'Change language'),
+            'icon' => 'glyphicon glyphicon-globe',
+            'type' => 'primary',
+            'htmlOptions' => array('id' => 'printLink', 'onclick' => 'return hideMe();'),
+        ));
+        echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));
+    }
     ?>
 </div>
 <br /><br /><br /><br />
@@ -174,13 +175,13 @@ $this->endWidget();
   $this->endWidget('zii.widgets.jui.CJuiDialog'); */
 
 $this->widget('widgetMail', array(
-    'urlFile' => Yii::app()->createAbsoluteUrl("docs/view/".$model->id."?mail=1"),
-    'urlAddress' => Yii::app()->createAbsoluteUrl("accounts/JSON/".$model->account_id),
+    'urlFile' => Yii::app()->createAbsoluteUrl("docs/view/" . $model->id . "?mail=1"),
+    'urlAddress' => Yii::app()->createAbsoluteUrl("accounts/JSON/" . $model->account_id),
     'urlMailForm' => Yii::app()->createAbsoluteUrl('mail/create'),
     'urlTemplate' => Yii::app()->createAbsoluteUrl('mailTemplate/json'),
-    'obj' =>'Docs',
-    'type'=>$model->doctype,
-    'id'=>$model->id
+    'obj' => 'Docs',
+    'type' => $model->doctype,
+    'id' => $model->id
 ));
 ?>
 

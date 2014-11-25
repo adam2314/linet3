@@ -54,30 +54,32 @@ $model->account_id = 0;
         'columns' => array(
             array(
                 'type' => 'raw',
-                'value' =>
-                'CHtml::checkBox("FormDeposit[Deposit][$data->doc_id,$data->line]",null,array("class"=>\'noPrint\', "onchange"=>"CalcSum()"))',
+                'value' =>'CHtml::checkBox("FormDeposit[Deposit][$data->doc_id,$data->line]",null,array("class"=>\'noPrint\', "onchange"=>"CalcSum()"))',
             ),
             array(
                 'type' => 'raw',
-                'value' =>
-                'CHtml::hiddenField("FormDeposit[Total][$data->doc_id,$data->line]","$data->sum").CHtml::hiddenField("FormDeposit[Type][$data->doc_id,$data->line]","$data->type")',
+                'value' =>'CHtml::hiddenField("FormDeposit[Total][$data->doc_id,$data->line]","$data->sum").CHtml::hiddenField("FormDeposit[Type][$data->doc_id,$data->line]","$data->type")',
             ),
             array(
                 'name' => 'type',
                 'type' => 'raw',
-                'value' =>
-                'Yii::t("app",$data->Type->name)',
+                'value' =>'Yii::t("app",$data->Type->name)',
             ),
-            'bank_refnum',
-            'bank',
-            'branch',
-            'cheque_acct',
-            'cheque_num',
-            'cheque_date',
-            'dep_date',
+            
+            array(
+                'name' => 'Details',
+                'value' =>'$data->printDetails()',
+            ),
+            //'bank_refnum',
+            //'bank',
+            //'branch',
+            //'cheque_acct',
+            //'cheque_num',
+            //'cheque_date',
+            //'dep_date',
             //'account_id',
             'currency_id',
-            'refnum',
+            //'refnum',
             'sum',
             //'total',
             array(

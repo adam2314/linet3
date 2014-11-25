@@ -58,9 +58,20 @@ class DocsController extends RightsController {
     public function actionCreate($type = 1) {
         $type = (isset($_POST['Docs']['doctype'])) ? (int) $_POST['Docs']['doctype'] : $type;
         $model = new Docs();
+        
+        $model->doctype = $type;
+        $model->docType = Doctype::model()->findByPk($type);
+        if(!is_null($model->docType->oppt_account_type))
+            $model->scenario="opppt_req";
+        
+        if($model->docType->id==9)//invrcpt
+            $model->scenario="invrcpt";
+        
+        
         // Uncomment the following line if AJAX validation is needed
         $this->performAjaxValidation($model);
 
+        
         if (isset($_POST['Docs'])) {
             $model->attributes = $_POST['Docs'];
 
@@ -73,8 +84,8 @@ class DocsController extends RightsController {
             return $this->doc($model);
         }
 
-        $model->doctype = $type;
-        $model->docType = Doctype::model()->findByPk($type);
+       
+        
         $model->status = $model->docType->docStatus_id;
         $model->description = $model->docType->footer;
         $this->render('create', array(
@@ -85,9 +96,9 @@ class DocsController extends RightsController {
     private function doc($model, $mail = 0) {
         switch ($_POST['subType']) {
             case 'save':
-                if ($model->save())
+                if ($model->save()){
                     $this->redirect(array('view', 'id' => $model->id));
-                else {
+                }else {
                     throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet'));
                 }
                 return;

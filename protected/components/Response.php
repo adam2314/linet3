@@ -18,7 +18,7 @@ class Response{
         // and the content type
         header('Content-type: ' . $content_type);
 
-        if(($error!=0)||($body==''))
+        if(($error!=0)&&($body==''))
             $body=Response::_getErrorCodeMessage($error);
         echo CJSON::encode(array("status" => $status, "text" => Response::_getStatusCodeMessage($status), "body" => $body, "errorCode" => $error));
 

@@ -217,6 +217,9 @@ class FormLinet2Import extends CFormModel {
     private function imprtCheques($cheques, $prefix) {
         $this->sqlExec('DELETE FROM `' . Yii::app()->db->tablePrefix . "docCheques` WHERE 1");
         foreach ($cheques as $cheque) {
+            /*adam: we need to update this crap!*/
+            
+            
             //echo $doc."<br />";
             $cheque = str_replace("'" . $prefix . "',", "", $cheque);
             //$doc= $this->parseLine($doc);

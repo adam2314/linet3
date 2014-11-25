@@ -1,16 +1,14 @@
 <?php
 
 /**
- * This is the model class for table "accHist".
+ * This is the model class for table "bug".
  *
- * The followings are the available columns in table 'accHist':
+ * The followings are the available columns in table 'bug':
  * @property integer $id
  * @property string $url
  * @property string $title
  * @property string $body
  *
- * The followings are the available model relations:
- * @property Accounts $account
  */
 class Bug extends mainRecord {
 

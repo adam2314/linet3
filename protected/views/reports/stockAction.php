@@ -66,13 +66,13 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             'name' => 'doc_id',
             'filter' => '',
             //'value'=>'0',
-            'value' => 'CHtml::link(CHtml::encode(Yii::t("app",$data->Doc->docType->name)." #".$data->Doc->docnum),Yii::app()->createAbsoluteUrl("/docs/view/$data->doc_id"))',
+            //'value' => 'CHtml::link(CHtml::encode(Yii::t("app",$data->Doc->docType->name)." #".$data->Doc->docnum),Yii::app()->createAbsoluteUrl("/docs/view/$data->doc_id"))',
             'type' => 'raw',
         ),
         array(
             'name' => 'item_id',
             'filter' => CHtml::listData(Item::model()->findAll(), 'id', 'name'),
-            'value' => '$data->Item->name'
+            //'value' => '$data->Item->name'
         ),
         'qty',
         'serial',

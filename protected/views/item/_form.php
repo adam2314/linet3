@@ -41,7 +41,7 @@
             <?php echo $form->fileFieldRow($model, 'pic', array('size' => 60, 'maxlength' => 255)); ?>
 
 
-            <?php echo $form->dropDownListRow($model, 'stockType', array(0 => 'no stock', 1 => 'qty', 2 => 'instanse')); ?>
+            <?php echo $form->dropDownListRow($model, 'stockType', CHtml::listData($model->getStocks(), 'id', 'name')); ?>
 
             <br />
             <?php echo $form->textAreaRow($model, 'description'); ?>

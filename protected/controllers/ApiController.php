@@ -43,6 +43,7 @@ class ApiController extends Controller {//RightsController
         'transactions' => 'Transactions',
         'files' => 'Files',
         'paymenttype'=>'PaymentType',
+        'migration'=>'Migration',
     );
 
     public function init() {
@@ -328,6 +329,9 @@ class ApiController extends Controller {//RightsController
                     Response::send(200, $loadedModel);
                 }else {
                     // Errors occurred
+                    
+                    //out!
+                    /*
                     $msg = "<h1>Error</h1>";
                     $msg .= sprintf("Couldn't create model <b>%s</b>", $_GET['model']);
                     $msg .= "<ul>";
@@ -338,8 +342,8 @@ class ApiController extends Controller {//RightsController
                             $msg .= "<li>$attr_error</li>";
                         $msg .= "</ul>";
                     }
-                    $msg .= "</ul>";
-                    Response::send(200, $msg,1001);
+                    $msg .= "</ul>";*/
+                    Response::send(200, $loadedModel->errors,1001);
                 }
             } catch (CHttpException $e) {
                 Response::send(500, $e->getMessage());
@@ -389,7 +393,7 @@ class ApiController extends Controller {//RightsController
             // prepare the error $msg
             // see actionCreate
             // ...
-                Response::send(500, $msg);
+                Response::send(500, $loadedModel->errors,1001);
         } else {
             Response::send(403, sprintf(
                             'Error: Mode <b>update</b> is not implemented for model <b>%s</b>', $model));

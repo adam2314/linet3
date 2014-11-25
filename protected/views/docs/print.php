@@ -1,11 +1,12 @@
 <?php
  $logopath = Yii::app()->createAbsoluteUrl("download/" . Yii::app()->user->settings['company.logo']);
-
+$legalize="";
 if ($preview == 3) {
     $configPath = Yii::app()->user->settings["company.path"];
     $logopath = Yii::app()->params["filePath"] . "$configPath/" . Yii::app()->user->settings['company.logo'];
 }      //Yii::app()->params["filePath"]."download/".Yii::app()->user->settings['company.logo'];
 elseif($preview==2){
+    $legalize=Yii::t('app','Computerized Document');
     $logopath = Yii::app()->params["filePath"] . Yii::app()->user->settings["company.path"]."/settings/" . Yii::app()->user->settings['company.logo'];
     //echo $preview.$logopath;
 //exit;
@@ -36,6 +37,7 @@ elseif($preview==2){
         </td>
     </tr>
 </table>
+<div align="center"><h1><?php echo $legalize?></h1></div>
 <hr />
 <table>	
     <tr>
@@ -225,46 +227,26 @@ if (count($model->docCheques) != 0) {
         <tr>
             <th class='Type'><?php echo Yii::t('labels', 'Type'); ?></th>   
             <th class='Line'><?php echo Yii::t('labels', 'Line'); ?></th> 
-            <th class='Refnum'><?php echo Yii::t('labels', 'Refnum'); ?></th>
+            <th class='Details'><?php echo Yii::t('labels', 'Details'); ?></th>
 
-            <th class='CreditCompany'><?php echo Yii::t('labels', 'Credit Company'); ?></th>
-            <th class='ChequeNo'><?php echo Yii::t('labels', 'Cheque No.'); ?></th>
-            <th class='Bank'><?php echo Yii::t('labels', 'Bank'); ?></th>
-            <th class='Branch'><?php echo Yii::t('labels', 'Branch'); ?></th>
-            <th class='ChequeAccount'><?php echo Yii::t('labels', 'Cheque Account'); ?></th>
-            <th class='ChequeDate'><?php echo Yii::t('labels', 'Cheque Date'); ?></th>
             <th class='Currency'><?php echo Yii::t('labels', 'Currency'); ?></th>
             <th class='Sum'><?php echo Yii::t('labels', 'Sum'); ?></th>
-            <th class='BankRefnum'><?php echo Yii::t('labels', 'Bank Refnum'); ?></th>
-            <th class='DepDate'><?php echo Yii::t('labels', 'Dep Date'); ?></th> 
         </tr>
     <?php
     $i = 0;
 
 
     foreach ($model->docCheques as $rcptdetail) {
-        $cmp=  Accounts::model()->findByPk($rcptdetail->creditcompany);
-        if($cmp!==null){
-            $cmp=$cmp->name;
-        }else {
-            $cmp=$rcptdetail->creditcompany;
-        }
+
         echo "
                 <tr>
                     <td class='Type'>".Yii::t("app",$rcptdetail->Type->name)."</td>
                     <td class='Line'>$rcptdetail->line</td>
-                    <td class='Refnum'>$rcptdetail->refnum</td>
-                    <td class='CreditCompany'>$cmp</td>
-                    <td class='ChequeNo'>$rcptdetail->cheque_num</td>
-                        
-                    <td class='Bank'>" . $rcptdetail->bank . "</td>
-                    <td class='Branch'>$rcptdetail->branch</td>    
-                    <td class='ChequeAccount'>$rcptdetail->cheque_acct</td>
-                    <td class='ChequeDate'>$rcptdetail->cheque_date</td>
+                    <td class='Detailes'>".$rcptdetail->printDetails()."</td>
+                    
                     <td class='Currency'>$rcptdetail->currency_id</td>
                     <td class='Sum'>$rcptdetail->sum</td>
-                    <td class='BankRefnum'>$rcptdetail->bank_refnum</td>
-                    <td class='DepDate'>$rcptdetail->dep_date</td>
+
                  </tr>
 
                 ";

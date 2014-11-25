@@ -1,11 +1,19 @@
 
 
 <?php
-$form = $this->beginWidget('CActiveForm', array(
+$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id' => 'docs-form',
     'enableAjaxValidation' => true,
+    'clientOptions' => array(
+        'validateOnSubmit' => true,
+    ),
     'htmlOptions' => array('enctype' => 'multipart/form-data'),
         ));
+
+
+$oppts = CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => $model->docType->oppt_account_type)), 'id', 'name');
+$oppts[""] = Yii::t('app', 'None');
+//echo $form->dropDownList($model, "[$i]item_id", $oppts);
 ?>
 <div class="form" style="
      /*
@@ -25,9 +33,9 @@ $form = $this->beginWidget('CActiveForm', array(
     <div><!--Company block-->
         <div class="col-md-2">
             <p>
-                <?php echo $form->labelEx($model, 'account_id'); ?>
-                <?php echo $form->dropDownList($model, 'account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => $model->docType->account_type)), 'id', 'name')); ?>
-                <?php echo $form->error($model, 'account_id'); ?>
+                <?php //echo $form->labelEx($model, 'account_id');   ?>
+                <?php echo $form->dropDownListRow($model, 'account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => $model->docType->account_type)), 'id', 'name')); ?>
+                <?php //echo $form->error($model, 'account_id');  ?>
                 <?php
                 $this->widget('bootstrap.widgets.TbButton', array(
                     'label' => Yii::t('app', 'New'),
@@ -41,43 +49,43 @@ $form = $this->beginWidget('CActiveForm', array(
         </div>
         <div class="col-md-2">
             <div>
-                <?php echo $form->labelEx($model, 'oppt_account_id'); ?>
-                <?php echo $form->dropDownList($model, 'oppt_account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => $model->docType->oppt_account_type)), 'id', 'name')); ?>
+                <?php //echo $form->labelEx($model, 'oppt_account_id');   ?>
+                <?php echo $form->dropDownListRow($model, 'oppt_account_id', $oppts); ?>
                 <p></p>
-                <?php echo $form->error($model, 'oppt_account_id'); ?>
+                <?php //echo $form->error($model, 'oppt_account_id');  ?>
             </div>
         </div>   
         <div class="col-md-2">
             <p>
-                <?php echo $form->labelEx($model, 'company'); ?>
-                <?php echo $form->textField($model, 'company', array('size' => 30, 'maxlength' => 80)); ?>
-                <?php echo $form->error($model, 'company'); ?>
+                <?php //echo $form->labelEx($model, 'company');  ?>
+                <?php echo $form->textFieldRow($model, 'company', array('size' => 30, 'maxlength' => 80)); ?>
+                <?php //echo $form->error($model, 'company'); ?>
             </p>
         </div>
         <div class="col-md-2">
-            <?php echo $form->labelEx($model, 'vatnum'); ?>
-            <?php echo $form->textField($model, 'vatnum', array('size' => 10, 'maxlength' => 10)); ?>
-            <?php echo $form->error($model, 'vatnum'); ?>
+            <?php //echo $form->labelEx($model, 'vatnum');  ?>
+            <?php echo $form->textFieldRow($model, 'vatnum', array('size' => 10, 'maxlength' => 10)); ?>
+            <?php //echo $form->error($model, 'vatnum'); ?>
         </div>
 
     </div><!--block-->
     <div class="row"><!--Address block-->
         <div class="col-md-2">
-            <?php echo $form->labelEx($model, 'address'); ?>
+            <?php //echo $form->labelExRow($model, 'address');  ?>
             <?php echo $form->textField($model, 'address', array('size' => 30, 'maxlength' => 80)); ?>
-            <?php echo $form->error($model, 'address'); ?>
+            <?php //echo $form->error($model, 'address'); ?>
         </div>
 
         <div class="col-md-1">
-            <?php echo $form->labelEx($model, 'city'); ?>
+            <?php //echo $form->labelEx($model, 'city');  ?>
             <?php echo $form->textField($model, 'city', array('size' => 30, 'maxlength' => 40)); ?>
-            <?php echo $form->error($model, 'city'); ?>
+            <?php //echo $form->error($model, 'city'); ?>
         </div>
 
         <div class="col-md-1">
-            <?php echo $form->labelEx($model, 'zip'); ?>
+            <?php //echo $form->labelEx($model, 'zip');  ?>
             <?php echo $form->textField($model, 'zip', array('size' => 10, 'maxlength' => 10)); ?>
-            <?php echo $form->error($model, 'zip'); ?>
+            <?php //echo $form->error($model, 'zip'); ?>
         </div>
 
 
@@ -86,20 +94,20 @@ $form = $this->beginWidget('CActiveForm', array(
 
 
         <div class="col-md-1">
-            <p><?php echo $form->labelEx($model, 'status'); ?></p>
-            <?php echo $form->dropDownList($model, 'status', CHtml::listData(Docstatus::model()->findAllByAttributes(array('doc_type' => $model->doctype)), 'num', 'name')); //Docstatus::model()->findAll(); ?>
-            <?php echo $form->error($model, 'status'); ?>
+            <p><?php //echo $form->labelEx($model, 'status');         ?></p>
+            <?php echo $form->dropDownListRow($model, 'status', CHtml::listData(Docstatus::model()->findAllByAttributes(array('doc_type' => $model->doctype)), 'num', 'name')); //Docstatus::model()->findAll();   ?>
+            <?php //echo $form->error($model, 'status'); ?>
         </div>    
 
         <div class="col-md-2">
-            <p><?php echo $form->labelEx($model, 'currency_id'); ?></p>
-            <?php echo $form->dropDownList($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency  ?>
-            <?php echo $form->error($model, 'currency_id'); ?>
+            <p><?php //echo $form->labelEx($model, 'currency_id');         ?></p>
+            <?php echo $form->dropDownListRow($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency    ?>
+            <?php //echo $form->error($model, 'currency_id'); ?>
         </div>
 
         <div class="col-md-1">
             <?php
-            ///*
+///*
             $this->widget('widgetRefnum', array(
                 'model' => $model, //Model object
                 'attribute' => 'refnum', //attribute name
@@ -110,9 +118,9 @@ $form = $this->beginWidget('CActiveForm', array(
 
         <div class="col-md-1">
             <?php if ($model->docType->stockSwitch) { ?>
-                <?php echo $form->labelEx($model, 'stockSwitch'); ?>
-                <?php echo $form->checkBox($model, 'stockSwitch'); ?>
-                <?php echo $form->error($model, 'stockSwitch'); ?>
+                <?php //echo $form->labelEx($model, 'stockSwitch'); ?>
+                <?php echo $form->checkBoxRow($model, 'stockSwitch'); ?>
+                <?php //echo $form->error($model, 'stockSwitch'); ?>
 
             <?php } ?>
         </div>
@@ -221,7 +229,7 @@ $form = $this->beginWidget('CActiveForm', array(
             <!--<div class="row">-->
             <thead>
                 <tr  class="head1">
-                    <?php //echo $form->labelEx($model,'doc_id');   ?>
+                    <?php //echo $form->labelEx($model,'doc_id');     ?>
                     <th class="item_id">
                         <?php echo Yii::t('labels', 'Item'); ?>
                         <?php
@@ -264,7 +272,7 @@ $form = $this->beginWidget('CActiveForm', array(
                     <td></td>
                     <td>
                         <?php echo $form->labelEx($model, 'discount'); ?>
-                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));  ?>
+                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));   ?>
                         <?php echo $form->error($model, 'discount'); ?>
 
                     </td>
@@ -295,7 +303,7 @@ $form = $this->beginWidget('CActiveForm', array(
                     <td></td>
                     <td>
                         <?php echo $form->labelEx($model, 'sub_total'); ?>
-                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));   ?>
+                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));    ?>
                         <?php echo $form->error($model, 'sub_total'); ?>
                     </td>
                     <td>
@@ -314,8 +322,8 @@ $form = $this->beginWidget('CActiveForm', array(
                     <td></td>
                     <td>
                         <label><?php echo Yii::t('app', 'Subtotal VAT'); ?></label>
-                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));   ?>
-                        <?php //echo $form->error($model, 'sub_total');  ?>
+                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));     ?>
+                        <?php //echo $form->error($model, 'sub_total');   ?>
                     </td>
                     <td>
                         <div id="docvat"></div>
@@ -334,8 +342,8 @@ $form = $this->beginWidget('CActiveForm', array(
                     <td></td>
                     <td></td>
                     <td>
-                        <?php //echo $form->labelEx($model,'novat_total');   ?>
-                        <?php //echo $form->error($model,'novat_total');     ?>
+                        <?php //echo $form->labelEx($model,'novat_total');     ?>
+                        <?php //echo $form->error($model,'novat_total');      ?>
                     </td>
                     <td>
                         <?php echo $form->hiddenField($model, 'novat_total'); ?>
@@ -390,14 +398,9 @@ $form = $this->beginWidget('CActiveForm', array(
             <thead>
                 <tr  class="head1">
                     <th class="type"><?php echo Yii::t('labels', 'Type'); ?></th>   
-                    <th class="refnum"><?php echo Yii::t('labels', 'Refnum'); ?></th>
 
-                    <th class="creditcompany"><?php echo Yii::t('labels', 'Credit Company/Bank'); ?></th>
-                    <th class="cheque_num"><?php echo Yii::t('labels', 'Cheque No.'); ?></th>
-                    <th class="bank"><?php echo Yii::t('labels', 'Bank'); ?></th>
-                    <th class="branch"><?php echo Yii::t('labels', 'Branch'); ?></th>
-                    <th class="cheque_acct"><?php echo Yii::t('labels', 'Cheque Account'); ?></th>
-                    <th class="cheque_date"><?php echo Yii::t('labels', 'Cheque Date'); ?></th>
+                    <th class="details"><?php echo Yii::t('labels', 'Details'); ?></th>
+
                     <th class="currency_id"><?php echo Yii::t('labels', 'Currency'); ?></th>
                     <th class="sum"><?php echo Yii::t('labels', 'Sum'); ?></th>
 
@@ -438,7 +441,7 @@ $form = $this->beginWidget('CActiveForm', array(
                     </td>
                     <td>
                         <?php echo $form->labelEx($model, 'sub_total'); ?>
-                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));   ?>
+                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));    ?>
                         <?php echo $form->error($model, 'sub_total'); ?>
                     </td>
 
@@ -491,50 +494,6 @@ $form = $this->beginWidget('CActiveForm', array(
     ?>
     <!--</div>-->
     <script type="text/javascript">
-        /*
-         
-         function CalcDueDate(valdate, pay_terms) {
-         var em = 0;
-         pay_terms = parseInt(pay_terms);
-         if (pay_terms >= 0) {
-         em = 0;
-         } else {
-         em = 1;
-         pay_terms = pay_terms * -1;
-         }
-         //var duedate = $('#Docs_due_date');//document.form1.due_date;
-         var dstr = valdate;
-         var darr = dstr.split("-");
-         var day = parseInt(darr[0]);
-         var month = parseFloat(darr[1]);
-         var year = parseInt(darr[2]);
-         
-         if (em) {
-         month += 1;
-         if (month > 12) {
-         month = 1;
-         year += 1;
-         }
-         day = 1;
-         
-         }
-         
-         D = new Date(year, month - 1, day);
-         D.setDate(D.getDate() + pay_terms);
-         day = D.getDate();
-         month = D.getMonth() + 1;
-         year = D.getFullYear();
-         if (month >= 12) {
-         month = 1;
-         year += 1;
-         }
-         //aler
-         $('#Docs_due_date').val(day + "-" + month + "-" + year);
-         }
-         
-         */
-
-
 
 
         var billed = [];
@@ -563,6 +522,7 @@ $form = $this->beginWidget('CActiveForm', array(
 
 
         jQuery(document).ready(function() {
+
             $("#docs-form").submit(function() {
                 var go = true;
                 for (var i = 0; i < billed.length; i++) {
@@ -570,22 +530,14 @@ $form = $this->beginWidget('CActiveForm', array(
                     if (!billed[i])
                         go = false;
                 }
-                if (go)
+                if (go) {
                     return true;
-                else
+                } else
                     return false;
 
                 //else
                 //    return rcptBill();
             });
-
-
-            function submitDoc() {
-
-
-
-            }
-
 
             //hideEmptyHeaders();
             $(".docadd").click(function() {
@@ -634,22 +586,7 @@ $form = $this->beginWidget('CActiveForm', array(
                 rcptcalcLines();
                 // end specific commands
             });
-            var docacc = true;
-            //var det=new Array();
-            $("#Docs_account_id").focus(function() {
-                if ($("#Docs_account_id").val() == '' && docacc) {
-                    $("#Docs_account_id").autocomplete("search", "");
-                    docacc = false;
-                }
-            });
 
-            var docoppacc = true;
-            $("#Docs_oppt_account_id").focus(function() {
-                if ($("#Docs_oppt_account_id").val() == '' && docacc) {
-                    $("#Docs_oppt_account_id").autocomplete("search", "");
-                    docoppacc = false;
-                }
-            });
 
             $("#resizable").resizable();
             $('.docadd').trigger('click');
@@ -674,19 +611,35 @@ $form = $this->beginWidget('CActiveForm', array(
 
 
 
-        function sendBill() {
-            var str = $("#billForm").serializeArray();
-            var type = $("#Payment_id").val();
+        function sendBill(index) {
+            
+            var type = $('#Doccheques_'+index+'_type').val();
+            
+            var elements = $('[id^=Doccheques_'+index+']');
+            var str ='';
+            for (var i = 0; i < elements.length; i++) {
+                var name=elements[i].name+'';
+                name=name.replace('Doccheques['+index+']', "bill");
+                str+=name+'='+$(elements[i]).val()+'&';
+            }
+            console.log(str);
             $.post("<?php echo $this->createUrl('/payment/bill'); ?>/" + type, str,
                     function(data) {
-                        //$("#paymenetDialog").show();
+                        
                         off = false;
+                        if(data.bill){
+                            billed[index]=true;
+                            $("#bill_"+index+"_btn").remove();
+                            
+                        }
+                        $("#bill_"+index+"_resualt").html(data.code+"-"+data.text+","+data.desc);
+                        
                         //console.log(data);
                         //alert(data);
                         //$('#paymenetDialog').dialog('open');
                         //show popup 
 
-                        $('#paymenetResult').html(data[1]);
+                        //$('#paymenetResult').html(data[1]);
 
                     }, "json");//
 
@@ -703,9 +656,10 @@ $form = $this->beginWidget('CActiveForm', array(
             var off = false;
             for (var i = 0; i < elements.length; i++) {
 
-                billed[i] = false;
+                //billed[i] = false;
                 console.log(elements[i].value);
-                $.post("<?php echo $this->createUrl('/payment/form'); ?>/" + elements[i].value, {"bill": {"sum": $(sums[i]).val(), "line": [i]}}, //"bill"
+                
+                /*$.post("<?php echo $this->createUrl('/payment/form'); ?>/" + elements[i].value, {"bill": {"sum": $(sums[i]).val(), "line": [i]}}, //"bill"
                 function(data) {
                     //$("#paymenetDialog").show();
                     off = true;
@@ -721,7 +675,7 @@ $form = $this->beginWidget('CActiveForm', array(
                         var tmp = "<input type='hidden' id='bill_line' value='" + i + "'/>";
                         $('#paymenetForm').html(tmp + data[1]);
                     }
-                }, "json");//
+                }, "json");//*/
                 //move values
 
                 //save
@@ -733,7 +687,7 @@ $form = $this->beginWidget('CActiveForm', array(
         function changeFileds() {//
             var type = <?php echo (int) $model->docType->oppt_account_type; ?>;
             if (type >= 1) {
-                $("#Docs_company").prop('disabled', true);
+                //$("#Docs_company").prop('disabled', true);
 
 
                 $("#Docs_status").parent().hide();
@@ -804,63 +758,28 @@ $form = $this->beginWidget('CActiveForm', array(
 
         function TypeSelChange(index) {
             var val = $('#Doccheques_' + index + '_type').val();
+            var sum = $('#Doccheques_' + index + '_sum').val();
+            var line = index;
+            $('#Doccheques_' + index + '_text').html('');
+            $.post("<?php echo $this->createUrl('/payment/fields'); ?>/" + val, {"bill": {"sum": sum, "line": line}}, //"bill"
+            function(data) {
 
-            //$('#Doccheques_'+index+"#banksel"+num).parent().append("<?php //echo PrintBankSelect();                       ?>");
-            $('#Doccheques_' + index + "_cheque_acct").attr('placeholder', '');
-            $('#Doccheques_' + index + "_cheque_num").attr('placeholder', '');
-            $('#Doccheques_' + index + "_branch").attr('placeholder', '');
-            $('#Doccheques_' + index + "_banksel").remove();
-
-            $('#Doccheques_' + index + "_refnum").hide();
-            $('#Doccheques_' + index + "_creditcompany").hide();
-            $('#Doccheques_' + index + "_cheque_num").hide();
-
-            $('#Doccheques_' + index + "_bank").hide();
-            $('#Doccheques_' + index + "_branch").hide();
-            $('#Doccheques_' + index + "_cheque_acct").hide();
-            $('#Doccheques_' + index + "_cheque_date").hide();
-
-
-            //$('#Doccheques_' + index + "_bank_chosen").hide();
-
+                billed[index] = !data.bill;
+                var tmp = "<div id='bill_" + index + "_resualt'></div>";
+                
+                if(data.bill){
+                    tmp+="<a id='bill_" + index + "_btn' href='javascript:sendBill(" + index + ");' class='btn btn-primary'><?php echo Yii::t('app','Bill') ?></a>";
+                }
+                $('#Doccheques_' + index + '_text').html(data.form+tmp);
+                
+                
+                
+            }, "json");
 
 
 
 
-            if ((val == 1) || (val == 3)) {//cash, credit
 
-            } else if (val == 2) {//cheque
-                $('#Doccheques_' + index + "_cheque_date").show();
-                $('#Doccheques_' + index + "_cheque_num").show();
-                $('#Doccheques_' + index + "_bank").show();
-                $('#Doccheques_' + index + "_branch").show();
-                $('#Doccheques_' + index + "_cheque_acct").show();
-            } else if ((val == 4) || (val == 5)) {//bank transfer
-                $('#Doccheques_' + index + "_cheque_date").show();
-                $('#Doccheques_' + index + "_refnum").show();
-                $('#Doccheques_' + index + "_cheque_num").attr('placeholder', 'Reference');
-                $('#Doccheques_' + index + "_bank").show();
-                $('#Doccheques_' + index + "_branch").show();
-                $('#Doccheques_' + index + "_creditcompany").show();
-                $('#Doccheques_' + index + "_cheque_acct").show();
-            } else if (val == 5) {//manuel credit
-
-                /*
-                 $('#Doccheques_' + index + "_cheque_date").show();
-                 
-                 $('#Doccheques_' + index + "_bank").parent().append('<?php //echo PrintCreditCompany();                       ?>');
-                 $('#Doccheques_' + index + "_bank").remove();
-                 
-                 $('#Doccheques_' + index + "_branch").show();
-                 $('#Doccheques_' + index + "_cheque_num").attr('placeholder', 'Reference');
-                 
-                 
-                 $('#Doccheques_' + index + "_cheque_acct").show();
-                 $('#Doccheques_' + index + "_branch").attr('placeholder', 'Number of payments');
-                 $('#Doccheques_' + index + "_cheque_num").show();
-                 $('#Doccheques_' + index + "_cheque_acct").attr('placeholder', 'last four digits of credit card');
-                 */
-            }//*/
         }
 
 
@@ -1063,7 +982,7 @@ $form = $this->beginWidget('CActiveForm', array(
                     vatSum += (ihTotal * (vatRate));
                 else
                     novatSum += ihTotal;
-                console.log(ihTotal);
+                //console.log(ihTotal);
                 //totalVatChange(i, false);
             }
 
@@ -1146,7 +1065,10 @@ $form = $this->beginWidget('CActiveForm', array(
         }
 
 
+
+
         function sendForm(value) {//preview,print,mail,pdf,save
+
             $('#subType').val(value);
             if (value == 'preview')
                 $("#docs-form").attr('target', '_BLANK');
@@ -1154,13 +1076,13 @@ $form = $this->beginWidget('CActiveForm', array(
 
 
 
-
-            if (($('#Docs_total').length) && ($('#Docs_rcptsum').length)) {
-                if (Number($('#Docs_total').val()) != Number($('#Docs_rcptsum').val())) {
-                    alert("<?php echo Yii::t('app', 'Sum is not equal'); ?>");
-                    return false;
-                }
-            }
+            /*
+             if (($('#Docs_total').length) && ($('#Docs_rcptsum').length)) {
+             if (Number($('#Docs_total').val()) != Number($('#Docs_rcptsum').val())) {
+             alert("<?php echo Yii::t('app', 'Sum is not equal'); ?>");
+             return false;
+             }
+             }*/
 
 
             rcptBill();
@@ -1168,13 +1090,15 @@ $form = $this->beginWidget('CActiveForm', array(
 
 
             $('#docs-form').submit();
-            //return false;
+
+            //}
+
         }
-        
-        
-         
-        
-        
+
+
+
+
+
     </script>
     <p>
         <?php echo $form->labelEx($model, 'description'); ?>
@@ -1206,44 +1130,46 @@ $form = $this->beginWidget('CActiveForm', array(
         <!--</div>
         
         <div class="row buttons">-->
-        <?php //echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save');   ?>
-        <?php
-        $this->widget('bootstrap.widgets.TbButton', array(
-            'label' => Yii::t('app', 'Preview'),
-            'icon' => 'glyphicon glyphicon-file',
-            'type' => 'primary',
-            'htmlOptions' => array('onclick' => 'return sendForm("preview");',),
-        ));
-        ?>
-
 
         <?php
-        $this->widget('bootstrap.widgets.TbButtonGroup', array(
-            'type' => '', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
-            'type' => 'primary',
-            'buttons' => array(
-                array('icon' => 'glyphicon glyphicon-print', 'label' => Yii::t('app', 'Print'), 'htmlOptions' => array('onclick' => 'return sendForm("print");'),),
-                array('items' => array(
-                        //array('icon'=>'envelope','label'=>Yii::t('app','Email'), 'url'=>'javascript:sendForm("email");',),
-                        array('icon' => 'glyphicon glyphicon-envelope', 'label' => Yii::t('app', 'Email'), 'url' => 'javascript:sendForm("email");',),
-                        array('icon' => 'glyphicon glyphicon-save', 'label' => Yii::t('app', 'PDF'), 'url' => 'javascript:sendForm("pdf");',),
-                        array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save Draft'), 'url' => 'javascript:sendForm("saveDraft");',),
-                    //array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save'), 'url' => 'javascript:sendForm("save");',),
-                    )),
-            ),
-        ));
-        ?>
+        if (($model->doctype != 13) && ($model->doctype != 14)) {
+            $this->widget('bootstrap.widgets.TbButton', array(
+                'label' => Yii::t('app', 'Preview'),
+                'icon' => 'glyphicon glyphicon-file',
+                'type' => 'primary',
+                'htmlOptions' => array('onclick' => 'return sendForm("preview");',),
+            ));
 
-        <?php
-        $this->widget('bootstrap.widgets.TbButton', array(
-            'label' => Yii::t('app', 'Change language'),
-            'type' => 'primary',
-            'icon' => 'glyphicon glyphicon-globe',
-            'htmlOptions' => array('id' => 'printLink', 'onclick' => 'return hideMe();'),
-        ));
-        ?>
+            $this->widget('bootstrap.widgets.TbButtonGroup', array(
+                'type' => '',
+                'type' => 'primary',
+                'buttons' => array(
+                    array('icon' => 'glyphicon glyphicon-print', 'label' => Yii::t('app', 'Print'), 'htmlOptions' => array('onclick' => 'return sendForm("print");'),),
+                    array('items' => array(
+                            array('icon' => 'glyphicon glyphicon-envelope', 'label' => Yii::t('app', 'Email'), 'url' => 'javascript:sendForm("email");',),
+                            array('icon' => 'glyphicon glyphicon-save', 'label' => Yii::t('app', 'PDF'), 'url' => 'javascript:sendForm("pdf");',),
+                            array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save Draft'), 'url' => 'javascript:sendForm("saveDraft");',),
+                        )),
+                ),
+            ));
 
-        <?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name')); //Docstatus::model()->findAll();    ?>
+            $this->widget('bootstrap.widgets.TbButton', array(
+                'label' => Yii::t('app', 'Change language'),
+                'type' => 'primary',
+                'icon' => 'glyphicon glyphicon-globe',
+                'htmlOptions' => array('id' => 'printLink', 'onclick' => 'return hideMe();'),
+            ));
+
+            echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));
+        } else {
+            $this->widget('bootstrap.widgets.TbButton', array(
+                'label' => Yii::t('app', 'Save'),
+                'icon' => 'glyphicon glyphicon-file',
+                'type' => 'primary',
+                'htmlOptions' => array('onclick' => 'return sendForm("save");',),
+            ));
+        }
+        ?>
         <!--</div>-->
     </div>
 

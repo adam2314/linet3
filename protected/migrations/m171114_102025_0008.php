@@ -34,3 +34,4 @@ class m171114_102025_0008 extends CDbMigration {
       }
      */
 }
+

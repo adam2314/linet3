@@ -123,9 +123,7 @@ class basicRecord extends CActiveRecord {
     protected function openfrmtFieldValue($field, $value) {//,$begin=null,$end=null
         switch ($field->type) {
             case "date":
-                //if(get_class($this)=="Doccheques")
-                //    Yii::log($value,'info','app');
-                //$this->issue_date=date("Y-m-d H:m:s",CDateTimeParser::parse($this->issue_date,Yii::app()->locale->getDateFormat('yiidatetime')));
+                
                 $value = substr($value, 0, 4) . "-" . substr($value, 4, 2) . "-" . substr($value, 6, 2);
 
                 if (get_class($this) == "Docs")

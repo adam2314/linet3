@@ -149,4 +149,5 @@ return array (
   'invoice Price' => '',
   'Documenet No.' => '@@@@',
   'Refernce No.' => '@@@@',
+  'no stock' => 'Non Stock Item',
 );
