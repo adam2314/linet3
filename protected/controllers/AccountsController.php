@@ -52,14 +52,16 @@ class AccountsController extends RightsController {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {//$prefix
-        //print 'in action';
-        //Yii::app()->user->setFlash('error', 'unable to change sys account');
-        //Yii::app()->user->setFlash('success', '<strong>Well done!</strong> You successfully read this important alert message.');
-        //Yii::app()->user->setFlash('info', '<strong>Heads up!</strong> This alert needs your attention, but it\'s not super important.');
-        //Yii::app()->user->setFlash('warning', '<strong>Warning!</strong> Best check yo self, you\'re not looking too good.');
-        //Yii::app()->user->setFlash('error', '<strong>Oh snap!</strong> Change a few things up and try submitting again.');
+//print 'in action';
+//Yii::app()->user->setFlash('error', 'unable to change sys account');
+//Yii::app()->user->setFlash('success', '<strong>Well done!</strong> You successfully read this important alert message.');
+//Yii::app()->user->setFlash('info', '<strong>Heads up!</strong> This alert needs your attention, but it\'s not super important.');
+//Yii::app()->user->setFlash('warning', '<strong>Warning!</strong> Best check yo self, you\'re not looking too good.');
+//Yii::app()->user->setFlash('error', '<strong>Oh snap!</strong> Change a few things up and try submitting again.');
         $model = $this->loadModel($id);
-
+        if ($model->system_acc == 1) {
+            Yii::app()->user->setFlash('error', Yii::t('app', 'unable to edit, it is a system account'));
+        }
         $this->performAjaxValidation($model);
 
         if (isset($_POST['Accounts'])) {
@@ -90,22 +92,28 @@ class AccountsController extends RightsController {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        //echo $model->system_acc;
-        //if(Yii::app()->request->isPostRequest){
+
+
         $model = $this->loadModel($id);
-        // we only allow deletion via POST request
+
         if ($model->system_acc == 1) {
-            Yii::app()->user->setFlash('error', Yii::t('app', "unable to delete, it is a system account"));
-            //$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+            $level='error' ;
+             $text= Yii::t('app', "unable to delete, it is a system account");
+
         } else {
 
 
-            if (!$this->loadModel($id)->delete())
-                Yii::app()->user->setFlash('error', Yii::t('app', "unable to delete, the account has transactions"));
+            if ($this->loadModel($id)->delete()) {
+                $level='success';
+                $text=Yii::t('app', "unable to delete, the account has transactions");
+            }
+            $level='error' ;
+                    
+                    $text= Yii::t('app',"unable to delete, the account has transactions");
         }
 
-        $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
-        //$this->actionIndex($model->);
+        echo "<div class='alert in alert-block fade alert-$level'><a data-dismiss='alert' class='close'>×</a>$text</div>";//flash 
+        Yii::app()->end();
     }
 
     public function actionAutocomplete($type = 0, $term = '') {
@@ -120,13 +128,11 @@ class AccountsController extends RightsController {
         Yii::app()->end(); //*/
     }
 
- 
-
     /**
      * Lists all models.
      */
     public function actionIndex($type = 0) {
-        //$type=isset($_GET['type'])?(int)$_GET['type']:0;
+//$type=isset($_GET['type'])?(int)$_GET['type']:0;
 
 
 
@@ -137,7 +143,7 @@ class AccountsController extends RightsController {
             $model->attributes = $_POST['Accounts'];
         }
         if (isset($_GET['ajax'])) {//Yii::app()->request->isAjaxRequest && && $_GET['ajax'] === $vl
-            // Render partial file created in Step 1
+// Render partial file created in Step 1
             $this->renderPartial('ajax', array(
                 'model' => $model,
             ));
@@ -169,7 +175,7 @@ class AccountsController extends RightsController {
      * @param integer the ID of the model to be loaded
      */
     public function loadModel($id) {
-        //$model=Accounts::model()->findByPk($id);
+//$model=Accounts::model()->findByPk($id);
         $model = Accounts::model()->findByPk($id);
 
         if ($model === null)

@@ -4,11 +4,11 @@ $this->beginWidget('MiniForm',array(
     'haeder' => Yii::t('app',"Tax Report"),
 )); 
 
-$form=$this->beginWidget('CActiveForm', array(
+$form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'reporttaxrep-form',
     //'enableAjaxValidation'=>true,
     
-    'enableAjaxValidation'=>false,
+    'enableAjaxValidation'=>true,
         'htmlOptions'=>array(
                                'onsubmit'=>"return false;",/* Disable normal form submit */
                                'onkeypress'=>" if(event.keyCode == 13){ send(); } " /* Do ajax call when user presses enter key */
@@ -25,16 +25,16 @@ for($min = $year - 2; $min <= $max; $min++)
 <div class='row'>
 <div class='col-md-3'>
 <?php
-echo Yii::t('app','From Date');
+//echo Yii::t('app','From Date');
 
 
-echo $form->dropDownList($model,'from_month',Yii::app()->locale->monthNames);
-echo $form->dropDownList($model,'year', $years);              
+echo $form->dropDownListRow($model,'from_month',Yii::app()->locale->monthNames);
+echo $form->dropDownListRow($model,'year', $years);              
 
 echo "<br>";
 
-echo Yii::t('app','To Date');
-echo $form->dropDownList($model,'to_month',Yii::app()->locale->monthNames);
+//echo Yii::t('app','To Date');
+echo $form->dropDownListRow($model,'to_month',Yii::app()->locale->monthNames);
 //echo $form->dropDownList($model,'to_year', $years);  
 //echo CHtml::submitButton('Go',array('onclick'=>'send();')); 
 ?>

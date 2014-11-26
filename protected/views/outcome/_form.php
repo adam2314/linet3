@@ -15,9 +15,14 @@
 
 
    
-    <?php echo $form->dropDownListRow($model, 'account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => 1)), 'id', 'name'));//supplieres ?>
-   
-
+    <?php 
+    if((int)$model->account_id!=0){
+        echo $form->hiddenField($model, 'account_id');
+        echo "<h2>".Accounts::model()->findByPk($model->account_id)->name."</h2>";
+   }else{
+       echo $form->dropDownListRow($model, 'account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => 1)), 'id', 'name'));//supplieres
+   }
+ ?>
 
 
 <?php echo $form->dropDownListRow($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency  ?>

@@ -8,11 +8,17 @@
 class OutcomeController extends RightsController{
     public function actionCreate($type=0){
         $model=new FormOutcome();
+        
+        
         if ($type == 1) {
             $model->account_id = Yii::app()->user->settings["company.acc.payvat"];
+            
+            $model->sum=Accounts::model()->findByPk($model->account_id)->getBalance();
+            
         }
         if ($type == 2) {
             $model->account_id = Yii::app()->user->settings["company.acc.natinspay"];
+            $model->sum=Accounts::model()->findByPk($model->account_id)->getBalance();
         }
 
 

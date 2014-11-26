@@ -71,7 +71,7 @@ class MailTemplate extends CActiveRecord {
             'entity_type' => Yii::t('labels', 'Entity Type'),
             'entity_id' => Yii::t('labels', 'Entity Id'),
             'bcc' => Yii::t('labels', 'Bcc'),
-            'cc' => Yii::t('labels', 'cc'),
+            'cc' => Yii::t('labels', 'Cc'),
             'body' => Yii::t('labels', 'Body'),
                 //'id' => Yii::t('labels', 'ID'),
                 //'name' => Yii::t('labels', 'Name'),

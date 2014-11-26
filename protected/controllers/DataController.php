@@ -138,17 +138,6 @@ class DataController extends RightsController{//
         }
         
         
-        public function actionPublicDownload($id){
-            $hash=$id;
-            //$model=Files::model()->findByHash($hash);//shuld be search
-            if($model===null)
-                    throw new CHttpException(404,'The requested page does not exist.');
-            
-            $configPath=Yii::app()->user->settings["company.path"];
-            $file   = $model->getFullPath();
-            return Yii::app()->getRequest()->sendFile($model->name, @file_get_contents($file));
-        }
-        
         public function actionOpenfrmtimport(){
             $model= new FormOpenfrmt();
             

@@ -7,12 +7,12 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	//array('label'=>'List ItemVatCat','url'=>array('index')),
-	array('label'=>Yii::t("app",'Create Item Tax Catagory'),'url'=>array('create')),
-	//array('label'=>Yii::t("app",'View Item Tax Catagory'),'url'=>array('view','id'=>$model->id)),
-	array('label'=>Yii::t("app",'Manage Item Tax Catagories'),'url'=>array('admin')),
+	array('label'=>Yii::t("app",'Create Item Tax Category'),'url'=>array('create')),
+	//array('label'=>Yii::t("app",'View Item Tax Category'),'url'=>array('view','id'=>$model->id)),
+	array('label'=>Yii::t("app",'Manage Item Tax Categories'),'url'=>array('admin')),
 );
 
-$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Update Item Tax Catagory #"). "".$model->id,)); 
+$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Update Item Tax Category #"). "".$model->id,)); 
 ?>
 
 

@@ -12,6 +12,18 @@ class FormReportAccounts extends CFormModel {
     public $from_date;
     public $to_date;
 
+    
+    public function attributeLabels() {
+        return array(
+            'from_date' => Yii::t('labels', 'From Date'),
+            'to_date' => Yii::t('labels', 'To Date'),
+            'acc' => Yii::t('labels', 'Account IDs'),
+            'type' => Yii::t('labels', 'Account Type'),
+            
+        );
+    }
+    
+    
     public function init() {
         $yiidatetimesec = Yii::app()->locale->getDateFormat('yiidatetimesec');
         $phpshort = Yii::app()->locale->getDateFormat('phpshort');

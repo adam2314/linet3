@@ -48,6 +48,9 @@ class FormMprofloss extends CFormModel
         $etime="23:59:59";
         $from_date="01/01/$this->year $stime";
         $to_date="31/12/$this->year $etime";
+        
+        $sumline=array("id"=>'',"name"=>Yii::t("app","Total"));
+        $total=0;
         foreach($accounts as $account){
                 
                 $sum=$account->getTotal($from_date,$to_date); 
@@ -71,12 +74,19 @@ class FormMprofloss extends CFormModel
                         }
                         $accounty[$x]=$account->getTotal("01/$a/$this->year $stime","$last/$a/$this->year $etime");
                         
+                        if(isset($sumline[$x]))
+                            $sumline[$x]+=$accounty[$x];
+                        else
+                            $sumline[$x]=$accounty[$x];
+                        
                     }
-
+                    $total+=$sum;
                     $data[]= $accounty;
                     
                 }
         }
+        $sumline["sum"]=$total;
+        $data[]= $sumline;
         return $data;
     }
     
@@ -84,7 +94,7 @@ class FormMprofloss extends CFormModel
         
         
         $data=$this->calc(3);//incomes
-        $data=array_merge($data,$this->calc(4));//outcomes
+        $data=array_merge($data,$this->calc(2));//outcomes
         
         
         return new CArrayDataProvider($data,

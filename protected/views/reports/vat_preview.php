@@ -18,7 +18,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 <div class='row'>
 <div class='col-md-3'>
 <?php
-echo Yii::t('app','From Date').$model->from_month;
+echo Yii::t('app','From Date').": ".$model->from_month;
 
 echo $form->hiddenField($model,'step');
 echo $form->hiddenField($model,'from_month');
@@ -26,7 +26,7 @@ echo $form->hiddenField($model,'year');
 
 echo "<br>";
 
-echo Yii::t('app','To Date').$model->to_month;
+echo Yii::t('app','To Date').": ".$model->to_month;
 echo $form->hiddenField($model,'to_month');
 //echo $form->hiddenField($model,'to_year');  
 echo "<br>";
@@ -49,12 +49,14 @@ echo $form->textFieldRow($model,'payvat_total');
 ?>
 <div class="row form-actions">
         <?php
-        $this->widget('bootstrap.widgets.TbButton', array(
-            //'buttonType' => 'submit',
-            'htmlOptions' => array('onclick' => 'return send();',),
-            'type' => 'primary',
-            'label' => Yii::t('app', "Pay"),
-        ));
+        
+        if($model->payvat_total>0)
+            $this->widget('bootstrap.widgets.TbButton', array(
+                //'buttonType' => 'submit',
+                'htmlOptions' => array('onclick' => 'return send();',),
+                'type' => 'primary',
+                'label' => Yii::t('app', "Commit"),
+            ));
         ?>
     </div>
 </div>

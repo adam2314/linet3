@@ -116,21 +116,25 @@ jQuery('#accounts<?php echo $model->type;?>-grid').yiiGridView({
 
     
 
-jQuery(document).on('click','#accounts0-grid a.delete',function() {
-	if(!confirm('Are you sure you want to delete this item?')) return false;
-	var th = this,
-		afterDelete = function(){};
+jQuery(document).on('click','#accounts<?php echo $model->type;?>-grid a.delete',function() {
+	if(!confirm('Are you sure you want to delete this item?'))
+           return false;
+       
+	var th = this,afterDelete = function(){};
 	jQuery('#accounts0-grid').yiiGridView('update', {
 		type: 'POST',
 		url: jQuery(this).attr('href'),
 		success: function(data) {
-			jQuery('#accounts0-grid').yiiGridView('update');
+			jQuery('#accounts<?php echo $model->type;?>-grid').yiiGridView('update');
 			afterDelete(th, true, data);
+                        $('#yw12').prepend(data);
+                        
 		},
 		error: function(XHR) {
 			return afterDelete(th, false, XHR);
 		}
 	});
+    
 	return false;
 });//*/
 

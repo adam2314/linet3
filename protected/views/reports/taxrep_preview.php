@@ -18,7 +18,7 @@ $form=$this->beginWidget('CActiveForm', array(
 <div class='row'>
 <div class='col-md-3'>
 <?php
-echo Yii::t('app','From Date');
+echo Yii::t('app','From Date').": ".$model->from_month;
 
 echo $form->hiddenField($model,'step');
 echo $form->hiddenField($model,'from_month');
@@ -26,7 +26,7 @@ echo $form->hiddenField($model,'year');
 
 echo "<br>";
 
-echo Yii::t('app','To Date');
+echo Yii::t('app','To Date').": ".$model->to_month;
 echo $form->hiddenField($model,'to_month');
 //echo $form->hiddenField($model,'to_year'); 
 
@@ -76,11 +76,12 @@ echo $form->textField($model,'tax_total');
 ?>
      <div class="row form-actions">
         <?php
+        if($model->tax_total>0)
         $this->widget('bootstrap.widgets.TbButton', array(
             //'buttonType' => 'submit',
             'htmlOptions' => array('onclick' => 'return send();',),
             'type' => 'primary',
-            'label' => Yii::t('app', "Pay"),
+            'label' => Yii::t('app', "Commit"),
         ));
         ?>
     </div>

@@ -51,7 +51,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         <?php echo $form->textFieldRow($model, 'acc'); ?>
         <?php
         $temp = CHtml::listData(Acctype::model()->findAll(), 'id', 'name');
-        $temp[""] = Yii::t('app', 'Chose Type');
+        $temp[""] = Yii::t('app', 'Choose Type');
 
         echo $form->dropDownListRow($model, 'type', $temp);
         ?>
