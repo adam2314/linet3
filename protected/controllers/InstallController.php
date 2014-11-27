@@ -58,6 +58,9 @@ class InstallController extends Controller {
         $model = new User();
         $model->scenario = 'create';
 
+        
+        
+        $this->performAjaxValidation($model);
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
 
@@ -68,6 +71,14 @@ class InstallController extends Controller {
         }
 
         $this->render('user', array('model' => $model));
+    }
+    
+    
+    protected function performAjaxValidation($model) {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'user-form') {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
     }
 
 }

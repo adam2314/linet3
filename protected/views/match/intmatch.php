@@ -26,24 +26,24 @@ $this->beginWidget('MiniForm',array(
     //$temp=CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => 0)), 'id', 'name');
     $temp=  array_merge(Accounts::model()->findAllByAttributes(array('type' => 1)),Accounts::model()->findAllByAttributes(array('type' => 0)));
     $temp=CHtml::listData($temp, 'id', 'name');
-    $temp[0]=Yii::t('app','Chose Account');
+    $temp[0]=Yii::t('app','Choose Account');
     $model->account_id=0;
-        echo $form->error($model,'account_id'); 
-        echo $form->dropDownList($model, "account_id", $temp,array('class'=>''));
-        echo $form->error($model,'account_id'); 
+        //echo $form->error($model,'account_id'); 
+        echo $form->dropDownListRow($model, "account_id", $temp,array('class'=>''));
+        //echo $form->error($model,'account_id'); 
         ?>
 <div id ="result">
 </div>
 <div class="row">
     <div class="col-md-3">
         <?php
-        echo $form->labelEx($model, 'in_total');
-        echo $form->textField($model, 'in_total', array('size' => 60, 'maxlength' => 100));
-        echo $form->error($model, 'in_total');
+        //echo $form->labelEx($model, 'in_total');
+        echo $form->textFieldRow($model, 'in_total', array('size' => 60, 'maxlength' => 100));
+        //echo $form->textFieldRow($model, 'in_total');
 
-        echo $form->labelEx($model, 'out_total');
-        echo $form->textField($model, 'out_total', array('size' => 60, 'maxlength' => 100));
-        echo $form->error($model, 'out_total');
+        //echo $form->labelEx($model, 'out_total');
+        echo $form->textFieldRow($model, 'out_total', array('size' => 60, 'maxlength' => 100));
+        //echo $form->error($model, 'out_total');
         ?>
     </div>  
 </div>

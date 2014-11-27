@@ -64,13 +64,13 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             'name' => 'account_id',
             //'filter'=>CHtml::dropDownList('Transactions[type]', $model->type,CHtml::listData(TransactionType::model()->findAll(), 'id', 'name')),
             'filter' => CHtml::listData(Accounts::model()->findAll(), 'id', 'name'),
-            'value' => '$data->Account->name'
+            'value' => '$data->getAccountName()'
         ),
         'item_id',
         array(
             'name' => 'item_id',
             'filter' => CHtml::listData(Item::model()->findAll(), 'id', 'name'),
-            'value' => '$data->Item->name'
+            'value' => '$data->getItemName()'
         ),
         array(
             'name' => 'qty',

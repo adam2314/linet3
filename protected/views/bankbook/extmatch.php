@@ -33,13 +33,13 @@ echo $form->error($extmatch, 'account_id');
 <div class="row">
     <div class="col-md-3">
         <?php
-        echo $form->labelEx($extmatch, 'ext_total');
-        echo $form->textField($extmatch, 'ext_total', array('size' => 60, 'maxlength' => 100));
-        echo $form->error($extmatch, 'ext_total');
+        //echo $form->labelEx($extmatch, 'ext_total');
+        echo $form->textFieldRow($extmatch, 'ext_total', array('size' => 60, 'maxlength' => 100));
+        //echo $form->error($extmatch, 'ext_total');
 
-        echo $form->labelEx($extmatch, 'int_total');
-        echo $form->textField($extmatch, 'int_total', array('size' => 60, 'maxlength' => 100));
-        echo $form->error($extmatch, 'int_total');
+        //echo $form->labelEx($extmatch, 'int_total');
+        echo $form->textFieldRow($extmatch, 'int_total', array('size' => 60, 'maxlength' => 100));
+        //echo $form->error($extmatch, 'int_total');
         ?>
     </div>  
 </div>

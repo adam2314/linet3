@@ -53,7 +53,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             'name' => 'account_id',
             //'filter'=>CHtml::dropDownList('Transactions[type]', $model->type,CHtml::listData(TransactionType::model()->findAll(), 'id', 'name')),
             'filter' => CHtml::listData(Accounts::model()->findAll(), 'id', 'name'),
-            'value' => '$data->Account->name'
+            'value' => '$data->getAccountName()'
         ),
         array(
             'name' => 'oppt_account_id',

@@ -11,7 +11,8 @@
  *
  * @author adam
  */
-class FormIntmatch extends CFormModel{
+class FormIntmatch extends CFormModel {
+
     //put your code here
     public $account_id;
     //public $date;
@@ -19,16 +20,25 @@ class FormIntmatch extends CFormModel{
     public $out_total = 0;
     public $in = array();
     public $out = array();
-    
+
+    public function attributeLabels() {
+        return array(
+            'account_id' => Yii::t('labels', 'Account'),
+           
+            'in_total' => Yii::t('labels', 'Credit Total'),
+            'out_total' => Yii::t('labels', 'Debit Total'),
+        );
+    }
+
     public function save() {
-       
+
         //create Match
         $match = new IntCorrelation();
         $match->account_id = $this->account_id;
         $match->owner = Yii::app()->user->id;
         $match->save();
         //bankbooks
-        foreach ($this->in as $transaction=>$true) {
+        foreach ($this->in as $transaction => $true) {
             $transaction = Transactions::model()->findByPk($transaction);
             if ($transaction !== null) {
                 $transaction->intCorrelation = $match->id;
@@ -37,7 +47,7 @@ class FormIntmatch extends CFormModel{
             }
         }
         //transaction
-        foreach ($this->out as $transaction=>$true) {
+        foreach ($this->out as $transaction => $true) {
             $transaction = Transactions::model()->findByPk($transaction);
             if ($transaction !== null) {
                 $transaction->intCorrelation = $match->id;
@@ -50,4 +60,5 @@ class FormIntmatch extends CFormModel{
 
         return $match->id;
     }
+
 }

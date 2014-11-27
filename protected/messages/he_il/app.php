@@ -574,7 +574,7 @@ return array (
   'Assetvat Total' => 'מס תשומות על ציוד ונכסים',
   'Buyvat Total' => 'המס על תשומות אחרות',
   'Payvat Total' => 'סכום לתשלום\זיכוי',
-  '' => '',
+  'Balance report' => 'מאזן',
   '' => '',	
   '' => '',
   '' => '',

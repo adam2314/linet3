@@ -29,6 +29,18 @@ class FormExtmatch extends CFormModel {
         return parent::afterSave();
     }
 
+    public function attributeLabels() {
+        return array(
+            'account_id' => Yii::t('labels', 'Account'),
+            'currency_id' => Yii::t('labels', 'Currency'),
+            'date' => Yii::t('labels', 'Date'),
+            //'sum' => Yii::t('labels', 'Sum'),
+            //'refnum' => Yii::t('labels', 'Refnum'),
+            'ext_total' => Yii::t('labels', 'External Total'),
+            'int_total' => Yii::t('labels', 'Internal Total'),
+        );
+    }
+
     public function rules() {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.

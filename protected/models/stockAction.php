@@ -90,7 +90,7 @@ class stockAction extends CActiveRecord {
             'id' => Yii::t('labels', 'ID'),
             'doc_id' => Yii::t('labels', 'Documenet'),
             'account_id' => Yii::t('labels', 'Account'),
-            'oppt_account_id' => Yii::t('labels', 'Counter Account'),
+            'oppt_account_id' => Yii::t('labels', 'Opposite Account'),
             'item_id' => Yii::t('labels', 'Item'),
             'serial' => Yii::t('labels', 'Serial No.'),
             'qty' => Yii::t('labels', 'Qty'),
@@ -137,6 +137,19 @@ class stockAction extends CActiveRecord {
             'sort' => $sort,
         ));
     }
+    
+    public function getAccountName(){
+        if(isset($this->Account)) 
+            return $this->Account->name;
+            return "ERROR";
+    }
+    
+    public function getItemName(){
+        if(isset($this->Item)) 
+            return $this->Item->name;
+            return "ERROR";
+    }
+    
 
     public function getItemSum() {
         $criteria = new CDbCriteria;
