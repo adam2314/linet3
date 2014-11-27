@@ -33,34 +33,43 @@ class InstallConfig extends CFormModel {
         $handle = fopen('protected/config/install.php', 'w');
         fwrite($handle, $new);
         fclose($handle);
-        if(!is_dir("protected/files/")){
+        if (!is_dir("protected/files/")) {
             mkdir("protected/files/");
         }
         //make main db
-        return$this->makeDB();
-
+        return $this->makeDB();
     }
-    
-    private function makeDB(){
+
+    private function makeDB() {
         try {
-            Yii::app()->db->setActive(false);
-            Yii::app()->db->connectionString = $this->dbstring;
-            Yii::app()->db->username = $this->dbuser;
-            Yii::app()->db->password = $this->dbpassword;
-            Yii::app()->db->setActive(true);
-            
+
+            //echo $this->dbstring . "|" . $this->dbuser . "|" . $this->dbpassword;
+
+            Yii::app()->setComponent('dbTemp', array(
+                'class' => 'CDbConnection',
+                'connectionString' => $this->dbstring,
+                'username' => $this->dbuser,
+                'password' => $this->dbpassword,
+                'emulatePrepare' => true,
+                'charset' => 'utf8',
+                'tablePrefix' => '',
+                    )
+            );
+
+
+
+
             $master = new dbMaster();
             $master->loadFile("protected/data/main.sql");
             //$master->loadFile("protected/data/main-data.sql");
-
-            
         } catch (CDbException $e) {
             $message = $e->getMessage();
-            print $message;
+            echo "Crash and Burn:";
+            echo "<br>" . $message;
+            exit;
         }
         return true;
     }
-    
 
     public function rules() {
         return array(
@@ -70,5 +79,3 @@ class InstallConfig extends CFormModel {
     }
 
 }
-
-

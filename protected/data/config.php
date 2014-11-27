@@ -2,9 +2,9 @@
 return "<?php
 return array(
     'language' => 'he_il',
-    //'params' => array(
-    //    'newInstall' => false,
-    //),
+    'params' => array(
+        'newInstall' => false,
+    ),
     'components' => array(
         'db' => array(
             <placeholder>

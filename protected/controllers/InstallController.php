@@ -18,11 +18,12 @@ class InstallController extends Controller {
         
         
         if (isset($_POST['InstallConfig'])) {
-            Yii::app()->user->setState('Company', 0);
             $model = new InstallConfig();
             $model->attributes = $_POST['InstallConfig'];
-            if($model->make())
+            if($model->make()){
+                unset(Yii::app()->user->Install);
                 $this->redirect(Yii::app()->createAbsoluteUrl('install/user'));
+            }
             //exit;
         }
         
@@ -58,11 +59,9 @@ class InstallController extends Controller {
         $model->scenario = 'create';
 
         if (isset($_POST['User'])) {
-            Yii::app()->user->setState('Company', 0);
             $model->attributes = $_POST['User'];
 
             if ($model->save()){
-                unset(Yii::app()->user->Install);
                 $this->redirect(array('company/admin'));
                 
             }
