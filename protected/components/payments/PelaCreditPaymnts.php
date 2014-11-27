@@ -29,6 +29,15 @@ class PelaCreditPaymnts {
             );
     }
     
+    public function settings(){
+        
+        return array(
+            "pelecard.userName",
+            'pelecard.password',
+            "pelecard.termNo",
+            'pelecard.shopNo',
+        );
+    }
 
     public function stoppage() {//needs to have!
         return true;

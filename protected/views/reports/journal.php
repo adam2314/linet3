@@ -1,5 +1,4 @@
 <?php
-
 //$this->widget('zii.widgets.CListView', array(
 //	'dataProvider'=>$dataProvider,
 //	'itemView'=>'_view',
@@ -43,7 +42,6 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
                 ), true);
 ?>
 <?php
-
 $this->beginWidget('MiniForm', array(
     'haeder' => Yii::t('app', "Transactions"),
         //'width' => '800',
@@ -114,6 +112,25 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
     ),
 ));
-
-$this->endWidget(); //miniform
 ?>
+<div class="row form-actions">
+<?php
+$this->widget('bootstrap.widgets.TbButton', array(
+    'type' => 'primary',
+    'buttonType' => 'ajaxButton',
+    "icon" => "glyphicon glyphicon-print",
+    'label' => Yii::t('app', "Print"),
+));
+?>
+</div>
+    <?php
+    $this->endWidget(); //miniform
+    ?>
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#yt0").click(function(e) {
+            window.print();
+        });
+    });
+</script>

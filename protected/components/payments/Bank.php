@@ -47,7 +47,7 @@ class Bank {
     }
 
     public function settings() {
-        
+        return array();
     }
     
     public function stoppage() {//needs to have!

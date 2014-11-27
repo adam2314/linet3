@@ -14,8 +14,6 @@ class Linet3 {
             self::setAppData();
             //self::setUserData();
         }
-        //check db
-        self::checkDb();
     }
 
     /*     * end beginRequest */
@@ -31,15 +29,4 @@ class Linet3 {
             Yii::app()->theme = Yii::app()->user->theme;
         }
     }
-
-    private static function checkDb() {
-        $install = substr(Yii::app()->request->url, 0, strlen('/install')) === '/install';
-        if (!$install) {
-            if (!isset(Yii::app()->dbMain)) {
-                Yii::app()->request->redirect('/install');
-                Yii::app()->end();
-            }
-        }
-    }
-
 }

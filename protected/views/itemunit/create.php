@@ -5,13 +5,13 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Itemunit', 'url'=>array('index')),
-	array('label'=>'Manage Itemunit', 'url'=>array('admin')),
+	array('label'=>Yii::t('actions','List')." " .Yii::t('models',"Item Units"), 'url'=>array('index')),
+	array('label'=>Yii::t('actions','Manage')." " .Yii::t('models',"Item Units"), 'url'=>array('admin')),
 );
 
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Create Item Units"),
+    'haeder' => Yii::t('app',Yii::t('actions','Create')." " .Yii::t('models',"Item Units")),
     //'width' => '800',
 )); 
 ?>

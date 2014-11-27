@@ -794,7 +794,8 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`) VALUES
 (73, 'Stock', 'reports/stock', NULL, 49),
 (74, 'Linet 2 Import', 'data/linet2Import', NULL, 57),
 (75, 'Bulk Balance', 'reports/accounts', NULL, 49),
-(76, 'Account Categories', 'accCat/admin', NULL, 12);
+(76, 'Account Categories', 'accCat/admin', NULL, 12),
+(77, 'Payment Admin', 'payment/admin', NULL, 1);
 
 CREATE TABLE IF NOT EXISTS `openformat` (
   `id` int(11) NOT NULL,
@@ -1070,7 +1071,9 @@ INSERT INTO `tbl_migration` (`version`, `apply_time`) VALUES
 ('m171114_102025_0008', 1412896918),
 ('m181114_102025_0009', 1412911613),
 ('m231114_102025_0010', 1412911614),
-('m241114_102025_0011', 1416919003);
+('m241114_102025_0011', 1416919003),
+('m271114_102025_0012', 1416919004),
+('m271114_102026_0013', 1416919005);
 
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

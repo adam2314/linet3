@@ -6,13 +6,13 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Itemunit', 'url'=>array('index')),
-	array('label'=>'Create Itemunit', 'url'=>array('create')),
-	array('label'=>'View Itemunit', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage Itemunit', 'url'=>array('admin')),
+	array('label'=>Yii::t('actions','List')." " .Yii::t('models',"Item Units"), 'url'=>array('index')),
+	array('label'=>Yii::t('actions','Create')." " .Yii::t('models',"Item Units"), 'url'=>array('create')),
+	array('label'=>Yii::t('actions','View')." " .Yii::t('models',"Item Units"), 'url'=>array('view', 'id'=>$model->id)),
+	array('label'=>Yii::t('actions','Manage')." " .Yii::t('models',"Item Units"), 'url'=>array('admin')),
 );
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Update Item Unit"). $model->id,
+    'haeder' => Yii::t('actions','Update')." " .Yii::t('models',"Item Units")." ". $model->id,
     //'width' => '800',
 )); 
 ?>

@@ -49,6 +49,9 @@ class InstallUser extends CFormModel {
                 Yii::app()->db->password=$this->dbpassword;
                 Yii::app()->db->setActive(true);
                 
+                dbMaster::loadFile($mysql);
+                
+                /*
                 $sqlArray = file_get_contents($mysql);
 
 
@@ -61,7 +64,7 @@ class InstallUser extends CFormModel {
                 catch(CDbException $e){
                         $message = $e->getMessage();
                         print $message;
-                }
+                }*/
             } else{
                 throw new CDbException(Yii::t('app','Cant find Company template file unable to create database'));
                 

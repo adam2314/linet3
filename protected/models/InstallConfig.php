@@ -37,9 +37,8 @@ class InstallConfig extends CFormModel {
             mkdir("protected/files/");
         }
         //make main db
-        $this->makeDB();
-        
-       return true;
+        return$this->makeDB();
+
     }
     
     private function makeDB(){
@@ -52,13 +51,14 @@ class InstallConfig extends CFormModel {
             
             $master = new dbMaster();
             $master->loadFile("protected/data/main.sql");
-            $master->loadFile("protected/data/main-data.sql");
+            //$master->loadFile("protected/data/main-data.sql");
 
             
         } catch (CDbException $e) {
             $message = $e->getMessage();
             print $message;
         }
+        return true;
     }
     
 

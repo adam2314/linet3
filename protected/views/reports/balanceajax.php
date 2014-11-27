@@ -4,23 +4,36 @@
 	'dataProvider'=>$model->search(),
 	//'filter'=>$model,
 	'columns'=>array(
-               'id' ,
-                'name',
+               array(
+                'header' => Yii::t('labels', 'ID'),
+                'name' => 'id',
+            ),
+            array(
+                'header' => Yii::t('labels', 'Name'),
+                'name' => 'name',
+            ),
             array(
             'cssClassExpression' => "'number'",
             'name'=>'neg',
+                'header' => Yii::t('labels', 'Debit'),
         ),
             array(
             'cssClassExpression' => "'number'",
             'name'=>'pos',
+                'header' => Yii::t('labels', 'Credit'),
         ),
             array(
             'cssClassExpression' => "'number'",
             'name'=>'sum',
+                'header' => Yii::t('labels', 'Sum'),
         ),
             
-             
-                'id6111',
+             array(
+                'header' => Yii::t('labels', 'Id6111'),
+                'name' => 'id6111',
+            ),
+                            
+
 	),
 )); 
 ?>

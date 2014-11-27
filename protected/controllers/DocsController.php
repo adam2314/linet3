@@ -177,7 +177,7 @@ class DocsController extends RightsController {
         $this->performAjaxValidation($model);
         if (isset($model->docStatus))
             if ($model->docStatus->looked == 1) {
-                Yii::app()->user->setFlash('danger', 'unable to edit documenet');
+                Yii::app()->user->setFlash('danger', Yii::t('app','Unable to edit document'));
                 $this->redirect(array('admin', 'id' => $model->id));
             }
         if (isset($_POST['Docs'])) {

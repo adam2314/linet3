@@ -38,7 +38,7 @@ class InstallPre extends CFormModel {
             if(is_writable($str))
                 return "Writable";
             else 
-                return "Dniaed";
+                return "Denaid";
             
         }
         public function report(){

@@ -13,18 +13,66 @@
  */
 class PaymentController extends RightsController {
 
-    //put your code here
-    public function actionFields($id) {
-        $model = PaymentType::model()->findByPk($id);
-        //echo CJSON::encode("echo ".$model->value);
+    public function actionAdmin() {
+        $model = new PaymentType('search');
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['PaymentType']))
+            $model->attributes = $_GET['PaymentType'];
 
-        if ($model->value == '') {
-            echo CJSON::encode(array($_POST['bill']['line'], false));
-            Yii::app()->end();
+        $this->render('admin', array(
+            'model' => $model,
+        ));
+    }
+
+    public function actionUpdate($id) {
+        $model = $this->loadModel($id);
+
+        
+        if (isset($_POST['Settings'])) {
+            //$this->performAjaxValidation($_POST['Settings']);
+            foreach ($_POST['Settings'] as $key => $value) {
+                $smodel = Settings::model()->findByPk($key);
+                $smodel->value = $value['value'];
+
+                //will stop
+
+
+                $smodel->save();
+            }
+
+
+            $comp = Company::model()->findByPk(Yii::app()->user->Company);
+            $comp->loadSettings();
+        }
+        
+        
+        if (isset($_POST['PaymentType'])) {
+            $model->attributes = $_POST['PaymentType'];
+            if ($model->save())
+                $this->redirect(array('update', 'id' => $model->id));
         }
 
+        $this->render('update', array(
+            'model' => $model,
+            //'items' => $items,
+        ));
+        
+        
+        
+        
+        
+        
+        
+    }
 
-        $form = new $model->value;
+    public function actionFields($id) {
+        $model = $this->loadModel($id);
+        //echo CJSON::encode("echo ".$model->value);
+
+        $form=$model->loadPayment();
+
+
+        //$form = new $model->value;
         $form->type = $id;
         $form->sum = $_POST['bill']['sum'];
         $form->line = (int) $_POST['bill']['line'];
@@ -37,16 +85,11 @@ class PaymentController extends RightsController {
     }
 
     public function actionForm($id) {
-        $model = PaymentType::model()->findByPk($id);
+        $model =  $this->loadModel($id);
         //echo CJSON::encode("echo ".$model->value);
 
-        if ($model->value == '') {
-            echo CJSON::encode(array($_POST['bill']['line'], false));
-            Yii::app()->end();
-        }
-
-
-        $form = new $model->value;
+        
+        $form = $model->loadPayment();
         $form->type = $id;
         $form->sum = $_POST['bill']['sum'];
         $form->line = $_POST['bill']['line'];
@@ -54,14 +97,9 @@ class PaymentController extends RightsController {
     }
 
     public function actionBill($id) {
-        $model = PaymentType::model()->findByPk($id);
+        $model = $this->loadModel($id);
 
-        if ($model->value == '') {
-            echo CJSON::encode(false);
-            Yii::app()->end();
-        }
-
-        $bill = new $model->value;
+        $bill=$model->loadPayment();
 
         $bill->setFields($_POST['bill']);
 
@@ -81,6 +119,24 @@ class PaymentController extends RightsController {
             } else {
                 return Yii::t('app', 'Error') . ": " . $rec->text;
             }
+        }
+    }
+
+    public function loadModel($id) {
+        $model = PaymentType::model()->findByPk($id);
+        if ($model === null)
+            throw new CHttpException(404, 'The requested page does not exist.');
+        return $model;
+    }
+
+    /**
+     * Performs the AJAX validation.
+     * @param CModel the model to be validated
+     */
+    protected function performAjaxValidation($model) {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'paymentType-form') {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
         }
     }
 

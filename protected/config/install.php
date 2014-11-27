@@ -2,9 +2,9 @@
 
 return array(
     'language' => 'he_il',
-    'params' => array(
-        'newInstall' => true,
-    ),
+    //'params' => array(
+    //    'newInstall' => true,
+    //),
     'components' => array(
         'db' => array(
             'connectionString' => 'mysql:host=localhost;dbname=multiTest',

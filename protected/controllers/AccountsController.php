@@ -97,22 +97,21 @@ class AccountsController extends RightsController {
         $model = $this->loadModel($id);
 
         if ($model->system_acc == 1) {
-            $level='error' ;
-             $text= Yii::t('app', "unable to delete, it is a system account");
-
+            $level = 'error';
+            $text = Yii::t('app', "unable to delete, it is a system account");
         } else {
 
 
             if ($this->loadModel($id)->delete()) {
-                $level='success';
-                $text=Yii::t('app', "unable to delete, the account has transactions");
+                $level = 'success';
+                $text = Yii::t('app', "unable to delete, the account has transactions");
+            } else {
+                $level = 'error';
+                $text = Yii::t('app', "unable to delete, the account has transactions");
             }
-            $level='error' ;
-                    
-                    $text= Yii::t('app',"unable to delete, the account has transactions");
         }
 
-        echo "<div class='alert in alert-block fade alert-$level'><a data-dismiss='alert' class='close'>×</a>$text</div>";//flash 
+        echo "<div class='alert in alert-block fade alert-$level'><a data-dismiss='alert' class='close'>×</a>$text</div>"; //flash 
         Yii::app()->end();
     }
 

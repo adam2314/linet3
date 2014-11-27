@@ -61,6 +61,8 @@ class RightsController extends RController {
                 Yii::app()->end();
             }
         } else {
+            //hasAccess!
+            
             $database=  Company::model()->findByPk(Yii::app()->user->Company);
             
             

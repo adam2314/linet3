@@ -22,6 +22,21 @@ class FormDeposit  extends CFormModel{
     public $Total=array();
     
     
+    public function attributeLabels() {
+        return array(
+            'account_id' => Yii::t('labels', 'Account'),
+            'currency_id' => Yii::t('labels', 'Currency'),
+            'date' => Yii::t('labels', 'Date'),
+            'sum' => Yii::t('labels', 'Sum'),
+            'refnum' => Yii::t('labels', 'Refnum'),
+            'cheq_sum' => Yii::t('labels','Check Sum'),
+            'cash_sum' => Yii::t('labels', 'Cash Sum'),
+            
+        );
+    }
+    
+    
+    
     public function beforeSave(){
             $this->date=date("Y-m-d H:i:s",CDateTimeParser::parse($this->date,Yii::app()->locale->getDateFormat('yiishort')));
             

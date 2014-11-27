@@ -85,4 +85,22 @@ class PaymentType extends CActiveRecord{
 			'criteria'=>$criteria,
 		));
 	}
+        
+        
+        public function getSettings(){
+            $arr=array();
+            foreach($this->loadPayment()->settings() as $setting){
+                $arr[]=  Settings::model()->findByPk($setting);
+            }
+            return $arr;
+        }
+        
+        public function  loadPayment(){
+            if(class_exists($this->value))
+            
+                return new $this->value;
+            else
+                throw new CHttpException(501, Yii::t('errors','The requested payment type is Invalid.').$this->id);
+        } 
+
 }

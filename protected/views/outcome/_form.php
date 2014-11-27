@@ -30,7 +30,7 @@
     <br />
 
     <?php echo $form->textFieldRow($model, 'sum'); ?>
-    <?php echo $form->textFieldRow($model, 'detailes'); ?>
+    <?php echo $form->textFieldRow($model, 'details'); ?>
     
     
     

@@ -121,7 +121,7 @@ jQuery(document).on('click','#accounts<?php echo $model->type;?>-grid a.delete',
            return false;
        
 	var th = this,afterDelete = function(){};
-	jQuery('#accounts0-grid').yiiGridView('update', {
+	jQuery('#accounts<?php echo $model->type;?>-grid').yiiGridView('update', {
 		type: 'POST',
 		url: jQuery(this).attr('href'),
 		success: function(data) {

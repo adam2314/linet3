@@ -6,21 +6,19 @@
 
 $this->menu=array(
 	//array('label'=>'List Item', 'url'=>array('index')),
-	array('label'=>'Create Item', 'url'=>array('create')),
-	array('label'=>'Update Item', 'url'=>array('update', 'id'=>$model->id)),
+	array('label'=>Yii::t('app','Create Item'), 'url'=>array('create')),
+	array('label'=>Yii::t('app','Update Item'), 'url'=>array('update', 'id'=>$model->id)),
 	//array('label'=>'Delete Item', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Item', 'url'=>array('admin')),
+	array('label'=>Yii::t('app','Manage Item'), 'url'=>array('admin')),
 );
 
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => "Manage Items",
+    'haeder' => Yii::t('app',"View Item")." #".$model->id,
     //'width' => '800',
 )); 
 
 ?>
-
-<h1>View Item <?php echo $model->id; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

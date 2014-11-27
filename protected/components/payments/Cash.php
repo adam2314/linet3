@@ -19,7 +19,7 @@ class Cash {
     
     public function settings(){
         
-        
+        return array();
     }
     
     

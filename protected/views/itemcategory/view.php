@@ -5,15 +5,17 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Itemcategory', 'url'=>array('index')),
-	array('label'=>'Create Itemcategory', 'url'=>array('create')),
-	array('label'=>'Update Itemcategory', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Itemcategory', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Itemcategory', 'url'=>array('admin')),
+	array('label'=>Yii::t('actions','List')." " .Yii::t('models','Item Categories'), 'url'=>array('index')),
+	array('label'=>Yii::t('actions','Create')." " .Yii::t('models','Item Categories'), 'url'=>array('create')),
+	array('label'=>Yii::t('actions','Update')." " .Yii::t('models','Item Categories'), 'url'=>array('update', 'id'=>$model->id)),
+	array('label'=>Yii::t('actions','Delete')." " .Yii::t('models','Item Categories'), 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	array('label'=>Yii::t('actions','Admin')." " .Yii::t('models','Item Categories'), 'url'=>array('admin')),
 );
+$this->beginWidget('MiniForm',array(
+    'haeder' => Yii::t('actions',"View") . " ".Yii::t('models',"Item Categories")." ". $model->id,
+)); 
 ?>
 
-<h1>View Itemcategory #<?php echo $model->id; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
@@ -23,3 +25,10 @@ $this->menu=array(
 		'profit',
 	),
 )); ?>
+
+
+<?php
+
+ $this->endWidget(); 
+
+?>

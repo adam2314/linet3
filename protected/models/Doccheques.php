@@ -162,6 +162,7 @@ class Doccheques extends basicRecord {
             'doc_id' => Yii::t('labels', 'Refnum'),
             'type' => Yii::t('labels', 'Type'),
             'sum' => Yii::t('labels', 'Sum'),
+            'currency_id' => Yii::t('labels', 'Currency'),
             'line' => Yii::t('labels', 'Line'),
         );
     }

@@ -2,6 +2,18 @@
 
 class SiteController extends Controller {
 
+    
+    public function init() {
+        
+        if(User::model()->findAll()==null){
+            $this->redirect(Yii::app()->createAbsoluteUrl('install/user'));
+                Yii::app()->end();
+        }
+        
+         return parent::init();
+    }
+    
+    
     /**
      * This is the action to handle external exceptions.
      */

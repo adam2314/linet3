@@ -4,6 +4,17 @@ class CompanyController extends RightsController{// //RightsController
     public $defaultAction = 'index';
     public $layout='//layouts/clean';
 
+    
+    
+    public function init() {
+        if (Yii::app()->params['newInstall']) {
+                $this->redirect(Yii::app()->createAbsoluteUrl('install'));
+                Yii::app()->end();
+            //}
+        }
+        
+         return parent::init();
+    }
     /**
      * Displays a particular model.
      * @param integer $id the ID of the model to be displayed

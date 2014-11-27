@@ -102,7 +102,7 @@ class FormReportVat extends CFormModel {
 
         $this->assetvat_acc = Yii::app()->user->settings['company.acc.assetvat'];
         $assetvat = Accounts::model()->findByPk($this->assetvat_acc);
-        $this->assetvat_total = $assetvat->getTotal($this->from_date, $this->to_date);
+        $this->assetvat_total = $assetvat->getTotal($this->from_date, $this->to_date) * -1;//hAS TO INVERT
 
         $this->payvat_total = $this->selvat_total - ($this->buyvat_total + $this->assetvat_total);
         return $this->payvat_total;

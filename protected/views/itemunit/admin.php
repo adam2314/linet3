@@ -5,8 +5,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Itemunit', 'url'=>array('index')),
-	array('label'=>'Create Itemunit', 'url'=>array('create')),
+	array('label'=>Yii::t('actions','List')." " .Yii::t('models',"Item Units"), 'url'=>array('index')),
+	array('label'=>Yii::t('actions','Create')." " .Yii::t('models',"Item Units"), 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -23,7 +23,7 @@ $('.search-form form').submit(function(){
 ");
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => "Manage Item Units",
+    'haeder' => Yii::t('actions','Admin')." " .Yii::t('models',"Item Units"),
     //'width' => '800',
 )); 
 

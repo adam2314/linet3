@@ -66,6 +66,16 @@ class PelaCredit {
 
     }
 
+    
+     public function settings(){
+        
+        return array(
+            "pelecard.userName",
+            'pelecard.password',
+            "pelecard.termNo",
+            'pelecard.shopNo',
+        );
+    }
         
     private function send($data) {
         

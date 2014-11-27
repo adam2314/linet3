@@ -4,9 +4,15 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'Create Itemunit', 'url'=>array('create')),
-	array('label'=>'Manage Itemunit', 'url'=>array('admin')),
+	array('label'=>Yii::t('actions','Create')." " .Yii::t('models',"Item Units"), 'url'=>array('create')),
+	array('label'=>Yii::t('actions','Manage')." " .Yii::t('models',"Item Units"), 'url'=>array('admin')),
 );
+
+ $this->beginWidget('MiniForm',array(
+    'haeder' => Yii::t('models',"Item Units"),
+    //'width' => '800',
+)); 
+
 ?>
 
 <h1>Itemunits</h1>
@@ -15,3 +21,4 @@ $this->menu=array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
 )); ?>
+<?php  $this->endWidget(); ?>

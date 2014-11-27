@@ -27,9 +27,9 @@ $model->account_id = 0;
     echo $form->dropDownListRow($model, "account_id", $temp, array('class' => ''));
 
 
-    echo $form->labelEx($model, 'refnum');
-    echo $form->textField($model, 'refnum', array('size' => 60, 'maxlength' => 100));
-    echo $form->error($model, 'refnum');
+    //echo $form->labelEx($model, 'refnum');
+    echo $form->textFieldRow($model, 'refnum', array('size' => 60, 'maxlength' => 100));
+    //echo $form->error($model, 'refnum');
 
 
     echo $form->labelEx($model, 'date');
@@ -68,6 +68,7 @@ $model->account_id = 0;
             
             array(
                 'name' => 'Details',
+                'header'=>Yii::t('app','Details'),
                 'value' =>'$data->printDetails()',
             ),
             //'bank_refnum',
@@ -104,7 +105,7 @@ $model->account_id = 0;
     $this->widget('bootstrap.widgets.TbButton', array(
         'buttonType' => 'submit',
         'type' => 'primary',
-        'label' => Yii::t('app', "Deposit"),
+        'label' => Yii::t('actions', "Deposit"),
     ));
     ?>
 </div>

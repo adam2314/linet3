@@ -36,7 +36,7 @@ class ManualCredit {
     }
 
     public function settings() {
-        
+        return array();
     }
 
     public function stoppage() {//needs to have!

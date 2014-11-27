@@ -72,19 +72,19 @@ $oppts[""] = Yii::t('app', 'None');
     <div class="row"><!--Address block-->
         <div class="col-md-2">
             <?php //echo $form->labelExRow($model, 'address');  ?>
-            <?php echo $form->textField($model, 'address', array('size' => 30, 'maxlength' => 80)); ?>
+            <?php echo $form->textFieldRow($model, 'address', array('size' => 30, 'maxlength' => 80)); ?>
             <?php //echo $form->error($model, 'address'); ?>
         </div>
 
         <div class="col-md-1">
             <?php //echo $form->labelEx($model, 'city');  ?>
-            <?php echo $form->textField($model, 'city', array('size' => 30, 'maxlength' => 40)); ?>
+            <?php echo $form->textFieldRow($model, 'city', array('size' => 30, 'maxlength' => 40)); ?>
             <?php //echo $form->error($model, 'city'); ?>
         </div>
 
         <div class="col-md-1">
             <?php //echo $form->labelEx($model, 'zip');  ?>
-            <?php echo $form->textField($model, 'zip', array('size' => 10, 'maxlength' => 10)); ?>
+            <?php echo $form->textFieldRow($model, 'zip', array('size' => 10, 'maxlength' => 10)); ?>
             <?php //echo $form->error($model, 'zip'); ?>
         </div>
 
@@ -106,6 +106,7 @@ $oppts[""] = Yii::t('app', 'None');
         </div>
 
         <div class="col-md-1">
+            
             <?php
 ///*
             $this->widget('widgetRefnum', array(
@@ -113,7 +114,11 @@ $oppts[""] = Yii::t('app', 'None');
                 'attribute' => 'refnum', //attribute name
             )); //*/
             ?>
-
+             
+        </div>
+        <div class="col-md-1">
+            
+             <?php echo $form->textFieldRow($model, 'refnum_ext'); ?>
         </div>
 
         <div class="col-md-1">
@@ -128,7 +133,7 @@ $oppts[""] = Yii::t('app', 'None');
 
 
 
-        <div class="col-md-3">
+        <div class="col-md-2">
             <label><?php echo Yii::t('labels', 'Attached Files'); ?></label>
 
             <?php

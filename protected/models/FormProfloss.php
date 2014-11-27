@@ -20,6 +20,15 @@ class FormProfloss extends CFormModel
         return parent::init();
     }
 
+    public function attributeLabels() {
+        return array(
+            'year' => Yii::t('labels', 'Year'),
+            'from_date' => Yii::t('labels', 'From Date'),
+            'to_date' => Yii::t('labels', 'To Date'),
+            
+        );
+    }
+    
 
     public function rules()
 	{
@@ -60,9 +69,12 @@ class FormProfloss extends CFormModel
         
         
         $data=$this->calc(3);//incomes
+        $data[] =$inTotal = array_pop($data);
         $data=array_merge($data,$this->calc(2));//outcomes
+        $data[] =$outTotal = array_pop($data);
         
         
+        $data[]=array('id'=>'','name'=>Yii::t("app", "Profit & Loss"),'sum'=>$inTotal["sum"]-$outTotal["sum"],'id6111'=>'');
         return new CArrayDataProvider($data,
                  array(
                                 'pagination'=>array(

@@ -575,13 +575,13 @@ class Docs extends fileRecord {
             
             
             
-            array('issue_date, due_date, comments, description, refnum_ids, refstatus', 'safe'),
+            array('issue_date, due_date, comments, description, refnum_ext, refnum_ids, refstatus', 'safe'),
             //array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe'),
             array('total', 'compare', 'compareAttribute'=>'rcptsum','on' => 'invrcpt'),
             array('oppt_account_id', 'required','on' => 'opppt_req'), 
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe', 'on' => 'search'),
+            array('oppt_account_id, discount, issue_from, refnum_ext, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe', 'on' => 'search'),
         );
     }
 
@@ -632,6 +632,7 @@ class Docs extends fileRecord {
             'zip' => Yii::t('labels', 'Zip'),
             'vatnum' => Yii::t('labels', 'VAT No.'),
             'refnum' => Yii::t('labels', 'Reference No.'),
+            'refnum_ext' => Yii::t('labels', 'External Reference'),
             'issue_date' => Yii::t('labels', 'Issue Date'),
             'due_date' => Yii::t('labels', 'Due Date'),
             'sub_total' => Yii::t('labels', 'Sub Total'),

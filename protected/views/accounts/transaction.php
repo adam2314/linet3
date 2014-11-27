@@ -112,5 +112,33 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
     ),
 ));
+?>
+<div class="row form-actions">
+        <?php
+        $this->widget('bootstrap.widgets.TbButton', array(
+            'buttonType' => 'submit',
+            'type' => 'primary',
+            "icon" => "glyphicon glyphicon-eye-open",
+            'label' => Yii::t('app', "Search"),
+        ));
+        ?>
+            <?php
+            $this->widget('bootstrap.widgets.TbButton', array(
+                'type' => 'primary',
+                'buttonType' => 'ajaxButton',
+                "icon" => "glyphicon glyphicon-print",
+                'label' => Yii::t('app', "Print"),
+            ));
+            ?>
+        </div>
+
+<?php
 $this->endWidget();
 ?>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#yt0").click(function(e) {
+            window.print();
+        });
+    });
+</script>

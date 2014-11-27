@@ -13,39 +13,19 @@ class InstallController extends Controller {
         } catch (Exception $e) {
             echo 'Caught exception: ', $e->getMessage(), "\n";
         }
-        
+        //print_r(Yii::app()->dbMain);
         Yii::app()->user->setState('Install', 1);
+        
+        
         if (isset($_POST['InstallConfig'])) {
+            Yii::app()->user->setState('Company', 0);
             $model = new InstallConfig();
             $model->attributes = $_POST['InstallConfig'];
-            //echo "mkDB";
-            $model->make();
+            if($model->make())
+                $this->redirect(Yii::app()->createAbsoluteUrl('install/user'));
             //exit;
         }
-        if (isset($_POST['InstallUser'])) {//need to check for users!
-            Yii::app()->user->setState('Company', 0);
-            $model = new InstallUser();
-            $model->attributes = $_POST['InstallUser'];
-            $model->make();
-        }
-
-
-
-        if (isset($_POST['User'])) {
-            $model = new User;
-            $model->scenario ='create';
-            Yii::app()->user->setState('Company', 0);
-            $model->attributes = $_POST['User'];
-
-            if ($model->save())
-                $step = 4;
-        }
-
-
-
-
-
-
+        
 
         if ($step == 0) {//pre
             $model = new InstallPre();
@@ -61,19 +41,34 @@ class InstallController extends Controller {
             $model = new InstallConfig();
             $this->renderPartial('config', array('model' => $model));
         }
-        if ($step == 3) {//user
-            $model = new User();
-            $model->scenario ='create';
-            $this->renderPartial('user', array('model' => $model));
-        }
-        if ($step == 4) {//finsih
-            //Yii::app()->request->redirect();
-            unset(Yii::app()->user->install);
-            $this->redirect(array('company/admin'));
-            //$model=new InstallConfig();
-            //$this->renderPartial('config',array('model'=>$model ));
-        }
+
+        
         //*/
+    }
+
+    public function actionUser() {
+        if(!User::model()->findAll()==null){
+            $this->redirect(Yii::app()->createAbsoluteUrl('site/login'));
+                Yii::app()->end();
+        }
+
+
+        //user
+        $model = new User();
+        $model->scenario = 'create';
+
+        if (isset($_POST['User'])) {
+            Yii::app()->user->setState('Company', 0);
+            $model->attributes = $_POST['User'];
+
+            if ($model->save()){
+                unset(Yii::app()->user->Install);
+                $this->redirect(array('company/admin'));
+                
+            }
+        }
+
+        $this->render('user', array('model' => $model));
     }
 
 }

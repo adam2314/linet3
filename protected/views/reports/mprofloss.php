@@ -4,7 +4,7 @@ $this->menu=array(
 	//array('label'=>'List Config','url'=>array('index')),
 	//array('label'=>'View Config','url'=>array('view','id'=>$model->id)),
 );
-$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Monthly Profit & Loss Report"))); 
+$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Monthly Profit & Loss report"))); 
 ?>
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'profloss-form',

@@ -1133,6 +1133,7 @@ CREATE TABLE `docs` (
   `zip` varchar(10) DEFAULT NULL,
   `vatnum` varchar(10) DEFAULT NULL,
   `refnum` varchar(20) NOT NULL,
+  `refnum_ext` varchar(255) NOT NULL,
   `issue_date` timestamp NULL DEFAULT NULL,
   `due_date` timestamp NULL DEFAULT NULL,
   `modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -1219,21 +1220,21 @@ CREATE TABLE `docType` (
 );
 
 INSERT INTO `docType` (`id`, `name`, `openformat`, `isdoc`, `isrecipet`, `iscontract`, `looked`, `stockAction`, `account_type`, `docStatus_id`, `last_docnum`, `oppt_account_type`, `transactionType_id`, `vat_acc_id`, `header`, `footer`, `stockSwitch`, `copy`) VALUES
-(1, 'Proforma', 300, 1, 0, 0, 1, -1, 0, 2, 1, NULL, NULL, 3, '', '', 0, 1),
-(2, 'Delivery Document', 200, 1, 0, 0, 0, -1, 0, 2, 1, NULL, NULL, 3, '', '', 0, 1),
-(3, 'Invoice', 305, 1, 0, 0, 1, -1, 0, 2, 1, NULL, 1, 3, '', '', 1, 1),
-(4, 'Credit Invoice', 330, 1, 0, 0, 0, 1, 0, 2, 1, NULL, 17, 3, '', '', 1, 1),
-(5, 'Return Document', 210, 1, 0, 0, 0, 1, 0, 2, 1, NULL, 19, 3, '', '', 1, 1),
-(6, 'Quote', 0, 1, 0, 0, 0, 0, 0, 2, 1, NULL, NULL, 3, '', '', 0, 0),
-(7, 'Sales Order', 0, 1, 0, 0, 0, 0, 0, 2, 1, NULL, NULL, 3, '', '', 0, 0),
-(8, 'Receipt', 400, 0, 1, 0, 1, 0, 0, 2, 1, NULL, 3, 3, '', '', 0, 1),
-(9, 'Invoice Receipt', 320, 1, 1, 0, 1, -1, 0, 2, 1, NULL, 18, 3, '', '', 1, 1),
-(10, 'Purchase Order', 500, 1, 0, 0, 0, 0, 1, 2, 1, NULL, NULL, 3, '', '', 0, 1),
-(11, 'Manual Invoice', 0, 1, 0, 0, 1, 1, 1, 2, 1, NULL, 11, 3, '', '', 1, 1),
-(12, 'Manual Receipt', 0, 1, 0, 0, 1, 1, 1, 2, 1, NULL, 12, 3, '', '', 0, 1),
-(13, 'Current Expense', 0, 1, 0, 0, 0, 1, 1, 2, 1, 2, 20, 1, '', '', 0, 0),
-(14, 'Asset Expense', 0, 1, 0, 0, 0, 1, 1, 2, 1, 4, 21, 2, '', '', 0, 0),
-(15, 'Warehouse Transaction', 830, 1, 0, 0, 0, 1, 8, 2, 1, 8, NULL, 0, '', '', 0, 1);
+(1, 'Proforma', 300, 1, 0, 0, 1, -1, 0, 2, 0, NULL, NULL, 3, '', '', 0, 1),
+(2, 'Delivery Document', 200, 1, 0, 0, 0, -1, 0, 2, 0, NULL, NULL, 3, '', '', 0, 1),
+(3, 'Invoice', 305, 1, 0, 0, 1, -1, 0, 2, 0, NULL, 1, 3, '', '', 1, 1),
+(4, 'Credit Invoice', 330, 1, 0, 0, 0, 1, 0, 2, 0, NULL, 17, 3, '', '', 1, 1),
+(5, 'Return Document', 210, 1, 0, 0, 0, 1, 0, 2, 0, NULL, 19, 3, '', '', 1, 1),
+(6, 'Quote', 0, 1, 0, 0, 0, 0, 0, 2, 0, NULL, NULL, 3, '', '', 0, 0),
+(7, 'Sales Order', 0, 1, 0, 0, 0, 0, 0, 2, 0, NULL, NULL, 3, '', '', 0, 0),
+(8, 'Receipt', 400, 0, 1, 0, 1, 0, 0, 2, 0, NULL, 3, 3, '', '', 0, 1),
+(9, 'Invoice Receipt', 320, 1, 1, 0, 1, -1, 0, 2, 0, NULL, 18, 3, '', '', 1, 1),
+(10, 'Purchase Order', 500, 1, 0, 0, 0, 0, 1, 2, 0, NULL, NULL, 3, '', '', 0, 1),
+(11, 'Manual Invoice', 0, 1, 0, 0, 1, 1, 1, 2, 0, NULL, 11, 3, '', '', 1, 1),
+(12, 'Manual Receipt', 0, 1, 0, 0, 1, 1, 1, 2, 0, NULL, 12, 3, '', '', 0, 1),
+(13, 'Current Expense', 0, 1, 0, 0, 0, 1, 1, 2, 0, 2, 20, 1, '', '', 0, 0),
+(14, 'Asset Expense', 0, 1, 0, 0, 0, 1, 1, 2, 0, 4, 21, 2, '', '', 0, 0),
+(15, 'Warehouse Transaction', 830, 1, 0, 0, 0, 1, 8, 2, 0, 8, NULL, 0, '', '', 0, 1);
 
 CREATE TABLE `eavAttr` (
   `entity` bigint(20) NOT NULL,
