@@ -12,7 +12,7 @@ $this->menu=array(
 
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => "Create Currency rate",
+    'header' => "Create Currency rate",
     //'width' => '800',
 )); 
 ?>

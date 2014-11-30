@@ -1181,6 +1181,8 @@ INSERT INTO `docStatus` (`num`, `doc_type`, `name`, `looked`, `action`) VALUES
 (1, 13, 'טיוטא', 0, '0'),
 (1, 14, 'טיוטא', 0, '0'),
 (1, 15, 'טיוטא', 0, '0'),
+(1, 16, 'הופק', 1, '1'),
+(1, 17, 'הופק', 1, '-1'),
 (2, 1, 'הופק', 0, '1'),
 (2, 2, 'הופק', 1, '1'),
 (2, 3, 'הופק', 1, '1'),
@@ -1234,7 +1236,9 @@ INSERT INTO `docType` (`id`, `name`, `openformat`, `isdoc`, `isrecipet`, `iscont
 (12, 'Manual Receipt', 0, 1, 0, 0, 1, 1, 1, 2, 0, NULL, 12, 3, '', '', 0, 1),
 (13, 'Current Expense', 0, 1, 0, 0, 0, 1, 1, 2, 0, 2, 20, 1, '', '', 0, 0),
 (14, 'Asset Expense', 0, 1, 0, 0, 0, 1, 1, 2, 0, 4, 21, 2, '', '', 0, 0),
-(15, 'Warehouse Transaction', 830, 1, 0, 0, 0, 1, 8, 2, 0, 8, NULL, 0, '', '', 0, 1);
+(15, 'Warehouse Transaction', 830, 1, 0, 0, 0, 1, 8, 2, 0, 8, NULL, 0, '', '', 0, 1),
+(16, 'Stock entry certificate', 810, 1, 0, 0, 1, 1, 1, 1, 0, NULL, NULL, 0, '', '', 1, 1),
+(17, 'Stock exit certificate', 820, 1, 0, 0, 1, 1, 1, 1, 0, NULL, NULL, 0, '', '', 1, 1);
 
 CREATE TABLE `eavAttr` (
   `entity` bigint(20) NOT NULL,

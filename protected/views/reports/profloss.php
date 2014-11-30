@@ -6,7 +6,7 @@ $this->menu=array(
 );?>
 
 <?php
-$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Profit & Loss report"))); 
+$this->beginWidget('MiniForm',array('header' => Yii::t("app","Profit & Loss report"))); 
 ?>
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'profloss-form',

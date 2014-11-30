@@ -12,7 +12,7 @@ $this->menu=array(
 	array('label'=>Yii::t('actions','Manage')." " .Yii::t('models',"Item Units"), 'url'=>array('admin')),
 );
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('actions','Update')." " .Yii::t('models',"Item Units")." ". $model->id,
+    'header' => Yii::t('actions','Update')." " .Yii::t('models',"Item Units")." ". $model->id,
     //'width' => '800',
 )); 
 ?>

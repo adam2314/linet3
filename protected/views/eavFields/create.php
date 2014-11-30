@@ -6,7 +6,7 @@ $this->menu=array(
 );
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Create Eav Fields"),
+    'header' => Yii::t('app',"Create Eav Fields"),
     //'width' => '800',
 )); 
 ?>

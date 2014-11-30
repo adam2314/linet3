@@ -15,7 +15,7 @@ $this->menu = array(
 
 
 $this->beginWidget('MiniForm', array(
-    'haeder' => Yii::t('app', "View Account Template") . " " . $model->name,
+    'header' => Yii::t('app', "View Account Template") . " " . $model->name,
 ));
 ?>
 

@@ -1,6 +1,6 @@
 
 <?php
-$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Import open format"))); 
+$this->beginWidget('MiniForm',array('header' => Yii::t("app","Import open format"))); 
 ?>
 
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(

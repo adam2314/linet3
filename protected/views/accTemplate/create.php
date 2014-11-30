@@ -5,7 +5,7 @@ $this->menu=array(
 );
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Create Account Template"),
+    'heaer' => Yii::t('app',"Create Account Template"),
 )); 
 ?>
 

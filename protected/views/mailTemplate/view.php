@@ -13,7 +13,7 @@ $this->menu=array(
 );
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"View Mail Template")." ".$model->name,
+    'header' => Yii::t('app',"View Mail Template")." ".$model->name,
 
 )); 
 

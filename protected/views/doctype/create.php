@@ -6,7 +6,7 @@ $this->menu=array(
 ?>
 <?php 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Create Document type"),
+    'header' => Yii::t('app',"Create Document type"),
 )); 
 echo $this->renderPartial('_form', array('model'=>$model)); 
  $this->endWidget(); 

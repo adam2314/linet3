@@ -12,7 +12,7 @@ $this->menu=array(
 	array('label'=>Yii::t("app","Manage Document Type"), 'url'=>array('admin')),
 );
 
- $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View Document Type")." ".$model->id,)); 
+ $this->beginWidget('MiniForm',array('header' => Yii::t("app","View Document Type")." ".$model->id,)); 
 ?>
 
 <?php $this->widget('zii.widgets.CDetailView', array(

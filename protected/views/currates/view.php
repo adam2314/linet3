@@ -16,7 +16,7 @@ $this->menu=array(
 <h1>View Currates #<?php echo $model->id; ?></h1>
 <?php 
  $this->beginWidget('MiniForm',array(
-    'haeder' => "Create Accounts",
+    'header' => "Create Accounts",
    // 'width' => '800',
 )); 
  $this->widget('zii.widgets.CDetailView', array(

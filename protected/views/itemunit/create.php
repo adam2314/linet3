@@ -11,7 +11,7 @@ $this->menu=array(
 
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',Yii::t('actions','Create')." " .Yii::t('models',"Item Units")),
+    'header' => Yii::t('app',Yii::t('actions','Create')." " .Yii::t('models',"Item Units")),
     //'width' => '800',
 )); 
 ?>

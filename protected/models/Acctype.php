@@ -27,7 +27,15 @@ class Acctype extends CActiveRecord{
 	public function tableName(){
 		return  self::table;
 	}
-        
+        public function getName($id){
+            $model=  Acctype::model()->findByPk($id);
+            if($model==NULL){
+                return 'ERROR';
+            }else {
+                return Yii::t('app',$model->desc);
+            }
+            
+        }
         
         public function switchType($old,$new){
             

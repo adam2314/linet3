@@ -8,7 +8,7 @@ $this->menu=array(
 
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Manage Mail Templates"),
+    'header' => Yii::t('app',"Manage Mail Templates"),
 
 )); 
 

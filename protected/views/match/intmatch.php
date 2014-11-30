@@ -7,7 +7,7 @@ $this->menu=array(
 
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Reconciliations"),
+    'header' => Yii::t('app',"Reconciliations"),
 )); 
 ?>
 

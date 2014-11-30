@@ -11,7 +11,7 @@ $this->menu=array(
 	array('label'=>Yii::t("app",'Delete Item Tax Category'),'url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>Yii::t("app",'Manage Item Tax Categories'),'url'=>array('admin')),
 );
-$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View Item Tax Category #")." ".$model->id,)); 
+$this->beginWidget('MiniForm',array('header' => Yii::t("app","View Item Tax Category #")." ".$model->id,)); 
 ?>
 
 

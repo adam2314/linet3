@@ -13,8 +13,7 @@ $this->menu=array(
 );
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Update Eav Fields")." ".$model->id,
-    //'width' => '800',
+    'header' => Yii::t('app',"Update Eav Fields")." ".$model->id,
 )); 
 
 ?>

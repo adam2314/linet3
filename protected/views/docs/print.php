@@ -11,7 +11,7 @@ elseif($preview==2){
     //echo $preview.$logopath;
 //exit;
 }
-//$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View Document ") ." " .$model->id,));
+//$this->beginWidget('MiniForm',array('header' => Yii::t("app","View Document ") ." " .$model->id,));
 
 
 

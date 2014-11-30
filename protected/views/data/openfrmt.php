@@ -1,6 +1,6 @@
 <?php
 
-$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Open Format Create"))); 
+$this->beginWidget('MiniForm',array('header' => Yii::t("app","Open Format Create"))); 
 ?>
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'openfrmt-form',

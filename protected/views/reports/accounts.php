@@ -6,7 +6,7 @@ $this->menu = array(
 ?>
 
 <?php
-$this->beginWidget('MiniForm', array('haeder' => Yii::t("app", "Bulk Balance")));
+$this->beginWidget('MiniForm', array('header' => Yii::t("app", "Bulk Balance")));
 ?>
 <?php
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(

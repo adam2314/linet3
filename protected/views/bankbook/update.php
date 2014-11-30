@@ -10,7 +10,7 @@ $this->menu=array(
 );
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Update Bankbooks")." ".$model->id,
+    'header' => Yii::t('app',"Update Bankbooks")." ".$model->id,
 )); 
 ?>
 

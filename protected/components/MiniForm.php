@@ -6,7 +6,7 @@ class MiniForm extends CWidget {
     public $help = 'none';
     public $collapse = true;
     public $fullscreen = true;
-    public $haeder = '';
+    public $header = '';
     public $titlewidth = 0;
     public $class = 'col-lg-12';
     public $content = '';
@@ -68,7 +68,7 @@ class MiniForm extends CWidget {
                     <div class="icons">
                         <i class="' . $this->logo . '"></i>
                     </div>
-                    <h5>' . $this->haeder . '</h5>
+                    <h5>' . $this->header . '</h5>
                         <div class="toolbar">
                       <nav style="padding: 8px;">
                         ' . $this->help . '

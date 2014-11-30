@@ -236,5 +236,9 @@ class ReportsController extends RightsController {
             Yii::app()->end();
         }
     }
+    
+    
+    
+    
 
 }

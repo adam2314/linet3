@@ -3,7 +3,7 @@ $this->menu = array(
         //array('label'=>'List Config','url'=>array('index')),
         //array('label'=>'View Config','url'=>array('view','id'=>$model->id)),
 );
-$this->beginWidget('MiniForm', array('haeder' => Yii::t("app", "Create Manual Transaction")));
+$this->beginWidget('MiniForm', array('header' => Yii::t("app", "Create Manual Transaction")));
 ?>
 <?php
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(

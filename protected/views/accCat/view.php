@@ -14,7 +14,7 @@ $this->menu=array(
 
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"View Account Category")." " .$model->id,
+    'header' => Yii::t('app',"View Account Category")." " .$model->id,
 
 )); 
 

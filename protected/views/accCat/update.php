@@ -13,7 +13,7 @@ $this->menu=array(
 );
         
         $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Update Account Category")." ".$model->id,
+    'header' => Yii::t('app',"Update Account Category")." ".$model->id,
 
 )); 
 ?>

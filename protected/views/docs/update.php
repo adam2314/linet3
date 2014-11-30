@@ -34,7 +34,7 @@ if($model->doctype==7){//Sales Order
 $this->menu=$actions;
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Update") . " " . Yii::t('app',$model->docType->name) . " " . $model->docnum,
+    'header' => Yii::t('app',"Update") . " " . Yii::t('app',$model->docType->name) . " " . $model->docnum,
     //'width' => '800',
 )); 
  echo $this->renderPartial('_form', array('model'=>$model)); 

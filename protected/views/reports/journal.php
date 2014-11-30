@@ -43,7 +43,7 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 ?>
 <?php
 $this->beginWidget('MiniForm', array(
-    'haeder' => Yii::t('app', "Transactions"),
+    'header' => Yii::t('app', "Transactions"),
         //'width' => '800',
 ));
 
@@ -52,10 +52,9 @@ $this->beginWidget('MiniForm', array(
 $yiidbdatetime = Yii::app()->locale->getDateFormat('yiidbdatetime');
 $phpdatetime = Yii::app()->locale->getDateFormat('phpdatetime');
 
-$this->widget('bootstrap.widgets.TbGridView', array(
+$this->widget('EExcelView', array(//
     'id' => 'transactions-grid',
     'dataProvider' => $model->search(),
-    //'enablePagination'=> false,
     'ajaxUpdate' => true,
     'ajaxType' => 'POST',
     'afterAjaxUpdate' => "function() {
@@ -114,18 +113,20 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 ));
 ?>
 <div class="row form-actions">
-<?php
-$this->widget('bootstrap.widgets.TbButton', array(
-    'type' => 'primary',
-    'buttonType' => 'ajaxButton',
-    "icon" => "glyphicon glyphicon-print",
-    'label' => Yii::t('app', "Print"),
-));
-?>
-</div>
     <?php
-    $this->endWidget(); //miniform
+    $this->widget('bootstrap.widgets.TbButton', array(
+        'type' => 'primary',
+        'buttonType' => 'ajaxButton',
+        "icon" => "glyphicon glyphicon-print",
+        'label' => Yii::t('app', "Print"),
+    ));
     ?>
+    
+
+</div>
+<?php
+$this->endWidget(); //miniform
+?>
 
 <script type="text/javascript">
     jQuery(document).ready(function() {

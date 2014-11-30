@@ -7,7 +7,7 @@ $this->menu=array(
 );
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Restore Backup From File"),
+    'header' => Yii::t('app',"Restore Backup From File"),
 )); 
 ?>
 <div class="form">

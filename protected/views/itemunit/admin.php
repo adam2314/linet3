@@ -23,7 +23,7 @@ $('.search-form form').submit(function(){
 ");
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('actions','Admin')." " .Yii::t('models',"Item Units"),
+    'header' => Yii::t('actions','Admin')." " .Yii::t('models',"Item Units"),
     //'width' => '800',
 )); 
 

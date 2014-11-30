@@ -12,7 +12,7 @@ $this->menu=array(
 	array('label'=>Yii::t("app","Manage Document Type"), 'url'=>array('admin')),
 );
 
- $this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Manage Document Type")." ".$model->id,)); 
+ $this->beginWidget('MiniForm',array('header' => Yii::t("app","Manage Document Type")." ".$model->id,)); 
 ?>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); 

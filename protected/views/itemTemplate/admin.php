@@ -17,7 +17,7 @@ $('.search-form form').submit(function(){
 ");
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Manage Account Templates"),
+    'header' => Yii::t('app',"Manage Account Templates"),
 )); 
 ?>
 

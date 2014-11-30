@@ -54,7 +54,7 @@ function getAlert(response){
 
 ");
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Manage Docs"),  )); 
+    'header' => Yii::t('app',"Manage Docs"),  )); 
 ?>
 
 <?php

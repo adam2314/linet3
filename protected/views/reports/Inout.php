@@ -1,6 +1,6 @@
 <?php
 
-$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","In Out"))); 
+$this->beginWidget('MiniForm',array('header' => Yii::t("app","In Out"))); 
 ?>
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'inout-form',

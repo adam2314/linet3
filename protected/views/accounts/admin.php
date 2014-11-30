@@ -11,7 +11,7 @@ $this->menu=array(
 
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Accounts"),
+    'header' => Yii::t('app',"Accounts"),
 )); 
  
   $types=  Acctype::model()->findAll();

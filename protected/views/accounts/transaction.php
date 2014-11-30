@@ -46,7 +46,7 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 <?php
 
 $this->beginWidget('MiniForm', array(
-    'haeder' => Yii::t('app', "Transactions for Account") . ": " . $account->name,
+    'header' => Yii::t('app', "Transactions for Account") . ": " . $account->name,
 ));
 
 $yiidbdatetime = Yii::app()->locale->getDateFormat('yiidbdatetime');

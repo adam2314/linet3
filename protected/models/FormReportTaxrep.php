@@ -18,7 +18,6 @@ class FormReportTaxrep extends CFormModel {
     private $custtax_acc;
     public $custtax_sum;
     public $custtax_total;
-    public $income_sum_novat = 0;
     public $income_sum = 0;
     public $tax_rate = 0;
     public $tax_sum = 0;
@@ -34,7 +33,16 @@ class FormReportTaxrep extends CFormModel {
             'from_month' => Yii::t('labels', 'From Month'),
             'to_month' => Yii::t('labels', 'To Month'),
             'year' => Yii::t('labels', 'Year'),
+            
+            'income_sum' => Yii::t('labels', 'Income Sum'),
+            'tax_rate' => Yii::t('labels', 'Tax Rate'),
+            'tax_sum' => Yii::t('labels', 'Tax Sum'),
+            'custtax_total' => Yii::t('labels', 'Withholding tax total'),
+            'custtax_sum' => Yii::t('labels', 'Withholding tax sum'),
+            'tax_total' => Yii::t('labels', 'Tax to pay'),
+            
         );
+        
     }
 
     /**
@@ -47,10 +55,10 @@ class FormReportTaxrep extends CFormModel {
             array('from_month, to_month, year', 'required'),
             array('from_month', 'compare', 'compareAttribute' => 'to_month', 'operator' => '<='),
             array('to_month', 'compare', 'compareAttribute' => 'from_month', 'operator' => '>='),
-            array('tax_rate, income_sum, income_sum_novat, custtax_sum, custtax_total, tax_total, tax_sum, step, to_month, to_date, from_month, from_date, year,', 'safe'),
+            array('tax_rate, income_sum, custtax_sum, custtax_total, tax_total, tax_sum, step, to_month, to_date, from_month, from_date, year,', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('tax_rate, income_sum, income_sum_novat, custtax_sum, custtax_total, tax_total, tax_sum, step, to_month, to_date, from_month, from_date, year,', 'safe', 'on' => 'search'),
+            array('tax_rate, income_sum, custtax_sum, custtax_total, tax_total, tax_sum, step, to_month, to_date, from_month, from_date, year,', 'safe', 'on' => 'search'),
         );
     }
 

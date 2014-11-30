@@ -23,10 +23,10 @@ $this->menu = array(
 
             if (isset(Yii::app()->user->widget[$widget[0]])) {
                 if (Yii::app()->user->widget[$widget[0]]) {
-                    $this->widget($widget[0], array('haeder' => Yii::t("app", $widget[1]), 'height' => 350, 'class' => $widget[2]));
+                    $this->widget($widget[0], array('header' => Yii::t("app", $widget[1]), 'height' => 350, 'class' => $widget[2]));
                 }
             } else {
-                $this->widget($widget[0], array('haeder' => Yii::t("app", $widget[1]), 'height' => 350, 'class' => $widget[2]));
+                $this->widget($widget[0], array('header' => Yii::t("app", $widget[1]), 'height' => 350, 'class' => $widget[2]));
             }
         }
     }

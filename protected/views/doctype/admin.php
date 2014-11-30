@@ -22,7 +22,7 @@ $('.search-form form').submit(function(){
 });
 ");
 $this->beginWidget('MiniForm', array(
-    'haeder' => Yii::t('app', "Manage Document types"),
+    'header' => Yii::t('app', "Manage Document types"),
 ));
 ?>
 

@@ -39,7 +39,7 @@ $this->menu = $actions;
 
 
 
-$this->beginWidget('MiniForm', array('haeder' => Yii::t("app", "View Document") . " " . $model->id,));
+$this->beginWidget('MiniForm', array('header' => Yii::t("app", "View Document") . " " . $model->id,));
 ?>
 
 

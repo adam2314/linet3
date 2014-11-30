@@ -9,7 +9,7 @@ $this->menu=array(
 
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Update Item"). " ".$model->id,
+    'header' => Yii::t('app',"Update Item"). " ".$model->id,
 )); 
 ?>
 

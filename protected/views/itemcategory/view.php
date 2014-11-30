@@ -12,7 +12,7 @@ $this->menu=array(
 	array('label'=>Yii::t('actions','Admin')." " .Yii::t('models','Item Categories'), 'url'=>array('admin')),
 );
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('actions',"View") . " ".Yii::t('models',"Item Categories")." ". $model->id,
+    'header' => Yii::t('actions',"View") . " ".Yii::t('models',"Item Categories")." ". $model->id,
 )); 
 ?>
 

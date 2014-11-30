@@ -10,7 +10,7 @@ $this->menu=array(
 );
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Create Account Id6111"),
+    'header' => Yii::t('app',"Create Account Id6111"),
 
 )); 
 ?>

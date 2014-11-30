@@ -7,7 +7,7 @@ $this->menu=array(
 );
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Update Account Template")." ".$model->name,
+    'header' => Yii::t('app',"Update Account Template")." ".$model->name,
 )); 
 
 ?>

@@ -26,7 +26,7 @@ $('.search-form form').submit(function(){
 ");
 /*
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Select Company"),
+    'header' => Yii::t('app',"Select Company"),
     //'width' => '800',
 )); */
 echo Yii::t('app',"Select Company");
@@ -139,7 +139,7 @@ echo Yii::t('app',"Select Company");
 //);
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Add User"),
+    'header' => Yii::t('app',"Add User"),
     //'width' => '800',
 )); 
 

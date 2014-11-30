@@ -9,7 +9,7 @@ $this->menu=array(
 );
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Item Categories"),
+    'header' => Yii::t('app',"Item Categories"),
 )); 
 ?>
 

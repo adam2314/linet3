@@ -3,7 +3,7 @@ $this->menu = array(
         //array('label'=>'List Config','url'=>array('index')),
         //array('label'=>'View Config','url'=>array('view','id'=>$model->id)),
 );
-$this->beginWidget('MiniForm', array('haeder' => Yii::t("app", "Create Open Balance")));
+$this->beginWidget('MiniForm', array('header' => Yii::t("app", "Create Open Balance")));
 ?>
 <?php
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(

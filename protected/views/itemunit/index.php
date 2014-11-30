@@ -9,7 +9,7 @@ $this->menu=array(
 );
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('models',"Item Units"),
+    'header' => Yii::t('models',"Item Units"),
     //'width' => '800',
 )); 
 

@@ -40,7 +40,7 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 <?php
 
 $this->beginWidget('MiniForm', array(
-    'haeder' => Yii::t('app', "Stock Sum"),
+    'header' => Yii::t('app', "Stock Sum"),
         //'width' => '800',
 ));
 

@@ -1,7 +1,7 @@
 <?php 
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Vat Report"),
+    'header' => Yii::t('app',"Vat Report"),
 )); 
 
 $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(

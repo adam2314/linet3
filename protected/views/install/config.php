@@ -1,7 +1,7 @@
 <?php
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => "Install Wizard",
+    'header' => "Install Wizard",
 )); 
 
 

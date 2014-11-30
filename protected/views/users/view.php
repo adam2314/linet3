@@ -12,7 +12,7 @@ $this->menu=array(
 	array('label'=>Yii::t("app","Manage Users"),'url'=>array('admin')),
 );
 
-$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","View User ") ." " .$model->username,));
+$this->beginWidget('MiniForm',array('header' => Yii::t("app","View User ") ." " .$model->username,));
 ?>
 <div class="col-md-4">
 

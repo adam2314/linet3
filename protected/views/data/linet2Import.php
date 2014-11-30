@@ -7,7 +7,7 @@ $this->menu=array(
 );
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Import Companay From Linet 2.0"),
+    'header' => Yii::t('app',"Import Companay From Linet 2.0"),
 )); 
 ?>
 <div class="form">

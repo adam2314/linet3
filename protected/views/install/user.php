@@ -1,6 +1,6 @@
 <?php
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t("app","Install Wizard"),
+    'header' => Yii::t("app","Install Wizard"),
 )); 
 
 //$this->renderPartial('application.views.users._form',array('model'=>$model ));

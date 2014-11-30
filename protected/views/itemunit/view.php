@@ -13,7 +13,7 @@ $this->menu=array(
 );
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',Yii::t('actions','View')." " .Yii::t('models',"Item Units"))." ". $model->id,
+    'header' => Yii::t('app',Yii::t('actions','View')." " .Yii::t('models',"Item Units"))." ". $model->id,
     //'width' => '800',
 )); 
 ?>

@@ -8,7 +8,7 @@ $this->menu=array(
 	array('label'=>Yii::t('app','Create Item VAT Category'),'url'=>array('create')),
 );
 
-$this->beginWidget('MiniForm',array('haeder' => Yii::t("app","Manage Item Tax Categories"),)); 
+$this->beginWidget('MiniForm',array('header' => Yii::t("app","Manage Item Tax Categories"),)); 
 ?>
 
 

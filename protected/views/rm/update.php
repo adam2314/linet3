@@ -8,7 +8,7 @@ $this->menu=array(
 );
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Update Account Contact History") ." ". $model->id,
+    'header' => Yii::t('app',"Update Account Contact History") ." ". $model->id,
     //'width' => '800',
 )); 
 

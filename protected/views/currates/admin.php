@@ -11,7 +11,7 @@ $this->menu=array(
 ?>
 
 
-<?php  $this->beginWidget('MiniForm',array('haeder' => Yii::t('app',"Manage Currencies Rates"),)); ?>
+<?php  $this->beginWidget('MiniForm',array('header' => Yii::t('app',"Manage Currencies Rates"),)); ?>
 
 <?php 
 // this is the date picker

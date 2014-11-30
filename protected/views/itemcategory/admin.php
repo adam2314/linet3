@@ -11,7 +11,7 @@ $this->menu=array(
 
 
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Manage Item Categories"),
+    'header' => Yii::t('app',"Manage Item Categories"),
 )); 
 
 

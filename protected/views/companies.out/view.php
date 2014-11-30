@@ -16,7 +16,7 @@ $this->menu=array(
 
 <?php 
  $this->beginWidget('MiniForm',array(
-    'haeder' => "View Company",
+    'header' => "View Company",
     'width' => '800',
 )); 
 

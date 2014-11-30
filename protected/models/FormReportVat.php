@@ -30,6 +30,13 @@ class FormReportVat extends CFormModel {
             'from_month' => Yii::t('labels', 'From Month'),
             'to_month' => Yii::t('labels', 'To Month'),
             'year' => Yii::t('labels', 'Year'),
+            
+            'income_sum_novat' => Yii::t('labels', 'Income Sum no VAT'),
+            'income_sum' => Yii::t('labels', 'Income Sum VAT not Included'),
+            'selvat_total' => Yii::t('labels', 'Sale VAT total'),
+            'buyvat_total' => Yii::t('labels', 'Buy VAT total'),
+            'assetvat_total' => Yii::t('labels', 'Asset VAT total'),
+            'payvat_total' => Yii::t('labels', 'Pay VAT total'),
         );
     }
     

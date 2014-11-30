@@ -9,7 +9,7 @@ $this->menu=array(
 	array('label'=>Yii::t('app','Create User'),'url'=>array('create')),
 );
 
-$this->beginWidget('MiniForm',array('haeder' => Yii::t('app',"Manage Users"),)); 
+$this->beginWidget('MiniForm',array('header' => Yii::t('app',"Manage Users"),)); 
 
 ?>
 

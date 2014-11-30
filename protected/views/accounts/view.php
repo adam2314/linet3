@@ -16,7 +16,7 @@ $this->menu=array(
 
 <?php 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"View Account") ." #$model->id;",
+    'header' => Yii::t('app',"View Account") ." #$model->id;",
     //'width' => '800',
 )); 
 $this->widget('zii.widgets.CDetailView', array(

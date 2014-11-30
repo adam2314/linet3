@@ -5,13 +5,11 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	//array('label'=>'List EavFields','url'=>array('index')),
 	array('label'=>Yii::t('app','Create EavFields'),'url'=>array('create')),
 );
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Manage Eav Fields"),
-    //'width' => '800',
+    'header' => Yii::t('app',"Manage Eav Fields"),
 )); 
 ?>
 

@@ -18,7 +18,7 @@ $('.search-form form').submit(function(){
 });
 ");
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Manage Bankbooks"),
+    'header' => Yii::t('app',"Manage Bankbooks"),
 )); 
 ?>
 

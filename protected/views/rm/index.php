@@ -5,7 +5,7 @@ $this->menu=array(
 );
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t("app","Account Contact History"),
+    'header' => Yii::t("app","Account Contact History"),
 )); 
 
 ?>

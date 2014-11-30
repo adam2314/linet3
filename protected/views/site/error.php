@@ -1,6 +1,6 @@
 <?php
 $this->pageTitle=Yii::app()->name . ' - '. Yii::t('app','Error');
- //$this->beginWidget('MiniForm',array(    'haeder' => Yii::t('app',"Error"),)); 
+ //$this->beginWidget('MiniForm',array(    'header' => Yii::t('app',"Error"),)); 
 ?>
 
 

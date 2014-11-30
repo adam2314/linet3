@@ -7,7 +7,7 @@ $this->menu=array(
 );
 
  $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Import open Format Files"),
+    'header' => Yii::t('app',"Import open Format Files"),
 )); 
 ?>
 <div class="form">

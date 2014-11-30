@@ -9,7 +9,7 @@ $this->menu=array(
 	array('label'=>Yii::t('app','Manage Item Category'), 'url'=>array('admin')),
 );
 $this->beginWidget('MiniForm',array(
-    'haeder' => Yii::t('app',"Create Item Category"),
+    'header' => Yii::t('app',"Create Item Category"),
     
 )); 
 

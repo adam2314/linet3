@@ -12,7 +12,7 @@ $this->menu = array(
 
 
 $this->beginWidget('MiniForm', array(
-    'haeder' => Yii::t('actions', 'Manage') . " " . Yii::t('models', 'Payments Types'),
+    'header' => Yii::t('actions', 'Manage') . " " . Yii::t('models', 'Payments Types'),
 ));
 ?>
 

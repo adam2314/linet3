@@ -1,7 +1,7 @@
 <?php
 
 $this->beginWidget('MiniForm', array(
-    'haeder' => Yii::t('app', "Customers owing money"),
+    'header' => Yii::t('app', "Customers owing money"),
 ));
 
 

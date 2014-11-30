@@ -1,5 +1,5 @@
 <?php
-$this->beginWidget('MiniForm', array('haeder' => Yii::t("app", "Update Configuration")));
+$this->beginWidget('MiniForm', array('header' => Yii::t("app", "Update Configuration")));
 
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id' => 'settings-form',
