@@ -2,14 +2,14 @@
 
 return array(
     'language' => 'he_il',
-    //'params' => array(
-    //    'newInstall' => true,
-    //),
+    'params' => array(
+        'newInstall' => true,
+    ),
     'components' => array(
         'db' => array(
-            'connectionString' => 'mysql:host=localhost;dbname=multiTest',
+            'connectionString' => 'mysql:host=localhost;dbname=linet',
             'username' => 'root',
-            'password' => 'VBy7t6r5',
+            'password' => 'linet',
             'emulatePrepare' => true,
             'charset' => 'utf8',
             'tablePrefix' => '',
@@ -17,9 +17,9 @@ return array(
             'class' => 'CDbConnection'
         ),
         'dbMain' => array(
-            'connectionString' => 'mysql:host=localhost;dbname=multiTest',
+            'connectionString' => 'mysql:host=localhost;dbname=linet',
             'username' => 'root',
-            'password' => 'VBy7t6r5',
+            'password' => 'linet',
             'emulatePrepare' => true,
             'charset' => 'utf8',
             'tablePrefix' => '',
