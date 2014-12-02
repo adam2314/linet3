@@ -66,7 +66,7 @@ class ItemController extends RightsController {
             //$model->pic->saveAs('/to/localFile');
                 $this->redirect(array('admin', 'id' => $model->id));
         }
-        $model->sku=$model->maxId()+1;
+        $model->sku = $model->maxId() + 1;
         $cat = CHtml::listData(Itemcategory::model()->findAll(), 'id', 'name');
         $units = CHtml::listData(Itemunit::model()->findAll(), 'id', 'name');
         $model->parent_item_id = 0;
@@ -144,11 +144,10 @@ class ItemController extends RightsController {
         $model = new Item('search');
         $model->unsetAttributes();  // clear any default values
 
-
         $vl = 'item-grid';
         if (isset($_POST['Item']))
             $model->attributes = $_POST['Item'];
-        if (isset($_GET['ajax']) && $_GET['ajax'] === $vl) {
+        if (isset($_GET['ajax'])) {
             // Render partial file created in Step 1
             $this->renderPartial('_ajax', array(
                 //'subscriberActiveDataProvider' => $subscriberActiveDataProvider,

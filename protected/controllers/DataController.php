@@ -130,7 +130,7 @@ class DataController extends RightsController{//
                     throw new CHttpException(404,'The requested page does not exist.');
             }
             //$configPath=Yii::app()->user->settings["company.path"];
-            $file   = $model->getFullPath();//????.$model->id;
+            $file   = $model->getFullFilePath();//????.$model->id;
 
             
             //echo $file.'end';

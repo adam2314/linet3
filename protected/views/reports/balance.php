@@ -114,7 +114,7 @@ $this->endWidget();
 
         $("#yt2").click(function(e) {
 
-             $("#balance-form").attr("action", $("#balance-form").attr("action") + "ajax?grid_mode=export");
+            $("#balance-form").attr("action", $("#balance-form").attr("action") + "ajax?grid_mode=export");
             $('#balance-form').submit();
 
 

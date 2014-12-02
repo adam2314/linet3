@@ -78,7 +78,7 @@ class Settings extends basicRecord {
                 $id = $logo->save(); // DONE
                 //echo $logo->id;
                 //Yii::app()->end();
-                if ($this->value->saveAs(Yii::app()->params["filePath"] . $configPath . "/settings/" . $logo->id)) {
+                if ($this->value->saveAs($logo->getFullFilePath())) {
                     $this->value = $logo->id; //"/files/".$configPath."/settings/".$this->id.".".$ext;
                 }
 

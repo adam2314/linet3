@@ -141,13 +141,13 @@ class stockAction extends CActiveRecord {
     public function getAccountName(){
         if(isset($this->Account)) 
             return $this->Account->name;
-            return "ERROR";
+            return "ERROR:".$this->account_id;
     }
     
     public function getItemName(){
         if(isset($this->Item)) 
             return $this->Item->name;
-            return "ERROR";
+            return "ERROR:".$this->item_id;
     }
     
 
