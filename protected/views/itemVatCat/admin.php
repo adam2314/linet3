@@ -13,7 +13,7 @@ $this->beginWidget('MiniForm',array('header' => Yii::t("app","Manage Item Tax Ca
 
 
 
-<?php $this->widget('bootstrap.widgets.TbGridView',array(
+<?php $this->widget('EExcelView',array(
 	'id'=>'item-vat-cat-grid',
 	'dataProvider'=>$model->search(),
 	//'filter'=>$model,

@@ -14,7 +14,7 @@ $this->beginWidget('MiniForm',array('header' => Yii::t('app',"Manage Users"),));
 ?>
 
 
-<?php $this->widget('bootstrap.widgets.TbGridView',array(
+<?php $this->widget('EExcelView',array(
 	'id'=>'user-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,

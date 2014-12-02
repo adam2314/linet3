@@ -2,6 +2,14 @@
 
 class TransactionController extends RightsController{
     
+    public function actionView($id = 200) {
+        $transactions = new Transactions('search');
+        $transactions->unsetAttributes();
+        $transactions->num = $id;
+        $this->render('index', array('model' => $transactions));
+    }
+    
+    
     public function actionCreate(){
         $model=new Transactions();
         

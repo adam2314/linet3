@@ -14,6 +14,7 @@ class DepositController extends RightsController{
 				Yii::app()->user->setFlash('success', Yii::t('app','Deposit Success'));
                 }
                 $cheques=new Doccheques('search');
+                $cheques->unsetAttributes();
                 $cheques->bank_refnum=null;
                 
                 
@@ -25,9 +26,10 @@ class DepositController extends RightsController{
         
     public function actionAjax(){
             $model=new Doccheques('search');
+            $model->unsetAttributes();
             //$model=new Bankbook('search');
             //$model=new Docdetails('search');
-            $model->bank_refnum='';
+            $model->bank_refnum=null;
             //if(isset($_POST['Deposit']))
             //$model->attributes['bank_refnum']='';
             $this->renderPartial('ajax',array( 'model'=>$model,   ));

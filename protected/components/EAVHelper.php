@@ -78,6 +78,14 @@ private static function field($key, $value, $sModel,$model){
         
         $field = CHtml::hiddenField($model.'[' . $key . '][value]', false) .
                 CHtml::checkbox($model.'[' . $key . '][value]', ($value=='true')?true:false);
+    } elseif ($sModel == 'date') {
+
+        //$label = Yii::t('app', $sModel->id);
+        
+        $field = CHtml::textField($model.'[' . $key . '][value]', $value,array('class'=>'date'));
+        $name=str_replace("[","_",str_replace("]","_",$model));
+        $field.="<script>
+jQuery('#{$name}{$key}_value').datepicker();</script>";
     } else {
         //$label = Yii::t('app', $sModel->id);
         $field = CHtml::textField($model.'[' . $key . '][value]', $value);

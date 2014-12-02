@@ -4,7 +4,7 @@
 ); ?>
 
 <div id="generator">
-<?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Generate items'))); ?>
+<?php $this->beginWidget('MiniForm',array('header' => Rights::t('core', 'Generate items'))); ?>
 	
 
 	<p><?php echo Rights::t('core', 'Please select which items you wish to generate.'); ?></p>

@@ -15,7 +15,7 @@ $('.search-form form').submit(function(){
 
 
 
-$this->widget('bootstrap.widgets.TbGridView', array(
+$this->widget('EExcelView', array(
 	'id'=>'accounts'.$model->type.'-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,

@@ -90,7 +90,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         $files->parent_type = get_class($model);
         $files->parent_id = $model->id;
         $files->hidden = 0;
-        $this->widget('bootstrap.widgets.TbGridView', array(
+        $this->widget('EExcelView', array(
             'id' => 'acc-template-grid',
             'dataProvider' => $files->search(),
             //'filter'=>$model,

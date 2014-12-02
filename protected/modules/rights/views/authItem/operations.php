@@ -4,7 +4,7 @@
 ); ?>
 
 <div id="operations">
-        <?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Operations'))); ?>
+        <?php $this->beginWidget('MiniForm',array('header' => Rights::t('core', 'Operations'))); ?>
 
 	<p>
 		<?php echo Rights::t('core', 'An operation is a permission to perform a single operation, for example accessing a certain controller action.'); ?><br />

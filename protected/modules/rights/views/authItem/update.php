@@ -8,7 +8,7 @@
 ?>
 
 <div id="updatedAuthItem">
-        <?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Update :name', array(
+        <?php $this->beginWidget('MiniForm',array('header' => Rights::t('core', 'Update :name', array(
 		':name'=>$model->name,
 		':type'=>Rights::getAuthItemTypeName($model->type),
 	)))); ?>

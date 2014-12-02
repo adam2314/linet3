@@ -251,7 +251,7 @@ class Accounts extends fileRecord {//CActiveRecord
             //array('vatnum', 'length', 'min'=>9),
             array('vatnum', 'vatnumVal'),
             array('id6111, zip', 'length', 'max' => 10),
-            array('src_tax', 'length', 'max' => 5),
+            array('src_tax', 'length', 'max' => 6),
             array('currency_id', 'length', 'max' => 3),
             array('name, contact, address', 'length', 'max' => 80),
             //array('department, web', 'length', 'max'=>60),

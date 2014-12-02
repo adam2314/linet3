@@ -30,7 +30,7 @@ $('.search-form form').submit(function(){
 ?>
 
 
-<?php $this->widget('bootstrap.widgets.TbGridView', array(
+<?php $this->widget('EExcelView', array(
 	'id'=>'itemunit-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,

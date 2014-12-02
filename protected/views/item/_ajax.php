@@ -14,11 +14,10 @@ $('.search-form form').submit(function(){
 
 
 
-$this->widget('bootstrap.widgets.TbGridView', array(
+$this->widget('EExcelView', array(
 	'id'=>'item-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
-        'template' => '{items}{pager}',
         'ajaxUpdate'=>true,
         'ajaxType'=>'POST',
 	'columns'=>array(

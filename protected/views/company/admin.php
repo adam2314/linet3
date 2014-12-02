@@ -33,7 +33,7 @@ echo Yii::t('app',"Select Company");
 
 ?>
 
-<?php $this->widget('bootstrap.widgets.TbGridView',array(
+<?php $this->widget('EExcelView',array(
 	'id'=>'comp-grid',
 	'dataProvider'=>$model->search(),
 	//'filter'=>$model,

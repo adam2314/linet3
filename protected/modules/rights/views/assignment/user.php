@@ -5,7 +5,7 @@
 ); ?>
 
 <div id="userAssignments">
-    <?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Assignments for :username', array(':username'=>$model->getName())))); ?>
+    <?php $this->beginWidget('MiniForm',array('header' => Rights::t('core', 'Assignments for :username', array(':username'=>$model->getName())))); ?>
 	
 	
 	<div class="">

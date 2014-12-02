@@ -18,7 +18,7 @@
 		//the PHPExcel object
 		public $objPHPExcel = null;
 		public $libPath = 'ext.phpexcel.Classes.PHPExcel'; //the path to the PHP excel lib
-
+                public $template = "{summary}\n{items}\n{pager}\n{exportbuttons}";
 		//config
 		public $autoWidth = true;
 		public $exportType = 'Excel5';
@@ -29,8 +29,8 @@
 		public $grid_mode_var = 'grid_mode'; //GET var for the grid mode
 		
 		//buttons config
-		public $exportButtonsCSS = 'summary';
-		public $exportButtons = array('Excel2007');
+		public $exportButtonsCSS = 'btn btn-primary';
+		public $exportButtons = array('Excel2007','Excel5','HTML','CSV','Print');
 		public $exportText = 'Export to: ';
 
 		//callbacks
@@ -43,28 +43,34 @@
 			'Excel5'	=> array(
 				'Content-type'=>'application/vnd.ms-excel',
 				'extension'=>'xls',
-				'caption'=>'Excel(*.xls)',
+				'caption'=>'Excel(xls)',
 			),
 			'Excel2007'	=> array(
 				'Content-type'=>'application/vnd.ms-excel',
 				'extension'=>'xlsx',
-				'caption'=>'Excel(*.xlsx)',				
+				'caption'=>'Excel(xlsx)',				
 			),
 			'PDF'		=>array(
 				'Content-type'=>'application/pdf',
 				'extension'=>'pdf',
-				'caption'=>'PDF(*.pdf)',								
+				'caption'=>'PDF',								
 			),
 			'HTML'		=>array(
 				'Content-type'=>'text/html',
 				'extension'=>'html',
-				'caption'=>'HTML(*.html)',												
+				'caption'=>'HTML',												
 			),
 			'CSV'		=>array(
 				'Content-type'=>'application/csv',			
 				'extension'=>'csv',
-				'caption'=>'CSV(*.csv)',												
+				'caption'=>'CSV',												
+			),
+                        'Print'		=>array(
+				//'Content-type'=>'application/csv',			
+				//'extension'=>'csv',
+				'caption'=>'Print',												
 			)
+                        
 		);
 
 		public function init()
@@ -244,13 +250,16 @@
 				$type = is_array($button) ? $key : $button;
 				$url = parse_url(Yii::app()->request->requestUri);
 				//$content[] = CHtml::link($item['caption'], '?'.$url['query'].'exportType='.$type.'&'.$this->grid_mode_var.'=export');
+                                if($button=='Print')
+                                    $content[] = CHtml::link($item['caption'],"javascript:window.print();", array('class'=>$this->exportButtonsCSS));				
+                                else
 				if (key_exists('query', $url))
-				    $content[] = CHtml::link($item['caption'], '?'.$url['query'].'&exportType='.$type.'&'.$this->grid_mode_var.'=export');          
+				    $content[] = CHtml::link($item['caption'], '?'.$url['query'].'&exportType='.$type.'&'.$this->grid_mode_var.'=export',array('class'=>$this->exportButtonsCSS));          
 				else
-				    $content[] = CHtml::link($item['caption'], '?exportType='.$type.'&'.$this->grid_mode_var.'=export');				
+				    $content[] = CHtml::link($item['caption'], '?exportType='.$type.'&'.$this->grid_mode_var.'=export',array('class'=>$this->exportButtonsCSS));				
 			}
 			if($content)
-				echo CHtml::tag('div', array('class'=>$this->exportButtonsCSS), $this->exportText.implode(', ',$content));	
+				echo CHtml::tag('div', array('class'=>"btn-group"), implode(' ',$content));	
 
 		}			
 		

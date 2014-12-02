@@ -1,6 +1,6 @@
 <div style=" width: 40%; display: inline-block; margin-right: 150px; ">
     <?php
-    $this->widget('bootstrap.widgets.TbGridView', array(
+    $this->widget('EExcelView', array(
         'id' => 'profloss-grid',
         'dataProvider' => $model->search(),
         //'filter'=>$model,

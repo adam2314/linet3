@@ -1,4 +1,4 @@
-<?php $this->widget('bootstrap.widgets.TbGridView', array(
+<?php $this->widget('EExcelView', array(
 	'id'=>'depsoit-grid',
 	'dataProvider'=>$model->search(),
 	'columns'=>array(

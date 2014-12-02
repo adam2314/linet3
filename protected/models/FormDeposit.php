@@ -55,8 +55,8 @@ class FormDeposit  extends CFormModel{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-                        array('account_id, currency_id, refnum, date, sum, Deposit, Total', 'required'),
-                        array('account_id, currency_id, refnum, date, sum, Deposit, Total', 'safe'),
+                        array('account_id, refnum, date, Deposit, Total', 'required'),
+                        array('account_id, refnum, date, Deposit, Total', 'safe'),
                     	);
 	}
     

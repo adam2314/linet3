@@ -5,7 +5,7 @@
 ?>
 
 <div id="roles">
-        <?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Roles'))); ?>
+        <?php $this->beginWidget('MiniForm',array('header' => Rights::t('core', 'Roles'))); ?>
 	
 	<p>
 		<?php echo Rights::t('core', 'A role is group of permissions to perform a variety of tasks and operations, for example the authenticated user.'); ?><br />

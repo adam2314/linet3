@@ -18,7 +18,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 );
 
 $temp = CHtml::listData(Accounts::model()->findAllByType(7), 'id', 'name');
-$temp[0] = Yii::t('app', 'Chose Bank');
+$temp[0] = Yii::t('app', 'Choose Bank');
 $model->account_id = 0;
 ?>
 <div class='col-md-3'>
@@ -48,28 +48,27 @@ $model->account_id = 0;
 <div id ="result">
 
     <?php
-    $this->widget('bootstrap.widgets.TbGridView', array(
+    $this->widget('EExcelView', array(
         'id' => 'depsoit-grid',
         'dataProvider' => $cheques->search(),
         'columns' => array(
             array(
                 'type' => 'raw',
-                'value' =>'CHtml::checkBox("FormDeposit[Deposit][$data->doc_id,$data->line]",null,array("class"=>\'noPrint\', "onchange"=>"CalcSum()"))',
+                'value' => 'CHtml::checkBox("FormDeposit[Deposit][$data->doc_id,$data->line]",null,array("class"=>\'noPrint\', "onchange"=>"CalcSum()"))',
             ),
             array(
                 'type' => 'raw',
-                'value' =>'CHtml::hiddenField("FormDeposit[Total][$data->doc_id,$data->line]","$data->sum").CHtml::hiddenField("FormDeposit[Type][$data->doc_id,$data->line]","$data->type")',
+                'value' => 'CHtml::hiddenField("FormDeposit[Total][$data->doc_id,$data->line]","$data->sum").CHtml::hiddenField("FormDeposit[Type][$data->doc_id,$data->line]","$data->type")',
             ),
             array(
                 'name' => 'type',
                 'type' => 'raw',
-                'value' =>'Yii::t("app",$data->Type->name)',
+                'value' => 'Yii::t("app",$data->Type->name)',
             ),
-            
             array(
                 'name' => 'Details',
-                'header'=>Yii::t('app','Details'),
-                'value' =>'$data->printDetails()',
+                'header' => Yii::t('app', 'Details'),
+                'value' => '$data->printDetails()',
             ),
             //'bank_refnum',
             //'bank',
@@ -94,10 +93,10 @@ $model->account_id = 0;
 <div id="sum">
 </div>
 <div class='row'>
-<div class='col-md-3'>
-    <?php echo $form->textFieldRow($model, 'cheq_sum', array('maxlength' => 100)); ?>
-    <?php echo $form->textFieldRow($model, 'cash_sum', array('maxlength' => 100)); ?>    
-</div>
+    <div class='col-md-3'>
+        <?php echo $form->textFieldRow($model, 'cheq_sum', array('maxlength' => 100)); ?>
+        <?php echo $form->textFieldRow($model, 'cash_sum', array('maxlength' => 100)); ?>    
+    </div>
 </div>
 
 <div class="form-actions">
@@ -116,24 +115,24 @@ $this->endWidget();
 
 <script type="text/javascript">
     /*
-     jQuery(document).ready(function(){
-     $( "#FormDeposit_account_id" ).change(function() {
-     var value=$("#FormDeposit_account_id").val();
-     
-     $.post( "<?php echo $this->createUrl('/deposit/ajax'); ?>", { Deposit: {account_id: value}} ).done(
-     function( data )
-     {
-     $( "#result" ).html( data );
-     }
-     
-     );
-     });
-     
-     
-     
-     });
-     //*/
-    
+    jQuery(document).ready(function() {
+        $("#FormDeposit_account_id").change(function() {
+            var value = $("#FormDeposit_account_id").val();
+
+            $.post("<?php echo $this->createUrl('/deposit/ajax'); ?>", {Deposit: {account_id: value}}).done(
+                    function(data)
+                    {
+                        $("#result").html(data);
+                    }
+
+            );
+        });
+
+
+
+    });
+    //*/
+
     function CalcSum() {
         var vals = $("[id^=FormDeposit_Deposit]");
         var total = $("[id^=FormDeposit_Total]");
@@ -149,7 +148,7 @@ $this->endWidget();
 
 
                     if ($(types[x]).val() == 1) {
-                        cashsum+= parseFloat(total[x].value);
+                        cashsum += parseFloat(total[x].value);
 
                     } else {
 

@@ -4,7 +4,7 @@
 ); ?>
 
 <div id="permissions">
-        <?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Permissions'))); ?>
+        <?php $this->beginWidget('MiniForm',array('header' => Rights::t('core', 'Permissions'))); ?>
 
 
 	<p>

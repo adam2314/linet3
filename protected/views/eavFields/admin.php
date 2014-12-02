@@ -13,7 +13,7 @@ $this->menu=array(
 )); 
 ?>
 
-<?php $this->widget('bootstrap.widgets.TbGridView',array(
+<?php $this->widget('EExcelView',array(
 	'id'=>'eav-fields-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,

@@ -64,7 +64,7 @@ class ApiController extends Controller {//RightsController
     private function translate($item) {
         if (isset($this->translate[$item]))
             return $this->translate[$item];
-        Response::send(501, 'Model does not exstis');
+        Response::send(404, 'Model does not exists');
     }
 
     private function hasAccess($path) {

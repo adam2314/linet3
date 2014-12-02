@@ -52,7 +52,7 @@ if ($model->doctype != null) {
     $model->status = null;
 }
 //print_r(Yii::app()->locale);
-$this->widget('bootstrap.widgets.TbGridView', array(//'zii.widgets.grid.CGridView'
+$this->widget('EExcelView', array(//'zii.widgets.grid.CGridView'
     'id' => 'Docs',
     'dataProvider' => $model->search(),
     'filter' => $model,

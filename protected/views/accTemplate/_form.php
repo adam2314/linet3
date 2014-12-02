@@ -34,7 +34,7 @@ if (isset($items)) {
 
 
 
-    $this->widget('bootstrap.widgets.TbGridView', array(
+    $this->widget('EExcelView', array(
         'id' => 'acc-templateItem-grid',
         'dataProvider' => $items->search(),
         'filter' => $items,

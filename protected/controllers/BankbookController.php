@@ -21,7 +21,7 @@ class BankbookController extends RightsController {
         if (isset($_POST['Bankbook'])) {
             $model->attributes = $_POST['Bankbook'];
             if ($model->save())
-                $this->redirect(array('view', 'id' => $model->id));
+                $this->redirect(array('admin', 'id' => $model->id));
         }
 
         $this->render('create', array(
@@ -71,9 +71,8 @@ class BankbookController extends RightsController {
     public function actionAdmin() {
         $model = new Bankbook('search');
         $model->unsetAttributes();  // clear any default values
-        //
-                //
-		if (isset($_POST['Bankbook']['file'])) {
+
+        if (isset($_POST['Bankbook']['file'])) {
 
             $model->import((int) $_POST['Bankbook']['account_id']);
             //Yii::app()->end();
@@ -128,27 +127,22 @@ class BankbookController extends RightsController {
         ));
     }
 
-    protected function bankDataColumn($data,$row)
-     {
-          // ... generate the output for the column
- 
-          // Params:
-          // $data ... the current row data   
-         // $row ... the row index    
-         $this->renderPartial('_bank', array('cdata' => $data));
-    }       
+    protected function bankDataColumn($data, $row) {
+        // ... generate the output for the column
+        // Params:
+        // $data ... the current row data   
+        // $row ... the row index    
+        $this->renderPartial('_bank', array('cdata' => $data));
+    }
 
-    protected function transDataColumn($data,$row)
-     {
-          // ... generate the output for the column
- 
-          // Params:
-          // $data ... the current row data   
-         // $row ... the row index    
-         $this->renderPartial('_trans', array('cdata' => $data));
-    }       
-    
-    
+    protected function transDataColumn($data, $row) {
+        // ... generate the output for the column
+        // Params:
+        // $data ... the current row data   
+        // $row ... the row index    
+        $this->renderPartial('_trans', array('cdata' => $data));
+    }
+
     public function actionMatchDelete($id) {
         if (Yii::app()->request->isPostRequest) {
             // we only allow deletion via POST request

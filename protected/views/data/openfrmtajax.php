@@ -16,7 +16,7 @@
     </p>
     <p><?php echo Yii::t('app','Details of Total records in bkmvdata.txt file');?>:</p>
     <div>
-        <?php $this->widget('bootstrap.widgets.TbGridView', array(
+        <?php $this->widget('EExcelView', array(
             'id'=>'profloss-grid',
             'dataProvider'=>$model->bkmvTable(),
             'template' => '{items}{pager}',
@@ -61,7 +61,7 @@
     <div style=" width: 40%;">
         <?php
 
-        $this->widget('bootstrap.widgets.TbGridView', array(
+        $this->widget('EExcelView', array(
             'id'=>'profloss-grid',
             'dataProvider'=>$model->docsTable(),
             'template' => '{items}{pager}',

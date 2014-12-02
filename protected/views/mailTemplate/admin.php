@@ -15,7 +15,7 @@ $this->menu=array(
 
 ?>
 
-<?php $this->widget('bootstrap.widgets.TbGridView',array(
+<?php $this->widget('EExcelView',array(
 	'id'=>'acctype-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,

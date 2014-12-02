@@ -52,7 +52,7 @@ $this->widget('bootstrap.widgets.TbButton', array(
 //print_r($model->items);
 //Yii::app()->end();
 
-$this->widget('bootstrap.widgets.TbGridView', array(
+$this->widget('EExcelView', array(
     'id' => 'acc-templateItem-grid',
     'dataProvider' => $items->search(),
     'filter' => $items,

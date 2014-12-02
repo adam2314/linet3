@@ -31,7 +31,7 @@
         
         <?php echo $form->textFieldRow($model,'currency_id'); ?>
             
-        <?php echo $form->textFieldRow($model,'account_id'); ?>
+        <?php echo $form->dropDownListRow($model, 'account_id', CHtml::listData(Accounts::model()->findAllByType(7), 'id', 'name')); ?>
 
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(

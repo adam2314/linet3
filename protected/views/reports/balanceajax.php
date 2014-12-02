@@ -2,6 +2,7 @@
     <?php $this->widget('EExcelView', array(
 	'id'=>'balance-grid',
 	'dataProvider'=>$model->search(),
+        
 	//'filter'=>$model,
 	'columns'=>array(
                array(

@@ -32,7 +32,7 @@
 ?>
 </div>
 <div style=" width: 30%; display: inline-block;">
-    <?php $this->widget('bootstrap.widgets.TbGridView', array(
+    <?php $this->widget('EExcelView', array(
 	'id'=>'transaction-grid',
 	'dataProvider'=>$trans->search(),
 	//'filter'=>$model,

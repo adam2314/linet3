@@ -4,7 +4,7 @@
 ); ?>
 
 <div id="tasks">
-        <?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Tasks'))); ?>
+        <?php $this->beginWidget('MiniForm',array('header' => Rights::t('core', 'Tasks'))); ?>
 
 	<p>
 		<?php echo Rights::t('core', 'A task is a permission to perform multiple operations, for example accessing a group of controller action.'); ?><br />

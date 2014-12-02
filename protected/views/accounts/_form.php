@@ -16,7 +16,13 @@
         <br />
         <?php echo $form->dropDownListRow($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency ?>
         <br />
-        <?php echo $form->dropDownListRow($model, 'id6111', CHtml::listData(AccId6111::model()->findAll(), 'id', 'name')); ?>
+        <?php 
+        $id6111 = CHtml::listData(AccId6111::model()->findAll(), 'id', 'name');
+        $id6111[''] = Yii::t('app', 'None');
+        
+        echo $form->dropDownListRow($model, 'id6111', $id6111); 
+        
+        ?>
         <br />
         <?php echo $form->dropDownListRow($model, 'cat_id', CHtml::listData(AccCat::model()->findAllByAttributes(array("type_id"=>$model->type)), 'id', 'name')); ?>
 
@@ -101,7 +107,7 @@
             $files->unsetAttributes();
             $files->parent_type = get_class($model);
             $files->parent_id = $model->id;
-            $this->widget('bootstrap.widgets.TbGridView', array(
+            $this->widget('EExcelView', array(
                 'id' => 'acc-template-grid',
                 'dataProvider' => $files->search(),
                 //'filter'=>$model,

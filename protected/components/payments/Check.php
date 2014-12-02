@@ -40,8 +40,8 @@ class Check {
     public function transaction($in,$out, $model) {
         $due_date = DocchequesEav::model()->findByPk(array("doc_id" => $model->doc_id, "line" => $model->line,'attribute'=>'cheque_date'));
         if($due_date==NULL)
-            throw new Exception("NO due date was found for transaction", 500);
-        $valuedate=$due_date->value;
+            throw new Exception("NO due date was found for transaction", 401);
+        $valuedate = date("Y-m-d H:m:s", CDateTimeParser::parse($due_date->value, Yii::app()->locale->getDateFormat('yiishort')));
         
         $in->valuedate = $valuedate;
         $out->valuedate = $valuedate;

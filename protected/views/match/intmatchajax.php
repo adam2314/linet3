@@ -30,7 +30,7 @@
 ?>
 </div>
 <div style=" width: 35%; display: inline-block;">
-    <?php $this->widget('bootstrap.widgets.TbGridView', array(
+    <?php $this->widget('EExcelView', array(
 	'id'=>'out-grid',
 	'dataProvider'=>$out->searchOut(),
 	//'filter'=>$model,

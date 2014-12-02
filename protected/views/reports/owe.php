@@ -5,7 +5,7 @@ $this->beginWidget('MiniForm', array(
 ));
 
 
-$this->widget('bootstrap.widgets.TbGridView', array(
+$this->widget('EExcelView', array(
     'id' => 'accounts-grid',
     'dataProvider' => $model->owes(),
     //'filter'=>$model,

@@ -4,7 +4,7 @@
 ); ?>
 
 <div class="createAuthItem">
-    <?php $this->beginWidget('MiniForm',array('haeder' => Rights::t('core', 'Create :type', array(
+    <?php $this->beginWidget('MiniForm',array('header' => Rights::t('core', 'Create :type', array(
 		':type'=>Rights::getAuthItemTypeName($_GET['type']),
 	)))); ?>
 	

@@ -28,7 +28,7 @@ $this->beginWidget('MiniForm', array(
 
 <?php
 
-$this->widget('bootstrap.widgets.TbGridView', array(
+$this->widget('EExcelView', array(
     'id' => 'doctype-grid',
     'dataProvider' => $model->search(),
     'filter' => $model,

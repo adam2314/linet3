@@ -30,6 +30,7 @@ class ManualCredit {
     public function field() {
         //text,date,temp(nosave)
         return array(
+            'account_id' => "listT(Accounts[7])",
             'last_4_digits' => "string",
             'pid' => "string"
             );

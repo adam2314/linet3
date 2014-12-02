@@ -24,18 +24,14 @@ class Transactions extends basicRecord {
 
     public $from_date;
     public $to_date;
-
-    public $Docs= NULL;
-    public $refnum1_ids ='';
-    
+    public $Docs = NULL;
+    public $refnum1_ids = '';
     public $maxNum;
-    
-    public function getRef(){
-        return array();//
-        
+
+    public function getRef() {
+        return array(); //
     }
-    
-    
+
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -63,6 +59,31 @@ class Transactions extends basicRecord {
     }
 
 //*/
+
+
+    public function numLink() {
+
+        return CHtml::link($this->num, Yii::app()->createAbsoluteUrl("/transaction/view/$this->num"));
+    }
+
+    public function accountLink() {
+        $str = '';
+        
+
+        
+            //$account_id = Docs::model()->findByPk($this->account_id);
+            if ($this->Account !== null) {
+                $str.= CHtml::link(CHtml::encode($this->Account->name), Yii::app()->createAbsoluteUrl("/accounts/transaction/$this->account_id"));
+            } else {
+                $str.=$this->account_id;
+            }
+            
+        
+
+        return $str;
+    }
+    
+    
     public function refnumDocsLink() {
         $str = '';
         $array = explode(",", $this->refnum1);
@@ -95,7 +116,7 @@ class Transactions extends basicRecord {
             return 1;
     }
 
-    public function getBalance(){
+    public function getBalance() {
         $criteria = new CDbCriteria;
         $criteria->condition = "num <= :num";
         $criteria->addCondition("account_id=:account_id");
@@ -104,14 +125,14 @@ class Transactions extends basicRecord {
             ':account_id' => $this->account_id,
         );
         $models = Transactions::model()->findAll($criteria);
-        $balance=0;
+        $balance = 0;
         foreach ($models as $model) {
             $balance+=$model->sum;
         }
-        
+
         return $balance;
     }
-    
+
     public function getOptAccId() {
 
         $criteria = new CDbCriteria;
@@ -131,7 +152,7 @@ class Transactions extends basicRecord {
                 $maxsum = $model->sum;
                 $retacc = $model->account_id;
             }
-            if ($this->sum >= 0.0) {
+            if ($this->sum <= 0.0) {//<
                 if ($model->sum > $maxsum) {
                     $maxsum = $model->sum;
                     $retacc = $model->account_id;
@@ -167,14 +188,13 @@ class Transactions extends basicRecord {
             return (int) $this->num;
         }
     }
-    
-    public static function getMax(){
+
+    public static function getMax() {
         $model = new Transactions;
-        $criteria=new CDbCriteria;
-        $criteria->select='max(num) AS maxNum';
+        $criteria = new CDbCriteria;
+        $criteria->select = 'max(num) AS maxNum';
         $row = $model->model()->find($criteria);
         return $row['maxNum'];
-        
     }
 
     public function beforeSave() {
@@ -298,27 +318,26 @@ class Transactions extends basicRecord {
         );
     }
 
-    
-    public function searchIn(){
+    public function searchIn() {
         //account_id,intCorrelation!=0,sum<0
-        $cDataProvider=$this->search();
-        
+        $cDataProvider = $this->search();
+
         $cDataProvider->criteria->addCondition("sum>0");
         $cDataProvider->criteria->addCondition("intCorrelation=0");
-            
+
         return $cDataProvider;
     }
-     public function searchOut(){
+
+    public function searchOut() {
         //account_id,intCorrelation!=0,sum<0
-        $cDataProvider=$this->search();
-        
+        $cDataProvider = $this->search();
+
         $cDataProvider->criteria->addCondition("sum<0");
         $cDataProvider->criteria->addCondition("intCorrelation=0");
-            
+
         return $cDataProvider;
     }
-    
-    
+
     /**
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.

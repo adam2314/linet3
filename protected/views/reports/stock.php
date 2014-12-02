@@ -49,7 +49,7 @@ $this->beginWidget('MiniForm', array(
 $yiidbdatetime = Yii::app()->locale->getDateFormat('yiidbdatetime');
 $phpdatetime = Yii::app()->locale->getDateFormat('phpdatetime');
 
-$this->widget('bootstrap.widgets.TbGridView', array(
+$this->widget('EExcelView', array(
     'id' => 'stockAction-grid',
     'dataProvider' => $model->sum(),
     //'enablePagination'=> false,

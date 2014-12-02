@@ -8,15 +8,22 @@ $phpdatetime = Yii::app()->locale->getDateFormat('phpdatetime');
 
 foreach ($model->accounts() as $account) {
     echo "<h3>" . $account . " " . Accounts::model()->findByPk($account)->name . "</h3>";
-    $this->widget('bootstrap.widgets.TbGridView', array(
-        'id' => 'transactions-grid',
+    $this->widget('EExcelView', array(
+        'id' => 'transactions-grid' . $account,
         'dataProvider' => $model->search($account),
         'columns' => array(
-            'num',
             array(
-                'value' => 'CHtml::link(CHtml::encode($data->getOptAccName()),Yii::app()->createAbsoluteUrl("/accounts/transaction/id/".$data->getOptAccId()))',
+                'name' => 'num',
+                'value' => '$data->numLink()',
                 'type' => 'raw',
             ),
+            
+             
+            /*
+              array(
+              'value' => 'CHtml::link(CHtml::encode($data->getOptAccName()),Yii::app()->createAbsoluteUrl("/accounts/transaction/".$data->getOptAccId()))',
+              'type' => 'raw',
+              ), */
             array(
                 'name' => 'type',
                 'value' => 'Yii::t("app",$data->Type->name)'

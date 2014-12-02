@@ -23,6 +23,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                 'attribute' => 'from_date', //attribute name
                 'mode' => 'datetime',
                 'language' => substr(Yii::app()->language, 0, 2),
+                
                 'options' => array(
                     'showAnim' => 'fold',
                     'dateFormat' => Yii::app()->locale->getDateFormat('short'),
@@ -51,6 +52,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                 'buttonType' => 'ajaxButton',
                 'type' => 'primary',
                 'label' => Yii::t('app', "Search"),
+                "icon" => "glyphicon glyphicon-search",
             ));
             ?>
             <?php

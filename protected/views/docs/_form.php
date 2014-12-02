@@ -11,7 +11,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         ));
 
 
-$oppts = CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => $model->docType->oppt_account_type)), 'id', 'name');
+$oppts = CHtml::listData(Accounts::model()->findAllByType($model->docType->oppt_account_type), 'id', 'name');
 $oppts[""] = Yii::t('app', 'None');
 //echo $form->dropDownList($model, "[$i]item_id", $oppts);
 ?>
@@ -34,7 +34,7 @@ $oppts[""] = Yii::t('app', 'None');
         <div class="col-md-2">
             <p>
                 <?php //echo $form->labelEx($model, 'account_id');   ?>
-                <?php echo $form->dropDownListRow($model, 'account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => $model->docType->account_type)), 'id', 'name')); ?>
+                <?php echo $form->dropDownListRow($model, 'account_id', CHtml::listData(Accounts::model()->findAllByType($model->docType->account_type), 'id', 'name')); ?>
                 <?php //echo $form->error($model, 'account_id');  ?>
                 <?php
                 $this->widget('bootstrap.widgets.TbButton', array(
@@ -153,7 +153,7 @@ $oppts[""] = Yii::t('app', 'None');
                 $files->unsetAttributes();
                 $files->parent_type = get_class($model);
                 $files->parent_id = $model->id;
-                $this->widget('bootstrap.widgets.TbGridView', array(
+                $this->widget('EExcelView', array(
                     'id' => 'acc-template-grid',
                     'dataProvider' => $files->search(),
                     //'filter'=>$model,
@@ -604,6 +604,8 @@ $oppts[""] = Yii::t('app', 'None');
             }
 
             $('#language_chosen').hide();
+            
+            changeFileds();
 
         });
         /*******************end ready*****************************/

@@ -52,7 +52,7 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 
 ?>
 
- <?php $this->widget('bootstrap.widgets.TbGridView', array(
+ <?php $this->widget('EExcelView', array(
 	'id'=>'transaction-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,

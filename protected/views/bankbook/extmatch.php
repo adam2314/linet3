@@ -13,7 +13,7 @@ $this->beginWidget('MiniForm', array(
 <?php
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id' => 'extmatch-form',
-    'enableAjaxValidation' => false,
+    'enableAjaxValidation' => true,
     'clientOptions' => array(
         'validateOnSubmit' => true,
     //'submitHandler'=>'js: go()',
@@ -21,12 +21,12 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         )
 );
 
-$temp = CHtml::listData(Accounts::model()->AutoComplete('', 7), 'value', 'label');
-$temp[0] = Yii::t('app', 'Chose Bank');
+$temp = CHtml::listData(Accounts::model()->findAllByType(7), 'id', 'name');
+$temp[0] = Yii::t('app', 'Choose Bank');
 $model->account_id = 0;
-echo $form->error($extmatch, 'account_id');
-echo $form->dropDownList($extmatch, "account_id", $temp, array('class' => ''));
-echo $form->error($extmatch, 'account_id');
+//echo $form->error($extmatch, 'account_id');
+echo $form->dropDownListRow($extmatch, "account_id", $temp, array('class' => ''));
+//echo $form->error($extmatch, 'account_id');
 ?>
 <div id ="result">
 </div>

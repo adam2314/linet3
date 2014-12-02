@@ -18,7 +18,7 @@ class Bank {
     // 'bank_refnum'); 
     // 'dep_date'); 
     //line,doc_id,name,value
-    public function line() {
+    public function line($attrs = array()) {
         //print
 
         $text = "";
@@ -39,10 +39,20 @@ class Bank {
             'due_date' => 'date');
     }
 
-    public function transaction() {
+    public function transaction($in,$out, $model) {
+        $due_date = DocchequesEav::model()->findByPk(array("doc_id" => $model->doc_id, "line" => $model->line,'attribute'=>'due_date'));
         $account_id = DocchequesEav::model()->findByPk(array("doc_id" => $model->doc_id, "line" => $model->line, 'attribute' => 'account_id'));
+        if($due_date==NULL)
+            throw new Exception("NO due date was found for transaction", 401);
+        
         if ($account_id == NULL)
-            throw new Exception("NO out account was found for transaction", 500);
+            throw new Exception("NO out account was found for transaction", 401);
+        
+        $valuedate = date("Y-m-d H:m:s", CDateTimeParser::parse($due_date->value, Yii::app()->locale->getDateFormat('yiishort')));
+
+        $in->valuedate = $valuedate;
+        $out->valuedate = $valuedate;
+        
         $out->account_id = $account_id->value;
     }
 

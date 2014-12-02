@@ -1,9 +1,6 @@
 <?php
 
-//$this->widget('zii.widgets.CListView', array(
-//	'dataProvider'=>$dataProvider,
-//	'itemView'=>'_view',
-//)); 
+
 $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
             // 'model'=>$model,
             'name' => 'Transactions[from_date]',
@@ -46,7 +43,7 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 <?php
 
 $this->beginWidget('MiniForm', array(
-    'header' => Yii::t('app', "Transactions for Account") . ": " . $account->name,
+    'header' => Yii::t('app', "Transactions for Num") . ": " . $model->num,
 ));
 
 $yiidbdatetime = Yii::app()->locale->getDateFormat('yiidbdatetime');
@@ -58,11 +55,13 @@ $this->widget('EExcelView', array(
     //'enablePagination'=> false,
     'filter' => $model,
     'columns' => array(
-        array(
-            'name' => 'num',
-            'value' => '$data->numLink()',
-            'type' => 'raw',
-        ),
+         'num',
+            
+         array(
+              'value' => '$data->accountLink()',
+              'type' => 'raw',
+              ), 
+        
         //'prefix',
         //'company',
         /*

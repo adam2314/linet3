@@ -86,18 +86,8 @@
     jQuery(function($) {
         //jQuery("#Docdetails_<?php echo $i; ?>_item_id").autocomplete({"minLength":0, "showAnim": "fold", "source": "/yii/demos/new/index.php?r=item/autocomplete"});
         CalcPrice(<?php echo $i; ?>);
-        changeFileds();
     });
-    /*var det=true;
-     $("#Docdetails_<?php echo $i; ?>_item_id").focus(function(){
-     if($("#Docdetails_<?php echo $i; ?>_item_id").val()=='' && det){
-     $("#Docdetails_<?php echo $i; ?>_item_id").autocomplete("search","");
-     det=false;
-     }
-     });//*/
-
-
-
+   
 
     $("#Docdetails_<?php echo $i; ?>_currency_id").change(function() {
         currChange(<?php echo $i; ?>);

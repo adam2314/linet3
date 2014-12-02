@@ -58,7 +58,7 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 
 
 <?php 
-$this->widget('bootstrap.widgets.TbGridView', array(
+$this->widget('EExcelView', array(
 	'id'=>'currates-grid',
 	'dataProvider'=>$model->search(),
         'template' => '{items}{pager}',
