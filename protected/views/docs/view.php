@@ -34,7 +34,15 @@ if ($model->doctype == 7) {//Sales Order
     $actions[] = array('label' => Yii::t('app', 'Convert to Invoice'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 3)); //Invoice
     $actions[] = array('label' => Yii::t('app', 'Convert to Invoice Receipt'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 9)); //Invoice Receipt 
 }
+if ($model->doctype == 10) {//Purchase Order
+    $actions[] = array('label' => Yii::t('app', 'Convert to') . " " . Yii::t('app', 'Current Expense'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 13)); //Current Expense
+    $actions[] = array('label' => Yii::t('app', 'Convert to') . " " . Yii::t('app', 'Asset Expense'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 14)); //Asset Expense
+    $actions[] = array('label' => Yii::t('app', 'Convert to') . " " . Yii::t('app', 'Stock entry certificate'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 16)); //Stock entry certificate
+}
 
+if ($model->doctype == 16) {//Stock entry certificate
+        $actions[] = array('label' => Yii::t('app', 'Convert to') . " " . Yii::t('app', 'Stock exit certificate'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 17)); //Stock entry certificate
+}
 $this->menu = $actions;
 
 
@@ -124,7 +132,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
     </div>
 </div>
-<div class="btn">
+<div class="btn-group">
 
     <?php
     echo CHTML::hiddenField("subType", "print");
@@ -133,6 +141,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     if (($model->doctype != 13) && ($model->doctype != 14)) {
         $this->widget('bootstrap.widgets.TbButtonGroup', array(
             'type' => 'primary', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+            'htmlOptions' => array('class' => 'dropup'),
             'buttons' => array(
                 array('icon' => 'glyphicon glyphicon-print', 'label' => Yii::t('app', 'Print'), 'htmlOptions' => array('onclick' => 'return sendForm("print");'),),
                 array('items' => array(
@@ -150,12 +159,13 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
             'type' => 'primary',
             'htmlOptions' => array('id' => 'printLink', 'onclick' => 'return hideMe();'),
         ));
-        echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));
+        
     }
     ?>
 </div>
-<br /><br /><br /><br />
+
 <?php
+echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));
 $this->endWidget();
 $this->endWidget();
 

@@ -11,7 +11,7 @@ $this->menu=array(
 	array('label'=>Yii::t("app",'View User'),'url'=>array('view','id'=>$model->id)),
 	array('label'=>Yii::t("app",'Manage Users'),'url'=>array('admin')),
 );
-$this->beginWidget('MiniForm',array('heaer' => Yii::t("app","Update User")." ". $model->username,)); 
+$this->beginWidget('MiniForm',array('header' => Yii::t("app","Update User")." ". $model->username,)); 
 ?>
 
 

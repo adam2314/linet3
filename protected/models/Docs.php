@@ -346,7 +346,7 @@ class Docs extends fileRecord {
                         $eav->save();
                     }
                 }
-                //$submodel->attributes = $rcpt;
+                
                 $submodel->doc_id = $this->id;
                 if ((int) $rcpt["type"] != 0) {
                     if ($submodel->save()) {
@@ -462,6 +462,7 @@ class Docs extends fileRecord {
                     $line++;
                     $line++;
                 }
+                /*
                 if ((int) $this->src_tax != 0) {
                     $src = new Transactions();
                     $src->num = $num;
@@ -491,6 +492,7 @@ class Docs extends fileRecord {
                     $line++;
                     $num = $src->save();
                 }
+                //*/
             }
         }
 

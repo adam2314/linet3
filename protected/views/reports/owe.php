@@ -14,7 +14,7 @@ $this->widget('EExcelView', array(
         array(
             'name' => 'name',
             'type' => 'raw',
-            'value' => 'CHtml::link(CHtml::encode($data["name"]), Yii::app()->createAbsoluteUrl("/accounts/transaction/id/".CHtml::encode($data["id"])))',
+            'value' => 'CHtml::link(CHtml::encode($data["name"]), Yii::app()->createAbsoluteUrl("/accounts/transaction/".CHtml::encode($data["id"])))',
         ),
         //'type',
          

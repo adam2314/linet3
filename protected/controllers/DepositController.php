@@ -15,7 +15,7 @@ class DepositController extends RightsController{
                 }
                 $cheques=new Doccheques('search');
                 $cheques->unsetAttributes();
-                $cheques->bank_refnum=null;
+                $cheques->bank_refnum='';
                 
                 
 		$this->render('admin',array(
@@ -24,17 +24,6 @@ class DepositController extends RightsController{
 		));
 	}
         
-    public function actionAjax(){
-            $model=new Doccheques('search');
-            $model->unsetAttributes();
-            //$model=new Bankbook('search');
-            //$model=new Docdetails('search');
-            $model->bank_refnum=null;
-            //if(isset($_POST['Deposit']))
-            //$model->attributes['bank_refnum']='';
-            $this->renderPartial('ajax',array( 'model'=>$model,   ));
-    }
-    
     
     protected function performAjaxValidation($model){
 		if(Yii::app()->getRequest()->getIsAjaxRequest()) {

@@ -30,7 +30,7 @@ class PrintDoc {
     public static function pdfDoc($model) {
         $yiiBasepath = Yii::app()->basePath;
         $yiiUser = Yii::app()->user->id;
-        $configPath = Yii::app()->user->settings["company.path"];
+        //$configPath = Yii::app()->user->settings["company.path"];
         $configCertpasswd = Yii::app()->user->certpasswd;
 
 
@@ -58,7 +58,7 @@ class PrintDoc {
         if (!$doc_file) {
 
             //'digi';//
-
+            $cerfile = User::getCertFilePath($yiiUser);
             spl_autoload_unregister(array('YiiBase', 'autoload'));
             $oldpath = get_include_path();
             set_include_path($yiiBasepath . '/modules/zend_pdf_certificate/');
@@ -71,7 +71,7 @@ class PrintDoc {
 
 
 
-            $cerfile = Yii::app()->params["filePath"] . $configPath . "/cert/" . $yiiUser . ".p12";
+            
 
 
             if (file_exists($cerfile)) {

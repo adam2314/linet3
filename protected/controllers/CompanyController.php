@@ -107,8 +107,8 @@ class CompanyController extends RightsController{// //RightsController
             $model->string=Yii::app()->dbMain->connectionString;
             $model->user=Yii::app()->dbMain->username;
             $model->password=Yii::app()->dbMain->password;
-            $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            $model->prefix=substr(str_shuffle($chars),0,4)."_";
+            //$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            //$model->prefix=substr(str_shuffle($chars),0,4)."_";
 
 
             if($model->save()){

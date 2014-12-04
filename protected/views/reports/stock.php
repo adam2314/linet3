@@ -72,10 +72,8 @@ $this->widget('EExcelView', array(
             'filter' => CHtml::listData(Item::model()->findAll(), 'id', 'name'),
             'value' => '$data->getItemName()'
         ),
-        array(
-            'name' => 'qty',
-            'value' => '$data->getItemSum()',
-        )
+        
+        'sum'
 
     //'qtySum',
     ),

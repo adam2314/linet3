@@ -68,6 +68,7 @@ class FormDeposit  extends CFormModel{
             if(($this->refnum=='')||($this->date=='')||!is_array($this->Deposit)){
                 return false;
             }
+            $valuedate = date("Y-m-d H:m:s", CDateTimeParser::parse($this->date, Yii::app()->locale->getDateFormat('yiishort')));
             
             foreach($this->Deposit as $line=>$val){
                 list($a, $b ) =  explode(',', $line);
@@ -80,7 +81,7 @@ class FormDeposit  extends CFormModel{
                 $accout->account_id=$this->account_id;
                 $accout->type=$tranType;
                 $accout->refnum1=$this->refnum;
-                $accout->valuedate=$this->date;
+                $accout->valuedate=$valuedate;
                 //$accout->details=$this->company;
                 $accout->currency_id=$cheq->currency_id;
                 $accout->owner_id=Yii::app()->user->id;
@@ -94,7 +95,7 @@ class FormDeposit  extends CFormModel{
                 $oppt->account_id=$oppt_acc;
                 $oppt->type=$tranType;
                 $oppt->refnum1=$this->refnum;
-                $oppt->valuedate=$this->date;
+                $oppt->valuedate=$valuedate;
                 //$oppt->details=$this->company;
                 $oppt->currency_id=$cheq->currency_id;
                 $oppt->owner_id=Yii::app()->user->id;

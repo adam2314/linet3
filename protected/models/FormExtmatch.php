@@ -13,8 +13,8 @@ class FormExtmatch extends CFormModel {
     public $date;
     public $ext_total = 0;
     public $int_total = 0;
-    public $bankbooks = array();
-    public $transactions = array();
+    public $Bankbooks = array();
+    public $Transactions = array();
 
     public function beforeSave() {
         $this->date = date("Y-m-d H:m:s", CDateTimeParser::parse($this->date, Yii::app()->locale->getDateFormat('yiishort')));
@@ -47,6 +47,7 @@ class FormExtmatch extends CFormModel {
         return array(
             array('account_id, ext_total, int_total', 'required'),
             array('account_id, currency_id, date, ext_total, int_total, Bankbook, Trans', 'safe'),
+            array('ext_total', 'compare', 'compareAttribute'=>'int_total'),
         );
     }
 
@@ -58,7 +59,7 @@ class FormExtmatch extends CFormModel {
         $match->owner = Yii::app()->user->id;
         $match->save();
         //bankbooks
-        foreach ($this->bankbooks as $bankbook=>$true) {
+        foreach ($this->Bankbooks as $bankbook=>$true) {
             $bankbook = Bankbook::model()->findByPk($bankbook);
             if ($bankbook !== null) {
                 $bankbook->extCorrelation = $match->id;
@@ -66,7 +67,7 @@ class FormExtmatch extends CFormModel {
             }
         }
         //transaction
-        foreach ($this->transactions as $transaction=>$true) {
+        foreach ($this->Transactions as $transaction=>$true) {
             $transaction = Transactions::model()->findByPk($transaction);
             if ($transaction !== null) {
                 $transaction->extCorrelation = $match->id;

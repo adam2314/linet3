@@ -29,7 +29,7 @@
 
         <?php echo $form->textFieldRow($model,'sum'); ?>
         
-        <?php echo $form->textFieldRow($model,'currency_id'); ?>
+        <?php echo $form->dropDownListRow($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency  ?>
             
         <?php echo $form->dropDownListRow($model, 'account_id', CHtml::listData(Accounts::model()->findAllByType(7), 'id', 'name')); ?>
 

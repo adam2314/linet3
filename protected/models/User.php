@@ -24,7 +24,7 @@ class User extends mainRecord {
 
     const table = 'user';
 
-    public $warehouse = 117;
+    public $warehouse;
     public $passwd;
     public $certfile;
 
@@ -56,7 +56,7 @@ class User extends mainRecord {
             array('fname, lname, certpasswd, salt, email', 'length', 'max' => 255),
             array('language', 'length', 'max' => 10),
             array('password', 'length', 'max' => 255),
-            array('passwd', 'required', 'on'=>'create'),
+            array('passwd', 'required', 'on' => 'create'),
             array('cookie, hash', 'length', 'max' => 32),
             array('certpasswd, salt, email', 'length', 'max' => 255),
             array('lastlogin, theme, warehouse, passwd, certfile', 'safe'),
@@ -65,7 +65,6 @@ class User extends mainRecord {
             array('id, username, fname, lname, password, lastlogin, cookie, hash, certpasswd, salt, email, language', 'safe', 'on' => 'search'),
         );
     }
-
 
     /**
      * @return array relational rules.
@@ -143,7 +142,8 @@ class User extends mainRecord {
             $this->compSave();
             //echo $this->warehouse;
             //exit;
-            $this->warehouseSave($this->warehouse);
+            if(isset($this->warehouse))
+                $this->warehouseSave($this->warehouse);
         }
         return $res;
     }
@@ -181,9 +181,8 @@ class User extends mainRecord {
         $tmps = CUploadedFile::getInstanceByName('User[certfile]');
         if ($tmps) {
             Yii::log('saved', 'info', 'app');
-            $configPath = Yii::app()->user->settings["company.path"];
 
-            if ($tmps->saveAs(Yii::app()->params["filePath"] . $configPath . "/cert/" . Yii::app()->user->id . ".p12")) {
+            if ($tmps->saveAs($this->getCertFilePath($this->id))) {
                 // add it to the main model now
             } else {
                 echo 'Cannot upload!';
@@ -191,13 +190,19 @@ class User extends mainRecord {
             //}
         }
     }
-    
-    function hasCert(){
+
+    function hasCert() {
         $configPath = Yii::app()->user->settings["company.path"];
-        return file_exists(Yii::app()->params["filePath"] . $configPath . "/cert/" . Yii::app()->user->id . ".p12");
-        
+        return file_exists($this->getCertFilePath());
     }
-    
+
+    static public function getCertFilePath($id=null) {
+        if($id==null)
+            $id=Yii::app()->user->id;
+        $user=User::model()->findByPk($id);
+        if($user!==null)
+            return Company::getFilePath() . "cert/" . $id . ".p12";
+    }
 
     //public function delete() {
     /*
@@ -274,6 +279,7 @@ class User extends mainRecord {
      * @return boolean whether the password is valid
      */
     public function validatePassword($password) {
+        //return true;
         return $this->hashPassword($password, $this->salt) === $this->password;
     }
 

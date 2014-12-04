@@ -8,7 +8,7 @@
  * @property string $name
  */
 class Bankbook extends CActiveRecord {
-
+    private $dateDBformat = true;
     public $file;
 
     const table = '{{bankbook}}';
@@ -21,6 +21,40 @@ class Bankbook extends CActiveRecord {
     public static function model($className = __CLASS__) {
         return parent::model($className);
     }
+    
+    public function beforeSave() {
+        if ($this->isNewRecord) {
+            $this->dateDBformat = false;
+        }
+        if (!$this->dateDBformat) {
+            $this->dateDBformat = true;
+            $this->date = date("Y-m-d H:i:s", CDateTimeParser::parse($this->date, Yii::app()->locale->getDateFormat('yiishort')));
+
+        }
+        
+        if($this->extCorrelation===null)
+            $this->extCorrelation='0';
+        return parent::beforeSave();
+    }
+
+    public function afterSave() {
+        if ($this->dateDBformat) {
+            $this->dateDBformat = false;
+            $this->date = date(Yii::app()->locale->getDateFormat('phpshort'), strtotime($this->date));
+
+        }
+        return parent::afterSave();
+    }
+
+    public function afterFind() {
+        if ($this->dateDBformat) {
+            $this->dateDBformat = false;
+            $this->date = date(Yii::app()->locale->getDateFormat('phpshort'), strtotime($this->date));
+
+        }
+        return parent::afterFind();
+    }
+    
 
     /**
      * @return string the associated database table name
@@ -97,7 +131,7 @@ class Bankbook extends CActiveRecord {
         //echo 'not file';
         if (is_object($file) && get_class($file) === 'CUploadedFile') {
             //echo 'is file';
-            $filename = Yii::app()->params["filePath"] . Yii::app()->user->settings["company.path"] . "/TNout"; //x
+            $filename = Company::getFilePath() . "TNout"; //x
             if ($file->saveAs($filename)) {
                 //read file...
                 $fp = fopen($filename, 'r');

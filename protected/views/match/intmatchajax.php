@@ -7,8 +7,8 @@
                 array(
                     'type'=>'raw',
                     'value'=>
-                        'CHtml::checkBox("FormIntmatch[In][match][$data->id]",null,array( "onchange"=>"CalcMatchSum()"));'.
-                    'CHtml::hiddenField("FormIntmatch[In][total][$data->id]","$data->sum")',
+                       'CHtml::checkBox("FormIntmatch[In][match][$data->id]",null,array("class"=>"In_match", "onchange"=>"CalcMatchSum()")).'.
+                     'CHtml::hiddenField("FormIntmatch[In][total][$data->id]","$data->sum",array("class"=>"In_total"));',
                     ),
                 array(
                     'name'=>'type',
@@ -38,8 +38,8 @@
                 array(
                     'type'=>'raw',
                     'value'=>
-                        'CHtml::checkBox("FormIntmatch[Out][match][$data->id]",null,array( "onchange"=>"CalcMatchSum()"));'.
-                    'CHtml::hiddenField("FormIntmatch[Out][total][$data->id]","$data->sum")'
+                        'CHtml::checkBox("FormIntmatch[Out][match][$data->id]",null,array("class"=>"Out_match", "onchange"=>"CalcMatchSum()")).'.
+                     'CHtml::hiddenField("FormIntmatch[Out][total][$data->id]","$data->sum",array("class"=>"Out_total"));'
                     ),
                 array(
                     'name'=>'type',

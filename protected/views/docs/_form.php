@@ -49,43 +49,29 @@ $oppts[""] = Yii::t('app', 'None');
         </div>
         <div class="col-md-2">
             <div>
-                <?php //echo $form->labelEx($model, 'oppt_account_id');   ?>
                 <?php echo $form->dropDownListRow($model, 'oppt_account_id', $oppts); ?>
                 <p></p>
-                <?php //echo $form->error($model, 'oppt_account_id');  ?>
             </div>
         </div>   
         <div class="col-md-2">
-            <p>
-                <?php //echo $form->labelEx($model, 'company');  ?>
                 <?php echo $form->textFieldRow($model, 'company', array('size' => 30, 'maxlength' => 80)); ?>
-                <?php //echo $form->error($model, 'company'); ?>
-            </p>
         </div>
         <div class="col-md-2">
-            <?php //echo $form->labelEx($model, 'vatnum');  ?>
             <?php echo $form->textFieldRow($model, 'vatnum', array('size' => 10, 'maxlength' => 10)); ?>
-            <?php //echo $form->error($model, 'vatnum'); ?>
         </div>
 
     </div><!--block-->
     <div class="row"><!--Address block-->
         <div class="col-md-2">
-            <?php //echo $form->labelExRow($model, 'address');  ?>
             <?php echo $form->textFieldRow($model, 'address', array('size' => 30, 'maxlength' => 80)); ?>
-            <?php //echo $form->error($model, 'address'); ?>
         </div>
 
         <div class="col-md-1">
-            <?php //echo $form->labelEx($model, 'city');  ?>
             <?php echo $form->textFieldRow($model, 'city', array('size' => 30, 'maxlength' => 40)); ?>
-            <?php //echo $form->error($model, 'city'); ?>
         </div>
 
         <div class="col-md-1">
-            <?php //echo $form->labelEx($model, 'zip');  ?>
             <?php echo $form->textFieldRow($model, 'zip', array('size' => 10, 'maxlength' => 10)); ?>
-            <?php //echo $form->error($model, 'zip'); ?>
         </div>
 
 
@@ -94,15 +80,11 @@ $oppts[""] = Yii::t('app', 'None');
 
 
         <div class="col-md-1">
-            <p><?php //echo $form->labelEx($model, 'status');         ?></p>
             <?php echo $form->dropDownListRow($model, 'status', CHtml::listData(Docstatus::model()->findAllByAttributes(array('doc_type' => $model->doctype)), 'num', 'name')); //Docstatus::model()->findAll();   ?>
-            <?php //echo $form->error($model, 'status'); ?>
         </div>    
 
         <div class="col-md-2">
-            <p><?php //echo $form->labelEx($model, 'currency_id');         ?></p>
             <?php echo $form->dropDownListRow($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency    ?>
-            <?php //echo $form->error($model, 'currency_id'); ?>
         </div>
 
         <div class="col-md-1">
@@ -122,12 +104,9 @@ $oppts[""] = Yii::t('app', 'None');
         </div>
 
         <div class="col-md-1">
-            <?php if ($model->docType->stockSwitch) { ?>
-                <?php //echo $form->labelEx($model, 'stockSwitch'); ?>
-                <?php echo $form->checkBoxRow($model, 'stockSwitch'); ?>
-                <?php //echo $form->error($model, 'stockSwitch'); ?>
-
-            <?php } ?>
+            <?php if ($model->docType->stockSwitch) { 
+                    echo $form->checkBoxRow($model, 'stockSwitch'); 
+                } ?>
         </div>
 
 
@@ -423,12 +402,12 @@ $oppts[""] = Yii::t('app', 'None');
                         </textarea>      
                     </td>
                     <td>
-                        <?php echo $form->labelEx($model, 'src_tax'); ?>
-                        <?php echo $form->error($model, 'src_tax'); ?>
+                        <?php //echo $form->labelEx($model, 'src_tax'); ?>
+                        <?php //echo $form->error($model, 'src_tax'); ?>
                     </td>
 
                     <td>
-                        <?php echo $form->textField($model, 'src_tax', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
+                        <?php //echo $form->textField($model, 'src_tax', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
                     </td>
                     <td></td>
                     <td class="rcptadd">
@@ -843,7 +822,7 @@ $oppts[""] = Yii::t('app', 'None');
 
 
         function calcLines() {//count doc lines
-            var elements = $('[id^=Docdetails][id$=line]');
+            var elements = $('.detailline');
 
             for (var i = 0; i < elements.length; i++) {
                 $('#' + elements[i].id).val(i + 1);
@@ -885,28 +864,22 @@ $oppts[""] = Yii::t('app', 'None');
 
 
         function CalcPriceSum(org) {
-            var elements = $('[id^=Docdetails][id$=ihTotal]');
-            var selements = $('[id^=Docdetails][id$=_iVatRate]');
+            var elements = $('.detailihTotal');
+            var selements = $('.detailVatRate');
             var vattotal = novattotal = subtotal = 0;
             //var  = 0;
             //var novat_total=0;
             for (var i = 0; i < elements.length; i++) {
-                //console.log(elements[i].id);
-                //if (org)
-                //    CalcPrice(i, org);
+
                 var itemtotal = Number($('#' + elements[i].id).val());
                 var vat = Number($('#' + selements[i].id).val());
-                //console.log(vat);
-                //console.log(selements[i].id);
-                //if(vatper!=0){
+
                 subtotal += itemtotal;
                 if (vat != 0)
                     vattotal += (vat / 100) * itemtotal;
                 else
                     novattotal += itemtotal;
-                //}else{
-                //novat_total+=itemtotal;
-                //}
+
             }
             $('#Docs_vat').val(vattotal.toFixed(2)).trigger('change');
             $('#Docs_sub_total').val(subtotal.toFixed(2)).trigger('change');
@@ -958,7 +931,7 @@ $oppts[""] = Yii::t('app', 'None');
         $('#Docs_discount').blur(function() {
             total = $('#Docs_sub_total').val();
             discount = $('#Docs_discount').val();
-            var iTotals = $('[id^=Docdetails][id$=ihTotal]');
+            var iTotals = $('.detailihTotal');
             var sum = vatSum = novatSum = 0;
 
             for (var i = 0; i < iTotals.length; i++) {
@@ -1043,7 +1016,7 @@ $oppts[""] = Yii::t('app', 'None');
         /**********************************doc end******************************/
 
         function rcptSum() {
-            var elements = $('[id^=Doccheques][id$=sum]');
+            var elements = $('.rcptsum');
             var total = 0;
             for (var i = 0; i < elements.length; i++) {
                 var item = Number($('#' + elements[i].id).val());
@@ -1054,7 +1027,7 @@ $oppts[""] = Yii::t('app', 'None');
         }
 
         function rcptcalcLines() {
-            var elements = $('[id^=Doccheques][id$=line]');
+            var elements = $('.rcptline');
             //var i=1;
 
             for (var i = 0; i < elements.length; i++) {
@@ -1133,7 +1106,7 @@ $oppts[""] = Yii::t('app', 'None');
         <?php echo $form->error($model, 'comments'); ?>
     </p>
 
-    <div class="btn">
+    <div class="btn-group">
         <!--</div>
         
         <div class="row buttons">-->
@@ -1148,8 +1121,8 @@ $oppts[""] = Yii::t('app', 'None');
             ));
 
             $this->widget('bootstrap.widgets.TbButtonGroup', array(
-                'type' => '',
                 'type' => 'primary',
+                'htmlOptions' => array('class' => 'dropup'),
                 'buttons' => array(
                     array('icon' => 'glyphicon glyphicon-print', 'label' => Yii::t('app', 'Print'), 'htmlOptions' => array('onclick' => 'return sendForm("print");'),),
                     array('items' => array(
@@ -1167,7 +1140,7 @@ $oppts[""] = Yii::t('app', 'None');
                 'htmlOptions' => array('id' => 'printLink', 'onclick' => 'return hideMe();'),
             ));
 
-            echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));
+            
         } else {
             $this->widget('bootstrap.widgets.TbButton', array(
                 'label' => Yii::t('app', 'Save'),
@@ -1179,8 +1152,8 @@ $oppts[""] = Yii::t('app', 'None');
         ?>
         <!--</div>-->
     </div>
-
-    <br /><br /><br /><br />
+<?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));?>
+    
 </div><!-- form -->
 <?php $this->endWidget(); ?>
 

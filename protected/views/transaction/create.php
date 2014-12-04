@@ -79,18 +79,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                                     <td>
                                         <?php echo $form->dropDownList($model, 'account_id', CHtml::listData(Accounts::model()->findAll(), 'id', 'name')); ?>
                                         <?php
-                                        /*
-                                        $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
-                                            'name' => 'Transactions[account_id]',
-                                            'id' => 'Transactions_account_id',
-                                            'value' => "$model->account_id",
-                                            'source' => $this->createUrl('/accounts/autocomplete', array('type' => 'all')),
-                                            'options' => array(
-                                                'minLength' => 0,
-                                                'showAnim' => 'fold',
-                                            //'onblur'=>"onChange('Transactions_account_id')",
-                                            ),
-                                        ));*/
+                  
                                         ?>
                                         <?php echo $form->error($model, 'account_id'); ?>
                                     </td>
@@ -239,7 +228,7 @@ $(document).ready(
         CalcSum();
     }
     function addItem(last) {
-        console.log("fire!");
+        //console.log("fire!");
         var ni = document.getElementById('det');
         var num = last + 1;
         var IdName = "My" + num;

@@ -79,10 +79,6 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
 
 <script type="text/javascript">
     jQuery(document).ready(function() {
-        $("#extmatch-form").submit(function(e) {
-            go(e);
-        });
-
 
 
         $("#FormExtmatch_account_id").change(function() {
@@ -100,57 +96,6 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
 
 
 
-    function ajaxSubmit(e) {
-        e.preventDefault();
-        var postData = $("#extmatch-form").serializeArray();
-        //console.log(postData);
-        //location.reload();
-    }
-
-
-    function go(e) {
-
-        var extsum=parseFloat($('#FormExtmatch_ext_total').val());
-        var intsum =parseFloat($('#FormExtmatch_int_total').val());
-        var diff=extsum - intsum;
-        if (diff != 0) {
-            e.preventDefault();
-            var sum = (-1) * (diff);
-            //$(this).modal();
-            //$('#modal-header').html("<h3><?php echo Yii::t("app", "Create Manual Transaction"); ?></h3>");
-            //$('#modal-body').load("<?php echo $this->createUrl('/transaction/create'); ?> #transaction-form", {minmal: true});
-            //$('#modal-footer').html("");
-            //$('#modal').width("1000px");
-            //try1();
-            //$(#modal).modal('show');
-            
-            
-            $("#Transactions_account_id").val($('#FormExtmatch_account_id').val());//bank_id
-            $("#valuedate").val('<?php echo date(Yii::app()->locale->getDateFormat("phpshort"));?>');//=date
-            $("#Transactions_refnum2").val();//=refnum
-            if(diff<0){
-                $("#sourceneg").val(diff*-1);
-                $("#sourcepos").val(0);
-            }else{
-                $("#sourcepos").val(diff);
-                $("#sourceneg").val(0);
-            }
-            
-
-            $('#transactionDiag').dialog('open');
-
-            $("#transaction-form").submit(ajaxSubmit(e));
-
-
-
-
-
-        }
-
-    }
-
-
-
     
      function CalcMatchSum() {
      var extsum = CalcExtSum();
@@ -161,8 +106,8 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
      }
      //*/
     function CalcExtSum() {
-        var vals = $("[id^=FormExtmatch_Bankbook_match]");
-        var sum = $("[id^=FormExtmatch_Bankbook_total]");
+        var vals = $(".ext_match");
+        var sum = $(".ext_total");
 
         total = parseFloat("0.0");
 
@@ -178,8 +123,8 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
     }
 
     function CalcIntSum() {
-        var vals = $("[id^=FormExtmatch_Trans_match]");
-        var sum = $("[id^=FormExtmatch_Trans_total]");
+        var vals = $(".trans_match");
+        var sum = $(".trans_total");
 
         total = parseFloat("0.0");
         for (x in vals) {

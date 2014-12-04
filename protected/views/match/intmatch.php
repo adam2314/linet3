@@ -165,8 +165,8 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
      }
      //*/
     function CalcInSum() {
-        var vals = $("[id^=FormIntmatch_In_match]");
-        var sum = $("[id^=FormIntmatch_In_total]");
+        var vals = $(".In_match");
+        var sum = $(".In_total");
 
         total = parseFloat("0.0");
 
@@ -182,8 +182,8 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
     }
 
     function CalcOutSum() {
-        var vals = $("[id^=FormIntmatch_Out_match]");
-        var sum = $("[id^=FormIntmatch_Out_total]");
+        var vals = $(".Out_match");
+        var sum = $(".Out_total");
 
         total = parseFloat("0.0");
         for (x in vals) {

@@ -2,14 +2,14 @@
     <td class="item_id"><b><?php echo $form->labelEx($model, 'item_id'); ?></b>
 
         <?php //echo $form->hiddenField($model, "[$i]id"); ?>
-        <?php echo $form->hiddenField($model, "[$i]doc_id"); ?>
-        <?php echo $form->hiddenField($model, "[$i]line"); ?>
+        <?php echo $form->hiddenField($model, "[$i]doc_id", array('class' => 'detaildoc_id')); ?>
+        <?php echo $form->hiddenField($model, "[$i]line", array('class' => 'detailline')); ?>
         <?php
         if ($model->currency_id == '')
             $cur = 1;
         else
             $cur = Currates::model()->GetRate($model->currency_id);
-        echo CHTML::hiddenField("Docdetails_${i}_rate", $cur);
+        echo CHTML::hiddenField("Docdetails_${i}_rate", $cur, array('class' => 'detailrate'));
         ?>
         <?php
         if ($model->item_id == '')
@@ -45,7 +45,7 @@
     </td>
     <td><b><?php echo $form->labelEx($model, 'iVatRate'); ?></b><?php
         //echo CHTML::checkBox("Docdetails_${i}_inclodeVat",'', array('value'=>1, 'uncheckValue'=>0));
-        echo $form->hiddenField($model, "[$i]iVatRate", array('maxlength' => 8, 'style' => "width: 65px;"));
+        echo $form->hiddenField($model, "[$i]iVatRate", array('class' => 'detailVatRate'));
         echo $form->textField($model, "[$i]iTotalVat", array('maxlength' => 8));
         ?>
 
@@ -59,10 +59,9 @@
         ?>
 
         <input type="hidden" class="rowIndex" value="<?php echo $i; ?>" />
-        <input id="Docdetails_<?php echo $i; ?>_ihItem" name="Docdetails[<?php echo $i; ?>][ihItem]" type="hidden" value="" />
-        <input id="Docdetails_<?php echo $i; ?>_iTotal"name="Docdetails[<?php echo $i; ?>][iTotal]" type="hidden" value="" />
-        <input id="Docdetails_<?php echo $i; ?>_ihTotal"name="Docdetails[<?php echo $i; ?>][ihTotal]" type="hidden" value="" />
-        <input id="Docdetails_<?php echo $i; ?>_rate" type="hidden" value="1" />
+        <input id="Docdetails_<?php echo $i; ?>_ihItem" name="Docdetails[<?php echo $i; ?>][ihItem]" type="hidden" value="" class="detailihItem" />
+        <input id="Docdetails_<?php echo $i; ?>_iTotal"name="Docdetails[<?php echo $i; ?>][iTotal]" type="hidden" value="" class="detailiTotal" />
+        <input id="Docdetails_<?php echo $i; ?>_ihTotal"name="Docdetails[<?php echo $i; ?>][ihTotal]" type="hidden" value="" class="detailihTotal" />
     </td>
 </tr>
 <tr class="docSubContent">

@@ -1404,7 +1404,7 @@ INSERT INTO `docType` (`id`, `name`, `openformat`, `isdoc`, `isrecipet`, `iscont
 (14, 'Asset Expense', 0, 1, 0, 0, 0, 1, 1, 2, 0, 4, 21, 2, '', '', 0, 0),
 (15, 'Warehouse Transaction', 830, 1, 0, 0, 0, 1, 8, 2, 0, 8, NULL, 0, '', '', 0, 1),
 (16, 'Stock entry certificate', 810, 1, 0, 0, 1, 1, 1, 1, 0, NULL, NULL, 0, '', '', 1, 1),
-(17, 'Stock exit certificate', 820, 1, 0, 0, 1, 1, 1, 1, 0, NULL, NULL, 0, '', '', 1, 1);
+(17, 'Stock exit certificate', 820, 1, 0, 0, 1, -1, 1, 1, 0, NULL, NULL, 0, '', '', 1, 1);
 
 CREATE TABLE `eavAttr` (
   `entity` bigint(20) NOT NULL,

@@ -21,7 +21,7 @@ class BankbookController extends RightsController {
         if (isset($_POST['Bankbook'])) {
             $model->attributes = $_POST['Bankbook'];
             if ($model->save())
-                $this->redirect(array('admin', 'id' => $model->id));
+                $this->redirect(array('bankbook/admin/'. $model->account_id));
         }
 
         $this->render('create', array(
@@ -43,7 +43,7 @@ class BankbookController extends RightsController {
         if (isset($_POST['Bankbook'])) {
             $model->attributes = $_POST['Bankbook'];
             if ($model->save())
-                $this->redirect(array('view', 'id' => $model->id));
+                $this->redirect(array('bankbook/admin/'. $model->account_id));
         }
 
         $this->render('update', array(
@@ -59,19 +59,22 @@ class BankbookController extends RightsController {
     public function actionDelete($id) {
         if (Yii::app()->request->isPostRequest) {
             // we only allow deletion via POST request
-            $this->loadModel($id)->delete();
+            $model=$this->loadModel($id);
+            $account_id=$model->account_id;
+                    $model->delete();
 
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax']))
-                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin/'.$account_id));
         } else
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
-    public function actionAdmin() {
+    public function actionAdmin($id=null) {
         $model = new Bankbook('search');
         $model->unsetAttributes();  // clear any default values
-
+        if($id!==null)
+            $model->account_id=$id;
         if (isset($_POST['Bankbook']['file'])) {
 
             $model->import((int) $_POST['Bankbook']['account_id']);
@@ -111,11 +114,11 @@ class BankbookController extends RightsController {
         if (isset($_POST['FormExtmatch'])) {
             //$extmatch->attributes=$_POST['FormExtmatch'];
             //if(){
-            //$this->performAjaxValidation($extmatch);
+            $this->performAjaxValidation($extmatch);
 
-            $extmatch->bankbooks = $_POST['FormExtmatch']['Bankbook']['match'];
-            $extmatch->transactions = $_POST['FormExtmatch']['Trans']['match'];
-            $extmatch->account_id = $_POST['FormExtmatch']['account_id'];
+            //$extmatch->bankbooks = $_POST['FormExtmatch']['Bankbook']['match'];
+            //$extmatch->transactions = $_POST['FormExtmatch']['Trans']['match'];
+            $extmatch->attributes = $_POST['FormExtmatch'];
             $extmatch->save();
             Yii::app()->user->setFlash('success', Yii::t('app', 'Mach 1 Success'));
             //}

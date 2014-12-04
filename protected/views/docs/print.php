@@ -2,12 +2,11 @@
  $logopath = Yii::app()->createAbsoluteUrl("download/" . Yii::app()->user->settings['company.logo']);
 $legalize="";
 if ($preview == 3) {
-    $configPath = Yii::app()->user->settings["company.path"];
-    $logopath = Yii::app()->params["filePath"] . "$configPath/" . Yii::app()->user->settings['company.logo'];
-}      //Yii::app()->params["filePath"]."download/".Yii::app()->user->settings['company.logo'];
-elseif($preview==2){
+    //$configPath = Yii::app()->user->settings["company.path"];
+    $logopath = Company::getFilePath() . Yii::app()->user->settings['company.logo'];
+}elseif($preview==2){
     $legalize=Yii::t('app','Computerized Document');
-    $logopath = Yii::app()->params["filePath"] . Yii::app()->user->settings["company.path"]."/settings/" . Yii::app()->user->settings['company.logo'];
+    $logopath = Company::getFilePath()."/settings/" . Yii::app()->user->settings['company.logo'];
     //echo $preview.$logopath;
 //exit;
 }

@@ -1,8 +1,8 @@
 <tr class="rcptContent">
     <td><b><?php echo $form->labelEx($model, 'type'); ?></b>
         <?php //echo $form->hiddenField($model, "[$i]id"); ?>
-        <?php echo $form->hiddenField($model, "[$i]doc_id"); ?>
-        <?php echo $form->hiddenField($model, "[$i]line"); ?>
+        <?php echo $form->hiddenField($model, "[$i]doc_id", array('class'=>'rcptdoc_id')); ?>
+        <?php echo $form->hiddenField($model, "[$i]line", array('class'=>'rcptline')); ?>
         <?php //echo $form->hiddenField($model, "[$i]dep_date");  ?>
         <b><?php echo $form->labelEx($model, 'type'); ?></b>
             
@@ -21,7 +21,7 @@
 
 
     <td><b><?php echo $form->labelEx($model, 'currency_id'); ?></b><?php echo $form->dropDownList($model, "[$i]currency_id", CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name'), array('class'=>'currSelect')); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'sum'); ?></b><?php echo $form->textField($model, "[$i]sum", array('placeholder' => Yii::t('label', 'sum') )); ?></td>
+    <td><b><?php echo $form->labelEx($model, 'sum'); ?></b><?php echo $form->textField($model, "[$i]sum", array('class'=>'rcptsum','placeholder' => Yii::t('label', 'sum') )); ?></td>
     
     <td class="remove">
         <?php

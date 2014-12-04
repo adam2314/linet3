@@ -43,26 +43,28 @@ class dbMaster {
                 $dbCon = Yii::app()->db;
 
             $transaction = $dbCon->beginTransaction();
-            try {
+            //try {
                 $sqlArray = explode(";\r\n", $sqlCmd);
                 $text = '';
                 foreach ($sqlArray as $line) {
                     $text.=$line . "\n";
-                    if (($line != '') && (strpos($line, '--') !== 0) && (strpos($line, '/*') !== 0))
+                    if (($line != '') && (strpos($line, '--') !== 0) && (strpos($line, '/*') !== 0)){
                         $dbCon->createCommand($line . ";")->execute();
+                        //echo $line."<br\n>";
+                    }
                 }
 
 
                 $transaction->commit();
-            } catch (Exception $e) { // an exception is raised if a query fails
+            /*} catch (Exception $e) { // an exception is raised if a query fails
                 $transaction->rollback();
                 $message = $e->getMessage();
                 echo $text . "<br />";
                 print $message;
                 Yii::app()->end();
-            }
+            }*/
         } else {
-            return false;
+            throw new CHttpException(500, 'The sql file does not exist.');
         }
     }
 
@@ -80,10 +82,13 @@ class dbMaster {
             //echo Yii::app()->db->tablePrefix;
             //echo strpos($key,Yii::app()->db->tablePrefix)===true;
             //echo strpos($key,Yii::app()->db->tablePrefix);
-            if ($prefix = '') {
-                if ((strpos($key, $prefix) === 0))
+            if ($prefix != '') {
+                if ((strpos($key, $prefix) === 0)){
+                    //echo "-- prefixed: ".$key."-".$prefix."\n";
                     $this->dumpTable($key);
+                }
             }else {
+                echo "--no:\n";
                 $this->dumpTable($key);
             }
         }
@@ -140,7 +145,7 @@ class dbMaster {
         $header.="SET FOREIGN_KEY_CHECKS=0;" . PHP_EOL;
         $header.="SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";" . PHP_EOL;
         $header.="SET AUTOCOMMIT=0;" . PHP_EOL;
-        $header.="START TRANSACTION;" . PHP_EOL . PHP_EOL;
+        //$header.="START TRANSACTION;" . PHP_EOL . PHP_EOL;
         $header.="/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;" . PHP_EOL;
         $header.="/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;" . PHP_EOL;
         $header.="/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;" . PHP_EOL;
@@ -155,7 +160,7 @@ class dbMaster {
      */
     private function setFooter() {
         $footer = PHP_EOL . "SET FOREIGN_KEY_CHECKS=1;" . PHP_EOL;
-        $footer.="COMMIT;" . PHP_EOL . PHP_EOL;
+        //$footer.="COMMIT;" . PHP_EOL . PHP_EOL;
         $footer.="/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;" . PHP_EOL;
         $footer.="/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;" . PHP_EOL;
         $footer.="/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;" . PHP_EOL;
@@ -179,7 +184,7 @@ class dbMaster {
 
         $q = $db->createCommand('SHOW CREATE TABLE ' . $db->quoteTableName($tableName) . ';')->queryRow();
 
-        $create_query = $q['Create Table'];
+        $create_query = str_replace($tableName, $newTableName, $q['Create Table']);
         //echo "\n".$create_query."\n";
         $pattern = '/CONSTRAINT.*|FOREIGN[\s]+KEY/';
 
@@ -208,7 +213,7 @@ class dbMaster {
         if (empty($rows))
             return;
 
-        echo PHP_EOL . "--\n-- Data for table `$tableName`\n--" . PHP_EOL . PHP_EOL;
+        echo PHP_EOL . "--\n-- Data for table `$newTableName`\n--" . PHP_EOL . PHP_EOL;
 
         $attrs = array_map(array($db, 'quoteColumnName'), array_keys($rows[0]));
         echo 'INSERT INTO ' . $db->quoteTableName($newTableName) . '' . " (", implode(', ', $attrs), ') VALUES' . PHP_EOL;

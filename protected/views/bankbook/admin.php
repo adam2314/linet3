@@ -33,20 +33,12 @@ $this->beginWidget('MiniForm',array(
  
     $temp=CHtml::listData(Accounts::model()->findAllByType(7), 'id', 'name');
     $temp[0]=Yii::t('app','Choose Bank');
-    $model->account_id=0;
+    //$model->account_id=0;
  
         echo $form->dropDownListRow($model, "account_id", $temp,array('class'=>''));
         ?>
 <div id ="result">
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
+    <?php echo $this->renderPartial('ajax', array('model'=>$model)); ?>
 </div>
 
 <?php

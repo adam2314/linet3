@@ -22,7 +22,6 @@ class Company extends mainRecord {
 
         Yii::app()->user->setState('settings', $settings);
         Yii::app()->user->setState('menu', Menu::model()->buildUserMenu());
-
     }
 
     public function loadComp($database = '') {
@@ -46,7 +45,7 @@ class Company extends mainRecord {
 
     public function select($id) {
         //echo 'run';
-        
+
         $database = Company::model()->findByPk($id);
         Yii::app()->user->setState('Database', $database);
         Yii::app()->user->setState('Company', $database->id);
@@ -55,7 +54,7 @@ class Company extends mainRecord {
 
         //need to chk user income map save
         $user = User::model()->findByPk(Yii::app()->user->id);
-        if($user!==null){
+        if ($user !== null) {
             $user->loadUser();
             return $user->save();
         }
@@ -80,24 +79,58 @@ class Company extends mainRecord {
             }
         }
         //delete folders
-
         //$yiiBasepath = Yii::app()->basePath;
-        $configPath = $this->prefix;
-        $folder = Yii::app()->params["filePath"] . $configPath . "/";
-        //rmdir($folder);
+        //$configPath = $this->prefix;
+        $folder = $this->getFilePath();
+        CFileHelper::removeDirectory($folder);
         //delete db perms
 
         return parent::delete();
     }
 
     public function backup() {
+        $folder = $this->getFilePath();
+        $file = $folder . "db.sql";
         $dumper = new dbMaster();
-        echo $dumper->getDump(true, $this->prefix);
-        Yii::app()->end();
+
+        $handle = fopen($file, 'w');
+        fwrite($handle, $dumper->getDump(false, $this->prefix));
+        fclose($handle);
+        Zipper::zip($folder, $folder . "tenant.zip");
+
+
+
+        $file = new Files;
+        $file->name = date("d-m-Y_H_i") . ".zip";
+        $file->path = 'backup/';
+        $file->save();
+
+
+
+        if (!is_dir($folder . $file->path))
+            mkdir($folder . $file->path);
+        rename($folder . "tenant.zip", $folder . $file->path . $file->id);
+        return true;
     }
 
-    public function restore() {
-        
+    public function restore($file) {
+        $folder = $this->getFilePath();
+        if (file_exists($file)) {
+
+            Zipper::unzip($file, $folder);
+            $db = new dbMaster;
+            $db->loadFile($folder . "db.sql", Yii::app()->db->tablePrefix);
+        } else {
+            throw new CHttpException(500, 'The backup file does not exist.');
+        }
+    }
+
+    static public function getFilePath() {
+
+        $configPath = Yii::app()->user->settings["company.path"];
+        $configPath = Yii::app()->user->Database->prefix;
+        //echo Yii::app()->params["filePath"] . $configPath . "/";
+        return Yii::app()->params["filePath"] . $configPath . "/";
     }
 
     private function createDb() {
@@ -112,12 +145,16 @@ class Company extends mainRecord {
     }
 
     public function save($runValidation = true, $attributes = NULL) {
+        $a = parent::save($runValidation, $attributes);
         if ($this->prefix == '') {
             $this->string = Yii::app()->dbMain->connectionString;
-            $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            $this->prefix = substr(str_shuffle($chars), 0, 4) . "_";
+            //$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            $this->prefix = "CA" . $this->id . "_";
+            //got prefix
+            $a = parent::save($runValidation, $attributes);
         }
-
+        
+        
         //if tables config notexsits
         Yii::app()->db->setActive(false);
         Yii::app()->db->connectionString = $this->string;
@@ -139,8 +176,8 @@ class Company extends mainRecord {
             $a->save();
 
             //$yiiBasepath = Yii::app()->basePath;
-            $configPath = $this->prefix;
-            $folder = Yii::app()->params["filePath"] . $configPath . "/";
+
+            $folder = Yii::app()->params["filePath"] . $this->prefix . "/";
             mkdir($folder);
             mkdir($folder . "settings/"); //settings
             mkdir($folder . "cert/"); //cert
@@ -148,12 +185,13 @@ class Company extends mainRecord {
             mkdir($folder . "items/"); //items
             mkdir($folder . "openformat/"); //openformat
             mkdir($folder . "files/"); //openformat
+            mkdir($folder . "backup/"); //backup
             //add permisstions
         } else {     //else
             //table version
             //upgrade
         }
-        $a = parent::save($runValidation, $attributes);
+
         $perm = new DatabasesPerm;
         $perm->user_id = Yii::app()->user->id;
         $perm->database_id = $this->id;
@@ -182,7 +220,7 @@ class Company extends mainRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('string, prefix', 'required'),
+            array('string', 'required'),
             array('string, prefix', 'length', 'max' => 255),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.

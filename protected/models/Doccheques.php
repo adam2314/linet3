@@ -189,7 +189,11 @@ class Doccheques extends basicRecord {
         $criteria->compare('type', $this->type);
         $criteria->compare('line', $this->line);
         $criteria->compare('currency_id', $this->currency_id, true);
-        $criteria->compare('bank_refnum', $this->bank_refnum,true);
+        
+        if($this->bank_refnum==''){
+            $criteria->addCondition('bank_refnum IS NULL');
+            $criteria->addCondition('bank_refnum =""','OR');
+        }
         
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

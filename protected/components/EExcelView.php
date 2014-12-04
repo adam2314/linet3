@@ -19,7 +19,7 @@ class EExcelView extends TbGridView {
     //the PHPExcel object
     public $objPHPExcel = null;
     public $libPath = 'ext.phpexcel.Classes.PHPExcel'; //the path to the PHP excel lib
-    public $template = "{summary}\n{items}\n{pager}\n{exportbuttons}";
+    public $template = "{summary}{exportbuttons}\n{items}\n{pager}";
     //config
     public $autoWidth = true;
     public $exportType = 'Excel5';
@@ -30,7 +30,7 @@ class EExcelView extends TbGridView {
     public $grid_mode_var = 'grid_mode'; //GET var for the grid mode
     //buttons config
     public $exportButtonsCSS = 'btn btn-primary';
-    public $exportButtons = array('Excel2007', 'Excel5', 'HTML', 'CSV', 'Print');
+    public $exportButtons = array('Excel2007', 'Excel5', 'HTML', 'CSV');
     public $exportText = 'Export to: ';
     //callbacks
     public $onRenderHeaderCell = null;
@@ -129,7 +129,7 @@ class EExcelView extends TbGridView {
         $n = count($data);
 
         if ($n > 0) {
-            for ($row = 0; $row < $n;  ++$row)
+            for ($row = 0; $row < $n; ++$row)
                 $this->renderRow($row);
         }
         return $n;
@@ -243,12 +243,24 @@ class EExcelView extends TbGridView {
 </script>
 ';
             } else {
-                $js = '<script>
-                                    $("#btn_' . $item['extension'] . '").live("click",function(){
-                                        
+                
+            }
+
+
+            //$content[] = CHtml::link($item['caption'], '', array('id' => 'btn_' . $item['extension'], 'class' => $this->exportButtonsCSS)) . $js;
+            $items[] = array('icon' => 'glyphicon glyphicon-export', 'label' => Yii::t('app', $item['caption']), 'url' => 'javascript:exportView("' . $type . '");',);
+        }
+        if ($items)
+        //echo CHtml::tag('div', array('class' => "btn-group"), implode(' ', $content));
+            echo '<script>
+            function exportView(format){
+                                    if(format=="print"){
+                                        javascript:window.print();
+                                        return ;
+                                    }
                                     var elements = $(".filter-container > *");
                                     data="";
-                                    $form = $(\'<form action="?exportType=' . $type . '&' . $this->grid_mode_var . '=export" method="post"></form>\').appendTo(\'body\');
+                                    $form = $(\'<form action="?exportType=\' +format +\'&' . $this->grid_mode_var . '=export" method="post"></form>\').appendTo(\'body\');
 
                                     for (var i = 0; i < elements.length; i++) {
                                     
@@ -256,15 +268,21 @@ class EExcelView extends TbGridView {
                                         
                                     }
                                     $form.submit();
-});
+
+}
                     </script>';
-            }
 
 
-            $content[] = CHtml::link($item['caption'], '', array('id' => 'btn_' . $item['extension'], 'class' => $this->exportButtonsCSS)) . $js;
-        }
-        if ($content)
-            echo CHtml::tag('div', array('class' => "btn-group"), implode(' ', $content));
+
+        $this->widget('bootstrap.widgets.TbButtonGroup', array(
+            'type' => 'primary',
+            //'htmlOptions' => array('class' => 'dropup'),
+            'buttons' => array(
+                array('icon' => 'glyphicon glyphicon-print', 'label' => Yii::t('app', 'Print'), 'htmlOptions' => array('onclick' => 'return exportView("print");'),),
+                array('items' => $items
+                ),
+            ),
+        ));
     }
 
     /**
@@ -274,7 +292,7 @@ class EExcelView extends TbGridView {
      * 
      */
     private static function cleanOutput() {
-        for ($level = ob_get_level(); $level > 0;  --$level) {
+        for ($level = ob_get_level(); $level > 0; --$level) {
             @ob_end_clean();
         }
     }

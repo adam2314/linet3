@@ -17,6 +17,7 @@ class stockAction extends CActiveRecord {
 
     public $from_date;
     public $to_date;
+    public $sum;
 
     public static function newTransaction($doc_id, $account_id, $oppt_account_id, $item_id, $qty = 1, $serial = '') {
         $model = new stockAction();
@@ -66,7 +67,7 @@ class stockAction extends CActiveRecord {
             array('serial', 'length', 'max' => 255),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, doc_id, account_id, oppt_account_id, item_id, serial, qty, user_id, date', 'safe', 'on' => 'search'),
+            array('id, doc_id, account_id, oppt_account_id, item_id, serial, qty, user_id, date, sum', 'safe', 'on' => 'search'),
         );
     }
 
@@ -97,6 +98,7 @@ class stockAction extends CActiveRecord {
             'doc_id' => Yii::t('labels', 'Document'),
             'user_id' => Yii::t('labels', 'User'),
             'date' => Yii::t('labels', 'Date'),
+            'sum' => Yii::t('labels', 'Sum'),
         );
     }
 
@@ -150,7 +152,7 @@ class stockAction extends CActiveRecord {
             return "ERROR:".$this->item_id;
     }
     
-
+   
     public function getItemSum() {
         $criteria = new CDbCriteria;
         $criteria->compare('item_id', $this->item_id);
@@ -163,9 +165,10 @@ class stockAction extends CActiveRecord {
         // should not be searched.
 
         $criteria = $this->getSearchCriteria();
+   $criteria->select = 'account_id,item_id,sum(qty) AS sum';
 
         
-        $criteria->group = "item_id";
+        $criteria->group = "account_id,item_id";
        //  $criteria->select='SUM(qty)';
 
 
