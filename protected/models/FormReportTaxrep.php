@@ -103,7 +103,7 @@ class FormReportTaxrep extends CFormModel {
         if ($this->custtax_total > $this->tax_sum)
             $this->custtax_total = $this->tax_sum;
 
-        $this->tax_total = $this->tax_sum - $this->custtax_total;
+        $this->tax_total = $this->tax_sum + $this->custtax_total;
 
 
         return $this->tax_total;

@@ -56,7 +56,7 @@ class Doccheques extends basicRecord {
         return $rcps . "\r\n";
     }
 
-    public function transaction($num, $refnum, $valuedate, $details, $action, $line, $account_id, $tranType) {
+    public function transaction($num, $refnum, $valuedate, $details, $action, $line, $account_id, $tranType,$insum,$outsum) {
         $model = PaymentType::model()->findByPk($this->type);
         $paymenet = new $model->value;
 
@@ -68,7 +68,7 @@ class Doccheques extends basicRecord {
             $in->valuedate = $valuedate;
             $in->details = $details;
             $in->currency_id = $this->currency_id;
-            $in->sum = $this->sum * $action;
+            $in->sum = $insum * $action;
             $in->owner_id = Yii::app()->user->id;
             $in->linenum = $line;
             
@@ -83,7 +83,7 @@ class Doccheques extends basicRecord {
             $out->valuedate = $valuedate;
             $out->details = $details;
             $out->currency_id = $this->currency_id;
-            $out->sum = $this->sum * $action * -1;
+            $out->sum = $outsum * $action * -1;
             $out->owner_id = Yii::app()->user->id;
             $out->linenum = $line;
 

@@ -45,14 +45,17 @@ $this->widget('EExcelView', array(
         array(
             'type' => 'raw',
             'value' =>
-            'CHtml::hiddenField("FormExtmatch[Transactions][total][$data->id]","$data->sum",array("class"=>"trans_total"))',
+            'CHtml::hiddenField("FormExtmatch[Transactions][total][$data->id]",$data->sum*-1,array("class"=>"trans_total"))',
         ),
         //'id',
         'details',
         'date',
         //'refnum',
         'currency_id',
-        'sum',
+        array(
+            'type' => 'raw',
+            'value' =>'$data->sum*-1',
+        ),
     //'total',
     //array(
     //	'class'=>'bootstrap.widgets.TbButtonColumn',

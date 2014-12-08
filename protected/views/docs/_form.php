@@ -394,7 +394,7 @@ $oppts[""] = Yii::t('app', 'None');
             </thead>	
             <tfoot>
                 <tr>
-                    <td colspan='7'>
+                    <td colspan='2'>
                         <textarea id="rcpt" style='display:none;'>       
                             <?php
                             echo $this->renderPartial('rcptdetial', array('model' => new Doccheques, 'form' => $form, 'i' => 'ABC'));
@@ -402,12 +402,12 @@ $oppts[""] = Yii::t('app', 'None');
                         </textarea>      
                     </td>
                     <td>
-                        <?php //echo $form->labelEx($model, 'src_tax'); ?>
-                        <?php //echo $form->error($model, 'src_tax'); ?>
+                        <?php echo $form->labelEx($model, 'src_tax'); ?>
+                        <?php echo $form->error($model, 'src_tax'); ?>
                     </td>
 
                     <td>
-                        <?php //echo $form->textField($model, 'src_tax', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
+                        <?php echo $form->textField($model, 'src_tax', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
                     </td>
                     <td></td>
                     <td class="rcptadd">
@@ -420,7 +420,7 @@ $oppts[""] = Yii::t('app', 'None');
                     </td>
                 </tr>
                 <tr>
-                    <td colspan='7'>
+                    <td colspan='2'>
 
                     </td>
                     <td>

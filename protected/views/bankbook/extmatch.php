@@ -36,7 +36,6 @@ echo $form->dropDownListRow($extmatch, "account_id", $temp, array('class' => '')
         //echo $form->labelEx($extmatch, 'ext_total');
         echo $form->textFieldRow($extmatch, 'ext_total', array('size' => 60, 'maxlength' => 100));
         //echo $form->error($extmatch, 'ext_total');
-
         //echo $form->labelEx($extmatch, 'int_total');
         echo $form->textFieldRow($extmatch, 'int_total', array('size' => 60, 'maxlength' => 100));
         //echo $form->error($extmatch, 'int_total');
@@ -44,13 +43,13 @@ echo $form->dropDownListRow($extmatch, "account_id", $temp, array('class' => '')
     </div>  
 </div>
 <div class="form-actions">
-<?php
-$this->widget('bootstrap.widgets.TbButton', array(
-    'buttonType' => 'submit',
-    'type' => 'primary',
-    'label' => Yii::t('app', "Save"),
-));
-?>
+    <?php
+    $this->widget('bootstrap.widgets.TbButton', array(
+        'buttonType' => 'submit',
+        'type' => 'primary',
+        'label' => Yii::t('app', "Save"),
+    ));
+    ?>
 </div>
 
 <?php
@@ -96,15 +95,14 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
 
 
 
-    
-     function CalcMatchSum() {
-     var extsum = CalcExtSum();
-     var intsum = CalcIntSum();
-     
-     
-     console.log("sum: " + (extsum - intsum));
-     }
-     //*/
+
+    function CalcMatchSum() {
+        var extsum = CalcExtSum();
+        var intsum = CalcIntSum();
+
+
+    }
+    //*/
     function CalcExtSum() {
         var vals = $(".ext_match");
         var sum = $(".ext_total");
