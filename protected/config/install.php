@@ -4,6 +4,7 @@ return array(
     'language' => 'he_il',
     'params' => array(
         'newInstall' => true,
+        'local'=>false,
     ),
     'components' => array(
         'db' => array(

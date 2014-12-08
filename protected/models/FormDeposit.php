@@ -12,8 +12,8 @@
  * @author adam
  */
 class FormDeposit  extends CFormModel{
-    public $account_id=0;
-    public $refnum=0;
+    public $account_id='';
+    public $refnum='';
     public $currency_id='';
     public $date;
     public $cheq_sum=0;
@@ -86,7 +86,7 @@ class FormDeposit  extends CFormModel{
                 $accout->currency_id=$cheq->currency_id;
                 $accout->owner_id=Yii::app()->user->id;
                 $accout->linenum=$linenum;
-                $accout->sum=$cheq->sum*1;
+                $accout->sum=$cheq->sum*-1;
                 $linenum++;
                 $num=$accout->save();
                 
@@ -100,7 +100,7 @@ class FormDeposit  extends CFormModel{
                 $oppt->currency_id=$cheq->currency_id;
                 $oppt->owner_id=Yii::app()->user->id;
                 $oppt->linenum=$linenum;
-                $oppt->sum=$cheq->sum*-1;
+                $oppt->sum=$cheq->sum*1;
                 $linenum++;
                 $num=$oppt->save();
                 

@@ -21,8 +21,8 @@ class PrintDoc {
     public static function printMe($model, $preview = 0) {
         if ($preview != 1)//preview
             $model->printedDoc();
-        
-        
+
+
         Yii::app()->controller->layout = 'print';
         return Yii::app()->controller->render('//docs/print', array('model' => $model, 'preview' => $preview), true);
     }
@@ -31,7 +31,7 @@ class PrintDoc {
         $yiiBasepath = Yii::app()->basePath;
         $yiiUser = Yii::app()->user->id;
         //$configPath = Yii::app()->user->settings["company.path"];
-        $configCertpasswd = Yii::app()->user->certpasswd;
+        $configCertpasswd = Yii::app()->user->User->getCertPasswd();
 
 
         $name = $model->docType->name . "-" . "$model->docnum.pdf";
@@ -47,7 +47,7 @@ class PrintDoc {
             $file->path = "docs/";
             $file->parent_type = get_class($model);
             $file->parent_id = $model->id;
-            $file->hidden=1;
+            $file->hidden = 1;
             $file->save();
             $file->writeFile($mPDF1->Output("bla", "S"));
         }
@@ -71,7 +71,7 @@ class PrintDoc {
 
 
 
-            
+
 
 
             if (file_exists($cerfile)) {
@@ -82,19 +82,23 @@ class PrintDoc {
                     throw new CHttpException('Cannot open the certificate file');
                 }
 
-                $pdf->attachDigitalCertificate($certificate, $configCertpasswd);
-                $docfile = $pdf->render();
                 
+                //throw new Exception('Uncaught Exception');
+                $pdf->attachDigitalCertificate($certificate, $configCertpasswd);
+                //restore_exception_handler();
+
+                $docfile = $pdf->render();
+
                 set_include_path($oldpath);
                 spl_autoload_register(array('YiiBase', 'autoload'));
 
 
                 $doc_file = new Files();
-                $doc_file->name = $name; 
+                $doc_file->name = $name;
                 $doc_file->path = "docs/";
                 $doc_file->parent_type = get_class($model);
-                $doc_file->parent_id = $model->id; 
-                $doc_file->public=true;
+                $doc_file->parent_id = $model->id;
+                $doc_file->public = true;
                 $doc_file->save();
 
                 $doc_file->writeFile($docfile);
@@ -118,8 +122,14 @@ You can find instructions for making self signed certificate file with Acrobat r
     }
 
     public static function mailDoc($model) {
-        $file=  PrintDoc::pdfDoc($model);
-        $mail=  new Mail;
+        $file = PrintDoc::pdfDoc($model);
+        $mail = new Mail;
+    }
+
+    public static function handle1Exception($exception) {
+
+        echo "Exception: " , $exception->getMessage(), "\n";
+        exit;
         
     }
 

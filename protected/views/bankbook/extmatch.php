@@ -6,7 +6,7 @@ $this->menu = array(
 
 
 $this->beginWidget('MiniForm', array(
-    'header' => Yii::t('app', "Bankbooks"),
+    'header' => Yii::t('app', "Bank Account Reconciliations"),
 ));
 ?>
 

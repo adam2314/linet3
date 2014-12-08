@@ -33,6 +33,11 @@ class UserIdentity extends CUserIdentity {
             $this->username = $user->username;
             $this->errorCode = self::ERROR_NONE;
             Yii::app()->user->setState('Company', 0); //must
+            
+            $auth=Yii::app()->authManager;
+            $auth->assign('Authenticated',$user->id);
+            $auth->save();
+            
             $user->loadUser();
         }
         return $this->errorCode == self::ERROR_NONE;

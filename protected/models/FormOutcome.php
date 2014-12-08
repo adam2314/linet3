@@ -68,7 +68,7 @@ class FormOutcome extends CFormModel {
         $tran->currency_id = $this->currency_id;
         $tran->owner_id = Yii::app()->user->id;
         $tran->linenum = $line;
-        $tran->sum = $this->sum;
+        $tran->sum = $this->sum*-1;
         $line++;
         $num = $tran->save();
 
@@ -82,7 +82,7 @@ class FormOutcome extends CFormModel {
         $opt_tran->currency_id = $this->currency_id;
         $opt_tran->owner_id = Yii::app()->user->id;
         $opt_tran->linenum = $line;
-        $opt_tran->sum = $this->sum * -1;
+        $opt_tran->sum = $this->sum * 1;
         $line++;
         //print_r($vat->attributes);
         $num = $opt_tran->save();

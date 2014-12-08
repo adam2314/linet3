@@ -1,5 +1,7 @@
 <?php
+
 Yii::import('ext.tinymce.*');
+
 /**
  * Controller is the customized base controller class.
  * All controller classes for this application should extend from this base class.
@@ -54,23 +56,33 @@ class RightsController extends RController {
           if(!isset(Yii::app()->user->Company)){
           Yii::app()->user->setState('Company',0);
           } */
+
         if (Yii::app()->user->Company == 0) {
             if (Yii::app()->controller->id != 'company') {
                 //print "'".Yii::app()->controller->id."'";
                 $this->redirect(Yii::app()->createAbsoluteUrl('company/index'));
                 Yii::app()->end();
+            } else {
+
+                Yii::app()->db->setActive(false);
+                Yii::app()->db->connectionString = Yii::app()->dbMain->connectionString;
+                Yii::app()->db->tablePrefix =Yii::app()->dbMain->tablePrefix;
+                Yii::app()->db->username = Yii::app()->dbMain->username;
+                Yii::app()->db->password = Yii::app()->dbMain->password;
+                Yii::app()->db->setActive(true);
             }
         } else {
             //hasAccess!
-            
-            $database=  Company::model()->findByPk(Yii::app()->user->Company);
-            
-            
-            Yii::log("Selected Company ID: ". Yii::app()->user->Company,'trace','app');
+
+            $database = Company::model()->findByPk(Yii::app()->user->Company);
+
+
+            Yii::log("Selected Company ID: " . Yii::app()->user->Company, 'trace', 'app');
+            //Yii::log("Selected Company ID: ". Yii::app()->user,'trace','app');
             Company::model()->loadComp($database);
         }
 
-
+//*/
 
 
 
@@ -84,9 +96,9 @@ class RightsController extends RController {
      * @throws CHttpException when called unless login is required.
      */
     public function accessDenied($message = null) {
-        if ($message === null)
+        if ($message === null) {
             $message = Rights::t('app', 'No sufficient permissions for current user to perform this action');
-
+        }
         $user = Yii::app()->getUser();
         if ($user->isGuest === true)
             $user->loginRequired();

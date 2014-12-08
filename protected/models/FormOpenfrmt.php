@@ -603,7 +603,7 @@ function typeline($str, $filter){
         
         $bkmvFile=new Files;
         $bkmvFile->name='bkmvdata.txt';
-        $bkmvFile->path='openformt/';//
+        $bkmvFile->path='openformat/';//
         $bkmvFile->expire=360;
         $bkmvFile->save();
         $bkmvFile->writeFile($bkmv);
@@ -620,7 +620,7 @@ function typeline($str, $filter){
         
         $iniFile=new Files;
         $iniFile->name='ini.txt';
-        $iniFile->path='openformt/';//
+        $iniFile->path='openformat/';//
         $iniFile->expire=360;
         $iniFile->save();
         $iniFile->writeFile($ini);

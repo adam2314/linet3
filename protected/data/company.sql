@@ -1602,9 +1602,9 @@ CREATE TABLE `Rights` (
 );
 
 INSERT INTO `Rights` (`itemname`, `type`, `weight`) VALUES
-('Authenticated', 2, 1),
-('Editor', 2, 0),
-('Guest', 2, 2);
+('Admin', 1, 0),
+('Guest', 3, 2),
+('User', 2, 1);
 
 CREATE TABLE `stockAction` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -1629,8 +1629,8 @@ CREATE TABLE `transactions` (
   `intCorrelation` int(11) NOT NULL,
   `intType` tinyint(1) NOT NULL,
   `extCorrelation` int(11) NOT NULL,
-  `valuedate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `valuedate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `details` varchar(255) NOT NULL,
   `currency_id` varchar(3) NOT NULL,
   `sum` decimal(20,2) NOT NULL,

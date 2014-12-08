@@ -69,12 +69,12 @@ return CMap::mergeArray(
                 'authManager' => array(
                     'class' => 'RDbAuthManager',
                     'connectionID' => 'db',
-                    'defaultRoles' => array('Guest'),
                     'itemTable' => '{{AuthItem}}',
                     'itemChildTable' => '{{AuthItemChild}}',
                     'assignmentTable' => '{{AuthAssignment}}',
                     'rightsTable' => '{{Rights}}',
                     'defaultRoles' => array('Guest'),
+                    //'defaultRoles' => array('Authenticated'),
                 ),
                 'ePdf' => array(
                     'class' => 'ext.yii-pdf.EYiiPdf',

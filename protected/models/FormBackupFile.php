@@ -20,5 +20,14 @@ class FormBackupFile extends CFormModel{
         );
         
     }
+    
+    public function attributeLabels() {
+        return array(
+            'file' => Yii::t('labels', 'File'),
+            
+            
+        );
+    }
+    
     //put your code here
 }

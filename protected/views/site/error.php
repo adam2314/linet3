@@ -12,6 +12,7 @@ $this->pageTitle=Yii::app()->name . ' - '. Yii::t('app','Error');
 //print_r(Yii::app()->theme);
 
 ?>
+    <a href='javascript:history.back()'><?php echo Yii::t('app','Back')?></a>
 </div>
 
 <?php //$this->endWidget(); ?>

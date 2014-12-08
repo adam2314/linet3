@@ -19,7 +19,7 @@ $('.search-form form').submit(function(){
 ");
 
  $this->beginWidget('MiniForm',array(
-    'header' => Yii::t('app',"Manage Account types"),
+    'header' => Yii::t('app',"Manage Backups"),
 
 )); 
 
@@ -40,7 +40,7 @@ $('.search-form form').submit(function(){
 			'template'=>'{restore}{download}{delete}',
 			'buttons'=>array(
                             'restore' => array(
-                                'label'=>'Restore<i class="glyphicon glyphicon-restore"></i>',
+                                'label'=>'<i class="glyphicon glyphicon-restore"></i>'.Yii::t('labels',"Restore"),
                                 'url'=>'Yii::app()->createUrl("data/restore/". $data->id)',
 
                             ),

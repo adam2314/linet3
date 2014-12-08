@@ -21,6 +21,8 @@
                 $('#main').html("Loading...");
                 $.post("?", {"step": step, "non": true}, function(data) {
                     $('#main').html(data);
+                }).fail(function() {
+                    $('#main').html("error: " + data);
                 });
             }
         </script>

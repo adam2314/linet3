@@ -98,7 +98,8 @@ class stockAction extends CActiveRecord {
             'doc_id' => Yii::t('labels', 'Document'),
             'user_id' => Yii::t('labels', 'User'),
             'date' => Yii::t('labels', 'Date'),
-            'sum' => Yii::t('labels', 'Sum'),
+            'createDate' => Yii::t('labels', 'Action Date'),
+            'sum' => Yii::t('labels', 'Qty'),
         );
     }
 
@@ -158,6 +159,11 @@ class stockAction extends CActiveRecord {
         $criteria->compare('item_id', $this->item_id);
         $criteria->select = 'SUM(qty)';
         return $this->commandBuilder->createFindCommand($this->getTableSchema(), $criteria)->queryScalar();
+    }
+    
+    public function getRefDocLink(){
+        
+        return CHtml::link(CHtml::encode(Yii::t("app",$this->Doc->docType->name)." #".$this->Doc->docnum),Yii::app()->createAbsoluteUrl("/docs/view/$this->doc_id"));
     }
 
     public function sum() {

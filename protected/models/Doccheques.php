@@ -200,5 +200,20 @@ class Doccheques extends basicRecord {
             'pagination' => array('pageSize' => 50),
         ));
     }
+    
+    
+    public function depositSearch() {
 
+        $criteria = new CDbCriteria;
+
+
+        $criteria->addCondition('bank_refnum IS NULL');
+        $criteria->addCondition('(type = 1 OR type = 2)','AND');
+        
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'pagination' => array('pageSize' => 50),
+        ));
+    }
+    
 }

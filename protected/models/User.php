@@ -27,7 +27,7 @@ class User extends mainRecord {
     public $warehouse;
     public $passwd;
     public $certfile;
-
+    public $certpasswd;
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -125,6 +125,17 @@ class User extends mainRecord {
         }
         return $this->warehouse;
     }
+    
+    public function getCertPasswd() {
+        if (Yii::app()->user->Company != 0) {
+            $a = Settings::model()->findByPk("company." . $this->id . ".certpasswd");
+            if ($a !== null) {
+                $this->certpasswd = $a->value;
+            }
+        }
+        return $this->certpasswd;
+    }
+    
 
     public function saveAttr() {
         
@@ -144,8 +155,29 @@ class User extends mainRecord {
             //exit;
             if(isset($this->warehouse))
                 $this->warehouseSave($this->warehouse);
+            if(isset($this->certpasswd))
+                $this->certpasswdSave($this->certpasswd);
         }
         return $res;
+    }
+ public function afterFind() {
+        
+        $this->certpasswd=  $this->getCertPasswd();
+        return parent::afterFind();
+    }
+    
+     private function certpasswdSave($id) {
+        $model = Settings::model()->findByPk("company." . $this->id . ".certpasswd");
+        if ($model === null) {
+            $model = new Settings();
+            $model->id = "company." . $this->id . ".certpasswd";
+            $model->eavType = 'integer';
+            $model->hidden = 1;
+        }
+        $model->value = $id;
+        $this->certpasswd = $model->value;
+
+        $model->save();
     }
 
     private function warehouseSave($id) {
@@ -307,8 +339,8 @@ class User extends mainRecord {
 
     public function loadUser() {
 
-
-        Yii::app()->user->setState('certpasswd', $this->certpasswd);
+        Yii::app()->user->setState('User',$this);
+        //Yii::app()->user->setState('certpasswd', $this->getCertPasswd());
         Yii::app()->user->setState('language', $this->language);
         Yii::app()->user->setState('timezone', $this->timezone);
         Yii::app()->user->setState('theme', $this->theme);

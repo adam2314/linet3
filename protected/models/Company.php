@@ -41,6 +41,7 @@ class Company extends mainRecord {
         if (!isset(Yii::app()->user->settings)) { //adam: shuld be cached in memory
             $this->loadSettings();
         }
+        //*/
     }
 
     public function select($id) {

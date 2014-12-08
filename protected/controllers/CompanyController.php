@@ -29,11 +29,11 @@ class CompanyController extends RightsController{// //RightsController
             //
             
             //if has access
-            $database= Company::model()->findByPk($id);
+            //$database= Company::model()->findByPk($id);
             Yii::log($id,'info','app');
-            Yii::app()->user->setState('Database',$database );
-            Yii::app()->user->setState('Company',$database->id);
-            
+            //Yii::app()->user->setState('Database',$database );
+            Yii::app()->user->setState('Company',$id);
+            //echo 'ok';
             Company::model()->select($id);
            
             
@@ -186,5 +186,19 @@ class CompanyController extends RightsController{// //RightsController
                     throw new CHttpException(404,'The requested page does not exist.');
             return $model;
     }
+    
+    
+    public function accessDenied($message = null) {
+        Yii::app()->user->setState('Company',0);
+        
+        if ($message === null) {
+            $message = Rights::t('app', 'User is not asigned a role inside the company!');
+        }
+        
+        return parent::accessDenied($message);
+        
+    }
+    
+    
 }
   

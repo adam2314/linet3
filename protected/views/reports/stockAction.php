@@ -66,13 +66,14 @@ $this->widget('EExcelView', array(
             'name' => 'doc_id',
             'filter' => '',
             //'value'=>'0',
-            //'value' => 'CHtml::link(CHtml::encode(Yii::t("app",$data->Doc->docType->name)." #".$data->Doc->docnum),Yii::app()->createAbsoluteUrl("/docs/view/$data->doc_id"))',
+            'value' => '$data->getRefDocLink()',
             'type' => 'raw',
         ),
         array(
             'name' => 'item_id',
+            'header'=>Yii::t('labels',"Item Name"),
             'filter' => CHtml::listData(Item::model()->findAll(), 'id', 'name'),
-            //'value' => '$data->Item->name'
+            'value' => '$data->getItemName()'
         ),
         'qty',
         'serial',

@@ -254,7 +254,14 @@ if (count($model->docCheques) != 0) {
     ?>
 
 
-
+<tr>
+            
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><?php echo Yii::t('labels', 'Total Received'); ?></td>
+            <td><?php echo $model->total; ?></td>
+        </tr>		
     </table>
 
     <?php

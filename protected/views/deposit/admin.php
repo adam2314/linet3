@@ -14,12 +14,15 @@ $this->beginWidget('MiniForm', array(
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id' => 'deposit-form',
     'enableAjaxValidation' => true,
+    'clientOptions' => array(
+        'validateOnSubmit' => true,
+    ),
         )
 );
 
 $temp = CHtml::listData(Accounts::model()->findAllByType(7), 'id', 'name');
-$temp[0] = Yii::t('app', 'Choose Bank');
-$model->account_id = 0;
+$temp[''] = Yii::t('app', 'Choose Bank');
+//$model->account_id = 0;
 ?>
 <div class='col-md-3'>
 
@@ -50,7 +53,7 @@ $model->account_id = 0;
     <?php
     $this->widget('EExcelView', array(
         'id' => 'depsoit-grid',
-        'dataProvider' => $cheques->search(),
+        'dataProvider' => $cheques->depositSearch(),
         'columns' => array(
             array(
                 'type' => 'raw',
@@ -67,7 +70,7 @@ $model->account_id = 0;
             ),
             array(
                 'name' => 'Details',
-                'header' => Yii::t('app', 'Details'),
+                'header' => Yii::t('labels', 'Details'),
                 'value' => '$data->printDetails()',
             ),
             //'bank_refnum',

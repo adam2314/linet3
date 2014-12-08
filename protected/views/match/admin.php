@@ -75,7 +75,7 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
                 array(
                     'name'=>'account_id',
                     'filter'=>CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => 7)), 'id', 'name'),
-                    'value'=>'$data->Account->name'
+                    'value'=>'$data->getAccountName()'
                 ),
                 array(
                     //'name'=>'account_id',
