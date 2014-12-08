@@ -312,7 +312,8 @@ function requ($url, $log = null) {
         CURLOPT_POST => TRUE,
         CURLOPT_RETURNTRANSFER => TRUE,
         CURLOPT_VERBOSE => true,
-        CURLOPT_CAINFO => $path . '/rootCA.crt',
+        //CURLOPT_CAINFO => $path . '/rootCA.crt',
+        CURLOPT_CAINFO => $path . '/gd_bundle.crt',
     ));
 
     logMe("End Requst: " . $url, $log);
