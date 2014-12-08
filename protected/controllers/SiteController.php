@@ -3,15 +3,6 @@
 class SiteController extends Controller {
 
     
-    public function init() {
-        
-        if(User::model()->findAll()==null){
-            $this->redirect(Yii::app()->createAbsoluteUrl('install/user'));
-                Yii::app()->end();
-        }
-        
-         return parent::init();
-    }
     
     
     /**
@@ -40,6 +31,12 @@ class SiteController extends Controller {
      */
     public function actionLogin() {
 
+        if(User::model()->findAll()==null){
+            $this->redirect(Yii::app()->createAbsoluteUrl('install/user'));
+                Yii::app()->end();
+        }
+        
+        
         $model = new FormLogin;
         $this->layout = '//layouts/clean';
         // if it is ajax validation request
@@ -88,6 +85,7 @@ class SiteController extends Controller {
      * Logs out the current user and redirect to homepage.
      */
     public function actionLogout() {
+        Yii::app()->user->setState('Company', 0);
         Yii::app()->user->logout();
         $this->redirect(Yii::app()->homeUrl);
     }
