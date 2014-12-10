@@ -252,15 +252,7 @@ if (count($model->docCheques) != 0) {
         $i++;
     }
     ?>
-
-<tr>
-            
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><?php echo Yii::t('labels', 'Src Tax'); ?></td>
-            <td><?php echo $model->src_tax; ?></td>
-        </tr>		
+	
 <tr>
             
             <td></td>
