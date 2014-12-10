@@ -1011,12 +1011,14 @@ INSERT INTO `AuthItemChild` (`parent`, `child`) VALUES
 ('Purchase Manager', 'Docs.View'),
 ('Purchase Manager', 'Files.*'),
 ('Purchase Manager', 'Item.VatJSON'),
+('Purchase Manager', 'Item.JSON'),
 ('Purchase Manager', 'Mail.Create'),
 ('Purchase Manager', 'Mail.Form'),
 ('Purchase Manager', 'Settings.Dashboard'),
 ('Purchase Manager', 'Site.Login'),
 ('Purchase Manager', 'Site.Logout'),
 ('Salesman', 'Accounts.Ajax'),
+('Salesman', 'Accounts.JSON'),
 ('Salesman', 'Company.Index'),
 ('Salesman', 'Docs.Admin'),
 ('Salesman', 'Docs.Create'),
@@ -1038,6 +1040,7 @@ INSERT INTO `AuthItemChild` (`parent`, `child`) VALUES
 ('Salesman', 'Docs.View'),
 ('Salesman', 'Files.*'),
 ('Salesman', 'Item.VatJSON'),
+('Salesman', 'Item.JSON'),
 ('Salesman', 'Mail.Create'),
 ('Salesman', 'Mail.Form'),
 ('Salesman', 'Settings.Dashboard'),
@@ -1592,7 +1595,9 @@ INSERT INTO `paymentType` (`id`, `name`, `value`, `oppt_account_id`) VALUES
 (3, 'Credit card', 'PelaCredit', 11),
 (4, 'Bank transfer', 'Bank', 0),
 (5, 'Manual Credit', 'ManualCredit', 11),
-(6, 'Credit card - payments', 'PelaCreditPaymnts', 11);
+(6, 'Credit card - payments', 'PelaCreditPaymnts', 11),
+(7, 'Source Tax', 'SourceTax', 8);
+
 
 CREATE TABLE `Rights` (
   `itemname` varchar(64) NOT NULL,

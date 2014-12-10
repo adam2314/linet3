@@ -458,31 +458,13 @@ class Docs extends fileRecord {
             if ($this->docType->isrecipet) {
                 
                 foreach ($this->docCheques as $docrcpt) {
-                    $src_tax_multi=($docrcpt->sum/$this->total);
-                    $insum=$docrcpt->sum;
-                    $outsum=$docrcpt->sum-($this->src_tax*$src_tax_multi);
-                    $num = $docrcpt->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->account_id, $tranType,$insum,$outsum);
+                    
+                    $num = $docrcpt->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->account_id, $tranType);
 
                     $line++;
                     $line++;
                 }
                 
-                if ((int) $this->src_tax != 0) {
-                    $src = new Transactions();
-                    $src->num = $num;
-                    $src->account_id = Yii::app()->user->settings['company.acc.custtax'];
-                    $src->type = $tranType;
-                    $src->refnum1 = $this->id;
-                    $src->valuedate = $valuedate;
-                    $src->details = $this->company;
-                    $src->currency_id = $this->currency_id;
-                    $src->owner_id = $this->owner;
-                    $src->linenum = $line;
-                    $src->sum+=($this->src_tax) * $action * -1;
-                    $line++;
-                    $num = $src->save();
-                }
-                //*/
             }
         }
 

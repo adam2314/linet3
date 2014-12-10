@@ -2,7 +2,7 @@
 class m301114_102026_0014 extends CDbMigration {
 
     public function up() {
-        //return false;
+        return true;
         
         $this->insert('menu', array("id"=>78,"label"=>"Stock entry certificate","url"=>"docs/create/16","parent"=>16)); 
         $this->insert('menu', array("id"=>79,"label"=>"Stock exit certificate","url"=>"docs/create/17","parent"=>16)); 

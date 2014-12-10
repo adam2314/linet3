@@ -1,16 +1,17 @@
 <?php
-class m041214_102026_0015 extends CDbMigration {
+
+class m301115_301114_0015 extends CDbMigration {
 
     public function up() {
-        //return false;
-        
+        return true;
+
         $companys = Company::model()->findAll();
         foreach ($companys as $company) {
-            
+
             //$this->update($company->prefix . 'docType', array("account_type"=>1,'oppt_account_type'=>null), "id=16");
             //$this->update($company->prefix . 'docType', array("account_type"=>1,'oppt_account_type'=>null), "id=17");
             //$this->update($company->prefix . 'docStatus', array("action"=>-1), "doc_type=17 AND num=1");
-          $this->update($company->prefix . 'docType', array("stockAction" => "-1"), "id=17");
+            $this->update($company->prefix . 'docType', array("stockAction" => "-1"), "id=17");
         }
     }
 

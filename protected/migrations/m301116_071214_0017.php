@@ -1,9 +1,9 @@
 <?php
 
-class m071214_102027_0017 extends CDbMigration {
+class m0301116_071214_0017 extends CDbMigration {
 
     public function up() {
-        //return false;
+        return true;
 
         $companys = Company::model()->findAll();
         foreach ($companys as $company) {

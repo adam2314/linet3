@@ -402,12 +402,12 @@ $oppts[""] = Yii::t('app', 'None');
                         </textarea>      
                     </td>
                     <td>
-                        <?php echo $form->labelEx($model, 'src_tax'); ?>
-                        <?php echo $form->error($model, 'src_tax'); ?>
+                        <?php //echo $form->labelEx($model, 'src_tax'); ?>
+                        <?php //echo $form->error($model, 'src_tax'); ?>
                     </td>
 
                     <td>
-                        <?php echo $form->textField($model, 'src_tax', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
+                        <?php //echo $form->textField($model, 'src_tax', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
                     </td>
                     <td></td>
                     <td class="rcptadd">
