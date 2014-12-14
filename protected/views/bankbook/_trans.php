@@ -11,7 +11,7 @@
 
 <?
 foreach ($cdata->Transactions as $transaction) {
-    echo "<tr><td>".$transaction->id ."</td><td>". Yii::t('app',$transaction->Type->name) ."</td><td>". $transaction->date ."</td><td>". $transaction->sum ."</td></tr>";
+    echo "<tr><td>".$transaction->num ."</td><td>". Yii::t('app',$transaction->Type->name) ."</td><td>". $transaction->valuedate ."</td><td>". $transaction->sum ."</td></tr>";
 }
 ?>
 </table>

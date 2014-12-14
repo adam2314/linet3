@@ -3,17 +3,23 @@
 class SettingsController extends RightsController {
 
     public function actionDashboard() {
-        $models = Settings::model()->findAll();
+        $update = new Update;
+        $messages = $update->getMessages();
+
+        foreach ($messages as $message) {
+            Yii::app()->user->setFlash(
+                    'error', "<h3>" . $message["title"] . "</h3><br>" . $message["data"]
+            );
+        }
 
         if (isset($_POST['Widget'])) {
-            $user=User::model()->findByPk(Yii::app()->user->id);
+            $user = User::model()->findByPk(Yii::app()->user->id);
             $user->saveWidget($_POST['Widget']);
-            
+
             Yii::app()->end();
         }
 
         $this->render('dashboard', array(
-                'models'=>$models,
         ));
     }
 

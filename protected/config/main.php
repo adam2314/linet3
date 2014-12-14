@@ -127,10 +127,11 @@ return CMap::mergeArray(
             'params' => array(
                 // this is used in contact page
                 'adminEmail' => 'adam@speedcomp.co.il',
-                'updatesrv' => 'https://update.linet.org.il/linet3/',
+                'updatesrv' => 'https://update3.linet.org.il/',
                 'version' => '3.0',
                 'timezone' => 'Asia/Tel_Aviv',
                 'filePath' => dirname(__FILE__) . '/../files/',
+                'local'=>true,
             ),
                 )//end main
 ); //end merge

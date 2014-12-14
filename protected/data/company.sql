@@ -1234,7 +1234,7 @@ INSERT INTO `config` (`id`, `value`, `eavType`, `hidden`, `priority`) VALUES
 ('system.name', 'Linet 3.0', 'string', 1, 40),
 ('system.vendor.name', 'Speedcomp', 'string', 1, 40),
 ('system.vendor.vatnum', '069924504', 'string', 1, 40),
-('system.version', '3.0', 'string', 1, 40),
+('system.version', '3.011', 'string', 1, 40),
 ('transactionType.chequedeposit', '4', 'integer', 1, 40),
 ('transactionType.manual', '0', 'integer', 1, 40),
 ('transactionType.openBalance', '16', 'integer', 1, 40),

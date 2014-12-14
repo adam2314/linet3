@@ -8,8 +8,8 @@
             
             
             <?php 
-            
-            $temp=CHtml::listData(PaymentType::model()->findAll(), 'id', 'name');
+            //Doctype::model()->getList()
+            $temp=PaymentType::model()->getList();
             $temp[0]=Yii::t('app','None');
                 
             

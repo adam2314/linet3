@@ -28,6 +28,7 @@ class User extends mainRecord {
     public $passwd;
     public $certfile;
     public $certpasswd;
+
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -125,7 +126,7 @@ class User extends mainRecord {
         }
         return $this->warehouse;
     }
-    
+
     public function getCertPasswd() {
         if (Yii::app()->user->Company != 0) {
             $a = Settings::model()->findByPk("company." . $this->id . ".certpasswd");
@@ -135,7 +136,6 @@ class User extends mainRecord {
         }
         return $this->certpasswd;
     }
-    
 
     public function saveAttr() {
         
@@ -153,20 +153,21 @@ class User extends mainRecord {
             $this->compSave();
             //echo $this->warehouse;
             //exit;
-            if(isset($this->warehouse))
+            if (isset($this->warehouse))
                 $this->warehouseSave($this->warehouse);
-            if(isset($this->certpasswd))
+            if (isset($this->certpasswd))
                 $this->certpasswdSave($this->certpasswd);
         }
         return $res;
     }
- public function afterFind() {
-        
-        $this->certpasswd=  $this->getCertPasswd();
+
+    public function afterFind() {
+
+        $this->certpasswd = $this->getCertPasswd();
         return parent::afterFind();
     }
-    
-     private function certpasswdSave($id) {
+
+    private function certpasswdSave($passwd) {
         $model = Settings::model()->findByPk("company." . $this->id . ".certpasswd");
         if ($model === null) {
             $model = new Settings();
@@ -174,7 +175,7 @@ class User extends mainRecord {
             $model->eavType = 'integer';
             $model->hidden = 1;
         }
-        $model->value = $id;
+        $model->value = $passwd;
         $this->certpasswd = $model->value;
 
         $model->save();
@@ -228,11 +229,11 @@ class User extends mainRecord {
         return file_exists($this->getCertFilePath());
     }
 
-    static public function getCertFilePath($id=null) {
-        if($id==null)
-            $id=Yii::app()->user->id;
-        $user=User::model()->findByPk($id);
-        if($user!==null)
+    static public function getCertFilePath($id = null) {
+        if ($id == null)
+            $id = Yii::app()->user->id;
+        $user = User::model()->findByPk($id);
+        if ($user !== null)
             return Company::getFilePath() . "cert/" . $id . ".p12";
     }
 
@@ -338,8 +339,10 @@ class User extends mainRecord {
     }
 
     public function loadUser() {
+        //after select company
+        
 
-        Yii::app()->user->setState('User',$this);
+        Yii::app()->user->setState('User', $this);
         //Yii::app()->user->setState('certpasswd', $this->getCertPasswd());
         Yii::app()->user->setState('language', $this->language);
         Yii::app()->user->setState('timezone', $this->timezone);

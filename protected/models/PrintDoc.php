@@ -31,6 +31,23 @@ class PrintDoc {
         $yiiBasepath = Yii::app()->basePath;
         $yiiUser = Yii::app()->user->id;
         //$configPath = Yii::app()->user->settings["company.path"];
+        
+        $user=User::model()->findByPk($yiiUser);
+        if (!$user->hasCert()) {
+            //create new
+            $ssl = new SSLHelper(array(
+                'localityName' => Yii::app()->user->settings['company.city'],
+                'organizationName' => Yii::app()->user->settings['company.name'],
+                'commonName' => $user->fname . " " . $user->lname,
+                'emailAddress' => $user->email,
+            ));
+
+            $filename = $user->getCertFilePath();
+            $user->certpasswd = $ssl->createUserCert($filename);
+            $user->save();
+        }
+        
+        
         $configCertpasswd = Yii::app()->user->User->getCertPasswd();
 
 

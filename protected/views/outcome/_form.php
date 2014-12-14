@@ -30,6 +30,7 @@
     <br />
 
     <?php echo $form->textFieldRow($model, 'sum'); ?>
+    <?php //echo $form->textFieldRow($model, 'src_tax'); src tax is closed until we will support 854 report?>
     <?php echo $form->textFieldRow($model, 'details'); ?>
     
     
@@ -94,4 +95,20 @@ function refNum(doc) {//
 
 
         }
+        
+        /*
+         
+          //src tax is closed until we will support 854 report
+        $("#FormOutcome_sum").change(function() {
+            var sum = $('#FormOutcome_sum').val();
+            $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "/accounts/JSON", "id": $("#FormOutcome_account_id").val()},
+            function(data) {
+                var src_tax=sum*(data.src_tax/100);
+                $("#FormOutcome_sum").val(sum-src_tax);
+                $("#FormOutcome_src_tax").val(src_tax);
+                
+            }, "json")
+                    .error(function() {
+                    });
+        });*/
         </script>

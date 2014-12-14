@@ -10,7 +10,7 @@ $this->widget('EExcelView', array(
     'dataProvider' => $model->search(),
     'template' => '{items}{pager}',
     'filter' => $model,
-    'afterAjaxUpdate' => 'function(){var elements = $("tr.filters > td > [name^=Docs]");
+    'afterAjaxUpdate' => 'function(){var elements = $(".filter-container > [name^=Docs]");
 for (var i=0; i<elements.length; i++) {
     elements[i].name=elements[i].name.replace("Docs","Docsfilter");
     console.log(elements[i].name);

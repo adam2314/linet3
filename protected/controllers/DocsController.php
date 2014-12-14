@@ -251,9 +251,13 @@ class DocsController extends RightsController {
      * Lists all models.
      */
     public function actionIndex() {
-        $dataProvider = new CActiveDataProvider('Docs');
+        //$dataProvider = new CActiveDataProvider('Docs');
+        $model = new Docs('search');
+        if (isset($_POST['Docs']))
+            $model->attributes = $_POST['Docs'];
+        
         $this->render('index', array(
-            'dataProvider' => $dataProvider,
+            'model' => $model,
         ));
     }
 

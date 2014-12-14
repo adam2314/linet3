@@ -34,6 +34,8 @@ class Accounts extends fileRecord {//CActiveRecord
 
     const table = '{{accounts}}';
 
+    private $dateDBformat = true;
+
     public function findAllByType($type) {
 
         return Accounts::model()->findAllByAttributes(array('type' => $type));
@@ -203,6 +205,19 @@ class Accounts extends fileRecord {//CActiveRecord
             $this->created = new CDbExpression('NOW()');
         else
             $this->modified = new CDbExpression('NOW()');
+
+
+        if ($this->isNewRecord) {
+            $this->dateDBformat = false;
+        }
+
+        if (!$this->dateDBformat) {
+            $this->dateDBformat = true;
+            $this->src_date = date("Y-m-d H:i:s", CDateTimeParser::parse($this->src_date, Yii::app()->locale->getDateFormat('yiishort')));
+        }
+
+
+
         return parent::beforeSave();
     }
 
@@ -305,7 +320,7 @@ class Accounts extends fileRecord {//CActiveRecord
             'id' => Yii::t('labels', 'ID'),
             'type' => Yii::t('labels', 'Type'),
             'id6111' => Yii::t('labels', 'Id6111'),
-            'cat_id' => Yii::t('labels', 'Category'), 
+            'cat_id' => Yii::t('labels', 'Category'),
             'pay_terms' => Yii::t('labels', 'Pay Terms'),
             'src_tax' => Yii::t('labels', 'Tax Rate'),
             'src_date' => Yii::t('labels', 'Tax Auth Date'),
@@ -338,20 +353,16 @@ class Accounts extends fileRecord {//CActiveRecord
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
 
-        $filter=1;//small change
-
-
-
+        $filter = 1; //small change
         //$type = (int) $this->type;
 
         $accounts = $this->findAllByType($this->type);
         // or using: $rawData=User::model()->findAll();
-        $list=array();
+        $list = array();
         foreach ($accounts as $account) {
-            $tmp=$account->getBalance();
-            if(($tmp>$filter)||($tmp<$filter*-1))
-                $list[]=array( 'id'=>$account->id,'name'=>$account->name, 'sum'=>$tmp);
-            
+            $tmp = $account->getBalance();
+            if (($tmp > $filter) || ($tmp < $filter * -1))
+                $list[] = array('id' => $account->id, 'name' => $account->name, 'sum' => $tmp);
         }
 
 
@@ -421,7 +432,20 @@ class Accounts extends fileRecord {//CActiveRecord
         //$type = $type;
     }
 
-    
-    
-    
+    public function afterSave() {
+        if ($this->dateDBformat) {
+            $this->dateDBformat = false;
+            $this->src_date = date(Yii::app()->locale->getDateFormat('phpshort'), strtotime($this->src_date));
+        }
+        return parent::afterSave();
+    }
+
+    public function afterFind() {
+        if ($this->dateDBformat) {
+            $this->dateDBformat = false;
+            $this->src_date = date(Yii::app()->locale->getDateFormat('phpshort'), strtotime($this->src_date));
+        }
+        return parent::afterFind();
+    }
+
 }

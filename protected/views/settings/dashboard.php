@@ -8,29 +8,33 @@ $this->menu = array(
     array('label' => Yii::t('app', 'docReport'), 'url' => '#', 'linkOptions' => array('onclick' => 'javascript: send("docReport");')),
 );
 ?>
-<div class="row">
-    <?php
-    if (isset(Yii::app()->user->widget)) {
-        $widgets = array(
-            array('invoiceReport', "Invoices to be collected", 'col-lg-4'),
-            array('chequeReport', "Income and Expenses", 'col-lg-4'),
-            array('accReport', "Accounts Related events", 'col-lg-4'),
-            array('outcomeReport', "Suppliers Payments", 'col-lg-4'),
-            array('salesReport', "Pending Sales Orders", 'col-lg-3'),
-            array('docReport', "Treat Needed Documents", 'col-lg-5'),
-        );
-        foreach ($widgets as $widget) {
 
-            if (isset(Yii::app()->user->widget[$widget[0]])) {
-                if (Yii::app()->user->widget[$widget[0]]) {
-                    $this->widget($widget[0], array('header' => Yii::t("app", $widget[1]), 'height' => 350, 'class' => $widget[2]));
-                }
-            } else {
+
+
+<div class="row">
+<?php
+if (isset(Yii::app()->user->widget)) {
+    $widgets = array(
+        array('invoiceReport', "Invoices to be collected", 'col-lg-4'),
+        array('chequeReport', "Income and Expenses", 'col-lg-4'),
+        array('accReport', "Accounts Related events", 'col-lg-4'),
+        array('outcomeReport', "Suppliers Payments", 'col-lg-4'),
+        array('salesReport', "Pending Sales Orders", 'col-lg-3'),
+        array('docReport', "Treat Needed Documents", 'col-lg-5'),
+    );
+    foreach ($widgets as $widget) {
+
+        if (isset(Yii::app()->user->widget[$widget[0]])) {
+            if (Yii::app()->user->widget[$widget[0]]) {
                 $this->widget($widget[0], array('header' => Yii::t("app", $widget[1]), 'height' => 350, 'class' => $widget[2]));
             }
+        } else {
+            $this->widget($widget[0], array('header' => Yii::t("app", $widget[1]), 'height' => 350, 'class' => $widget[2]));
         }
     }
-    ?>
+}
+?>
+
 </div>
 
 

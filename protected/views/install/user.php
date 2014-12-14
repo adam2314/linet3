@@ -15,7 +15,7 @@ $model->language='he_il';
 $model->timezone='Asia/Jerusalem';
 ?>
 
-	<p class="help-block">Fields with <span class="required">*</span> are required.</p>
+	<p class="help-block"><?php echo Yii::t('app',"Fields with");?> <span class="required">*</span> <?php echo Yii::t('app',"are required");?>.</p>
 
 	<?php echo $form->errorSummary($model); ?>
 

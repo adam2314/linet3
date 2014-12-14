@@ -30,16 +30,21 @@
         <?php echo $form->textFieldRow($model, 'src_tax', array('class' => 'span5', 'maxlength' => 40)); ?>
 
         <?php echo $form->labelEx($model, 'src_date'); ?>
+        
         <?php
-        $this->widget('zii.widgets.jui.CJuiDatePicker', array(// you must specify name or model/attribute
-            'name' => 'src_date',
-            'language' => 'en',
-            'options' => array(
-                'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-            )
-                )
-        );
-        ?>
+                $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker', array(
+                    'model' => $model, //Model object
+                    'attribute' => 'src_date', //attribute name
+                    'mode' => 'date',
+                    'language' => substr(Yii::app()->language, 0, 2),
+                    'options' => array(
+                        'showAnim' => 'fold',
+                        'dateFormat' => Yii::app()->locale->getDateFormat('short'),
+                    ) // jquery plugin options
+                ));
+                ?>
+        
+        
         <?php echo $form->error($model, 'src_date'); ?>
 
         <?php //echo $form->textFieldRow($model, 'src_tax', array('class' => 'span5', 'maxlength' => 80)); ?>

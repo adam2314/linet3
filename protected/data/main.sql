@@ -782,7 +782,7 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`) VALUES
 (61, 'Restore From Backup', 'data/restore', NULL, 57),
 (62, 'PCN874 Report', 'data/pcn874', NULL, 57),
 (63, 'Support', NULL, 'glyphicon glyphicon-info-sign', 0),
-(64, 'Update', 'update/', NULL, 63),
+(64, 'Update', 'newUpdate/', NULL, 63),
 (65, 'Paid Support', 'site/support', NULL, 63),
 (66, 'About', 'site/about', NULL, 63),
 (67, 'Bug Report', 'site/bug', NULL, 63),
@@ -1080,13 +1080,11 @@ INSERT INTO `tbl_migration` (`version`, `apply_time`) VALUES
 ('m041214_102026_0015', 1416919007),
 ('m071214_102026_0016', 1416919008),
 ('m071214_102027_0017', 1416919009),
-('m101214_102027_0018 ', 1416919010),
-('m301114_102026_0014 ', 1416919011),
-('m301115_301114_0015 ', 1416919012),
-('m301116_071214_0016 ', 1416919013),
-('m301116_101214_0018 ', 1416919014);
-
-;
+('m101214_102027_0018', 1416919010),
+('m301115_301114_0015', 1416919012),
+('m301116_071214_0016', 1416919013),
+('m301116_101214_0018', 1416919014),
+('m301116_131214_0019', 1416919015);
 
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
