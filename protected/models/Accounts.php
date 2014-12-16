@@ -373,9 +373,7 @@ class Accounts extends fileRecord {//CActiveRecord
                     'id', 'name', 'sum',
                 ),
             ),
-            'pagination' => array(
-                'pageSize' => 10,
-            ),
+            'pagination' => false
         ));
 
         return $dataProvider;

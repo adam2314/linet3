@@ -41,6 +41,10 @@ class Company extends mainRecord {
         if (!isset(Yii::app()->user->settings)) { //adam: shuld be cached in memory
             $this->loadSettings();
         }
+        if (!isset(Yii::app()->user->warehouse)) { //adam: shuld be cached in memory
+            $user = User::model()->findByPk(Yii::app()->user->id);
+            $user->loadUser();
+        }
         //*/
     }
 
@@ -154,8 +158,8 @@ class Company extends mainRecord {
             //got prefix
             $a = parent::save($runValidation, $attributes);
         }
-        
-        
+
+
         //if tables config notexsits
         Yii::app()->db->setActive(false);
         Yii::app()->db->connectionString = $this->string;

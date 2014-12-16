@@ -14,6 +14,20 @@ class InstallConfig extends CFormModel {
     public $dbhost = 'localhost';
     public $dbstring = 'mysql:protected/linet';
 
+    
+    public function attributeLabels() {
+        return array(
+            'dbtype' => Yii::t('labels', 'Dbtype'),
+            'dbname' => Yii::t('labels', 'Dbname'),
+            'dbuser' => Yii::t('labels', 'Dbuser'),
+            'dbpassword' => Yii::t('labels', 'Dbpassword'),
+            'dbhost' => Yii::t('labels', 'Dbhost'),
+            'dbstring' => Yii::t('labels', 'Dbstring'),
+
+        );
+    }
+    
+    
     public function make() {
         //make conf file
         //echo $this->dbtype;

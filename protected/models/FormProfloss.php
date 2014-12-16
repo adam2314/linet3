@@ -74,7 +74,7 @@ class FormProfloss extends CFormModel
         $data[] =$outTotal = array_pop($data);
         
         
-        $data[]=array('id'=>'','name'=>Yii::t("app", "Profit & Loss"),'sum'=>$inTotal["sum"]-$outTotal["sum"],'id6111'=>'');
+        $data[]=array('id'=>'','name'=>Yii::t("app", "Profit & Loss"),'sum'=>$inTotal["sum"]+$outTotal["sum"],'id6111'=>'');
         return new CArrayDataProvider($data,
                  array(
                                 'pagination'=>array(

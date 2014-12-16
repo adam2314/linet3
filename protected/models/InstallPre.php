@@ -19,31 +19,30 @@ class InstallPre extends CFormModel {
         
         private function phpchk($str){
             if(extension_loaded($str))
-                return "OK";
+                return Yii::t('app', "OK");
             else 
-                return "Failed";
+                return Yii::t('app',"Failed");
             
         }
 
          private function apachechk($str){
              $array=apache_get_modules();
             if(in_array($str,$array))
-                return "OK";
+                return Yii::t('app', "OK");
             else 
-                return "Failed";
+                return Yii::t('app', "Failed");
             
         }
         
         private function filechk($str){
             if(is_writable($str))
-                return "Writable";
+                return Yii::t('app',"Writable");
             else 
-                return "Denaid";
+                return Yii::t('app',"Denaid");
             
         }
         public function report(){
         
-            //print_r(get_loaded_extensions());
             //print_r(apache_get_modules());
             $data=array(
               array('id'=>'PHP Version','value'=>phpversion()),  
@@ -56,7 +55,7 @@ class InstallPre extends CFormModel {
                 array('id'=>'Apache mod Rewrite','value'=>$this->apachechk("mod_rewrite")),
                 
                 //array('id'=>'Apache mod Rewrite','value'=>$this->filechk("private/")),
-                array('id'=>'file permtion','value'=>$this->filechk("index.php")),
+                array('id'=>'file permission','value'=>$this->filechk("index.php")),
             );
 
 
@@ -69,14 +68,7 @@ class InstallPre extends CFormModel {
               );
     }
         
-        
-        
-	public function attributeLabels() {
-		return array(
-			'answer'=>'What type of pet(s) do you have?',
-		);
-	}
-
+   
 	public function getForm() {
             $php_version=phpversion();
             
@@ -86,8 +78,6 @@ class InstallPre extends CFormModel {
 			'attributes'=>array('id'=>'install'),
 			'elements'=>array(
 				'php_version'=>array(
-					//'type'=>'radiolist',
-					//'items'=>array('Dog'=>'Dog','Cat'=>'Cat','Dog and Cat'=>'Both','Neither'=>'Neither'),
 					'layout'=>'{label}<br/>{input}<br/>{error}'
 				),
 			),

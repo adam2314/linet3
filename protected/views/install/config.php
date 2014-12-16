@@ -1,7 +1,7 @@
 <?php
 
 $this->beginWidget('MiniForm',array(
-    'header' => "Install Wizard",
+    'header' => Yii::t('app',"Install Wizard"),
 )); 
 
 
@@ -29,7 +29,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     
     
 //echo CHtml::submitButton('Previews',array('onclick'=>'send();')); 
-echo CHtml::submitButton('Next',array('onclick'=>'send();')); 
+echo CHtml::submitButton(Yii::t("app",'Next'),array('onclick'=>'send();')); 
 
  $this->endWidget(); 
  

@@ -17,14 +17,100 @@ Author : adam
 }
 
 @media screen{
-    
+
     #stamp{
-         display: none;
-     }
+        display: none;
+    }
 }
+
+
+
+.docHead{
+    width:100%;
+    
+    
+}
+.fromBox{
+    width:200px;
+    float: right;
+
+}
+.logo{
+    float:right;
+    max-width: 400px;
+    max-height:100px;
+
+}
+.logo img{
+    width:100%;
+}
+.lineHR{
+    float: right;
+    border: 1px solid #b1b1b1;
+    width:100%;
+}
+.toBox{
+    width:200px;
+    float:right;
+
+}
+.toDate{
+    width:200px;
+    float:left;
+}
+
+.printtbl {
+    margin-top: 20px;
+    float:right;
+    width:100%;
+    font-size: 10px;
+    font-family: arial, sans-serif;
+}
+.bold{
+    
+    font-weight: bolder;
+}
+.printtbl thead tr th{
+    border-top: 2px solid black;
+    border-bottom:  2px solid black;
+    padding: 2px;
+    /*padding:5px;*/
+}
+.newLine,
+.printtbl tfoot tr td{
+    padding: 2px;
+    border-bottom: 1px solid #b1b1b1;
+
+}
+
+.printtbl tfoot tr td.clear{
+    border:none;
+}
+.legalize{
+    float: right;
+    text-align: center;
+    width: 100%;
+} 
+.docTitle{
+    float: right;
+    text-align: center;
+    width: 100%;
+
+
+}
+.comments{
+    float: right;
+
+}
+
+
 
 @media print
 {
+    
+    
+
+
     .topnav,.noPrint,
     .form-actions,
     .filters
@@ -50,11 +136,14 @@ Author : adam
     .box{
         border:none;
     }
-    a:link, a:visited {background:transparent;font-weight:700;text-decoration:underline;}
+    
+    
+
+    a:link, a:visited {background:transparent;font-weight:100;}
     /*a:link:after, a:visited:after {content:" (" attr(href) ")";font-size:90%;}*/
-     a[href]:after {
-    content: "";
-  }
+    a[href]:after {
+        content: "";
+    }
 
 }
 @media (min-width: 1164px){
@@ -107,7 +196,7 @@ width:8%;
     max-width: 250px;
 }
 .chosen-container .chosen-drop {
-    
+
     left:0;
     display:none;
 }

@@ -3,6 +3,7 @@
     $this->widget('EExcelView', array(
         'id' => 'profloss-grid',
         'dataProvider' => $model->search(),
+        'pager' =>false,
         //'filter'=>$model,
         'columns' => array(
             array(

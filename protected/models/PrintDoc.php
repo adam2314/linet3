@@ -35,12 +35,15 @@ class PrintDoc {
         $user=User::model()->findByPk($yiiUser);
         if (!$user->hasCert()) {
             //create new
-            $ssl = new SSLHelper(array(
-                'localityName' => Yii::app()->user->settings['company.city'],
-                'organizationName' => Yii::app()->user->settings['company.name'],
-                'commonName' => $user->fname . " " . $user->lname,
+            $settings=array(
+                   'commonName' => $user->username,
                 'emailAddress' => $user->email,
-            ));
+            );
+            if(Yii::app()->user->settings['company.en.city']!='')
+                $settings['localityName']=Yii::app()->user->settings['company.en.city'];
+            if(Yii::app()->user->settings['company.en.name']!='')
+                $settings['organizationName'] = Yii::app()->user->settings['company.en.name'];
+            $ssl = new SSLHelper($settings);
 
             $filename = $user->getCertFilePath();
             $user->certpasswd = $ssl->createUserCert($filename);

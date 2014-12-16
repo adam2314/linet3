@@ -11,7 +11,10 @@ $this->beginWidget('MiniForm', array('header' => Yii::t("app", "Bulk Balance")))
 <?php
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id' => 'bulkBalance-form',
-    'enableAjaxValidation' => false,
+    'enableAjaxValidation' => true,
+    'clientOptions' => array(
+        'validateOnSubmit' => true,
+    ),
         ));
 ?>
 <div class='form-actions'>
@@ -49,6 +52,11 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
         ?>
         <?php echo $form->textFieldRow($model, 'acc'); ?>
+        <?php echo Yii::t('app','Examples');?>: <br/>
+        1-200<br/>
+        1,3,5<br/>
+        1-10,15-20,25-30<br/>
+        
         <?php
         $temp = CHtml::listData(Acctype::model()->findAll(), 'id', 'name');
         $temp[""] = Yii::t('app', 'Choose Type');

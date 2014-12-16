@@ -99,7 +99,7 @@ class FormMprofloss extends CFormModel {
         );
 
         for ($x = 1; $x <= 12; $x++) {
-            $total[$x] = $inTotal[$x] - $outTotal[$x];
+            $total[$x] = $inTotal[$x] + $outTotal[$x];
             $sum+=$total[$x];
         }
         $total['sum'] = $sum;

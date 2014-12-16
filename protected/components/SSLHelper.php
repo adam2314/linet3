@@ -21,6 +21,12 @@ class SSLHelper {
     public $commonName = 'User';
     public $emailAddress = 'user@domain.com';
 
+    
+    public function __construct($array){
+        foreach($array as $public=>$key)
+            if(property_exists($this,$public))
+                $this->$public=$key;
+    }
     //put your code here
 
     public function createUserCert($filename) {
@@ -30,13 +36,10 @@ class SSLHelper {
         //$filename = dirname(__FILE__) . '/certificate.pfx';
         $numberOfDays = 365*3;
 
+                
         $privateKey = openssl_pkey_new();
         $csr = openssl_csr_new($dn, $privateKey);
         $sscert = openssl_csr_sign($csr, null, $privateKey, $numberOfDays); //create a csr file, change null to a filename to save it if you need to
-        openssl_x509_export($sscert, $publicKey); //on success $publicKey will hold the PEM content
-        openssl_pkey_export($privateKey, $privateKey, $privateKeyPass); //export the privateKey as a PEM content
-
-        
 
         $key = openssl_pkey_get_private($privateKey, $privateKeyPass); //parses the $privateKey and prepares it for use by openssl_pkcs12_export_to_file.
 

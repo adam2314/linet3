@@ -273,7 +273,7 @@ class EExcelView extends TbGridView {
                     </script>';
 
 
-
+        echo "<div class='form-actions'>";
         $this->widget('bootstrap.widgets.TbButtonGroup', array(
             'type' => 'primary',
             //'htmlOptions' => array('class' => 'dropup'),
@@ -283,6 +283,8 @@ class EExcelView extends TbGridView {
                 ),
             ),
         ));
+        echo "</div>";
+        
     }
 
     /**

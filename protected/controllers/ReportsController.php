@@ -180,9 +180,9 @@ class ReportsController extends RightsController {
             $model->attributes = $_POST['FormReportTaxrep'];
 
             if ($model->step == 1) {
-                 $model->pay();
-                 echo "ok";
-                 Yii::app()->end();
+                $model->pay();
+                echo "ok";
+                Yii::app()->end();
             }
 
 
@@ -203,6 +203,8 @@ class ReportsController extends RightsController {
 
     public function actionAccounts() {
         $model = new FormReportAccounts();
+
+        $this->performAjaxValidation($model);
         if (isset($_POST["FormReportAccounts"])) {
             $model->attributes = $_POST['FormReportAccounts'];
 
@@ -236,9 +238,5 @@ class ReportsController extends RightsController {
             Yii::app()->end();
         }
     }
-    
-    
-    
-    
 
 }

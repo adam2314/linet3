@@ -7,17 +7,17 @@
 ?>
 
 <div class="updatetext">
-    <?php echo Yii::t('update', "Backup system and database, it is heighly advised to save a local copy of the backup files");?><br />
+    <?php echo Yii::t('update', "Backup system and database, it is highly advised to save a local copy of the backup files");?><br />
     <?php echo Yii::t('update', "Backuping system files");?><br />
     
 
 
-    <?php echo  Yii::t('update', "Done");?><br />
     
-    <a href='<?php echo $this->createUrl('/newUpdate/backupfile');?>'> <?php echo Yii::t('update', "Downlod System Files") ?></a><br />
+    
+    <a href='<?php echo $this->createUrl('/newUpdate/backupfile');?>'> <?php echo Yii::t('update', "Download System Files") ?></a><br />
     <?php echo  Yii::t('update', "Backuping database");?><br />
     
-    <?php echo Yii::t('update', "Done");?> <br />
+    
 
     <a href='<?php echo $this->createUrl('/data/download')."/".$model->DBback;?>'><?php echo Yii::t('update', "Download Database file");?></a><br />
     

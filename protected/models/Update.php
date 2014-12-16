@@ -10,13 +10,20 @@ class Update extends CFormModel {
 
     public $SYSback;
     public $DBback;
+    private $_sversion;
 
+    public function init(){
+        $this->_sversion= Settings::model()->findByPk('system.version')->value;
+        return parent::init();
+    }
+    
     private function _send($url, $params = array()) {
         $updatesrv = Yii::app()->params['updatesrv'];
 
         $output = Yii::app()->curl
                 ->setOptions(array('Content-Type: application/xml',
                     CURLOPT_CAINFO => Yii::app()->basePath . '/data/rootCA.pem',
+                    CURLOPT_USERAGENT=>$this->_sversion,
                 ))
                 //
                 ->post($updatesrv . $url, CJSON::encode($params));
@@ -56,7 +63,7 @@ class Update extends CFormModel {
     }
 
     public function getSVersion() {
-        return Settings::model()->findByPk('system.version')->value;
+        return $this->_sversion;
     }
 
     public function backupSys() {
@@ -66,9 +73,9 @@ class Update extends CFormModel {
         if (file_exists(Yii::app()->basePath . "/tmp"))
             unlink(Yii::app()->basePath . "/tmp");
 
-        Zipper::zip($folder, Yii::app()->basePath . "/tmp" . "tmp");
+        Zipper::zip($folder, Yii::app()->basePath . "/tmp" );
 
-        return $folder . "tmp";
+        return Yii::app()->basePath . "/tmp";
     }
 
     public function backupDB() {

@@ -1228,7 +1228,7 @@ INSERT INTO `config` (`id`, `value`, `eavType`, `hidden`, `priority`) VALUES
 ('server.checkTime', '20130324114336', '', 1, 40),
 ('server.dbVersion', '3.0', '', 1, 40),
 ('server.Latest', '', '', 1, 40),
-('server.Version', '3.0', '', 1, 40),
+('server.Version', '3.0119', '', 1, 40),
 ('server.wkhtmltopdf', 'xvfb-run -a -s "-screen 0 1024x768x16" wkhtmltopdf', 'string', 1, 40),
 ('system.auth', '179403', 'string', 1, 40),
 ('system.name', 'Linet 3.0', 'string', 1, 40),

@@ -25,6 +25,46 @@ class Docdetails extends basicRecord {
      * for open format export 
      */
 
+    public function CalcPriceTotalWithVat() {
+        /*
+          calc = typeof calc !== 'undefined' ? calc : true;
+          var iVatRate = Number($('#Docdetails_' + index + '_iVatRate').val());
+          var iTotalVat = Number($('#Docdetails_' + index + '_iTotalVat').val());
+          if (calc) {
+          ihTotal = $('#Docdetails_' + index + '_ihTotal').val();
+          }
+
+          ihTotal = iTotalVat - (iTotalVat * (iVatRate / 100)) / (1 + (iVatRate / 100));
+
+          $('#Docdetails_' + index + '_ihTotal').val(ihTotal.toFixed(2));
+          //$('#Docdetails_' + index + '_iTotal').val(ihTotal.toFixed(2));
+          $('#Docdetails_' + index + '_iTotallabel').html(ihTotal.toFixed(2));
+          $('#Docdetails_' + index + '_iTotal').val(ihTotal.toFixed(2));
+          //totalChange(index);
+
+          return totalChange(index);
+         */
+        
+
+          $iVatRate = 0;
+          $iTotalVat =0;
+          
+
+          $this->ihTotal = $this->iTotalVat - ($this->iTotalVat * ($iVatRate / 100)) / (1 + ($iVatRate / 100));
+
+         
+
+          return $this->CalcPrice();
+    }
+
+    public function CalcPriceTotal() {
+        
+    }
+
+    public function CalcPrice() {
+          $this->iTotal = ($this->iItem * $this->qty)* ($rate / $doc_rate);//qty
+    }
+
     public function getType() {
         return isset($this->Doc) ? $this->Doc->getType() : "";
     }
@@ -54,7 +94,7 @@ class Docdetails extends basicRecord {
     }
 
     public function transaction($num, $refnum, $valuedate, $details, $action, $line, $optacc, $tranType) {
-        
+
 
         if (is_null($this->Item)) {
             throw new CHttpException(500, 'The item ' . $this->item_id . ' does not exsits.');
@@ -66,36 +106,36 @@ class Docdetails extends basicRecord {
 
 
 
-        
+
         $income = new Transactions();
-        
+
         if (is_null($optacc)) {
 
             $incomeacc = $vatCatAcc->account_id;
-            
+
             $income->sum = ($this->ihTotal * $action);
         } else {
             $incomeacc = $optacc;
 
-            
-            
+
+
             if ($oppt = Accounts::model()->findByPk($vatCatAcc->account_id))
                 $multi = ($oppt->src_tax / 100);
-            
-            $vat=$this->ihTotal*$multi;
-            
+
+            $vat = $this->ihTotal * $multi;
+
             if ($oppt = Accounts::model()->findByPk($incomeacc))
-                $multi = 1-($oppt->src_tax / 100);
-            $vat=$vat*$multi;
-            
-            
+                $multi = 1 - ($oppt->src_tax / 100);
+            $vat = $vat * $multi;
+
+
             //$multi=$this->iTotalVat*$multi;
             Yii::log($this, CLogger::LEVEL_INFO, __METHOD__);
             Yii::log($multi, CLogger::LEVEL_INFO, __METHOD__);
-            $income->sum = (($this->ihTotal+ $vat) * $action) ;
+            $income->sum = (($this->ihTotal + $vat) * $action);
         }
-        
-        
+
+
         $income->num = $num;
         $income->account_id = $incomeacc;
         $income->type = $tranType;
@@ -104,7 +144,7 @@ class Docdetails extends basicRecord {
 
         $income->details = $details;
         $income->currency_id = $this->currency_id;
-        
+
         $income->owner_id = Yii::app()->user->id;
         $income->linenum = $line;
         return $income->save();

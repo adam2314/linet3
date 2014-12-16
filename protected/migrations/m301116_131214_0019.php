@@ -1,6 +1,6 @@
 <?php
 
-class m301116_101214_0018 extends CDbMigration {
+class m301116_131214_0019 extends CDbMigration {
 
     public function up() {
         //return false;

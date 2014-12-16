@@ -15,8 +15,8 @@ $this->beginWidget('MiniForm', array(
 ?>
 <div id='conUpdate'>
     <div class="updatetext">
-        <?php echo Yii::t('update', "Welcome To Linet update wizard your system version is: ") . $sversion; ?><br />
-        <?php echo Yii::t('update', "The current version is: ") . $version; ?> 
+        <?php echo Yii::t('update', "Welcome To Linet update wizard your system version is:") ." ". $sversion; ?><br />
+        <?php echo Yii::t('update', "The current version is:") ." ". $version; ?> 
         <br />
         <?php
         if ($version != $sversion)

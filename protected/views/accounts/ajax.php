@@ -81,7 +81,7 @@ $this->widget('EExcelView', array(
                             ),
                             'display' => array(
                                 'label'=>'<i class="glyphicon glyphicon-transfer"></i>',
-                                'url'=>'Yii::app()->createUrl("accounts/transaction", array("id"=>$data->id))',
+                                'url'=>'Yii::app()->createUrl("accounts/transaction/".$data->id)',
                                 //'visible'=>'$data->score > 0',
                                 //'click'=>'function(){alert("Going down!");}',
                             ),

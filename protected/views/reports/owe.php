@@ -8,6 +8,7 @@ $this->beginWidget('MiniForm', array(
 $this->widget('EExcelView', array(
     'id' => 'accounts-grid',
     'dataProvider' => $model->owes(),
+     'pager' =>false,
     //'filter'=>$model,
     'columns' => array(
         'id',
