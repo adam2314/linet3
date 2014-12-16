@@ -26,7 +26,7 @@ if ($preview == 3) {
 
 
         <div  class="logo">
-            <img alt="logo" src="<?php echo $logopath; ?>" />
+            <img class="logo" alt="logo" src="<?php echo $logopath; ?>" />
         </div>
     </div>
 
@@ -309,14 +309,14 @@ if ($preview == 3) {
 //$this->endWidget(); 
 ?>
 <script type="text/javascript">
-//$(function () {
+window.onload = function () {
     preview =<?php echo $preview; ?>;
 
     if (preview == 0) {
-        //window.print();
-        //window.location = "<?php echo Yii::app()->CreateURL('docs/admin') ?>"
+        window.print();
+        window.location = "<?php echo Yii::app()->CreateURL('docs/admin') ?>"
         //return url
     }
-//});
+};
 
 </script>

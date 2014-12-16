@@ -775,7 +775,7 @@ $oppts[""] = Yii::t('app', 'None');
             //console.log(currency);
             $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "Currates/Getrate", "id": currency},
             function(data) {
-                $('#Docdetails_' + index + '_rate').val(data);
+                $('#Docdetails_' + index + '_rate').val(data.body);
                 CalcPrice(index);
             }, "json")
                     .error(function() {
@@ -982,7 +982,7 @@ $oppts[""] = Yii::t('app', 'None');
 
             $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "Currates/Getrate", "id": currency},
             function(data) {
-                $('#doc_rate').val(data);
+                $('#doc_rate').val(data.body);
                 var elements = $('.currSelect');
                 for (var i = 0; i < elements.length; i++) {
                     index = elements[i].id.replace("Docdetails_", '').replace("_currency_id", '');

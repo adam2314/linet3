@@ -177,11 +177,9 @@ class Accounts extends fileRecord {//CActiveRecord
 
         $transactions = Transactions::model()->findAll($criteria);
         foreach ($transactions as $transaction) {
-            //echo $transaction->date.','.$transaction->sum.'<br>';
             $sum+=$transaction->sum;
         }
 
-        //echo $from_date,";",$to_date,";",$sum;
         return $sum;
     }
 
@@ -243,9 +241,6 @@ class Accounts extends fileRecord {//CActiveRecord
     }
 
     private function hasHistory() {
-        //echo "help";
-        //echo count($this->transactions);
-        //Yii::app()->end();
         if (count($this->transactions) == 0) {
             return false;
         } else {
