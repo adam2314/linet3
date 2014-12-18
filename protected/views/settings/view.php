@@ -25,38 +25,58 @@ echo "<div class='row'><div class='col-md-6'>$col1</div><div class='col-md-6'>$c
 ?>  
 
 <?php echo CHtml::submitButton(Yii::t('app', "Save")); ?>    
-<?php 
-$this->endWidget(); 
+<?php
+$this->endWidget();
 $this->endWidget();
 ?>
 
 <script type="text/javascript">
-
+    var val=true;
     function del() {
         $("input[id='Settings_company.logo_value']").attr('value', '');
     }
 
 
     $('input').change(function() {
+       submits();
+
+    });
+
+
+
+    $("#settings-form").submit(function(event) {
+        if(!val)
+            event.preventDefault();
+
+        
+        
+    });
+
+
+
+    function submits(){
         var from = "ajax=settings-form&" + $("#settings-form").serialize();
         $.post("<?php echo $this->createUrl('/'); ?>/settings/admin", from,
                 function(data) {
                     $('.help-block').html('');
+                    val=true;
                     $.each(data, function(key, value) {
-
+                        val=false;
                         markMe(key, value[0]);
+                        
                     });
+                    
+                    //if(val)
+                    //    $("#settings-form").submit();
                 }, "json")
                 .error(function() {
                 });
+    }
 
 
-
-
-    });
 
     function markMe(fieldName, error) {
-        field = document.getElementById("Settings_" +fieldName+ "_em"); 
+        field = document.getElementById("Settings_" + fieldName + "_em");
         $(field).html(error);
         $(field).show();
 
