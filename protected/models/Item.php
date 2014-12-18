@@ -53,6 +53,8 @@ class Item extends fileRecord {
         return $itms . "\r\n";
     }
 
+    
+    
     public function findByPk($id, $condition = '', $params = Array()) {
         $model = parent::findByPk($id, $condition = '', $params = Array());
         if ($model !== null) {

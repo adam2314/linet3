@@ -19,50 +19,78 @@ class Docdetails extends basicRecord {
 
     const table = '{{docDetails}}';
 
-    public $iTotalVat;
+    private $ini = false;
+    public $iTotalVat = null;
+    public $iTotallabel = null;
+    public $rate = 1;
+    public $doc_rate = 1;
 
     /*
      * for open format export 
      */
 
-    public function CalcPriceTotalWithVat() {
-        /*
-          calc = typeof calc !== 'undefined' ? calc : true;
-          var iVatRate = Number($('#Docdetails_' + index + '_iVatRate').val());
-          var iTotalVat = Number($('#Docdetails_' + index + '_iTotalVat').val());
-          if (calc) {
-          ihTotal = $('#Docdetails_' + index + '_ihTotal').val();
-          }
+    public function save($runValidation = true, $attributes = NULL) {
+        //var_dump($this->iTotalVat);
+        //exit;
+        if ($this->iItem == null) {
+            if ($this->iTotalVat !== null)
+                $this->CalcPriceWithVat(); //qty,rate,totalwVat
+            else if ($this->iTotal !== null)
+                $this->CalcPriceWithOutVat(); //qty,rate,totalw/oVat
+        }else {
+            $this->CalcPrice();
+        }
 
-          ihTotal = iTotalVat - (iTotalVat * (iVatRate / 100)) / (1 + (iVatRate / 100));
-
-          $('#Docdetails_' + index + '_ihTotal').val(ihTotal.toFixed(2));
-          //$('#Docdetails_' + index + '_iTotal').val(ihTotal.toFixed(2));
-          $('#Docdetails_' + index + '_iTotallabel').html(ihTotal.toFixed(2));
-          $('#Docdetails_' + index + '_iTotal').val(ihTotal.toFixed(2));
-          //totalChange(index);
-
-          return totalChange(index);
-         */
-        
-
-          $iVatRate = 0;
-          $iTotalVat =0;
-          
-
-          $this->ihTotal = $this->iTotalVat - ($this->iTotalVat * ($iVatRate / 100)) / (1 + ($iVatRate / 100));
-
-         
-
-          return $this->CalcPrice();
+        return parent::save($runValidation, $attributes);
     }
 
-    public function CalcPriceTotal() {
-        
+    private function ini() {
+        if (!$this->ini) {
+            $this->iVatRate = Item::model()->findByPK($this->item_id)->vat;
+            $this->rate = Currates::model()->GetRate($this->currency_id);
+
+            if ($this->doc_rate == 0){
+                $doc=Docs::model()->findByPk($this->doc_id);
+                $this->doc_rate = Currates::model()->GetRate($doc->currency_id);
+            }
+            $this->ini!=$this->ini;
+        }
     }
 
+    public function CalcPriceWithVat() {
+        $this->ini();
+
+        $this->iTotal = round($this->iTotalVat - ($this->iTotalVat * ($this->iVatRate / 100)) / (1 + ($this->iVatRate / 100)), 2);
+
+        return $this->CalcPriceWithOutVat();
+    }
+
+//itotal+vat
+    public function CalcPriceWithOutVat() {
+        $this->ini();
+
+        $this->iItem = round(($this->iTotal / $this->qty) * ($this->rate / $this->doc_rate), 2);
+
+        return $this->CalcPrice();
+    }
+
+//qty,unit,rate,vat, item
     public function CalcPrice() {
-          $this->iTotal = ($this->iItem * $this->qty)* ($rate / $doc_rate);//qty
+        $this->ini();
+
+        $this->ihItem = $this->iItem;
+
+
+
+        $this->iTotal = round(($this->iItem * $this->qty) * ($this->rate / $this->doc_rate), 2);
+        $this->iTotalVat = round(($this->iTotal * (($this->iVatRate / 100) + 1)), 2);
+
+
+        $this->ihTotal = $this->iTotal;
+        $this->iTotallabel = $this->iTotal;
+
+
+        return $this;
     }
 
     public function getType() {
@@ -182,7 +210,7 @@ class Docdetails extends basicRecord {
             array('doc_id, item_id, currency_id', 'length', 'max' => 10),
             array('name', 'length', 'max' => 255),
             array('ihTotal, ihItem, iItem, iTotal, iVatRate, qty', 'length', 'max' => 20),
-            array('description', 'safe'),
+            array('description, iTotalVat, doc_rate', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('doc_id, item_id, name, description, qty, unit_id, currency_id, ihTotal, ihItem, iItem, iTotal, iVatRate, line', 'safe', 'on' => 'search'),

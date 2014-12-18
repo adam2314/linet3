@@ -15,6 +15,14 @@ class basicRecord extends CActiveRecord {
       public function tableName() {
       return (Yii::app()->db->tablePrefix . self::table);
       } */
+    
+    
+    public function getIterator() {
+
+        $all = array_merge($this->getAttributes(), get_object_vars($this));
+
+        return new CMapIterator($all);
+    }
 
     public function __toString() {
         $vars = $this->getAttributes();

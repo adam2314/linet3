@@ -236,6 +236,7 @@ class Docs extends fileRecord {
                     throw new CHttpException(500, Yii::t('app', 'Status is Invalid'));
                 $this->saveDet();
                 $this->saveCheq();
+                $this->calc();
                 if (isset($this->docStatus)) {
                     if ($this->docStatus->action != 0) {
                         $this->docnum = $this->newNum(); //get num 
@@ -295,26 +296,73 @@ class Docs extends fileRecord {
 
     /*     * *********************doc******************* */
 
+    public function calc() {
+
+
+        $this->vat = 0;
+        $this->sub_total = 0;
+        $this->novat_total = 0;
+        $this->total = 0;
+        $this->rcptsum = 0;
+
+        if (!is_null($this->docDet)) {
+
+            foreach ($this->docDet as $key => $detial) {
+
+
+                $vat = $detial['iTotalVat'] - $detial['ihTotal'];
+
+                $this->sub_total += $detial['ihTotal'];
+                if ($vat != 0)
+                    $this->vat += $vat;
+                else
+                    $this->novat_total += $detial['ihTotal'];
+            }
+            $this->total = $this->vat + $this->sub_total;
+        }
+
+
+        if (!is_null($this->docCheq)) {
+
+            foreach ($this->docCheq as $key => $rcpt) {
+
+
+                $this->rcptsum = $rcpt['sum'];
+            }
+        }
+
+
+
+
+        return $this;
+    }
+
     private function saveDet() {
         if (!is_null($this->docDet)) {
-            $line = 0;
+            $line = 1;
             foreach ($this->docDet as $key => $detial) {
-                $submodel = Docdetails::model()->findByPk(array('doc_id' => $this->id, 'line' => $detial['line']));
-                if (!$submodel) {//new line
+                $fline = isset($detial['line']) ? $detial['line'] : 0;
+                $submodel = Docdetails::model()->findByPk(array('doc_id' => $this->id, 'line' => $fline));
+                if ($submodel === null) {//new line
                     $submodel = new Docdetails;
                 }
+
                 $submodel->attributes = $detial;
+                $submodel->line = $line;
                 $submodel->doc_id = $this->id;
                 if ((int) $detial["item_id"] != 0) {
                     if ($submodel->save()) {
+
+                        $this->docDet[$key]['iTotalVat'] = $submodel->iTotalVat;
+                        $this->docDet[$key]['ihTotal'] = $submodel->ihTotal;
                         $saved = true;
                         $line++;
                     } else {
-                        Yii::log("fatel error cant save docdetial,doc_id:" . $submodel->line . "," . $submodel->doc_id, 'error', 'application');
+                        Yii::log("fatel error cant save docdetial,doc_id:" . $submodel->line . "," . $submodel->doc_id, CLogger::LEVEL_ERROR, __METHOD__);
                     }
                 }
             }
-            if (count($this->docDetailes) != $line) {//if more items in $docdetails delete them
+            if (count($this->docDetailes) != $line - 1) {//if more items in $docdetails delete them
                 for ($curLine = $line; $curLine < count($this->docDetailes); $curLine++)
                     $this->docDetailes[$curLine]->delete();
             }
@@ -332,28 +380,28 @@ class Docs extends fileRecord {
                     $submodel = new Doccheques;
                 }
 
-                
+
                 //go throw attr if no save new
-                foreach($rcpt as $key=>$value){
-                    if($submodel->hasAttribute($key))
-                        $submodel->$key=$value;
-                    else{
-                        $eav=new DocchequesEav;
-                        $eav->line=$rcpt['line'];
-                        $eav->doc_id= $this->id;
-                        $eav->attribute=$key;
-                        $eav->value=$value['value'];
+                foreach ($rcpt as $key => $value) {
+                    if ($submodel->hasAttribute($key))
+                        $submodel->$key = $value;
+                    else {
+                        $eav = new DocchequesEav;
+                        $eav->line = $rcpt['line'];
+                        $eav->doc_id = $this->id;
+                        $eav->attribute = $key;
+                        $eav->value = $value['value'];
                         $eav->save();
                     }
                 }
-                
+
                 $submodel->doc_id = $this->id;
                 if ((int) $rcpt["type"] != 0) {
                     if ($submodel->save()) {
                         $saved = true;
                         $line++;
                     } else {
-                        Yii::log("fatel error cant save rcptdetial,doc_id:" . $submodel->line . "," . $submodel->doc_id, 'error', 'application');
+                        Yii::log("fatel error cant save rcptdetial,doc_id:" . $submodel->line . "," . $submodel->doc_id, CLogger::LEVEL_ERROR, __METHOD__);
 
                         //Yii::app()->end();
                     }
@@ -420,7 +468,7 @@ class Docs extends fileRecord {
 
                     $iVat = ($docdetail->ihTotal * ($docdetail->iVatRate / 100));
                     $accout->sum+=($docdetail->ihTotal + $iVat) * $action;
-                    
+
                     $iVat*=$multi;
                     $vat->sum+= $iVat * $action;
                 }
@@ -456,15 +504,14 @@ class Docs extends fileRecord {
             }
 
             if ($this->docType->isrecipet) {
-                
+
                 foreach ($this->docCheques as $docrcpt) {
-                    
+
                     $num = $docrcpt->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->account_id, $tranType);
 
                     $line++;
                     $line++;
                 }
-                
             }
         }
 
@@ -546,13 +593,10 @@ class Docs extends fileRecord {
             array('refnum', 'length', 'max' => 20),
             array('vatnum', 'vatnumVal'),
             array('rcptsum, discount, sub_total, novat_total, vat, total, src_tax', 'length', 'max' => 20),
-            
-            
-            
             array('issue_date, due_date, comments, description, refnum_ext, refnum_ids, refstatus', 'safe'),
             //array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe'),
-            array('total', 'compare', 'compareAttribute'=>'rcptsum','on' => 'invrcpt'),
-            array('oppt_account_id', 'required','on' => 'opppt_req'), 
+            array('total', 'compare', 'compareAttribute' => 'rcptsum', 'on' => 'invrcpt'),
+            array('oppt_account_id', 'required', 'on' => 'opppt_req'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('oppt_account_id, discount, issue_from, refnum_ext, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe', 'on' => 'search'),

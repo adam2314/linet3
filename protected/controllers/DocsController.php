@@ -51,6 +51,21 @@ class DocsController extends RightsController {
         echo $tmp;
     }
 
+    
+    public function actionCalc(){
+        $model = new Docs();
+         if (isset($_POST['Docs'])) {
+            $model->attributes = $_POST['Docs'];
+            if (isset($_POST['Docdetails']))
+                $model->docDet = $_POST['Docdetails'];
+            if (isset($_POST['Doccheques']))
+                $model->docCheq = $_POST['Doccheques'];
+
+            return Response::send(200,$model->calc());
+        }
+    }
+    
+    
     /**
      * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -95,6 +110,8 @@ class DocsController extends RightsController {
 
     private function doc($model, $mail = 0) {
         switch ($_POST['subType']) {
+            case 'calc':
+                Response::send(200,$model->calc());
             case 'save':
                 if ($model->save()){
                     $this->redirect(array('view', 'id' => $model->id));

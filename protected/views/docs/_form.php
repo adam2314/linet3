@@ -54,7 +54,7 @@ $oppts[""] = Yii::t('app', 'None');
             </div>
         </div>   
         <div class="col-md-2">
-                <?php echo $form->textFieldRow($model, 'company', array('size' => 30, 'maxlength' => 80)); ?>
+            <?php echo $form->textFieldRow($model, 'company', array('size' => 30, 'maxlength' => 80)); ?>
         </div>
         <div class="col-md-2">
             <?php echo $form->textFieldRow($model, 'vatnum', array('size' => 10, 'maxlength' => 10)); ?>
@@ -88,7 +88,7 @@ $oppts[""] = Yii::t('app', 'None');
         </div>
 
         <div class="col-md-1">
-            
+
             <?php
 ///*
             $this->widget('widgetRefnum', array(
@@ -96,17 +96,19 @@ $oppts[""] = Yii::t('app', 'None');
                 'attribute' => 'refnum', //attribute name
             )); //*/
             ?>
-             
+
         </div>
         <div class="col-md-1">
-            
-             <?php echo $form->textFieldRow($model, 'refnum_ext'); ?>
+
+            <?php echo $form->textFieldRow($model, 'refnum_ext'); ?>
         </div>
 
         <div class="col-md-1">
-            <?php if ($model->docType->stockSwitch) { 
-                    echo $form->checkBoxRow($model, 'stockSwitch'); 
-                } ?>
+            <?php
+            if ($model->docType->stockSwitch) {
+                echo $form->checkBoxRow($model, 'stockSwitch');
+            }
+            ?>
         </div>
 
 
@@ -256,7 +258,7 @@ $oppts[""] = Yii::t('app', 'None');
                     <td></td>
                     <td>
                         <?php echo $form->labelEx($model, 'discount'); ?>
-                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));   ?>
+                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));    ?>
                         <?php echo $form->error($model, 'discount'); ?>
 
                     </td>
@@ -287,7 +289,7 @@ $oppts[""] = Yii::t('app', 'None');
                     <td></td>
                     <td>
                         <?php echo $form->labelEx($model, 'sub_total'); ?>
-                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));    ?>
+                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));     ?>
                         <?php echo $form->error($model, 'sub_total'); ?>
                     </td>
                     <td>
@@ -306,8 +308,8 @@ $oppts[""] = Yii::t('app', 'None');
                     <td></td>
                     <td>
                         <label><?php echo Yii::t('app', 'Subtotal VAT'); ?></label>
-                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));     ?>
-                        <?php //echo $form->error($model, 'sub_total');   ?>
+                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));      ?>
+                        <?php //echo $form->error($model, 'sub_total');    ?>
                     </td>
                     <td>
                         <div id="docvat"></div>
@@ -326,8 +328,8 @@ $oppts[""] = Yii::t('app', 'None');
                     <td></td>
                     <td></td>
                     <td>
-                        <?php //echo $form->labelEx($model,'novat_total');     ?>
-                        <?php //echo $form->error($model,'novat_total');      ?>
+                        <?php //echo $form->labelEx($model,'novat_total');      ?>
+                        <?php //echo $form->error($model,'novat_total');       ?>
                     </td>
                     <td>
                         <?php echo $form->hiddenField($model, 'novat_total'); ?>
@@ -402,12 +404,12 @@ $oppts[""] = Yii::t('app', 'None');
                         </textarea>      
                     </td>
                     <td>
-                        <?php //echo $form->labelEx($model, 'src_tax'); ?>
-                        <?php //echo $form->error($model, 'src_tax'); ?>
+                        <?php //echo $form->labelEx($model, 'src_tax');  ?>
+                        <?php //echo $form->error($model, 'src_tax');  ?>
                     </td>
 
                     <td>
-                        <?php //echo $form->textField($model, 'src_tax', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
+                        <?php //echo $form->textField($model, 'src_tax', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;"));  ?>
                     </td>
                     <td></td>
                     <td class="rcptadd">
@@ -425,7 +427,7 @@ $oppts[""] = Yii::t('app', 'None');
                     </td>
                     <td>
                         <?php echo $form->labelEx($model, 'sub_total'); ?>
-                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));    ?>
+                        <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));     ?>
                         <?php echo $form->error($model, 'sub_total'); ?>
                     </td>
 
@@ -583,7 +585,7 @@ $oppts[""] = Yii::t('app', 'None');
             }
 
             $('#language_chosen').hide();
-            
+
             changeFileds();
 
         });
@@ -598,28 +600,28 @@ $oppts[""] = Yii::t('app', 'None');
 
 
         function sendBill(index) {
-            
-            var type = $('#Doccheques_'+index+'_type').val();
-            
-            var elements = $('[id^=Doccheques_'+index+']');
-            var str ='';
+
+            var type = $('#Doccheques_' + index + '_type').val();
+
+            var elements = $('[id^=Doccheques_' + index + ']');
+            var str = '';
             for (var i = 0; i < elements.length; i++) {
-                var name=elements[i].name+'';
-                name=name.replace('Doccheques['+index+']', "bill");
-                str+=name+'='+$(elements[i]).val()+'&';
+                var name = elements[i].name + '';
+                name = name.replace('Doccheques[' + index + ']', "bill");
+                str += name + '=' + $(elements[i]).val() + '&';
             }
             console.log(str);
             $.post("<?php echo $this->createUrl('/payment/bill'); ?>/" + type, str,
                     function(data) {
-                        
+
                         off = false;
-                        if(data.bill){
-                            billed[index]=true;
-                            $("#bill_"+index+"_btn").remove();
-                            
+                        if (data.bill) {
+                            billed[index] = true;
+                            $("#bill_" + index + "_btn").remove();
+
                         }
-                        $("#bill_"+index+"_resualt").html(data.code+"-"+data.text+","+data.desc);
-                        
+                        $("#bill_" + index + "_resualt").html(data.code + "-" + data.text + "," + data.desc);
+
                         //console.log(data);
                         //alert(data);
                         //$('#paymenetDialog').dialog('open');
@@ -644,24 +646,24 @@ $oppts[""] = Yii::t('app', 'None');
 
                 //billed[i] = false;
                 console.log(elements[i].value);
-                
-                /*$.post("<?php echo $this->createUrl('/payment/form'); ?>/" + elements[i].value, {"bill": {"sum": $(sums[i]).val(), "line": [i]}}, //"bill"
-                function(data) {
-                    //$("#paymenetDialog").show();
-                    off = true;
-                    //console.log(data);
-                    if (!data[1]) {
-                        billed[data[0]] = true;
 
-                        $('#docs-form').submit();
-                    } else {
-                        //   return true;
-                        $('#paymenetDialog').dialog('open');
-                        //show popup 
-                        var tmp = "<input type='hidden' id='bill_line' value='" + i + "'/>";
-                        $('#paymenetForm').html(tmp + data[1]);
-                    }
-                }, "json");//*/
+                /*$.post("<?php echo $this->createUrl('/payment/form'); ?>/" + elements[i].value, {"bill": {"sum": $(sums[i]).val(), "line": [i]}}, //"bill"
+                 function(data) {
+                 //$("#paymenetDialog").show();
+                 off = true;
+                 //console.log(data);
+                 if (!data[1]) {
+                 billed[data[0]] = true;
+                 
+                 $('#docs-form').submit();
+                 } else {
+                 //   return true;
+                 $('#paymenetDialog').dialog('open');
+                 //show popup 
+                 var tmp = "<input type='hidden' id='bill_line' value='" + i + "'/>";
+                 $('#paymenetForm').html(tmp + data[1]);
+                 }
+                 }, "json");//*/
                 //move values
 
                 //save
@@ -752,14 +754,14 @@ $oppts[""] = Yii::t('app', 'None');
 
                 billed[index] = !data.bill;
                 var tmp = "<div id='bill_" + index + "_resualt'></div>";
-                
-                if(data.bill){
-                    tmp+="<a id='bill_" + index + "_btn' href='javascript:sendBill(" + index + ");' class='btn btn-primary'><?php echo Yii::t('app','Bill') ?></a>";
+
+                if (data.bill) {
+                    tmp += "<a id='bill_" + index + "_btn' href='javascript:sendBill(" + index + ");' class='btn btn-primary'><?php echo Yii::t('app', 'Bill') ?></a>";
                 }
-                $('#Doccheques_' + index + '_text').html(data.form+tmp);
-                
-                
-                
+                $('#Doccheques_' + index + '_text').html(data.form + tmp);
+
+
+
             }, "json");
 
 
@@ -770,19 +772,6 @@ $oppts[""] = Yii::t('app', 'None');
 
 
         /******************************************************docs calcs********************/
-        function currChange(index) {
-            var currency = $('#Docdetails_' + index + '_currency_id').val();
-            //console.log(currency);
-            $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "Currates/Getrate", "id": currency},
-            function(data) {
-                $('#Docdetails_' + index + '_rate').val(data.body);
-                CalcPrice(index);
-            }, "json")
-                    .error(function() {
-                    });
-
-
-        }
 
         function itemChange(index) {
             var part = $('#Docdetails_' + index + '_item_id').val();
@@ -796,6 +785,8 @@ $oppts[""] = Yii::t('app', 'None');
                 $('#Docdetails_' + index + '_iItem').val(data.saleprice);
                 $('#Docdetails_' + index + '_currency_id').val(data.currency_id);
                 $('#Docdetails_' + index + '_currency_id').trigger("liszt:updated");
+                $('#Docdetails_' + index + '_unit_id').val(data.unit_id);
+                $('#Docdetails_' + index + '_unit_id').trigger("liszt:updated");
                 //currChange(index);
 
                 $('#Docdetails_' + index + '_rate').val("1");
@@ -804,16 +795,9 @@ $oppts[""] = Yii::t('app', 'None');
 
                 }
 
-                $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "item/VatJSON", "id": part},
-                function(smalldata) {
-                    smalldata = jQuery.parseJSON(smalldata);
-                    $('#Docdetails_' + index + '_iVatRate').val(smalldata.vat);
-                    CalcPrice(index, true);
-                });
+                CalcPrice(index);
+                //$('#Docdetails_' + index + '_iVatRate').val(data.vat);
 
-
-
-                //$('#Docdetails_'+index+'_qty').focus();
             }, "json")
                     .error(function() {
                     });
@@ -822,7 +806,7 @@ $oppts[""] = Yii::t('app', 'None');
 
 
         function calcLines() {//count doc lines
-            var elements = $('.detailline');
+            var elements = $('.detail .line');
 
             for (var i = 0; i < elements.length; i++) {
                 $('#' + elements[i].id).val(i + 1);
@@ -830,150 +814,80 @@ $oppts[""] = Yii::t('app', 'None');
         }
 
         function CalcPrice(index, hChange) {//.org
-            hChange = typeof hChange !== 'undefined' ? hChange : true;
-            var qty = $('#Docdetails_' + index + '_qty').val();
-            var iItem = $('#Docdetails_' + index + '_iItem').val();
-            //var ihItem = $('#Docdetails_' + index + '_ihItem').val();
-            var rate = $('#Docdetails_' + index + '_rate').val();
-            var doc_rate = $('#doc_rate').val();
-            var vat = $('#Docdetails_' + index + '_iVatRate').val();
-            var itemtotal;
+            if (hChange == 'CalcPriceWithVat')
+                hChange = '&CalcPriceWithVat=1';
+            else
+            if (hChange == 'CalcPriceWithOutVat')
+                hChange = '&CalcPriceWithOutVat=1';
+            else
+                hChange = '';
+            var doc_rate = $("#doc_rate").val();
+            var parms = '&Docdetails[' + index + '][doc_rate]=' + doc_rate + '&Docdetails[line]=' + index + hChange;
+            var form = $('[id^=Docdetails_' + index + ']').serialize() + parms;
 
-            var iTotal = (iItem * qty).toFixed(2);//qty
+            $.post("<?php echo $this->createUrl('/'); ?>/docdetails/calc", form,
+                    function(data) {
+                        $.each(data.body, function(key, value) {
+                            $('#Docdetails_' + index + '_' + key).val(value);
+                        });
 
-            iTotal = iTotal * (rate / doc_rate);//rate
+                        $('#Docdetails_' + index + '_iTotallabel').html(data.body.iTotal);
+                        //if (calc === undefined) 
+                        return CalcPriceSum();
+                        //else
+                        //    return data.body.iTotal;
+                    }, "json")
+                    .error(function(data) {
+                        console.log(data);
+                    });
 
-            $('#Docdetails_' + index + '_iTotallabel').html(iTotal.toFixed(2));
-            $('#Docdetails_' + index + '_iTotal').val(iTotal.toFixed(2));
-            $('#Docdetails_' + index + '_iTotalVat').val((iTotal * ((vat / 100) + 1)).toFixed(2));
 
 
-            if (hChange) {
-                $('#Docdetails_' + index + '_ihTotal').val(iTotal);
 
-            } else {
-                var ihTotal = (iItem * qty).toFixed(2);//qty
-                ihTotal = ihTotal * (rate / doc_rate);//rate
-                $('#Docdetails_' + index + '_ihTotal').val(ihTotal);
-                return ihTotal;
-            }
-
-            return CalcPriceSum();
         }
 
 
 
         function CalcPriceSum(org) {
-            var elements = $('.detailihTotal');
-            var selements = $('.detailVatRate');
-            var vattotal = novattotal = subtotal = 0;
-            //var  = 0;
-            //var novat_total=0;
-            for (var i = 0; i < elements.length; i++) {
+            //$('#subType').val('calc');
+            
+            $.post("<?php echo $this->createUrl('/docs/calc'); ?>", $("#docs-form").serialize(),
+                    function(data) {
+                        $('#Docs_vat').val(data.body.vat).trigger('change');
+                        $('#Docs_sub_total').val(data.body.sub_total).trigger('change');
+                        $('#Docs_novat_total').val(data.body.novat_total);
+                        $('#Docs_total').val(data.body.total).trigger('change');//novat_total
+                        $('#Docs_rcptsum').val(data.body.rcptsum).trigger('change');
+                    }, "json")
+                    .error(function(data) {
+                        console.log(data);
+                    });
 
-                var itemtotal = Number($('#' + elements[i].id).val());
-                var vat = Number($('#' + selements[i].id).val());
 
-                subtotal += itemtotal;
-                if (vat != 0)
-                    vattotal += (vat / 100) * itemtotal;
-                else
-                    novattotal += itemtotal;
-
-            }
-            $('#Docs_vat').val(vattotal.toFixed(2)).trigger('change');
-            $('#Docs_sub_total').val(subtotal.toFixed(2)).trigger('change');
-            $('#Docs_novat_total').val(novattotal.toFixed(2));
-            $('#Docs_total').val((subtotal + vattotal).toFixed(2)).trigger('change');//novat_total
         }
 
 
-        function totalChange(index, calc) {
-            calc = typeof calc !== 'undefined' ? calc : true;
 
-            var qty = Number($('#Docdetails_' + index + '_qty').val());
-            var ihTotal = Number($('#Docdetails_' + index + '_ihTotal').val());
-            var rate = Number($('#Docdetails_' + index + '_rate').val());
-            var doc_rate = Number($('#doc_rate').val());
-            var iVatRate = Number($('#Docdetails_' + index + '_iVatRate').val());
-
-
-
-            ihItem = (ihTotal / qty) * (rate / doc_rate);
-
-            $('#Docdetails_' + index + '_iItem').val(ihItem.toFixed(2));//
-            if (calc)
-                return CalcPrice(index, true);
-            return ihItem;
-        }
-
-        //total + vat change
-        function totalVatChange(index, calc) {
-            calc = typeof calc !== 'undefined' ? calc : true;
-            var iVatRate = Number($('#Docdetails_' + index + '_iVatRate').val());
-            var iTotalVat = Number($('#Docdetails_' + index + '_iTotalVat').val());
-            if (calc) {
-                ihTotal = $('#Docdetails_' + index + '_ihTotal').val();
-            }
-
-            ihTotal = iTotalVat - (iTotalVat * (iVatRate / 100)) / (1 + (iVatRate / 100));
-
-            $('#Docdetails_' + index + '_ihTotal').val(ihTotal.toFixed(2));
-            //$('#Docdetails_' + index + '_iTotal').val(ihTotal.toFixed(2));
-            $('#Docdetails_' + index + '_iTotallabel').html(ihTotal.toFixed(2));
-            $('#Docdetails_' + index + '_iTotal').val(ihTotal.toFixed(2));
-            //totalChange(index);
-
-            return totalChange(index);
-        }
 
         /**********************************Discount*****************************/
         $('#Docs_discount').blur(function() {
             total = $('#Docs_sub_total').val();
             discount = $('#Docs_discount').val();
-            var iTotals = $('.detailihTotal');
+            var iTotals = $('.detail.ihTotal');
             var sum = vatSum = novatSum = 0;
 
             for (var i = 0; i < iTotals.length; i++) {
 
-                //if ($('#Docs_disType').attr('checked')) {
-                //    per = discount / 100;
-                //} else {
-                //    per = (discount / total);
-                //}
-                //var iVatRate = Number($('#Docdetails_' + i + '_iVatRate').val());
-
-                var ihTotal = CalcPrice(i, false);//get ihtotal with vat:)
-                var vatRate = $('#Docdetails_' + i + '_iVatRate').val() / 100;
-                //ihVat = iTotal * (iVatRate / 100);
-
+                var iTotal = $('#Docdetails_' + i + '_iTotal').val();//get ihtotal with vat:)
                 if ($('#Docs_disType').attr('checked')) {
-                    ihTotal = ihTotal - ((ihTotal / 100) * discount);
+                    iTotal = iTotal - ((iTotal / 100) * discount);
                 } else {
-                    ihTotal = ihTotal - ((ihTotal / total) * discount);
+                    iTotal = iTotal - ((iTotal / total) * discount);
                 }
 
-
-
-                $('#Docdetails_' + i + '_ihTotal').val(ihTotal.toFixed(2));
-
-                sum += ihTotal;
-                if (vatRate != 0)
-                    vatSum += (ihTotal * (vatRate));
-                else
-                    novatSum += ihTotal;
-                //console.log(ihTotal);
-                //totalVatChange(i, false);
+                $('#Docdetails_' + i + '_iTotal').val(iTotal);
+                CalcPrice(i, "CalcPriceWithOutVat");
             }
-
-            $('#Docs_vat').val(vatSum.toFixed(2)).trigger('change');
-            $('#Docs_sub_total').val(sum.toFixed(2)).trigger('change');
-            $('#Docs_novat_total').val(novatSum.toFixed(2));
-            $('#Docs_total').val((vatSum + sum).toFixed(2)).trigger('change');//novat_total
-
-            //console.log(per);
-
-            //CalcPriceSum(true);
         });
 
         /**********************************CurChange****************************/
@@ -996,34 +910,26 @@ $oppts[""] = Yii::t('app', 'None');
         });
 
         $('#Docs_total').change(function() {
-            //console.log('go');
             $('#doctotal').html($('#Docs_total').val());
         });
 
         $('#Docs_sub_total').change(function() {
-            //console.log('go');
             $('#docsub_total').html($('#Docs_sub_total').val());
         });
 
         $('#Docs_vat').change(function() {
-            //console.log('go');
             $('#docvat').html($('#Docs_vat').val());
         });
 
-
+        $('#Docs_rcptsum').change(function() {
+            $('#rcptSum').html($('#Docs_rcptsum').val());
+        });
 
 
         /**********************************doc end******************************/
 
         function rcptSum() {
-            var elements = $('.rcptsum');
-            var total = 0;
-            for (var i = 0; i < elements.length; i++) {
-                var item = Number($('#' + elements[i].id).val());
-                total += item;
-            }
-            $('#rcptSum').html((total).toFixed(2));
-            $('#Docs_rcptsum').val(total);
+            CalcPriceSum();
         }
 
         function rcptcalcLines() {
@@ -1139,8 +1045,6 @@ $oppts[""] = Yii::t('app', 'None');
                 'icon' => 'glyphicon glyphicon-globe',
                 'htmlOptions' => array('id' => 'printLink', 'onclick' => 'return hideMe();'),
             ));
-
-            
         } else {
             $this->widget('bootstrap.widgets.TbButton', array(
                 'label' => Yii::t('app', 'Save'),
@@ -1152,25 +1056,8 @@ $oppts[""] = Yii::t('app', 'None');
         ?>
         <!--</div>-->
     </div>
-<?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));?>
-    
+    <?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name')); ?>
+
 </div><!-- form -->
 <?php $this->endWidget(); ?>
 
-
-<?php
-/*
-  $this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
-  'id' => 'choseRefDoc',
-  'options' => array(
-  'title' => Yii::t('app', 'Chose Refernce Documenet'),
-  'autoOpen' => false,
-  'width' => '600px',
-  ),
-  ));
-  $dataProvider = new CActiveDataProvider('Docs');
-  echo $this->renderPartial('index');
-  //echo $this->renderPartial('index', array('dataProvider'=>$dataProvider,));
-
-  $this->endWidget('zii.widgets.jui.CJuiDialog'); */
-?>

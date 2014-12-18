@@ -46,6 +46,7 @@ class FormMprofloss extends CFormModel {
         foreach ($accounts as $account) {
 
             $sum = $account->getTotal($from_date, $to_date);
+            echo $account->id .": ".$sum.",";
             if ($sum != 0) {
                 $accounty = array(
                     'id' => $account->id,
@@ -99,7 +100,13 @@ class FormMprofloss extends CFormModel {
         );
 
         for ($x = 1; $x <= 12; $x++) {
-            $total[$x] = $inTotal[$x] + $outTotal[$x];
+            $inc=$out=0;
+            if(isset($inTotal[$x]))
+                $inc=$inTotal[$x];
+            if(isset($outTotal[$x]))
+                $out=$outTotal[$x];
+            
+            $total[$x] = $inc + $out;
             $sum+=$total[$x];
         }
         $total['sum'] = $sum;

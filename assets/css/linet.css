@@ -103,7 +103,11 @@ Author : adam
 
 }
 
-
+.outer{
+    /*background-image: url("../../img/back.gif");*/
+   
+   
+}
 
 @media print
 {

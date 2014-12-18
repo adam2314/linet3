@@ -2,22 +2,10 @@
     <td class="item_id"><b><?php echo $form->labelEx($model, 'item_id'); ?></b>
 
         <?php //echo $form->hiddenField($model, "[$i]id"); ?>
-        <?php echo $form->hiddenField($model, "[$i]doc_id", array('class' => 'detaildoc_id')); ?>
-        <?php echo $form->hiddenField($model, "[$i]line", array('class' => 'detailline')); ?>
-        <?php
-        if ($model->currency_id == '')
-            $cur = 1;
-        else
-            $cur = Currates::model()->GetRate($model->currency_id);
-        echo CHTML::hiddenField("Docdetails_${i}_rate", $cur, array('class' => 'detailrate'));
-        ?>
-        <?php
-        if ($model->item_id == '')
-            $vat = 0;
-        else
-            $vat = Item::model()->findByPk($model->item_id)->vat;
-        echo CHTML::hiddenField("Docdetails_${i}_accvat", $vat);
-        ?>
+        <?php echo $form->hiddenField($model, "[$i]doc_id", array('class' => 'detail doc_id')); ?>
+        <?php echo $form->hiddenField($model, "[$i]line", array('class' => 'detail line')); ?>
+        
+        
 
         <?php
         if ($model->item_id == '')
@@ -32,21 +20,20 @@
 
 
 
-    <td><b><?php echo $form->labelEx($model, 'name'); ?></b><?php echo $form->textField($model, "[$i]name");
+    <td><b><?php echo $form->labelEx($model, 'name'); ?></b><?php echo $form->textField($model, "[$i]name", array('class' => 'detail'));
         //echo $form->dropDownList($model, "[$i]name", CHtml::listData(Item::model()->findAll(), 'id', 'name')); 
         ?></td>
 
-    <td><b><?php echo $form->labelEx($model, 'qty'); ?></b><?php echo $form->textField($model, "[$i]qty", array('maxlength' => 5)); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'unit_id'); ?></b><?php echo $form->dropDownList($model, "[$i]unit_id", CHtml::listData(Itemunit::model()->findAll(), 'id', 'name'), array('class' => 'currSelect')); //,array()  ?></td>
-    <td><b><?php echo $form->labelEx($model, 'iItem'); ?></b><?php echo $form->textField($model, "[$i]iItem", array('maxlength' => 8)); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'currency_id'); ?></b><?php echo $form->dropDownList($model, "[$i]currency_id", CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name'), array('class' => 'currSelect')); //,array()  ?></td>
-    <td><b><?php echo $form->labelEx($model, 'iTotal'); ?></b><?php //echo $form->textField($model, "[$i]iTotal", array( 'maxlength' => 8));  ?>
+    <td><b><?php echo $form->labelEx($model, 'qty'); ?></b><?php echo $form->textField($model, "[$i]qty", array('class' => 'detail')); ?></td>
+    <td><b><?php echo $form->labelEx($model, 'unit_id'); ?></b><?php echo $form->dropDownList($model, "[$i]unit_id", CHtml::listData(Itemunit::model()->findAll(), 'id', 'name'), array('class' => 'detail untSelect')); //,array()  ?></td>
+    <td><b><?php echo $form->labelEx($model, 'iItem'); ?></b><?php echo $form->textField($model, "[$i]iItem", array('class' => 'detail',)); ?></td>
+    <td><b><?php echo $form->labelEx($model, 'currency_id'); ?></b><?php echo $form->dropDownList($model, "[$i]currency_id", CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name'), array('class' => 'detail currSelect')); //,array()  ?></td>
+    <td><b><?php echo $form->labelEx($model, 'iTotal'); ?></b>
         <div id="Docdetails_<?php echo $i; ?>_iTotallabel" ></div>
     </td>
     <td><b><?php echo $form->labelEx($model, 'iVatRate'); ?></b><?php
-        //echo CHTML::checkBox("Docdetails_${i}_inclodeVat",'', array('value'=>1, 'uncheckValue'=>0));
-        echo $form->hiddenField($model, "[$i]iVatRate", array('class' => 'detailVatRate'));
-        echo $form->textField($model, "[$i]iTotalVat", array('maxlength' => 8));
+        echo $form->hiddenField($model, "[$i]iVatRate", array('class' => 'detail iVatRate'));
+        echo $form->textField($model, "[$i]iTotalVat", array('class' => 'detail iVat'));
         ?>
 
     </td>
@@ -59,21 +46,21 @@
         ?>
 
         <input type="hidden" class="rowIndex" value="<?php echo $i; ?>" />
-        <input id="Docdetails_<?php echo $i; ?>_ihItem" name="Docdetails[<?php echo $i; ?>][ihItem]" type="hidden" value="" class="detailihItem" />
-        <input id="Docdetails_<?php echo $i; ?>_iTotal"name="Docdetails[<?php echo $i; ?>][iTotal]" type="hidden" value="" class="detailiTotal" />
-        <input id="Docdetails_<?php echo $i; ?>_ihTotal"name="Docdetails[<?php echo $i; ?>][ihTotal]" type="hidden" value="" class="detailihTotal" />
+        <input id="Docdetails_<?php echo $i; ?>_ihItem" name="Docdetails[<?php echo $i; ?>][ihItem]" type="hidden" value="" class="detail ihItem" />
+        <input id="Docdetails_<?php echo $i; ?>_iTotal"name="Docdetails[<?php echo $i; ?>][iTotal]" type="hidden" value="" class="detail iTotal" />
+        <input id="Docdetails_<?php echo $i; ?>_ihTotal"name="Docdetails[<?php echo $i; ?>][ihTotal]" type="hidden" value="" class="detail ihTotal" />
     </td>
 </tr>
 <tr class="docSubContent">
     <td></td>
     <td colspan="5"><b><?php echo $form->labelEx($model, 'description'); ?></b><?php
         if ($i == 'ABC')
-            echo $form->textField($model, "[$i]description");
+            echo $form->textField($model, "[$i]description", array('class' => 'detail'));
         else
-            echo $form->textArea($model, "[$i]description", array('rows' => 1, 'cols' => 10));
+            echo $form->textArea($model, "[$i]description", array('class' => 'detail','rows' => 1, 'cols' => 10));
         ?></td>
     <td></td>
-    <td><b><?php echo $form->labelEx($model, 'invprice'); ?></b><?php //echo $form->textField($model, "[$i]invprice", array( 'maxlength' => 8));  ?></td> 
+    <td><b><?php echo $form->labelEx($model, 'invprice'); ?></b></td> 
 
 </tr>    
 <script type="text/javascript">
@@ -89,7 +76,7 @@
    
 
     $("#Docdetails_<?php echo $i; ?>_currency_id").change(function() {
-        currChange(<?php echo $i; ?>);
+        CalcPrice(<?php echo $i; ?>);
     });
 
 
@@ -113,7 +100,7 @@
         CalcPrice(<?php echo $i; ?>);
     });
     $("#Docdetails_<?php echo $i; ?>_iTotalVat").change(function() {
-        totalVatChange(<?php echo $i; ?>, true);
+        CalcPrice(<?php echo $i; ?>, "CalcPriceWithVat");
     });
     //$("#Docdetails_<?php echo $i; ?>_invprice").change(function(){
     //    sumChange(<?php echo $i; ?>);  

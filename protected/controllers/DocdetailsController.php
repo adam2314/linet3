@@ -1,113 +1,28 @@
 <?php
-exit;
+//exit;
 class DocdetailsController extends RightsController
 {
 	
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionView($id)
-	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
-	}
-
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
-	public function actionCreate()
-	{
-		$model=new Docdetails;
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['Docdetails']))
-		{
-			$model->attributes=$_POST['Docdetails'];
-			print_r($model->attributes);
-			if($model->save())
-				print 'a';
-				//$this->redirect(array('view','id'=>$model->id));
-		}
-
-		$this->render('create',array(
-			'model'=>$model,
-		));
-	}
-
-	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
-	public function actionUpdate($id)
-	{
-		$model=$this->loadModel($id);
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['Docdetails']))
-		{
-			$model->attributes=$_POST['Docdetails'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
-		}
-
-		$this->render('update',array(
-			'model'=>$model,
-		));
-	}
-
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
-	public function actionDelete($id)
-	{
-		if(Yii::app()->request->isPostRequest)
-		{
-			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
-
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-		}
-		else
-			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
-	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$dataProvider=new CActiveDataProvider('Docdetails');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
-	}
-
-	/**
-	 * Manages all models.
-	 */
-	public function actionAdmin()
-	{
-		$model=new Docdetails('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Docdetails']))
-			$model->attributes=$_GET['Docdetails'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
-	}
+    
+    
+    public function actionCalc(){
+        $model=new Docdetails;
+        
+        if(isset($_POST['Docdetails']['line'])){
+            $i=$_POST['Docdetails']['line'];
+            $model->attributes=$_POST['Docdetails'][$i];
+            
+            if(isset($_POST['CalcPriceWithVat']))
+                Response::send(200,$model->CalcPriceWithVat());
+            
+            if(isset($_POST['CalcPriceWithOutVat']))
+                Response::send(200,$model->CalcPriceWithOutVat());
+            
+            
+            Response::send(200,$model->CalcPrice());
+        }
+    }
+	
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
