@@ -86,9 +86,14 @@ $this->widget('EExcelView', array(
         ),
         'details',
         array(
-            'name' => 'date',
+            'name' => 'valuedate',
             'filter' => $dateisOn,
             'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->valuedate,"' . $yiidbdatetime . '"))'
+        ),
+        array(
+            'name' => 'reg_date',
+            'filter' => '',
+            'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->reg_date,"' . $yiidbdatetime . '"))'
         ),
         array(
             'header' => Yii::t('app', 'Debit'),

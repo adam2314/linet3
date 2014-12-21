@@ -12,18 +12,21 @@ class Update extends CFormModel {
     public $DBback;
     private $_sversion;
 
-    public function init(){
-        $this->_sversion= Settings::model()->findByPk('system.version')->value;
+    public function init() {
+        if (file_exists(Yii::app()->basePath . '/data/version'))
+            $this->_sversion = file_get_contents(Yii::app()->basePath . '/data/version');
+        else
+            $this->_sversion = "3.01210";
         return parent::init();
     }
-    
+
     private function _send($url, $params = array()) {
         $updatesrv = Yii::app()->params['updatesrv'];
 
         $output = Yii::app()->curl
                 ->setOptions(array('Content-Type: application/xml',
                     CURLOPT_CAINFO => Yii::app()->basePath . '/data/rootCA.pem',
-                    CURLOPT_USERAGENT=>$this->_sversion,
+                    CURLOPT_USERAGENT => $this->_sversion,
                 ))
                 //
                 ->post($updatesrv . $url, CJSON::encode($params));
@@ -73,7 +76,7 @@ class Update extends CFormModel {
         if (file_exists(Yii::app()->basePath . "/tmp"))
             unlink(Yii::app()->basePath . "/tmp");
 
-        Zipper::zip($folder, Yii::app()->basePath . "/tmp" );
+        Zipper::zip($folder, Yii::app()->basePath . "/tmp");
 
         return Yii::app()->basePath . "/tmp";
     }
@@ -125,14 +128,14 @@ class Update extends CFormModel {
             'migrate',
                 //'down',
         ));
-        $text= htmlentities(ob_get_clean(), null, Yii::app()->charset);
+        $text = htmlentities(ob_get_clean(), null, Yii::app()->charset);
 
 
         //save version
-        $settings = Settings::model()->findByPk('system.version');
-        $settings->value = $version["name"];
-        $settings->save();
+        file_put_contents(Yii::app()->basePath . '/data/version', $version["name"]);
         
+        
+
         return $text;
     }
 

@@ -73,6 +73,23 @@ $oppts[""] = Yii::t('app', 'None');
         <div class="col-md-1">
             <?php echo $form->textFieldRow($model, 'zip', array('size' => 10, 'maxlength' => 10)); ?>
         </div>
+        
+        <div class="col-md-2">
+                <?php echo $form->labelEx($model, 'ref_date'); ?>
+                <?php
+                $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker', array(
+                    'model' => $model, //Model object
+                    'attribute' => 'ref_date', //attribute name
+                    'mode' => 'datetime',
+                    'language' => substr(Yii::app()->language, 0, 2),
+                    'options' => array(
+                        'showAnim' => 'fold',
+                        'dateFormat' => Yii::app()->locale->getDateFormat('short'),
+                    ) // jquery plugin options
+                ));
+                ?>
+                <?php echo $form->error($model, 'ref_date'); ?>
+            </div>
 
 
     </div><!--block-->
@@ -701,7 +718,10 @@ $oppts[""] = Yii::t('app', 'None');
                 //$('.formtable tr td:nth-child(9)').hide();
             } else {
                 //$('#Docs_oppt_account_id').parent().hide();
+                $('#Docs_ref_date').parent().remove();
+                
                 $('#Docs_oppt_account_id').parent().remove();
+                $('#Docs_issue_date').attr("disabled",'disabled');
             }
         }
 

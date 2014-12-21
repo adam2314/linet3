@@ -43,7 +43,8 @@ class Company extends mainRecord {
         }
         if (!isset(Yii::app()->user->warehouse)) { //adam: shuld be cached in memory
             $user = User::model()->findByPk(Yii::app()->user->id);
-            $user->loadUser();
+            if($user!=null)
+                $user->loadUser();
         }
         //*/
     }

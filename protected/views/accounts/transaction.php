@@ -92,6 +92,11 @@ $this->widget('EExcelView', array(
             'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->valuedate,"' . $yiidbdatetime . '"))'
         ),
         array(
+            'name' => 'reg_date',
+            'filter' => '',
+            'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->reg_date,"' . $yiidbdatetime . '"))'
+        ),
+        array(
             'header' => Yii::t('app', 'Debit'),
             'name' => 'sum',
             'filter' => '',

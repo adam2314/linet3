@@ -46,7 +46,6 @@ class FormMprofloss extends CFormModel {
         foreach ($accounts as $account) {
 
             $sum = $account->getTotal($from_date, $to_date);
-            echo $account->id .": ".$sum.",";
             if ($sum != 0) {
                 $accounty = array(
                     'id' => $account->id,

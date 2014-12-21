@@ -67,7 +67,7 @@ class Docs extends fileRecord {
     public function init() {
         $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
         $this->due_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
-
+        $this->ref_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
         return parent::init();
     }
 
@@ -173,7 +173,8 @@ class Docs extends fileRecord {
         if ($this->isNewRecord) {
             $this->dateDBformat = false;
         }
-        $this->modified = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
+        if($this->reg_date==null)
+            $this->reg_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
 
         //echo Yii::app()->locale->getDateFormat('yiishort');
         //echo $this->due_date;
@@ -184,7 +185,8 @@ class Docs extends fileRecord {
             $this->dateDBformat = true;
             $this->due_date = date("Y-m-d H:i:s", CDateTimeParser::parse($this->due_date, Yii::app()->locale->getDateFormat('yiidatetime')));
             $this->issue_date = date("Y-m-d H:i:s", CDateTimeParser::parse($this->issue_date, Yii::app()->locale->getDateFormat('yiidatetime')));
-            $this->modified = date("Y-m-d H:i:s", CDateTimeParser::parse($this->modified, Yii::app()->locale->getDateFormat('yiidatetime')));
+            $this->reg_date = date("Y-m-d H:i:s", CDateTimeParser::parse($this->reg_date, Yii::app()->locale->getDateFormat('yiidatetime')));
+            $this->ref_date = date("Y-m-d H:i:s", CDateTimeParser::parse($this->ref_date, Yii::app()->locale->getDateFormat('yiidatetime')));
         }
         //return true;
         //echo $this->due_date.";".$this->issue_date.";".$this->modified;
@@ -197,7 +199,8 @@ class Docs extends fileRecord {
             $this->dateDBformat = false;
             $this->due_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->due_date));
             $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->issue_date));
-            $this->modified = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->modified));
+            $this->reg_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->reg_date));
+            $this->ref_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->ref_date));
         }
         return parent::afterSave();
     }
@@ -207,7 +210,8 @@ class Docs extends fileRecord {
             $this->dateDBformat = false;
             $this->due_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->due_date));
             $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->issue_date));
-            $this->modified = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->modified));
+            $this->reg_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->reg_date));
+            $this->ref_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->ref_date));
         }
 
         $this->getRef();
@@ -593,7 +597,7 @@ class Docs extends fileRecord {
             array('refnum', 'length', 'max' => 20),
             array('vatnum', 'vatnumVal'),
             array('rcptsum, discount, sub_total, novat_total, vat, total, src_tax', 'length', 'max' => 20),
-            array('issue_date, due_date, comments, description, refnum_ext, refnum_ids, refstatus', 'safe'),
+            array('ref_date, issue_date, due_date, comments, description, refnum_ext, refnum_ids, refstatus', 'safe'),
             //array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe'),
             array('total', 'compare', 'compareAttribute' => 'rcptsum', 'on' => 'invrcpt'),
             array('oppt_account_id', 'required', 'on' => 'opppt_req'),
@@ -653,6 +657,8 @@ class Docs extends fileRecord {
             'refnum_ext' => Yii::t('labels', 'External Reference'),
             'issue_date' => Yii::t('labels', 'Issue Date'),
             'due_date' => Yii::t('labels', 'Due Date'),
+            'ref_date' => Yii::t('labels', 'Reference Date'),
+            'reg_date' => Yii::t('labels', 'Create Date'),
             'sub_total' => Yii::t('labels', 'Sub Total'),
             'novat_total' => Yii::t('labels', 'No VAT Total'),
             'vat' => Yii::t('labels', 'VAT'),

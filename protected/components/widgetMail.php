@@ -8,14 +8,13 @@
 class widgetMail extends CWidget {
 
     public $model;
-    public $urlFile='';
-    public $urlAddress='';
-    public $urlMailForm= '';
-    public $urlTemplate='';
-    public $urlAction='';
+    public $urlFile = '';
+    public $urlAddress = '';
+    public $urlMailForm = '';
+    public $urlTemplate = '';
+    public $urlAction = '';
+    public $obj, $id, $type;
 
-    public $obj,$id,$type;
-    
     //put your code here
 
 
@@ -42,13 +41,15 @@ class widgetMail extends CWidget {
         $this->endWidget('zii.widgets.jui.CJuiDialog');
 
         Yii::app()->clientScript->registerScript('edit', "
-function getFile() {//only for docs
+function getFile(url) {//only for docs
         //get file
         //post....
-        var url = '". $this->urlFile . "';
+        
         var parms = $('#docs-form').serializeArray();
+        if(url!='')
         $.post(url, parms)
          .done(function(data) {
+            console.log(data);
             if(data.status!=200){
                 alert(data.text);
             }else{
@@ -57,7 +58,7 @@ function getFile() {//only for docs
             }
         })
         .fail(function(data) {
-            alert(data.responseText);
+            //alert(data.responseText);
             console.log(data);
         });
 
@@ -73,7 +74,7 @@ function getFile() {//only for docs
         function getAddress() {//only for docs
         //get file
         //post....
-        var url = '". $this->urlAddress."';
+        var url = '" . $this->urlAddress . "';
         var parms = {};//$('#docs-form').serializeArray();
         $.post(url, {},
                 function(data) {
@@ -94,15 +95,22 @@ function getFile() {//only for docs
 
 
     function getMailForm() {
-        $.post('". $this->urlMailForm."', {'minimal': 'true'},
+        $.post('" . $this->urlMailForm . "', {'minimal': 'true'},
         function(data) {
+            var fileUrl = '" . $this->urlFile . "';
+            var actionUrl = '" . $this->urlAction . "';    
 
             //console.log(data);
             $('#mailForm').html(data);
             
-            getFile();
-            getTemplate('".$this->obj."', '".$this->type."', '".$this->id."');
+
+            if(fileUrl!='')
+                getFile(fileUrl);
+            getTemplate('" . $this->obj . "', '" . $this->type . "', '" . $this->id . "');
             getAddress();
+            if(actionUrl!='')
+                getAction(actionUrl);
+
 
 
             $('#Mail_body').tinymce({'language': 'en', 'plugins': ['advlist autolink lists link image charmap print preview hr anchor pagebreak', 'searchreplace visualblocks visualchars code fullscreen', 'insertdatetime media nonbreaking save table contextmenu directionality', 'template paste textcolor'], 'toolbar': 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor', 'toolbar_items_size': 'small', 'image_advtab': true, 'relative_urls': false, 'spellchecker_languages': '+Русский=ru'});
@@ -111,18 +119,18 @@ function getFile() {//only for docs
 
     }
 
-    function getAction() {
-        $.post('". $this->urlAction."', {},
+    function getAction(url) {
+        $.post(url, {},
         function(data) {
             //console.log(data)
             //return data;
-            $('#Mail_body').val($('#Mail_body').val()+data);
+            $('#Mail_body').val($('#Mail_body').val()+data.body);
         }, 'json');//
         //return '';
     }
 
     function getTemplate(obj, type, id) {
-        $.post('". $this->urlTemplate."', {'MailTemplate': {'obj': obj, 'type': type, 'id': id}},
+        $.post('" . $this->urlTemplate . "', {'MailTemplate': {'obj': obj, 'type': type, 'id': id}},
         function(data) {
 
             //console.log(data[0].subject);

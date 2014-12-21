@@ -199,7 +199,8 @@ class Transactions extends basicRecord {
 
     public function beforeSave() {
         $this->num = $this->newNum();
-        $this->date = date("Y-m-d H:i:s");
+        if($this->reg_date==null)
+            $this->reg_date = date("Y-m-d H:i:s");
 
         $cur = Yii::app()->user->settings['company.cur'];
         $acc = Accounts::model()->findByPk($this->account_id);
@@ -274,7 +275,7 @@ class Transactions extends basicRecord {
             array('num, account_id, owner_id, linenum', 'numerical', 'integerOnly' => true),
             array('refnum1, refnum2, details', 'length', 'max' => 255),
             array('sum, leadsum', 'length', 'max' => 20),
-            array('date, refnum1_ids', 'safe'),
+            array('due_date, reg_date, refnum1_ids', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('type, from_date, to_date, id, num, account_id, type, refnum1, refnum2, valuedate, date, details, currency_id, sum, leadsum, owner_id, linenum', 'safe', 'on' => 'search'),
@@ -306,8 +307,9 @@ class Transactions extends basicRecord {
             'type' => Yii::t('labels', 'Type'),
             'refnum1' => Yii::t('labels', 'Refnum 1'),
             'refnum2' => Yii::t('labels', 'Refnum 2'),
-            'valuedate' => Yii::t('labels', 'Value Date'),
-            'date' => Yii::t('labels', 'Date'),
+            'valuedate' => Yii::t('labels', 'Issue Date'),
+            //'due_date' => Yii::t('labels', 'Due Date'),
+            'reg_date' => Yii::t('labels', 'Create Date'),
             'details' => Yii::t('labels', 'Details'),
             'currency_id' => Yii::t('labels', 'Currency'),
             'sum' => Yii::t('labels', 'Sum'),
@@ -355,7 +357,7 @@ class Transactions extends basicRecord {
         $criteria->compare('refnum1', $this->refnum1, true);
         $criteria->compare('refnum2', $this->refnum2, true);
         $criteria->compare('valuedate', $this->valuedate, true);
-        $criteria->compare('date', $this->date, true);
+        $criteria->compare('reg_date', $this->reg_date, true);
         $criteria->compare('details', $this->details, true);
         $criteria->compare('currency_id', $this->currency_id);
         $criteria->compare('sum', $this->sum, true);
@@ -375,14 +377,14 @@ class Transactions extends basicRecord {
             $criteria->addCondition("valuedate>=:date_from");
             $criteria->params[':date_from'] = $date_from;
         } elseif (!empty($this->to_date) && empty($this->from_date)) {
-            $date_to = date($phpdbdatetime, CDateTimeParser::parse($this->to_date, $yiidate));
+            $date_to = date($phpdbdatetime, CDateTimeParser::parse($this->to_date, $yiidate)+24*60*60-1);
             //print $this->to_date.";".$date_to;
 
             $criteria->addCondition("valuedate>=:date_to");
             $criteria->params[':date_to'] = $date_to;
         } elseif (!empty($this->to_date) && !empty($this->from_date)) {
             $date_from = date($phpdbdatetime, CDateTimeParser::parse($this->from_date, $yiidate));
-            $date_to = date($phpdbdatetime, CDateTimeParser::parse($this->to_date, $yiidate));
+            $date_to = date($phpdbdatetime, CDateTimeParser::parse($this->to_date, $yiidate)+24*60*60-1);
 
 
             $criteria->addCondition("valuedate>=:date_from");

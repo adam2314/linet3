@@ -229,12 +229,15 @@ class FormLinet2Import extends CFormModel {
             
             
             //echo $doc."<br />";
-            $cheque = str_replace("'" . $prefix . "',", "", $cheque);
-            //$doc= $this->parseLine($doc);
-            $keys = "`doc_id`, `type`, `creditcompany`, `cheque_num`, `bank`, `branch`, `cheque_acct`, `cheque_date`, `sum`, `bank_refnum`, `dep_date`, `line`";
+            //$cheque = str_replace("'" . $prefix . "',", "", $cheque);
+            //$cheque(`doc_id`, `type`, `creditcompany`, `cheque_num`, `bank`, `branch`, `cheque_acct`, `cheque_date`, `sum`, `bank_refnum`, `dep_date`, `line`)
+            
+            $cheque= $this->parseLine($cheque);
+            $values = "'$cheque[1]', '$cheque[2]', 'ILS', '$cheque[9]', '$cheque[10]', '$cheque[12]'";
+            
+            $keys = "`doc_id`, `type`, `currency_id`, `sum`, `bank_refnum`, `line`";
 
-            //$values="'$item[0]', '$item[3]', '$item[4]', '$item[5]', '$item[6]', '$item[7]', '$item[8]', '$item[9]', '$item[10]'";
-            $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "docCheques` ($keys) VALUES $cheque;");
+            $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "docCheques` ($keys) VALUES ($values);");
             //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
         }
     }
