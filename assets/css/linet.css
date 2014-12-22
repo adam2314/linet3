@@ -1,12 +1,11 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/*
-Created on : Feb 27, 2014, 5:42:19 PM
-Author : adam
-*/
+/***********************************************************************************
+ * The contents of this file are subject to the Mozilla Public License Version 2.0
+ * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The Original Code is:  Linet 3.0 Open Source
+ * The Initial Developer of the Original Code is Adam Ben Hur.
+ * All portions are Copyright (C) Adam Ben Hur.
+ * All Rights Reserved.
+ ************************************************************************************/
 .grid-view .button-column{
     width:100px;
 }
@@ -27,8 +26,8 @@ Author : adam
 
 .docHead{
     width:100%;
-    
-    
+
+
 }
 .fromBox{
     width:200px;
@@ -67,7 +66,7 @@ Author : adam
     font-family: arial, sans-serif;
 }
 .bold{
-    
+
     font-weight: bolder;
 }
 .printtbl thead tr th{
@@ -105,14 +104,14 @@ Author : adam
 
 .outer{
     /*background-image: url("../../img/back.gif");*/
-   
-   
+
+
 }
 
 @media print
 {
-    
-    
+
+
 
 
     .topnav,.noPrint,
@@ -140,8 +139,8 @@ Author : adam
     .box{
         border:none;
     }
-    
-    
+
+
 
     a:link, a:visited {background:transparent;font-weight:100;}
     /*a:link:after, a:visited:after {content:" (" attr(href) ")";font-size:90%;}*/

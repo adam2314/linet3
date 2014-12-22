@@ -1,16 +1,14 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/* * *********************************************************************************
+ * The contents of this file are subject to the Mozilla Public License Version 2.0
+ * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The Original Code is:  Linet 3.0 Open Source
+ * The Initial Developer of the Original Code is Adam Ben Hur.
+ * All portions are Copyright (C) Adam Ben Hur.
+ * All Rights Reserved.
+ * ********************************************************************************** */
 
-/**
- * Description of MailController
- *
- * @author adam
- */
 class MailController extends RightsController {
 
     public function actionCreate() {
@@ -23,34 +21,35 @@ class MailController extends RightsController {
             $model->attributes = $_POST['Mail'];
             if ($model->save())
                 echo "done";
-                //$this->redirect(array('view', 'id' => $model->id));
+            //$this->redirect(array('view', 'id' => $model->id));
         }
 
         $this->render('create', array(
             'model' => $model,
         ));
     }
-/*
-    public function actionForm($id) {
-        
-        $type=$_POST['Mail']['obj'];
-        
-        $id=$_POST['Mail']['type'];
-        $model = MailTemplate::model()->findByTypeId($type,$id);
-        //echo CJSON::encode("echo ".$model->value);
 
-        if ($model->value == '') {
-            echo CJSON::encode(array($_POST['bill']['line'], false));
-            Yii::app()->end();
-        }
+    /*
+      public function actionForm($id) {
+
+      $type=$_POST['Mail']['obj'];
+
+      $id=$_POST['Mail']['type'];
+      $model = MailTemplate::model()->findByTypeId($type,$id);
+      //echo CJSON::encode("echo ".$model->value);
+
+      if ($model->value == '') {
+      echo CJSON::encode(array($_POST['bill']['line'], false));
+      Yii::app()->end();
+      }
 
 
-        $form = new $model->value;
-        $form->type = $id;
-        $form->sum = $_POST['bill']['sum'];
-        $form->line = $_POST['bill']['line'];
-        echo CJSON::encode(array($form->line, $form->stoppage()));
-    }
-*/
+      $form = new $model->value;
+      $form->type = $id;
+      $form->sum = $_POST['bill']['sum'];
+      $form->line = $_POST['bill']['line'];
+      echo CJSON::encode(array($form->line, $form->stoppage()));
+      }
+     */
     //put your code here
 }

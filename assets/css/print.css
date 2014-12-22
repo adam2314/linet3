@@ -1,17 +1,11 @@
-/* -----------------------------------------------------------------------
-
-
-Blueprint CSS Framework 1.0.1
-http://blueprintcss.org
-
-* Copyright (c) 2007-Present. See LICENSE for more info.
-* See README for instructions on how to use Blueprint.
-* For credits and origins, see AUTHORS.
-* This is a compressed file. See the sources in the 'src' directory.
-
------------------------------------------------------------------------ */
-
-/* print.css */
+/***********************************************************************************
+ * The contents of this file are subject to the Mozilla Public License Version 2.0
+ * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The Original Code is:  Linet 3.0 Open Source
+ * The Initial Developer of the Original Code is Adam Ben Hur.
+ * All portions are Copyright (C) Adam Ben Hur.
+ * All Rights Reserved.
+ ************************************************************************************/
 body {
     direction: rtl;
     width: 100%;

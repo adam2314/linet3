@@ -1,25 +1,15 @@
 <?php
-
+/***********************************************************************************
+ * The contents of this file are subject to the Mozilla Public License Version 2.0
+ * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The Original Code is:  Linet 3.0 Open Source
+ * The Initial Developer of the Original Code is Adam Ben Hur.
+ * All portions are Copyright (C) Adam Ben Hur.
+ * All Rights Reserved.
+ ************************************************************************************/
 class AccTemplateItemController extends RightsController
 {
-	/*
-        public function actionSaveSub($id)	{
-		$model=$this->loadModel($id);
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-  
-		if(isset($_POST['AccTemplateItem'])){
-                        $submodel=new AccTemplateItem;
-			$submodel->attributes=$_POST['AccTemplateItem'];
-			if($submodel->save())
-				$this->redirect(array('view','id'=>$model->id));
-                        
-                            
-		}
-
-		$this->redirect(array('view','id'=>$model->id));
-	}*/
+	
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed

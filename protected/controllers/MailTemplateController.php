@@ -1,5 +1,14 @@
 <?php
 
+/* * *********************************************************************************
+ * The contents of this file are subject to the Mozilla Public License Version 2.0
+ * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The Original Code is:  Linet 3.0 Open Source
+ * The Initial Developer of the Original Code is Adam Ben Hur.
+ * All portions are Copyright (C) Adam Ben Hur.
+ * All Rights Reserved.
+ * ********************************************************************************** */
+
 class MailTemplateController extends RightsController {
 
     /**
@@ -19,20 +28,20 @@ class MailTemplateController extends RightsController {
         $type = $_POST['MailTemplate']['type'];
         $id = $_POST['MailTemplate']['id'];
         $model = MailTemplate::model()->findByAttributes(array('entity_type' => $obj, 'entity_id' => $type));
-        
-        
-        
-        
-        $data=$obj::model()->findByPk($id);
-        
-        
-        
+
+
+
+
+        $data = $obj::model()->findByPk($id);
+
+
+
         $model->templateRplc($data);
         echo CJSON::encode(array($model));
         /*
-        $this->render('view', array(
-            'model' => $model,
-        ));*/
+          $this->render('view', array(
+          'model' => $model,
+          )); */
     }
 
     /**
