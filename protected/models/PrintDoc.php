@@ -26,6 +26,17 @@ class PrintDoc {
         Yii::app()->controller->layout = 'print';
         return Yii::app()->controller->render('//docs/print', array('model' => $model, 'preview' => $preview), true);
     }
+    
+    
+    public static function getPdf($model){
+        $name = $model->docType->name . "-" . "$model->docnum-signed.pdf";
+        $doc_file = PrintDoc::findFile($model, $name);
+        if (!$doc_file) {
+            return false;
+        }
+        return $doc_file;
+    }
+    
 
     public static function pdfDoc($model) {
         $yiiBasepath = Yii::app()->basePath;

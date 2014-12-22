@@ -722,7 +722,7 @@ CREATE TABLE IF NOT EXISTS `menu` (
 INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`) VALUES
 (1, 'Settings', NULL, 'glyphicon glyphicon-cog', 0),
 (2, 'Business Details', 'settings/admin', NULL, 1),
-(3, 'Manual Journal Voucher', 'transaction/create', NULL, 43),
+(3, 'Manual Journal Voucher', 'transaction/create', NULL, 12),
 (4, 'Business Docs', 'doctype/admin', NULL, 1),
 (5, 'Custom Fields', 'eavFields/admin', NULL, 1),
 (6, 'Currency Rates', 'currates/admin', NULL, 1),
@@ -1085,9 +1085,10 @@ INSERT INTO `tbl_migration` (`version`, `apply_time`) VALUES
 ('m301116_071214_0016', 1416919013),
 ('m301116_101214_0018', 1416919014),
 ('m301116_131214_0019', 1416919015),
-('m301116_131214_0020', 1416919016),
-('m301117_131214_0021', 1416919017),
-('m301118_131214_0022', 1416919018);
+('m301116_211214_0020', 1416919016),
+('m301117_211214_0021', 1416919017),
+('m301118_211214_0022', 1416919018),
+('m301118_221214_0023', 1416919019);
 
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

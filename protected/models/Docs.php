@@ -750,6 +750,13 @@ class Docs extends fileRecord {
         return PrintDoc::printMe($this);
     }
 
+     public function getPdf() {
+
+
+        return PrintDoc::getPdf($this);
+    }
+    
+    
     public function pdf() {
 
 

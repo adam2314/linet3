@@ -72,13 +72,24 @@ if ($preview == 3) {
 
             <tr>
 
-                <td><?php echo Yii::t('app', 'Due date'); ?></td>
+                <td><?php echo Yii::t('app', 'Due date'); ?>:</td>
                 <td>
                     <?php echo date(Yii::app()->locale->getDateFormat('phpshort'), CDateTimeParser::parse($model->due_date, Yii::app()->locale->getDateFormat('yiidatetime'))); ?>
                 </td>
             </tr>
+            <?php
+            if (($model->doctype==14)||($model->doctype==13)) {
+                ?>
+                <tr>
 
-
+                    <td><?php echo Yii::t('app', 'Reference date'); ?>:</td>
+                    <td>
+                        <?php echo date(Yii::app()->locale->getDateFormat('phpshort'), CDateTimeParser::parse($model->ref_date, Yii::app()->locale->getDateFormat('yiidatetime'))); ?>
+                    </td>
+                </tr> 
+                <?php
+            }
+            ?>
         </table>
 
     </div>
@@ -309,14 +320,14 @@ if ($preview == 3) {
 //$this->endWidget(); 
 ?>
 <script type="text/javascript">
-window.onload = function () {
-    preview =<?php echo $preview; ?>;
+    window.onload = function() {
+        preview =<?php echo $preview; ?>;
 
-    if (preview == 0) {
-        window.print();
-        window.location = "<?php echo Yii::app()->CreateURL('docs/admin') ?>"
-        //return url
-    }
-};
+        if (preview == 0) {
+            window.print();
+            window.location = "<?php echo Yii::app()->CreateURL('docs/admin') ?>"
+            //return url
+        }
+    };
 
 </script>
