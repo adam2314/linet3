@@ -13,7 +13,7 @@ require_once(dirname(__FILE__).'/protected/config/yii.php');
 require_once($yii);
 
 
-$load=dirname(__FILE__)."/../linet3admin/protected/addon/load.php";
+$load=dirname(__FILE__)."/../linet3admin-dev/protected/addon/load.php";
 if(file_exists($load)){
     $config=require_once($load);
 }else{

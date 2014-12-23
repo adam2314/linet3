@@ -18,7 +18,7 @@ $this->menu=array(
 
 <?php 
  $this->beginWidget('MiniForm',array(
-    'header' => Yii::t('app',"Update Account"). " ". $model->id,
+    'header' => Yii::t('app',"Update Account"). " ". $model->name,
     
 )); 
 echo $this->renderPartial('_form', array('model'=>$model)); 

@@ -1203,7 +1203,6 @@ INSERT INTO `config` (`id`, `value`, `eavType`, `hidden`, `priority`) VALUES
 ('company.logo', '110', 'file', 0, 40),
 ('company.name', '', 'string', 0 ,1),
 ('company.path', 'TEMP', 'string', 1, 40),
-('company.pdfprint', 'true', 'boolean', 0, 40),
 ('company.phone', '', 'string', 0, 40),
 ('company.po', '', 'string', 0, 40),
 ('company.seccur', '', 'list(Currecies)', 0, 40),

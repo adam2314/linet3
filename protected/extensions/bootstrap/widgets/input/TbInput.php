@@ -249,10 +249,13 @@ abstract class TbInput extends CInputWidget
 	 */
 	protected function getLabel()
 	{
+            
+            //$help="<span class='help'>?<span style='display:none;'>Tooltip</span></span>";
+            $help='';
 		if ($this->label !== false && !in_array($this->type, array('checkbox', 'radio')) && $this->hasModel())
-			return $this->form->labelEx($this->model, $this->attribute, $this->labelOptions);
+			return $this->form->labelEx($this->model, $this->attribute, $this->labelOptions).$help;
 		else if ($this->label !== null)
-			return $this->label;
+			return $this->label.$help;
 		else
 			return '';
 	}

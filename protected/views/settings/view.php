@@ -7,22 +7,13 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'htmlOptions' => array('enctype' => 'multipart/form-data'),
         ));
 
-$col1 = $col = '';
-$print = false;
-foreach ($models as $sModel) {
-    if ($sModel->hidden == 0) {
-        $tmp = EAVHelper::addRow($sModel->id, $sModel->value, $sModel);
-        if ($print) {
-            $col.= $tmp;
-            $print = false;
-        } else {
-            $col1.= $tmp;
-            $print = true;
-        }
-    }
-}
-echo "<div class='row'><div class='col-md-6'>$col1</div><div class='col-md-6'>$col</div></div>"
 ?>  
+<?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "General basiness details"),'models' =>  $models,'from' =>  100,'to' => 199)); ?>
+<?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Tax and accounting data"),'models' =>  $models,'from' =>  200,'to' => 249)); ?>
+<?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Currency"),'models' =>  $models,'from' =>  250,'to' => 299)); ?>
+<?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Address details"),'models' =>  $models,'from' =>  300,'to' => 399)); ?>
+<?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Contact details"),'models' =>  $models,'from' =>  400,'to' => 499)); ?>
+<?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Outgoing Email settings"),'models' =>  $models,'from' =>  500,'to' => 599)); ?>
 
 <?php echo CHtml::submitButton(Yii::t('app', "Save")); ?>    
 <?php
@@ -31,41 +22,41 @@ $this->endWidget();
 ?>
 
 <script type="text/javascript">
-    var val=true;
+    var val = true;
     function del() {
         $("input[id='Settings_company.logo_value']").attr('value', '');
     }
 
 
     $('input').change(function() {
-       submits();
+        submits();
 
     });
 
 
 
     $("#settings-form").submit(function(event) {
-        if(!val)
+        if (!val)
             event.preventDefault();
 
-        
-        
+
+
     });
 
 
 
-    function submits(){
+    function submits() {
         var from = "ajax=settings-form&" + $("#settings-form").serialize();
         $.post("<?php echo $this->createUrl('/'); ?>/settings/admin", from,
                 function(data) {
                     $('.help-block').html('');
-                    val=true;
+                    val = true;
                     $.each(data, function(key, value) {
-                        val=false;
+                        val = false;
                         markMe(key, value[0]);
-                        
+
                     });
-                    
+
                     //if(val)
                     //    $("#settings-form").submit();
                 }, "json")

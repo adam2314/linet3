@@ -59,6 +59,16 @@ class SiteController extends Controller {
             if ($model->validate() && $model->login())
                 $this->redirect(Yii::app()->user->returnUrl);
         }
+        
+        if (isset($_POST['login_id'])) {
+            $model->id = $_POST['login_id'];
+            $model->hash = $_POST['login_hash'];
+            //$model->login_company = $_POST['login_company'];
+            // validate user input and redirect to the previous page if valid
+            if ($model->apiLogin())
+                $this->redirect(Yii::app()->user->returnUrl);
+        }
+        
         // display the login form
         $this->render('login', array('model' => $model));
     }

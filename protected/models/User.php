@@ -135,7 +135,7 @@ class User extends mainRecord {
     }
 
     public function getCertPasswd() {
-        if (Yii::app()->user->Company != 0) {
+        if (isset(Yii::app()->user->Database)) {
             $a = Settings::model()->findByPk("company." . $this->id . ".certpasswd");
             if ($a !== null) {
                 $this->certpasswd = $a->value;

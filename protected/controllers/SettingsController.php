@@ -63,7 +63,7 @@ class SettingsController extends RightsController {
             $comp = Company::model()->findByPk(Yii::app()->user->Company);
             $comp->loadSettings();
         }
-        $models = Settings::model()->findAll(array('order' => 'priority'));
+        $models = Settings::model()->findAllByAttributes(array("hidden"=>"0"),array('order' => 'priority'));
         $this->render('view', array(
             'models' => $models,
         ));

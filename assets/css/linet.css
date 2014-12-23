@@ -22,7 +22,19 @@
     }
 }
 
-
+.help {
+    background-color: #deedf7;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    font-size: xx-small;
+    height: 10px;
+    margin: 2px;
+    text-align: center;
+    vertical-align: super;
+    width: 10px;
+}
 
 .docHead{
     width:100%;

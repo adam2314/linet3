@@ -335,21 +335,7 @@ class ApiController extends Controller {//RightsController
                 if ($loadedModel->save()){
                     Response::send(200, $loadedModel);
                 }else {
-                    // Errors occurred
-                    
-                    //out!
-                    /*
-                    $msg = "<h1>Error</h1>";
-                    $msg .= sprintf("Couldn't create model <b>%s</b>", $_GET['model']);
-                    $msg .= "<ul>";
-                    foreach ($loadedModel->errors as $attribute => $attr_errors) {
-                        $msg .= "<li>Attribute: $attribute</li>";
-                        $msg .= "<ul>";
-                        foreach ($attr_errors as $attr_error)
-                            $msg .= "<li>$attr_error</li>";
-                        $msg .= "</ul>";
-                    }
-                    $msg .= "</ul>";*/
+                   
                     Response::send(200, $loadedModel->errors,1001);
                 }
             } catch (CHttpException $e) {

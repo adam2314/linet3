@@ -26,43 +26,54 @@
         <?php echo $form->dropDownListRow($model, 'cat_id', CHtml::listData(AccCat::model()->findAllByAttributes(array("type_id" => $model->type)), 'id', 'name')); ?>
 
         <?php echo $form->textFieldRow($model, 'pay_terms', array('class' => 'span5', 'maxlength' => 40)); ?>
-        <?php echo $form->textFieldRow($model, 'src_tax', array('class' => 'span5', 'maxlength' => 40)); ?>
 
-        <?php echo $form->labelEx($model, 'src_date'); ?>
+         <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Vat Info"),)); ?>
+                <?php echo $form->textFieldRow($model, 'src_tax', array('class' => 'span5', 'maxlength' => 40)); ?>
 
-        <?php
-        $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker', array(
-            'model' => $model, //Model object
-            'attribute' => 'src_date', //attribute name
-            'mode' => 'date',
-            'language' => substr(Yii::app()->language, 0, 2),
-            'options' => array(
-                'showAnim' => 'fold',
-                'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-            ) // jquery plugin options
-        ));
-        ?>
+                <?php echo $form->labelEx($model, 'src_date'); ?>
+
+                <?php
+                $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker', array(
+                    'model' => $model, //Model object
+                    'attribute' => 'src_date', //attribute name
+                    'mode' => 'date',
+                    'language' => substr(Yii::app()->language, 0, 2),
+                    'options' => array(
+                        'showAnim' => 'fold',
+                        'dateFormat' => Yii::app()->locale->getDateFormat('short'),
+                    ) // jquery plugin options
+                ));
+                ?>
 
 
-        <?php echo $form->error($model, 'src_date'); ?>
-
+                <?php echo $form->error($model, 'src_date'); ?>
+                <?php echo $form->textFieldRow($model, 'vatnum', array('class' => 'span5', 'maxlength' => 20)); ?>
+        <?php $this->endWidget(); ?>
         <?php //echo $form->textFieldRow($model, 'src_tax', array('class' => 'span5', 'maxlength' => 80));  ?>
-        <?php echo $form->textFieldRow($model, 'contact', array('class' => 'span5', 'maxlength' => 80)); ?>
-        <?php echo $form->textFieldRow($model, 'department', array('class' => 'span5', 'maxlength' => 60)); ?>
-        <?php echo $form->textFieldRow($model, 'vatnum', array('class' => 'span5', 'maxlength' => 20)); ?>
+
+
     </div>
     <div class="col-md-4">
-        <?php echo $form->textFieldRow($model, 'email', array('class' => 'span5', 'maxlength' => 50)); ?>
-        <?php echo $form->textFieldRow($model, 'phone', array('class' => 'span5', 'maxlength' => 20)); ?>
-        <?php echo $form->textFieldRow($model, 'dir_phone', array('class' => 'span5', 'maxlength' => 20)); ?>
+        <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Contact Info"),)); ?>
+            <?php echo $form->textFieldRow($model, 'email', array('class' => 'span5', 'maxlength' => 50)); ?>
+            <?php echo $form->textFieldRow($model, 'phone', array('class' => 'span5', 'maxlength' => 20)); ?>
+            <?php echo $form->textFieldRow($model, 'dir_phone', array('class' => 'span5', 'maxlength' => 20)); ?>
 
-        <?php echo $form->textFieldRow($model, 'cellular', array('class' => 'span5', 'maxlength' => 20)); ?>
-        <?php echo $form->textFieldRow($model, 'fax', array('class' => 'span5', 'maxlength' => 20)); ?>
 
-        <?php echo $form->textFieldRow($model, 'web', array('class' => 'span5', 'maxlength' => 60)); ?>
-        <?php echo $form->textFieldRow($model, 'address', array('class' => 'span5', 'maxlength' => 80)); ?>
-        <?php echo $form->textFieldRow($model, 'city', array('class' => 'span5', 'maxlength' => 40)); ?>
-        <?php echo $form->textFieldRow($model, 'zip', array('class' => 'span5', 'maxlength' => 10)); ?>
+            <?php echo $form->textFieldRow($model, 'cellular', array('maxlength' => 20)); ?>
+            <?php echo $form->textFieldRow($model, 'fax', array('maxlength' => 20)); ?>
+            <?php echo $form->textFieldRow($model, 'web', array('maxlength' => 60)); ?>
+            <?php echo $form->textFieldRow($model, 'contact', array('maxlength' => 80)); ?>
+            <?php echo $form->textFieldRow($model, 'department', array('maxlength' => 60)); ?>
+        <?php $this->endWidget(); ?>
+        
+        <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Address Info"),)); ?>
+            <?php echo $form->textFieldRow($model, 'address', array( 'maxlength' => 80)); ?>
+            <?php echo $form->textFieldRow($model, 'city', array( 'maxlength' => 40)); ?>
+            <?php echo $form->textFieldRow($model, 'zip', array( 'maxlength' => 10)); ?>
+         <?php $this->endWidget(); ?>
+
+
 
         <?php echo $form->textAreaRow($model, 'comments', array('rows' => 6, 'cols' => 50)); ?>
     </div>
