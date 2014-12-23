@@ -84,7 +84,7 @@ class SiteController extends Controller {
     public function actionAbout() {
         //$this->layout = '//layouts/clean';
         $model=new Update;
-        $this->render('pages/about', array('version'=>$model->getVersion()
+        $this->render('pages/about', array('version'=>$model->getSVersion()
         ));
     }
 

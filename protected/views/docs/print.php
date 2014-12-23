@@ -7,16 +7,10 @@
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-$logopath = Yii::app()->createAbsoluteUrl("download/" . Yii::app()->user->settings['company.logo']);
+$logopath = Yii::app()->createAbsoluteUrl("site/download/" . Yii::app()->user->settings['company.logo']);
 $legalize = "";
-if ($preview == 3) {
-    //$configPath = Yii::app()->user->settings["company.path"];
-    $logopath = Company::getFilePath() . Yii::app()->user->settings['company.logo'];
-} elseif ($preview == 2) {
+if ($preview == 2) {
     $legalize = Yii::t('app', 'Computerized Document');
-    $logopath = Company::getFilePath() . "/settings/" . Yii::app()->user->settings['company.logo'];
-    //echo $preview.$logopath;
-//exit;
 }
 //$this->beginWidget('MiniForm',array('header' => Yii::t("app","View Document ") ." " .$model->id,));
 ?>

@@ -13,7 +13,7 @@ class Curl extends CComponent {
     // default config
     private $_config = array(
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_FOLLOWLOCATION => true,
+        //CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HEADER => false,
         CURLOPT_VERBOSE => true,
         CURLOPT_AUTOREFERER => true,

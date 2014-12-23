@@ -64,7 +64,8 @@ class Update extends CFormModel {
     }
 
     public function getVersion() {
-        return $this->_send("update/version")["name"];
+        $result = $this->_send("update/version");
+        return $result["name"];
     }
 
     public function getSVersion() {

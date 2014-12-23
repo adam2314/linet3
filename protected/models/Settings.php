@@ -81,12 +81,12 @@ class Settings extends basicRecord {
                 $logo->path = "settings/";
                 $logo->parent_type = get_class($this);
                 $logo->parent_id = $this->id; // this links your picture model to the main model (like your user, or profile model)
-
+                $logo->public=true;
                 $id = $logo->save(); // DONE
                 //echo $logo->id;
                 //Yii::app()->end();
                 if ($this->value->saveAs($logo->getFullFilePath())) {
-                    $this->value = $logo->id; //"/files/".$configPath."/settings/".$this->id.".".$ext;
+                    $this->value = $logo->hash; //"/files/".$configPath."/settings/".$this->id.".".$ext;
                 }
 
 
