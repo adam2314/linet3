@@ -34,12 +34,12 @@ class TbPanel extends CWidget {
         $newform = '
         <div class="panel panel-' . $this->class . '">
             <div class="panel-heading">
-                    <header>           
+                             
                         <div class="icons">
                             <i class="' . $this->logo . '"></i>
                         </div>
                         <h5>' . $this->header . '</h5>
-                    </header>
+                    
             </div>
             <div class="panel-body">
 

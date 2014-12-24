@@ -6,50 +6,51 @@
         'enableAjaxValidation' => true,
     ));
     ?>
+    
+     <?php
+            $temp = CHtml::listData(Item::model()->findAll(), 'id', 'name');
+            $temp[0] = Yii::t('app', 'None');
+            ?>
     <div class="row">
         <?php echo $form->errorSummary($model); ?>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            <?php echo $form->dropDownListRow($model, 'itemVatCat_id', CHtml::listData(ItemVatCat::model()->findAll(), 'id', 'name')); ?>
-            <br />
-            <?php echo $form->textFieldRow($model, 'name', array('class' => 'span5', 'maxlength' => 100)); ?>
+        <div class="col-md-4 col-sm-6">
+            <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Item General Details"),)); ?>
+                <?php echo $form->textFieldRow($model, 'name', array('maxlength' => 100)); ?>
+                <?php echo $form->textFieldRow($model, 'sku', array('maxlength' => 255)); ?>
+                <?php echo $form->dropDownListRow($model, 'category_id', $cat); ?>
+                <?php echo $form->textAreaRow($model, 'description'); ?>
+                <br />
+                <?php echo $form->dropDownListRow($model, 'parent_item_id', $temp); ?>
+                <?php echo $form->fileFieldRow($model, 'pic', array('size' => 60, 'maxlength' => 255)); ?>
+            <?php $this->endWidget(); ?>
+            <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Inventory Details"),)); ?>
+                <?php echo $form->dropDownListRow($model, 'unit_id', $units); ?>
+                <?php echo $form->dropDownListRow($model, 'stockType', CHtml::listData($model->getStocks(), 'id', 'name')); ?>
+                
+                <?php echo $form->checkboxRow($model, 'isProduct', $temp); ?>	
+            <?php $this->endWidget(); ?>
             
-            <?php echo $form->textFieldRow($model, 'sku', array('maxlength' => 255)); ?>
-            <?php echo $form->dropDownListRow($model, 'category_id', $cat); ?>
-            <br />
-
-            <?php
-            $temp = CHtml::listData(Item::model()->findAll(), 'id', 'name');
-            $temp[0] = Yii::t('app', 'None');
-            ?>
-            <?php echo $form->dropDownListRow($model, 'parent_item_id', $temp); ?>	
-            <br />
-            <?php echo $form->checkboxRow($model, 'isProduct', $temp); ?>	
-
-            <?php echo $form->textFieldRow($model, 'profit', array('class' => 'span5')); ?>
-
-            <?php echo $form->dropDownListRow($model, 'unit_id', $units); ?>
-            <br />
-
-            <?php echo $form->textFieldRow($model, 'purchaseprice', array('class' => 'span5', 'maxlength' => 8)); ?>
-
-            <?php echo $form->textFieldRow($model, 'saleprice', array('class' => 'span5', 'maxlength' => 8)); ?>	
-
-            <?php echo $form->dropDownListRow($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); ?>
-            <br />
-            <?php echo $form->fileFieldRow($model, 'pic', array('size' => 60, 'maxlength' => 255)); ?>
-
-
-            <?php echo $form->dropDownListRow($model, 'stockType', CHtml::listData($model->getStocks(), 'id', 'name')); ?>
-
-            <br />
-            <?php echo $form->textAreaRow($model, 'description'); ?>
-
+            
+          </div>
+        <div class="col-md-4 col-sm-6">   
+  
+            
+            <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Item General Details"),)); ?>
+                <?php echo $form->textFieldRow($model, 'purchaseprice', array( 'maxlength' => 8)); ?>
+                <?php echo $form->textFieldRow($model, 'profit'); ?>
+                <?php echo $form->dropDownListRow($model, 'itemVatCat_id', CHtml::listData(ItemVatCat::model()->findAll(), 'id', 'name')); ?>
+            
+                <?php echo $form->textFieldRow($model, 'saleprice', array( 'maxlength' => 8)); ?>	
+                <?php echo $form->dropDownListRow($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); ?>
+            <?php $this->endWidget(); ?>
+            
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4 col-sm-6">
             <?php
-            $this->beginWidget('application.modules.eav.components.eavProp', array(
+            $this->beginWidget('TbPanel', array('header' => Yii::t('app', "EAV Fields"),));
+            $this->Widget('application.modules.eav.components.eavProp', array(
                 'name' => get_class($model),
                 'attr' => $model->getEavAttributes(),
             ));
@@ -57,7 +58,13 @@
             $this->endWidget();
             ?>
             <?php
-            $this->widget('CMultiFileUpload', array(
+            
+            ?>
+            <?php
+            if (!$model->isNewRecord) {
+                $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Attached files"),));
+                
+                $this->widget('CMultiFileUpload', array(
                 'name' => 'Files',
                 'model' => $model,
                 'id' => 'Files',
@@ -65,10 +72,7 @@
                 'duplicate' => 'Duplicate file!', // useful, i think
                 'denied' => 'Invalid file type', // useful, i think
             ));
-            ?>
-            <?php
-            if (!$model->isNewRecord) {
-                echo "<h2>" . Yii::t('app', 'Attached files') . "</h2>";
+                
                 $files = new Files('search');
                 $files->unsetAttributes();
                 $files->parent_type = get_class($model);
@@ -103,6 +107,7 @@
                         ),
                     ),
                 ));
+                $this->endWidget();
             }
             ?>
 

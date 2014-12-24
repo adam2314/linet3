@@ -32,7 +32,7 @@ class SettingsTbPanel extends CWidget {
                 }
             }
         }
-        echo "<div class='row'><div class='col-md-6'>$col1</div><div class='col-md-6'>$col</div></div>";
+        echo "<div class='col-xs-6'>$col1</div><div class='col-xs-6'>$col</div>";
         $this->endWidget();
     }
 
