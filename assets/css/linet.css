@@ -22,6 +22,7 @@
     }
 }
 
+
 .help {
     background-color: #deedf7;
     border-radius: 10px;
@@ -360,26 +361,14 @@ input {
 .content{
     float: right;
     display: block;
-    /*height: 100%;*/
     width:100%;
-    /*position: absolute;*/
-    /*position: absolute;*/
-
 }
 
 #content{
-    /*float: left;*/
     display: block;
-    /*min-height: 100%;*/
-    /*position: static;*/
-    /*position: absolute;*/
-
 }
 #left{
-    /*min-height: 100%;*/
     float: left;
-
-
 }
 #footer {
     clear:both;
@@ -388,12 +377,9 @@ input {
     bottom:0;
     position:relative;
     width:100%;
-    /*z-index: 10;*/
-
 }
 
 .body{
-
     min-height: 420px;
 }
 
@@ -585,9 +571,20 @@ width:auto;*/
         display: none;
     }
 }
-/*
-@media (min-width: 1200px){
-.container, .navbar-static-top .container, .navbar-fixed-top .container, .navbar-fixed-bottom .container {
-width: 1200px;
+
+
+/***bootstrap Overide***/
+
+
+.panel-heading {
+    padding: 0 15px;
+    font-weight: bold;
 }
-}*/
+
+.panel-heading h5{
+    font-weight: bold;
+}
+
+label {
+     font-weight: normal;
+}

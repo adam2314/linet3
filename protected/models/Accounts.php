@@ -244,7 +244,6 @@ class Accounts extends fileRecord {//CActiveRecord
             }
         }
         return false;
-        //else no delete
     }
 
     private function hasHistory() {

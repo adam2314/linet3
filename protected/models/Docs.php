@@ -118,6 +118,21 @@ class Docs extends fileRecord {
         //return "";
         return Yii::t('app', $list[$this->refstatus]['name']);
     }
+    
+            
+    public function getTypeName(){
+        if($this->docType)
+            return Yii::t("app",$this->docType->name);
+        else
+            return $this->doctype;
+    }        
+    
+    public function getStatus(){
+        if($this->docStatus)
+            return Yii::t('app',$this->docStatus->name);
+        else
+            return $this->status;
+    }
 
     public function getType($type = '') {
         if ($type == '') {

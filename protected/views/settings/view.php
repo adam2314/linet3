@@ -9,22 +9,21 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 ?>  
 <div class='row'>
     <div class='col-md-6'>
-        <?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "General basiness details"), 'models' => $models, 'from' => 100, 'to' => 199)); ?>
+        <?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "General Business Details"), 'models' => $models, 'from' => 100, 'to' => 199)); ?>
+    
+        <?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Contact Details"), 'models' => $models, 'from' => 400, 'to' => 499)); ?>
+        
+        <?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Address Details"), 'models' => $models, 'from' => 300, 'to' => 399)); ?>
+        
     </div>
     <div class='col-md-6'>
-        <?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Tax and accounting data"), 'models' => $models, 'from' => 200, 'to' => 249)); ?>
-    </div>
-    <div class='col-md-6'>
+        
+    
+        <?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Tax and Accounting Data"), 'models' => $models, 'from' => 200, 'to' => 249)); ?>
+  
         <?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Currency"), 'models' => $models, 'from' => 250, 'to' => 299)); ?>
-    </div>
-    <div class='col-md-6'>
-        <?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Address details"), 'models' => $models, 'from' => 300, 'to' => 399)); ?>
-    </div>
-    <div class='col-md-6'>
-        <?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Contact details"), 'models' => $models, 'from' => 400, 'to' => 499)); ?>
-    </div>
-    <div class='col-md-6'>
-        <?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Outgoing Email settings"), 'models' => $models, 'from' => 500, 'to' => 599)); ?>
+    
+        <?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Outgoing Email Settings"), 'models' => $models, 'from' => 500, 'to' => 599)); ?>
     </div>
     <?php echo CHtml::submitButton(Yii::t('app', "Save")); ?>    
 

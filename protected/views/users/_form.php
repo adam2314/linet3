@@ -51,7 +51,7 @@ $model->password = '';
         <?php $this->endWidget(); ?>
     </div>     
     <div class="col-md-4 col-sm-6">
-        <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "User Inventory"),)); ?>
+        <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "User Warehouse and VAT Configuration"),)); ?>
         <?php echo $form->dropDownListRow($model, 'warehouse', CHtml::listData(Accounts::model()->AutoComplete('', 8), 'value', 'label')); ?>
         <table  data-role="table" class="table" ><!-- docdetalies -->
             <thead>

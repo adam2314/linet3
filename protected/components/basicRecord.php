@@ -18,6 +18,15 @@ class basicRecord extends CActiveRecord {
         return new CMapIterator($all);
     }
 
+    public function hasAttribute($name) {
+        //return true;
+        $attr=get_object_vars($this);
+        if(isset($attr[$name]))
+            return true;
+        else
+            return parent::hasAttribute($name);
+    }
+    
     public function __toString() {
         $vars = $this->getAttributes();
         return json_encode($vars);

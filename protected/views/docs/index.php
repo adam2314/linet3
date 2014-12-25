@@ -27,7 +27,7 @@ for (var i=0; i<elements.length; i++) {
         array(
             'name' => 'doctype',
             'filter' => CHtml::listData(Doctype::model()->findAll(), 'id', 'name'),
-            'value' => 'Yii::t("app",$data->docType->name)'
+            'value' => '$data->getTypeName()'
         ),
         array(
             'name' => 'docnum',
@@ -47,7 +47,7 @@ for (var i=0; i<elements.length; i++) {
           ), */
         array(
             'name' => 'status',
-            'value' => 'isset($data->docStatus)?$data->docStatus->name:""'
+            'value' => '$data->getStatus()'
         ),
         'total',
     ),

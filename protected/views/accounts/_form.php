@@ -59,7 +59,7 @@
 
         <?php $this->endWidget(); ?>
 
-        <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Address  & Website"),)); ?>
+        <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Address & Website"),)); ?>
         <?php echo $form->textFieldRow($model, 'address', array('maxlength' => 80)); ?>
 
         <?php echo $form->textFieldRow($model, 'web', array('maxlength' => 60)); ?>

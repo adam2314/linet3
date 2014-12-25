@@ -75,13 +75,13 @@ $this->widget('EExcelView', array(//'zii.widgets.grid.CGridView'
         array(
             'name' => 'doctype',
             'filter' => Doctype::model()->getList(),
-            'value' => 'Yii::t("app",$data->docType->name)'
+            'value' => '$data->getTypeName()'
         ),
         array(
             'name' => 'status',
             'filter' => $filter,
             ////'filter'=>CHtml::listData(Docstatus::model()->findAllByAttributes(array('doc_type'=>$data->doctype)), 'num', 'name'),
-            'value' => '$data->docStatus->name'
+            'value' => '$data->getStatus()'
         ),
         array(
             'name' => 'refstatus',

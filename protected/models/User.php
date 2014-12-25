@@ -32,7 +32,7 @@ class User extends mainRecord {
     const table = 'user';
 
     public $warehouse;
-    public $passwd;
+    public $passwd='';
     public $certfile;
     public $certpasswd;
 
@@ -244,7 +244,7 @@ class User extends mainRecord {
             return Company::getFilePath() . "cert/" . $id . ".p12";
     }
 
-    //public function delete() {
+    public function delete() {
     /*
       $users=User::model()->findAll();
 
@@ -257,7 +257,7 @@ class User extends mainRecord {
       } */
     //no user delete only disable
     //parent::delete();
-    //}
+    }
 
     /**
      * @return array customized attribute labels (name=>label)

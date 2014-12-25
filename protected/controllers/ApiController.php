@@ -364,7 +364,6 @@ class ApiController extends Controller {//RightsController
             $modelName = $this->translate($model);
             $loadedModel = $modelName::model()->findByPk($id);
 
-
             // Did we find the requested model? If not, raise an error
             if ($loadedModel === null)
                 Response::send(400, sprintf("Error: Didn't find any model <b>%s</b> with ID <b>%s</b>.", $model, $id));

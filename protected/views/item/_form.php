@@ -37,7 +37,7 @@
         <div class="col-md-4 col-sm-6">   
   
             
-            <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Item General Details"),)); ?>
+            <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Item Financial Details"),)); ?>
                 <?php echo $form->textFieldRow($model, 'purchaseprice', array( 'maxlength' => 8)); ?>
                 <?php echo $form->textFieldRow($model, 'profit'); ?>
                 <?php echo $form->dropDownListRow($model, 'itemVatCat_id', CHtml::listData(ItemVatCat::model()->findAll(), 'id', 'name')); ?>
