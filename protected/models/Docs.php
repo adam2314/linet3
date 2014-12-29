@@ -1,12 +1,14 @@
 <?php
-/***********************************************************************************
+
+/* * *********************************************************************************
  * The contents of this file are subject to the Mozilla Public License Version 2.0
  * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
+
 /**
  * This is the model class for table "docs".
  *
@@ -118,18 +120,17 @@ class Docs extends fileRecord {
         //return "";
         return Yii::t('app', $list[$this->refstatus]['name']);
     }
-    
-            
-    public function getTypeName(){
-        if($this->docType)
-            return Yii::t("app",$this->docType->name);
+
+    public function getTypeName() {
+        if ($this->docType)
+            return Yii::t("app", $this->docType->name);
         else
             return $this->doctype;
-    }        
-    
-    public function getStatus(){
-        if($this->docStatus)
-            return Yii::t('app',$this->docStatus->name);
+    }
+
+    public function getStatus() {
+        if ($this->docStatus)
+            return Yii::t('app', $this->docStatus->name);
         else
             return $this->status;
     }
@@ -195,7 +196,7 @@ class Docs extends fileRecord {
         if ($this->isNewRecord) {
             $this->dateDBformat = false;
         }
-        if($this->reg_date==null)
+        if ($this->reg_date == null)
             $this->reg_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
 
         //echo Yii::app()->locale->getDateFormat('yiishort');
@@ -332,12 +333,8 @@ class Docs extends fileRecord {
         $this->rcptsum = 0;
 
         if (!is_null($this->docDet)) {
-
             foreach ($this->docDet as $key => $detial) {
-
-
                 $vat = $detial['iTotalVat'] - $detial['ihTotal'];
-
                 $this->sub_total += $detial['ihTotal'];
                 if ($vat != 0)
                     $this->vat += $vat;
@@ -347,19 +344,11 @@ class Docs extends fileRecord {
             $this->total = $this->vat + $this->sub_total;
         }
 
-
         if (!is_null($this->docCheq)) {
-
             foreach ($this->docCheq as $key => $rcpt) {
-
-
-                $this->rcptsum = $rcpt['sum'];
+                $this->rcptsum += $rcpt['sum'];
             }
         }
-
-
-
-
         return $this;
     }
 
@@ -772,13 +761,12 @@ class Docs extends fileRecord {
         return PrintDoc::printMe($this);
     }
 
-     public function getPdf() {
+    public function getPdf() {
 
 
         return PrintDoc::getPdf($this);
     }
-    
-    
+
     public function pdf() {
 
 

@@ -48,7 +48,7 @@ class TbGridView extends CGridView
 	{
 		parent::init();
 
-		$classes = array('table');
+		$classes = array('table','table-responsive');
 
 		if (isset($this->type))
 		{

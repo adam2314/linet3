@@ -22,12 +22,7 @@ $oppts = CHtml::listData(Accounts::model()->findAllByType($model->docType->oppt_
 $oppts[""] = Yii::t('app', 'None');
 //echo $form->dropDownList($model, "[$i]item_id", $oppts);
 ?>
-<div class="form" style="
-     /*
-     background-image:url('<?php echo Yii::app()->createAbsoluteUrl('/form.png'); ?>');
-     background-repeat:no-repeat;
-     background-size:100% 700px;*/
-     ">
+<div class="form">
         <!-- <p class="note">Fields with <span class="required">*</span> are required.</p>-->
 
     <?php echo $form->errorSummary($model); ?>
@@ -1043,7 +1038,7 @@ $oppts[""] = Yii::t('app', 'None');
         <!--</div>
         
         <div class="row buttons">-->
-
+        <?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name')); ?>
         <?php
         if (($model->doctype != 13) && ($model->doctype != 14)) {
             $this->widget('bootstrap.widgets.TbButton', array(
@@ -1083,7 +1078,7 @@ $oppts[""] = Yii::t('app', 'None');
         ?>
         <!--</div>-->
     </div>
-    <?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name')); ?>
+    
 
 </div><!-- form -->
 <?php $this->endWidget(); ?>
