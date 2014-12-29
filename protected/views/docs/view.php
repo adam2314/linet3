@@ -140,6 +140,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
     </div>
 </div>
+<?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));?>
 <div class="btn-group">
 
     <?php
@@ -173,7 +174,6 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 </div>
 
 <?php
-echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));
 $this->endWidget();
 $this->endWidget();
 

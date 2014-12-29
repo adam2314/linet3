@@ -327,7 +327,7 @@ if ($preview == 2) {
 
         if (preview == 0) {
             window.print();
-            window.location = "<?php echo Yii::app()->CreateURL('docs/admin') ?>"
+            window.location = "<?php echo Yii::app()->CreateURL('docs/view/'.$model->id) ?>"
             //return url
         }
     };

@@ -144,7 +144,7 @@ class DocsController extends RightsController {
                 return;
             case 'print':
                 if ($model->save())
-                    $this->redirect(array('print', 'id' => $model->id));
+                    $this->actionPrint($model->id);
                 else {
                     throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet'));
                 }
