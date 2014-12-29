@@ -43,7 +43,7 @@ class AccountsController extends RightsController {
                 $model->setEavAttributes(array_combine($_POST['AccounteavE'], $_POST['AccounteavV']));
             }
             if ($model->save())
-                $this->redirect(array('index', 'id' => $model->id));
+                $this->redirect(array('accounts/index/'. $model->type));
         }
 
         $model->accType = Acctype::model()->findByPk((int) $type);
@@ -139,20 +139,18 @@ class AccountsController extends RightsController {
      */
     public function actionIndex($type = 0) {
 //$type=isset($_GET['type'])?(int)$_GET['type']:0;
-
+        //$type=(int)$id;
 
 
         $model = new Accounts('search');
+        $model->unsetAttributes();
         $model->type = $type;
         $vl = 'accounts-grid';
         if (isset($_POST['Accounts'])) {
             $model->attributes = $_POST['Accounts'];
         }
-        if (isset($_GET['ajax'])) {//Yii::app()->request->isAjaxRequest && && $_GET['ajax'] === $vl
-// Render partial file created in Step 1
-            $this->renderPartial('ajax', array(
-                'model' => $model,
-            ));
+        if (isset($_GET['ajax'])) {
+            $this->renderPartial('ajax', array('model' => $model, ));
             Yii::app()->end();
         }
 
