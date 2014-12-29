@@ -24,26 +24,18 @@ $types = Acctype::model()->findAll();
 $list = array();
 foreach ($types as $type1) {
     $list[Yii::t('app', $type1->desc)] = array(
-        //'label' => '',
-        //'id' => $type1->id,
+        'id' => $type1->id,
         'ajax' => $this->createUrl('accounts/index?ajax=accounts-grid&type=' . $type1->id),
-            //'data' =>'$type1->id',
-            //'ui-tooltip'
+
     );
 }
 
 $this->widget('zii.widgets.jui.CJuiTabs', array(
     'tabs' => $list,
     // additional javascript options for the tabs plugin
-    //'headerTemplate' => '<li><a id="{id}" href="{url}" title="{title}">{title}</a></li>',
-    //'id' => 'account-tab',
+    'headerTemplate' => '<li><a id="{id}" href="{url}" title="{title}">{title}</a></li>',
     'options' => array(
-        'selected' => 3,
-        
-        //'collapsible' => true,
-    //'data'
-    //'class'=>'nav nav-tabs',
-    //'collapsible' => true,
+        'active' => $type,
     ),
 )); //*/
 
@@ -78,19 +70,8 @@ $this->endWidget();
 
     $(document).on("click", '.ui-tabs-anchor',
             function(e) {
-                console.log(this.id.replace("#ui-id-", ''));
-                $('#accType').val(this.id.replace("#ui-id-", ''));
+                $('#accType').val(this.id.replace("#", ''));
             }
     );
-    
-    jQuery(document).ready(function() {
-        $(".ui-tabs").tabs("option", "active", 3);
-     //   $(".ui-tabs").tabs();
-     //   $( ".ui-tabs" ).tabs({ selected: 3 });
-    //$("#account-tab").tabs('load', <?php echo $type;?>);
-    //$("#account-tab").tabs("option", "active", <?php echo $type;?>);
-    //$('#account-tab').tabs('select', <?php echo $type;?>);
-    //$( "#account-tab" ).tabs( "refresh" );
-    
-    });
+   
 </script>
