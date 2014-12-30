@@ -266,6 +266,7 @@ class FormLinet2Import extends CFormModel {
             //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
         }
         $this->sqlExec('UPDATE `' . Yii::app()->db->tablePrefix . "docDetails` SET `currency_id` = 'ILS', `iVatRate` = '18.00';");
+        $this->sqlExec('DELETE FROM `' . Yii::app()->db->tablePrefix . 'docDetails` WHERE `iItem`=0 AND `qty`=0 AND `iTotal`=0 AND `ihTotal`=0');
     }
 
     //
