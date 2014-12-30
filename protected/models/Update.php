@@ -18,7 +18,7 @@ class Update extends CFormModel {
         if (file_exists(Yii::app()->basePath . '/data/version'))
             $this->_sversion = file_get_contents(Yii::app()->basePath . '/data/version');
         else
-            $this->_sversion = "3.01210";
+            $this->_sversion = "3.0";
         return parent::init();
     }
 

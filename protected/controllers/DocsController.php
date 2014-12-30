@@ -231,7 +231,11 @@ class DocsController extends RightsController {
         $model->printed = '';
         $model->refnum_ids = '';
         $model->status = $model->docType->docStatus_id; //switch status back to defult for doc
-
+        
+        $model->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
+        $model->due_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
+        $model->ref_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
+        
         if (isset($_POST['Docs'])) {
             $this->actionCreate();
         }
