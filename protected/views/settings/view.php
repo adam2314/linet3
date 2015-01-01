@@ -25,7 +25,15 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     
         <?php $this->Widget('SettingsTbPanel', array('header' => Yii::t('app', "Outgoing Email Settings"), 'models' => $models, 'from' => 500, 'to' => 599)); ?>
     </div>
-    <?php echo CHtml::submitButton(Yii::t('app', "Save")); ?>    
+    <div class="row form-actions">
+        <?php
+        $this->widget('bootstrap.widgets.TbButton', array(
+            'buttonType' => 'submit',
+            'type' => 'primary',
+            'label' => Yii::t('app', "Save"),
+        ));
+        ?>
+    </div>
 
 </div>
 <?php

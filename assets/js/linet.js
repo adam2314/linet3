@@ -9,7 +9,9 @@
 
 $(function() {
 
-    $("select:not(.not-chzn-select)").addClass("chzn-select").chosen();//.addClass("chzn-rtl")
+    //$("select:not(.not-chzn-select)").addClass("chzn-select").chosen();//.addClass("chzn-rtl")
+    
+    $("select:not(.not-chzn-select)").select2();
 
 });
 

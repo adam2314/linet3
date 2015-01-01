@@ -34,7 +34,7 @@
 
     </td>
 <script type="text/javascript">
-    $("#Doccheques_<?php echo $i; ?>_type").chosen();
+    $("#Doccheques_<?php echo $i; ?>_type").select2();
     
     $( document ).ready(function() {
         rcptSum();

@@ -335,13 +335,15 @@ class Docs extends fileRecord {
         if (!is_null($this->docDet)) {
             foreach ($this->docDet as $key => $detial) {
                 $vat = $detial['iTotalVat'] - $detial['ihTotal'];
-                $this->sub_total += $detial['ihTotal'];
-                if ($vat != 0)
+               
+                if ($vat != 0){
                     $this->vat += $vat;
-                else
+                    $this->sub_total += $detial['ihTotal'];
+                }else{
                     $this->novat_total += $detial['ihTotal'];
+                }
             }
-            $this->total = $this->vat + $this->sub_total;
+            $this->total = $this->vat + $this->sub_total+$this->novat_total;
         }
 
         if (!is_null($this->docCheq)) {

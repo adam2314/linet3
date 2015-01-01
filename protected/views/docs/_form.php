@@ -347,10 +347,12 @@ $oppts[""] = Yii::t('app', 'None');
                     <td></td>
                     <td></td>
                     <td>
-                        <?php //echo $form->labelEx($model,'novat_total');      ?>
-                        <?php //echo $form->error($model,'novat_total');       ?>
+                        <?php echo $form->labelEx($model,'novat_total');      ?>
+                        <?php echo $form->error($model,'novat_total');       ?>
                     </td>
                     <td>
+                        
+                        <div id="docnovat_total"></div>
                         <?php echo $form->hiddenField($model, 'novat_total'); ?>
                     </td>
                 </tr>
@@ -514,7 +516,8 @@ $oppts[""] = Yii::t('app', 'None');
                 $("#Docs_zip").val(data.zip);
                 $("#Docs_vatnum").val(data.vatnum);
                 $("#Docs_currency_id").val(data.currency_id);
-                $("#Docs_currency_id").trigger("liszt:updated");
+                //$("#Docs_currency_id").trigger("liszt:updated");
+                $("#Docs_currency_id").trigger("change");
 
                 $("#Docs_vatnum").trigger("change");
                 var pay_terms = data.pay_terms;
@@ -738,7 +741,8 @@ $oppts[""] = Yii::t('app', 'None');
 
 
             $('#Docs_account_id').val(doc.account_id);
-            $("#Docs_account_id").trigger("liszt:updated");
+            //$("#Docs_account_id").trigger("liszt:updated");
+            $('#Docs_account_id').trigger("change");
 
             $("#Docs_company").val(doc.company);
             $("#Docs_address").val(doc.address);
@@ -746,7 +750,8 @@ $oppts[""] = Yii::t('app', 'None');
             $("#Docs_zip").val(doc.zip);
             $("#Docs_vatnum").val(doc.vatnum);
             $("#Docs_currency_id").val(doc.currency_id);
-            $("#Docs_currency_id").trigger("liszt:updated");
+            //$("#Docs_currency_id").trigger("liszt:updated");
+            $("#Docs_currency_id").trigger("change");
 
 
             if ($('#Doccheques_0_sum').val() == '') {
@@ -806,9 +811,11 @@ $oppts[""] = Yii::t('app', 'None');
                 $('#Docdetails_' + index + '_ihItem').val(data.saleprice);
                 $('#Docdetails_' + index + '_iItem').val(data.saleprice);
                 $('#Docdetails_' + index + '_currency_id').val(data.currency_id);
-                $('#Docdetails_' + index + '_currency_id').trigger("liszt:updated");
+                //$('#Docdetails_' + index + '_currency_id').trigger("liszt:updated");
+                $('#Docdetails_' + index + '_currency_id').trigger("change");
                 $('#Docdetails_' + index + '_unit_id').val(data.unit_id);
-                $('#Docdetails_' + index + '_unit_id').trigger("liszt:updated");
+                //$('#Docdetails_' + index + '_unit_id').trigger("liszt:updated");
+                $('#Docdetails_' + index + '_unit_id').trigger("change");
                 //currChange(index);
 
                 $('#Docdetails_' + index + '_rate').val("1");
@@ -877,8 +884,8 @@ $oppts[""] = Yii::t('app', 'None');
                     function(data) {
                         $('#Docs_vat').val(data.body.vat).trigger('change');
                         $('#Docs_sub_total').val(data.body.sub_total).trigger('change');
-                        $('#Docs_novat_total').val(data.body.novat_total);
-                        $('#Docs_total').val(data.body.total).trigger('change');//novat_total
+                        $('#Docs_novat_total').val(data.body.novat_total).trigger('change');
+                        $('#Docs_total').val(data.body.total).trigger('change');
                         $('#Docs_rcptsum').val(data.body.rcptsum).trigger('change');
                     }, "json")
                     .error(function(data) {
@@ -937,6 +944,10 @@ $oppts[""] = Yii::t('app', 'None');
 
         $('#Docs_sub_total').change(function() {
             $('#docsub_total').html($('#Docs_sub_total').val());
+        });
+        
+        $('#Docs_novat_total').change(function() {
+            $('#docnovat_total').html($('#Docs_novat_total').val());
         });
 
         $('#Docs_vat').change(function() {

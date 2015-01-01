@@ -32,8 +32,8 @@ class Linet3 {
         if (isset(Yii::app()->user->language)) {
             Yii::app()->language = Yii::app()->user->language;
         }
-        if (isset(Yii::app()->user->theme)) {
-            Yii::app()->theme = Yii::app()->user->theme;
+        if (isset(Yii::app()->user->User)) {
+            Yii::app()->theme = Yii::app()->user->User->theme;
         }
         //Yii::app()->theme = 'admin4';
         //Yii::app()->theme = 'classic';

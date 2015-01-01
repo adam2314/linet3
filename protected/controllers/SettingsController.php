@@ -29,7 +29,8 @@ class SettingsController extends RightsController {
         $this->render('dashboard', array(
         ));
     }
-
+    
+/*
     public function actionAdminNew() {
         $model = new FormSettings;
         $model->loadAttributes();
@@ -41,7 +42,7 @@ class SettingsController extends RightsController {
             }
         }
         $this->render('view', array('model' => $model));
-    }
+    }*/
 
     public function actionAdmin() {/* used in the refnum selection */
 
@@ -62,6 +63,8 @@ class SettingsController extends RightsController {
 
             $comp = Company::model()->findByPk(Yii::app()->user->Company);
             $comp->loadSettings();
+            Yii::app()->user->setFlash('success', Yii::t("app","Saved"));
+            
         }
         $models = Settings::model()->findAllByAttributes(array("hidden"=>"0"),array('order' => 'priority'));
         $this->render('view', array(

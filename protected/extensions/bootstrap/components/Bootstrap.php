@@ -75,21 +75,14 @@ class Bootstrap extends CApplicationComponent {
 
         $cs->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/bootstrap/css/bootstrap.min.css'));
         $cs->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/Font-Awesome/css/font-awesome.min.css'));
-        $cs->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/chosen/chosen.min.css'));
         $cs->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/jasny/css/jasny-bootstrap.min.css'));
 
-
-        Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/main.css'));
-        Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/theme.css'));
-        Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/linet.css'));
-        if (Yii::app()->language == 'he_il') {
-            Yii::app()->clientScript->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/css/linet-rtl.css'));
-        }
-        //Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/modernizr-build.min.js'));
-
+        //$cs->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/chosen/chosen.min.css'));
+        //Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/chosen/chosen.jquery.min.js'), CClientScript::POS_HEAD);
+        $cs->registerCSSFile(Yii::app()->createAbsoluteUrl('/assets/lib/select2/select2.css'));
+        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/select2/select2.js'), CClientScript::POS_HEAD);
 
         Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/bootstrap/js/bootstrap.min.js'), CClientScript::POS_HEAD);
-        Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/chosen/chosen.jquery.min.js'), CClientScript::POS_HEAD);
         Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/cssbeautify/cssbeautify.js'), CClientScript::POS_END);
         Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/lib/screenfull/screenfull.js'), CClientScript::POS_END);
         Yii::app()->clientScript->registerScriptFile(Yii::app()->createAbsoluteUrl('/assets/js/main.js'), CClientScript::POS_END);

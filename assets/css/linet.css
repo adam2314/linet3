@@ -22,6 +22,10 @@
     }
 }
 
+.select2-container{
+    display: block;
+}
+
 
 .help {
     background-color: #deedf7;
@@ -586,5 +590,5 @@ width:auto;*/
 }
 
 label {
-     font-weight: normal;
+    font-weight: normal;
 }

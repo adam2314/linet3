@@ -65,9 +65,9 @@
 </tr>    
 <script type="text/javascript">
 
-    $("#Docdetails_<?php echo $i; ?>_currency_id").chosen();
-    $("#Docdetails_<?php echo $i; ?>_item_id").chosen();
-    //$("#Docdetails_<?php echo $i; ?>_name").chosen();
+    $("#Docdetails_<?php echo $i; ?>_currency_id").select2();
+    $("#Docdetails_<?php echo $i; ?>_item_id").select2();
+    //$("#Docdetails_<?php echo $i; ?>_name").select2();
 
     jQuery(function($) {
         //jQuery("#Docdetails_<?php echo $i; ?>_item_id").autocomplete({"minLength":0, "showAnim": "fold", "source": "/yii/demos/new/index.php?r=item/autocomplete"});

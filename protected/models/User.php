@@ -353,7 +353,7 @@ class User extends mainRecord {
         //Yii::app()->user->setState('certpasswd', $this->getCertPasswd());
         Yii::app()->user->setState('language', $this->language);
         Yii::app()->user->setState('timezone', $this->timezone);
-        Yii::app()->user->setState('theme', $this->theme);
+        //Yii::app()->user->setState('theme', $this->theme);
         Yii::app()->user->setState('fname', $this->fname);
         Yii::app()->user->setState('lname', $this->lname);
         Yii::app()->user->setState('username', $this->username);

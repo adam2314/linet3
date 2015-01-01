@@ -132,3 +132,13 @@
     <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<script type="text/javascript">
+
+    $(document).on("ready", document,
+            function(e) {
+                
+            }
+    );
+   
+</script>

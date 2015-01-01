@@ -70,8 +70,8 @@ class MiniForm extends CWidget {
         //    exit;
         //CWidget::render();
         $this->render("MiniForm",$this);
-        $newform = '';
-        echo $newform;
+        //$newform = '';
+        //echo $newform;
     }
 
 }

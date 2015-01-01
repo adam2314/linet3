@@ -1,7 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo Yii::app()->language;?>">
 <head>
 	<meta charset="UTF-8">
+        <?php
+        Yii::app()->bootstrap->register();
+        Yii::app()->tinymce->register();
+        
+        $cs = Yii::app()->getClientScript();
+        $path=Yii::app()->createAbsoluteUrl('/assets/css/');
+        
+        $cs->registerCssFile($path . '/main.css');
+        $cs->registerCssFile($path . '/linet.css');
+        if (Yii::app()->language == 'he_il') {
+            $cs->registerCssFile($path . '/linet-rtl.css');
+         } 
+        ?>
+        
         <link rel="shortcut icon" href="<?php echo Yii::app()->createAbsoluteUrl('/assets/img/favicon.ico'); ?>">
         <link rel="icon" type="image/ico" href="<?php echo Yii::app()->createAbsoluteUrl('/assets/img/favicon.ico'); ?>">        
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
@@ -53,8 +67,7 @@
             </button>
             
              <div class="navbar-collapse navbar-ex1-collapse collapse" style="height: 1px;">
-                <?php Yii::app()->bootstrap->register();?>
-                 <?php Yii::app()->tinymce->register();?>
+                
                  <?php 
                  if(!Yii::app()->user->isGuest){
 			$this->widget('bootstrap.widgets.TbMenu', array('items'=>Yii::app()->user->menu,'htmlOptions'=>array('class'=>'navbar-nav')));

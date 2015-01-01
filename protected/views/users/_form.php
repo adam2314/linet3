@@ -40,9 +40,13 @@ $model->password = '';
 
 
     <div class="col-md-4 col-sm-6">
-
+        <?php 
+        $theme=array();
+        foreach(Yii::app()->themeManager->themeNames as $key=>$value)
+            $theme[$value]=$value;
+            ?>
         <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "User Workspace"),)); ?>
-        <?php echo $form->dropDownListRow($model, 'theme', Yii::app()->themeManager->themeNames); ?>
+        <?php echo $form->dropDownListRow($model, 'theme', $theme); ?>
         <?php echo $form->dropDownListRow($model, 'timezone', Timezone::makeList()); ?>
         <?php echo $form->dropDownListRow($model, 'language', CHtml::listData(Language::model()->findAll(), 'id', 'name')); ?>
         <?php echo $form->fileFieldRow($model, 'certfile', array('maxlength' => 255)); ?>

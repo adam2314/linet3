@@ -80,12 +80,15 @@
         <div>
 
             <?php
-            if (Yii::app()->hasModule('cp'))
+            
+
+            if (!$model->isNewRecord) {
+                if (Yii::app()->hasModule('cp'))
                 $this->widget('application.modules.cp.components.widgetCpUser', array(
                     'model' => $model, //Model object
                 ));
-
-            if (!$model->isNewRecord) {
+                
+                
                 $this->beginWidget('TbPanel', array('header' => Yii::t('app', "EAV Fields"),));
                 $this->Widget('application.modules.eav.components.eavProp', array(
                     'name' => get_class($model),
