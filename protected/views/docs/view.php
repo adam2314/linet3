@@ -140,9 +140,9 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
     </div>
 </div>
-<?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));?>
-<div class="btn-group">
 
+<div class="btn-group">
+    <?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));?>
     <?php
     echo CHTML::hiddenField("subType", "print");
     echo CHTML::hiddenField("Docs[id]", $model->id);
@@ -221,7 +221,7 @@ $this->widget('widgetMail', array(
     }
     jQuery(document).ready(function() {
 
-        $('#language_chosen').hide();
+        $('#s2id_language').hide();
         if ("1" == "<?php echo $mail; ?>") {
             $('#subType').val('email');
             showMail();
@@ -233,8 +233,8 @@ $this->widget('widgetMail', array(
      showMail();
      });*/
     function hideMe() {
-        $('#printLink').hide();
-        $('#language_chosen').show();
+        $('#printLink').hide(150);
+        $('#s2id_language').show(150);
         return false;
     }
 

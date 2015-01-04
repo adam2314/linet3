@@ -484,7 +484,7 @@ $oppts[""] = Yii::t('app', 'None');
 
 
 
-
+/*
     $this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
         'id' => "paymenetDialog",
         'options' => array(
@@ -493,12 +493,15 @@ $oppts[""] = Yii::t('app', 'None');
             'width' => '600px',
         ),
     ));
-    ?>
-    <div id="paymenetForm"></div>    
+       <div id="paymenetForm"></div>    
     <div id="paymenetResult"></div>
     <?php
     $this->endWidget('zii.widgets.jui.CJuiDialog');
     ?>
+    */
+    
+    ?>
+ 
     <!--</div>-->
     <script type="text/javascript">
 
@@ -606,7 +609,7 @@ $oppts[""] = Yii::t('app', 'None');
 
             }
 
-            $('#language_chosen').hide();
+            $('#s2id_language').hide();
 
             changeFileds();
 
@@ -632,7 +635,7 @@ $oppts[""] = Yii::t('app', 'None');
                 name = name.replace('Doccheques[' + index + ']', "bill");
                 str += name + '=' + $(elements[i]).val() + '&';
             }
-            console.log(str);
+            //console.log(str);
             $.post("<?php echo $this->createUrl('/payment/bill'); ?>/" + type, str,
                     function(data) {
 
@@ -979,7 +982,7 @@ $oppts[""] = Yii::t('app', 'None');
 
         function hideMe() {
             $('#printLink').hide(150);
-            $('#language_chosen').show(150);
+            $('#s2id_language').show(150);
             return false;
         }
 
