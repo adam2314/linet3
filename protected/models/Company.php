@@ -65,6 +65,8 @@ class Company extends mainRecord {
         $database = Company::model()->findByPk($id);
         Yii::app()->user->setState('Database', $database);
         Yii::app()->user->setState('Company', $database->id);
+        
+        Yii::app()->user->Company=$database->id;
         unset(Yii::app()->user->settings);
         $this->loadComp($database);
 
@@ -312,26 +314,11 @@ class Company extends mainRecord {
     }
 
     public function getName() {
-        //$oldName = Yii::app()->db->connectionString;
-        //$oldPrefix = Yii::app()->db->tablePrefix;
-        //Yii::app()->db->setActive(false);
-        //Yii::app()->db->connectionString = $this->string;
-        //Yii::app()->db->tablePrefix = $this->prefix;
-        //Yii::app()->db->setActive(true);
-        //$database = Yii::app()->user->Database;
-        //Yii::app()->user->setState('Company', 1);
+
         $this->select($this->id);
 
         Settings::model()->refreshMetaData();
         $name = Settings::model()->findByPk('company.name')->value;
-
-        //$this->select($database->id);
-        //Yii::app()->user->setState('Company', 0);
-        // Yii::app()->user->Database=$database;
-        //Yii::app()->db->setActive(false);
-        //Yii::app()->db->connectionString = $oldName;
-        //Yii::app()->db->tablePrefix = $oldPrefix;
-        //Yii::app()->db->setActive(true);
 
         return $name;
     }

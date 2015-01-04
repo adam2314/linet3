@@ -60,7 +60,7 @@ class RightsController extends RController {
           if(!isset(Yii::app()->user->Company)){
           Yii::app()->user->setState('Company',0);
           } */
-
+        Yii::log("Selected Company ID: " . Yii::app()->user->Company, 'info', 'app');
         if (Yii::app()->user->Company == 0) {
             if (Yii::app()->controller->id != 'company') {
                 //print "'".Yii::app()->controller->id."'";
@@ -80,9 +80,6 @@ class RightsController extends RController {
 
             $database = Company::model()->findByPk(Yii::app()->user->Company);
 
-
-            Yii::log("Selected Company ID: " . Yii::app()->user->Company, 'trace', 'app');
-            //Yii::log("Selected Company ID: ". Yii::app()->user,'trace','app');
             Company::model()->loadComp($database);
         }
 

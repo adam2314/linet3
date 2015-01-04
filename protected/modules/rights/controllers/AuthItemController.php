@@ -23,16 +23,7 @@ class AuthItemController extends RightsController {
      * Initializes the controller.
      */
     public function init() {
-        if (Yii::app()->user->Company == 0) {
-            if (Yii::app()->controller->id != 'company') {
-                //print "'".Yii::app()->controller->id."'";
-                $this->redirect(Yii::app()->createAbsoluteUrl('company/index'));
-                Yii::app()->end();
-            }
-        } else {
-            $database=  Company::model()->findByPk(Yii::app()->user->Company);
-            Company::model()->loadComp($database);
-        }
+        parent::init();
 
 
         $this->_authorizer = $this->module->getAuthorizer();
