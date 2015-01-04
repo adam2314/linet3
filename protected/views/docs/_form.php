@@ -307,7 +307,7 @@ $oppts[""] = Yii::t('app', 'None');
                     <td></td>
                     <td></td>
                     <td>
-                        <?php echo $form->labelEx($model, 'sub_total'); ?>
+                        <label><?php echo Yii::t('app', 'Subtotal tax excluded'); ?></label>
                         <?php //echo $form->textField($model,'sub_total',array('size'=>8,'maxlength'=>8));     ?>
                         <?php echo $form->error($model, 'sub_total'); ?>
                     </td>
@@ -347,7 +347,7 @@ $oppts[""] = Yii::t('app', 'None');
                     <td></td>
                     <td></td>
                     <td>
-                        <?php echo $form->labelEx($model,'novat_total');      ?>
+                        <label><?php echo Yii::t('app', 'Subtotal tax exempt'); ?></label>
                         <?php echo $form->error($model,'novat_total');       ?>
                     </td>
                     <td>
