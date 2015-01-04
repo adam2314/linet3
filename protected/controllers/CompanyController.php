@@ -45,7 +45,6 @@ class CompanyController extends RightsController{// //RightsController
            
             
             //redirect
-            Yii::app()->end();
             Response::send();
         }
 
