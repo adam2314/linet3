@@ -140,6 +140,7 @@ class Doccheques extends basicRecord {
     public function rules() {
         return array(
             array('type, doc_id, line', 'numerical', 'integerOnly' => true),
+            array('sum', 'length', 'min' => 1),
             //array('doc_id', 'length', 'max' => 10),
             array('currency_id', 'length', 'max' => 3),
             //array('cheque_acct, cheque_num, bank_refnum', 'length', 'max' => 20),

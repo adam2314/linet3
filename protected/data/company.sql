@@ -1462,7 +1462,7 @@ CREATE TABLE `inventoryItem` (
 );
 
 CREATE TABLE `itemCategories` (
-  `id` int(11) NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `profit` int(11) NOT NULL,
   PRIMARY KEY (`id`)

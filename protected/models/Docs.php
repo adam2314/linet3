@@ -245,7 +245,10 @@ class Docs extends fileRecord {
         $this->owner = Yii::app()->user->id;
         if ($this->total == 0)
             $this->total = $this->rcptsum;
-        $a = parent::save(false);
+        $a = parent::save($runValidation, $attributes);
+
+        if (!$a)
+            return $a;
         if (!is_null($attributes))
             return $a;
 
@@ -253,34 +256,40 @@ class Docs extends fileRecord {
 
 
 
-        if ($a) { //if switch no save
-            $this->saveRef(); //load docs and re-save them
-            if (!$this->action) {
-                if ($this->status === null)
-                    throw new CHttpException(500, Yii::t('app', 'No status recived'));
-                $this->docStatus = Docstatus::model()->findByPk(array('num' => $this->status, 'doc_type' => $this->doctype));
-                if ($this->docStatus === null)
-                    throw new CHttpException(500, Yii::t('app', 'Status is Invalid'));
-                $this->saveDet();
-                $this->saveCheq();
-                $this->calc();
-                if (isset($this->docStatus)) {
-                    if ($this->docStatus->action != 0) {
-                        $this->docnum = $this->newNum(); //get num 
-                        $this->action = 1;
-                        $a = parent::save($runValidation, $attributes);
-                        $this->transaction((int) $this->docStatus->action);
-                        if (is_null($this->docType->transactionType_id)) {//only if !transaction stock
-                            foreach ($this->docDetailes as $docdetail) {
-                                $this->stock($docdetail->item_id, $docdetail->qty);
-                            }
+        //if ($a) { //if switch no save
+        $this->saveRef(); //load docs and re-save them
+        if (!$this->action) {
+            if ($this->status === null)
+                throw new CHttpException(500, Yii::t('app', 'No status recived'));
+            $this->docStatus = Docstatus::model()->findByPk(array('num' => $this->status, 'doc_type' => $this->doctype));
+            if ($this->docStatus === null)
+                throw new CHttpException(500, Yii::t('app', 'Status is Invalid'));
+
+            $this->saveDet();
+            $this->saveCheq();
+            $this->calc();
+            $this->validate();
+            if (!empty($this->getErrors()))
+                return false;
+            if (isset($this->docStatus)) {
+                if ($this->docStatus->action != 0) {
+                    $this->docnum = $this->newNum(); //get num 
+                    $this->action = 1;
+                    $a = parent::save($runValidation, $attributes);
+
+
+                    $this->transaction((int) $this->docStatus->action);
+                    if (is_null($this->docType->transactionType_id)) {//only if !transaction stock
+                        foreach ($this->docDetailes as $docdetail) {
+                            $this->stock($docdetail->item_id, $docdetail->qty);
                         }
                     }
                 }
             }
-        } else {
-            throw new CHttpException(500, Yii::t('app', 'Uneable to save document'));
         }
+        //} //else {
+        // throw new CHttpException(500, Yii::t('app', 'Uneable to save document'));
+        //}
         return $a;
     }
 
@@ -335,15 +344,15 @@ class Docs extends fileRecord {
         if (!is_null($this->docDet)) {
             foreach ($this->docDet as $key => $detial) {
                 $vat = $detial['iTotalVat'] - $detial['ihTotal'];
-               
-                if ($vat != 0){
+
+                if ($vat != 0) {
                     $this->vat += $vat;
                     $this->sub_total += $detial['ihTotal'];
-                }else{
+                } else {
                     $this->novat_total += $detial['ihTotal'];
                 }
             }
-            $this->total = $this->vat + $this->sub_total+$this->novat_total;
+            $this->total = $this->vat + $this->sub_total + $this->novat_total;
         }
 
         if (!is_null($this->docCheq)) {
@@ -601,7 +610,7 @@ class Docs extends fileRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('account_id', 'required'),
+            array('account_id, currency_id', 'required'),
             array('stockSwitch, disType, status, printed, owner', 'numerical', 'integerOnly' => true),
             array('city', 'length', 'max' => 40),
             array('doctype, docnum, oppt_account_id, account_id, zip, vatnum', 'length', 'max' => 11),
@@ -609,6 +618,8 @@ class Docs extends fileRecord {
             array('currency_id', 'length', 'max' => 3),
             array('refnum', 'length', 'max' => 20),
             array('vatnum', 'vatnumVal'),
+            array('docDet', 'docDetVal'),
+            array('docCheq', 'docCheqVal'),
             array('rcptsum, discount, sub_total, novat_total, vat, total, src_tax', 'length', 'max' => 20),
             array('ref_date, issue_date, due_date, comments, description, refnum_ext, refnum_ids, refstatus', 'safe'),
             //array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe'),
@@ -629,6 +640,70 @@ class Docs extends fileRecord {
         }
         if (!($counter % 10 == 0)) {
             $this->addError($attribute, Yii::t('app', 'Not a valid VAT id'));
+        }
+    }
+
+    public function docCheqVal($attribute, $params) {
+        $line = 0;
+        $sum = 0;
+        if (!is_null($this->docCheq)) {
+            foreach ($this->docCheq as $key => $rcpt) {
+                $line++;
+                if (!is_array($rcpt)) {
+                    return $this->addError($attribute, Yii::t('app', 'Not a valid doc Cheq array'));
+                }
+                $submodel = new Doccheques;
+
+                //go throw attr if no save new
+                foreach ($rcpt as $key1 => $value) {
+                    if ($submodel->hasAttribute($key1))
+                        $submodel->$key1 = $value;
+                }
+
+                $submodel->doc_id = 0;
+                if (PaymentType::model()->findByPk((int) $rcpt["type"]) !== null) {
+                    if ($submodel->validate()) {
+                        $sum+=$submodel->sum;
+                    } else {
+                        $this->addError($attribute, Yii::t('app', 'Not a valid doc Cheq'));
+                    }
+                } else {
+                    $this->addError($attribute, Yii::t('app', 'Not a valid paymenet type'));
+                }
+            }
+        }
+        if ($line) {
+            if ($sum != (double) $this->total)
+                $this->addError($attribute, Yii::t('app', 'Total and recipt does not mach') . " " . $sum . " " . $this->total);
+        }
+    }
+
+    public function docDetVal($attribute, $params) {
+        $line = 0;
+        $sum = 0;
+
+        if (!is_null($this->docDet)) {
+            $line++;
+            foreach ($this->docDet as $key => $detial) {
+                if (!is_array($detial)) {
+                    return $this->addError($attribute, Yii::t('app', 'Not a valid doc Detail array'));
+                }
+
+                $submodel = new Docdetails;
+
+                $submodel->attributes = $detial;
+                $submodel->line = $line;
+                $submodel->doc_id = 0;
+                if (Item::model()->findByPk((int) $detial["item_id"]) !== null) {
+                    if ($submodel->validate()) {
+                        
+                    } else {
+                        $this->addError($attribute, Yii::t('app', 'Not a valid doc item'));
+                    }
+                } else {
+                    $this->addError($attribute, Yii::t('app', 'Not a valid item id'));
+                }
+            }
         }
     }
 

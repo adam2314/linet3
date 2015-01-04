@@ -261,7 +261,7 @@ class Accounts extends fileRecord {//CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('name, type', 'required'),
+            array('name, type, currency_id', 'required'),
             array('cat_id, type, pay_terms, parent_account_id, system_acc, owner', 'numerical', 'integerOnly' => true),
             //array('vatnum', 'length', 'max'=>9),
             //array('vatnum', 'length', 'min'=>9),
