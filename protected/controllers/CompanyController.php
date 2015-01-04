@@ -39,7 +39,7 @@ class CompanyController extends RightsController{// //RightsController
             //$database= Company::model()->findByPk($id);
             Yii::log($id,'info','app');
             //Yii::app()->user->setState('Database',$database );
-            Yii::app()->user->setState('Company',$id);
+            //Yii::app()->user->setState('Company',$id);
             //echo 'ok';
             Company::model()->select($id);
            
