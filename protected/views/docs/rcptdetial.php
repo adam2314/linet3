@@ -35,7 +35,7 @@
     </td>
 <script type="text/javascript">
     $("#Doccheques_<?php echo $i; ?>_type").select2();
-    
+    $("#Doccheques_<?php echo $i; ?>_currency_id").select2();
     $( document ).ready(function() {
         rcptSum();
         <?php if($i=='ABC'){?>

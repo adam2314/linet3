@@ -67,6 +67,7 @@
 
     $("#Docdetails_<?php echo $i; ?>_currency_id").select2();
     $("#Docdetails_<?php echo $i; ?>_item_id").select2();
+    $("#Docdetails_<?php echo $i; ?>_unit_id").select2();
     //$("#Docdetails_<?php echo $i; ?>_name").select2();
 
     jQuery(function($) {

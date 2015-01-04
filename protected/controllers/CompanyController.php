@@ -46,7 +46,7 @@ class CompanyController extends RightsController{// //RightsController
             
             //redirect
             Yii::app()->end();
-
+            Response::send();
         }
 
         if(Yii::app()->user->Company!=0){
@@ -54,6 +54,7 @@ class CompanyController extends RightsController{// //RightsController
             Yii::app()->user->Company=0;
 
             $this->redirect('company');
+            
             Yii::app()->end();
         }
 
