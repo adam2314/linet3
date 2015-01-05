@@ -282,11 +282,13 @@ $oppts[""] = Yii::t('app', 'None');
 
                     </td>
                     <td>
-                        <?php echo $form->textField($model, 'discount', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
+                        
                     </td>
-                    <td><?php
-                        echo "<label>" . Yii::t('app', "in percentage") . "</label>" .
-                        $form->checkBox($model, "disType", '', array('value' => 1, 'uncheckValue' => 0));
+                    <td>
+                        <?php echo $form->textField($model, 'discount', array('size' => 8, 'maxlength' => 8, 'style' => "width: 65px;")); ?>
+                        <?php
+                        //echo "<label>" . Yii::t('app', "in percentage") . "</label>" .
+                        //$form->checkBox($model, "disType", '', array('value' => 1, 'uncheckValue' => 0));
                         ?>
                     </td>
                     <td class="docadd">

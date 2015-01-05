@@ -359,16 +359,16 @@ class Docs extends fileRecord {
                 $this->rcptsum += $rcpt['sum'];
             }
         }
-        if ((( $this->discount !== 0)&&($this->sub_total!== 0))) {
+        if ( $this->discount !== 0) {
             $docdetail=$this->calcDiscount();
-            $iVat = ($docdetail->iTotal * ($docdetail->iVatRate / 100));
+            $iVat = round(($docdetail->iTotal * ($docdetail->iVatRate / 100)),2);
             //$this->vat += $iVat;
             
             $this->vat += $iVat;
             $this->sub_total += $docdetail->iTotal;
         }
 
-        $this->total = $this->vat + $this->sub_total + $this->novat_total - $this->discount;
+        $this->total = $this->vat + $this->sub_total + $this->novat_total;
 
         return $this;
     }
@@ -378,7 +378,7 @@ class Docs extends fileRecord {
         $docdetail->currency_id = $this->currency_id;
         $docdetail->item_id = 1;
         $docdetail->qty = 1;
-        $docdetail->iTotal = $this->discount * -1;
+        $docdetail->iTotalVat = $this->discount * -1;
         $docdetail->CalcPriceWithVat();
         return $docdetail;
         
@@ -397,7 +397,7 @@ class Docs extends fileRecord {
                 $submodel->attributes = $detial;
                 $submodel->line = $line;
                 $submodel->doc_id = $this->id;
-                if ((int) $detial["item_id"] != 0) {
+                if (Item::model()->findByPk((int) $detial["item_id"]) !== null) {
                     if ($submodel->save()) {
 
                         $this->docDet[$key]['iTotalVat'] = $submodel->iTotalVat;
@@ -746,7 +746,8 @@ class Docs extends fileRecord {
                         $this->addError($attribute, Yii::t('app', 'Not a valid doc item'));
                     }
                 } else {
-                    $this->addError($attribute, Yii::t('app', 'Not a valid item id'));
+                    if($detial["item_id"] !=0)
+                        $this->addError($attribute, Yii::t('app', 'Not a valid item id'));
                 }
             }
         }

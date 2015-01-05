@@ -190,6 +190,21 @@ if ($preview == 2) {
                         <td class='Unit clear'></td>
                         <td class='Qty clear'></td>    
                         <td class='Price clear'></td>
+                        <td  colspan='2' class='Qty clear'><?php echo Yii::t('labels', 'Discount'); ?></td>
+                        <td class='Total'><?php echo (($model->disType) ? "%" : "") . $model->discount; ?></td>
+
+                    </tr>
+                    
+                    
+                    <tr>
+                        <!--<td class='line clear'></td>
+                        <td class='Itemid clear'></td>-->
+                        <td class='Name clear'></td>
+
+                        <td class='UntPrice clear'></td>
+                        <td class='Unit clear'></td>
+                        <td class='Qty clear'></td>    
+                        <td class='Price clear'></td>
                         <td  colspan='2' class='Qty clear'><?php echo Yii::t('app', 'Subtotal tax excluded'); ?></td>
                         <td class='Total'><?php echo $model->sub_total; ?></td>
 
@@ -220,19 +235,7 @@ if ($preview == 2) {
                         <td class='Total'><?php echo $model->novat_total; ?></td>
 
                     </tr>
-                    <tr>
-                        <!--<td class='line clear'></td>
-                        <td class='Itemid clear'></td>-->
-                        <td class='Name clear'></td>
-
-                        <td class='UntPrice clear'></td>
-                        <td class='Unit clear'></td>
-                        <td class='Qty clear'></td>    
-                        <td class='Price clear'></td>
-                        <td  colspan='2' class='Qty clear'><?php echo Yii::t('labels', 'Discount'); ?></td>
-                        <td class='Total'><?php echo (($model->disType) ? "%" : "") . $model->discount; ?></td>
-
-                    </tr>
+                    
                     <tr>
                         <!--<td class='line clear'></td>
                         <td class='Itemid clear'></td>-->

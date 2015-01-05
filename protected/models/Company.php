@@ -31,6 +31,7 @@ class Company extends mainRecord {
 
         Yii::app()->user->setState('settings', $settings);
         Yii::app()->user->setState('menu', Menu::model()->buildUserMenu());
+        Yii::app()->user->setState('settingsID', $this->id);
     }
 
     public function loadComp($database = '') {
@@ -47,7 +48,12 @@ class Company extends mainRecord {
         Yii::app()->db->password = $database->password;
         Yii::app()->db->charset = 'utf8';
         Yii::app()->db->setActive(true);
-        if (!isset(Yii::app()->user->settings)) { //adam: shuld be cached in memory
+        if (
+                (!isset(Yii::app()->user->settingsID))          ||
+                (Yii::app()->user->settingsID!=$database->id)   ||
+                (!isset(Yii::app()->user->settings))
+                
+                ) { //adam: shuld be cached in memory
             $this->loadSettings();
         }
         //if (!isset(Yii::app()->user->warehouse)) { //adam: shuld be cached in memory
