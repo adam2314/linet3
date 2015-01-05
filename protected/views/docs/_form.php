@@ -902,25 +902,13 @@ $oppts[""] = Yii::t('app', 'None');
 
 
         /**********************************Discount*****************************/
+        ///*
         $('#Docs_discount').blur(function() {
-            total = $('#Docs_sub_total').val();
-            discount = $('#Docs_discount').val();
-            var iTotals = $('.detail.ihTotal');
-            var sum = vatSum = novatSum = 0;
-
-            for (var i = 0; i < iTotals.length; i++) {
-
-                var iTotal = $('#Docdetails_' + i + '_iTotal').val();//get ihtotal with vat:)
-                if ($('#Docs_disType').attr('checked')) {
-                    iTotal = iTotal - ((iTotal / 100) * discount);
-                } else {
-                    iTotal = iTotal - ((iTotal / total) * discount);
-                }
-
-                $('#Docdetails_' + i + '_iTotal').val(iTotal);
-                CalcPrice(i, "CalcPriceWithOutVat");
-            }
+            
+            CalcPriceSum();
+            
         });
+        //*/
 
         /**********************************CurChange****************************/
         $('#Docs_currency_id').change(function() {

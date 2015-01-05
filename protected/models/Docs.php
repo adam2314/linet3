@@ -352,7 +352,6 @@ class Docs extends fileRecord {
                     $this->novat_total += $detial['ihTotal'];
                 }
             }
-            $this->total = $this->vat + $this->sub_total + $this->novat_total;
         }
 
         if (!is_null($this->docCheq)) {
@@ -360,7 +359,29 @@ class Docs extends fileRecord {
                 $this->rcptsum += $rcpt['sum'];
             }
         }
+        if ((( $this->discount !== 0)&&($this->sub_total!== 0))) {
+            $docdetail=$this->calcDiscount();
+            $iVat = ($docdetail->iTotal * ($docdetail->iVatRate / 100));
+            //$this->vat += $iVat;
+            
+            $this->vat += $iVat;
+            $this->sub_total += $docdetail->iTotal;
+        }
+
+        $this->total = $this->vat + $this->sub_total + $this->novat_total - $this->discount;
+
         return $this;
+    }
+    
+    private function calcDiscount(){
+        $docdetail = new Docdetails;
+        $docdetail->currency_id = $this->currency_id;
+        $docdetail->item_id = 1;
+        $docdetail->qty = 1;
+        $docdetail->iTotal = $this->discount * -1;
+        $docdetail->CalcPriceWithVat();
+        return $docdetail;
+        
     }
 
     private function saveDet() {
@@ -395,7 +416,7 @@ class Docs extends fileRecord {
         }
     }
 
-    /*     * ********************rcpt******************* */
+    /*     * ***********************rcpt***************************** */
 
     private function saveCheq() {
         if (!is_null($this->docCheq)) {
@@ -492,13 +513,35 @@ class Docs extends fileRecord {
                         if ($oppt = Accounts::model()->findByPk($this->oppt_account_id))
                             $multi = ($oppt->src_tax / 100);
 
-                    $iVat = ($docdetail->ihTotal * ($docdetail->iVatRate / 100));
-                    $accout->sum+=($docdetail->ihTotal + $iVat) * $action;
+                    $iVat = ($docdetail->iTotal * ($docdetail->iVatRate / 100));
+                    $accout->sum+=($docdetail->iTotal + $iVat) * $action;
 
                     $iVat*=$multi;
                     $vat->sum+= $iVat * $action;
                 }
 
+                //******************Discount*******************//
+
+                if ((double) $this->discount != 0) {
+                    $docdetail=$this->calcDiscount();
+
+                    $num = $docdetail->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->oppt_account_id, $tranType);
+                    $line++;
+                    $multi = 1;
+                    if (!is_null($this->oppt_account_id))
+                        if ($oppt = Accounts::model()->findByPk($this->oppt_account_id))
+                            $multi = ($oppt->src_tax / 100);
+
+                    $iVat = ($docdetail->iTotal * ($docdetail->iVatRate / 100));
+                    $accout->sum+=($docdetail->iTotal + $iVat) * $action;
+
+                    $iVat*=$multi;
+                    $vat->sum+= $iVat * $action;
+                }
+
+
+
+                //*******************Account*******************//
                 $accout->num = $num;
                 $accout->account_id = $this->account_id;
                 $accout->type = $tranType;
@@ -512,6 +555,8 @@ class Docs extends fileRecord {
                 $line++;
                 $num = $accout->save();
 
+
+                //*******************VAT***********************//
                 if ((double) $vat->sum != 0) {
                     $vat->num = $num;
                     //$vat->account_id=Yii::app()->user->settings['company.acc.vatacc'];
