@@ -57,7 +57,8 @@ $phpdatetime = Yii::app()->locale->getDateFormat('phpdatetime');
 $this->widget('EExcelView', array(
     'id' => 'transactions-grid',
     'dataProvider' => $model->search(),
-    
+    'ajaxUpdate' => true,
+    'ajaxType' => 'POST',
     //'enablePagination'=> false,
     'filter' => $model,
     'columns' => array(
@@ -65,6 +66,7 @@ $this->widget('EExcelView', array(
             'name' => 'num',
             'value' => '$data->numLink()',
             'type' => 'raw',
+            'htmlOptions' => array('style' => 'width:8%;'),
         ),
         //'prefix',
         //'company',

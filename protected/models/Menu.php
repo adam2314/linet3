@@ -1,12 +1,14 @@
 <?php
-/***********************************************************************************
+
+/* * *********************************************************************************
  * The contents of this file are subject to the Mozilla Public License Version 2.0
  * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
+
 /**
  * This is the model class for table "databasesPerm".
  *
@@ -39,11 +41,12 @@ class Menu extends mainRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('id, label, url', 'required'),
-            array('id, perant', 'numerical', 'integerOnly' => true),
+            array('id, label', 'required'),
+            array('id, parent, sort', 'numerical', 'integerOnly' => true),
+            array('icon', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, label, url, icon, perant', 'safe', 'on' => 'search'),
+            array('id, label, url, icon, parent, sort', 'safe', 'on' => 'search'),
         );
     }
 
@@ -54,6 +57,7 @@ class Menu extends mainRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
+            'Parent' => array(self::BELONGS_TO, 'Menu', 'parent'),
         );
     }
 
@@ -66,7 +70,8 @@ class Menu extends mainRecord {
             'label' => Yii::t('label', 'Label'),
             'url' => Yii::t('label', 'Url'),
             'icon' => Yii::t('label', 'Icon'),
-            'perant' => Yii::t('label', 'Perant'),
+            'parent' => Yii::t('label', 'parent'),
+            'sort' => Yii::t('label', 'Sort'),
         );
     }
 
@@ -88,11 +93,12 @@ class Menu extends mainRecord {
         $criteria = new CDbCriteria;
 
         $criteria->compare('id', $this->id);
-        $criteria->compare('label', $this->label);
-        $criteria->compare('url', $this->url);
-        $criteria->compare('icon', $this->icon);
-        $criteria->compare('perant', $this->perant);
-
+        $criteria->compare('label', $this->label, true);
+        $criteria->compare('url', $this->url, true);
+        $criteria->compare('icon', $this->icon, true);
+        $criteria->compare('parent', $this->parent);
+        $criteria->compare('sort', $this->sort, true);
+        
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
         ));
@@ -110,23 +116,28 @@ class Menu extends mainRecord {
 
     public static function buildUserMenu() {
         if (Yii::app()->user->isGuest) {
-            return $menu = array(array('label' => Yii::t('app', 'Login'), 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest));
+            return array(array('label' => Yii::t('app', 'Login'), 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest));
         }
-        $known = Menu::model()->findAll(array('order' => 'parent'));
+
+        return Menu::buildMenu(0);
+    }
+
+    private static function buildMenu($id) {
+
+        $known = Menu::model()->findAllByAttributes(array('parent' => $id),array('order'=>'sort'));
         $menu = array();
         foreach ($known as $item) {
-            if ((($item->id == 43) ||($item->id == 43) || ($item->parent == 43)) && (Yii::app()->user->settings['company.doublebook'] == 'false')){
-                    continue;
+            if ((($item->id == 43) || ($item->id == 43) || ($item->parent == 43)) && (Yii::app()->user->settings['company.doublebook'] == 'false')) {
+                continue;
             }
-            if ($item->parent == 0) {
-                $menu[$item->id] = array('label' => Yii::t('app', $item->label), 'icon' => $item->icon, 'items' => array());
-            } else {
-                $url = str_replace('/', '.', $item->url);
-                if (Yii::app()->user->checkAccess($url)) {//if has access
-                    $url = Yii::app()->createAbsoluteUrl('/' . $item->url);
-                    $menu[$item->parent]['items'][] = array('label' => Yii::t('app', $item->label), 'url' => $url, 'icon' => $item->icon);
-                }
+            //echo "  ".$item->id." ".$item->label."<br />";
+            $url = str_replace('/', '.', $item->url);
+            if (Yii::app()->user->checkAccess($url)) {//if has access
+                $url = Yii::app()->createAbsoluteUrl('/' . $item->url);
+                
+                $menu[$item->id] = array('label' => Yii::t('app', $item->label), 'url' => $url, 'icon' => $item->icon, 'items' => Menu::buildMenu($item->id));
             }
+            //}
         }
         return $menu;
     }

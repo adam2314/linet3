@@ -606,7 +606,7 @@ return array (
   'Contact Person Details' => 'פרטי איש קשר',
   'Address & Website' => 'כתובת ואתר אינטרנט',
   'Remarks' => 'הערות',
-  '' => '',
+  'General' => 'כללי',
   '' => '',
   '' => '',
   '' => '',

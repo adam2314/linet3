@@ -20,10 +20,13 @@ class AccountsController extends RightsController {
     }
 
     public function actionTransaction($id = 200) {
-        $transactions = new Transactions('search');
-        $transactions->unsetAttributes();
-        $transactions->account_id = $id;
-        $this->render('transaction', array('model' => $transactions, 'account' => $this->loadModel($id)));
+        $model = new Transactions('search');
+        $model->unsetAttributes();
+        
+        if (isset($_POST['Transactions']))
+            $model->attributes = $_POST['Transactions'];
+        $model->account_id = $id;
+        $this->render('transaction', array('model' => $model, 'account' => $this->loadModel($id)));
     }
 
     /**

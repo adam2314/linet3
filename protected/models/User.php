@@ -1,12 +1,14 @@
 <?php
-/***********************************************************************************
+
+/* * *********************************************************************************
  * The contents of this file are subject to the Mozilla Public License Version 2.0
  * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
+
 /**
  * This is the model class for table "user".
  *
@@ -32,7 +34,7 @@ class User extends mainRecord {
     const table = 'user';
 
     public $warehouse;
-    public $passwd='';
+    public $passwd = '';
     public $certfile;
     public $certpasswd;
 
@@ -245,18 +247,18 @@ class User extends mainRecord {
     }
 
     public function delete() {
-    /*
-      $users=User::model()->findAll();
+        /*
+          $users=User::model()->findAll();
 
-      foreach ($users as $user){
-      $IncomeMap=UserIncomeMap::model()->findByPk(array('user_id'=>$user->id, 'itemVatCat_id'=>$this->id));
-      if($IncomeMap){//'user_id', 'itemVatCat_id'
-      $IncomeMap->delete();
-      }
+          foreach ($users as $user){
+          $IncomeMap=UserIncomeMap::model()->findByPk(array('user_id'=>$user->id, 'itemVatCat_id'=>$this->id));
+          if($IncomeMap){//'user_id', 'itemVatCat_id'
+          $IncomeMap->delete();
+          }
 
-      } */
-    //no user delete only disable
-    //parent::delete();
+          } */
+        //no user delete only disable
+        //parent::delete();
     }
 
     /**
@@ -347,7 +349,7 @@ class User extends mainRecord {
 
     public function loadUser() {
         //after select company
-        
+
 
         Yii::app()->user->setState('User', $this);
         //Yii::app()->user->setState('certpasswd', $this->getCertPasswd());

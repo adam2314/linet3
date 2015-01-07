@@ -37,7 +37,7 @@ $(function () {
         $(this).children('span').children('i').toggleClass('icon-angle-down');
     });
     
-    $('#menu').metisMenu();
+    //$('#menu').metisMenu();
     
     
 });

@@ -1,12 +1,13 @@
 <?php
-/***********************************************************************************
+
+/* * *********************************************************************************
  * The contents of this file are subject to the Mozilla Public License Version 2.0
  * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
 // this is the date picker
 $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
             // 'model'=>$model,
@@ -75,7 +76,8 @@ $this->widget('EExcelView', array(//'zii.widgets.grid.CGridView'
         array(
             'name' => 'doctype',
             'filter' => Doctype::model()->getList(),
-            'value' => '$data->getTypeName()'
+            'value' => '$data->getTypeName()',
+            'htmlOptions' => array('style' => 'width:20%;'),
         ),
         array(
             'name' => 'status',
@@ -89,16 +91,26 @@ $this->widget('EExcelView', array(//'zii.widgets.grid.CGridView'
             'filter' => CHtml::listData(Docs::model()->getRefStatuses(), 'id', 'name'),
             'value' => '$data->getRefStatus()'
         ),
-        'docnum',
-        'account_id',
+        array(
+            'name' => 'docnum',
+            'htmlOptions' => array('style' => 'width:8%;'),
+        ),
+        array(
+            'name' => 'account_id',
+            'htmlOptions' => array('style' => 'width:8%;'),
+        ),
         'company',
         //'issue_date',
         array(
             'name' => 'issue_date',
             'filter' => $dateisOn,
-            'value' => '$data->issue_date'
+            'value' => '$data->issue_date',
+            'htmlOptions' => array('style' => 'width:15%;'),
         ),
-        'total',
+         array(
+            'name' => 'total',
+            'htmlOptions' => array('style' => 'width:8%;'),
+        ),
         /*
           'address',
           'city',
@@ -125,12 +137,10 @@ $this->widget('EExcelView', array(//'zii.widgets.grid.CGridView'
                 (
                 'duplicate' => array
                     (
-                    'label' => '<i class="glyphicon glyphicon-plus-sign"></i>',//
+                    'label' => '<i class="glyphicon glyphicon-plus-sign"></i>', //
                     //'imageUrl'=>Yii::app()->request->baseUrl.'/images/email.png',
                     'url' => 'Yii::app()->createUrl("docs/duplicate/". $data->id)',
                 ),
-                
-                
                 'edit' => array
                     (
                     'label' => '<i class="glyphicon glyphicon-edit"></i>',

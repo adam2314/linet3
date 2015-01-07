@@ -1,5 +1,6 @@
 <?php
-/***********************************************************************************
+
+/* * *********************************************************************************
  * The contents of this file are subject to the Mozilla Public License Version 2.0
  * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
  * The Original Code is:  Linet 3.0 Open Source
@@ -9,7 +10,7 @@
  * @author adam
  * 
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
 
 /**
  * Description of widgetRefnum
@@ -34,23 +35,22 @@ class widgetRefnum extends CWidget {
     public function run() {//style="width:'.($this->width-$this->titlewidth-28).'px;"
         $name = get_class($this->model);
         $id = $name . "_" . $this->attribute;
-        $ids = $this->attribute."_ids";
+        $ids = $this->attribute . "_ids";
         //if (!($this->model->hasAttribute($this->attribute)))
         //if (!($this->model->{$this->attribute}))
-            //throw new CHttpException(500, Yii::t('app', 'Did not set attr or model for refnum'));
-
+        //throw new CHttpException(500, Yii::t('app', 'Did not set attr or model for refnum'));
         //Yii::app()->end();
         //$baseUrl = Yii::app()->request->baseUrl;
-        $text='';
+        $text = '';
         //if(function_exists(getRef())){
-            //$this->model->getRef();
-            if ($this->model->Docs !== null) {
-                foreach ($this->model->Docs as $doc) {
-                    //echo CHtml::link($doc->docType->name . " #" . $doc->docnum, array('docs/view', "id" => $doc->id)) . "<br />";
-                    $text.="<a href='".Yii::app()->createAbsoluteUrl("docs/view/$doc->id")."' >" . $doc->docType->name . ' #' . $doc->docnum . "</a><br />";
-                }
+        //$this->model->getRef();
+        if ($this->model->Docs !== null) {
+            foreach ($this->model->Docs as $doc) {
+                //echo CHtml::link($doc->docType->name . " #" . $doc->docnum, array('docs/view', "id" => $doc->id)) . "<br />";
+                $text.="<a href='" . Yii::app()->createAbsoluteUrl("docs/view/$doc->id") . "' >" . $doc->docType->name . ' #' . $doc->docnum . "</a><br />";
             }
-       // }
+        }
+        // }
 
         $newform = "
             <label for='$name'>" . $this->model->getAttributeLabel($this->attribute) . "</label>
@@ -72,7 +72,7 @@ class widgetRefnum extends CWidget {
                 'width' => '600px',
             ),
         ));
-        
+
         echo $this->controller->renderPartial('application.views.docs.index');
 
 
@@ -83,7 +83,7 @@ class widgetRefnum extends CWidget {
     }
 
     function tmp() {
-        Yii::app()->clientScript->registerScript('search', "
+      /*  Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
 	return false;
@@ -95,7 +95,7 @@ $('.search-form form').submit(function(){
 	return false;
 });
 
-");
+");*/
     }
 
 }

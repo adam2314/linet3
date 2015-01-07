@@ -67,24 +67,30 @@ $this->widget('EExcelView', array(//
                                 }",
     'filter' => $model,
     'columns' => array(
-        'num',
+        array(
+            'name' => 'num',
+            'htmlOptions' => array('style' => 'width:8%;'),
+        ),
         array(
             'name' => 'type',
             //'filter'=>CHtml::dropDownList('Transactions[type]', $model->type,CHtml::listData(TransactionType::model()->findAll(), 'id', 'name')),
             'filter' => CHtml::listData(TransactionType::model()->findAll(), 'id', 'name'),
-            'value' => 'Yii::t("app",$data->Type->name)'
+            'value' => 'Yii::t("app",$data->Type->name)',
+            'htmlOptions' => array('style' => 'width:15%;'),
         ),
         array(
             'name' => 'account_id',
             'filter' => CHtml::listData(Accounts::model()->findAll(), 'id', 'name'),
             'value' => 'CHtml::link(CHtml::encode(isset($data->Account)?$data->Account->name:$data->account_id),Yii::app()->createAbsoluteUrl("/accounts/transaction/".$data->account_id))',
             'type' => 'raw',
+            'htmlOptions' => array('style' => 'width:15%;'),
         //'value' => '$data->getOptAcc()',
         ),
         //'',
         array(
             'name' => 'refnum1',
             'value' => '$data->refnumDocsLink()',
+            'filter'=>'',
             'type' => 'raw',
         ),
         array(
@@ -97,12 +103,14 @@ $this->widget('EExcelView', array(//
         array(
             'name' => 'valuedate',
             'filter' => $dateisOn,
-            'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->valuedate,"' . $yiidbdatetime . '"))'
-        ),
+            'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->valuedate,"' . $yiidbdatetime . '"))',
+            'htmlOptions' => array('style' => 'width:8%;'),
+            ),
         array(
             'name' => 'reg_date',
             'filter' => '',
-            'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->reg_date,"' . $yiidbdatetime . '"))'
+            'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->reg_date,"' . $yiidbdatetime . '"))',
+             'htmlOptions' => array('style' => 'width:8%;'),
         ),
         array(
             'header' => Yii::t('app', 'Debit'),

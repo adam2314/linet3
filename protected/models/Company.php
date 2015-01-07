@@ -53,9 +53,10 @@ class Company extends mainRecord {
                 (Yii::app()->user->settingsID!=$database->id)   ||
                 (!isset(Yii::app()->user->settings))
                 
-                ) { //adam: shuld be cached in memory
+                ) { 
             $this->loadSettings();
         }
+        Yii::app()->user->setState('menu', Menu::model()->buildUserMenu());
         //if (!isset(Yii::app()->user->warehouse)) { //adam: shuld be cached in memory
         $user = User::model()->findByPk(Yii::app()->user->id);
         if ($user != null){

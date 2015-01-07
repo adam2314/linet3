@@ -361,13 +361,14 @@ class Docs extends fileRecord {
         }
         if ( $this->discount !== 0) {
             $docdetail=$this->calcDiscount();
-            $iVat = round(($docdetail->iTotal * ($docdetail->iVatRate / 100)),2);
+            $iVat = ($docdetail->iTotal * ($docdetail->iVatRate / 100));
             //$this->vat += $iVat;
             
             $this->vat += $iVat;
             $this->sub_total += $docdetail->iTotal;
         }
 
+        $this->vat=round($this->vat,2);
         $this->total = $this->vat + $this->sub_total + $this->novat_total;
 
         return $this;
@@ -672,7 +673,7 @@ class Docs extends fileRecord {
             array('oppt_account_id', 'required', 'on' => 'opppt_req'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('oppt_account_id, discount, issue_from, refnum_ext, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe', 'on' => 'search'),
+            array('oppt_account_id, discount, issue_from, refnum_ext, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner, refstatus', 'safe', 'on' => 'search'),
         );
     }
 
@@ -850,7 +851,8 @@ class Docs extends fileRecord {
         $criteria->compare('currency_id', $this->currency_id);
         $criteria->compare('comments', $this->comments, true);
         $criteria->compare('owner', $this->owner);
-
+        $criteria->compare('refstatus', $this->refstatus, true);
+        
         if (!empty($this->issue_from) && empty($this->issue_to)) {
             $this->issue_from = date("Y-m-d", CDateTimeParser::parse($this->issue_from, Yii::app()->locale->getDateFormat('yiishort')));
 

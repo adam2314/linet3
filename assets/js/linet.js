@@ -10,8 +10,15 @@
 $(function() {
 
     //$("select:not(.not-chzn-select)").addClass("chzn-select").chosen();//.addClass("chzn-rtl")
-    
+
     $("select:not(.not-chzn-select)").select2();
+
+
+    $('li.dropdown-submenu').on('click', function(event) {
+        event.stopPropagation();
+        $(this).siblings().removeClass('open');
+        $(this).toggleClass('open');
+    });
 
 });
 
