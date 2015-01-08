@@ -269,7 +269,7 @@ class Docs extends fileRecord {
             $this->saveCheq();
             $this->calc();
             $this->validate();
-            if (!empty($this->getErrors()))
+            if (count($this->getErrors())!=0)
                 return false;
             if (isset($this->docStatus)) {
                 if ($this->docStatus->action != 0) {
