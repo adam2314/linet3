@@ -123,7 +123,7 @@ class DocsController extends RightsController {
                 if ($model->save()){
                     $this->redirect(array('view', 'id' => $model->id));
                 }else {
-                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet'));
+                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet').print_r($model->errors,true));
                 }
                 return;
             case 'saveDraft':
@@ -139,14 +139,14 @@ class DocsController extends RightsController {
                 if ($model->save())
                     $this->redirect(array('admin'));
                 else {
-                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet'));
+                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet').print_r($model->errors,true));
                 }
                 return;
             case 'print':
                 if ($model->save())
                     $this->actionPrint($model->id);
                 else {
-                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet'));
+                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet').print_r($model->errors,true));
                 }
                 //$this->redirect(array('update','id'=>$model->id));
                 return;
@@ -178,7 +178,7 @@ class DocsController extends RightsController {
                 if ($model->save()) {
                     $this->actionPdf($model);
                 } else {
-                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet'));
+                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet').print_r($model->errors,true));
                 }
 
                 return;

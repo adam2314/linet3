@@ -359,18 +359,23 @@ class Docs extends fileRecord {
                 $this->rcptsum += $rcpt['sum'];
             }
         }
+        
+        /**/
         if ( $this->discount !== 0) {
             $docdetail=$this->calcDiscount();
             $iVat = ($docdetail->iTotal * ($docdetail->iVatRate / 100));
-            //$this->vat += $iVat;
-            
             $this->vat += $iVat;
             $this->sub_total += $docdetail->iTotal;
-        }
+        }//*/
 
         $this->vat=round($this->vat,2);
         $this->total = $this->vat + $this->sub_total + $this->novat_total;
 
+        if($this->doctype==8){//recipt
+            $this->total=$this->rcptsum;
+        }
+        
+        
         return $this;
     }
     
@@ -719,7 +724,7 @@ class Docs extends fileRecord {
             }
         }
         if ($line) {
-            if ($sum != (double) $this->total)
+            if ($sum != (double) $this->rcptsum)
                 $this->addError($attribute, Yii::t('app', 'Total and recipt does not mach') . " " . $sum . " " . $this->total);
         }
     }
