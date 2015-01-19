@@ -114,20 +114,20 @@ class Menu extends mainRecord {
         return parent::model($className);
     }
 
-    public static function buildUserMenu() {
+    public static function buildUserMenu($settings) {
         if (Yii::app()->user->isGuest) {
             return array(array('label' => Yii::t('app', 'Login'), 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest));
         }
 
-        return Menu::buildMenu(0);
+        return Menu::buildMenu(0,$settings);
     }
 
-    private static function buildMenu($id) {
+    private static function buildMenu($id,$settings) {
 
         $known = Menu::model()->findAllByAttributes(array('parent' => $id),array('order'=>'sort'));
         $menu = array();
         foreach ($known as $item) {
-            if ((($item->id == 43) || ($item->id == 43) || ($item->parent == 43)) && (Yii::app()->user->settings['company.doublebook'] == 'false')) {
+            if ((($item->id == 43) || ($item->id == 43) || ($item->parent == 43)) && ($settings['company.doublebook'] == 'false')) {
                 continue;
             }
             //echo "  ".$item->id." ".$item->label."<br />";
@@ -135,7 +135,7 @@ class Menu extends mainRecord {
             if (Yii::app()->user->checkAccess($url)) {//if has access
                 $url = Yii::app()->createAbsoluteUrl('/' . $item->url);
                 
-                $menu[$item->id] = array('label' => Yii::t('app', $item->label), 'url' => $url, 'icon' => $item->icon, 'items' => Menu::buildMenu($item->id));
+                $menu[$item->id] = array('label' => Yii::t('app', $item->label), 'url' => $url, 'icon' => $item->icon, 'items' => Menu::buildMenu($item->id,$settings));
             }
             //}
         }

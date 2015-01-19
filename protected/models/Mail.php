@@ -1,12 +1,14 @@
 <?php
-/***********************************************************************************
+
+/* * *********************************************************************************
  * The contents of this file are subject to the Mozilla Public License Version 2.0
  * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
+
 /**
  * This is the model class for table "bankName".
  *
@@ -26,47 +28,57 @@ class Mail extends CActiveRecord {
 
     const table = '{{mail}}';
 
-    
-    private function mailsend(){
-        $mail=Yii::app()->Smtpmail;
-        $mail->CharSet = 'utf-8';  
+    private function mailsend() {
+
+        Yii::import('application.extensions.smtpmail.PHPMailer');
+        $mail = new PHPMailer;
+        
+        
+        $mail->IsSMTP();
+        $mail->Host = Yii::app()->user->settings['company.mail.server'];
+        $mail->SMTPAuth = (Yii::app()->user->settings['company.mail.user']=='')?true:false;
+        $mail->SMTPSecure=(Yii::app()->user->settings['company.mail.ssl'])?'tls':'';
+        $mail->CharSet = 'utf-8';
+        $mail->Port = Yii::app()->user->settings['company.mail.port'];
+        $mail->Username = Yii::app()->user->settings['company.mail.user'];
+        $mail->Password = Yii::app()->user->settings['company.mail.password'];
+
+        
+
+
         //$mail->SetFrom($this->from);
         //echo $this->files;
-        if($this->files!=''){
-            $file=  Files::model()->findByPk($this->files);
-            if($file!=null){
+        if ($this->files != '') {
+            $file = Files::model()->findByPk($this->files);
+            if ($file != null) {
                 //echo $file->getFullPath().";;".$file->name;
-                
-                $mail->AddAttachment($file->getFullFilePath(),$file->name);
+
+                $mail->AddAttachment($file->getFullFilePath(), $file->name);
             }
-                    
-                    
         }
-        //$mail->SetFrom('adam@speedcomp.co.il', 'Adam Ben Hour');
         $mail->SetFrom(Yii::app()->user->settings['company.mail.address']);
-        //$mail->AddReplyTo('adam@speedcomp.co.il', 'Adam Ben Hour');
-        $mail->AddCC($this->cc);//.$this->cc
+        $mail->AddCC($this->cc); //.$this->cc
         $mail->AddBcc($this->bcc);
-        $mail->Subject    = $this->subject;
+        $mail->Subject = $this->subject;
         $mail->MsgHTML($this->body);
         $mail->AddAddress($this->to, "");
-        ///*
-        if(!$mail->Send()) {
+       
+        if (!$mail->Send()) {
             //echo "Mailer Error: " . $mail->ErrorInfo;
-             throw new CHttpException(501, Yii::t('app', "Mailer Error: "). $mail->ErrorInfo);
-        }else {
-            Yii::app()->user->setFlash('success', Yii::t('app','Message sent!'));
+            throw new CHttpException(501, Yii::t('app', "Mailer Error: ") . $mail->ErrorInfo. $mail->Username );
+        } else {
+            Yii::app()->user->setFlash('success', Yii::t('app', 'Message sent!'));
             //echo "Message sent!";
         }//*/
-        
         //Yii::app()->end();
     }
-    
-    public function save($runValidation = true, $attributes = NULL){
-        
+
+    public function save($runValidation = true, $attributes = NULL) {
+
         $this->mailsend();
         return parent::save($runValidation = true, $attributes = NULL);
     }
+
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -144,7 +156,7 @@ class Mail extends CActiveRecord {
         $criteria->compare('subject', $this->subject, true);
         $criteria->compare('cc', $this->cc, true);
         $criteria->compare('bcc', $this->bcc, true);
-        
+
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

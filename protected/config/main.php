@@ -37,6 +37,7 @@ return CMap::mergeArray(
             ),
             // application components
             'components' => array(
+                /*
                 'Smtpmail' => array(
                     'class' => 'application.extensions.smtpmail.PHPMailer',
                     'Host' => "127.0.0.1",
@@ -46,7 +47,7 @@ return CMap::mergeArray(
                     'Port' => 25,
                     'SMTPAuth' => false,
                     'SMTPSecure' => '',
-                ),
+                ),*/
                 'curl' => array(
                     'class' => 'ext.curl.Curl',
                     'options' => array(/* additional curl options */),

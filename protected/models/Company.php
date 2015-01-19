@@ -29,9 +29,12 @@ class Company extends mainRecord {
             $settings[$key->id] = $key->value;
         }
 
-        Yii::app()->user->setState('settings', $settings);
-        Yii::app()->user->setState('menu', Menu::model()->buildUserMenu());
-        Yii::app()->user->setState('settingsID', $this->id);
+        
+        Yii::app()->session['settings']=$settings;
+        Yii::app()->session['menu']=Menu::model()->buildUserMenu($settings);
+
+        
+        
     }
 
     public function loadComp($database = '') {
@@ -51,11 +54,17 @@ class Company extends mainRecord {
         if (
                 (!isset(Yii::app()->user->settingsID))          ||
                 (Yii::app()->user->settingsID!=$database->id)   ||
-                (!isset(Yii::app()->user->settings))
+                (!isset(Yii::app()->session['settings']))
                 
                 ) { 
             $this->loadSettings();
         }
+        
+        Yii::app()->user->setState('settings', Yii::app()->session['settings']);
+        Yii::app()->user->setState('menu', Yii::app()->session['menu']);
+        Yii::app()->user->setState('settingsID', $this->id);
+        
+
         //if (!isset(Yii::app()->user->warehouse)) { //adam: shuld be cached in memory
         $user = User::model()->findByPk(Yii::app()->user->id);
         if ($user != null){
