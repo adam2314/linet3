@@ -36,7 +36,7 @@ class Mail extends CActiveRecord {
         
         $mail->IsSMTP();
         $mail->Host = Yii::app()->user->settings['company.mail.server'];
-        $mail->SMTPAuth = (Yii::app()->user->settings['company.mail.user']=='')?true:false;
+        $mail->SMTPAuth = (Yii::app()->user->settings['company.mail.user']!='')?true:false;
         $mail->SMTPSecure=(Yii::app()->user->settings['company.mail.ssl'])?'tls':'';
         $mail->CharSet = 'utf-8';
         $mail->Port = Yii::app()->user->settings['company.mail.port'];
