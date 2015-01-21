@@ -1,13 +1,14 @@
 <?php
 
-/***********************************************************************************
+/* * *********************************************************************************
  * The contents of this file are subject to the Mozilla Public License Version 2.0
  * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
+
 class FormOutcome extends CFormModel {
 
     public $account_id;
@@ -48,42 +49,15 @@ class FormOutcome extends CFormModel {
     }
 
     public function transaction() {
-        $valuedate = date("Y-m-d H:m:s", CDateTimeParser::parse($this->date, Yii::app()->locale->getDateFormat('yiishort')));
-        $num = 0;
-        $line = 1;
-        $tranType = Yii::app()->user->settings["transactionType.supplierPayment"];
-        $tran = new Transactions();
-        $opt_tran = new Transactions();
 
-        $tran->num = $num;
-        $tran->account_id = $this->account_id;
-        $tran->type = $tranType;
-        $tran->refnum1 = $this->refnum_ids;
-        $tran->valuedate = $valuedate;
-        $tran->details = $this->details;
-        $tran->currency_id = $this->currency_id;
-        $tran->owner_id = Yii::app()->user->id;
-        $tran->linenum = $line;
-        $tran->sum = $this->sum * -1;
-        $line++;
-        $num = $tran->save();
+        if ($this->validate()) {
+            $valuedate = date("Y-m-d H:m:s", CDateTimeParser::parse($this->date, Yii::app()->locale->getDateFormat('yiishort')));
+            $num = 0;
+            $line = 1;
+            $tranType = Yii::app()->user->settings["transactionType.supplierPayment"];
+            $tran = new Transactions();
+            $opt_tran = new Transactions();
 
-        $opt_tran->num = $num;
-        //$vat->account_id=Yii::app()->user->settings['company.acc.vatacc'];
-        $opt_tran->account_id = $this->opp_account_id;
-        $opt_tran->type = $tranType;
-        $opt_tran->refnum1 = $this->refnum_ids;
-        $opt_tran->valuedate = $valuedate;
-        $opt_tran->details = $this->details;
-        $opt_tran->currency_id = $this->currency_id;
-        $opt_tran->owner_id = Yii::app()->user->id;
-        $opt_tran->linenum = $line;
-        $opt_tran->sum = $this->sum * 1;
-        $line++;
-        //print_r($vat->attributes);
-        $num = $opt_tran->save();
-
-        if ((int) $this->src_tax <> 0) {
             $tran->num = $num;
             $tran->account_id = $this->account_id;
             $tran->type = $tranType;
@@ -93,13 +67,13 @@ class FormOutcome extends CFormModel {
             $tran->currency_id = $this->currency_id;
             $tran->owner_id = Yii::app()->user->id;
             $tran->linenum = $line;
-            $tran->sum = $this->src_tax * -1;
+            $tran->sum = $this->sum * -1;
             $line++;
             $num = $tran->save();
 
             $opt_tran->num = $num;
             //$vat->account_id=Yii::app()->user->settings['company.acc.vatacc'];
-            $opt_tran->account_id = 5;//company.acc.supliertax
+            $opt_tran->account_id = $this->opp_account_id;
             $opt_tran->type = $tranType;
             $opt_tran->refnum1 = $this->refnum_ids;
             $opt_tran->valuedate = $valuedate;
@@ -107,22 +81,53 @@ class FormOutcome extends CFormModel {
             $opt_tran->currency_id = $this->currency_id;
             $opt_tran->owner_id = Yii::app()->user->id;
             $opt_tran->linenum = $line;
-            $opt_tran->sum = $this->src_tax * 1;
+            $opt_tran->sum = $this->sum * 1;
             $line++;
             //print_r($vat->attributes);
             $num = $opt_tran->save();
+
+            if ((int) $this->src_tax <> 0) {
+                $tran->num = $num;
+                $tran->account_id = $this->account_id;
+                $tran->type = $tranType;
+                $tran->refnum1 = $this->refnum_ids;
+                $tran->valuedate = $valuedate;
+                $tran->details = $this->details;
+                $tran->currency_id = $this->currency_id;
+                $tran->owner_id = Yii::app()->user->id;
+                $tran->linenum = $line;
+                $tran->sum = $this->src_tax * -1;
+                $line++;
+                $num = $tran->save();
+
+                $opt_tran->num = $num;
+                //$vat->account_id=Yii::app()->user->settings['company.acc.vatacc'];
+                $opt_tran->account_id = 5; //company.acc.supliertax
+                $opt_tran->type = $tranType;
+                $opt_tran->refnum1 = $this->refnum_ids;
+                $opt_tran->valuedate = $valuedate;
+                $opt_tran->details = $this->details;
+                $opt_tran->currency_id = $this->currency_id;
+                $opt_tran->owner_id = Yii::app()->user->id;
+                $opt_tran->linenum = $line;
+                $opt_tran->sum = $this->src_tax * 1;
+                $line++;
+                //print_r($vat->attributes);
+                $num = $opt_tran->save();
+            }
+
+
+
+
+            $this->saveRef($num, $this->sum);
+
+
+
+
+
+            return true;
         }
-
-
-
-
-        $this->saveRef($num, $this->sum);
-
-
-
-
-
-        return true;
+        return false;
     }
 
     public function saveRef($id, $total) {

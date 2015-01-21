@@ -58,9 +58,15 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 
 
-
-
-<?php echo CHtml::submitButton(Yii::t('app', "Save")); ?>    
+<div class="form-actions">
+    <?php
+    $this->widget('bootstrap.widgets.TbButton', array(
+        'buttonType' => 'submit',
+        'type' => 'primary',
+        'label' => Yii::t('app', "Save"),
+    ));
+    ?>
+</div>
 <?php $this->endWidget(); ?>
 
 
@@ -69,19 +75,3 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 $this->endWidget();
 ?>
 
-
-<script type="text/javascript">
-    jQuery(document).ready(function() {
-        var docacc = true;
-        $("#account_0").focus(function() {
-            if ($("#Docs_account_id").val() == '' && docacc) {
-                $("#account_0").autocomplete("search", "");
-                docacc = false;
-            }
-        });
-
-
-
-    });
-
-</script>

@@ -1,12 +1,14 @@
 <?php
-/***********************************************************************************
+
+/* * *********************************************************************************
  * The contents of this file are subject to the Mozilla Public License Version 2.0
  * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
+
 /**
  * This is the model class for table "config".
  *
@@ -21,39 +23,29 @@ class Settings extends basicRecord {
     public static function Tmvalidate($attr) {
         //print_r($attr);
         foreach ($attr as $key => $value) {
-            if (($key == 'company.name')&&($value['value']=='')) {
+            if (($key == 'company.name') && ($value['value'] == '')) {
                 //echo 'bla';
-                Settings::model()->addError( 'company.name', 'Field "company.name" is invalid...' );
+                Settings::model()->addError('company.name', 'Field "company.name" is invalid...');
             }
-                
-            if($key=='company.vat.id'){
-                if($value['value']==''){
-                    Settings::model()->addError('company.vat.id', Yii::t('app','Not a valid VAT id'));
+
+            if ($key == 'company.vat.id') {
+                if ($value['value'] == '') {
+                    Settings::model()->addError('company.vat.id', Yii::t('app', 'Not a valid VAT id'));
                 }
-                Settings::model()->vatnumVal($key,$value['value']);
-                
-                
+                Settings::model()->vatnumVal($key, $value['value']);
             }
         }
-        
+
         echo CJSON::encode(Settings::model()->getErrors());
         //return parent::validate($attr);
     }
 
-    public function vatnumVal($attribute,$value) {
-            $counter = 0;
-            for ($i = 0; $i<strlen($value); $i++)  { 
-                    $digi = substr($value, $i,1);  
-                    $incNum = $digi * (($i % 2) + 1);//multiply digit by 1 or 2
-                    $counter += ($incNum > 9) ? $incNum - 9 : $incNum;//sum the digits up and add to counter
-            }
-            if(! ($counter % 10 == 0)){
-                Settings::model()->addError($attribute, Yii::t('app','Not a valid VAT id'));
-            }
-            
-            
+    public function vatnumVal($attribute, $value) {
+        if (!Linet3Helper::vatnumVal($value)) {
+            $this->addError($attribute, Yii::t('app', 'Not a valid VAT id'));
         }
-    
+    }
+
     public function save($runValidation = true, $attributes = NULL) {
         //adam:
         if ($this->eavType == 'boolean') {
@@ -64,7 +56,7 @@ class Settings extends basicRecord {
         }else if ($this->eavType == 'file') {
 
 
-            $configPath = Yii::app()->user->settings["company.path"];
+            $configPath = Yii::app()->user->getSetting("company.path");
 
 
 
@@ -81,7 +73,7 @@ class Settings extends basicRecord {
                 $logo->path = "settings/";
                 $logo->parent_type = get_class($this);
                 $logo->parent_id = $this->id; // this links your picture model to the main model (like your user, or profile model)
-                $logo->public=true;
+                $logo->public = true;
                 $id = $logo->save(); // DONE
                 //echo $logo->id;
                 //Yii::app()->end();

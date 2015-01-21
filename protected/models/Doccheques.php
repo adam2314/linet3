@@ -63,17 +63,18 @@ class Doccheques extends basicRecord {
         return $rcps . "\r\n";
     }
 
-    public function transaction($num, $refnum, $valuedate, $details, $action, $line, $account_id, $tranType) {
+    public function transaction($transaction,$action, $line, $account_id) {
         $model = PaymentType::model()->findByPk($this->type);
         $paymenet = new $model->value;
 
         $in = new Transactions();
-            $in->num = $num;
+            $in->num = $transaction->num;
             $in->account_id = $account_id;
-            $in->type = $tranType;
-            $in->refnum1 = $refnum;
-            $in->valuedate = $valuedate;
-            $in->details = $details;
+            $in->type = $transaction->type;
+            $in->refnum1 = $transaction->refnum1;
+            $in->valuedate = $transaction->valuedate;
+            $in->details = $transaction->details;
+            
             $in->currency_id = $this->currency_id;
             $in->sum = $this->sum * $action;
             $in->owner_id = Yii::app()->user->id;
@@ -85,10 +86,11 @@ class Doccheques extends basicRecord {
             
             //if($this->Type->oppt_account_id!=0)
             $out->account_id = $this->Type->oppt_account_id;
-            $out->type = $tranType;
-            $out->refnum1 = $refnum;
-            $out->valuedate = $valuedate;
-            $out->details = $details;
+            $out->type = $transaction->type;
+            $out->refnum1 = $transaction->refnum1;
+            $out->valuedate = $transaction->valuedate;
+            $out->details = $transaction->details;
+            
             $out->currency_id = $this->currency_id;
             $out->sum = $this->sum * $action * -1;
             $out->owner_id = Yii::app()->user->id;

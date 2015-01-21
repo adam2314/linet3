@@ -1242,7 +1242,9 @@ INSERT INTO `config` (`id`, `value`, `eavType`, `hidden`, `priority`) VALUES
 ('pelecard.userName', '', 'string', 1, 40), 
 ('pelecard.password', '', 'string', 1, 40), 
 ('pelecard.termNo', '', 'string', 1, 40), 
-('pelecard.shopNo', '', 'string', 1, 40);
+('pelecard.shopNo', '', 'string', 1, 40),
+('company.sumDiff', '0.05', 'string', 1, 40),
+('company.precision', '1', 'integer', 1, 40);
 
 CREATE TABLE `curRates` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -1566,6 +1568,7 @@ CREATE TABLE `mail` (
   `files` int(11) NOT NULL,
   `create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` int(11) NOT NULL,
+  `sent` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 );
 

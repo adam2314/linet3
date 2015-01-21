@@ -28,20 +28,20 @@ class Mail extends CActiveRecord {
 
     const table = '{{mail}}';
 
-    private function mailsend() {
+    public function send() {
 
         Yii::import('application.extensions.smtpmail.PHPMailer');
         $mail = new PHPMailer;
         
         
         $mail->IsSMTP();
-        $mail->Host = Yii::app()->user->settings['company.mail.server'];
-        $mail->SMTPAuth = (Yii::app()->user->settings['company.mail.user']!='')?true:false;
-        $mail->SMTPSecure=(Yii::app()->user->settings['company.mail.ssl'])?'tls':'';
+        $mail->Host = Yii::app()->user->getSetting('company.mail.server');
+        $mail->SMTPAuth = (Yii::app()->user->getSetting('company.mail.user')!='')?true:false;
+        $mail->SMTPSecure=(Yii::app()->user->getSetting('company.mail.ssl'))?'tls':'';
         $mail->CharSet = 'utf-8';
-        $mail->Port = Yii::app()->user->settings['company.mail.port'];
-        $mail->Username = Yii::app()->user->settings['company.mail.user'];
-        $mail->Password = Yii::app()->user->settings['company.mail.password'];
+        $mail->Port = Yii::app()->user->getSetting('company.mail.port');
+        $mail->Username = Yii::app()->user->getSetting('company.mail.user');
+        $mail->Password = Yii::app()->user->getSetting('company.mail.password');
 
         
 
@@ -67,16 +67,20 @@ class Mail extends CActiveRecord {
             //echo "Mailer Error: " . $mail->ErrorInfo;
             throw new CHttpException(501, Yii::t('app', "Mailer Error: ") . $mail->ErrorInfo. $mail->Username );
         } else {
+            $this->sent++;
+            $this->save();
             Yii::app()->user->setFlash('success', Yii::t('app', 'Message sent!'));
             //echo "Message sent!";
         }//*/
         //Yii::app()->end();
     }
 
+    
+    
     public function save($runValidation = true, $attributes = NULL) {
 
         $this->mailsend();
-        return parent::save($runValidation = true, $attributes = NULL);
+        return parent::save($runValidation, $attributes);
     }
 
     /**

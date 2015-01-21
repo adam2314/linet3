@@ -27,6 +27,7 @@ class Docdetails extends basicRecord {
     const table = '{{docDetails}}';
 
     private $ini = false;
+    private $_precision;
     public $iTotalVat = null;
     public $iTotallabel = null;
     public $rate = 1;
@@ -53,6 +54,7 @@ class Docdetails extends basicRecord {
 
     private function ini() {
         if (!$this->ini) {
+            $this->_precision=Yii::app()->user->getSetting('company.precision');
             $this->iVatRate = Item::model()->findByPK($this->item_id)->vat;
             $this->rate = Currates::model()->GetRate($this->currency_id);
 
@@ -67,7 +69,7 @@ class Docdetails extends basicRecord {
     public function CalcPriceWithVat() {
         $this->ini();
 
-        $this->iTotal = round($this->iTotalVat - ($this->iTotalVat * ($this->iVatRate / 100)) / (1 + ($this->iVatRate / 100)), 2);
+        $this->iTotal = round($this->iTotalVat - ($this->iTotalVat * ($this->iVatRate / 100)) / (1 + ($this->iVatRate / 100)), $this->_precision);
 
         return $this->CalcPriceWithOutVat();
     }
@@ -76,7 +78,7 @@ class Docdetails extends basicRecord {
     public function CalcPriceWithOutVat() {
         $this->ini();
 
-        $this->iItem = round(($this->iTotal / $this->qty) * ($this->rate / $this->doc_rate), 2);
+        $this->iItem = round(($this->iTotal / $this->qty) * ($this->rate / $this->doc_rate), $this->_precision);
 
         return $this->CalcPrice();
     }
@@ -89,8 +91,8 @@ class Docdetails extends basicRecord {
 
 
 
-        $this->iTotal = round(($this->iItem * $this->qty) * ($this->rate / $this->doc_rate), 2);
-        $this->iTotalVat = round(($this->iTotal * (($this->iVatRate / 100) + 1)), 2);
+        $this->iTotal = round(($this->iItem * $this->qty) * ($this->rate / $this->doc_rate), $this->_precision);
+        $this->iTotalVat = round(($this->iTotal * (($this->iVatRate / 100) + 1)), $this->_precision);
 
 
         $this->ihTotal = $this->iTotal;
@@ -128,7 +130,7 @@ class Docdetails extends basicRecord {
         return $dets . "\r\n";
     }
 
-    public function transaction($num, $refnum, $valuedate, $details, $action, $line, $optacc, $tranType) {
+    public function transaction($transaction,$action, $line, $optacc) {
 
 
         if (is_null($this->Item)) {
@@ -141,14 +143,14 @@ class Docdetails extends basicRecord {
 
 
 
-
-        $income = new Transactions();
+        $sum=0;
+        
 
         if (is_null($optacc)) {
 
             $incomeacc = $vatCatAcc->account_id;
 
-            $income->sum = ($this->ihTotal * $action);
+            $sum = ($this->ihTotal * $action);
         } else {
             $incomeacc = $optacc;
 
@@ -167,22 +169,13 @@ class Docdetails extends basicRecord {
             //$multi=$this->iTotalVat*$multi;
             Yii::log($this, CLogger::LEVEL_INFO, __METHOD__);
             Yii::log($multi, CLogger::LEVEL_INFO, __METHOD__);
-            $income->sum = (($this->ihTotal + $vat) * $action);
+            $sum = (($this->ihTotal + $vat) * $action);
         }
-
-
-        $income->num = $num;
-        $income->account_id = $incomeacc;
-        $income->type = $tranType;
-        $income->refnum1 = $refnum;
-        $income->valuedate = $valuedate;
-
-        $income->details = $details;
-        $income->currency_id = $this->currency_id;
-
-        $income->owner_id = Yii::app()->user->id;
-        $income->linenum = $line;
-        return $income->save();
+        if($sum)
+            $trans=$transaction->addSingleLine($incomeacc,$sum,$line);
+        else
+            return $transaction->num;
+        return $trans->num;
     }
 
     /**

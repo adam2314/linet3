@@ -269,7 +269,7 @@ class Docs extends fileRecord {
             $this->saveCheq();
             $this->calc();
             $this->validate();
-            if (count($this->getErrors())!=0)
+            if (count($this->getErrors()) != 0)
                 return false;
             if (isset($this->docStatus)) {
                 if ($this->docStatus->action != 0) {
@@ -333,7 +333,7 @@ class Docs extends fileRecord {
     /*     * *********************doc******************* */
 
     public function calc() {
-
+        $precision = Yii::app()->user->getSetting('company.precision');
 
         $this->vat = 0;
         $this->sub_total = 0;
@@ -359,27 +359,31 @@ class Docs extends fileRecord {
                 $this->rcptsum += $rcpt['sum'];
             }
         }
-        
+
         /**/
-        if ( $this->discount !== 0) {
-            $docdetail=$this->calcDiscount();
+        if ($this->discount !== 0) {
+            $docdetail = $this->calcDiscount();
             $iVat = ($docdetail->iTotal * ($docdetail->iVatRate / 100));
             $this->vat += $iVat;
             $this->sub_total += $docdetail->iTotal;
         }//*/
 
-        $this->vat=round($this->vat,2);
+        $this->vat = round($this->vat, $precision);
+        $this->sub_total = round($this->sub_total, $precision);
+        $this->novat_total = round($this->novat_total, $precision);
+
         $this->total = $this->vat + $this->sub_total + $this->novat_total;
 
-        if($this->doctype==8){//recipt
-            $this->total=$this->rcptsum;
+
+        if ($this->doctype == 8) {//recipt
+            $this->total = $this->rcptsum;
         }
-        
-        
+
+
         return $this;
     }
-    
-    private function calcDiscount(){
+
+    private function calcDiscount() {
         $docdetail = new Docdetails;
         $docdetail->currency_id = $this->currency_id;
         $docdetail->item_id = 1;
@@ -387,7 +391,6 @@ class Docs extends fileRecord {
         $docdetail->iTotalVat = $this->discount * -1;
         $docdetail->CalcPriceWithVat();
         return $docdetail;
-        
     }
 
     private function saveDet() {
@@ -497,22 +500,32 @@ class Docs extends fileRecord {
         //income account -
         //vat account +
         //costmer accout +
+        $precision = Yii::app()->user->getSetting('company.precision');
         $valuedate = date("Y-m-d H:m:s", CDateTimeParser::parse($this->issue_date, Yii::app()->locale->getDateFormat('yiidatetime')));
         $num = 0;
         $line = 1;
         $tranType = $this->docType->transactionType_id;
-
+        $round = 0;
 
 
         if (!is_null($tranType)) {//has trans action!
             if ($this->docType->isdoc) {
-                $vat = new Transactions();
-                $accout = new Transactions();
-
+                $vatSum =0;
+                $sum=0;
+                
+                $docAction = new Transactions();
+                $docAction->num = $num;
+                $docAction->account_id = $this->account_id;
+                $docAction->type = $tranType;
+                $docAction->refnum1 = $this->id;
+                $docAction->valuedate = $valuedate;
+                $docAction->details = $this->company;
+                $docAction->currency_id = $this->currency_id;
+                $docAction->owner_id = $this->owner;
+                
                 foreach ($this->docDetailes as $docdetail) {
                     $refnum2 = $this->stock($docdetail->item_id, $docdetail->qty);
-                    //$num = $docdetail->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->docType->oppt_account_type, $tranType);
-                    $num = $docdetail->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->oppt_account_id, $tranType);
+                    $num = $docdetail->transaction($docAction,$action, $line, $this->oppt_account_id);
                     $line++;
                     $multi = 1;
                     if (!is_null($this->oppt_account_id))
@@ -520,18 +533,18 @@ class Docs extends fileRecord {
                             $multi = ($oppt->src_tax / 100);
 
                     $iVat = ($docdetail->iTotal * ($docdetail->iVatRate / 100));
-                    $accout->sum+=($docdetail->iTotal + $iVat) * $action;
+                    $sum+=($docdetail->iTotal + $iVat) * $action;
 
                     $iVat*=$multi;
-                    $vat->sum+= $iVat * $action;
+                    $vatSum+= $iVat * $action;
                 }
 
                 //******************Discount*******************//
 
                 if ((double) $this->discount != 0) {
-                    $docdetail=$this->calcDiscount();
+                    $docdetail = $this->calcDiscount();
 
-                    $num = $docdetail->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->oppt_account_id, $tranType);
+                    $num = $docdetail->transaction($docAction, $action, $line, $this->oppt_account_id);
                     $line++;
                     $multi = 1;
                     if (!is_null($this->oppt_account_id))
@@ -539,44 +552,32 @@ class Docs extends fileRecord {
                             $multi = ($oppt->src_tax / 100);
 
                     $iVat = ($docdetail->iTotal * ($docdetail->iVatRate / 100));
-                    $accout->sum+=($docdetail->iTotal + $iVat) * $action;
+                    $sum+=($docdetail->iTotal + $iVat) * $action;
 
                     $iVat*=$multi;
-                    $vat->sum+= $iVat * $action;
+                    $vatSum+= $iVat * $action;
                 }
 
 
 
                 //*******************Account*******************//
-                $accout->num = $num;
-                $accout->account_id = $this->account_id;
-                $accout->type = $tranType;
-                $accout->refnum1 = $this->id;
-                $accout->valuedate = $valuedate;
-                $accout->details = $this->company;
-                $accout->currency_id = $this->currency_id;
-                $accout->sum = $accout->sum * -1;
-                $accout->owner_id = $this->owner;
-                $accout->linenum = $line;
+                $docAction->addSingleLine($this->account_id,$sum * -1,$line); 
                 $line++;
-                $num = $accout->save();
+     
+
+                //*******************ROUND***********************//
+                $diff=$sum-round($sum,$precision);
+                if ($diff) {//diif
+                    $docAction->addDoubleLine(6, $this->account_id,$diff,$line);
+                    $line++;
+                    $line++;
+                }
 
 
                 //*******************VAT***********************//
-                if ((double) $vat->sum != 0) {
-                    $vat->num = $num;
-                    //$vat->account_id=Yii::app()->user->settings['company.acc.vatacc'];
-                    $vat->account_id = $this->docType->vat_acc_id;
-                    $vat->type = $tranType;
-                    $vat->refnum1 = $this->id;
-                    $vat->valuedate = $valuedate;
-                    $vat->details = $this->company;
-                    $vat->currency_id = $this->currency_id;
-                    $vat->owner_id = $this->owner;
-                    $vat->linenum = $line;
+                if ((double) $vatSum != 0) {
+                    $docAction->addSingleLine($this->docType->vat_acc_id,$vatSum,$line);
                     $line++;
-                    //print_r($vat->attributes);
-                    $num = $vat->save();
                 }
             }
 
@@ -584,7 +585,7 @@ class Docs extends fileRecord {
 
                 foreach ($this->docCheques as $docrcpt) {
 
-                    $num = $docrcpt->transaction($num, $this->id, $valuedate, $this->company, $action, $line, $this->account_id, $tranType);
+                    $num = $docrcpt->transaction($docAction, $action, $line, $this->account_id);
 
                     $line++;
                     $line++;
@@ -683,13 +684,7 @@ class Docs extends fileRecord {
     }
 
     public function vatnumVal($attribute, $params) {
-        $counter = 0;
-        for ($i = 0; $i < strlen($this->$attribute); $i++) {
-            $digi = substr($this->$attribute, $i, 1);
-            $incNum = $digi * (($i % 2) + 1); //multiply digit by 1 or 2
-            $counter += ($incNum > 9) ? $incNum - 9 : $incNum; //sum the digits up and add to counter
-        }
-        if (!($counter % 10 == 0)) {
+        if (!Linet3Helper::vatnumVal($this->$attribute)) {
             $this->addError($attribute, Yii::t('app', 'Not a valid VAT id'));
         }
     }
@@ -724,7 +719,8 @@ class Docs extends fileRecord {
             }
         }
         if ($line) {
-            if ($sum != (double) $this->rcptsum)
+            //if (!Linet3Helper::numDiff($sum, (double) $this->rcptsum))
+            if ((double) $sum != (double) $this->total)
                 $this->addError($attribute, Yii::t('app', 'Total and recipt does not mach') . " " . $sum . " " . $this->total);
         }
     }
@@ -752,7 +748,7 @@ class Docs extends fileRecord {
                         $this->addError($attribute, Yii::t('app', 'Not a valid doc item'));
                     }
                 } else {
-                    if($detial["item_id"] !=0)
+                    if ($detial["item_id"] != 0)
                         $this->addError($attribute, Yii::t('app', 'Not a valid item id'));
                 }
             }
@@ -857,7 +853,7 @@ class Docs extends fileRecord {
         $criteria->compare('comments', $this->comments, true);
         $criteria->compare('owner', $this->owner);
         $criteria->compare('refstatus', $this->refstatus, true);
-        
+
         if (!empty($this->issue_from) && empty($this->issue_to)) {
             $this->issue_from = date("Y-m-d", CDateTimeParser::parse($this->issue_from, Yii::app()->locale->getDateFormat('yiishort')));
 

@@ -19,8 +19,12 @@ class MailController extends RightsController {
 
         if (isset($_POST['Mail'])) {
             $model->attributes = $_POST['Mail'];
-            if ($model->save())
+            if ($model->send()){
+                //sent++
+                
                 echo "done";
+                
+            }
             //$this->redirect(array('view', 'id' => $model->id));
         }
 
@@ -29,6 +33,17 @@ class MailController extends RightsController {
         ));
     }
 
+    public function actionAdmin() {
+        $model = new Mail('search');
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['Mail']))
+            $model->attributes = $_GET['Mail'];
+
+        $this->render('admin', array(
+            'model' => $model,
+        ));
+    }
+    
     /*
       public function actionForm($id) {
 

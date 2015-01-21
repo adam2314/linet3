@@ -8,7 +8,7 @@ $this->beginWidget('MiniForm', array('header' => Yii::t("app", "Create Manual Tr
 <?php
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id' => 'transaction-form',
-    'enableAjaxValidation' => false,
+    'enableAjaxValidation' => true,
         ));
 ?>
 
@@ -18,12 +18,12 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     <?php echo $form->textFieldRow($model, 'details'); ?>
     <?php //echo $form->error($model, 'details'); ?>
 
-    <?php echo $form->error($model, 'valuedate'); ?> 
     <?php echo $form->labelEx($model, 'valuedate'); ?>
     <?php
     $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-        'name' => 'valuedate',
-        'language' => 'en',
+        'attribute' => 'valuedate',
+        'model'=>$model,
+        'language' => substr(Yii::app()->language, 0, 2),
         'options' => array(
             'dateFormat' => Yii::app()->locale->getDateFormat('short'),
         )
@@ -42,6 +42,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
             'attribute' => 'refnum1', //attribute name
         )); //*/
         ?>
+        
     </div>
     <?php //echo $form->labelEx($model, 'refnum1'); ?>
     <?php //echo $form->textField($model, 'refnum1'); ?>
@@ -52,7 +53,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     <?php //echo $form->error($model, 'refnum2'); ?>
 
     <?php //echo $form->labelEx($model, 'currency_id'); ?>
-    <?php echo $form->dropDownListRow($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency  ?>
+    <?php echo $form->dropDownListRow($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name'));  ?>
     <?php //echo $form->error($model, 'currency_id'); ?>
 </div>
 <div class="row">
@@ -144,14 +145,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 $(document).ready(
             function() {
                 addItem(0);
-                //$('#Transactions_account_id').blur(function() {
-                //    onChange('Transactions_account_id');
-                //});
-
-
                 $('#transaction-form').submit(function() {
-
-
                     if (Number($('#balance').val()) != 0) {
                         alert('sum is not 0');
                         return false;
@@ -234,17 +228,21 @@ $(document).ready(
         var IdName = "My" + num;
         var r = document.createElement('tr');
         var ca = document.createElement('td');
-        var cb = document.createElement('td');
+        //var cb = document.createElement('td');
         var cc = document.createElement('td');
         var cd = document.createElement('td');
 
         var cg = document.createElement('td');
+        var accountselect='<?php echo str_replace("\n","",$form->dropDownList($model, 'ops[]', CHtml::listData(Accounts::model()->findAll(), 'id', 'name'))); ?>'
+        
         r.setAttribute("id", 'tr' + IdName);
-        cg.setAttribute("id", 'Action' + IdName);
-        ca.innerHTML = "<input placeholder=\"חפש פה...\" type=\"text\" id=\"ops" + num + "\" class=\"number\" name=\"ops[]\" onblur=\"onChange('ops" + num + "')\" size=\"8\" />";
-        cb.innerHTML = "<span id=\"nameops" + num + "\"></span>";
-        cc.innerHTML = "<input type=\"text\" id=\"sumpos" + num + "\" value=\"0\" class=\"number\" name=\"sumpos[]\" size=\"6\" onblur=\"CalcSum(" + name + ")\" />";
-        cd.innerHTML = "<input type=\"text\" id=\"sumneg" + num + "\" value=\"0\" class=\"number\" name=\"sumneg[]\" size=\"6\" onblur=\"CalcSum(" + name + ")\" />";
+        cg.setAttribute("id", 'Action' + IdName);//id="FormTransaction_ops"
+        ca.innerHTML = accountselect.replace('id="FormTransaction_ops','id="FormTransaction_ops'+num);
+        
+ 
+
+        cc.innerHTML = "<input type=\"text\" id=\"sumpos" + num + "\" value=\"0\" class=\"number\" name=\"FormTransaction[sumpos][]\" size=\"6\" onblur=\"CalcSum(" + name + ")\" />";
+        cd.innerHTML = "<input type=\"text\" id=\"sumneg" + num + "\" value=\"0\" class=\"number\" name=\"FormTransaction[sumneg][]\" size=\"6\" onblur=\"CalcSum(" + name + ")\" />";
 
         cg.innerHTML = "<a href=\"javascript:addItem(" + num + ");\" class=\"btnadd\">הוסף</a>";
 
@@ -255,44 +253,30 @@ $(document).ready(
         //replace add button with remove
 
         r.appendChild(ca);
-        r.appendChild(cb);
+        //r.appendChild(cb);
         r.appendChild(cc);
         r.appendChild(cd);
 
         r.appendChild(cg);
 
         ni.appendChild(r);
+        $("#FormTransaction_ops" + num).select2();
+        /*
         $("#ops" + num).autocomplete({
             source: "<?php echo $this->createUrl('/accounts/autocomplete', array('type' => 'all')); ?>",
             open: function() {
                 $(this).autocomplete('widget').css('z-index', 2048);
                 return false;
             }
-        });
+        });*/
     }
 
-    function onChange(name) {
-        var acc = $('#' + name).val();
-        $.get("<?php echo $this->createUrl('/accounts/json'); ?>", {"id": acc},
-        function(data) {
-            $('#name' + name).html(data.name);
-        }, "json")
-                .error(function() {
-                });
-    }
+
     function refNum(doc) {//
-
-
         $("#choseTransactions_refnum1").dialog("close");
-
         $('#Transactions_refnum1_div').html($('#Transactions_refnum1_div').html() + ", " + doc.doctype + " #" + doc.docnum);
         $('#Transactions_refnum1_ids').val($('#Transactions_refnum1_ids').val() + doc.id + ",");
-
-
-
         return false;
-
-
     }
 
 //*/

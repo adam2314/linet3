@@ -1,12 +1,14 @@
 <?php
-/***********************************************************************************
+
+/* * *********************************************************************************
  * The contents of this file are subject to the Mozilla Public License Version 2.0
  * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
+
 /**
  * This is the model class for table "transactions".
  *
@@ -34,6 +36,64 @@ class Transactions extends basicRecord {
     public $Docs = NULL;
     public $refnum1_ids = '';
     public $maxNum;
+    
+    private $_line;
+
+    public function addSingleLine($account_id,$sum,$line){
+        $this->_line=$line;
+        
+        $round = new Transactions();
+        $round->num = $this->num;
+        $round->account_id = $account_id;
+        $round->type = $this->type;
+        $round->refnum1 = $this->refnum1;
+        $round->valuedate = $this->valuedate;
+        $round->details = $this->details;
+        $round->currency_id = $this->currency_id;
+        $round->sum = $sum;
+        $round->owner_id = $this->owner_id;
+        $round->linenum = $line;
+        $this->_line++;
+        $this->num = $round->save();
+        
+        
+        return $this;
+    }
+    
+    
+    public function addDoubleLine($account_id,$oppt_account_id,$sum,$line) {
+        $this->_line=$line;
+        
+        $round = new Transactions();
+        $round->num = $this->num;
+        $round->account_id = $account_id;
+        $round->type = $this->type;
+        $round->refnum1 = $this->refnum1;
+        $round->valuedate = $this->valuedate;
+        $round->details = $this->details;
+        $round->currency_id = $this->currency_id;
+        $round->sum = $sum;
+        $round->owner_id = $this->owner_id;
+        $round->linenum = $line;
+        $this->_line++;
+        $this->num = $round->save();
+
+        $round = new Transactions();
+        $round->num = $this->num;
+        $round->account_id = $oppt_account_id;
+        $round->type = $this->type;
+        $round->refnum1 = $this->refnum1;
+        $round->valuedate = $this->valuedate;
+        $round->details = $this->details;
+        $round->currency_id = $this->currency_id;
+        $round->sum = $sum * -1;
+        $round->owner_id = $this->owner_id;
+        $round->linenum = $line;
+        $this->_line++;
+        $this->num = $round->save();
+        
+        return $this;
+    }
 
     public function getRef() {
         return array(); //
@@ -75,22 +135,21 @@ class Transactions extends basicRecord {
 
     public function accountLink() {
         $str = '';
-        
 
-        
-            //$account_id = Docs::model()->findByPk($this->account_id);
-            if ($this->Account !== null) {
-                $str.= CHtml::link(CHtml::encode($this->Account->name), Yii::app()->createAbsoluteUrl("/accounts/transaction/$this->account_id"));
-            } else {
-                $str.=$this->account_id;
-            }
-            
-        
+
+
+        //$account_id = Docs::model()->findByPk($this->account_id);
+        if ($this->Account !== null) {
+            $str.= CHtml::link(CHtml::encode($this->Account->name), Yii::app()->createAbsoluteUrl("/accounts/transaction/$this->account_id"));
+        } else {
+            $str.=$this->account_id;
+        }
+
+
 
         return $str;
     }
-    
-    
+
     public function refnumDocsLink() {
         $str = '';
         $array = explode(",", $this->refnum1);
@@ -206,7 +265,7 @@ class Transactions extends basicRecord {
 
     public function beforeSave() {
         $this->num = $this->newNum();
-        if($this->reg_date==null)
+        if ($this->reg_date == null)
             $this->reg_date = date("Y-m-d H:i:s");
 
         $cur = Yii::app()->user->settings['company.cur'];
@@ -384,14 +443,14 @@ class Transactions extends basicRecord {
             $criteria->addCondition("valuedate>=:date_from");
             $criteria->params[':date_from'] = $date_from;
         } elseif (!empty($this->to_date) && empty($this->from_date)) {
-            $date_to = date($phpdbdatetime, CDateTimeParser::parse($this->to_date, $yiidate)+24*60*60-1);
+            $date_to = date($phpdbdatetime, CDateTimeParser::parse($this->to_date, $yiidate) + 24 * 60 * 60 - 1);
             //print $this->to_date.";".$date_to;
 
             $criteria->addCondition("valuedate>=:date_to");
             $criteria->params[':date_to'] = $date_to;
         } elseif (!empty($this->to_date) && !empty($this->from_date)) {
             $date_from = date($phpdbdatetime, CDateTimeParser::parse($this->from_date, $yiidate));
-            $date_to = date($phpdbdatetime, CDateTimeParser::parse($this->to_date, $yiidate)+24*60*60-1);
+            $date_to = date($phpdbdatetime, CDateTimeParser::parse($this->to_date, $yiidate) + 24 * 60 * 60 - 1);
 
 
             $criteria->addCondition("valuedate>=:date_from");

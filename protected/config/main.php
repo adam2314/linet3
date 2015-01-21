@@ -32,22 +32,23 @@ return CMap::mergeArray(
                 'eav' => array(),
                 'forum' => array(),
                 'user' => array(
-                    'debug' => True,
+                    'class' => 'WebUser', //rights
+                    'allowAutoLogin' => true,
                 ),
             ),
             // application components
             'components' => array(
                 /*
-                'Smtpmail' => array(
-                    'class' => 'application.extensions.smtpmail.PHPMailer',
-                    'Host' => "127.0.0.1",
-                    //'Username' => '',
-                    //'Password' => '',
-                    'Mailer' => 'smtp',
-                    'Port' => 25,
-                    'SMTPAuth' => false,
-                    'SMTPSecure' => '',
-                ),*/
+                  'Smtpmail' => array(
+                  'class' => 'application.extensions.smtpmail.PHPMailer',
+                  'Host' => "127.0.0.1",
+                  //'Username' => '',
+                  //'Password' => '',
+                  'Mailer' => 'smtp',
+                  'Port' => 25,
+                  'SMTPAuth' => false,
+                  'SMTPSecure' => '',
+                  ), */
                 'curl' => array(
                     'class' => 'ext.curl.Curl',
                     'options' => array(/* additional curl options */),
@@ -75,7 +76,7 @@ return CMap::mergeArray(
                     'assignmentTable' => '{{AuthAssignment}}',
                     'rightsTable' => '{{Rights}}',
                     'defaultRoles' => array('Guest'),
-                    //'defaultRoles' => array('Authenticated'),
+                //'defaultRoles' => array('Authenticated'),
                 ),
                 'ePdf' => array(
                     'class' => 'ext.yii-pdf.EYiiPdf',
@@ -132,7 +133,7 @@ return CMap::mergeArray(
                 'version' => '3.0',
                 'timezone' => 'Asia/Tel_Aviv',
                 'filePath' => dirname(__FILE__) . '/../files/',
-                'local'=>true,
+                'local' => true,
             ),
                 )//end main
 ); //end merge

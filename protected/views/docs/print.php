@@ -7,7 +7,7 @@
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-$logopath = Yii::app()->createAbsoluteUrl("site/download/" . Yii::app()->user->settings['company.logo']);
+$logopath = Yii::app()->createAbsoluteUrl("site/download/" . Yii::app()->user->getSetting('company.logo'));
 $legalize = "";
 if ($preview == 2) {
     $legalize = Yii::t('app', 'Computerized Document');
@@ -17,13 +17,13 @@ if ($preview == 2) {
 <div class="body">
     <div class="docHead">
         <div class="fromBox">
-            <h3><?php echo Yii::app()->user->settings['company.name']; ?></h3><br />
-            <?php echo Yii::app()->user->settings['company.address']; ?>, <?php echo Yii::app()->user->settings['company.city']; ?> ,<?php echo Yii::app()->user->settings['company.zip']; ?><br />
-            <?php echo Yii::t('app', 'Phone'); ?>: <?php echo Yii::app()->user->settings['company.phone']; ?><br />
-            <?php echo Yii::t('app', 'Fax'); ?>: <?php echo Yii::app()->user->settings['company.fax']; ?><br />
-            <?php echo Yii::app()->user->settings['company.website']; ?><br />
+            <h3><?php echo Yii::app()->user->getSetting('company.name'); ?></h3><br />
+            <?php echo Yii::app()->user->getSetting('company.address'); ?>, <?php echo Yii::app()->user->getSetting('company.city'); ?> ,<?php echo Yii::app()->user->settings['company.zip']; ?><br />
+            <?php echo Yii::t('app', 'Phone'); ?>: <?php echo Yii::app()->user->getSetting('company.phone'); ?><br />
+            <?php echo Yii::t('app', 'Fax'); ?>: <?php echo Yii::app()->user->getSetting('company.fax'); ?><br />
+            <?php echo Yii::app()->user->getSetting('company.website'); ?><br />
 
-            <?php echo Yii::t('app', 'VAT No.'); ?>: <?php echo Yii::app()->user->settings['company.vat.id']; ?><br />
+            <?php echo Yii::t('app', 'VAT No.'); ?>: <?php echo Yii::app()->user->getSetting('company.vat.id'); ?><br />
         </div>
 
 
@@ -157,7 +157,7 @@ if ($preview == 2) {
                     <td class='Qty'>$docdetail->qty</td>    
                     <td class='Price'>" . $docdetail->qty * $docdetail->iItem . "</td>
                     <td class='Currency'>$docdetail->currency_id</td>
-                    <td class='VAT'>" . ($docdetail->iVatRate / 100) * $docdetail->qty * $docdetail->iItem . "</td>
+                    <td class='VAT'>" . round(($docdetail->iVatRate / 100) * $docdetail->iTotal,2) . "</td>
                     <td class='Total'>$docdetail->iTotal</td>
                     
                  </tr>
