@@ -262,7 +262,12 @@ $(document).ready(
         ni.appendChild(r);
         
         
-        //$("#FormTransaction_ops" + num).select2();
+        $("#FormTransaction_ops" + num).select2()
+        .on("change", function(e) {
+          console.log(e.val);
+          $("#FormTransaction_ops" + num).val(e.val);
+          $("#FormTransaction_ops" + num+' [value="'+e.val+'"]').attr('selected',true);//ugly fix but it just wont select:(
+        });
         /*
         $("#ops" + num).autocomplete({
             source: "<?php echo $this->createUrl('/accounts/autocomplete', array('type' => 'all')); ?>",
