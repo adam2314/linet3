@@ -1,12 +1,14 @@
 <?php
-/***********************************************************************************
+
+/* * *********************************************************************************
  * The contents of this file are subject to the Mozilla Public License Version 2.0
  * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
+
 /**
  * This is the model class for table "cheques".
  *
@@ -63,55 +65,54 @@ class Doccheques extends basicRecord {
         return $rcps . "\r\n";
     }
 
-    public function transaction($transaction,$action, $line, $account_id) {
+    public function transaction($transaction, $action, $account_id) {
         $model = PaymentType::model()->findByPk($this->type);
         $paymenet = new $model->value;
 
         $in = new Transactions();
-            $in->num = $transaction->num;
-            $in->account_id = $account_id;
-            $in->type = $transaction->type;
-            $in->refnum1 = $transaction->refnum1;
-            $in->valuedate = $transaction->valuedate;
-            $in->details = $transaction->details;
-            
-            $in->currency_id = $this->currency_id;
-            $in->sum = $this->sum * $action;
-            $in->owner_id = Yii::app()->user->id;
-            $in->linenum = $line;
-            
-            $line++;
+        $in->num = $transaction->num;
+        $in->account_id = $account_id;
+        $in->type = $transaction->type;
+        $in->refnum1 = $transaction->refnum1;
+        $in->valuedate = $transaction->valuedate;
+        $in->details = $transaction->details;
 
-            $out = new Transactions();
-            
-            //if($this->Type->oppt_account_id!=0)
-            $out->account_id = $this->Type->oppt_account_id;
-            $out->type = $transaction->type;
-            $out->refnum1 = $transaction->refnum1;
-            $out->valuedate = $transaction->valuedate;
-            $out->details = $transaction->details;
-            
-            $out->currency_id = $this->currency_id;
-            $out->sum = $this->sum * $action * -1;
-            $out->owner_id = Yii::app()->user->id;
-            $out->linenum = $line;
+        $in->currency_id = $this->currency_id;
+        $in->sum = $this->sum * $action;
+        $in->owner_id = Yii::app()->user->id;
+        $in->linenum = $transaction->linenum;
+
+        $transaction->linenum++;
+
+        $out = new Transactions();
+
+        //if($this->Type->oppt_account_id!=0)
+        $out->account_id = $this->Type->oppt_account_id;
+        $out->type = $transaction->type;
+        $out->refnum1 = $transaction->refnum1;
+        $out->valuedate = $transaction->valuedate;
+        $out->details = $transaction->details;
+
+        $out->currency_id = $this->currency_id;
+        $out->sum = $this->sum * $action * -1;
+        $out->owner_id = Yii::app()->user->id;
+        $out->linenum = $transaction->linenum;
+
+        $transaction->linenum++;
 
 
-            
-            
-            
-        if (method_exists ($paymenet,"transaction")) {
-            
-            $paymenet->transaction($in,$out, $this);
+
+        if (method_exists($paymenet, "transaction")) {
+
+            $paymenet->transaction($in, $out, $this);
         } else {
             
-
-            
         }
-        
+
         $num = $in->save();
         $out->num = $num;
-        return $out->save();
+        $num = $out->save();
+        return $transaction;
     }
 
     /**
@@ -199,31 +200,30 @@ class Doccheques extends basicRecord {
         $criteria->compare('type', $this->type);
         $criteria->compare('line', $this->line);
         $criteria->compare('currency_id', $this->currency_id, true);
-        
-        if($this->bank_refnum==''){
+
+        if ($this->bank_refnum == '') {
             $criteria->addCondition('bank_refnum IS NULL');
-            $criteria->addCondition('bank_refnum =""','OR');
+            $criteria->addCondition('bank_refnum =""', 'OR');
         }
-        
+
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
             'pagination' => array('pageSize' => 50),
         ));
     }
-    
-    
+
     public function depositSearch() {
 
         $criteria = new CDbCriteria;
 
 
         $criteria->addCondition('bank_refnum IS NULL');
-        $criteria->addCondition('(type = 1 OR type = 2)','AND');
-        
+        $criteria->addCondition('(type = 1 OR type = 2)', 'AND');
+
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
             'pagination' => array('pageSize' => 50),
         ));
     }
-    
+
 }

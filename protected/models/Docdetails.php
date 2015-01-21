@@ -130,7 +130,7 @@ class Docdetails extends basicRecord {
         return $dets . "\r\n";
     }
 
-    public function transaction($transaction,$action, $line, $optacc) {
+    public function transaction($transaction,$action, $optacc) {
 
 
         if (is_null($this->Item)) {
@@ -172,10 +172,10 @@ class Docdetails extends basicRecord {
             $sum = (($this->ihTotal + $vat) * $action);
         }
         if($sum)
-            $trans=$transaction->addSingleLine($incomeacc,$sum,$line);
-        else
-            return $transaction->num;
-        return $trans->num;
+            return $transaction->addSingleLine($incomeacc,$sum);
+        
+            
+        return $transaction;
     }
 
     /**

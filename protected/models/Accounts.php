@@ -282,7 +282,8 @@ class Accounts extends fileRecord {//CActiveRecord
     }
 
     public function vatnumVal($attribute, $params) {
-        if (!Linet3Helper::vatnumVal($this->$attribute)) {
+        $value=$this->$attribute;
+        if (Linet3Helper::vatnumVal($value)) {
             $this->addError($attribute, Yii::t('app', 'Not a valid VAT id'));
         }
     }

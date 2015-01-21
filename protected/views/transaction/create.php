@@ -88,10 +88,10 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                                         <span id="nameTransactions_account_id"></span>
                                     </td>
                                     <td>
-                                        <input size="6" id="sourcepos" type="text" class="number" name="sourcepos" onchange="CalcSum()" value="0">
+                                        <input size="6" id="sourcepos" type="text" class="number" name="FormTransaction[sourcepos]" onchange="CalcSum()" value="0">
                                     </td>
                                     <td>
-                                        <input size="6" id="sourceneg" type="text" class="number" name="sourceneg" onchange="CalcSum()" value="0">
+                                        <input size="6" id="sourceneg" type="text" class="number" name="FormTransaction[sourceneg]" onchange="CalcSum()" value="0">
                                     </td>
                                 </tr>
                             </tbody>
@@ -110,7 +110,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                             <thead>
                                 <tr>
                                     <td><?php echo Yii::t('app', 'Account id'); ?></td>
-                                    <td style="width:200px;"><?php echo Yii::t('app', 'Account Name'); ?></td>
+
                                     <td><?php echo Yii::t('app', 'Credit'); ?></td>
                                     <td><?php echo Yii::t('app', 'Debit'); ?></td>
                                     <td></td>
@@ -124,7 +124,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                                         <input size="5" id="balance" type="text" value="0" readonly="">
                                     </td>
                                     <td></td>
-                                    <td></td>
+
                                 </tr>
                             </tfoot>
                             <tbody id="det">
@@ -233,16 +233,16 @@ $(document).ready(
         var cd = document.createElement('td');
 
         var cg = document.createElement('td');
-        var accountselect='<?php echo str_replace("\n","",$form->dropDownList($model, 'ops[]', CHtml::listData(Accounts::model()->findAll(), 'id', 'name'))); ?>'
+        var accountselect='<?php echo str_replace("\n","",$form->dropDownList($model, 'ops', CHtml::listData(Accounts::model()->findAll(), 'id', 'name'))); ?>'
         
         r.setAttribute("id", 'tr' + IdName);
         cg.setAttribute("id", 'Action' + IdName);//id="FormTransaction_ops"
-        ca.innerHTML = accountselect.replace('id="FormTransaction_ops','id="FormTransaction_ops'+num);
+        ca.innerHTML = accountselect.replace('id="FormTransaction_ops','id="FormTransaction_ops'+num).replace('name="FormTransaction[ops','name="FormTransaction[ops]['+num);
         
  
 
-        cc.innerHTML = "<input type=\"text\" id=\"sumpos" + num + "\" value=\"0\" class=\"number\" name=\"FormTransaction[sumpos][]\" size=\"6\" onblur=\"CalcSum(" + name + ")\" />";
-        cd.innerHTML = "<input type=\"text\" id=\"sumneg" + num + "\" value=\"0\" class=\"number\" name=\"FormTransaction[sumneg][]\" size=\"6\" onblur=\"CalcSum(" + name + ")\" />";
+        cc.innerHTML = "<input type=\"text\" id=\"sumpos" + num + "\" value=\"0\" class=\"number\" name=\"FormTransaction[sumpos][" + num + "]\" size=\"6\" onblur=\"CalcSum(" + name + ")\" />";
+        cd.innerHTML = "<input type=\"text\" id=\"sumneg" + num + "\" value=\"0\" class=\"number\" name=\"FormTransaction[sumneg][" + num + "]\" size=\"6\" onblur=\"CalcSum(" + name + ")\" />";
 
         cg.innerHTML = "<a href=\"javascript:addItem(" + num + ");\" class=\"btnadd\">הוסף</a>";
 
@@ -260,7 +260,9 @@ $(document).ready(
         r.appendChild(cg);
 
         ni.appendChild(r);
-        $("#FormTransaction_ops" + num).select2();
+        
+        
+        //$("#FormTransaction_ops" + num).select2();
         /*
         $("#ops" + num).autocomplete({
             source: "<?php echo $this->createUrl('/accounts/autocomplete', array('type' => 'all')); ?>",

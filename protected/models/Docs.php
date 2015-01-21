@@ -502,8 +502,7 @@ class Docs extends fileRecord {
         //costmer accout +
         $precision = Yii::app()->user->getSetting('company.precision');
         $valuedate = date("Y-m-d H:m:s", CDateTimeParser::parse($this->issue_date, Yii::app()->locale->getDateFormat('yiidatetime')));
-        $num = 0;
-        $line = 1;
+        //$num = 0;
         $tranType = $this->docType->transactionType_id;
         $round = 0;
 
@@ -514,9 +513,10 @@ class Docs extends fileRecord {
                 $sum=0;
                 
                 $docAction = new Transactions();
-                $docAction->num = $num;
+                $docAction->num = 0;
                 $docAction->account_id = $this->account_id;
                 $docAction->type = $tranType;
+                $docAction->linenum=1;
                 $docAction->refnum1 = $this->id;
                 $docAction->valuedate = $valuedate;
                 $docAction->details = $this->company;
@@ -525,8 +525,8 @@ class Docs extends fileRecord {
                 
                 foreach ($this->docDetailes as $docdetail) {
                     $refnum2 = $this->stock($docdetail->item_id, $docdetail->qty);
-                    $num = $docdetail->transaction($docAction,$action, $line, $this->oppt_account_id);
-                    $line++;
+                    $docAction = $docdetail->transaction($docAction,$action, $this->oppt_account_id);
+                    //$line++;
                     $multi = 1;
                     if (!is_null($this->oppt_account_id))
                         if ($oppt = Accounts::model()->findByPk($this->oppt_account_id))
@@ -544,8 +544,7 @@ class Docs extends fileRecord {
                 if ((double) $this->discount != 0) {
                     $docdetail = $this->calcDiscount();
 
-                    $num = $docdetail->transaction($docAction, $action, $line, $this->oppt_account_id);
-                    $line++;
+                    $docAction = $docdetail->transaction($docAction, $action, $this->oppt_account_id);
                     $multi = 1;
                     if (!is_null($this->oppt_account_id))
                         if ($oppt = Accounts::model()->findByPk($this->oppt_account_id))
@@ -561,23 +560,20 @@ class Docs extends fileRecord {
 
 
                 //*******************Account*******************//
-                $docAction->addSingleLine($this->account_id,$sum * -1,$line); 
-                $line++;
+                $docAction = $docAction->addSingleLine($this->account_id,$sum * -1); 
      
 
                 //*******************ROUND***********************//
                 $diff=$sum-round($sum,$precision);
                 if ($diff) {//diif
-                    $docAction->addDoubleLine(6, $this->account_id,$diff,$line);
-                    $line++;
-                    $line++;
+                    $docAction = $docAction->addDoubleLine(6, $this->account_id,$diff);
+
                 }
 
 
                 //*******************VAT***********************//
                 if ((double) $vatSum != 0) {
-                    $docAction->addSingleLine($this->docType->vat_acc_id,$vatSum,$line);
-                    $line++;
+                    $docAction =$docAction->addSingleLine($this->docType->vat_acc_id,$vatSum);
                 }
             }
 
@@ -585,10 +581,8 @@ class Docs extends fileRecord {
 
                 foreach ($this->docCheques as $docrcpt) {
 
-                    $num = $docrcpt->transaction($docAction, $action, $line, $this->account_id);
+                    $docAction =$docrcpt->transaction($docAction, $action, $this->account_id);
 
-                    $line++;
-                    $line++;
                 }
             }
         }
@@ -684,7 +678,7 @@ class Docs extends fileRecord {
     }
 
     public function vatnumVal($attribute, $params) {
-        if (!Linet3Helper::vatnumVal($this->$attribute)) {
+        if (Linet3Helper::vatnumVal($this->$attribute)) {
             $this->addError($attribute, Yii::t('app', 'Not a valid VAT id'));
         }
     }

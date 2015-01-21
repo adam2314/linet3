@@ -41,7 +41,7 @@ class Settings extends basicRecord {
     }
 
     public function vatnumVal($attribute, $value) {
-        if (!Linet3Helper::vatnumVal($value)) {
+        if (Linet3Helper::vatnumVal($value)) {
             $this->addError($attribute, Yii::t('app', 'Not a valid VAT id'));
         }
     }

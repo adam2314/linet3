@@ -27,16 +27,17 @@ class Linet3Helper {
     
     
     public static function vatnumVal($num) {
+        /**/
         $counter = 0;
         for ($i = 0; $i < strlen($num); $i++) {
-            $digi = substr($$num, $i, 1);
+            $digi = substr($num, $i, 1);
             $incNum = $digi * (($i % 2) + 1); //multiply digit by 1 or 2
             $counter += ($incNum > 9) ? $incNum - 9 : $incNum; //sum the digits up and add to counter
         }
         if (!($counter % 10 == 0)) {
-            return false;
+            return true;
         }
         
-        return true;
+        return false;
     }
 }

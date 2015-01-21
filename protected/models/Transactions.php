@@ -37,11 +37,10 @@ class Transactions extends basicRecord {
     public $refnum1_ids = '';
     public $maxNum;
     
-    private $_line;
 
-    public function addSingleLine($account_id,$sum,$line){
-        $this->_line=$line;
-        
+
+    public function addSingleLine($account_id,$sum){
+
         $round = new Transactions();
         $round->num = $this->num;
         $round->account_id = $account_id;
@@ -52,8 +51,8 @@ class Transactions extends basicRecord {
         $round->currency_id = $this->currency_id;
         $round->sum = $sum;
         $round->owner_id = $this->owner_id;
-        $round->linenum = $line;
-        $this->_line++;
+        $round->linenum = $this->linenum;
+        $this->linenum++;
         $this->num = $round->save();
         
         
@@ -61,8 +60,8 @@ class Transactions extends basicRecord {
     }
     
     
-    public function addDoubleLine($account_id,$oppt_account_id,$sum,$line) {
-        $this->_line=$line;
+    public function addDoubleLine($account_id,$oppt_account_id,$sum) {
+
         
         $round = new Transactions();
         $round->num = $this->num;
@@ -74,8 +73,8 @@ class Transactions extends basicRecord {
         $round->currency_id = $this->currency_id;
         $round->sum = $sum;
         $round->owner_id = $this->owner_id;
-        $round->linenum = $line;
-        $this->_line++;
+        $round->linenum = $this->linenum;
+        $this->linenum++;
         $this->num = $round->save();
 
         $round = new Transactions();
@@ -88,8 +87,8 @@ class Transactions extends basicRecord {
         $round->currency_id = $this->currency_id;
         $round->sum = $sum * -1;
         $round->owner_id = $this->owner_id;
-        $round->linenum = $line;
-        $this->_line++;
+        $round->linenum = $this->linenum;
+        $this->linenum++;
         $this->num = $round->save();
         
         return $this;

@@ -56,7 +56,7 @@ class FormTransaction  extends CFormModel{
             array('account_id, valuedate, currency_id', 'required'),
             array('account_id', 'numerical', 'integerOnly' => true),
             array('refnum1, refnum2, details', 'length', 'max' => 255),
-            array('valuedate, refnum1_ids', 'safe'),
+            array('valuedate, refnum1_ids, ops, sumneg, sumpos, sourcepos, sourceneg', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             
@@ -75,44 +75,38 @@ class FormTransaction  extends CFormModel{
         }
 
 
-        $model = new Transactions;
-        $line = 1;
-        $model->type = Yii::app()->user->settings['transactionType.manual'];
+        $transAction = new Transactions;
+        $valuedate = date("Y-m-d H:m:s", CDateTimeParser::parse($this->valuedate, Yii::app()->locale->getDateFormat('yiishort')));
+
+        $transAction->type = Yii::app()->user->settings['transactionType.manual'];
         if (isset($this->sourcepos) && (float) $this->sourcepos != 0)
-            $model->sum = $this->sourcepos;
+            $sum = $this->sourcepos;
         else
-            $model->sum = $this->sourceneg * -1;
+            $sum = $this->sourceneg * -1;
 
         //$model->sum=$docdetail->price*$action;
-        $model->owner_id = Yii::app()->user->id;
-        $model->linenum = $line;
-        $model->currency_id = $this->currency_id;
-        $model->refnum1_ids = $this->refnum1;
-        $model->refnum2 = $this->refnum2;
-        $model->details = $this->details;
-        $model->valuedate = $this->valuedate;
-        
-        $model->refnum1 = $model->refnum1_ids;
-        $line++;
-        if ($model->save()) {
-            foreach ($this->ops as $acc) {
-                $i = $line - 2;
-                $submodel = new Transactions();
-                $submodel->attributes = $model->attributes;
-                $submodel->type = Yii::app()->user->settings['transactionType.manual'];
-                $submodel->num = $model->num;
-                $submodel->account_id = $acc;
-                $submodel->refnum1 = $model->refnum1_ids;
-                if (isset($this->sumpos[$i]) && (float) $this->sumneg[$i] != 0)
-                    $submodel->sum = $this->sumpos[$i];
-                else
-                    $submodel->sum = $this->sumneg[$i] * -1;
+        $transAction->owner_id = Yii::app()->user->id;
+        $transAction->linenum = 1;
+        $transAction->currency_id = $this->currency_id;
+        $transAction->refnum1_ids = $this->refnum1;
+        $transAction->refnum2 = $this->refnum2;
+        $transAction->details = $this->details;
+        $transAction->valuedate = $valuedate;
+        $transAction->refnum1 = $transAction->refnum1_ids;
 
-                $submodel->owner_id = Yii::app()->user->id;
-                $submodel->linenum = $line;
-                $submodel->save();
-                //$i
-                $line++;
+        
+        $transAction = $transAction->addSingleLine($this->account_id,$sum); 
+        
+        if ($transAction) {
+            foreach ($this->ops as $i=>$acc) {
+
+                if (isset($this->sumpos[$i]) && (float) $this->sumpos[$i] != 0)
+                    $smallsum = $this->sumpos[$i];
+                else
+                    $smallsum = $this->sumneg[$i] * -1;
+
+                $transAction = $transAction->addSingleLine($acc,$smallsum); 
+
             }
         }
         //put your code here
