@@ -6,6 +6,7 @@
  */
 
 $version = $model->getVersionI()["name"];
+$version = $version["name"];
 $sversion = $model->getSVersion();
 
 

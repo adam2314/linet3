@@ -508,24 +508,28 @@ class Docs extends fileRecord {
 
 
         if (!is_null($tranType)) {//has trans action!
+            $docAction = new Transactions();
+            $docAction->num = 0;
+            $docAction->account_id = $this->account_id;
+            $docAction->type = $tranType;
+            $docAction->linenum = 1;
+            $docAction->refnum1 = $this->id;
+            $docAction->valuedate = $valuedate;
+            $docAction->details = $this->company;
+            $docAction->currency_id = $this->currency_id;
+            $docAction->owner_id = $this->owner;
+
+
+
             if ($this->docType->isdoc) {
-                $vatSum =0;
-                $sum=0;
-                
-                $docAction = new Transactions();
-                $docAction->num = 0;
-                $docAction->account_id = $this->account_id;
-                $docAction->type = $tranType;
-                $docAction->linenum=1;
-                $docAction->refnum1 = $this->id;
-                $docAction->valuedate = $valuedate;
-                $docAction->details = $this->company;
-                $docAction->currency_id = $this->currency_id;
-                $docAction->owner_id = $this->owner;
-                
+                $vatSum = 0;
+                $sum = 0;
+
+
+
                 foreach ($this->docDetailes as $docdetail) {
                     $refnum2 = $this->stock($docdetail->item_id, $docdetail->qty);
-                    $docAction = $docdetail->transaction($docAction,$action, $this->oppt_account_id);
+                    $docAction = $docdetail->transaction($docAction, $action, $this->oppt_account_id);
                     //$line++;
                     $multi = 1;
                     if (!is_null($this->oppt_account_id))
@@ -560,20 +564,19 @@ class Docs extends fileRecord {
 
 
                 //*******************Account*******************//
-                $docAction = $docAction->addSingleLine($this->account_id,$sum * -1); 
-     
+                $docAction = $docAction->addSingleLine($this->account_id, $sum * -1);
+
 
                 //*******************ROUND***********************//
-                $diff=$sum-round($sum,$precision);
+                $diff = $sum - round($sum, $precision);
                 if ($diff) {//diif
-                    $docAction = $docAction->addDoubleLine(6, $this->account_id,$diff);
-
+                    $docAction = $docAction->addDoubleLine(6, $this->account_id, $diff);
                 }
 
 
                 //*******************VAT***********************//
                 if ((double) $vatSum != 0) {
-                    $docAction =$docAction->addSingleLine($this->docType->vat_acc_id,$vatSum);
+                    $docAction = $docAction->addSingleLine($this->docType->vat_acc_id, $vatSum);
                 }
             }
 
@@ -581,8 +584,7 @@ class Docs extends fileRecord {
 
                 foreach ($this->docCheques as $docrcpt) {
 
-                    $docAction =$docrcpt->transaction($docAction, $action, $this->account_id);
-
+                    $docAction = $docrcpt->transaction($docAction, $action, $this->account_id);
                 }
             }
         }

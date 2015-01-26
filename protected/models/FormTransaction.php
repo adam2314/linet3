@@ -110,6 +110,7 @@ class FormTransaction  extends CFormModel{
             }
         }
         //put your code here
+        return true;
     }
 
 }

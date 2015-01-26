@@ -56,7 +56,7 @@ $this->widget('EExcelView', array(
     'filter' => $model,
     'columns' => array(
          'num',
-            
+          'linenum',  
          array(
               'value' => '$data->accountLink()',
               'type' => 'raw',
