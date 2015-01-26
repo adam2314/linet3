@@ -280,9 +280,9 @@ $(document).ready(
 
 
     function refNum(doc) {//
-        $("#choseTransactions_refnum1").dialog("close");
-        $('#Transactions_refnum1_div').html($('#Transactions_refnum1_div').html() + ", " + doc.doctype + " #" + doc.docnum);
-        $('#Transactions_refnum1_ids').val($('#Transactions_refnum1_ids').val() + doc.id + ",");
+        $("#choseFormTransaction_refnum1").dialog("close");
+        $('#FormTransaction_refnum1_div').html($('#FormTransaction_refnum1_div').html() + ", " + doc.doctype + " #" + doc.docnum);
+        $('#FormTransaction_refnum1_ids').val($('#FormTransaction_refnum1_ids').val() + doc.id + ",");
         return false;
     }
 
