@@ -79,7 +79,7 @@ class Mail extends CActiveRecord {
     
     public function save($runValidation = true, $attributes = NULL) {
 
-        $this->mailsend();
+        //$this->mailsend();
         return parent::save($runValidation, $attributes);
     }
 

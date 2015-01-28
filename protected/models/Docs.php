@@ -346,10 +346,10 @@ class Docs extends fileRecord {
                 $vat = $detial['iTotalVat'] - $detial['ihTotal'];
 
                 if ($vat != 0) {
-                    $this->vat += $vat;
-                    $this->sub_total += $detial['ihTotal'];
+                    $this->vat += round($vat,$precision);
+                    $this->sub_total += round($detial['ihTotal'],$precision);
                 } else {
-                    $this->novat_total += $detial['ihTotal'];
+                    $this->novat_total += round($detial['ihTotal'],$precision);
                 }
             }
         }
@@ -368,9 +368,9 @@ class Docs extends fileRecord {
             $this->sub_total += $docdetail->iTotal;
         }//*/
 
-        $this->vat = round($this->vat, $precision);
-        $this->sub_total = round($this->sub_total, $precision);
-        $this->novat_total = round($this->novat_total, $precision);
+        //$this->vat = round($this->vat, $precision);
+        //$this->sub_total = round($this->sub_total, $precision);
+        //$this->novat_total = round($this->novat_total, $precision);
 
         $this->total = $this->vat + $this->sub_total + $this->novat_total;
 
@@ -407,6 +407,7 @@ class Docs extends fileRecord {
                 $submodel->line = $line;
                 $submodel->doc_id = $this->id;
                 if (Item::model()->findByPk((int) $detial["item_id"]) !== null) {
+                    $submodel->iItem=null;
                     if ($submodel->save()) {
 
                         $this->docDet[$key]['iTotalVat'] = $submodel->iTotalVat;
@@ -536,7 +537,7 @@ class Docs extends fileRecord {
                         if ($oppt = Accounts::model()->findByPk($this->oppt_account_id))
                             $multi = ($oppt->src_tax / 100);
 
-                    $iVat = ($docdetail->iTotal * ($docdetail->iVatRate / 100));
+                    $iVat = $docdetail->iTotalVat- $docdetail->iTotal;
                     $sum+=($docdetail->iTotal + $iVat) * $action;
 
                     $iVat*=$multi;
@@ -554,7 +555,7 @@ class Docs extends fileRecord {
                         if ($oppt = Accounts::model()->findByPk($this->oppt_account_id))
                             $multi = ($oppt->src_tax / 100);
 
-                    $iVat = ($docdetail->iTotal * ($docdetail->iVatRate / 100));
+                    $iVat = $docdetail->iVatTotal-$docdetail->iTotal;
                     $sum+=($docdetail->iTotal + $iVat) * $action;
 
                     $iVat*=$multi;
@@ -564,7 +565,7 @@ class Docs extends fileRecord {
 
 
                 //*******************Account*******************//
-                $docAction = $docAction->addSingleLine($this->account_id, $sum * -1);
+                $docAction = $docAction->addSingleLine($this->account_id, round($sum * -1, $precision));
 
 
                 //*******************ROUND***********************//
@@ -576,7 +577,7 @@ class Docs extends fileRecord {
 
                 //*******************VAT***********************//
                 if ((double) $vatSum != 0) {
-                    $docAction = $docAction->addSingleLine($this->docType->vat_acc_id, $vatSum);
+                    $docAction = $docAction->addSingleLine($this->docType->vat_acc_id, round($vatSum, $precision));
                 }
             }
 

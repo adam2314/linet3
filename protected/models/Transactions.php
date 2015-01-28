@@ -46,6 +46,7 @@ class Transactions extends basicRecord {
         $round->account_id = $account_id;
         $round->type = $this->type;
         $round->refnum1 = $this->refnum1;
+        $round->refnum2 = $this->refnum2;
         $round->valuedate = $this->valuedate;
         $round->details = $this->details;
         $round->currency_id = $this->currency_id;
@@ -68,6 +69,7 @@ class Transactions extends basicRecord {
         $round->account_id = $account_id;
         $round->type = $this->type;
         $round->refnum1 = $this->refnum1;
+        $round->refnum2 = $this->refnum2;
         $round->valuedate = $this->valuedate;
         $round->details = $this->details;
         $round->currency_id = $this->currency_id;
@@ -82,6 +84,7 @@ class Transactions extends basicRecord {
         $round->account_id = $oppt_account_id;
         $round->type = $this->type;
         $round->refnum1 = $this->refnum1;
+        $round->refnum2 = $this->refnum2;
         $round->valuedate = $this->valuedate;
         $round->details = $this->details;
         $round->currency_id = $this->currency_id;

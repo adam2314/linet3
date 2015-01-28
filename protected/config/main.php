@@ -31,10 +31,7 @@ return CMap::mergeArray(
                 ),
                 'eav' => array(),
                 'forum' => array(),
-                'user' => array(
-                    'class' => 'WebUser', //rights
-                    'allowAutoLogin' => true,
-                ),
+                'user' => array(),
             ),
             // application components
             'components' => array(
@@ -66,7 +63,8 @@ return CMap::mergeArray(
                     'class' => 'tinymce.TinyMce',
                 ),
                 'user' => array(
-                    'class' => 'RWebUser',
+                    'class' => 'WebUser',
+                    'allowAutoLogin' => true,
                 ),
                 'authManager' => array(
                     'class' => 'RDbAuthManager',

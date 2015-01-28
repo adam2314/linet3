@@ -56,7 +56,7 @@ class FormTransaction  extends CFormModel{
             array('account_id, valuedate, currency_id', 'required'),
             array('account_id', 'numerical', 'integerOnly' => true),
             array('refnum1, refnum2, details', 'length', 'max' => 255),
-            array('valuedate, refnum1_ids, ops, sumneg, sumpos, sourcepos, sourceneg', 'safe'),
+            array('valuedate, refnum2, refnum1, ops, sumneg, sumpos, sourcepos, sourceneg', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             
@@ -88,11 +88,11 @@ class FormTransaction  extends CFormModel{
         $transAction->owner_id = Yii::app()->user->id;
         $transAction->linenum = 1;
         $transAction->currency_id = $this->currency_id;
-        $transAction->refnum1_ids = $this->refnum1;
+        $transAction->refnum1 = $this->refnum1;
         $transAction->refnum2 = $this->refnum2;
         $transAction->details = $this->details;
         $transAction->valuedate = $valuedate;
-        $transAction->refnum1 = $transAction->refnum1_ids;
+        //$transAction->refnum1 = $transAction->refnum1_ids;
 
         
         $transAction = $transAction->addSingleLine($this->account_id,$sum); 

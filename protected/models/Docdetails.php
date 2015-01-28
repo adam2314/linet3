@@ -71,7 +71,14 @@ class Docdetails extends basicRecord {
 
         $this->iTotal = round($this->iTotalVat - ($this->iTotalVat * ($this->iVatRate / 100)) / (1 + ($this->iVatRate / 100)), $this->_precision);
 
-        return $this->CalcPriceWithOutVat();
+        $this->iItem = round(($this->iTotal / $this->qty) * ($this->rate / $this->doc_rate), $this->_precision);
+        $this->ihItem = $this->iItem;
+        $this->iTotal = round(($this->iItem * $this->qty) * ($this->rate / $this->doc_rate), $this->_precision);
+        $this->ihTotal = $this->iTotal;
+        $this->iTotallabel = $this->iTotal;
+        
+        
+        return $this;
     }
 
 //itotal+vat
@@ -131,7 +138,7 @@ class Docdetails extends basicRecord {
     }
 
     public function transaction($transaction,$action, $optacc) {
-
+        $this->ini();
 
         if (is_null($this->Item)) {
             throw new CHttpException(500, 'The item ' . $this->item_id . ' does not exsits.');
@@ -172,7 +179,7 @@ class Docdetails extends basicRecord {
             $sum = (($this->ihTotal + $vat) * $action);
         }
         if($sum)
-            return $transaction->addSingleLine($incomeacc,$sum);
+            return $transaction->addSingleLine($incomeacc,round($sum, $this->_precision));
         
             
         return $transaction;

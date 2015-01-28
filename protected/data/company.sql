@@ -1290,6 +1290,7 @@ CREATE TABLE `docDetails` (
   `ihTotal` decimal(20,2) DEFAULT NULL,
   `iVatRate` decimal(20,2) NOT NULL,
   `line` int(11) NOT NULL,
+  `iTotalVat` decimal(20,2) NOT NULL,
   PRIMARY KEY (`doc_id`,`line`)
 );
 
