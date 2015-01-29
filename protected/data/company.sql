@@ -1244,7 +1244,7 @@ INSERT INTO `config` (`id`, `value`, `eavType`, `hidden`, `priority`) VALUES
 ('pelecard.termNo', '', 'string', 1, 40), 
 ('pelecard.shopNo', '', 'string', 1, 40),
 ('company.sumDiff', '0.05', 'string', 1, 40),
-('company.precision', '1', 'integer', 1, 40);
+('company.precision', '2', 'integer', 1, 40);
 
 CREATE TABLE `curRates` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,

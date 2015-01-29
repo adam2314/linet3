@@ -151,7 +151,7 @@ class FormLinet2Import extends CFormModel {
             $item = $this->parseLine($item);
             $keys = "`id`, `name`, `unit_id`, `extcatnum`, `manufacturer`, `saleprice`, `currency_id`, `ammount`, `owner`, `itemVatCat_id`";
 
-            $values = "'$item[0]', '$item[3]', '$item[4]', '$item[5]', '$item[6]', '$item[7]', '$item[8]', '$item[9]', '$item[10]', '1'"; //itemVatCat
+            $values = "'$item[0]', '$item[3]', '$item[4]', '$item[5]', '$item[6]', '$item[7]', 'ILS', '$item[9]', '$item[10]', '1'"; //itemVatCat
             $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "items` ($keys) VALUES ($values);");
             //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
         }
@@ -407,6 +407,9 @@ class FormLinet2Import extends CFormModel {
         $acc->src_tax = $company[12];
         $acc->save();
 
+        //add warehouse
+        
+        //add genral item
 
         //get transaction num
         $this->saveSetting('company.transaction', Transactions::getMax() + 1);
