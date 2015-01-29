@@ -98,7 +98,10 @@ class PelaCredit {
         //return $output;
        
     }
-    
+    public function line($attrs=array()){
+        return "";
+        
+    }
     
     
 

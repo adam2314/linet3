@@ -17,7 +17,10 @@ class PelaCreditPaymnts {
     const CUR_USD = 2;
     const CUR_EUR = 978;
 
-    
+    public function line($attrs=array()){
+        return "";
+        
+    }
         
     
     

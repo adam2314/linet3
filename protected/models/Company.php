@@ -128,7 +128,7 @@ class Company extends mainRecord {
         $handle = fopen($file, 'w');
         fwrite($handle, $dumper->getDump(false, $this->prefix));
         fclose($handle);
-        Zipper::zip($folder, $folder . "tenant.zip");
+        Zipper::zip($folder, $folder . "tenant.zip","backup");
 
 
 

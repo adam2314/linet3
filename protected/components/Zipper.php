@@ -10,7 +10,7 @@
  ************************************************************************************/
 class Zipper {
     
-    public static function zip($source, $destination) {
+    public static function zip($source, $destination,$exclude='') {
         if (extension_loaded('zip') === true) {
             if (file_exists($source) === true) {
                 $zip = new ZipArchive();
@@ -19,11 +19,13 @@ class Zipper {
                     if (is_dir($source) === true) {
                         $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
                         foreach ($files as $file) {
-                            $file = realpath($file);
-                            if (is_dir($file) === true) {
-                                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
-                            } else if (is_file($file) === true) {
-                                $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+                            if(strpos($file,$exclude)==0){
+                                $file = realpath($file);
+                                if (is_dir($file) === true) {
+                                    $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+                                } else if (is_file($file) === true) {
+                                    $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+                                }
                             }
                         }
                     } else if (is_file($source) === true) {
