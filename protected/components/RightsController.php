@@ -11,7 +11,7 @@ Yii::import('ext.tinymce.*');
  * All Rights Reserved.
  ************************************************************************************/
 class RightsController extends RController {
-
+   public $company=null;
     /**
      * @var string the default layout for the controller view. Defaults to '//layouts/column1',
      * meaning using a single column layout. See 'protected/views/layouts/column1.php'.
@@ -78,9 +78,9 @@ class RightsController extends RController {
         } else {
             //hasAccess!
 
-            $database = Company::model()->findByPk(Yii::app()->user->Company);
+            $this->company = Company::model()->findByPk(Yii::app()->user->Company);
 
-            Company::model()->loadComp($database);
+            Company::model()->loadComp($this->company);
         }
 
 //*/

@@ -116,7 +116,7 @@ class User extends mainRecord {
     }
 
     private function getWidgets() {
-        if (Yii::app()->user->Company != 0) {
+        if (Yii::app()->db->schema->getTable('{{config}}') !== null) {
             $a = Settings::model()->findByPk("company." . $this->id . ".widget");
 
             if ($a !== null) {
@@ -127,7 +127,7 @@ class User extends mainRecord {
     }
 
     private function getWarehouse() {
-        if (Yii::app()->user->Company != 0) {
+        if (Yii::app()->db->schema->getTable('{{config}}') !== null) {
             $a = Settings::model()->findByPk("company." . $this->id . ".warehouse");
             if ($a !== null) {
                 $this->warehouse = $a->value;
@@ -137,7 +137,7 @@ class User extends mainRecord {
     }
 
     public function getCertPasswd() {
-        if (isset(Yii::app()->user->Database)) {
+        if (Yii::app()->db->schema->getTable('{{config}}') !== null) {
             $a = Settings::model()->findByPk("company." . $this->id . ".certpasswd");
             if ($a !== null) {
                 $this->certpasswd = $a->value;
@@ -158,7 +158,7 @@ class User extends mainRecord {
             $this->password = $this->hashPassword($this->passwd, $this->salt);
 
         $res = parent::save($runValidation, $attributes);
-        if ((Yii::app()->user->Company != 0) && ($res)) {
+        if ((Yii::app()->db->schema->getTable('{{config}}') !== null) && ($res)) {
             $this->compSave();
             //echo $this->warehouse;
             //exit;

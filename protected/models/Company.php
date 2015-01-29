@@ -23,15 +23,19 @@ class Company extends mainRecord {
 
     public function loadSettings() {
         //load also income maps
-        $temp = Settings::model()->findAll();
         $settings = array();
-        foreach ($temp as $key) {
-            $settings[$key->id] = $key->value;
+        if (Yii::app()->db->schema->getTable('{{config}}') !== null) {
+            $temp = Settings::model()->findAll();
+            
+            foreach ($temp as $key) {
+                $settings[$key->id] = $key->value;
+            }
+            
+            Yii::app()->session['menu']=Menu::model()->buildUserMenu($settings);
         }
-
         
         Yii::app()->session['settings']=$settings;
-        Yii::app()->session['menu']=Menu::model()->buildUserMenu($settings);
+        
 
         
         
@@ -113,7 +117,7 @@ class Company extends mainRecord {
         }
         //delete folders
 
-        $folder = $this->getFilePath();
+        $folder = $this->getFilePath($this);
         CFileHelper::removeDirectory($folder);
         //delete db perms
 
@@ -121,7 +125,7 @@ class Company extends mainRecord {
     }
 
     public function backup() {
-        $folder = $this->getFilePath();
+        $folder = $this->getFilePath($this);
         $file = $folder . "db.sql";
         $dumper = new dbMaster();
 
@@ -146,7 +150,7 @@ class Company extends mainRecord {
     }
 
     public function restore($file) {
-        $folder = $this->getFilePath();
+        $folder = $this->getFilePath($this);
         if (file_exists($file)) {
 
             Zipper::unzip($file, $folder);
@@ -157,11 +161,11 @@ class Company extends mainRecord {
         }
     }
 
-    static public function getFilePath() {
-
-        $configPath = Yii::app()->user->settings["company.path"];
-        $configPath = Yii::app()->user->Database->prefix;
-        //echo Yii::app()->params["filePath"] . $configPath . "/";
+    static public function getFilePath($company=null) {
+        if($company!==null)
+            $configPath=$company->prefix;
+        else
+            $configPath = Yii::app()->user->Database->prefix;
         return Yii::app()->params["filePath"] . $configPath . "/";
     }
 
@@ -333,7 +337,8 @@ class Company extends mainRecord {
         $this->select($this->id);
 
         Settings::model()->refreshMetaData();
-        $name = Settings::model()->findByPk('company.name')->value;
+        $name = Yii::app()->user->getSetting('company.name');
+        //$name = Settings::model()->findByPk('company.name')->value;
 
         return $name;
     }
