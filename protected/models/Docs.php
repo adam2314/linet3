@@ -363,7 +363,7 @@ class Docs extends fileRecord {
         /**/
         if ($this->discount !== 0) {
             $docdetail = $this->calcDiscount();
-            $iVat = ($docdetail->iTotal * ($docdetail->iVatRate / 100));
+            $iVat = round($docdetail->iTotalVat-$docdetail->iTotal,$precision);
             $this->vat += $iVat;
             $this->sub_total += $docdetail->iTotal;
         }//*/
