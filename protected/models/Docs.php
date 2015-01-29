@@ -555,7 +555,7 @@ class Docs extends fileRecord {
                         if ($oppt = Accounts::model()->findByPk($this->oppt_account_id))
                             $multi = ($oppt->src_tax / 100);
 
-                    $iVat = $docdetail->iVatTotal-$docdetail->iTotal;
+                    $iVat = $docdetail->iTotalVat-$docdetail->iTotal;
                     $sum+=($docdetail->iTotal + $iVat) * $action;
 
                     $iVat*=$multi;
@@ -717,8 +717,12 @@ class Docs extends fileRecord {
         }
         if ($line) {
             //if (!Linet3Helper::numDiff($sum, (double) $this->rcptsum))
-            if ((double) $sum != (double) $this->total)
+            if ( abs($sum -  $this->total)>0.0001){
+                echo  Yii::t('app', 'Total and recipt does not mach') . " " . $sum . " " . $this->total." ".abs($sum -  $this->total);
+                exit;
                 $this->addError($attribute, Yii::t('app', 'Total and recipt does not mach') . " " . $sum . " " . $this->total);
+                
+            }
         }
     }
 
