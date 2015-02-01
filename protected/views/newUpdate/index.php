@@ -5,7 +5,7 @@
  * and open the template in the editor.
  */
 
-$version = $model->getVersionI()["name"];
+$version = $model->getVersionI();
 $version = $version["name"];
 $sversion = $model->getSVersion();
 

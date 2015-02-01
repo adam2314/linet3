@@ -62,7 +62,7 @@ class docReport extends DashPanel {
                 ), //*/
                 array(
                     'name' => 'account_id',
-                    'value' => 'CHtml::link(CHtml::encode($data->company),Yii::app()->createAbsoluteUrl("/accounts/transaction/id/".$data->account_id))',
+                    'value' => 'CHtml::link(CHtml::encode($data->company),Yii::app()->createAbsoluteUrl("/accounts/transaction/".$data->account_id))',
                     'type' => 'raw',
                 ), //*/
                 'total',

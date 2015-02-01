@@ -259,7 +259,7 @@ class FormLinet2Import extends CFormModel {
             //echo $doc."<br />";
             $docdetail = str_replace("'" . $prefix . "',", "", $docdetail);
             //$doc= $this->parseLine($doc);
-            $keys = "`doc_id`, `item_id`, `name`, `qty`, `iItem`, `currency_id`, `ihTotal`, `iTotal`, `line`";
+            $keys = "`doc_id`, `item_id`, `name`, `qty`, `iItem`, `currency_id`, `iTotal`, `ihTotal`, `line`";
 
             //$values="'$item[0]', '$item[3]', '$item[4]', '$item[5]', '$item[6]', '$item[7]', '$item[8]', '$item[9]', '$item[10]'";
             $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "docDetails` ($keys) VALUES $docdetail;");
