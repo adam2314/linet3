@@ -238,6 +238,7 @@ class DocsController extends RightsController {
         
         if (isset($_POST['Docs'])) {
             $this->actionCreate();
+            Yii::app()->end();
         }
 
 

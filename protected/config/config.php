@@ -2,8 +2,8 @@
 
 return array(
     'language'=>'en_us',
-    'sourcePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'../..',
-    'messagePath'=>dirname(__FILE__).'/../messages',
+    'sourcePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..'. DIRECTORY_SEPARATOR .'..',
+    'messagePath'=>dirname(__FILE__). DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'messages',
     'languages'=>array('en_us','he_il'),
     'fileTypes'=>array('php'),
     'overwrite'=>true,

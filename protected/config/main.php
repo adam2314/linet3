@@ -1,18 +1,18 @@
 <?php
 
 //needs to move!
-Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
-Yii::setPathOfAlias('tinymce', dirname(__FILE__) . '/../extensions/tinymce');
+Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . DIRECTORY_SEPARATOR . '..'. DIRECTORY_SEPARATOR .'extensions'.DIRECTORY_SEPARATOR.'bootstrap');
+Yii::setPathOfAlias('tinymce', dirname(__FILE__) . DIRECTORY_SEPARATOR . '..'. DIRECTORY_SEPARATOR .'extensions'.DIRECTORY_SEPARATOR.'tinymce');
 
 return CMap::mergeArray(
-                include(dirname(__FILE__) . '/install.php'), array(
+                include(dirname(__FILE__) .  DIRECTORY_SEPARATOR .'install.php'), array(
             'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
             'name' => 'Linet 3.0',
             //'theme'=>'fancy',
             'sourceLanguage' => 'en',
             // preloading 'log' component
             'preload' => array('log'),
-            'localeDataPath' => 'protected/i18n/data/',
+            'localeDataPath' => 'protected'. DIRECTORY_SEPARATOR .'i18n'. DIRECTORY_SEPARATOR .'data'. DIRECTORY_SEPARATOR,
             'defaultController' => 'company',
             'onBeginRequest' => array('Linet3', 'beginRequest'),
             // autoloading model and component classes
@@ -130,7 +130,7 @@ return CMap::mergeArray(
                 'updatesrv' => 'https://update3.linet.org.il/',
                 'version' => '3.0',
                 'timezone' => 'Asia/Tel_Aviv',
-                'filePath' => dirname(__FILE__) . '/../files/',
+                'filePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR,
                 'local' => true,
             ),
                 )//end main
