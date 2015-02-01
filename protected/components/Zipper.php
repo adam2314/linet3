@@ -22,14 +22,15 @@ class Zipper {
                             if(strpos($file,$exclude)==0){
                                 $file = realpath($file);
                                 if (is_dir($file) === true) {
-                                    $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+                                    $zip->addEmptyDir(str_replace($source . DIRECTORY_SEPARATOR, '', $file . DIRECTORY_SEPARATOR));
                                 } else if (is_file($file) === true) {
-                                    $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+                                    $zip->addFile($file,str_replace($source . DIRECTORY_SEPARATOR, '', $file));
                                 }
                             }
                         }
                     } else if (is_file($source) === true) {
-                        $zip->addFromString(basename($source), file_get_contents($source));
+                        $zip->addFile($source,basename($source));
+                        //$zip->addFromString(basename($source), file_get_contents($source));
                     }
                 }
                 return $zip->close();

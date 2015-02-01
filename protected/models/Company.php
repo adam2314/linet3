@@ -138,7 +138,7 @@ class Company extends mainRecord {
 
         $file = new Files;
         $file->name = date("d-m-Y_H_i") . ".zip";
-        $file->path = 'backup/';
+        $file->path = 'backup'.DIRECTORY_SEPARATOR;
         $file->save();
 
 
@@ -166,7 +166,7 @@ class Company extends mainRecord {
             $configPath=$company->prefix;
         else
             $configPath = Yii::app()->user->Database->prefix;
-        return Yii::app()->params["filePath"] . $configPath . "/";
+        return Yii::app()->params["filePath"] . $configPath . DIRECTORY_SEPARATOR;
     }
 
     private function createDb() {
@@ -176,8 +176,8 @@ class Company extends mainRecord {
 
         $master = new dbMaster();
         //$master->loadFile($yiiBasepath . "/data/company-lite.sql", Yii::app()->db->tablePrefix);
-        $master->loadFile($yiiBasepath . "/data/company.sql", Yii::app()->db->tablePrefix);
-        $master->loadFile($yiiBasepath . "/data/company-data.sql", Yii::app()->db->tablePrefix);
+        $master->loadFile($yiiBasepath . DIRECTORY_SEPARATOR."data".DIRECTORY_SEPARATOR."company.sql", Yii::app()->db->tablePrefix);
+        $master->loadFile($yiiBasepath . DIRECTORY_SEPARATOR."data".DIRECTORY_SEPARATOR."company-data.sql", Yii::app()->db->tablePrefix);
     }
 
     public function save($runValidation = true, $attributes = NULL) {
@@ -213,15 +213,15 @@ class Company extends mainRecord {
 
             //$yiiBasepath = Yii::app()->basePath;
 
-            $folder = Yii::app()->params["filePath"] . $this->prefix . "/";
+            $folder = Yii::app()->params["filePath"] . $this->prefix . DIRECTORY_SEPARATOR;
             mkdir($folder);
-            mkdir($folder . "settings/"); //settings
-            mkdir($folder . "cert/"); //cert
-            mkdir($folder . "docs/"); //docs
-            mkdir($folder . "items/"); //items
-            mkdir($folder . "openformat/"); //openformat
-            mkdir($folder . "files/"); //openformat
-            mkdir($folder . "backup/"); //backup
+            mkdir($folder . "settings"); //settings
+            mkdir($folder . "cert"); //cert
+            mkdir($folder . "docs"); //docs
+            mkdir($folder . "items"); //items
+            mkdir($folder . "openformat"); //openformat
+            mkdir($folder . "files"); //openformat
+            mkdir($folder . "backup"); //backup
             //add permisstions
         } else {     //else
             //table version
