@@ -9,7 +9,7 @@
  ************************************************************************************/
 $logopath = Yii::app()->createAbsoluteUrl("site/download/" . Yii::app()->user->getSetting('company.logo'));
 $legalize = "";
-if ($preview == 2) {
+if ($model->preview == 2) {
     $legalize = Yii::t('app', 'Computerized Document');
 }
 //$this->beginWidget('MiniForm',array('header' => Yii::t("app","View Document ") ." " .$model->id,));
@@ -326,8 +326,9 @@ if ($preview == 2) {
 ?>
 <script type="text/javascript">
     window.onload = function() {
-        preview =<?php echo $preview; ?>;
-
+        preview =<?php echo $model->preview; ?>;
+        //console.log(preview);
+        
         if (preview == 0) {
             window.print();
             window.location = "<?php echo Yii::app()->CreateURL('docs/view/'.$model->id) ?>"

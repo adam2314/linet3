@@ -41,6 +41,7 @@ class Docs extends fileRecord {
     const table = '{{docs}}';
 
     //public $lang;
+    public $preview=0;
     public $docDet = NULL;
     public $docCheq = NULL;
     public $Docs = NULL;

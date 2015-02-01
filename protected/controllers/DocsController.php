@@ -43,7 +43,7 @@ class DocsController extends RightsController {
         }
     }
 
-    public function actionPrint($id, $preview = 0, $model = null, $return = false) {//usd for print*/
+    public function actionPrint($id, $model = null, $return = false) {//usd for print*/
         if (isset($_POST['language']))
             Yii::app()->language = $_POST['language'];
         //Yii::app()->language='he_il';
@@ -153,9 +153,11 @@ class DocsController extends RightsController {
             case 'preview':
 
                 //$model->loadDet();
+                $model->preview=1;
                 $model->draftSave();
                 $model->save();
-                $this->actionPrint($model->id, 1, $model);
+                
+                $this->actionPrint($model->id, $model);
                 $model->delete();
                 return;
             case 'email':
@@ -237,8 +239,8 @@ class DocsController extends RightsController {
         $model->ref_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
         
         if (isset($_POST['Docs'])) {
-            $this->actionCreate();
-            Yii::app()->end();
+            return $this->actionCreate();
+            
         }
 
 
