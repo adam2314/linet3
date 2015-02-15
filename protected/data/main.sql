@@ -799,7 +799,9 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`, `sort`) VALUES
 (77, 'Payment Admin', 'payment/admin', NULL, 1, 0),
 (78, 'Stock entry certificate', 'docs/create/16', NULL, 16, 0),
 (79, 'Stock exit certificate', 'docs/create/17', NULL, 16, 0),
-(80, 'General', NULL, 'glyphicon glyphicon-flag', 0, 1);
+(80, 'General', NULL, 'glyphicon glyphicon-flag', 0, 1),
+(81, 'Manage Costumers', 'accounts/index/0', NULL, 22, 0);
+
 
 CREATE TABLE IF NOT EXISTS `openformat` (
   `id` int(11) NOT NULL,

@@ -26,7 +26,7 @@ class DocsController extends RightsController {
         }
         //$docdetails =$model->docDetailes;
         //$doctype =$model->docType;
-
+        $model->preview=1;
 
         $this->render('view', array(
             'model' => $model,

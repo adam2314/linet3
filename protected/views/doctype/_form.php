@@ -21,7 +21,7 @@
 		<?php //echo $form->checkboxRow($model,'iscontract'); ?>
 	
 
-		<?php //echo $form->textFieldRow($model,'stockAction'); ?>
+		<?php echo $form->checkboxRow($model,'stockAction'); ?>
 	
 		<?php echo $form->dropDownListRow($model,'account_type',CHtml::listData(Acctype::model()->findAll(), 'id', 'name'));?>
                 <br />

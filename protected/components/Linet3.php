@@ -20,6 +20,9 @@ class Linet3 {
         if (!Yii::app()->user->isGuest) {
             self::setAppData();
             //self::setUserData();
+        }else{
+            //default theme
+            //Yii::app()->theme = 'admin4';
         }
     }
 
@@ -35,7 +38,5 @@ class Linet3 {
         if (isset(Yii::app()->user->User)) {
             Yii::app()->theme = Yii::app()->user->User->theme;
         }
-        //Yii::app()->theme = 'admin4';
-        //Yii::app()->theme = 'classic';
     }
 }

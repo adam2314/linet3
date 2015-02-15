@@ -59,7 +59,7 @@ $this->beginWidget('MiniForm', array('header' => Yii::t("app", "View Document") 
 ?>
 
 
-<?php echo $this->renderPartial('print', array('model' => $model, 'preview' => 1)); ?>
+<?php echo $this->renderPartial('print', array('model' => $model)); ?>
 
 <label for="Docs_comments"><?php echo $model->getAttributeLabel('comments'); ?></label>
 
