@@ -161,16 +161,10 @@ class Docdetails extends basicRecord {
         } else {
             $incomeacc = $optacc;
 
-
-
-            if ($oppt = Accounts::model()->findByPk($vatCatAcc->account_id))
-                $multi = ($oppt->src_tax / 100);
-
-            $vat = $this->ihTotal * $multi;
-
+            $vat = $this->iTotalVat- $this->iTotal;
             if ($oppt = Accounts::model()->findByPk($incomeacc))
                 $multi = 1 - ($oppt->src_tax / 100);
-            $vat = $vat * $multi;
+            $vat = round($vat * $multi,$this->_precision);
 
 
             //$multi=$this->iTotalVat*$multi;

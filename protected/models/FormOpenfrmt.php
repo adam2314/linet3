@@ -493,7 +493,7 @@ function typeline($str, $filter){
 
 
     public function make(){
-        $this->id= rand(0,999999999999999);
+        $this->id= rand(0,999999);
         //$this->iniArr=array('b110'=>0,'b100'=>0,'m100'=>0,'c100'=>0,'d100'=>0,'d110'=>0,'d120'=>0,);
         //$this->docArr=array(0=>0,305=>0,300=>0,);
         $bkmv='';

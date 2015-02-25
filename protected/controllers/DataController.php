@@ -17,7 +17,7 @@ class DataController extends RightsController {//
             $this->redirect('backup');
         }
         $model=new Files('search');
-        $model->path="backup/";
+        $model->path="backup".DIRECTORY_SEPARATOR;
         //if(isset($_POST['name'])){
         //Yii::import('ext.dumpDB.dumpDB');
         //$dumper = new dbDump();
