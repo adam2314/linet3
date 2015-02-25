@@ -223,6 +223,11 @@ class basicRecord extends CActiveRecord {
         if ($field->type == 'n')
             $template = "%0" . $field->size . "d";
         if ($field->type == 'date') {//date
+            if(get_class($this)=='Transactions'){
+                $phpdbdatetime = Yii::app()->locale->getDateFormat('yiidbdatetime');
+                return date('Ymd', CDateTimeParser::parse($value, $phpdbdatetime));
+            }
+            
             if (isset($this->dateDBformat)) {
                 if ($this->dateDBformat) {
                     $phpdbdatetime = Yii::app()->locale->getDateFormat('yiidbdatetime');
