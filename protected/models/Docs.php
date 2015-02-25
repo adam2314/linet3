@@ -516,7 +516,7 @@ class Docs extends fileRecord {
             $docAction->type = $tranType;
             $docAction->linenum = 1;
             $docAction->refnum1 = $this->id;
-            $docAction->refnum2 = $this->refnum2;
+            $docAction->refnum2 = $this->refnum_ext;
             $docAction->valuedate = $valuedate;
             $docAction->details = $this->company;
             $docAction->currency_id = $this->currency_id;
