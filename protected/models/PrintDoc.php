@@ -1,12 +1,13 @@
 <?php
-/***********************************************************************************
+
+/* * *********************************************************************************
  * The contents of this file are subject to the Mozilla Public License Version 2.0
  * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
 
 class PrintDoc {
 
@@ -28,9 +29,8 @@ class PrintDoc {
         Yii::app()->controller->layout = 'print';
         return Yii::app()->controller->render('//docs/print', array('model' => $model), true);
     }
-    
-    
-    public static function getPdf($model){
+
+    public static function getPdf($model) {
         $name = $model->docType->name . "-" . "$model->docnum-signed.pdf";
         $doc_file = PrintDoc::findFile($model, $name);
         if (!$doc_file) {
@@ -38,23 +38,22 @@ class PrintDoc {
         }
         return $doc_file;
     }
-    
 
     public static function pdfDoc($model) {
         $yiiBasepath = Yii::app()->basePath;
         $yiiUser = Yii::app()->user->id;
         //$configPath = Yii::app()->user->settings["company.path"];
-        
-        $user=User::model()->findByPk($yiiUser);
+
+        $user = User::model()->findByPk($yiiUser);
         if (!$user->hasCert()) {
             //create new
-            $settings=array(
-                   'commonName' => $user->username,
+            $settings = array(
+                'commonName' => $user->username,
                 'emailAddress' => $user->email,
             );
-            if(Yii::app()->user->settings['company.en.city']!='')
-                $settings['localityName']=Yii::app()->user->settings['company.en.city'];
-            if(Yii::app()->user->settings['company.en.name']!='')
+            if (Yii::app()->user->settings['company.en.city'] != '')
+                $settings['localityName'] = Yii::app()->user->settings['company.en.city'];
+            if (Yii::app()->user->settings['company.en.name'] != '')
                 $settings['organizationName'] = Yii::app()->user->settings['company.en.name'];
             $ssl = new SSLHelper($settings);
 
@@ -62,15 +61,16 @@ class PrintDoc {
             $user->certpasswd = $ssl->createUserCert($filename);
             $user->save();
         }
-        
-        
+
+
         $configCertpasswd = Yii::app()->user->User->getCertPasswd();
 
 
         $name = $model->docType->name . "-" . "$model->docnum.pdf";
         $file = PrintDoc::findFile($model, $name);
         if (!$file) {
-            $docfile = PrintDoc::printMe($model, 2);
+            $model->preview = 2;
+            $docfile = PrintDoc::printMe($model);
             $mPDF1 = Yii::app()->ePdf->mpdf();
             $mPDF1->WriteHTML($docfile);
 
@@ -115,7 +115,7 @@ class PrintDoc {
                     throw new CHttpException('Cannot open the certificate file');
                 }
 
-                
+
                 //throw new Exception('Uncaught Exception');
                 $pdf->attachDigitalCertificate($certificate, $configCertpasswd);
                 //restore_exception_handler();
@@ -161,9 +161,8 @@ You can find instructions for making self signed certificate file with Acrobat r
 
     public static function handle1Exception($exception) {
 
-        echo "Exception: " , $exception->getMessage(), "\n";
+        echo "Exception: ", $exception->getMessage(), "\n";
         exit;
-        
     }
 
 }

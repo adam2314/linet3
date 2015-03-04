@@ -9,7 +9,7 @@
  * All Rights Reserved.
  * ********************************************************************************** */
 
-class m301120_250215_0031 extends CDbMigration {
+class m301120_260215_0032 extends CDbMigration {
 
     public function up() {
 
@@ -17,7 +17,9 @@ class m301120_250215_0031 extends CDbMigration {
         CFileHelper::removeDirectory(Yii::app()->basePath . "/../update/");
         CFileHelper::removeDirectory(Yii::app()->basePath . "/../assets/lib/chosen/");
         
-        $this->update( 'openformat', array("export"=>"this.reg_date","import"=>'this.reg_date'), "id='1362'");
+        $this->update( 'openformat', array("export"=>"this.reg_date","import"=>'this.reg_date'), "id='1375'");
+        
+
     }
 
     public function down() {
