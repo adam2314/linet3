@@ -29,7 +29,9 @@ class InstallPre extends CFormModel {
         }
 
          private function apachechk($str){
-             $array=apache_get_modules();
+             $array=[];
+             if (function_exists('apache_get_modules')) 
+                $array=apache_get_modules();
             if(in_array($str,$array))
                 return Yii::t('app', "OK");
             else 

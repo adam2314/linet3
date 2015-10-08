@@ -160,7 +160,7 @@ class Docdetails extends basicRecord {
             $sum = ($this->ihTotal * $action);
         } else {
             $incomeacc = $optacc;
-
+	    $multi=1;
             $vat = $this->iTotalVat- $this->iTotal;
             if ($oppt = Accounts::model()->findByPk($incomeacc))
                 $multi = 1 - ($oppt->src_tax / 100);

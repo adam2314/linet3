@@ -54,9 +54,11 @@ class Update extends CFormModel {
     }
 
     public function getMessages() {
-
-
-        return $this->_send("update/msg/?version=" . $this->getSVersion());
+	try {
+            return $this->_send("update/msg/?version=" . $this->getSVersion());
+        } catch (\Exception $ex) {
+            return [["data" => "No Server!", "title" => "error no update server"]];
+        }
     }
 
     public function getVersionI() {
