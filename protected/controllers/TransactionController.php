@@ -47,7 +47,7 @@ class TransactionController extends RightsController {
                 $sum = $balanceArr[$index];
                 if ($account) {
                     $submodel = new Transactions();
-                    $submodel->date = $date;
+                    $submodel->valuedate = $date;
                     $submodel->details = Yii::t('app', "Opening Balance");
                     $submodel->type = Yii::app()->user->settings['transactionType.openBalance'];
                     $submodel->currency_id = Yii::app()->user->settings['company.cur'];
@@ -62,7 +62,7 @@ class TransactionController extends RightsController {
 
                     $submodel1 = new Transactions();
                     $submodel1->num = $submodel->num;
-                    $submodel1->date = $date;
+                    $submodel1->valuedate = $date;
                     $submodel1->details = Yii::t('app', "Opening Balance");
                     $submodel1->type = Yii::app()->user->settings['transactionType.openBalance'];
                     $submodel1->currency_id = Yii::app()->user->settings['company.cur'];
