@@ -68,7 +68,7 @@ $this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
     ),
 ));
 
-echo $this->renderPartial('application.views.transaction.create', array('model' => new Transactions()));
+echo $this->renderPartial('application.views.transaction.create', array('model' => new FormTransaction()));
 
 
 
