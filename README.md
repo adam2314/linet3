@@ -9,12 +9,18 @@
 linet3
 ======
 
-Linet accounting application
+Linet accounting system
 
+to install on linux clone the source
+`git clone https://github.com/adam2314/linet3.git`
 
+then cd into the protected folder and run
+`curl -sS https://getcomposer.org/installer | php`
 
-./composer.phar global require "fxp/composer-asset-plugin:~1.1.1"
+the update composer globals
+`./composer.phar global require "fxp/composer-asset-plugin:~1.1.1"`
 
-./composer.phar update
+and install missing packages
+`./composer.phar update`
 
 ./composer.phar install

@@ -21,8 +21,6 @@ $config = [
             'dateFormat' => 'dd/MM/yyyy',
             'decimalSeparator' => '.',
             'thousandSeparator' => ',',
-            'currencyCode' => 'ILS',
-            'defaultTimeZone' =>'Asia/Jerusalem',
         ],
         'request' => [
             'cookieValidationKey' => 'S994ssCV_EvpN3dbikgqKtiCqTQ5ytNB',
