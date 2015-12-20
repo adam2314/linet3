@@ -18,6 +18,7 @@ use app\models\InstallPre;
 use app\models\InstallConfig;
 use app\models\User;
 use app\models\Finish;
+
 class InstallController extends Controller {
 
     //public $layout = '//layouts/main';
@@ -48,12 +49,11 @@ class InstallController extends Controller {
     }
 
     public function actionError() {
-         $exception = Yii::$app->errorHandler->exception;
-    if ($exception !== null) {
-        return $this->render('error', ['exception' => $exception]);
-    }
+        $exception = Yii::$app->errorHandler->exception;
+        if ($exception !== null) {
+            return $this->render('error', ['exception' => $exception]);
+        }
         return $this->render('error', ["exception" => $exception]);
-
     }
 
     public function actionConfig() {
@@ -83,8 +83,8 @@ class InstallController extends Controller {
         try {
             $db->con();
         } catch (\yii\db\Exception $e) {
-            
-            return $this->render('config', array('model' => $db,"error"=>"No DB"));
+
+            return $this->render('config', array('model' => $db, "error" => "No DB"));
         }
 
 
@@ -98,55 +98,60 @@ class InstallController extends Controller {
         //user
         $model = new User();
         $model->scenario = 'create';
-        $model->language='he_il';
-        $model->timezone='Asia/Jerusalem';
-        
-        
-        
+        $model->language = 'he_il';
+        $model->timezone = 'Asia/Jerusalem';
+
+
         if ($model->load(Yii::$app->request->post())) {
             //$model->save();
+
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\bootstrap\ActiveForm::validate($model);
+            }
+
             if ($model->save()) {
                 $this->redirect('?r=install/finish');
             }
         }
 
-        
-        
-        
+
+
+
         return $this->render('user', array('model' => $model));
     }
-     public function actionFinish() {
-         
-         $db = new InstallConfig;
+
+    public function actionFinish() {
+
+        $db = new InstallConfig;
 
         try {
             $db->con();
         } catch (\yii\db\Exception $e) {
-            
+
             $this->redirect('?r=install/config');
         }
-        
+
         if (User::find()->All() === null) {
             return $this->redirect('?r=install/user');
         }
 
-         
-         $model = new Finish();
-         
-         
-          if ($model->load(Yii::$app->request->post())) {
+
+        $model = new Finish();
+
+
+        if ($model->load(Yii::$app->request->post())) {
             //$model->save();
             if ($model->make()) {
                 return $this->redirect('../');
             }
         }
 
-        
-        
-        
+
+
+
         return $this->render('finish', array('model' => $model));
-         //redierct
-         
-         
-     }
+        //redierct
+    }
+
 }

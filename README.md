@@ -12,3 +12,9 @@ linet3
 Linet accounting application
 
 
+
+./composer.phar global require "fxp/composer-asset-plugin:~1.1.1"
+
+./composer.phar update
+
+./composer.phar install
