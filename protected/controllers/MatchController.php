@@ -1,13 +1,22 @@
 <?php
 
-/***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+/* * *********************************************************************************
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
+
+namespace app\controllers;
+
+use Yii;
+use app\components\RightsController;
+use app\models\FormIntmatch;
+use app\models\IntCorrelation;
+use app\models\Transactions;
+
 class MatchController extends RightsController {
 
     public function actionIntmatch() {
@@ -22,13 +31,13 @@ class MatchController extends RightsController {
             $model->out = $_POST['FormIntmatch']['Out']['match'];
             $model->account_id = $_POST['FormIntmatch']['account_id'];
             $model->save();
-            Yii::app()->user->setFlash('success', Yii::t('app', 'Mach 1 Success'));
+            \Yii::$app->getSession()->setFlash('success', Yii::t('app', 'Mach 1 Success'));
             //}
-            //Yii::app()->user->setFlash('success', Yii::t('app','Mach2 Success'));
+            //\Yii::$app->getSession()->setFlash('success', Yii::t('app','Mach2 Success'));
         }
 
-        $this->render('intmatch', array(
-            'model' => $model,
+        return $this->render('intmatch', array(
+                    'model' => $model,
         ));
     }
 
@@ -37,7 +46,7 @@ class MatchController extends RightsController {
         // Params:
         // $data ... the current row data   
         // $row ... the row index    
-        $this->renderPartial('_trans', array('cdata' => $data,'intType'=>1));
+        return $this->renderPartial('_trans', array('cdata' => $data, 'intType' => 1));
     }
 
     protected function outDataColumn($data, $row) {
@@ -45,61 +54,47 @@ class MatchController extends RightsController {
         // Params:
         // $data ... the current row data   
         // $row ... the row index    
-        $this->renderPartial('_trans', array('cdata' => $data,'intType'=>0));
+        return $this->renderPartial('_trans', array('cdata' => $data, 'intType' => 0));
     }
 
     public function actionDispmatch() {
 
-        $match = new IntCorrelation('search');
+        $match = new IntCorrelation();
         if (isset($_POST['FormExtmatch'])) {
             $match->attributes = $_POST['FormExtmatch'];
         }
-        $this->render('admin', array(
-            'model' => $match,
+        return $this->render('admin', array(
+                    'model' => $match,
         ));
     }
 
     public function actionIntmatchajax() {
 
-        $in = new Transactions('search');
-        $out = new Transactions('search');
+        $in = new Transactions();
+        $out = new Transactions();
+        $in->scenario = 'search';
+        $out->scenario = 'search';
 
 
-
-        $in->unsetAttributes();
-        $out->unsetAttributes();
+        //$in->unsetAttributes();
+        //$out->unsetAttributes();
 
         if (isset($_POST['FormIntmatch'])) {
             $in->attributes = $_POST['FormIntmatch'];
             $out->attributes = $_POST['FormIntmatch'];
         }
-        $this->renderPartial('intmatchajax', array('in' => $in, 'out' => $out));
+        return $this->renderPartial('intmatchajax', array('in' => $in, 'out' => $out));
     }
-    
-    
-    public function actionMatchDelete($id) {
-        if (Yii::app()->request->isPostRequest) {
-            // we only allow deletion via POST request
-            $model = IntCorrelation::model()->findByPk($id);
-            if ($model === null)
-                throw new CHttpException(404, 'The requested page does not exist.');
 
-            $model->delete();
+    public function actionMatchdelete($id) {
 
-            // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-            if (!isset($_GET['ajax']))
-                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-        } else
-            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
-    }
-    
-    
+        $model = IntCorrelation::findOne($id);
+        if ($model === null)
+            throw new \yii\web\HttpException(404, 'The requested page does not exist.');
 
-    protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'intmatch-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
+        $model->delete();
+
+        $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('dispmatch'));
     }
 
 }

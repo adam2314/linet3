@@ -1,5 +1,5 @@
 <?php
-$this->breadcrumbs=array(
+$this->params["breadcrumbs"]=array(
 	'Paypal'=>array('/paypal'),
 	'Cancel',
 );

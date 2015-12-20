@@ -1,9 +1,9 @@
 <?php
-$this->breadcrumbs=array(
+$this->params["breadcrumbs"]=array(
 	'Users',
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>'Create User','url'=>array('create')),
 	array('label'=>'Manage User','url'=>array('admin')),
 );

@@ -1,31 +1,31 @@
 <?php
-$this->menu = array(
+$this->params["menu"]= array(
         //array('label'=>'List Doctype', 'url'=>array('index')),
         //array('label'=>'Create Doctype', 'url'=>array('create')),
 );
 
 
-$this->beginWidget('MiniForm', array(
+app\widgets\MiniForm::begin( array(
     'header' => Yii::t('app', "Bank Account Reconciliations"),
 ));
 ?>
 
 <?php
-$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+$form = kartik\form\ActiveForm::begin( array(
     'id' => 'extmatch-form',
-    'enableAjaxValidation' => true,
-    'clientOptions' => array(
-        'validateOnSubmit' => true,
+    //'enableAjaxValidation' => true,
+    //'clientOptions' => array(
+    //    'validateOnSubmit' => true,
     //'submitHandler'=>'js: go()',
-    ),
+    //),
         )
 );
 
-$temp = CHtml::listData(Accounts::model()->findAllByType(7), 'id', 'name');
+$temp = \yii\helpers\ArrayHelper::map(app\models\Accounts::findAllByType(7), 'id', 'name');
 $temp[0] = Yii::t('app', 'Choose Bank');
 $model->account_id = 0;
 //echo $form->error($extmatch, 'account_id');
-echo $form->dropDownListRow($extmatch, "account_id", $temp, array('class' => ''));
+echo $form->field($extmatch, "account_id")->widget(kartik\select2\Select2::className(),['data'=>$temp]);
 //echo $form->error($extmatch, 'account_id');
 ?>
 <div id ="result">
@@ -34,68 +34,59 @@ echo $form->dropDownListRow($extmatch, "account_id", $temp, array('class' => '')
     <div class="col-md-3">
         <?php
         //echo $form->labelEx($extmatch, 'ext_total');
-        echo $form->textFieldRow($extmatch, 'ext_total', array('size' => 60, 'maxlength' => 100));
+        echo $form->field($extmatch, 'ext_total');
         //echo $form->error($extmatch, 'ext_total');
         //echo $form->labelEx($extmatch, 'int_total');
-        echo $form->textFieldRow($extmatch, 'int_total', array('size' => 60, 'maxlength' => 100));
+        echo $form->field($extmatch, 'int_total');
         //echo $form->error($extmatch, 'int_total');
         ?>
     </div>  
 </div>
 <div class="form-actions">
-    <?php
-    $this->widget('bootstrap.widgets.TbButton', array(
-        'buttonType' => 'submit',
-        'type' => 'primary',
-        'label' => Yii::t('app', "Save"),
-    ));
-    ?>
+    <?= \yii\helpers\Html::submitButton( Yii::t('app', 'Save'), ['class' => 'btn btn-primery' ]) ?>
+    
 </div>
 
 <?php
-$this->endWidget();
-$this->endWidget();
+kartik\form\ActiveForm::end();
+app\widgets\MiniForm::end();
 
 
 
 
-$this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
+\yii\jui\Dialog::begin( array(//
     'id' => "transactionDiag",
-    'options' => array(
+    'clientOptions' => array(
         'title' => Yii::t('app', 'Choose Reference Document'),
         'autoOpen' => false,
-        'width' => '600px',
+        'width' => 600,
     ),
 ));
 
-echo $this->renderPartial('application.views.transaction.create', array('model' => new FormTransaction()));
+echo $this->render('//transaction/create', array('model' => new app\models\FormTransaction()));
 
-
-
-$this->endWidget('zii.widgets.jui.CJuiDialog');
+\yii\jui\Dialog::end();
 ?>
-
-
-<script type="text/javascript">
-    jQuery(document).ready(function() {
-
-
-        $("#FormExtmatch_account_id").change(function() {
-            var value = $("#FormExtmatch_account_id").val();
-            $.post("<?php echo $this->createUrl('/bankbook/extmatchajax'); ?>", {FormExtmatch: {account_id: value}}).done(
+<?php
+$java = <<<JS
+$("#formextmatch-account_id").change(function() {
+            var value = $("#formextmatch-account_id").val();
+            $.post(baseAddress+"/bankbook/extmatchajax", {FormExtmatch: {account_id: value}}).done(
                     function(data) {
                         $("#result").html(data);
                     }
             );
 
         });
-    });
+        
+JS;
+$this->registerJs("var baseAddress='" . yii\helpers\BaseUrl::base() . "';".
+    $java
+, \yii\web\View::POS_READY);
+?>
 
 
-
-
-
-
+<script type="text/javascript">
     function CalcMatchSum() {
         var extsum = CalcExtSum();
         var intsum = CalcIntSum();
@@ -116,7 +107,7 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
         }
 
         total = Math.round(total * 100) / 100;
-        $("#FormExtmatch_ext_total").val(total);
+        $("#formextmatch-ext_total").val(total);
         return total;
     }
 
@@ -131,11 +122,7 @@ $this->endWidget('zii.widgets.jui.CJuiDialog');
             }
         }
         total = Math.round(total * 100) / 100;
-        $("#FormExtmatch_int_total").val(total);
+        $("#formextmatch-int_total").val(total);
         return total;
     }
-
-
-
-
 </script>

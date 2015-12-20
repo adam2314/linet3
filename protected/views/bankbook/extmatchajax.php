@@ -1,19 +1,20 @@
-<div style=" width: 40%; display: inline-block; margin-right: 150px; ">
+<div class="row">
+<div class="col-md-6">
     <?php
-    $this->widget('bootstrap.widgets.TbGridView', array(
+    echo app\widgets\GridView::widget( array(
         'id' => 'bankbook-grid',
-        'dataProvider' => $model->search(),
-        //'filter'=>$model,
+        'dataProvider' => $model->search([]),
+        'panel'=>false,
+        ////'filter'=>$model,
         'columns' => array(
+            
             array(
-                'type' => 'raw',
-                'value' =>
-                'CHtml::checkBox("FormExtmatch[Bankbooks][match][$data->id]",null,array("class"=>"ext_match",  "onchange"=>"CalcMatchSum()"))',
-            ),
-            array(
-                'type' => 'raw',
-                'value' =>
-                'CHtml::hiddenField("FormExtmatch[Bankbooks][total][$data->id]","$data->sum",array("class"=>"ext_total"))',
+                'format' => 'raw',
+                'value' =>function($data){
+                            return \yii\helpers\Html::checkBox("FormExtmatch[Bankbooks][match][$data->id]",null,array("class"=>"ext_match",  "onchange"=>"CalcMatchSum()")).
+                                    \yii\helpers\Html::hiddenInput("FormExtmatch[Bankbooks][total][$data->id]","$data->sum",array("class"=>"ext_total"));
+                            
+                },
             ),
             //'id',
             
@@ -24,44 +25,44 @@
             'sum',
         //'total',
         //array(
-        //	'class'=>'bootstrap.widgets.TbButtonColumn',
+        //	'class'=>'yii\grid\ActionColumn',
         //),
         ),
     ));
     ?>
 </div>
-<div style=" width: 30%; display: inline-block;">
+<div class="col-md-6">
 <?php
-$this->widget('EExcelView', array(
+echo app\widgets\GridView::widget( array(
     'id' => 'transaction-grid',
-    'dataProvider' => $trans->search(),
-    //'filter'=>$model,
+    'dataProvider' => $trans->search([]),
+    'panel'=>false,
+    ////'filter'=>$model,
     'columns' => array(
         array(
-            'type' => 'raw',
-            'value' =>
-            'CHtml::checkBox("FormExtmatch[Transactions][match][$data->id]",null,array("class"=>"trans_match", "onchange"=>"CalcMatchSum()"))',
+            'format' => 'raw',
+            'value' =>function($data){
+            return \yii\helpers\Html::checkBox("FormExtmatch[Transactions][match][$data->id]",null,array("class"=>"trans_match", "onchange"=>"CalcMatchSum()")).
+                    \yii\helpers\Html::hiddenInput("FormExtmatch[Transactions][total][$data->id]",$data->sum*-1,array("class"=>"trans_total"));
+            }
         ),
-        array(
-            'type' => 'raw',
-            'value' =>
-            'CHtml::hiddenField("FormExtmatch[Transactions][total][$data->id]",$data->sum*-1,array("class"=>"trans_total"))',
-        ),
+
         //'id',
         'details',
-        'date',
+        'valuedate',
         //'refnum',
         'currency_id',
         array(
-            'type' => 'raw',
-            'value' =>'$data->sum*-1',
+            'format' => 'raw',
+            'value' =>function($data){return $data->sum*-1;},
         ),
     //'total',
     //array(
-    //	'class'=>'bootstrap.widgets.TbButtonColumn',
+    //	'class'=>'yii\grid\ActionColumn',
     //),
     ),
 ));
 ?>
 </div>
 
+</div>

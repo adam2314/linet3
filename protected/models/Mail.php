@@ -1,8 +1,8 @@
 <?php
 
 /* * *********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -24,59 +24,74 @@
  * @property string $create
  * @property string $user_id
  */
-class Mail extends CActiveRecord {
 
-    const table = '{{mail}}';
+namespace app\models;
+
+use Yii;
+
+class Mail extends Record {
+
+    const table = '{{%mail}}';
 
     public function send() {
 
-        Yii::import('application.extensions.smtpmail.PHPMailer');
-        $mail = new PHPMailer;
-        
-        
-        $mail->IsSMTP();
-        $mail->Host = Yii::app()->user->getSetting('company.mail.server');
-        $mail->SMTPAuth = (Yii::app()->user->getSetting('company.mail.user')!='')?true:false;
-        $mail->SMTPSecure=(Yii::app()->user->getSetting('company.mail.ssl'))?'tls':'';
-        $mail->CharSet = 'utf-8';
-        $mail->Port = Yii::app()->user->getSetting('company.mail.port');
-        $mail->Username = Yii::app()->user->getSetting('company.mail.user');
-        $mail->Password = Yii::app()->user->getSetting('company.mail.password');
+        //Yii::import('application.extensions.smtpmail.PHPMailer');
+        $mailer = new \yii\swiftmailer\Mailer([
+            "transport"=>[
+                'class' => 'Swift_SmtpTransport',
+              'host' => \app\helpers\Linet3Helper::getSetting('company.mail.server'),
+              'username' => \app\helpers\Linet3Helper::getSetting('company.mail.user'),
+              'password' => \app\helpers\Linet3Helper::getSetting('company.mail.password'),
+              'port' => \app\helpers\Linet3Helper::getSetting('company.mail.port'),
+              'encryption' => (\app\helpers\Linet3Helper::getSetting('company.mail.ssl')) ? 'tls' : '',
+          //$mail->CharSet = 'utf-8';
+          //$mail->SMTPAuth = (app\helpers\Linet3Helper::getSetting('company.mail.user') != '') ? true : false;
+                //'Auth_mode'=> (\app\helpers\Linet3Helper::getSetting('company.mail.user') != '') ? 'login' : false,
+            ]
+        ]);
 
+        $mail=$mailer->compose('layouts/html', ['content' => $this->body]);
         
+
+
 
 
         //$mail->SetFrom($this->from);
         //echo $this->files;
         if ($this->files != '') {
-            $file = Files::model()->findByPk($this->files);
+            $file = Files::findOne($this->files);
             if ($file != null) {
                 //echo $file->getFullPath().";;".$file->name;
 
-                $mail->AddAttachment($file->getFullFilePath(), $file->name);
+                $mail->attach($file->getFullFilePath(), ["fileName"=>$file->name]);
             }
         }
-        $mail->SetFrom(Yii::app()->user->settings['company.mail.address']);
-        $mail->AddCC($this->cc); //.$this->cc
-        $mail->AddBcc($this->bcc);
-        $mail->Subject = $this->subject;
-        $mail->MsgHTML($this->body);
-        $mail->AddAddress($this->to, "");
-       
-        if (!$mail->Send()) {
+        $mail->setFrom(\app\helpers\Linet3Helper::getSetting('company.mail.address'))
+                ->setTo($this->to)
+                ->setSubject($this->subject);
+        if($this->cc!='')        
+                $mail->setCc($this->cc);
+             if($this->bcc!='') 
+                $mail->setBcc($this->bcc);
+        //$mail->AddCC($this->cc); //.$this->cc
+        //$mail->AddBcc($this->bcc);
+        //$mail->
+        //$mail->setHtmlBody($this->body);
+        //$mail;
+
+        if (!$mail->send()) {
             //echo "Mailer Error: " . $mail->ErrorInfo;
-            throw new CHttpException(501, Yii::t('app', "Mailer Error: ") . $mail->ErrorInfo. $mail->Username );
+            throw new Exception(Yii::t('app', "Mailer Error: ") . $mail->ErrorInfo . $mail->Username);
         } else {
             $this->sent++;
             $this->save();
-            Yii::app()->user->setFlash('success', Yii::t('app', 'Message sent!'));
+            if(!\app\helpers\Linet3Helper::isConsole())
+                \Yii::$app->getSession()->setFlash('success', Yii::t('app', 'Message sent!'));
             //echo "Message sent!";
         }//*/
-        //Yii::app()->end();
+        //Yii::$app->end();
     }
 
-    
-    
     public function save($runValidation = true, $attributes = NULL) {
 
         //$this->mailsend();
@@ -84,18 +99,9 @@ class Mail extends CActiveRecord {
     }
 
     /**
-     * Returns the static model of the specified AR class.
-     * @param string $className active record class name.
-     * @return BankName the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
-
-    /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -106,12 +112,12 @@ class Mail extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('id', 'numerical', 'integerOnly' => true),
-            array('from, to ,bcc, cc, subject', 'length', 'max' => 255),
-            array('from, to ,bcc, cc, subject, text, body, files', 'safe'),
+            array(['id'], 'number', 'integerOnly' => true),
+            array(['from', 'to' ,'bcc', 'cc', 'subject'], 'string', 'max' => 255),
+            array(['from', 'to' ,'bcc', 'cc', 'subject', 'body', 'files'], 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, from, to ,bcc, cc, subject, text, body', 'safe', 'on' => 'search'),
+            array(['id', 'from', 'to' ,'bcc', 'cc', 'subject', 'body'], 'safe', 'on' => 'search'),
         );
     }
 
@@ -131,16 +137,16 @@ class Mail extends CActiveRecord {
      */
     public function attributeLabels() {
         return array(
-            'id' => Yii::t('labels', 'ID'),
-            'to' => Yii::t('labels', 'To'),
-            'from' => Yii::t('labels', 'From'),
-            'subject' => Yii::t('labels', 'Subject'),
-            'cc' => Yii::t('labels', 'cc'),
-            'bcc' => Yii::t('labels', 'Bcc'),
-            'body' => Yii::t('labels', 'Body'),
-            'files' => Yii::t('labels', 'Files'),
-            'create' => Yii::t('labels', 'Create Date'),
-            'user_id' => Yii::t('labels', 'User'),
+            'id' => Yii::t('app', 'ID'),
+            'to' => Yii::t('app', 'To'),
+            'from' => Yii::t('app', 'From'),
+            'subject' => Yii::t('app', 'Subject'),
+            'cc' => Yii::t('app', 'cc'),
+            'bcc' => Yii::t('app', 'Bcc'),
+            'body' => Yii::t('app', 'Body'),
+            'files' => Yii::t('app', 'Files'),
+            'create' => Yii::t('app', 'Create Date'),
+            'user_id' => Yii::t('app', 'User'),
         );
     }
 
@@ -148,7 +154,7 @@ class Mail extends CActiveRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search() {
+    public function search($params) {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
 

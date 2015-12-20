@@ -1,22 +1,22 @@
 <?php
-$this->breadcrumbs=array(
-	'Acctypes'=>array('index'),
-	$model->name,
+$this->params["breadcrumbs"]=array(
+	//'Acctypes'=>array('index'),
+	//$model->name,
 );
 
-$this->menu=array(
-	array('label'=>'List Acctype','url'=>array('index')),
-	array('label'=>'Create Acctype','url'=>array('create')),
-	array('label'=>'Update Acctype','url'=>array('update','id'=>$model->id)),
-	array('label'=>'Delete Acctype','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Acctype','url'=>array('admin')),
+$this->params["menu"]=array(
+	//array('label'=>'List Acctype','url'=>'index'),
+	//array('label'=>'Create Acctype','url'=>'create'),
+	//array('label'=>'Update Acctype','url'=>'update/'.$model->id),
+	//array('label'=>'Delete Acctype','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	//array('label'=>'Manage Acctype','url'=>'admin'),
 );
 ?>
 
 <h1>View Acctype #<?php echo $model->id; ?></h1>
 
-<?php $this->widget('bootstrap.widgets.TbDetailView',array(
-	'data'=>$model,
+<?= kartik\detail\DetailView::widget(array(
+	'model'=>$model,
 	'attributes'=>array(
 		'id',
 		'name',

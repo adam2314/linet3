@@ -1,14 +1,14 @@
 <?php
-$this->breadcrumbs=array(
+$this->params["breadcrumbs"]=array(
 	'Itemcategories'=>array('index'),
 	'Create',
 );
 
-$this->menu=array(
-	array('label'=>Yii::t('app','List Item Category'), 'url'=>array('index')),
+$this->params["menu"]=array(
+	//array('label'=>Yii::t('app','List Item Category'), 'url'=>array('index')),
 	array('label'=>Yii::t('app','Manage Item Category'), 'url'=>array('admin')),
 );
-$this->beginWidget('MiniForm',array(
+app\widgets\MiniForm::begin(array(
     'header' => Yii::t('app',"Create Item Category"),
     
 )); 
@@ -16,7 +16,7 @@ $this->beginWidget('MiniForm',array(
 ?>
 
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); 
+<?php echo $this->render('_form', array('model'=>$model)); 
 
- $this->endWidget();
+ app\widgets\MiniForm::end();
 ?>

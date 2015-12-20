@@ -1,12 +1,13 @@
 <?php
-/***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+
+/* * *********************************************************************************
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
 /**
  * This is the model class for table "docStatus".
  *
@@ -18,15 +19,29 @@
  * @property integer $looked
  * @property string $action
  */
-class stockAction extends CActiveRecord {
 
-    const table = '{{stockAction}}';
+namespace app\models;
+
+use Yii;
+use yii\helpers\Html;
+
+class stockAction extends Record {
+
+    const table = '{{%stockAction}}';
 
     public $from_date;
     public $to_date;
     public $sum;
 
     public static function newTransaction($doc_id, $account_id, $oppt_account_id, $item_id, $qty = 1, $serial = '') {
+        if(isset(Yii::$app->user)){
+            $uid=Yii::$app->user->id;
+        }else{
+            $uid=Yii::$app->params['uid'];
+        }
+        
+        
+        
         $model = new stockAction();
         $model->doc_id = $doc_id;
         $model->account_id = $account_id;
@@ -34,7 +49,7 @@ class stockAction extends CActiveRecord {
         $model->item_id = $item_id;
         $model->qty = $qty;
         $model->serial = $serial;
-        $model->user_id = Yii::app()->user->id;
+        $model->user_id = $uid;
         if ($model->save()) {
             return $model->id;
         } else {
@@ -42,23 +57,14 @@ class stockAction extends CActiveRecord {
         }
     }
 
-    /**
-     * Returns the static model of the specified AR class.
-     * @param string $className active record class name.
-     * @return Docstatus the static model class
-     */
-    public function primaryKey() {
-        return array('id');
-    }
-
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
+    public static function primaryKey() {
+        return ['id'];
     }
 
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -69,12 +75,12 @@ class stockAction extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('doc_id, account_id, oppt_account_id, item_id, qty, user_id', 'required'),
-            array('doc_id, account_id, oppt_account_id, item_id, qty, user_id', 'numerical', 'integerOnly' => true),
-            array('serial', 'length', 'max' => 255),
+            array(['doc_id', 'account_id', 'oppt_account_id', 'item_id', 'qty', 'user_id'], 'required'),
+            array(['doc_id', 'account_id', 'oppt_account_id', 'item_id', 'qty', 'user_id'], 'number', 'integerOnly' => true),
+            array(['serial'], 'string', 'max' => 255),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, doc_id, account_id, oppt_account_id, item_id, serial, qty, user_id, date, sum', 'safe', 'on' => 'search'),
+            array(['id', 'doc_id', 'account_id', 'oppt_account_id', 'item_id', 'serial', 'qty', 'user_id', 'date', 'sum'], 'safe', 'on' => 'search'),
         );
     }
 
@@ -92,85 +98,124 @@ class stockAction extends CActiveRecord {
             'User' => array(self::BELONGS_TO, 'User', 'user_id'),
         );
     }
+    public function getAccount(){
+        return $this->hasOne(Accounts::className(), array('id' => 'account_id'));
+    }
+    public function getOpptAccount(){
+        return $this->hasOne(Accounts::className(), array('id' => 'oppt_account_id'));
+    }
+    public function getDoc(){
+        return $this->hasOne(Docs::className(), array('id' => 'doc_id'));
+    }
+    public function getItem(){
+        return $this->hasOne(Item::className(), array('id' => 'item_id'));
+    }
+    public function getUser(){
+        return $this->hasOne(User::className(), array('id' => 'user_id'));
+    }
 
     public function attributeLabels() {
         return array(
-            'id' => Yii::t('labels', 'ID'),
-            'doc_id' => Yii::t('labels', 'Documenet'),
-            'account_id' => Yii::t('labels', 'Account'),
-            'oppt_account_id' => Yii::t('labels', 'Opposite Account'),
-            'item_id' => Yii::t('labels', 'Item'),
-            'serial' => Yii::t('labels', 'Serial No.'),
-            'qty' => Yii::t('labels', 'Qty'),
-            'doc_id' => Yii::t('labels', 'Document'),
-            'user_id' => Yii::t('labels', 'User'),
-            'date' => Yii::t('labels', 'Date'),
-            'createDate' => Yii::t('labels', 'Action Date'),
-            'sum' => Yii::t('labels', 'Qty'),
+            'id' => Yii::t('app', 'ID'),
+            'doc_id' => Yii::t('app', 'Documenet'),
+            'account_id' => Yii::t('app', 'Account'),
+            'oppt_account_id' => Yii::t('app', 'Opposite Account'),
+            'item_id' => Yii::t('app', 'Item'),
+            'serial' => Yii::t('app', 'Serial No.'),
+            'qty' => Yii::t('app', 'Qty'),
+            'doc_id' => Yii::t('app', 'Document'),
+            'user_id' => Yii::t('app', 'User'),
+            'date' => Yii::t('app', 'Date'),
+            'createDate' => Yii::t('app', 'Action Date'),
+            'sum' => Yii::t('app', 'Qty'),
         );
     }
 
-    public function getSearchCriteria() {
-        $criteria = new CDbCriteria;
-        $criteria->compare('id', $this->id);
-        $criteria->compare('item_id', $this->item_id,true);
-        $criteria->compare('account_id', $this->account_id);
-        $criteria->compare('oppt_account_id', $this->oppt_account_id);
-        $criteria->compare('qty', $this->qty);
-        $criteria->compare('user_id', $this->user_id);
-         
-         
-        return $criteria;
+    public function getSearchCriteria($params = []) {
+        $query = stockAction::find();
+
+
+
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'item_id' => $this->item_id,
+            'account_id' => $this->account_id,
+            'oppt_account_id' => $this->oppt_account_id,
+            'qty' => $this->qty,
+            'user_id' => $this->user_id,
+        ]);
+
+
+
+
+
+        return $query;
     }
 
     /**
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search() {
+    public function search($params) {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
 
-        $criteria = $this->getSearchCriteria();
-
-        
-
-
-        $sort = new CSort();
-        $sort->defaultOrder = 'id DESC';
+        $query = $this->getSearchCriteria();
 
 
 
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-            'pagination' => array('pageSize' => 50),
-            'sort' => $sort,
-        ));
+
+        //$sort = new CSort();
+        //$sort->defaultOrder = 'id DESC';
+
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+
+
+
+
+        return new $dataProvider;
     }
-    
-    public function getAccountName(){
-        if(isset($this->Account)) 
-            return $this->Account->name;
-            return "ERROR:".$this->account_id;
+
+    public function getAccountName() {
+        if (isset($this->account))
+            return $this->account->name;
+        return "ERROR:" . $this->account_id;
     }
-    
-    public function getItemName(){
-        if(isset($this->Item)) 
-            return $this->Item->name;
-            return "ERROR:".$this->item_id;
+
+    public function getItemName() {
+        if (isset($this->item))
+            return $this->item->name;
+        return "ERROR:" . $this->item_id;
     }
-    
-   
+
     public function getItemSum() {
-        $criteria = new CDbCriteria;
-        $criteria->compare('item_id', $this->item_id);
-        $criteria->select = 'SUM(qty)';
-        return $this->commandBuilder->createFindCommand($this->getTableSchema(), $criteria)->queryScalar();
+        $num = stockAction::find()->select('SUM(qty)')->where(['item_id' => $this->item_id])->scalar();
+        return $num;
     }
-    
-    public function getRefDocLink(){
+
+    public function getRefDocLink() {
+        if(isset($this->doc))
+            $num=$this->doc->docnum;
+        else
+            $num=$this->doc_id."error";
         
-        return CHtml::link(CHtml::encode(Yii::t("app",$this->Doc->docType->name)." #".$this->Doc->docnum),Yii::app()->createAbsoluteUrl("/docs/view/$this->doc_id"));
+        if(isset($this->doc->docType->name))
+            $type=$this->doc->docType->name;
+        else
+            $type=$this->doc_id."error";
+
+        return Html::a(Html::encode(Yii::t("app", $type) . " #" . $num), yii\helpers\BaseUrl::base() . ("/docs/view/$this->doc_id"));
     }
 
     public function sum() {
@@ -178,23 +223,24 @@ class stockAction extends CActiveRecord {
         // should not be searched.
 
         $criteria = $this->getSearchCriteria();
-   $criteria->select = 'account_id,item_id,sum(qty) AS sum';
-
-        
-        $criteria->group = "account_id,item_id";
-       //  $criteria->select='SUM(qty)';
+        $criteria->select = ['account_id','item_id','sum(qty) AS sum'];
 
 
-        $sort = new CSort();
-        $sort->defaultOrder = 'id DESC';
+        $criteria->groupBy = ['account_id','item_id'];
+        //  $criteria->select='SUM(qty)';
+
+
+        //$sort = new CSort();
+        //$sort->defaultOrder = 'id DESC';
 
 
 
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
+        return new \yii\data\ActiveDataProvider( array(
+            //$this,
+            'query' => $criteria,
             'pagination' => array('pageSize' => 50),
-            //'qtySum' => Yii::app()->db->createCommand('SELECT SUM(`qty`) FROM `' . stockAction::table . '`')->queryScalar(),
-            'sort' => $sort,
+            //'qtySum' => Yii::$app->db->createCommand('SELECT SUM(`qty`) FROM `' . stockAction::table . '`')->queryScalar(),
+            //'sort' => $sort,
         ));
     }
 

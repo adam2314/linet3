@@ -1,24 +1,27 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-class FormSettings  extends CFormModel{
+namespace app\models;
+use Yii;
+use yii\base\Model;
+class FormSettings  extends Model{
     public $companyName;
    /**
     * Load attributes from DB
     */
    public function loadAttributes()
    {
-      $settings = Settings::model()->findAll(array('order'=>'priority'));
-      //$models = Settings::model()->findAll();
+      $settings = Settings::find()->where(['order'=>'priority'])->all();
+      //$models = Settings::find()->All();
       
       $this->companyLogo='';
-      $this->setAttributes(CHtml::listData($settings,'id','value'));
+      $this->setAttributes(\yii\helpers\Html::listData($settings,'id','value'));
    }
 
    /*
@@ -28,8 +31,7 @@ class FormSettings  extends CFormModel{
    {
       foreach($this->attributes as $key => $value)
       {
-         $setting = Settings::model()->find(array('condition'=>'key = :key',
-                                                 'params'=>array(':key'=>$key)));
+         $setting = Settings::find()->where(['key'=>$key])->one();
          if($setting==null)
          {
             $setting = new Setting;

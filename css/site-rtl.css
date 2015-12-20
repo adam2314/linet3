@@ -1,0 +1,81 @@
+
+body{
+    direction: rtl;
+    
+}
+.radio input[type="radio"], .radio-inline input[type="radio"], .checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"] {
+    margin-right: -20px;
+}
+.radio label, .checkbox label {
+    padding-right: 20px;
+}
+
+/********************************************************************************/
+.toolbar{
+    float:left;
+    margin-top:-5px;
+}
+
+.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12,
+col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+    float: right;
+}
+#login{width:150px;margin-right:45%;margin-top:100px; };
+#changeSidebarPos{
+    float:right;
+}
+
+a#changeSidebarPos {
+  float: right;
+}
+@media (min-width: 1200px) {
+.container {
+    width: 1200px;
+}
+}
+
+.navbar-collapse > img{
+    float:left;
+}
+
+.navbar-left {
+    float: right !important;
+}
+.navbar-nav > li {
+    float: right;
+}
+
+
+.dropdown >.dropdown-menu {
+    float: right;
+    right:0;
+}
+
+.dropdown-submenu{
+    right: 0%;
+}
+
+.dropdown-submenu>.dropdown-menu {
+
+    left: 0;
+    right: 100%;
+}
+
+
+.dropdown-submenu>a:after {
+    border-width: 5px 5px 5px 5px;
+    float: left;
+
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    right: -100%;
+    left:0px;
+}
+
+
+.dropdown-menu {
+    text-align: right;
+}
+
+

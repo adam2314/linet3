@@ -1,42 +1,42 @@
 <?php
 
-$this->breadcrumbs = array(
-    Yii::t('models', 'Payments Types') => array('index'),
-    Yii::t('actions', 'Manage'),
+$this->params["breadcrumbs"] = array(
+    Yii::t('app', 'Payments Types') => array('index'),
+    Yii::t('app', 'Manage'),
 );
 
-$this->menu = array(
-        //array('label'=>Yii::t('actions','List')." ". Yii::t('models','Payments Types'), 'url'=>array('index')),
-        //array('label'=>Yii::t('actions','Create') ." ". Yii::t('actions','Payments Types'), 'url'=>array('create')),
+$this->params["menu"]= array(
+        //array('label'=>Yii::t('app','List')." ". Yii::t('app','Payments Types'), 'url'=>array('index')),
+        //array('label'=>Yii::t('app','Create') ." ". Yii::t('app','Payments Types'), 'url'=>array('create')),
 );
 
 
-$this->beginWidget('MiniForm', array(
-    'header' => Yii::t('actions', 'Manage') . " " . Yii::t('models', 'Payments Types'),
+app\widgets\MiniForm::begin( array(
+    'header' => Yii::t('app', 'Manage') . " " . Yii::t('app', 'Payments Types'),
 ));
 ?>
 
 
 <?php
 
-$this->widget('EExcelView', array(
+echo app\widgets\GridView::widget( array(
     'id' => 'paymentType-grid',
-    'dataProvider' => $model->search(),
-    'filter' => $model,
+    'dataProvider' => $model->dp(),
+    //'filter' => $model,
     'columns' => array(
         'id',
         //'name',
         array(
-            'name' => 'name',
-            'value' => 'Yii::t("app",$data->name)',
+            'attribute' => 'name',
+            //'value' => 'Yii::t("app",$data->name)',
         ),
         //'profit',
         array(
-            'class' => 'bootstrap.widgets.TbButtonColumn',
+            'class' => 'yii\grid\ActionColumn',
             'template' => '{update}',
         ),
     ),
 ));
 
-$this->endWidget();
+app\widgets\MiniForm::end();
 ?>

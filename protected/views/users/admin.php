@@ -1,23 +1,23 @@
 <?php
-$this->breadcrumbs=array(
-	'Users'=>array('index'),
-	'Manage',
+$this->params["breadcrumbs"]=array(
+	//'Users'=>array('index'),
+	//'Manage',
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>Yii::t('app','List User'),'url'=>array('index')),
 	array('label'=>Yii::t('app','Create User'),'url'=>array('create')),
 );
 
-$this->beginWidget('MiniForm',array('header' => Yii::t('app',"Manage Users"),)); 
+app\widgets\MiniForm::begin(array('header' => Yii::t('app',"Manage Users"),)); 
 
 ?>
 
 
-<?php $this->widget('EExcelView',array(
+<?php echo app\widgets\GridView::widget(array(
 	'id'=>'user-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
+	'dataProvider'=>$model->dp(),
+	//'filter'=>$model,
 	'columns'=>array(
 		//'id',
 		'username',
@@ -29,10 +29,10 @@ $this->beginWidget('MiniForm',array('header' => Yii::t('app',"Manage Users"),));
 		//'cookie',
 		
 		array(
-			'class'=>'bootstrap.widgets.TbButtonColumn',
+			'class'=>'yii\grid\ActionColumn',
 		),
 	),
 )); 
 
-$this->endWidget(); 
+app\widgets\MiniForm::end(); 
 ?>

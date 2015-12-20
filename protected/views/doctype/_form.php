@@ -1,61 +1,55 @@
 <div class="form">
-
-<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+<?php 
+use yii\helpers\arrayhelper;
+use app\models\Acctype;
+use app\models\Docstatus;
+use kartik\select2\Select2;
+?>
+<?php $form=kartik\form\ActiveForm::begin( array(
 	'id'=>'doctype-form',
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<?php echo $form->errorSummary($model); ?>
+	<?= $form->errorSummary($model); ?>
 
     
     
-        <?php echo $form->textFieldRow($model,'name',array('maxlength'=>255)); ?>
-        <?php echo $form->textFieldRow($model,'openformat'); ?>
+        <?php //echo $form->field($model,'name'); ?>
+        <?php //echo $form->field($model,'openformat'); ?>
 	
 
 	
-               <?php echo $form->checkboxRow($model,'isdoc'); ?>
+               <?php //echo $form->field($model,'isdoc')->checkbox(); ?>
 
-		<?php echo $form->checkboxRow($model,'isrecipet'); ?>
+		<?php //echo $form->field($model,'isrecipet')->checkbox(); ?>
 	
 		<?php //echo $form->checkboxRow($model,'iscontract'); ?>
 	
 
-		<?php echo $form->checkboxRow($model,'stockAction'); ?>
+		<?php //echo $form->field($model,'stockAction')->checkbox(); ?>
 	
-		<?php echo $form->dropDownListRow($model,'account_type',CHtml::listData(Acctype::model()->findAll(), 'id', 'name'));?>
+		<?php //echo $form->field($model,'account_type')->widget(Select2::classname(), ['data' =>arrayhelper::map(Acctype::find()->All(), 'id', 'name')]);?>
                 <br />
-		<?php echo $form->dropDownListRow($model,'docStatus_id',CHtml::listData(Docstatus::model()->findAllByAttributes(array('doc_type'=>$model->id)), 'num', 'name'));?>
+		<?= $form->field($model,'docStatus_id')->widget(Select2::classname(), ['data' =>arrayhelper::map(Docstatus::find()->where(array('doc_type'=>$model->id))->all(), 'num', 'name')]);?>
 	<br />
-		<?php echo $form->textFieldRow($model,'last_docnum'); ?>
+		<?= $form->field($model,'last_docnum'); ?>
 	
-        <?php echo $form->labelEx($model,'header');?>
-        <?php 
-        $this->widget('ext.tinymce.TinyMce', array(
-            'model' => $model,
-            'attribute' => 'header',
-        ));
-        ?>
         
-        <?php echo $form->labelEx($model,'footer');?>
-        <?php 
-        $this->widget('ext.tinymce.TinyMce', array(
-            'model' => $model,
-            'attribute' => 'footer',
-        ));
-        ?>
+        <?= $form->field($model, 'header')->textArea(); ?>
+       
+        
+        
+        <?= $form->field($model, 'footer')->textArea(); ?>
+        
     
         
         
         
 	<div class="form-actions">
-            <?php $this->widget('bootstrap.widgets.TbButton', array(
-                    'buttonType'=>'submit',
-                    'type'=>'primary',
-                    'label'=>$model->isNewRecord ? Yii::t('app',"Create") : Yii::t('app',"Save"),
-            )); ?>
+            <?= \yii\helpers\Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => 'btn btn-success']) ?>
+            
     </div>
 
-<?php $this->endWidget(); ?>
+<?php kartik\form\ActiveForm::end(); ?>
 
 </div><!-- form -->

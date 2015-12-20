@@ -1,14 +1,20 @@
 <?php
 
-/***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+/* * *********************************************************************************
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
-class FormReportAccounts extends CFormModel {
+ * ********************************************************************************** */
+
+namespace app\models;
+
+use Yii;
+use yii\base\Model;
+
+class FormReportAccounts extends Model {
 
     public $type;
     public $acc = "";
@@ -16,89 +22,77 @@ class FormReportAccounts extends CFormModel {
     public $to_date;
 
     
+
     public function attributeLabels() {
         return array(
-            'from_date' => Yii::t('labels', 'From Date'),
-            'to_date' => Yii::t('labels', 'To Date'),
-            'acc' => Yii::t('labels', 'Account IDs'),
-            'type' => Yii::t('labels', 'Account Type'),
-            
+            'from_date' => Yii::t('app', 'From Date'),
+            'to_date' => Yii::t('app', 'To Date'),
+            'acc' => Yii::t('app', 'Account IDs'),
+            'type' => Yii::t('app', 'Account Type'),
         );
     }
-    
-    
-    public function init() {
-        $yiidatetimesec = Yii::app()->locale->getDateFormat('yiidatetimesec');
-        $phpshort = Yii::app()->locale->getDateFormat('phpshort');
 
-        $this->from_date = date($phpshort, CDateTimeParser::parse('01/01/' . date('Y') . ' 00:00:00', $yiidatetimesec));
-        $this->to_date = date($phpshort);
-        return parent::init();
+    public function init() {
+        parent::init();
+        $this->from_date = date('Y') . "-01-01";
+        $this->to_date = date('Y-m-d');
     }
 
     public function accounts() {
+        $accountQ=Accounts::find();
         if (substr_count($this->acc, ",") != 0) {
             $accs = explode(",", $this->acc);
-            $accounts = array();
             foreach ($accs as $acc) {
-                $accounts = array_merge($accounts, $this->between($acc));
+                $accountQ = $this->between($acc,$accountQ);
             }
-            return $accounts;
+        }else{
+            $accountQ=$this->between($this->acc,$accountQ);
         }
-
-        return $this->between($this->acc);
+        return $this->chkType($accountQ)->asArray()->all();
     }
 
-    private function between($str) {
-
+    private function between($str,$accountQ) {
         if (substr_count($str, "-") == 1) {
             $accs = explode("-", $str);
-            $accounts = array();
-            for ($index = $accs[0]; $index <= $accs[1]; $index++) {
-                $acc = $this->chkType($index);
-                if ($acc !== null)//if account exstis and in type add
-                    $accounts[] = $acc;
-            }
-            return $accounts;
+            return $accountQ->andWhere(['between', 'id', $accs[0] , $accs[1]]);
         } else {
-            return array($this->chkType($str));
+            return $accountQ->andWhere(["id"=>$str]);
         }
     }
 
-    private function chkType($account_id) {
-        $model = Accounts::model()->findByPk($account_id);
-        if ($model === NULL)
-            return NULL;
-        if ($model->type == $this->type)
-            return $account_id;
-        elseif ($this->type == '')
-            return $account_id;
-        else
-            return null;
+    private function chkType($accountsQ) {
+        if ($this->type == '')
+            return $accountsQ;
+        else 
+            return $accountsQ->andWhere(['type'=>$this->type]);
     }
 
     public function rules() {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('acc', 'required'),
-            array('to_date, from_date, type, acc', 'safe'),
-            // The following rule is used by search().
-            // Please remove those attributes that should not be searched.
-            array('to_date, from_date, acc, type', 'safe', 'on' => 'search'),
+            array(['acc'], 'required'),
+            array(['to_date', 'from_date', 'type', 'acc'], 'safe'),
+            array(['to_date', 'from_date', 'acc', 'type'], 'safe', 'on' => 'search'),
         );
     }
 
     public function search($id) {
         //echo $id . uniqid();
 
-
-        $transactions = new Transactions('search');
-        $transactions->unsetAttributes();
-        $transactions->account_id = $id;
-        $transactions->from_date = $this->from_date;
-        $transactions->to_date = $this->to_date;
-        return $transactions->search();
+        $query = Transactions::find();
+        $query->andFilterWhere([
+            'account_id' => $id,
+            ]);
+        $query->andFilterWhere(['between', 'valuedate', $this->from_date, $this->to_date]);
+        $dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => $query,
+            "sort"=> ['defaultOrder' => [
+                'num'=>SORT_DESC,
+                ]],
+            'pagination'=>false
+        ]);
+        return $dataProvider;
     }
 
     //put your code here

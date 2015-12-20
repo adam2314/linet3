@@ -1,120 +1,100 @@
+<?php
+use yii\helpers\ArrayHelper;
+use kartik\select2\Select2;
+?>
+
+
 <tr class="docContent">
-    <td class="item_id"><b><?php echo $form->labelEx($model, 'item_id'); ?></b>
+    <td class="item_id">
 
         <?php //echo $form->hiddenField($model, "[$i]id"); ?>
-        <?php echo $form->hiddenField($model, "[$i]doc_id", array('class' => 'detail doc_id')); ?>
-        <?php echo $form->hiddenField($model, "[$i]line", array('class' => 'detail line')); ?>
+        <?php //echo $form->field($model, "[$i]doc_id",['template'=>'{input}'])->hiddenInput(); ?>
+        <?php //echo $form->field($model, "[$i]line",['template'=>'{input}'])->hiddenInput(); ?>
         
-        
+        <input id="docdetails-<?= $i; ?>-doc_id" name="Docdetails[<?= $i; ?>][doc_id]" type="hidden" value="<?= $model->doc_id;?>" />
+        <input id="docdetails-<?= $i; ?>-line" name="Docdetails[<?= $i; ?>][line]" type="hidden" value="<?= $model->line;?>" />
 
         <?php
         if ($model->item_id == '')
             $model->item_id = 0;
 
-        $temp = CHtml::listData(Item::model()->findAll(), 'id', 'name');
-        $temp[0] = Yii::t('app', 'None');
-        echo $form->dropDownList($model, "[$i]item_id", $temp);
+        
+        $items=ArrayHelper::map(\app\models\Item::find()->All(), 'id', 'name');
+        $itemunit=ArrayHelper::map(\app\models\Itemunit::find()->All(), 'id', 'name');
+        $currency=ArrayHelper::map(\app\models\Currates::GetRateList(), 'currency_id', 'name');
+        //$temp = \yii\helpers\ArrayHelper::map(Item::find()->All(), 'id', 'name');
+        //$temp[0] = Yii::t('app', 'None');
+        echo $form->field($model, "[$i]item_id" )->dropDownList($items);//select2/$temp
+        
         ?>
     </td>
 
 
 
 
-    <td><b><?php echo $form->labelEx($model, 'name'); ?></b><?php echo $form->textField($model, "[$i]name", array('class' => 'detail'));
-        //echo $form->dropDownList($model, "[$i]name", CHtml::listData(Item::model()->findAll(), 'id', 'name')); 
-        ?></td>
-
-    <td><b><?php echo $form->labelEx($model, 'qty'); ?></b><?php echo $form->textField($model, "[$i]qty", array('class' => 'detail')); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'unit_id'); ?></b><?php echo $form->dropDownList($model, "[$i]unit_id", CHtml::listData(Itemunit::model()->findAll(), 'id', 'name'), array('class' => 'detail untSelect')); //,array()  ?></td>
-    <td><b><?php echo $form->labelEx($model, 'iItem'); ?></b><?php echo $form->textField($model, "[$i]iItem", array('class' => 'detail',)); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'currency_id'); ?></b><?php echo $form->dropDownList($model, "[$i]currency_id", CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name'), array('class' => 'detail currSelect')); //,array()  ?></td>
-    <td><b><?php echo $form->labelEx($model, 'iTotal'); ?></b>
-        <div id="Docdetails_<?php echo $i; ?>_iTotallabel" ></div>
+    <td>
+        <?php //echo $form->field($model, "[$i]name");?>
+       <!-- <label class="control-label" for="docdetails-<?= $i; ?>-name"><?= $model->name;?></label>-->
+        <input id="docdetails-<?= $i; ?>-name" name="Docdetails[<?= $i; ?>][name]" value="<?= $model->name;?>" class="form-control" />
+        <div class="help-block"></div>
     </td>
-    <td><b><?php echo $form->labelEx($model, 'iVatRate'); ?></b><?php
-        echo $form->hiddenField($model, "[$i]iVatRate", array('class' => 'detail iVatRate'));
-        echo $form->textField($model, "[$i]iTotalVat", array('class' => 'detail iVat'));
+
+    <td><?php echo $form->field($model, "[$i]qty")->input('number',["pattern"=>'\d+(\.\d*)?']); ?></td>
+    <td><?php echo $form->field($model, "[$i]unit_id")->dropDownList($itemunit);  ?></td>
+    <td><?php echo $form->field($model, "[$i]iItem")->input('number'); ?></td>
+    <td><?php echo $form->field($model, "[$i]currency_id")->dropDownList($currency);  ?></td>
+    <td><div id="docdetails-<?php echo $i; ?>-iTotallabel" ></div></td>
+    <td><?php
+        echo $form->field($model, "[$i]iVatRate",['template'=>'{input}'])->hiddenInput();
+        echo $form->field($model, "[$i]iTotalVat")->input('number',["pattern"=>'\d+(\.\d*)?']);
         ?>
 
     </td>
-    <td class="remove">
+    <td class="detRemove">
         <?php
-        $this->widget('bootstrap.widgets.TbButton', array(
+        echo yii\bootstrap\Button::widget([
             'label' => Yii::t('app', 'Remove'),
-            'icon' => 'glyphicon glyphicon-remove',
-        ));
+            'options'=>['class'=>'btn btn-danger']
+            //'icon' => 'glyphicon glyphicon-remove',
+        ]);
         ?>
 
         <input type="hidden" class="rowIndex" value="<?php echo $i; ?>" />
-        <input id="Docdetails_<?php echo $i; ?>_ihItem" name="Docdetails[<?php echo $i; ?>][ihItem]" type="hidden" value="" class="detail ihItem" />
-        <input id="Docdetails_<?php echo $i; ?>_iTotal"name="Docdetails[<?php echo $i; ?>][iTotal]" type="hidden" value="" class="detail iTotal" />
-        <input id="Docdetails_<?php echo $i; ?>_ihTotal"name="Docdetails[<?php echo $i; ?>][ihTotal]" type="hidden" value="" class="detail ihTotal" />
+        <input id="Docdetails-<?php echo $i; ?>-ihItem" name="Docdetails[<?php echo $i; ?>][ihItem]" type="hidden" value="<?= $model->ihItem;?>" />
+        <input id="Docdetails-<?php echo $i; ?>-iTotal"name="Docdetails[<?php echo $i; ?>][iTotal]" type="hidden" value="<?= $model->iTotal;?>"  />
+        <input id="Docdetails-<?php echo $i; ?>-ihTotal"name="Docdetails[<?php echo $i; ?>][ihTotal]" type="hidden" value="<?= $model->ihTotal;?>" />
     </td>
 </tr>
 <tr class="docSubContent">
     <td></td>
-    <td colspan="5"><b><?php echo $form->labelEx($model, 'description'); ?></b><?php
+    <td colspan="5"><b><?php //echo $form->labelEx($model, 'description'); ?></b><?php
         if ($i == 'ABC')
-            echo $form->textField($model, "[$i]description", array('class' => 'detail'));
+            echo $form->field($model, "[$i]description");
         else
-            echo $form->textArea($model, "[$i]description", array('class' => 'detail','rows' => 1, 'cols' => 10));
+            echo $form->field($model, "[$i]description");//textArea
         ?></td>
     <td></td>
-    <td><b><?php echo $form->labelEx($model, 'invprice'); ?></b></td> 
+    <td><b><?php //echo $form->labelEx($model, 'invprice'); ?></b></td> 
 
 </tr>    
-<script type="text/javascript">
 
-    $("#Docdetails_<?php echo $i; ?>_currency_id").select2();
-    $("#Docdetails_<?php echo $i; ?>_item_id").select2();
-    $("#Docdetails_<?php echo $i; ?>_unit_id").select2();
-    //$("#Docdetails_<?php echo $i; ?>_name").select2();
+
+<?php
+$java= <<< JAVA
+    $("#docdetails-$i-currency_id").select2();
+    $("#docdetails-$i-item_id").select2();
+    $("#docdetails-$i-unit_id").select2();
 
     jQuery(function($) {
-        //jQuery("#Docdetails_<?php echo $i; ?>_item_id").autocomplete({"minLength":0, "showAnim": "fold", "source": "/yii/demos/new/index.php?r=item/autocomplete"});
-        CalcPrice(<?php echo $i; ?>);
-    });
-   
-
-    $("#Docdetails_<?php echo $i; ?>_currency_id").change(function() {
-        CalcPrice(<?php echo $i; ?>);
+        CalcPrice($i);
     });
 
+JAVA;
 
-    //$("#Docdetails_<?php echo $i; ?>_inclodeVat").change(function(){
-    //   vatChange(<?php echo $i; ?>);  
-    //});
-
-    //$("#Docdetails_<?php echo $i; ?>_name").change(function(){
-    //    nameChange(<?php echo $i; ?>);  
-    //});
-
-    $("#Docdetails_<?php echo $i; ?>_item_id").change(function() {
-        itemChange(<?php echo $i; ?>);
-    });
-
-
-    $("#Docdetails_<?php echo $i; ?>_qty").change(function() {
-        CalcPrice(<?php echo $i; ?>);
-    });
-    $("#Docdetails_<?php echo $i; ?>_iItem").change(function() {
-        CalcPrice(<?php echo $i; ?>);
-    });
-    $("#Docdetails_<?php echo $i; ?>_iTotalVat").change(function() {
-        CalcPrice(<?php echo $i; ?>, "CalcPriceWithVat");
-    });
-    //$("#Docdetails_<?php echo $i; ?>_invprice").change(function(){
-    //    sumChange(<?php echo $i; ?>);  
-    //});
-    $(".remove").click(function() {
-        //$(this).parents(".docContent:first:after").remove();
-        $(this).parent().next().remove();
-        $(this).parent().remove();
-        //$(this).parents(".docContent:first").remove();
-        CalcPriceSum();
-        calcLines();
-    });
-
-</script>
-
-
+if($i==='ABC'){
+    //echo '<script type="text/javascript">'.$java.'</script>';
+}else{
+    //echo '<script type="text/javascript">'.$java.'</script>';
+    $this->registerJs($java, \yii\web\View::POS_READY);
+}
+?>

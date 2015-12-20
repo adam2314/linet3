@@ -1,12 +1,16 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
+namespace app\controllers;
+
+use Yii;
+use app\components\RightsController;
 class BankNameController extends RightsController{
 	
 
@@ -16,7 +20,7 @@ class BankNameController extends RightsController{
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
+		return $this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
 	}
@@ -29,17 +33,12 @@ class BankNameController extends RightsController{
 	{
 		$model=new BankName;
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['BankName']))
-		{
-			$model->attributes=$_POST['BankName'];
+		if ($model->load(Yii::$app->request->post())){
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('create',array(
+		return $this->render('create',array(
 			'model'=>$model,
 		));
 	}
@@ -53,17 +52,12 @@ class BankNameController extends RightsController{
 	{
 		$model=$this->loadModel($id);
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['BankName']))
-		{
-			$model->attributes=$_POST['BankName'];
+		if ($model->load(Yii::$app->request->post())){
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('update',array(
+		return $this->render('update',array(
 			'model'=>$model,
 		));
 	}
@@ -75,7 +69,7 @@ class BankNameController extends RightsController{
 	 */
 	public function actionDelete($id)
 	{
-		if(Yii::app()->request->isPostRequest)
+		if(Yii::$app->request->isPostRequest)
 		{
 			// we only allow deletion via POST request
 			$this->loadModel($id)->delete();
@@ -85,7 +79,7 @@ class BankNameController extends RightsController{
 				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 		}
 		else
-			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+			throw new \yii\web\HttpException(400,'Invalid request. Please do not repeat this request again.');
 	}
 
 	/**
@@ -94,7 +88,7 @@ class BankNameController extends RightsController{
 	public function actionIndex()
 	{
 		$dataProvider=new CActiveDataProvider('BankName');
-		$this->render('index',array(
+		return $this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
 	}
@@ -104,12 +98,12 @@ class BankNameController extends RightsController{
 	 */
 	public function actionAdmin()
 	{
-		$model=new BankName('search');
-		$model->unsetAttributes();  // clear any default values
+		$model=new BankName();
+		//$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['BankName']))
 			$model->attributes=$_GET['BankName'];
 
-		$this->render('admin',array(
+		return $this->render('admin',array(
 			'model'=>$model,
 		));
 	}
@@ -121,27 +115,16 @@ class BankNameController extends RightsController{
 	 */
 	public function loadModel($id)
 	{
-		$model=BankName::model()->findByPk($id);
+		$model=BankName::findOne($id);
 		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+			throw new \yii\web\HttpException(404,'The requested page does not exist.');
 		return $model;
 	}
 
-	/**
-	 * Performs the AJAX validation.
-	 * @param CModel the model to be validated
-	 */
-	protected function performAjaxValidation($model)
-	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='bank-name-form')
-		{
-			echo CActiveForm::validate($model);
-			Yii::app()->end();
-		}
-	}
+
         public function actionAutocomplete($term='') {
 	    $res =  BankName::AutoComplete($term);
-	    echo CJSON::encode($res);
-	    Yii::app()->end();//*/
+	    echo \yii\helpers\Json::encode($res);
+	    Yii::$app->end();//*/
 	}
 }

@@ -1,0 +1,67 @@
+{
+    "name": "adam2314/linet3",
+    "description": "linet3",
+    "keywords": ["linet", "accounting", "software"],
+    "homepage": "http://www.linet.org.il/",
+    "type": "project",
+    "license": "GNU AFFERO GENERAL PUBLIC LICENSE Version 3",
+    "support": {
+        "issues": "https://github.com/adam2314/linet3/issues?state=open",
+        "source": "https://github.com/adam2314/linet3"
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "*",
+        "yiisoft/yii2-bootstrap": "*",
+        "yiisoft/yii2-swiftmailer": "*",
+        "kartik-v/yii2-widgets": "*",
+        "kartik-v/yii2-grid": "*",
+        "kartik-v/yii2-mpdf": "*",
+        "asdf-studio/yii2-eav": "*",
+        "kartik-v/yii2-detail-view": "*",
+        "yiisoft/yii2-jui": "~2.0@dev",
+        "kartik-v/yii2-icons": "dev-master",
+        "kartik-v/yii2-datecontrol": "dev-master",
+        "kartik-v/yii2-tabs-x": "*",
+        "mdmsoft/yii2-admin": "*",
+        "miloschuman/yii2-highcharts-widget": "*",
+        "kartik-v/yii2-popover-x": "*",
+        "kartik-v/yii2-field-range": "*",
+        "kartik-v/yii2-date-range": "*"
+
+        
+    },
+    "require-dev": {
+        "yiisoft/yii2-codeception": "*",
+        "yiisoft/yii2-debug": "*",
+        "yiisoft/yii2-gii": "*",
+        "yiisoft/yii2-faker": "*"
+    },
+    "config": {
+        "process-timeout": 1800
+    },
+    "scripts": {
+        "post-create-project-cmd": [
+            "yii\\composer\\Installer::postCreateProject"
+        ]
+    },
+    "extra": {
+        "yii\\composer\\Installer::postCreateProject": {
+            "setPermission": [
+                {
+                    "runtime": "0777",
+                    "web/assets": "0777",
+                    "yii": "0755"
+                }
+            ],
+            "generateCookieValidationKey": [
+                "config/web.php"
+            ]
+        },
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm",
+            "bower-asset-library": "vendor/bower"
+        }
+    }
+}

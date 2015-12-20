@@ -1,40 +1,41 @@
 <?php
-$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+use kartik\select2\Select2;
+$form = kartik\form\ActiveForm::begin( array(
     'id' => 'user-form',
     'enableAjaxValidation' => false,
-    'htmlOptions' => array('enctype' => 'multipart/form-data'),
+    //'options' => array('enctype' => 'multipart/form-data'),
         ));
 
 
 $model->password = '';
 ?>
 <div class="row">
-    <?php echo $form->errorSummary($model); ?>
+    <?= $form->errorSummary($model); ?>
     <div class="col-md-4 col-sm-6">
 
 
-        <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "User General Details"),)); ?>
-        <?php echo $form->textFieldRow($model, 'username', array('maxlength' => 100)); ?>
+        <?php app\widgets\TbPanel::begin( array('header' => Yii::t('app', "User General Details"),)); ?>
+        <?= $form->field($model, 'username'); ?>
 
-        <?php echo $form->textFieldRow($model, 'fname', array('maxlength' => 80)); ?>
+        <?= $form->field($model, 'fname'); ?>
 
-        <?php echo $form->textFieldRow($model, 'lname', array('maxlength' => 80)); ?>
+        <?= $form->field($model, 'lname'); ?>
 
-        <?php echo $form->passwordFieldRow($model, 'passwd', array('maxlength' => 41)); ?>
+        <?= $form->field($model, 'passwd'); ?>
 
-        <?php echo $form->textFieldRow($model, 'email', array('maxlength' => 255)); ?>
+        <?= $form->field($model, 'email'); ?>
 
-        <?php //echo $form->textFieldRow($model, 'lastlogin' ); ?>
+        <?php //echo $form->field($model, 'lastlogin' ); ?>
 
-        <?php //echo $form->textFieldRow($model, 'cookie', array('maxlength' => 32)); ?>
+        <?php //echo $form->field($model, 'cookie', array('maxlength' => 32)); ?>
 
-        <?php //echo $form->textFieldRow($model,'hash',array('maxlength'=>32));  ?>
-        <?php $this->endWidget(); ?>
-
-
+        <?php //echo $form->field($model,'hash',array('maxlength'=>32));  ?>
+        <?php app\widgets\TbPanel::end(); ?>
 
 
-        <?php //echo $form->textFieldRow($model,'salt',array('maxlength'=>255));  ?>
+
+
+        <?php //echo $form->field($model,'salt',array('maxlength'=>255));  ?>
 
     </div>	
 
@@ -42,26 +43,26 @@ $model->password = '';
     <div class="col-md-4 col-sm-6">
         <?php 
         $theme=array();
-        foreach(Yii::app()->themeManager->themeNames as $key=>$value)
-            $theme[$value]=$value;
+        //foreach(Yii::$app->themeManager->themeNames as $key=>$value)
+        //    $theme[$value]=$value;
             ?>
-        <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "User Workspace"),)); ?>
-        <?php echo $form->dropDownListRow($model, 'theme', $theme); ?>
-        <?php echo $form->dropDownListRow($model, 'timezone', Timezone::makeList()); ?>
-        <?php echo $form->dropDownListRow($model, 'language', CHtml::listData(Language::model()->findAll(), 'id', 'name')); ?>
-        <?php echo $form->fileFieldRow($model, 'certfile', array('maxlength' => 255)); ?>
-        <?php echo ($model->hasCert() ? Yii::t('app', "Has certifcate file") : '') . "<br>"; ?>
-        <?php echo $form->textFieldRow($model, 'certpasswd', array('maxlength' => 255)); ?>
-        <?php $this->endWidget(); ?>
+        <?php app\widgets\TbPanel::begin( array('header' => Yii::t('app', "User Workspace"),)); ?>
+        <?= $form->field($model, 'theme')->widget(Select2::classname(), ['data' =>  $theme]); ?>
+        <?= $form->field($model, 'timezone')->widget(Select2::classname(), ['data' =>  app\models\Timezone::makeList()]); ?>
+        <?= $form->field($model, 'language')->widget(Select2::classname(), ['data' =>  \yii\helpers\ArrayHelper::map(app\models\Language::find()->All(), 'id', 'name')]); ?>
+        <?= $form->field($model, 'certfile')->fileInput(); ?>
+        <?= ($model->hasCert() ? Yii::t('app', "Has certifcate file") : '') . "<br>"; ?>
+        <?= $form->field($model, 'certpasswd'); ?>
+        <?php app\widgets\TbPanel::end(); ?>
     </div>     
     <div class="col-md-4 col-sm-6">
-        <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "User Warehouse and VAT Configuration"),)); ?>
-        <?php echo $form->dropDownListRow($model, 'warehouse', CHtml::listData(Accounts::model()->AutoComplete('', 8), 'value', 'label')); ?>
+        <?php app\widgets\TbPanel::begin( array('header' => Yii::t('app', "User Warehouse and VAT Configuration"),)); ?>
+        <?= $form->field($model, 'warehouse')->widget(Select2::classname(), ['data' => \yii\helpers\ArrayHelper::map(app\models\Accounts::findAllByType(8), 'id', 'name')]); ?>
         <table  data-role="table" class="table" ><!-- docdetalies -->
             <thead>
                 <tr  class="head1">
-                    <th><?php echo $form->labelEx($model, 'ItemVatCat'); ?></th>
-                    <th><?php echo $form->labelEx($model, 'account_id'); ?></th>
+                    <th><label><?= Yii::t('app', "Item VAT Cat");?></label></th>
+                    <th><label><?= Yii::t('app', "Account ID");?></label></th>
                 </tr>
             </thead>	
             <tfoot>
@@ -76,7 +77,7 @@ $model->password = '';
                 $i = 0;
                 if (count($model->userIncomeMaps) != 0)
                     foreach ($model->userIncomeMaps as $userIncomeMap) {
-                        echo $this->renderPartial('userIncomeMap', array('model' => $userIncomeMap, 'form' => $form, 'i' => "{$i}"));
+                        echo $this->render('userIncomeMap', array('model' => $userIncomeMap, 'form' => $form, 'i' => "{$i}"));
                         $i++;
                     }
                 ?>
@@ -84,19 +85,13 @@ $model->password = '';
 
 
         </table>
-        <?php $this->endWidget(); ?>
+        <?php app\widgets\TbPanel::end(); ?>
     </div>    
 
 
 
 </div> 
 <div class="form-actions">
-    <?php
-    $this->widget('bootstrap.widgets.TbButton', array(
-        'buttonType' => 'submit',
-        'type' => 'primary',
-        'label' => $model->isNewRecord ? 'Create' : 'Save',
-    ));
-    ?>
+    <?= \yii\helpers\Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => 'btn btn-success']) ?>
 </div>
-<?php $this->endWidget(); ?>
+<?php kartik\form\ActiveForm::end(); ?>

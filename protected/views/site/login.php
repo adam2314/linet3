@@ -1,59 +1,63 @@
 <?php
-$this->pageTitle=Yii::app()->name . ' - Login';
 
-?><br /><br />
-<div class="text-center">      
-    <a href="http://www.linet.org.il" >
-        <img src="<?php echo Yii::app()->createAbsoluteUrl('/assets/img/logo.png');?>" alt="">
-    </a>
-</div>
+use yii\widgets\ActiveForm;
+use yii\helpers\Html;
+?>
+
+
+<?php
+//$this->pageTitle=Yii::$app->name . ' - Login';
+?>
+
 <div class="container">
-    <div class="text-center">
-        <div class="form">
-            <div class="tab-content">
-                <div id="login" class="tab-pane active">
-            <?php $form=$this->beginWidget('CActiveForm', array(
-                    'id'=>'login-form',
-                    'enableClientValidation'=>true,
-                    'htmlOptions'=>array(
-                        'class'=>"form-signin",
-                        ),
-                    'clientOptions'=>array(
-                            'validateOnSubmit'=>true,
-                    ),
-            )); ?>
+
+                <div id="login" class="centered">
+                    <?php
+                    $form = ActiveForm::begin([
+                                'id' => 'login-form',
+                                'enableClientValidation' => true,
+                                'options' => ['class' => 'form-horizontal'],
+                                'fieldConfig' => [
+                                    //'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
+                                    //'labelOptions' => ['class' => 'col-lg-1 control-label'],
+                                ],
+                    ]);
+                    ?>
 
 
 
-                            <?php echo $form->labelEx($model,'username',array('class'=>"text-muted text-center")); ?>
-                            <?php echo $form->error($model,'username'); ?>
-                            <?php echo $form->textField($model,'username',array('class'=>"form-control","placeholder"=>Yii::t('app','Username'))); ?>
-                            
+                    <?= $form->field($model, 'username') ?>
 
-                            <?php //echo $form->labelEx($model,'password',array('class'=>"text-muted text-center")); ?>
-                            <?php echo $form->passwordField($model,'password',array('class'=>"form-control","placeholder"=>Yii::t('app','Password'))); ?>
-                            <?php echo $form->error($model,'password'); ?>
+                    <?= $form->field($model, 'password')->passwordInput() ?>
+
+                    <?=
+                    $form->field($model, 'rememberMe', [
+                        //'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
+                    ])->checkbox()
+                    ?>
 
 
-                            <?php //echo $form->checkBox($model,'rememberMe',array('class'=>"text-muted text-center")); ?>
-                            <?php //echo $form->label($model,'rememberMe'); ?>
-                            <?php //echo $form->error($model,'rememberMe'); ?>
+                    <?php //echo $form->labelEx($model,'username',array('class'=>"text-muted text-center")); ?>
+                    <?php //echo $form->error($model,'username');   ?>
+                    <?php //echo $form->textField($model,'username',array('class'=>"form-control","placeholder"=>Yii::t('app','Username')));   ?>
 
-                    <div class="form-actions">
-                            <?php $this->widget('bootstrap.widgets.TbButton', array(
-                                    'buttonType'=>'submit',
-                                    'type'=>'primary',
-                                    'label'=>Yii::t('app','Login'),
-                                'htmlOptions'=>array(
-                                    'class'=>"btn btn-lg btn-primary btn-block"
-                                    ),
-                            )); ?>
+
+                    <?php //echo $form->passwordField($model,'password',array('class'=>"form-control","placeholder"=>Yii::t('app','Password')));   ?>
+                    <?php //echo $form->error($model,'password');   ?>
+
+
+                    <?php //echo $form->checkBox($model,'rememberMe',array('class'=>"text-muted text-center")); ?>
+                    <?php //echo $form->label($model,'rememberMe');   ?>
+                    <?php //echo $form->error($model,'rememberMe');   ?>
+
+                    <div class="form-group">
+                        <div class="col-lg-offset-1 col-lg-11">
+                            <?= Html::submitButton('Login', ['class' => 'btn btn-success', 'name' => 'login-button']) ?>
+                        </div>
                     </div>
 
 
-            <?php $this->endWidget(); ?>
+                    <?php ActiveForm::end(); ?>
                 </div><!-- tab-pane -->
-            </div><!-- tab-content -->
-        </div><!-- form -->
-    </div><!-- text-center -->
+
 </div><!-- container -->

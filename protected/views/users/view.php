@@ -1,25 +1,25 @@
 <?php
-$this->breadcrumbs = array(
+$this->params["breadcrumbs"] = array(
     'Users' => array('index'),
     $model->id,
 );
 
-$this->menu = array(
+$this->params["menu"]= array(
     //array('label'=>Yii::t("app","List Users"),'url'=>array('index')),
     array('label' => Yii::t("app", "Create User"), 'url' => array('create')),
     array('label' => Yii::t("app", "Update User"), 'url' => array('update', 'id' => $model->id)),
-    array('label' => Yii::t("app", "Delete User"), 'url' => '#', 'linkOptions' => array('submit' => array('delete', 'id' => $model->id), 'confirm' => 'Are you sure you want to delete this item?')),
+    //array('label' => Yii::t("app", "Delete User"), 'url' => '#', 'linkOptions' => array('submit' => array('delete', 'id' => $model->id), 'confirm' => 'Are you sure you want to delete this item?')),
     array('label' => Yii::t("app", "Manage Users"), 'url' => array('admin')),
 );
 
-$this->beginWidget('MiniForm', array('header' => Yii::t("app", "View User ") . " " . $model->username,));
+app\widgets\MiniForm::begin( array('header' => Yii::t("app", "View User ") . " " . $model->username,));
 ?>
 <div class="row">
     <div class="col-md-4">
 
         <?php
-        $this->widget('bootstrap.widgets.TbDetailView', array(
-            'data' => $model,
+        echo kartik\detail\DetailView::widget( array(
+            'model' => $model,
             'attributes' => array(
                 'id',
                 'username',
@@ -56,7 +56,7 @@ $this->beginWidget('MiniForm', array('header' => Yii::t("app", "View User ") . "
                 <?php
                 $i = 0;
                 foreach ($model->userIncomeMaps as $userIncome) {
-                    echo $this->renderPartial('userIncomeMapview', array('model' => $userIncome, 'i' => $i,));
+                    echo $this->render('userIncomeMapview', array('model' => $userIncome, 'i' => $i,));
                     $i++;
                 }
                 ?>
@@ -65,5 +65,5 @@ $this->beginWidget('MiniForm', array('header' => Yii::t("app", "View User ") . "
     </div>
 </div>
 <?php
-$this->endWidget();
+app\widgets\MiniForm::end();
 ?>

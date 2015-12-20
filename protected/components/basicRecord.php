@@ -1,22 +1,28 @@
 <?php
 
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-class basicRecord extends CActiveRecord {
+//use Yii;
+namespace app\components;
+use Yii;
+use app\models\Record;
+//use app\components\basicRecord;
 
-    
+class basicRecord extends Record {
+
+    /*
     public function getIterator() {
 
         $all = array_merge($this->getAttributes(), get_object_vars($this));
 
-        return new CMapIterator($all);
-    }
+        return new MapIterator($all);
+    }*/
 
     public function hasAttribute($name) {
         //return true;
@@ -35,7 +41,7 @@ class basicRecord extends CActiveRecord {
     public static function getConstants($token, $objectClass) {
         $tokenLen = strlen($token);
 
-        $reflection = new ReflectionClass($objectClass); //php built-in 
+        $reflection = new \ReflectionClass($objectClass); //php built-in 
         $allConstants = $reflection->getConstants(); //constants as array
 
         $tokenConstants = array();
@@ -84,17 +90,15 @@ class basicRecord extends CActiveRecord {
     }
 
     public function readLine($line, $type) {
-
-        $fields = Yii::app()->cache->get("Openformat." . $type);
+        Yii::$app->cache->flush();
+        $fields = Yii::$app->cache->get("Openformat." . $type);
         if ($fields === false) {
-            $criteria = new CDbCriteria;
-            $criteria->condition = "type_id = :type_id";
-            $criteria->params = array(':type_id' => $type);
+            
 
-            $fields = OpenFormat::model()->findAll($criteria);
+            $fields = \app\models\OpenFormat::find()->where(['type_id' => $type])->All();
 
-            Yii::app()->cache->set("Openformat." . $type, $fields, 600);
-            Yii::log("Openformat" . $type . ' saved', 'info', 'app');
+            Yii::$app->cache->set("Openformat." . $type, $fields, 600);
+            Yii::info("Openformat" . $type . ' saved');
         }
 
 
@@ -115,19 +119,19 @@ class basicRecord extends CActiveRecord {
 
             $this->openfrmtFieldValue($field, $str);
         }
-        //Yii::app()->end();
+        //Yii::$app->end();
         //echo "****************************<br />\n";
         return true;
     }
 
     public function save($runValidation = true, $attributes = NULL) {
         
-        if (!Yii::app()->params['readOnly']){
+        if (!Yii::$app->params['readOnly']){
             $a= parent::save($runValidation, $attributes);
-            Yii::log("Saving Model: " . var_export($this->getErrors(), true), CLogger::LEVEL_INFO, __METHOD__);
+            Yii::info("Saving Model: " . var_export($this->getErrors(), true));
             return $a;
         }else
-            throw new CHttpException(401, Yii::t('app', 'System is in read only mode.'));
+            throw new \Exception(Yii::t('app', 'System is in read only mode.'));//401
             return false;
     }
 
@@ -138,7 +142,7 @@ class basicRecord extends CActiveRecord {
                 $value = substr($value, 0, 4) . "-" . substr($value, 4, 2) . "-" . substr($value, 6, 2);
 
                 if (get_class($this) == "Docs")
-                    $value = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($value));
+                    $value = date(Yii::$app->locale->getDateFormat('phpdatetimes'), strtotime($value));
 
                 break;
             case "hour":
@@ -199,19 +203,23 @@ class basicRecord extends CActiveRecord {
         if ($field->export == "file.line")
             $value = $line;
         if ($field->export == "company.vatnum")
-            $value = Settings::model()->findByPk('company.vat.id')->value;
+            $value = \app\helpers\Linet3Helper::getSetting('company.vat.id');
         if (strpos($field->export, "this.") === 0)
             if (isset($this->{str_replace("this.", "", $field->export)}))
                 $value = $this->{str_replace("this.", "", $field->export)};
 
         if (strpos($field->export, "system.") === 0)
-            $value = Settings::model()->findByPk($field->export)->value;
+            $value = \app\helpers\Linet3Helper::getSetting($field->export);
 
         if (strpos($field->export, "func.") === 0)
             $value = $this->{str_replace("func.", "", $field->export)}();
 
         if (strpos($field->export, "limit.") === 0)
             $value = $this->{str_replace("limit.", "", $field->export)}($begin, $end);
+        if ($field->export == "start")
+            $value = $begin;
+        if ($field->export == "end")
+            $value = $end;
 
 
 
@@ -223,23 +231,12 @@ class basicRecord extends CActiveRecord {
         if ($field->type == 'n')
             $template = "%0" . $field->size . "d";
         if ($field->type == 'date') {//date
-            if(get_class($this)=='Transactions'){
-                $phpdbdatetime = Yii::app()->locale->getDateFormat('yiidbdatetime');
-                return date('Ymd', CDateTimeParser::parse($value, $phpdbdatetime));
-            }
+            return $this->readOFDate($value);
             
-            if (isset($this->dateDBformat)) {
-                if ($this->dateDBformat) {
-                    $phpdbdatetime = Yii::app()->locale->getDateFormat('yiidbdatetime');
-                    return date('Ymd', CDateTimeParser::parse($value, $phpdbdatetime));
-                }
-            }
-            $phpdbdatetime = Yii::app()->locale->getDateFormat('yiidatetime'); //phpdbdatetime
-            return date('Ymd', CDateTimeParser::parse($value, $phpdbdatetime));
         }
         if ($field->type == 'hour') {//hour
-            $phpdbdatetime = Yii::app()->locale->getDateFormat('yiidatetime'); //phpdbdatetime
-            return date('Hs', CDateTimeParser::parse($value, $phpdbdatetime));
+            //$phpdbdatetime = Yii::$app->locale->getDateFormat('yiidatetime'); //phpdbdatetime
+            return $this->readOFTime($value);
         }
         if ($field->type == '99') {//v99
             $template = "%0" . ($field->size) . "d";

@@ -1,8 +1,8 @@
 <?php
 
 /* * *********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -29,10 +29,20 @@
  * @property Docs[] $docs
  * @property UserIncomeMap[] $userIncomeMaps
  */
-class User extends mainRecord {
 
+namespace app\models;
+
+use Yii;
+use app\components\mainRecord;
+use yii\web\IdentityInterface;
+
+class User extends mainRecord implements IdentityInterface {
+
+    const STATUS_DELETED = 0;
+    const STATUS_ACTIVE = 10;
     const table = 'user';
 
+    public $auth_key;
     public $warehouse;
     public $passwd = '';
     public $certfile;
@@ -43,15 +53,35 @@ class User extends mainRecord {
      * @param string $className active record class name.
      * @return User the static model class
      */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
+    //public static function model($className = __CLASS__) {
+    //    return parent::model($className);
+    // }
 
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public static function tableName() {
         return self::table;
+    }
+
+    public function getId() {
+        return $this->getPrimaryKey();
+    }
+
+    public static function findIdentity($id) {
+        return static::findOne(['id' => $id]); //, 'status' => self::STATUS_ACTIVE
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null) {
+        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+    }
+
+    public function validateAuthKey($authKey) {
+        return $this->getAuthKey() === $authKey;
+    }
+
+    public function getAuthKey() {
+        return $this->auth_key;
     }
 
     /**
@@ -61,18 +91,18 @@ class User extends mainRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('username, lname, email, timezone', 'required'),
-            array('username', 'length', 'max' => 100),
-            array('fname, lname, certpasswd, salt, email', 'length', 'max' => 255),
-            array('language', 'length', 'max' => 10),
-            array('password', 'length', 'max' => 255),
-            array('passwd', 'required', 'on' => 'create'),
-            array('cookie, hash', 'length', 'max' => 32),
-            array('certpasswd, salt, email', 'length', 'max' => 255),
-            array('lastlogin, theme, warehouse, passwd, certfile', 'safe'),
+            array(['username', 'lname', 'email', 'timezone'], 'required'),
+            array(['username'], 'string', 'max' => 100),
+            array(['fname', 'lname', 'certpasswd', 'salt', 'email'], 'string', 'max' => 255),
+            array(['language'], 'string', 'max' => 10),
+            array(['password'], 'string', 'max' => 255),
+            array(['passwd'], 'required', 'on' => 'create'),
+            array(['cookie', 'hash'], 'string', 'max' => 32),
+            array(['certpasswd', 'salt', 'email'], 'string', 'max' => 255),
+            array(['lastlogin', 'theme', 'warehouse', 'passwd', 'certfile', 'company', 'home'], 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, username, fname, lname, password, lastlogin, cookie, hash, certpasswd, salt, email, language', 'safe', 'on' => 'search'),
+            array(['id', 'username', 'fname', 'lname', 'password', 'lastlogin', 'cookie', 'hash', 'certpasswd', 'salt', 'email', 'language'], 'safe', 'on' => 'search'),
         );
     }
 
@@ -84,21 +114,25 @@ class User extends mainRecord {
         // class name for the relations automatically generated below.
         return array(
             'docs' => array(self::HAS_MANY, 'Docs', 'owner'),
-            'userIncomeMaps' => array(self::HAS_MANY, 'UserIncomeMap', 'user_id'),
+            'UserIncomeMap' => array(self::HAS_MANY, 'UserIncomeMap', 'user_id'),
         );
+    }
+
+    public function getUserIncomeMaps() {
+        return $this->hasMany(UserIncomeMap::className(), array('user_id' => 'id'));
     }
 
     public function saveWidget($widget) {
 
 
 
-        $model = Settings::model()->findByPk("company." . $this->id . ".widget");
+        $model = Settings::findOne("company." . $this->id . ".widget");
         if ($model === null) {
             $model = new Settings();
             $model->id = "company." . $this->id . ".widget";
             $model->eavType = 'integer';
             $model->hidden = 1;
-            $model->value = CJSON::encode(array());
+            $model->value = \yii\helpers\Json::encode(array());
         }//
         //$model->value = !$model->value;
 
@@ -110,38 +144,34 @@ class User extends mainRecord {
             $key[$widget] = false;
         }
 
-        $model->value = CJSON::encode($key);
+        $model->value = \yii\helpers\Json::encode($key);
         $model->save();
-        Yii::app()->user->setState('widget', $this->getWidgets());
+        //out:Yii::$app->user->setState('widget', $this->getWidgets());
     }
 
-    private function getWidgets() {
-        if (Yii::app()->db->schema->getTable('{{config}}') !== null) {
-            $a = Settings::model()->findByPk("company." . $this->id . ".widget");
-
-            if ($a !== null) {
-                return CJSON::decode($a->value);
-            }
+    public function getWidgets() {
+        if (Yii::$app->db->schema->getTableSchema('{{%config}}') !== null) {
+            return \yii\helpers\Json::decode(\app\helpers\Linet3Helper::getSetting("company." . $this->id . ".widget"));
         }
         return array();
     }
 
-    private function getWarehouse() {
-        if (Yii::app()->db->schema->getTable('{{config}}') !== null) {
-            $a = Settings::model()->findByPk("company." . $this->id . ".warehouse");
-            if ($a !== null) {
-                $this->warehouse = $a->value;
-            }
+    public static function getWarehouse($id=null) {
+        $warehouse=0;
+        if($id===null)
+            $id=$this->id;
+        if (Yii::$app->db->schema->getTableSchema('{{%config}}') !== null) {
+
+                $warehouse = \app\helpers\Linet3Helper::getSetting("company." . $id . ".warehouse");
+
         }
-        return $this->warehouse;
+        return $warehouse;
     }
 
     public function getCertPasswd() {
-        if (Yii::app()->db->schema->getTable('{{config}}') !== null) {
-            $a = Settings::model()->findByPk("company." . $this->id . ".certpasswd");
-            if ($a !== null) {
-                $this->certpasswd = $a->value;
-            }
+        if (Yii::$app->db->schema->getTableSchema('{{%config}}') !== null) {
+            $this->certpasswd = \app\helpers\Linet3Helper::getSetting("company." . $this->id . ".certpasswd");
+            
         }
         return $this->certpasswd;
     }
@@ -158,7 +188,7 @@ class User extends mainRecord {
             $this->password = $this->hashPassword($this->passwd, $this->salt);
 
         $res = parent::save($runValidation, $attributes);
-        if ((Yii::app()->db->schema->getTable('{{config}}') !== null) && ($res)) {
+        if ((Yii::$app->db->schema->getTableSchema('{{%config}}') !== null) && ($res)) {
             $this->compSave();
             //echo $this->warehouse;
             //exit;
@@ -177,7 +207,7 @@ class User extends mainRecord {
     }
 
     private function certpasswdSave($passwd) {
-        $model = Settings::model()->findByPk("company." . $this->id . ".certpasswd");
+        $model = Settings::findOne("company." . $this->id . ".certpasswd");
         if ($model === null) {
             $model = new Settings();
             $model->id = "company." . $this->id . ".certpasswd";
@@ -191,7 +221,7 @@ class User extends mainRecord {
     }
 
     private function warehouseSave($id) {
-        $model = Settings::model()->findByPk("company." . $this->id . ".warehouse");
+        $model = Settings::findOne("company." . $this->id . ".warehouse");
         if ($model === null) {
             $model = new Settings();
             $model->id = "company." . $this->id . ".warehouse";
@@ -205,24 +235,26 @@ class User extends mainRecord {
     }
 
     private function compSave() {
-        $catagories = ItemVatCat::model()->findAll();
+        $catagories = ItemVatCat::find()->All();
 
         foreach ($catagories as $catagory) {
-            if (!UserIncomeMap::model()->findByPk(array('user_id' => $this->id, 'itemVatCat_id' => $catagory->id))) {//'user_id', 'itemVatCat_id'
+            if (!UserIncomeMap::findOne(array('user_id' => $this->id, 'itemVatCat_id' => $catagory->id))) {//'user_id', 'itemVatCat_id'
                 $model = new UserIncomeMap;
                 $attr = array("user_id" => $this->id, "itemVatCat_id" => $catagory->id, "account_id" => 100);
                 $model->attributes = $attr;
-                if (!$model->save())
+                if (!$model->save()){
+                    Yii::error('fatel error unable to save cat');
                     return false;
+                }
             }
         }
 
 
-        Yii::log('user save catagory', 'info', 'app');
+        Yii::info('user save catagory');
 
-        $tmps = CUploadedFile::getInstanceByName('User[certfile]');
+        $tmps = \yii\web\UploadedFile::getInstanceByName('User[certfile]');
         if ($tmps) {
-            Yii::log('saved', 'info', 'app');
+            Yii::info('cert file loaded');
 
             if ($tmps->saveAs($this->getCertFilePath($this->id))) {
                 // add it to the main model now
@@ -234,24 +266,24 @@ class User extends mainRecord {
     }
 
     function hasCert() {
-        $configPath = Yii::app()->user->settings["company.path"];
+        $configPath = \app\helpers\Linet3Helper::getSetting("company.path");
         return file_exists($this->getCertFilePath());
     }
 
     static public function getCertFilePath($id = null) {
         if ($id == null)
-            $id = Yii::app()->user->id;
-        $user = User::model()->findByPk($id);
+            $id = \app\helpers\Linet3Helper::getUserId();
+        $user = User::findOne($id);
         if ($user !== null)
             return Company::getFilePath() . "cert/" . $id . ".p12";
     }
-
+/*
     public function delete() {
         /*
-          $users=User::model()->findAll();
+          $users=User::find()->All();
 
           foreach ($users as $user){
-          $IncomeMap=UserIncomeMap::model()->findByPk(array('user_id'=>$user->id, 'itemVatCat_id'=>$this->id));
+          $IncomeMap=UserIncomeMap::findOne(array('user_id'=>$user->id, 'itemVatCat_id'=>$this->id));
           if($IncomeMap){//'user_id', 'itemVatCat_id'
           $IncomeMap->delete();
           }
@@ -259,32 +291,32 @@ class User extends mainRecord {
           } */
         //no user delete only disable
         //parent::delete();
-    }
+  //  }
 
     /**
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels() {
         return array(
-            'id' => Yii::t('labels', 'ID'),
-            'username' => Yii::t('labels', 'User Name'),
-            'fname' => Yii::t('labels', 'First Name'),
-            'lname' => Yii::t('labels', 'Last Name'),
-            'password' => Yii::t('labels', 'Password'),
-            'lastlogin' => Yii::t('labels', 'Last Login'),
-            'cookie' => Yii::t('labels', 'Cookie'),
-            'hash' => Yii::t('labels', 'Hash'),
-            'certpasswd' => Yii::t('labels', 'Certifcate Password'),
-            'salt' => Yii::t('labels', 'Salt'),
-            'email' => Yii::t('labels', 'Email'),
-            'language' => Yii::t('labels', 'Language'),
-            'warehouse' => Yii::t('labels', 'Warehouse'),
-            'timezone' => Yii::t('labels', 'Timezone'),
-            'theme' => Yii::t('labels', 'Theme'),
-            'passwd' => Yii::t('labels', 'Set Password'),
-            'ItemVatCat' => Yii::t('labels', 'Item VAT Catagory'),
-            'account_id' => Yii::t('labels', 'Account id'),
-            'certfile' => Yii::t('labels', 'Certificate file'),
+            'id' => Yii::t('app', 'ID'),
+            'username' => Yii::t('app', 'User Name'),
+            'fname' => Yii::t('app', 'First Name'),
+            'lname' => Yii::t('app', 'Last Name'),
+            'password' => Yii::t('app', 'Password'),
+            'lastlogin' => Yii::t('app', 'Last Login'),
+            'cookie' => Yii::t('app', 'Cookie'),
+            'hash' => Yii::t('app', 'Hash'),
+            'certpasswd' => Yii::t('app', 'Certifcate Password'),
+            'salt' => Yii::t('app', 'Salt'),
+            'email' => Yii::t('app', 'Email'),
+            'language' => Yii::t('app', 'Language'),
+            'warehouse' => Yii::t('app', 'Warehouse'),
+            'timezone' => Yii::t('app', 'Timezone'),
+            'theme' => Yii::t('app', 'Theme'),
+            'passwd' => Yii::t('app', 'Set Password'),
+            'ItemVatCat' => Yii::t('app', 'Item VAT Catagory'),
+            'account_id' => Yii::t('app', 'Account id'),
+            'certfile' => Yii::t('app', 'Certificate file'),
         );
     }
 
@@ -292,7 +324,7 @@ class User extends mainRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search() {
+    public function search($params) {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
 
@@ -322,7 +354,13 @@ class User extends mainRecord {
      */
     public function validatePassword($password) {
         //return true;
+        //$this->setPassword($password);
+        //return Yii::$app->security->validatePassword($password, $this->password);
         return $this->hashPassword($password, $this->salt) === $this->password;
+    }
+
+    public function setPassword($password) {
+        $this->password = Yii::$app->security->generatePasswordHash($password);
     }
 
     public function validateHash($hash) {
@@ -348,19 +386,31 @@ class User extends mainRecord {
     }
 
     public function loadUser() {
+        //$this->save();
         //after select company
 
+        /*
+          Yii::$app->user->setState('User', $this);
+          //Yii::$app->user->setState('certpasswd', $this->getCertPasswd());
+          Yii::$app->user->setState('language', $this->language);
+          Yii::$app->user->setState('timezone', $this->timezone);
+          //Yii::$app->user->setState('theme', $this->theme);
+          Yii::$app->user->setState('fname', $this->fname);
+          Yii::$app->user->setState('lname', $this->lname);
+          Yii::$app->user->setState('username', $this->username);
+          Yii::$app->user->setState('warehouse', $this->getWarehouse());
+          Yii::$app->user->setState('widget', $this->getWidgets());
+         * 
+         * 
+         */
+    }
 
-        Yii::app()->user->setState('User', $this);
-        //Yii::app()->user->setState('certpasswd', $this->getCertPasswd());
-        Yii::app()->user->setState('language', $this->language);
-        Yii::app()->user->setState('timezone', $this->timezone);
-        //Yii::app()->user->setState('theme', $this->theme);
-        Yii::app()->user->setState('fname', $this->fname);
-        Yii::app()->user->setState('lname', $this->lname);
-        Yii::app()->user->setState('username', $this->username);
-        Yii::app()->user->setState('warehouse', $this->getWarehouse());
-        Yii::app()->user->setState('widget', $this->getWidgets());
+    public static function findByUsername($username) {
+        return static::findOne(['username' => $username]); //, 'status' => self::STATUS_ACTIVE
+    }
+
+    public static function findByPk($id) {
+        return static::findOne(['id' => $id]); //, 'status' => self::STATUS_ACTIVE
     }
 
 }

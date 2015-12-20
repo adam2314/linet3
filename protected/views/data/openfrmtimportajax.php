@@ -1,22 +1,22 @@
 
 <?php
-$this->beginWidget('MiniForm',array('header' => Yii::t("app","Import open format"))); 
+app\widgets\MiniForm::begin(array('header' => Yii::t("app","Import open format"))); 
 ?>
 
-<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+<?php $form=kartik\form\ActiveForm::begin( array(
 	'id'=>'accounts-form',
 	'enableAjaxValidation'=>true,
-    'htmlOptions'=>array('enctype'=>'multipart/form-data'),
+    'options'=>array('enctype'=>'multipart/form-data'),
 )); ?>
 
     <?php echo $form->errorSummary($model); ?>    
    
     <?php 
-    echo CHtml::hiddenField("companyId",$model->companyId);
+    echo \yii\helpers\Html::hiddenInput("companyId",$model->companyId);
     foreach($model->accDesc as $type=>$desc){
         //$model->accTypeIndex[$type];
-        //echo $form->dropDownListRow($model,'id6111',CHtml::listData(AccId6111::model()->findAll(), 'id', 'name')); 
-        echo CHtml::dropDownList("SwitchType[".$model->accTypeIndex[$type]."]",0,CHtml::listData(Acctype::model()->findAll(), 'id', 'name'));
+        //echo $form->dropDownListRow($model,'id6111',\yii\helpers\ArrayHelper::map(AccId6111::find()->All(), 'id', 'name')); 
+        echo \yii\helpers\Html::dropDownList("SwitchType[".$model->accTypeIndex[$type]."]",0,\yii\helpers\ArrayHelper::map(app\models\Acctype::find()->All(), 'id', 'name'));
         echo $desc."<br/>";
         // $this->accDesc[$acc->type]=$acc->name;
     }
@@ -25,12 +25,8 @@ $this->beginWidget('MiniForm',array('header' => Yii::t("app","Import open format
     ?>
 
     <div class="form-actions">
-            <?php $this->widget('bootstrap.widgets.TbButton', array(
-                    'buttonType'=>'submit',
-                    'type'=>'primary',
-                    'label'=>Yii::t('app',"Go") ,
-            )); ?>
+        <?= \yii\helpers\Html::submitButton(Yii::t('app', 'Go'), ['class' => 'btn btn-success']) ?>    
     </div>
 
-<?php $this->endWidget();
-$this->endWidget(); ?>
+<?php kartik\form\ActiveForm::end();
+app\widgets\MiniForm::end(); ?>

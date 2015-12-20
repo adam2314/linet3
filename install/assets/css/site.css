@@ -1,0 +1,15 @@
+body{
+	width :100%;
+	text-align:center;
+
+}
+.warp{
+	width :800px;
+
+}
+.iPage{
+    min-width:800px;
+    max-width:800px;
+    width:800px;
+    display:inline-block;
+}

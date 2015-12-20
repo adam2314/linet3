@@ -1,6 +1,6 @@
 <?php
-
-$this->menu=array(
+use app\widgets\app\widgets\MiniForm;
+$this->params["menu"]=array(
 	//array('label'=>'List Item', 'url'=>array('index')),
 	array('label'=>Yii::t('app','Create Item'), 'url'=>array('create')),
 	array('label'=>Yii::t('app','View Item'), 'url'=>array('view', 'id'=>$model->id)),
@@ -8,13 +8,17 @@ $this->menu=array(
 );
 
 
-$this->beginWidget('MiniForm',array(
+app\widgets\MiniForm::begin(array(
     'header' => Yii::t('app',"Update Item"). " ".$model->id,
 )); 
 ?>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model,'units'=>$units,'cat'=>$cat)); 
+<?= $this->render('_form', array(
+    'model'=>$model,
+    //'units'=>$units,
+    //'cat'=>$cat
+        )); 
 
- $this->endWidget();
+ app\widgets\MiniForm::end();
 
 ?>

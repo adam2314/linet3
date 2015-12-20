@@ -1,14 +1,18 @@
 <?php
 
 /* * *********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  * ********************************************************************************** */
+namespace app\controllers;
 
+use Yii;
+use app\components\RightsController;
+use app\models\Itemcategory;
 class ItemcategoryController extends RightsController {
 
     /**
@@ -16,7 +20,7 @@ class ItemcategoryController extends RightsController {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        $this->render('view', array(
+        return $this->render('view', array(
             'model' => $this->loadModel($id),
         ));
     }
@@ -28,15 +32,14 @@ class ItemcategoryController extends RightsController {
     public function actionCreate() {
         $model = new Itemcategory;
 
-        $this->performAjaxValidation($model);
 
-        if (isset($_POST['Itemcategory'])) {
-            $model->attributes = $_POST['Itemcategory'];
+        if ($model->load(Yii::$app->request->post())) {
+            //$model->attributes = $_POST['Itemcategory'];
             if ($model->save())
                 $this->redirect(array('view', 'id' => $model->id));
         }
 
-        $this->render('create', array(
+        return $this->render('create', array(
             'model' => $model,
         ));
     }
@@ -49,15 +52,12 @@ class ItemcategoryController extends RightsController {
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
 
-        $this->performAjaxValidation($model);
-
-        if (isset($_POST['Itemcategory'])) {
-            $model->attributes = $_POST['Itemcategory'];
+        if ($model->load(Yii::$app->request->post())) {
             if ($model->save())
                 $this->redirect(array('view', 'id' => $model->id));
         }
 
-        $this->render('update', array(
+        return $this->render('update', array(
             'model' => $model,
         ));
     }
@@ -68,7 +68,7 @@ class ItemcategoryController extends RightsController {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        if (Yii::app()->request->isPostRequest) {
+        if (Yii::$app->request->isPostRequest) {
             // we only allow deletion via POST request
             $this->loadModel($id)->delete();
 
@@ -76,7 +76,7 @@ class ItemcategoryController extends RightsController {
             if (!isset($_GET['ajax']))
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
         } else
-            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+            throw new \yii\web\HttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
     /**
@@ -84,7 +84,7 @@ class ItemcategoryController extends RightsController {
      */
     public function actionIndex() {
         $dataProvider = new CActiveDataProvider('Itemcategory');
-        $this->render('index', array(
+        return $this->render('index', array(
             'dataProvider' => $dataProvider,
         ));
     }
@@ -93,12 +93,12 @@ class ItemcategoryController extends RightsController {
      * Manages all models.
      */
     public function actionAdmin() {
-        $model = new Itemcategory('search');
-        $model->unsetAttributes();  // clear any default values
+        $model = new Itemcategory();
+        //$model->unsetAttributes();  // clear any default values
         if (isset($_GET['Itemcategory']))
             $model->attributes = $_GET['Itemcategory'];
 
-        $this->render('admin', array(
+        return $this->render('admin', array(
             'model' => $model,
         ));
     }
@@ -109,21 +109,10 @@ class ItemcategoryController extends RightsController {
      * @param integer the ID of the model to be loaded
      */
     public function loadModel($id) {
-        $model = Itemcategory::model()->findByPk($id);
+        $model = Itemcategory::findOne($id);
         if ($model === null)
-            throw new CHttpException(404, 'The requested page does not exist.');
+            throw new \yii\web\HttpException(404, 'The requested page does not exist.');
         return $model;
-    }
-
-    /**
-     * Performs the AJAX validation.
-     * @param CModel the model to be validated
-     */
-    protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'itemcategory-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
     }
 
 }

@@ -1,39 +1,32 @@
-<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
+<?php $form=kartik\form\ActiveForm::begin(array(
 	'id'=>'mail-form',
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<?php echo $form->errorSummary($model); ?>
+	<?= $form->errorSummary($model); ?>
 
-        <?php echo $form->hiddenField($model,'files'); ?>
+        <?= $form->field($model,'files')->hiddenInput(); ?>
 
-	<?php //echo $form->textFieldRow($model,'from',array('maxlength'=>255)); ?>
+	<?php //echo $form->field($model,'from',array('maxlength'=>255)); ?>
 
-        <?php echo $form->textFieldRow($model,'to',array('maxlength'=>255)); ?>
-        <?php //echo $form->dropDownListRow($model, 'entity_type', CHtml::listData($list, 'id', 'name')); ?>
+        <?= $form->field($model,'to'); ?>
+        <?php //echo $form->dropDownListRow($model, 'entity_type', \yii\helpers\ArrayHelper::map($list, 'id', 'name')); ?>
 
-        <?php //echo $form->dropDownListRow($model, 'entity_id', CHtml::listData(Acctype::model()->findAll(), 'id', 'name')); ?>
+        <?php //echo $form->dropDownListRow($model, 'entity_id', \yii\helpers\ArrayHelper::map(Acctype::find()->All(), 'id', 'name')); ?>
         <br />
-	<?php echo $form->textFieldRow($model,'cc',array('maxlength'=>255)); ?>
+	<?= $form->field($model,'cc'); ?>
 
-        <?php echo $form->textFieldRow($model,'bcc',array('maxlength'=>255)); ?>
+        <?= $form->field($model,'bcc'); ?>
         <div id="files"></div>
-        <?php echo $form->textFieldRow($model,'subject',array('maxlength'=>255)); ?>
+        <?= $form->field($model,'subject'); ?>
 
-        <?php $this->widget('ext.tinymce.TinyMce', array(
-            'model' => $model,
-            'attribute' => 'body',
-        )); ?>
+        <?= $form->field($model,'body')->textArea(); ?>
 
-	<?php //echo $form->textFieldRow($model,'openformat',array('class'=>'span5','maxlength'=>5)); ?>
+	<?php //echo $form->field($model,'openformat',array('class'=>'span5','maxlength'=>5)); ?>
 
 	<div class="form-actions">
-		<?php $this->widget('bootstrap.widgets.TbButton', array(
-			'buttonType'=>'submit',
-			'type'=>'primary',
-			'label'=>$model->isNewRecord ? Yii::t('app',"Send") : Yii::t('app',"Save"),
-		)); ?>
+		<?= \yii\helpers\Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => 'btn btn-success']) ?>
 	</div>
 
-<?php $this->endWidget(); ?>
+<?php kartik\form\ActiveForm::end(); ?>
 

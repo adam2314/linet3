@@ -1,7 +1,7 @@
 <?php
 
 
-$this->widget('EExcelView', array(
+echo app\widgets\GridView::widget( array(
     'id' => 'item-grid',
     'dataProvider' => $model->search(),
     'filter' => $model,
@@ -15,7 +15,7 @@ $this->widget('EExcelView', array(
         //'category_id',
         array(
             'name' => 'category_id',
-            'filter' => CHtml::listData(Itemcategory::model()->findAll(), 'id', 'name'),
+            'filter' => \yii\helpers\ArrayHelper::map(Itemcategory::find()->All(), 'id', 'name'),
             'value' => 'isset($data->Category)?$data->Category->name:0', //where name is Client model attribute 
         ),
         'parent_item_id',
@@ -31,7 +31,7 @@ $this->widget('EExcelView', array(
           'owner',
          */
         array(
-            'class' => 'bootstrap.widgets.TbButtonColumn',
+            'class' => 'yii\grid\ActionColumn',
         ),
    
     ),

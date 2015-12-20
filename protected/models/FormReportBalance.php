@@ -1,40 +1,47 @@
 <?php
-/***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+
+/* * *********************************************************************************
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
-class FormReportBalance extends CFormModel {
+ * ********************************************************************************** */
+
+namespace app\models;
+
+use Yii;
+use yii\base\Model;
+
+class FormReportBalance extends Model {
 
     public $year;
     public $from_date;
     public $to_date;
 
+    public function init() {
+        parent::init();
+        $this->from_date = date('Y') . "-01-01";
+        $this->to_date = date('Y-m-d');
+    }
+
     public function rules() {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('to_date, from_date, year', 'safe'),
+            array(['to_date', 'from_date', 'year'], 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('to_date, from_date, year', 'safe', 'on' => 'search'),
+            array(['to_date', 'from_date', 'year'], 'safe', 'on' => 'search'),
         );
     }
 
     private function calc($account_type) {
-        $criteria = new CDbCriteria;
-        $criteria->condition = "type = :type";
-        $criteria->params = array(
-            ':type' => $account_type,
-        );
-
-        $accounts = Accounts::model()->findAll($criteria);
+        $accounts = Accounts::find()->where(['type' => $account_type])->All();
         $sum = 0;
         $data = array();
-        $data[] = array("id" => '', 'name' => Acctype::model()->getName($account_type), 'neg' => '', 'pos' => '', 'sum' => '', 'id6111' => '');
+        $data[] = array("id" => '', 'name' => Acctype::getName($account_type), 'neg' => '', 'pos' => '', 'sum' => '', 'id6111' => '');
         $total = array("id" => '', 'name' => Yii::t("app", "Total"), 'neg' => 0, 'pos' => 0, 'sum' => 0, 'id6111' => '');
         foreach ($accounts as $account) {
             //echo $this->from_date.":00<br>";
@@ -56,7 +63,7 @@ class FormReportBalance extends CFormModel {
 
 
         //$data=$this->calc(3);//incomes
-        $accType = Acctype::model()->findAll();
+        $accType = Acctype::find()->All();
         $data = array();
         $sum = array("id" => '', 'name' => Yii::t("app", "Sub Total"), 'neg' => 0, 'pos' => 0, 'sum' => 0, 'id6111' => '');
         foreach ($accType as $type) {
@@ -71,7 +78,8 @@ class FormReportBalance extends CFormModel {
         $data[] = $sum;
 
 
-        return new CArrayDataProvider($data, array(
+        return new \yii\data\ArrayDataProvider(array(
+            'allModels' => $data,
             'pagination' => array(
                 'pageSize' => 1000,
             ),

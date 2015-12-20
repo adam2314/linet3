@@ -1,19 +1,19 @@
 <?php
 
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>'List Acctype','url'=>array('index')),
 	array('label'=>'Create Acctype','url'=>array('create')),
 
 );
 
- $this->beginWidget('MiniForm',array(
+ app\widgets\MiniForm::begin(array(
     'header' => "Update Company",
     //'width' => '800',
 )); 
 
 ?>
-<?php echo $this->renderPartial('_form',array('model'=>$model)); 
+<?php echo $this->render('_form',array('model'=>$model)); 
 
 
- $this->endWidget(); 
+ app\widgets\MiniForm::end(); 
 ?>

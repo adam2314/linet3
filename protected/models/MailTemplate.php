@@ -1,7 +1,7 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -20,23 +20,20 @@
  * @property string $entity_type
  * @property string $entity_id
  */
-class MailTemplate extends CActiveRecord {
-    //public $to;
-    const table = '{{mailTemplate}}';
+namespace app\models;
 
-    /**
-     * Returns the static model of the specified AR class.
-     * @param string $className active record class name.
-     * @return BankName the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
+use Yii;
+
+class MailTemplate extends Record {
+    //public $to;
+    const table = '{{%mailTemplate}}';
+
+
 
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -48,12 +45,12 @@ class MailTemplate extends CActiveRecord {
         // will receive user inputs.
         return array(
             array('name', 'required'),
-            array('id', 'numerical', 'integerOnly' => true),
-            array('name', 'length', 'max' => 255),
-            array('to, name, bcc, cc, subject, body, entity_type, entity_id', 'safe'),
+            array('id', 'number', 'integerOnly' => true),
+            array('name', 'string', 'max' => 255),
+            array(['name', 'bcc', 'cc', 'subject', 'body', 'entity_type', 'entity_id'], 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, name', 'safe', 'on' => 'search'),
+            array(['id', 'name'], 'safe', 'on' => 'search'),
         );
     }
 
@@ -72,16 +69,16 @@ class MailTemplate extends CActiveRecord {
      */
     public function attributeLabels() {
         return array(
-            'id' => Yii::t('labels', 'ID'),
-            'name' => Yii::t('labels', 'Name'),
-            'subject' => Yii::t('labels', 'Subject'),
-            'entity_type' => Yii::t('labels', 'Entity Type'),
-            'entity_id' => Yii::t('labels', 'Entity Id'),
-            'bcc' => Yii::t('labels', 'Bcc'),
-            'cc' => Yii::t('labels', 'Cc'),
-            'body' => Yii::t('labels', 'Body'),
-                //'id' => Yii::t('labels', 'ID'),
-                //'name' => Yii::t('labels', 'Name'),
+            'id' => Yii::t('app', 'ID'),
+            'name' => Yii::t('app', 'Name'),
+            'subject' => Yii::t('app', 'Subject'),
+            'entity_type' => Yii::t('app', 'Entity Type'),
+            'entity_id' => Yii::t('app', 'Entity Id'),
+            'bcc' => Yii::t('app', 'Bcc'),
+            'cc' => Yii::t('app', 'Cc'),
+            'body' => Yii::t('app', 'Body'),
+                //'id' => Yii::t('app', 'ID'),
+                //'name' => Yii::t('app', 'Name'),
         );
     }
 
@@ -89,7 +86,7 @@ class MailTemplate extends CActiveRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search() {
+    public function search($params) {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
 
@@ -124,6 +121,15 @@ class MailTemplate extends CActiveRecord {
                     $this->subject = str_replace($result, $data->{str_replace("%", "", $result)}, $this->subject);
             }
         }
+        
+        if($this->bcc==null)
+            $this->bcc='';
+        if($this->subject==null)
+            $this->subject='NO TEMPLATE';
+        if($this->body==null)
+            $this->body='NO BODY';
+        
+        
     }
 
 }

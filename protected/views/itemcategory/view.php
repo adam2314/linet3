@@ -1,24 +1,24 @@
 <?php
-$this->breadcrumbs=array(
-	'Itemcategories'=>array('index'),
-	$model->name,
+$this->params["breadcrumbs"]=array(
+	//'Itemcategories'=>array('index'),
+	//$model->name,
 );
 
-$this->menu=array(
-	array('label'=>Yii::t('actions','List')." " .Yii::t('models','Item Categories'), 'url'=>array('index')),
-	array('label'=>Yii::t('actions','Create')." " .Yii::t('models','Item Categories'), 'url'=>array('create')),
-	array('label'=>Yii::t('actions','Update')." " .Yii::t('models','Item Categories'), 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>Yii::t('actions','Delete')." " .Yii::t('models','Item Categories'), 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>Yii::t('actions','Admin')." " .Yii::t('models','Item Categories'), 'url'=>array('admin')),
+$this->params["menu"]=array(
+	array('label'=>Yii::t('app','List')." " .Yii::t('app','Item Categories'), 'url'=>array('index')),
+	array('label'=>Yii::t('app','Create')." " .Yii::t('app','Item Categories'), 'url'=>array('create')),
+	array('label'=>Yii::t('app','Update')." " .Yii::t('app','Item Categories'), 'url'=>array('update', 'id'=>$model->id)),
+	//array('label'=>Yii::t('app','Delete')." " .Yii::t('app','Item Categories'), 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	array('label'=>Yii::t('app','Admin')." " .Yii::t('app','Item Categories'), 'url'=>array('admin')),
 );
-$this->beginWidget('MiniForm',array(
-    'header' => Yii::t('actions',"View") . " ".Yii::t('models',"Item Categories")." ". $model->id,
+app\widgets\MiniForm::begin(array(
+    'header' => Yii::t('app',"View") . " ".Yii::t('app',"Item Categories")." ". $model->id,
 )); 
 ?>
 
 
-<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
+<?= kartik\detail\DetailView::widget( array(
+	'model'=>$model,
 	'attributes'=>array(
 		'id',
 		'name',
@@ -29,6 +29,6 @@ $this->beginWidget('MiniForm',array(
 
 <?php
 
- $this->endWidget(); 
+ app\widgets\MiniForm::end(); 
 
 ?>

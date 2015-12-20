@@ -1,16 +1,17 @@
-<?php $this->widget('EExcelView', array(
+<?php echo app\widgets\GridView::widget( array(
 	'id'=>'depsoit-grid',
-	'dataProvider'=>$model->search(),
+	'dataProvider'=>$model->dp(),
 	'columns'=>array(
                 array(
-                    'type'=>'raw',
-                    'value'=>
-                        'CHtml::checkBox("FormDeposit[Deposit][$data->doc_id,$data->line]",null,array( "onchange"=>"CalcSum()"))',
+                    'format'=>'raw',
+                    'value'=>function($data){
+                        return \yii\helpers\Html::checkBox("FormDeposit[Deposit][$data->doc_id,$data->line]",null,array( "onchange"=>"CalcSum()"));
+                    },
                     ),
                 array(
-                    'type'=>'raw',
-                     'value'=>
-                        'CHtml::hiddenField("FormDeposit[Total][$data->doc_id,$data->line]","$data->sum").CHtml::hiddenField("FormDeposit[Type][$data->doc_id,$data->line]","$data->type")',
+                    'format'=>'raw',
+                     'value'=>function($data){
+                        return \yii\helpers\Html::hiddenInput("FormDeposit[Total][$data->doc_id,$data->line]","$data->sum").\yii\helpers\Html::hiddenInput("FormDeposit[Type][$data->doc_id,$data->line]","$data->type");}
                     ),
                 //'type',
 		'bank',
@@ -27,7 +28,7 @@
 		
 		
 		array(
-			'class'=>'bootstrap.widgets.TbButtonColumn',
+			'class'=>'yii\grid\ActionColumn',
 		),
 	),
 )); 

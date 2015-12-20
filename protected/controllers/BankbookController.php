@@ -1,16 +1,25 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
+namespace app\controllers;
+
+use Yii;
+use app\components\RightsController;
+use app\models\Bankbook;
+use app\models\Transactions;
+use app\models\FormExtmatch;
+use app\models\ExtCorrelation;
+
 class BankbookController extends RightsController {
 
     public function actionView($id) {
-        $this->render('view', array(
+        return $this->render('view', array(
             'model' => $this->loadModel($id),
         ));
     }
@@ -22,16 +31,12 @@ class BankbookController extends RightsController {
     public function actionCreate() {
         $model = new Bankbook;
 
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-        if (isset($_POST['Bankbook'])) {
-            $model->attributes = $_POST['Bankbook'];
+        if ($model->load(Yii::$app->request->post())){
             if ($model->save())
                 $this->redirect(array('bankbook/admin/'. $model->account_id));
         }
 
-        $this->render('create', array(
+        return $this->render('create', array(
             'model' => $model,
         ));
     }
@@ -44,16 +49,12 @@ class BankbookController extends RightsController {
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
 
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-        if (isset($_POST['Bankbook'])) {
-            $model->attributes = $_POST['Bankbook'];
+        if ($model->load(Yii::$app->request->post())){
             if ($model->save())
                 $this->redirect(array('bankbook/admin/'. $model->account_id));
         }
 
-        $this->render('update', array(
+        return $this->render('update', array(
             'model' => $model,
         ));
     }
@@ -64,7 +65,7 @@ class BankbookController extends RightsController {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        if (Yii::app()->request->isPostRequest) {
+        if (Yii::$app->request->isPostRequest) {
             // we only allow deletion via POST request
             $model=$this->loadModel($id);
             $account_id=$model->account_id;
@@ -74,65 +75,58 @@ class BankbookController extends RightsController {
             if (!isset($_GET['ajax']))
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin/'.$account_id));
         } else
-            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+            throw new \yii\web\HttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
     public function actionAdmin($id=null) {
-        $model = new Bankbook('search');
-        $model->unsetAttributes();  // clear any default values
+        $model = new Bankbook();
+        //$model->unsetAttributes();  // clear any default values
         if($id!==null)
             $model->account_id=$id;
         if (isset($_POST['Bankbook']['file'])) {
 
             $model->import((int) $_POST['Bankbook']['account_id']);
-            //Yii::app()->end();
+            //Yii::$app->end();
         }
 
-        $this->render('admin', array(
+        return $this->render('admin', array(
             'model' => $model,
         ));
     }
 
     public function actionAjax() {
-        $model = new Bankbook('search');
-        $model->unsetAttributes();
+        $model = new Bankbook();
+        //$model->unsetAttributes();
         //$model->account_id=$account_id;
         if (isset($_POST['Bankbook'])) {
             $model->attributes = $_POST['Bankbook'];
         }
-        $this->renderPartial('ajax', array('model' => $model,));
+        return $this->renderPartial('ajax', array('model' => $model,));
     }
 
     public function actionEdispmatch() {
-        $match = new ExtCorrelation('search');
+        $match = new ExtCorrelation();
         if (isset($_POST['FormExtmatch'])) {
             $match->attributes = $_POST['FormExtmatch'];
         }
-        $this->render('disp', array(
+        return $this->render('disp', array(
             'model' => $match,
         ));
     }
 
     public function actionExtmatch() {
-        $extmatch = new FormExtmatch('search');
-        $model = new Bankbook('search');
-        $model->unsetAttributes();  // clear any default value
+        $extmatch = new FormExtmatch();
+        $model = new Bankbook();
 
-        if (isset($_POST['FormExtmatch'])) {
-            //$extmatch->attributes=$_POST['FormExtmatch'];
-            //if(){
-            $this->performAjaxValidation($extmatch);
+        if ($extmatch->load(Yii::$app->request->post())){
 
-            //$extmatch->bankbooks = $_POST['FormExtmatch']['Bankbook']['match'];
-            //$extmatch->transactions = $_POST['FormExtmatch']['Trans']['match'];
-            $extmatch->attributes = $_POST['FormExtmatch'];
             $extmatch->save();
-            Yii::app()->user->setFlash('success', Yii::t('app', 'Mach 1 Success'));
+            \Yii::$app->getSession()->setFlash('success', Yii::t('app', 'Mach 1 Success'));
             //}
-            //Yii::app()->user->setFlash('success', Yii::t('app','Mach2 Success'));
+            //\Yii::$app->getSession()->setFlash('success', Yii::t('app','Mach2 Success'));
         }
 
-        $this->render('extmatch', array(
+        return $this->render('extmatch', array(
             'model' => $model, 'extmatch' => $extmatch,
         ));
     }
@@ -142,7 +136,7 @@ class BankbookController extends RightsController {
         // Params:
         // $data ... the current row data   
         // $row ... the row index    
-        $this->renderPartial('_bank', array('cdata' => $data));
+        return $this->renderPartial('_bank', array('cdata' => $data));
     }
 
     protected function transDataColumn($data, $row) {
@@ -150,15 +144,15 @@ class BankbookController extends RightsController {
         // Params:
         // $data ... the current row data   
         // $row ... the row index    
-        $this->renderPartial('_trans', array('cdata' => $data));
+        return $this->renderPartial('_trans', array('cdata' => $data));
     }
 
     public function actionMatchDelete($id) {
-        if (Yii::app()->request->isPostRequest) {
+        if (Yii::$app->request->isPostRequest) {
             // we only allow deletion via POST request
-            $model = ExtCorrelation::model()->findByPk($id);
+            $model = ExtCorrelation::findOne($id);
             if ($model === null)
-                throw new CHttpException(404, 'The requested page does not exist.');
+                throw new \yii\web\HttpException(404, 'The requested page does not exist.');
 
             $model->delete();
 
@@ -166,18 +160,19 @@ class BankbookController extends RightsController {
             if (!isset($_GET['ajax']))
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
         } else
-            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+            throw new \yii\web\HttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
     public function actionExtmatchajax() {
 
-        $model = new Bankbook('search');
-        $trans = new Transactions('search');
+        $model = new Bankbook();
+        $trans = new Transactions();
+        $model->scenario='search';
+        $trans->scenario='search';
 
 
-
-        $model->unsetAttributes();
-        $trans->unsetAttributes();
+        //$model->unsetAttributes();
+        //$trans->unsetAttributes();
         //$model->account_id=$account_id;
         if (isset($_POST['FormExtmatch'])) {
             $model->attributes = $_POST['FormExtmatch'];
@@ -186,21 +181,14 @@ class BankbookController extends RightsController {
 
         $model->extCorrelation = 0;
         $trans->extCorrelation = 0;
-        $this->renderPartial('extmatchajax', array('model' => $model, 'trans' => $trans));
+        return $this->renderPartial('extmatchajax', array('model' => $model, 'trans' => $trans));
     }
 
-    protected function performAjaxValidation($model) {
-        //$model=new FormExtmatch('search');
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'extmatch-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
-    }
 
     public function loadModel($id) {
-        $model = Bankbook::model()->findByPk($id);
+        $model = Bankbook::findOne($id);
         if ($model === null)
-            throw new CHttpException(404, 'The requested page does not exist.');
+            throw new \yii\web\HttpException(404, 'The requested page does not exist.');
         return $model;
     }
 

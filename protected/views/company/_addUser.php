@@ -1,4 +1,4 @@
-<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
+<?php $form=kartik\form\ActiveForm::begin(array(
 	'id'=>'company-form',
 	'enableAjaxValidation'=>false,
 )); ?>
@@ -6,16 +6,12 @@
 	<?php echo $form->errorSummary($user); ?>
 
 	
-        <?php echo $form->dropDownListRow($user,'user_id',CHtml::listData(User::model()->findAll(), 'id', 'username')); ?>
+        <?php echo $form->field($user,'user_id')->widget(kartik\select2\Select2::className(),['data'=>\yii\helpers\ArrayHelper::map(\app\models\User::find()->All(), 'id', 'username')]); ?>
 <br />
-	<?php echo $form->textFieldRow($user,'level_id'); ?>
+	<?php echo $form->field($user,'level_id'); ?>
 
 	<div class="form-actions">
-		<?php $this->widget('bootstrap.widgets.TbButton', array(
-			'buttonType'=>'submit',
-			'type'=>'primary',
-			'label'=>$user->isNewRecord ? Yii::t('app',"Create") : Yii::t('app',"Save"),
-		)); ?>
+		<?= \yii\helpers\Html::submitButton($user->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => 'btn btn-success']) ?>
 	</div>
 
-<?php $this->endWidget(); ?>
+<?php kartik\form\ActiveForm::end(); ?>

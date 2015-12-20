@@ -1,22 +1,22 @@
 <?php
-$this->breadcrumbs=array(
+$this->params["breadcrumbs"]=array(
 	'Menu'=>array('index'),
 	$model->label,
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>'List Menu','url'=>array('index')),
 	array('label'=>'Create Menu','url'=>array('create')),
 	array('label'=>'Update Menu','url'=>array('update','id'=>$model->id)),
-	array('label'=>'Delete Menu','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	//array('label'=>'Delete Menu','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage Menu','url'=>array('admin')),
 );
 ?>
-<?php  $this->beginWidget('MiniForm',array( 'header' => Yii::t("app","View Menu")." ". $model->id,));  ?>
+<?php  app\widgets\MiniForm::begin(array( 'header' => Yii::t("app","View Menu")." ". $model->id,));  ?>
 
 
-<?php $this->widget('bootstrap.widgets.TbDetailView',array(
-	'data'=>$model,
+<?= kartik\detail\DetailView::widget(array(
+	'model'=>$model,
 	'attributes'=>array(
 		'id',
 		'label',
@@ -27,4 +27,4 @@ $this->menu=array(
 )); ?>
 
 
-<?php $this->endWidget();?>
+<?php app\widgets\MiniForm::end();?>

@@ -1,35 +1,39 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-class InstallController extends Controller {
+namespace app\controllers;
 
-    public $layout = '//layouts/clean';
+use Yii;
+use app\components\LitController;
+class InstallController extends LitController {
+
+    public $layout = '//layouts/main';
 
     public function actionIndex($step = 0) {
         try {
-            if (isset(Yii::app()->dbMain)) {
-                if (!isset(Yii::app()->user->Install))
+            if (isset(Yii::$app->dbMain)) {
+                if (!isset(Yii::$app->user->Install))
                     return;
             }
         } catch (Exception $e) {
             echo 'Caught exception: ', $e->getMessage(), "\n";
         }
-        //print_r(Yii::app()->dbMain);
-        Yii::app()->user->setState('Install', 1);
+        //print_r(Yii::$app->dbMain);
+        Yii::$app->user->setState('Install', 1);
         
         
         if (isset($_POST['InstallConfig'])) {
             $model = new InstallConfig();
             $model->attributes = $_POST['InstallConfig'];
             if($model->make()){
-                unset(Yii::app()->user->Install);
-                $this->redirect(Yii::app()->createAbsoluteUrl('install/user'));
+                unset(Yii::$app->user->Install);
+                $this->redirect(Yii::$app->createAbsoluteUrl('install/user'));
             }
             //exit;
         }
@@ -37,17 +41,17 @@ class InstallController extends Controller {
 
         if ($step == 0) {//pre
             $model = new InstallPre();
-            $this->render('Pre', array('model' => $model));
+            return $this->render('Pre', array('model' => $model));
         }
 
         if ($step == 1) {//recheck
             $model = new InstallPre();
 
-            $this->renderPartial('Pre', array('model' => $model));
+            return $this->renderPartial('Pre', array('model' => $model));
         }
         if ($step == 2) {//config
             $model = new InstallConfig();
-            $this->renderPartial('config', array('model' => $model));
+            return $this->renderPartial('config', array('model' => $model));
         }
 
         
@@ -55,9 +59,9 @@ class InstallController extends Controller {
     }
 
     public function actionUser() {
-        if(!User::model()->findAll()==null){
-            $this->redirect(Yii::app()->createAbsoluteUrl('site/login'));
-                Yii::app()->end();
+        if(!User::find()->All()==null){
+            $this->redirect(Yii::$app->createAbsoluteUrl('site/login'));
+                Yii::$app->end();
         }
 
 
@@ -65,11 +69,7 @@ class InstallController extends Controller {
         $model = new User();
         $model->scenario = 'create';
 
-        
-        
-        $this->performAjaxValidation($model);
-        if (isset($_POST['User'])) {
-            $model->attributes = $_POST['User'];
+        if ($model->load(Yii::$app->request->post())){
 
             if ($model->save()){
                 $this->redirect(array('company/admin'));
@@ -77,15 +77,8 @@ class InstallController extends Controller {
             }
         }
 
-        $this->render('user', array('model' => $model));
+        return $this->render('user', array('model' => $model));
     }
     
-    
-    protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'user-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
-    }
 
 }

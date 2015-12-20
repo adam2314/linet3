@@ -1,11 +1,11 @@
 <?php
 
-$this->menu=array(
-	array('label'=>Yii::t('app','List Account Contact History'),'url'=>array('index')),
+$this->params["menu"]=array(
+	//array('label'=>Yii::t('app','List Account Contact History'),'url'=>array('index')),
 	array('label'=>Yii::t('app','Create Account Contact History'),'url'=>array('create')),
 );
 
- $this->beginWidget('MiniForm',array(
+ app\widgets\MiniForm::begin(array(
     'header' => Yii::t('app',"Manage Account Contact History"),
 
 )); 
@@ -13,30 +13,51 @@ $this->menu=array(
 
 ?>
 
-<?php $this->widget('EExcelView',array(
+<?php echo app\widgets\GridView::widget(array(
 	'id'=>'acchist-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
+	'dataProvider'=>$model->search([]),
+        'filterModel' => $model,
 	'columns'=>array(
+                'subject',
+                [
+                    'attribute'=>'type',
+                    'filter' => \yii\helpers\ArrayHelper::map(\app\models\AccHist::getTypes(), 'id', 'name'),
+                    "value"=>function($data) {
+                            return $data->getTypeName();
+                            
+                    },
+                ],
 		array(
-                    'name'=>'account_id',
-                    'value'=>'$data->Account->name',
-                ),
-		'dt',
-		array(
-                    'name'=>'details',
-                    'value'=>'$data->details',
-                     'type'=>'raw',
-                         
+                    'attribute'=>'account_id',
+                    'value' => function($data) {
+                            return app\models\Accounts::findName($data->account_id);
+                        }, 
                 ),
 		
+                array(
+                    'attribute'=>'dt',
+                    'value'=>function($data) {
+                            return $data->readDateFormat($data->dt);
+                            
+                    }
+                    //'type'=>'raw',
+                         
+                ),                
+                                
+		//array(
+                    //'attribute'=>'details',
+                    //'value'=>'$data->details',
+                    //'type'=>'raw',
+                         
+                //),
+		
 		array(
-			'class'=>'bootstrap.widgets.TbButtonColumn',
+			'class'=>'yii\grid\ActionColumn',
 		),
 	),
 )); 
 
- $this->endWidget(); 
+ app\widgets\MiniForm::end(); 
 
 
 ?>

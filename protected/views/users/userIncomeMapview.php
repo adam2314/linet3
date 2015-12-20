@@ -1,14 +1,13 @@
 <tr>
     <td>
         <?php 
-        echo ItemVatCat::model()->findByPk($model->itemVatCat_id)->name;
+        use app\models\ItemVatCat;
+        use app\models\Accounts;
+        echo ItemVatCat::findName($model->itemVatCat_id);
         //echo $form->hiddenField($model, "[$i]itemVatCat_id"); 
         ?>
     </td>
     <td>
-        <?php 
-        echo Accounts::model()->findByPk($model->account_id)->name;
-        //echo $form->dropDownList($model, "[$i]account_id", CHtml::listData(Accounts::model()->AutoComplete('',3), 'value', 'label'),array('class'=>'currSelect'));
-        ?>
+        <?php echo Accounts::findName($model->account_id);      ?>
     </td> 
 </tr>

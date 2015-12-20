@@ -1,5 +1,5 @@
 <?php
-$this->menu = array(
+$this->params["menu"] = array(
     array('label' => Yii::t('app', 'invoiceReport'), 'url' => '#', 'linkOptions' => array('onclick' => 'javascript: send("invoiceReport");')),
     array('label' => Yii::t('app', 'chequeReport'), 'url' => '#', 'linkOptions' => array('onclick' => 'javascript: send("chequeReport");')),
     array('label' => Yii::t('app', 'accReport'), 'url' => '#', 'linkOptions' => array('onclick' => 'javascript: send("accReport");')),
@@ -12,28 +12,36 @@ $this->menu = array(
 
 
 <div class="row">
-<?php
-if (isset(Yii::app()->user->widget)) {
+    <?php
+//if (isset($user->getWidgets())) {
     $widgets = array(
-        array('invoiceReport', "Invoices to be collected", 'col-lg-4'),
-        array('chequeReport', "Income and Expenses", 'col-lg-4'),
-        array('accReport', "Accounts Related events", 'col-lg-4'),
-        array('outcomeReport', "Suppliers Payments", 'col-lg-4'),
-        array('salesReport', "Pending Sales Orders", 'col-lg-3'),
-        array('docReport', "Treat Needed Documents", 'col-lg-5'),
+        array('app\widgets\invoiceReport', "Invoices to be collected", 'col-lg-4'),
+        array('app\widgets\chequeReport', "Income and Expenses", 'col-lg-4'),
+        array('app\widgets\accReport', "Accounts Related events", 'col-lg-4'),
+        array('app\widgets\outcomeReport', "Suppliers Payments", 'col-lg-4'),
+        array('app\widgets\salesReport', "Pending Sales Orders", 'col-lg-3'),
+        array('app\widgets\docReport', "Treat Needed Documents", 'col-lg-5'),
     );
+    $userWidgets = $user->getWidgets();
+    $i = 0;
     foreach ($widgets as $widget) {
-
-        if (isset(Yii::app()->user->widget[$widget[0]])) {
-            if (Yii::app()->user->widget[$widget[0]]) {
-                $this->widget($widget[0], array('header' => Yii::t("app", $widget[1]), 'height' => 350, 'class' => $widget[2]));
+        if ($i == 3)
+            echo "</div><div class='row'>";
+        if (isset($userWidgets[$widget[0]])) {
+            if ($userWidgets[$widget[0]]) {
+                echo "<div class='$widget[2]'>".$widget[0]::widget(array('header' => Yii::t("app", $widget[1])))."</div>";
+                $i++;
             }
         } else {
-            $this->widget($widget[0], array('header' => Yii::t("app", $widget[1]), 'height' => 350, 'class' => $widget[2]));
+
+
+            echo "<div class='$widget[2]'>".$widget[0]::widget(array('header' => Yii::t("app", $widget[1])))."</div>";
+            $i++;
         }
+        
     }
-}
-?>
+//}
+    ?>
 
 </div>
 
@@ -41,19 +49,20 @@ if (isset(Yii::app()->user->widget)) {
 
 
 <?php
-//$this->endWidget(); 
+$this->registerJs("$('#sidebar').trigger('hide');"
+        , \yii\web\View::POS_READY);
 ?>
 
 <script type="text/javascript">
-    $(function() {
-        $('body').toggleClass('hide-sidebar');
-    });
+    //$(function() {
+    //    $('body').toggleClass('hide-sidebar');
+    //});
 
 
     function send(str) {
-        $.post("<?php echo $this->createUrl('/'); ?>/settings/dashboard", {"Widget": str},
-        function(data) {
-            window.location = "<?php echo Yii::app()->createAbsoluteUrl('/settings/dashboard'); ?>";
+        $.post("<?php echo yii\helpers\BaseUrl::base() . ('/'); ?>/settings/dashboard", {"Widget": "app\\widgets\\" + str},
+        function (data) {
+            window.location = "<?php echo yii\helpers\BaseUrl::base() . ('/settings/dashboard'); ?>";
         });
     }
 </script>

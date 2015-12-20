@@ -1,9 +1,9 @@
 <?php
-$this->breadcrumbs=array(
+$this->params["breadcrumbs"]=array(
 	'Items',
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>'Create Item', 'url'=>array('create')),
 	array('label'=>'Manage Item', 'url'=>array('admin')),
 );

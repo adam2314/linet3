@@ -1,13 +1,23 @@
 <?php
-/***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+
+/* * *********************************************************************************
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
-class FormReportTaxrep extends CFormModel {
+ * ********************************************************************************** */
+
+namespace app\models;
+
+use Yii;
+use yii\base\Model;
+use app\models\Accounts;
+use app\models\Acctype;
+use app\models\Transactions;
+
+class FormReportTaxrep extends Model {
 
     public $from_month;
     public $year;
@@ -31,25 +41,26 @@ class FormReportTaxrep extends CFormModel {
     public $tax_total = 0;
     public $tax_acc;
 
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
+    public function init() {
+        parent::init();
+        // company.tax.irs
+        $this->year = date('Y');
+        $this->from_month = date('m')-1-\app\helpers\Linet3Helper::getSetting('company.tax.irs');
+        $this->to_month = date('m')-1;
     }
 
     public function attributeLabels() {
         return array(
-            'from_month' => Yii::t('labels', 'From Month'),
-            'to_month' => Yii::t('labels', 'To Month'),
-            'year' => Yii::t('labels', 'Year'),
-            
-            'income_sum' => Yii::t('labels', 'Income Sum'),
-            'tax_rate' => Yii::t('labels', 'Tax Rate'),
-            'tax_sum' => Yii::t('labels', 'Tax Sum'),
-            'custtax_total' => Yii::t('labels', 'Withholding tax total'),
-            'custtax_sum' => Yii::t('labels', 'Withholding tax sum'),
-            'tax_total' => Yii::t('labels', 'Tax to pay'),
-            
+            'from_month' => Yii::t('app', 'From Month'),
+            'to_month' => Yii::t('app', 'To Month'),
+            'year' => Yii::t('app', 'Year'),
+            'income_sum' => Yii::t('app', 'Income Sum'),
+            'tax_rate' => Yii::t('app', 'Tax Rate'),
+            'tax_sum' => Yii::t('app', 'Tax Sum'),
+            'custtax_total' => Yii::t('app', 'Withholding tax total'),
+            'custtax_sum' => Yii::t('app', 'Withholding tax sum'),
+            'tax_total' => Yii::t('app', 'Tax to pay'),
         );
-        
     }
 
     /**
@@ -59,13 +70,11 @@ class FormReportTaxrep extends CFormModel {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('from_month, to_month, year', 'required'),
+            array(['from_month', 'to_month', 'year'], 'required'),
             array('from_month', 'compare', 'compareAttribute' => 'to_month', 'operator' => '<='),
             array('to_month', 'compare', 'compareAttribute' => 'from_month', 'operator' => '>='),
-            array('tax_rate, income_sum, custtax_sum, custtax_total, tax_total, tax_sum, step, to_month, to_date, from_month, from_date, year,', 'safe'),
-            // The following rule is used by search().
-            // Please remove those attributes that should not be searched.
-            array('tax_rate, income_sum, custtax_sum, custtax_total, tax_total, tax_sum, step, to_month, to_date, from_month, from_date, year,', 'safe', 'on' => 'search'),
+            array(['tax_rate', 'income_sum', 'custtax_sum', 'custtax_total', 'tax_total', 'tax_sum', 'step', 'to_month', 'to_date', 'from_month', 'from_date', 'year',], 'safe'),
+            array(['tax_rate', 'income_sum', 'custtax_sum', 'custtax_total', 'tax_total', 'tax_sum', 'step', 'to_month', 'to_date', 'from_month', 'from_date', 'year',], 'safe', 'on' => 'search'),
         );
     }
 
@@ -81,8 +90,8 @@ class FormReportTaxrep extends CFormModel {
         if (strlen($this->to_month) == 1)
             $this->to_month = "0{$this->to_month}";
 
-        $this->from_date = "01/{$this->from_month}/{$this->year} 00:00:00";
-        $this->to_date = "$last/{$this->to_month}/{$this->year} 23:59:59";
+        $this->from_date = "{$this->year}-{$this->from_month}-01 00:00:00";
+        $this->to_date = "{$this->year}-{$this->to_month}-$last 23:59:59";
     }
 
     public function calcPay() {
@@ -93,17 +102,17 @@ class FormReportTaxrep extends CFormModel {
 
 
 
-        $this->income_sum = Acctype::model()->findByPk(3)->getTotal($this->from_date, $this->to_date);
+        $this->income_sum = Acctype::findOne(3)->getTotal($this->from_date, $this->to_date);
 
-        $this->tax_rate = Yii::app()->user->settings['company.tax.rate'];
+        $this->tax_rate = \app\helpers\Linet3Helper::getSetting('company.tax.rate');
 
         //$tax
         $this->tax_sum = $this->income_sum * ($this->tax_rate / 100);
 
 
-        $this->custtax_acc = Yii::app()->user->settings['company.acc.custtax'];
-        $this->custtax_sum = Accounts::model()->findByPk($this->custtax_acc)->getTotal($this->from_date, $this->to_date);    //*-1    
-        $this->custtax_total = Accounts::model()->findByPk($this->custtax_acc)->getTotal(0, $this->to_date);
+        $this->custtax_acc = \app\helpers\Linet3Helper::getSetting('company.acc.custtax');
+        $this->custtax_sum = Accounts::findOne($this->custtax_acc)->getTotal($this->from_date, $this->to_date);    //*-1    
+        $this->custtax_total = Accounts::findOne($this->custtax_acc)->getTotal(0, $this->to_date);
 
 
 
@@ -118,10 +127,8 @@ class FormReportTaxrep extends CFormModel {
 
     public function pay() {
         $this->dates();
-        $yiidatetimesec = Yii::app()->locale->getDateFormat('yiidatetimesec');
-        $phpdbdatetime = Yii::app()->locale->getDateFormat('phpdbdatetime');
 
-        $date = date($phpdbdatetime, CDateTimeParser::parse($this->to_date, $yiidatetimesec));
+        $date = $this->to_date;
 
 
 
@@ -136,11 +143,11 @@ class FormReportTaxrep extends CFormModel {
 
 
 
-        $irs = Yii::app()->user->settings['company.acc.irs'];
-        $pretax = Yii::app()->user->settings['company.acc.pretax'];
-        $custtax = Yii::app()->user->settings['company.acc.custtax'];
-        $cur = Yii::app()->user->settings['company.cur'];
-        $owner = Yii::app()->user->id;
+        $irs = \app\helpers\Linet3Helper::getSetting('company.acc.irs');
+        $pretax = \app\helpers\Linet3Helper::getSetting('company.acc.pretax');
+        $custtax = \app\helpers\Linet3Helper::getSetting('company.acc.custtax');
+        $cur = \app\helpers\Linet3Helper::getSetting('company.cur');
+        $owner = Yii::$app->user->id;
         $line = 1;
 
 
@@ -150,7 +157,7 @@ class FormReportTaxrep extends CFormModel {
         //$accout->refnum1 = $this->from_date;
         //$accout->refnum2 = $this->to_date;
         $accout->valuedate = $date;
-        $accout->details = Yii::t('app', 'tax')." ".$this->from_month."-".$this->to_month."/".$this->year;
+        $accout->details = Yii::t('app', 'tax') . " " . $this->from_month . "-" . $this->to_month . "/" . $this->year;
         $accout->currency_id = $cur;
         $accout->owner_id = $owner;
         $accout->linenum = $line;
@@ -165,7 +172,7 @@ class FormReportTaxrep extends CFormModel {
         //$accout->refnum1 = $this->from_date;
         //$accout->refnum2 = $this->to_date;
         $accout->valuedate = $date;
-        $accout->details = Yii::t('app', 'tax')." ".$this->from_month."-".$this->to_month."/".$this->year;
+        $accout->details = Yii::t('app', 'tax') . " " . $this->from_month . "-" . $this->to_month . "/" . $this->year;
         $accout->currency_id = $cur;
         $accout->owner_id = $owner;
         $accout->linenum = $line;
@@ -180,7 +187,7 @@ class FormReportTaxrep extends CFormModel {
         //$accout->refnum1 = $this->from_date;
         //$accout->refnum2 = $this->to_date;
         $accout->valuedate = $date;
-        $accout->details = Yii::t('app', 'tax')." ".$this->from_month."-".$this->to_month."/".$this->year;
+        $accout->details = Yii::t('app', 'tax') . " " . $this->from_month . "-" . $this->to_month . "/" . $this->year;
         $accout->currency_id = $cur;
         $accout->owner_id = $owner;
         $accout->linenum = $line;
@@ -195,7 +202,7 @@ class FormReportTaxrep extends CFormModel {
         //$accout->refnum1 = $this->from_date;
         //$accout->refnum2 = $this->to_date;
         $accout->valuedate = $date;
-        $accout->details = Yii::t('app', 'tax')." ".$this->from_month."-".$this->to_month."/".$this->year;
+        $accout->details = Yii::t('app', 'tax') . " " . $this->from_month . "-" . $this->to_month . "/" . $this->year;
         $accout->currency_id = $cur;
         $accout->owner_id = $owner;
         $accout->linenum = $line;

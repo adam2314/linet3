@@ -1,42 +1,41 @@
-<div style=" width: 40%; display: inline-block; margin-right: 150px; ">
-    <?php $this->widget('EExcelView', array(
+
+    <?php echo app\widgets\GridView::widget( array(
 	'id'=>'balance-grid',
 	'dataProvider'=>$model->search(),
         
-	//'filter'=>$model,
+	////'filter'=>$model,
 	'columns'=>array(
                array(
-                'header' => Yii::t('labels', 'ID'),
-                'name' => 'id',
+                'header' => Yii::t('app', 'ID'),
+                'attribute' => 'id',
             ),
             array(
-                'header' => Yii::t('labels', 'Name'),
-                'name' => 'name',
+                'header' => Yii::t('app', 'Name'),
+                'attribute' => 'name',
             ),
             array(
-            'cssClassExpression' => "'number'",
-            'name'=>'neg',
-                'header' => Yii::t('labels', 'Debit'),
+            //'cssClassExpression' => "'number'",
+            'attribute'=>'neg',
+                'header' => Yii::t('app', 'Debit'),
         ),
             array(
-            'cssClassExpression' => "'number'",
-            'name'=>'pos',
-                'header' => Yii::t('labels', 'Credit'),
+            //'cssClassExpression' => "'number'",
+            'attribute'=>'pos',
+                'header' => Yii::t('app', 'Credit'),
         ),
             array(
-            'cssClassExpression' => "'number'",
-            'name'=>'sum',
-                'header' => Yii::t('labels', 'Sum'),
+            //'cssClassExpression' => "'number'",
+            'attribute'=>'sum',
+                'header' => Yii::t('app', 'Sum'),
         ),
             
              array(
-                'header' => Yii::t('labels', 'Id6111'),
-                'name' => 'id6111',
+                'header' => Yii::t('app', 'Id6111'),
+                'attribute' => 'id6111',
             ),
                             
 
 	),
 )); 
 ?>
-</div>
 

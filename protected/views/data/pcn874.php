@@ -1,55 +1,17 @@
 <?php
 
-$this->beginWidget('MiniForm',array('header' => Yii::t("app","PCN874 Report"))); 
+app\widgets\MiniForm::begin(array('header' => Yii::t("app","PCN874 Report"))); 
 ?>
-<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
+<?php $form=kartik\form\ActiveForm::begin(array(
 	'id'=>'pcn874-form',
 	'enableAjaxValidation'=>false,
 )); 
-
-
-
-echo Yii::t('app','From Date');
-
-Yii::import('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker');
-///*
-$this->widget('CJuiDateTimePicker',array(
-    'model'=>$model, //Model object
-    'attribute'=>'from_date', //attribute name
-    'mode'=>'datetime', 
-    'language' => substr(Yii::app()->language,0,2),
-    'options'=>array(
-        'showAnim'=>'fold',
-        'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
-    ) // jquery plugin options
-));
-
 ?>
+<?= $form->field($model, 'from_date')->widget(kartik\datecontrol\DateControl::classname(), ['type' => 'date']); ?>
+<?= $form->field($model, 'to_date')->widget(kartik\datecontrol\DateControl::classname(), ['type' => 'date']); ?>
 
-<br />
-<?php
-
-echo Yii::t('app','To Date');
-
-$this->widget('CJuiDateTimePicker',array(
-    'model'=>$model, //Model object
-    'attribute'=>'to_date', //attribute name
-    'mode'=>'datetime', //use "time","date" or "datetime" (default)
-    'language' => substr(Yii::app()->language,0,2),
-    'options'=>array(
-        'showAnim'=>'fold',
-        'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
-        
-
-    ) // jquery plugin options
-));
-?>
     <div class="form-actions">
-            <?php $this->widget('bootstrap.widgets.TbButton', array(
-                    'buttonType'=>'submit',
-                    'type'=>'primary',
-                    'label'=>Yii::t('app',"Search") ,
-            )); ?>
+            <?= \yii\helpers\Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-success']) ?>
     </div>
 
 
@@ -60,12 +22,12 @@ $this->widget('CJuiDateTimePicker',array(
 
 
 
-<?php $this->endWidget(); ?>
+<?php kartik\form\ActiveForm::end(); ?>
 
 
 
     <?php 
-$this->endWidget(); 
+app\widgets\MiniForm::end(); 
 ?>
 
 
@@ -82,7 +44,7 @@ $this->endWidget();
         
         var from=$("#FormReportPcn874_from_date").val();
         var to=$("#FormReportPcn874_to_date").val();
-            $.post( "<?php echo $this->createUrl('/data/pcn874ajax');?>", { FormReportPcn874: {from_date: from, to_date: to}} ).done(
+            $.post( "<?php echo yii\helpers\BaseUrl::base().('/data/pcn874ajax');?>", { FormReportPcn874: {from_date: from, to_date: to}} ).done(
                 function( data ){
                     $( "#result" ).html( data );
                 }
@@ -92,7 +54,7 @@ $this->endWidget();
     
     $( "#year" ).change(function() {
             var value=$("#year").val();
-            $.post( "<?php echo $this->createUrl('/data/pcn874ajax');?>", { FormReportPcn874: {year: value}} ).done(
+            $.post( "<?php echo yii\helpers\BaseUrl::base().('/data/pcn874ajax');?>", { FormReportPcn874: {year: value}} ).done(
                 function( data ){
                     $( "#result" ).html( data );
                 }

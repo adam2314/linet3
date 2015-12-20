@@ -1,14 +1,17 @@
 <?php
 
 /* * *********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  * ********************************************************************************** */
+namespace app\controllers;
 
+use Yii;
+use app\components\RightsController;
 class PaypalController extends RightsController {
 
     public function actionBuy() {
@@ -17,12 +20,12 @@ class PaypalController extends RightsController {
         $paymentInfo['Order']['theTotal'] = 10.00;
         $paymentInfo['Order']['description'] = "Some payment description here";
         $paymentInfo['Order']['quantity'] = '1';
-        Yii::app()->Paypal->currency = 'ILS';
+        Yii::$app->Paypal->currency = 'ILS';
         // call paypal 
-        $result = Yii::app()->Paypal->SetExpressCheckout($paymentInfo);
+        $result = Yii::$app->Paypal->SetExpressCheckout($paymentInfo);
         //Detect Errors 
-        if (!Yii::app()->Paypal->isCallSucceeded($result)) {
-            if (Yii::app()->Paypal->apiLive === true) {
+        if (!Yii::$app->Paypal->isCallSucceeded($result)) {
+            if (Yii::$app->Paypal->apiLive === true) {
                 //Live mode basic error message
                 $error = 'We were unable to process your request. Please try again later';
             } else {
@@ -30,12 +33,12 @@ class PaypalController extends RightsController {
                 $error = $result['L_LONGMESSAGE0'];
             }
             echo $error;
-            Yii::app()->end();
+            Yii::$app->end();
         } else {
             // send user to paypal 
             $token = urldecode($result["TOKEN"]);
 
-            $payPalURL = Yii::app()->Paypal->paypalUrl . $token;
+            $payPalURL = Yii::$app->Paypal->paypalUrl . $token;
             $this->redirect($payPalURL);
         }
     }
@@ -46,15 +49,15 @@ class PaypalController extends RightsController {
 
 
 
-        $result = Yii::app()->Paypal->GetExpressCheckoutDetails($token);
+        $result = Yii::$app->Paypal->GetExpressCheckoutDetails($token);
 
         $result['PAYERID'] = $payerId;
         $result['TOKEN'] = $token;
         $result['ORDERTOTAL'] = 10.00;
 
         //Detect errors 
-        if (!Yii::app()->Paypal->isCallSucceeded($result)) {
-            if (Yii::app()->Paypal->apiLive === true) {
+        if (!Yii::$app->Paypal->isCallSucceeded($result)) {
+            if (Yii::$app->Paypal->apiLive === true) {
                 //Live mode basic error message
                 $error = 'We were unable to process your request. Please try again later';
             } else {
@@ -62,13 +65,13 @@ class PaypalController extends RightsController {
                 $error = $result['L_LONGMESSAGE0'];
             }
             echo $error;
-            Yii::app()->end();
+            Yii::$app->end();
         } else {
 
-            $paymentResult = Yii::app()->Paypal->DoExpressCheckoutPayment($result);
+            $paymentResult = Yii::$app->Paypal->DoExpressCheckoutPayment($result);
             //Detect errors  
-            if (!Yii::app()->Paypal->isCallSucceeded($paymentResult)) {
-                if (Yii::app()->Paypal->apiLive === true) {
+            if (!Yii::$app->Paypal->isCallSucceeded($paymentResult)) {
+                if (Yii::$app->Paypal->apiLive === true) {
                     //Live mode basic error message
                     $error = 'We were unable to process your request. Please try again later';
                 } else {
@@ -76,11 +79,11 @@ class PaypalController extends RightsController {
                     $error = $paymentResult['L_LONGMESSAGE0'];
                 }
                 echo $error;
-                Yii::app()->end();
+                Yii::$app->end();
             } else {
                 //payment was completed successfully
 
-                $this->render('confirm');
+                return $this->render('confirm');
             }
         }
     }
@@ -89,7 +92,7 @@ class PaypalController extends RightsController {
         //The token of the cancelled payment typically used to cancel the payment within your application
         $token = $_GET['token'];
 
-        $this->render('cancel');
+        return $this->render('cancel');
     }
 
     public function actionDirectPayment() {
@@ -125,11 +128,11 @@ class PaypalController extends RightsController {
          * [L_SEVERITYCODE0]  
          */
 
-        $result = Yii::app()->Paypal->DoDirectPayment($paymentInfo);
+        $result = Yii::$app->Paypal->DoDirectPayment($paymentInfo);
 
         //Detect Errors 
-        if (!Yii::app()->Paypal->isCallSucceeded($result)) {
-            if (Yii::app()->Paypal->apiLive === true) {
+        if (!Yii::$app->Paypal->isCallSucceeded($result)) {
+            if (Yii::$app->Paypal->apiLive === true) {
                 //Live mode basic error message
                 $error = 'We were unable to process your request. Please try again later';
             } else {
@@ -141,7 +144,7 @@ class PaypalController extends RightsController {
             //Payment was completed successfully, do the rest of your stuff
         }
 
-        Yii::app()->end();
+        Yii::$app->end();
     }
 
 }

@@ -1,12 +1,16 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
+namespace app\controllers;
+
+use Yii;
+use app\components\RightsController;
 class AccTemplateItemController extends RightsController
 {
 	
@@ -16,9 +20,9 @@ class AccTemplateItemController extends RightsController
 	 */
 	public function actionView($id)
 	{
-                $model=AccTemplateItem::model()->findByPk($id);
+                $model=AccTemplateItem::findOne($id);
                 
-		$this->render('view',array(
+		return $this->render('view',array(
 			'model'=>$model,
                         
 		));
@@ -32,17 +36,12 @@ class AccTemplateItemController extends RightsController
 	{
 		$model=new AccTemplateItem;
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['AccTemplateItem']))
-		{
-			$model->attributes=$_POST['AccTemplateItem'];
+		if ($model->load(Yii::$app->request->post())){
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('create',array(
+		return $this->render('create',array(
 			'model'=>$model,
 		));
 	}
@@ -56,17 +55,12 @@ class AccTemplateItemController extends RightsController
 	{
 		$model=$this->loadModel($id);
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['AccTemplateItem']))
-		{
-			$model->attributes=$_POST['AccTemplateItem'];
+		if ($model->load(Yii::$app->request->post())){
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('update',array(
+		return $this->render('update',array(
 			'model'=>$model,
 		));
 	}
@@ -79,7 +73,7 @@ class AccTemplateItemController extends RightsController
 	public function actionDelete($id)
 	{
             
-		if(Yii::app()->request->isPostRequest)
+		if(Yii::$app->request->isPostRequest)
 		{
 			// we only allow deletion via POST request
 			$this->loadModel($id)->delete();
@@ -89,7 +83,7 @@ class AccTemplateItemController extends RightsController
 			//	$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 		}
 		else
-			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+			throw new \yii\web\HttpException(400,'Invalid request. Please do not repeat this request again.');
 	}
 
 	/**
@@ -98,7 +92,7 @@ class AccTemplateItemController extends RightsController
 	public function actionIndex()
 	{
 		$dataProvider=new CActiveDataProvider('AccTemplateItem');
-		$this->render('index',array(
+		return $this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
 	}
@@ -108,12 +102,12 @@ class AccTemplateItemController extends RightsController
 	 */
 	public function actionAdmin()
 	{
-		$model=new AccTemplateItem('search');
-		$model->unsetAttributes();  // clear any default values
+		$model=new AccTemplateItem();
+		//$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['AccTemplateItem']))
 			$model->attributes=$_GET['AccTemplateItem'];
 
-		$this->render('admin',array(
+		return $this->render('admin',array(
 			'model'=>$model,
 		));
 	}
@@ -125,22 +119,10 @@ class AccTemplateItemController extends RightsController
 	 */
 	public function loadModel($id)
 	{
-		$model=  AccTemplateItem::model()->findByPk($id);
+		$model=  AccTemplateItem::findOne($id);
 		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+			throw new \yii\web\HttpException(404,'The requested page does not exist.');
 		return $model;
 	}
 
-	/**
-	 * Performs the AJAX validation.
-	 * @param CModel the model to be validated
-	 */
-	protected function performAjaxValidation($model)
-	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='acc-templateitem-form')
-		{
-			echo CActiveForm::validate($model);
-			Yii::app()->end();
-		}
-	}
 }

@@ -1,18 +1,20 @@
 <div style=" width: 35%; display: inline-block; margin-right: 150px; ">
-    <?php $this->widget('bootstrap.widgets.TbGridView', array(
+    <?php echo app\widgets\GridView::widget( array(
 	'id'=>'in-grid',
 	'dataProvider'=>$in->searchIn(),
-	//'filter'=>$model,
+        'panel'=>false,
+	////'filter'=>$model,
 	'columns'=>array(
                 array(
-                    'type'=>'raw',
-                    'value'=>
-                       'CHtml::checkBox("FormIntmatch[In][match][$data->id]",null,array("class"=>"In_match", "onchange"=>"CalcMatchSum()")).'.
-                     'CHtml::hiddenField("FormIntmatch[In][total][$data->id]","$data->sum",array("class"=>"In_total"));',
+                    'format'=>'raw',
+                    'value'=>function($data){return
+                       \yii\helpers\Html::checkBox("FormIntmatch[In][match][$data->id]",null,array("class"=>"In_match", "onchange"=>"CalcMatchSum()")).
+                     \yii\helpers\Html::hiddenInput("FormIntmatch[In][total][$data->id]","$data->sum",array("class"=>"In_total"));
+                    },
                     ),
                 array(
-                    'name'=>'type',
-                    'value'=>'Yii::t("app",$data->Type->name)'
+                    'attribute'=>'type',
+                    'value'=>function($data){return Yii::t("app",$data->ttype->name);},
                     ),
 		'details',
                 //'refnum',
@@ -23,27 +25,29 @@
 		
 		
 		//array(
-		//	'class'=>'bootstrap.widgets.TbButtonColumn',
+		//	'class'=>'yii\grid\ActionColumn',
 		//),
 	),
 )); 
 ?>
 </div>
 <div style=" width: 35%; display: inline-block;">
-    <?php $this->widget('EExcelView', array(
+    <?php echo app\widgets\GridView::widget( array(
 	'id'=>'out-grid',
 	'dataProvider'=>$out->searchOut(),
-	//'filter'=>$model,
+        'panel'=>false,
+	////'filter'=>$model,
 	'columns'=>array(
                 array(
-                    'type'=>'raw',
-                    'value'=>
-                        'CHtml::checkBox("FormIntmatch[Out][match][$data->id]",null,array("class"=>"Out_match", "onchange"=>"CalcMatchSum()")).'.
-                     'CHtml::hiddenField("FormIntmatch[Out][total][$data->id]","$data->sum",array("class"=>"Out_total"));'
+                    'format'=>'raw',
+                    'value'=>function($data){return
+                        \yii\helpers\Html::checkBox("FormIntmatch[Out][match][$data->id]",null,array("class"=>"Out_match", "onchange"=>"CalcMatchSum()")).
+                     \yii\helpers\Html::hiddenInput("FormIntmatch[Out][total][$data->id]","$data->sum",array("class"=>"Out_total"));
+                    }
                     ),
                 array(
-                    'name'=>'type',
-                    'value'=>'Yii::t("app",$data->Type->name)'
+                    'attribute'=>'type',
+                    'value'=>function($data){return Yii::t("app",$data->ttype->name);},
                     ),
 		'details',
                 //'refnum',
@@ -54,7 +58,7 @@
 		
 		
 		//array(
-		//	'class'=>'bootstrap.widgets.TbButtonColumn',
+		//	'class'=>'yii\grid\ActionColumn',
 		//),
 	),
 )); 

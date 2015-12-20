@@ -1,10 +1,10 @@
 <?php
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>Yii::t("app",'Create Account Contact History'),'url'=>array('create')),
 	array('label'=>Yii::t("app",'Manage Accounts Contact History'),'url'=>array('admin')),
 );
 
- $this->beginWidget('MiniForm',array(
+ app\widgets\MiniForm::begin(array(
     'header' => Yii::t("app","Account Contact History"),
 )); 
 
@@ -16,6 +16,6 @@ $this->menu=array(
 )); 
 
 
- $this->endWidget(); 
+ app\widgets\MiniForm::end(); 
 
 ?>

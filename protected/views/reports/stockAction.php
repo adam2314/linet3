@@ -1,104 +1,77 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-$dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-            'name' => 'stockAction[from_date]',
-            'language' => substr(Yii::app()->language, 0, 2),
-            'value' => $model->from_date,
-            'options' => array(
-                'showAnim' => 'fold',
-                'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-                'changeMonth' => 'true',
-                'changeYear' => 'true',
-                'constrainInput' => 'false',
-            ),
-            'htmlOptions' => array(
-                'placeholder' => Yii::t('app', 'From Date'),
-            ),
-                ), true) . $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-            'name' => 'stockAction[to_date]',
-            'language' => substr(Yii::app()->language, 0, 2),
-            'value' => $model->to_date,
-            'options' => array(
-                'showAnim' => 'fold',
-                'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-                'changeMonth' => 'true',
-                'changeYear' => 'true',
-                'constrainInput' => 'false',
-            ),
-            'htmlOptions' => array(
-                'placeholder' => Yii::t('app', 'To Date'),
-            ),
-                ), true);
+$dateisOn = kartik\datecontrol\DateControl::widget(['model' => $model,'attribute' => 'from_date','type' => 'date']) .
+        kartik\datecontrol\DateControl::widget(['model' => $model,'attribute' => 'to_date','type' => 'date']);    
 ?>
 
 <?php
 
-$this->beginWidget('MiniForm', array(    'header' => Yii::t('app', "Stock Transactions"),));
+app\widgets\MiniForm::begin( array(    'header' => Yii::t('app', "Stock Transactions"),));
 
 
 
-$yiidbdatetime = Yii::app()->locale->getDateFormat('yiidbdatetime');
-$phpdatetime = Yii::app()->locale->getDateFormat('phpdatetime');
-
-$this->widget('EExcelView', array(
+echo app\widgets\GridView::widget( array(
     'id' => 'stockAction-grid',
-    'dataProvider' => $model->search(),
+    'dataProvider' => $model->dp(),
     //'enablePagination'=> false,
-    'ajaxUpdate' => true,
-    'ajaxType' => 'POST',
-    'filter' => $model,
+    //'ajaxUpdate' => true,
+    //'ajaxType' => 'POST',
+    //'filter' => $model,
     'columns' => array(
         'id',
         array(
-            'name' => 'account_id',
-            //'filter'=>CHtml::dropDownList('Transactions[type]', $model->type,CHtml::listData(TransactionType::model()->findAll(), 'id', 'name')),
-            'filter' => CHtml::listData(Accounts::model()->findAll(), 'id', 'name'),
-            'value' => '$data->getAccountName()'
+            'attribute' => 'account_id',
+            //'filter'=>\yii\helpers\Html::dropDownList('Transactions[type]', $model->type,\yii\helpers\ArrayHelper::map(TransactionType::find()->All(), 'id', 'name')),
+            //'filter' => \yii\helpers\ArrayHelper::map(Accounts::find()->All(), 'id', 'name'),
+            'value' => function($data){return $data->getAccountName();},
         ),
         array(
-            'name' => 'oppt_account_id',
+            'attribute' => 'oppt_account_id',
             //'type' => 'raw',
-            'filter' => CHtml::listData(Accounts::model()->findAll(), 'id', 'name'),
-            'value' => '$data->OpptAccount->name'
-        //'value'=>'CHtml::link(CHtml::encode($data->account_id),Yii::app()->createAbsoluteUrl("/accounts/transaction/id/".$data->account_id))',
+            //'filter' => \yii\helpers\ArrayHelper::map(Accounts::find()->All(), 'id', 'name'),
+            'value' => function($data){return $data->opptAccount->name;},
+            
+        //'value'=>'\yii\helpers\Html::link(\yii\helpers\Html::encode($data->account_id),yii\helpers\BaseUrl::base().("/accounts/transaction/id/".$data->account_id))',
         ),
         array(
-            'name' => 'doc_id',
+            'attribute' => 'doc_id',
             'filter' => '',
             //'value'=>'0',
-            'value' => '$data->getRefDocLink()',
-            'type' => 'raw',
+            'value' => function($data){return $data->getRefDocLink();},
+            
+            'format' => 'raw',
         ),
         array(
-            'name' => 'item_id',
-            'header'=>Yii::t('labels',"Item Name"),
-            'filter' => CHtml::listData(Item::model()->findAll(), 'id', 'name'),
-            'value' => '$data->getItemName()'
+            'attribute' => 'item_id',
+            'header'=>Yii::t('app',"Item Name"),
+            //'filter' => \yii\helpers\ArrayHelper::map(Item::find()->All(), 'id', 'name'),
+            'value' => function($data){return $data->getItemName();},
         ),
         'qty',
         'serial',
 
         array(
-            'name' => 'createDate',
+            'attribute' => 'createDate',
             'filter' => $dateisOn,
-            'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->createDate,"' . $yiidbdatetime . '"))'
+            //'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->createDate,"' . $yiidbdatetime . '"))'
         ),
         array(
-            'name' => 'user_id',
-            'filter' => CHtml::listData(User::model()->findAll(), 'id', 'username'),
-            'value' => '$data->User->username'
+            'attribute' => 'user_id',
+            //'filter' => \yii\helpers\ArrayHelper::map(User::find()->All(), 'id', 'username'),
+            'value' => function($data){return $data->user->username;},
+
         ),
     //'sum',
     ),
 ));
 
 
-$this->endWidget(); //miniform
+app\widgets\MiniForm::end(); //app\widgets\MiniForm
 ?>

@@ -1,0 +1,168 @@
+
+body {
+    background-color: #fff;
+    color: #333;
+    font-family: "Alef Hebrew",“Helvetica Neue”,Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.42857;
+}
+
+
+
+
+@media (min-width: 1165px) {
+    .navbar-header {
+        float: left;
+    }
+    .dropdown-submenu:hover>.dropdown-menu {
+        display: block;
+    }
+
+    .dropdown:hover >*{
+        display: block;
+    }
+}
+#sidebar,#sidebar>div>ul,#sidebar>ul{
+    padding: 0;
+    
+}
+.navbar-collapse > img{
+    margin-top: 8px;
+    float:right;
+}
+
+
+
+#changeSidebarPos{
+    float:left;
+    margin-top:10px;
+}
+
+
+#w1-container > table > thead > tr:nth-child(1) > th:nth-child(8){
+    max-width:150px;
+}
+
+.dropdown-submenu{position:relative;}
+.dropdown-submenu>.dropdown-menu{top:0;left:100%;margin-top:-6px;margin-left:-1px;-webkit-border-radius:0 6px 6px 6px;-moz-border-radius:0 6px 6px 6px;border-radius:0 6px 6px 6px;}
+.dropdown-submenu>a:after{display:block;content:" ";float:right;width:0;height:0;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;border-left-color:#cccccc;margin-top:5px;margin-right:-10px;}
+.dropdown-submenu:hover>a:after{border-left-color:#555;}
+.dropdown-submenu.pull-left{float:none;}.dropdown-submenu.pull-left>.dropdown-menu{left:-100%;margin-left:10px;-webkit-border-radius:6px 0 6px 6px;-moz-border-radius:6px 0 6px 6px;border-radius:6px 0 6px 6px;}
+
+
+/*onsmall screens shuld be block*/
+.docContent > td>div>label,
+.rcptContent > td>div>label{
+    display:none;
+    
+}
+th {
+    text-align: right;
+}
+html,
+body {
+    height: 100%;
+}
+
+.panel-heading > * {
+    display: inline-block;
+    
+}
+
+
+.wrap {
+    height: auto;
+    margin: 60px 30px 0;
+    min-height: 100%;
+    padding: 0;
+    width: auto;
+}
+.list>li>a {
+    color: #555;
+}
+.list>li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    display: block;
+    margin-bottom: -1px;
+    position: relative;
+}
+.wrap > .container {
+    padding: 70px 15px 20px;
+}
+
+.footer {
+    height: 60px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.jumbotron {
+    text-align: center;
+    background-color: transparent;
+}
+
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
+
+.not-set {
+    color: #c55;
+    font-style: italic;
+}
+
+/* add sorting icons to gridview sort links */
+a.asc:after, a.desc:after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    padding-left: 5px;
+}
+
+a.asc:after {
+    content: /*"\e113"*/ "\e151";
+}
+
+a.desc:after {
+    content: /*"\e114"*/ "\e152";
+}
+
+.sort-numerical a.asc:after {
+    content: "\e153";
+}
+
+.sort-numerical a.desc:after {
+    content: "\e154";
+}
+
+.sort-ordinal a.asc:after {
+    content: "\e155";
+}
+
+.sort-ordinal a.desc:after {
+    content: "\e156";
+}
+
+.grid-view th {
+    white-space: nowrap;
+}
+
+.hint-block {
+    display: block;
+    margin-top: 5px;
+    color: #999;
+}
+
+.error-summary {
+    color: #a94442;
+    background: #fdf7f7;
+    border-left: 3px solid #eed3d7;
+    padding: 10px 20px;
+    margin: 0 0 15px 0;
+}

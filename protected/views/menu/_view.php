@@ -1,23 +1,23 @@
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id),array('view','id'=>$data->id)); ?>
+	<b><?php echo \yii\helpers\Html::encode($data->getAttributeLabel('id')); ?>:</b>
+	<?php echo \yii\helpers\Html::link(\yii\helpers\Html::encode($data->id),array('view','id'=>$data->id)); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('label')); ?>:</b>
-	<?php echo CHtml::encode($data->label); ?>
+	<b><?php echo \yii\helpers\Html::encode($data->getAttributeLabel('label')); ?>:</b>
+	<?php echo \yii\helpers\Html::encode($data->label); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('url')); ?>:</b>
-	<?php echo CHtml::encode($data->url); ?>
+	<b><?php echo \yii\helpers\Html::encode($data->getAttributeLabel('url')); ?>:</b>
+	<?php echo \yii\helpers\Html::encode($data->url); ?>
 	<br />
 
-        <b><?php echo CHtml::encode($data->getAttributeLabel('icon')); ?>:</b>
-	<?php echo CHtml::encode($data->icon); ?>
+        <b><?php echo \yii\helpers\Html::encode($data->getAttributeLabel('icon')); ?>:</b>
+	<?php echo \yii\helpers\Html::encode($data->icon); ?>
 	<br />
         
-	<b><?php echo CHtml::encode($data->getAttributeLabel('parent')); ?>:</b>
-	<?php echo CHtml::encode($data->parent); ?>
+	<b><?php echo \yii\helpers\Html::encode($data->getAttributeLabel('parent')); ?>:</b>
+	<?php echo \yii\helpers\Html::encode($data->parent); ?>
 	<br />
 
 

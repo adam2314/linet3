@@ -1,24 +1,24 @@
 <?php
 
 /* * *********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  * ********************************************************************************** */
+namespace app\controllers;
 
+use Yii;
+use app\components\RightsController;
+use app\models\Mail;
 class MailController extends RightsController {
 
     public function actionCreate() {
         $model = new Mail;
 
-        // Uncomment the following line if AJAX validation is needed
-        //$this->performAjaxValidation($model);
-
-        if (isset($_POST['Mail'])) {
-            $model->attributes = $_POST['Mail'];
+        if ($model->load(Yii::$app->request->post())){
             if ($model->send()){
                 //sent++
                 
@@ -28,18 +28,19 @@ class MailController extends RightsController {
             //$this->redirect(array('view', 'id' => $model->id));
         }
 
-        $this->render('create', array(
+        return $this->render('create', array(
             'model' => $model,
         ));
     }
 
     public function actionAdmin() {
-        $model = new Mail('search');
-        $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['Mail']))
-            $model->attributes = $_GET['Mail'];
+        $model = new Mail();
+        //$model->unsetAttributes();  // clear any default values
 
-        $this->render('admin', array(
+        $model->load(Yii::$app->request->get());
+            //$model->attributes = $_GET['Mail'];
+
+        return $this->render('admin', array(
             'model' => $model,
         ));
     }
@@ -50,12 +51,12 @@ class MailController extends RightsController {
       $type=$_POST['Mail']['obj'];
 
       $id=$_POST['Mail']['type'];
-      $model = MailTemplate::model()->findByTypeId($type,$id);
-      //echo CJSON::encode("echo ".$model->value);
+      $model = MailTemplate::findByTypeId($type,$id);
+      //echo \yii\helpers\Json::encode("echo ".$model->value);
 
       if ($model->value == '') {
-      echo CJSON::encode(array($_POST['bill']['line'], false));
-      Yii::app()->end();
+      echo \yii\helpers\Json::encode(array($_POST['bill']['line'], false));
+      Yii::$app->end();
       }
 
 
@@ -63,7 +64,7 @@ class MailController extends RightsController {
       $form->type = $id;
       $form->sum = $_POST['bill']['sum'];
       $form->line = $_POST['bill']['line'];
-      echo CJSON::encode(array($form->line, $form->stoppage()));
+      echo \yii\helpers\Json::encode(array($form->line, $form->stoppage()));
       }
      */
     //put your code here

@@ -1,26 +1,15 @@
 <?php
-$this->breadcrumbs=array(
+$this->params["breadcrumbs"]=array(
 	'Bank Names'=>array('index'),
 	'Manage',
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>'List BankName','url'=>array('index')),
 	array('label'=>'Create BankName','url'=>array('create')),
 );
 
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('bank-name-grid', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
+
 ?>
 
 <h1>Manage Bank Names</h1>
@@ -30,22 +19,22 @@ You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&g
 or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
 </p>
 
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button btn')); ?>
+<?php echo \yii\helpers\Html::link('Advanced Search','#',array('class'=>'search-button btn')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
 )); ?>
 </div><!-- search-form -->
 
-<?php $this->widget('EExcelView',array(
+<?php echo app\widgets\GridView::widget(array(
 	'id'=>'bank-name-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
+	'dataProvider'=>$model->dp(),
+	//'filter'=>$model,
 	'columns'=>array(
 		'id',
 		'name',
 		array(
-			'class'=>'bootstrap.widgets.TbButtonColumn',
+			'class'=>'yii\grid\ActionColumn',
 		),
 	),
 )); ?>

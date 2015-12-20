@@ -1,7 +1,7 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -22,25 +22,26 @@
  * @property integer $docStatus_id
  * @property integer $last_docnum
  */
-class Doctype extends basicRecord {
+namespace app\models;
+
+use Yii;
+
+class Doctype extends Record {
 
     
     
     
-    const table = '{{docType}}';
+    const table = '{{%docType}}';
 
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
      * @return Doctype the static model class
      */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
-
+   
      public static function getList($const=null){
         //if($const===null){
-            $arr= self::model()->findAll();
+            $arr= self::find()->All();
             
             //
         //}
@@ -50,25 +51,25 @@ class Doctype extends basicRecord {
         }
         
         
-        return CHtml::listData($arr, 'id', 'name');
+        return \yii\helpers\ArrayHelper::map($arr, 'id', 'name');
     }
     
     
-    public function getOpenType($key) {
+    public static function getOpenType($key) {
         //$this->find
-        $tmp = $this->findByAttributes(array('openformat' => $key));
+        $tmp = Doctype::find()->where(['openformat' => $key])->one();
         if ($tmp !== null)
             return Yii::t('app', $tmp->name);
         else {
             Yii::log("OpenFormat Import: no type:" . $key, 'error', 'app');
-            //Yii::app()->end();
+            //Yii::$app->end();
             return '';
         }
         // return isset($this->docType)?$this->docType->openformat:"";
     }
 
-    public function primaryKey() {
-        return 'id';
+    public static function primaryKey() {
+        return ['id'];
     }
 
     /**
@@ -82,7 +83,7 @@ class Doctype extends basicRecord {
         }
     }
 
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -93,16 +94,45 @@ class Doctype extends basicRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('name, openformat, isdoc, isrecipet, iscontract, stockAction, account_type, docStatus_id, last_docnum', 'required'),
-            array('openformat, isdoc, isrecipet, iscontract, stockAction, account_type, docStatus_id, last_docnum', 'numerical', 'integerOnly' => true),
-            array('name', 'length', 'max' => 255),
-            array('header, footer', 'safe'),
+            array(['name', 'openformat', 'isdoc', 'isrecipet', 'iscontract', 'stockAction', 'account_type', 'docStatus_id', 'last_docnum'], 'required'),
+            array(['openformat', 'isdoc', 'isrecipet', 'iscontract', 'stockAction', 'account_type', 'docStatus_id', 'last_docnum'], 'number', 'integerOnly' => true),
+            array(['name'], 'string', 'max' => 255),
+            array(['header', 'footer'], 'safe'),
+            [['last_docnum'], 'last_docnumVal'],
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, name, openformat, isdoc, isrecipet, iscontract, stockAction, account_type, docStatus_id, last_docnum', 'safe', 'on' => 'search'),
+            array(['id', 'name', 'openformat', 'isdoc', 'isrecipet', 'iscontract', 'stockAction', 'account_type', 'docStatus_id', 'last_docnum'], 'safe', 'on' => 'search'),
         );
     }
 
+    public function last_docnumVal($attribute, $params) {
+        $num=Docs::getMax($this->id);
+        if($num!=null){
+            if ((docs::getMax($this->id)!=($this->$attribute))) {
+                $this->addError($attribute, Yii::t('app', 'Not a valid number, last number:').$num);
+            }
+        }
+        
+        return true;
+    }
+    public function issue_label(){
+        if($this->issueLabel==null)
+            return false;
+        return Yii::t('app', $this->issueLabel);
+        
+    }
+    public function due_label(){
+        if($this->dueLabel==null)
+            return false;
+        return Yii::t('app', $this->dueLabel);
+        
+    }
+    public function ref_label(){
+        if($this->refLabel==null)
+            return false;
+        return Yii::t('app', $this->refLabel);
+        
+    }
     /**
      * @return array relational rules.
      */
@@ -116,14 +146,12 @@ class Doctype extends basicRecord {
     }
 
     public function getType($name) {
-        $model = Doctype::model()->find('name=:name', array(':name' => ucfirst($name)));
-        //$post=Post::model()->find('postID=:postID', array(':postID'=>10));
+        $model = Doctype::find()->where(['name'=> ucfirst($name)])->one();
         return $model->id;
     }
 
     public function getOType($type) {
-        $model = Doctype::model()->find('openformat=:openformat', array(':openformat' => $type));
-        //$post=Post::model()->find('postID=:postID', array(':postID'=>10));
+        $model = Doctype::find()->where(['openformat' => $type])->one();
         if ($model === null)
             return 0;
 
@@ -135,18 +163,18 @@ class Doctype extends basicRecord {
      */
     public function attributeLabels() {
         return array(
-            'id' => Yii::t('labels', 'ID'),
-            'name' => Yii::t('labels', 'Name'),
-            'openformat' => Yii::t('labels', 'Open Format'),
-            'isdoc' => Yii::t('labels', 'Is Document'),
-            'isrecipet' => Yii::t('labels', 'Is Recipet'),
-            'iscontract' => Yii::t('labels', 'Is Contract'),
-            'stockAction' => Yii::t('labels', 'Stock Action'),
-            'account_type' => Yii::t('labels', 'Account Type'),
-            'docStatus_id' => Yii::t('labels', 'Document Status'),
-            'last_docnum' => Yii::t('labels', 'Last Document num'),
-            'header' => Yii::t('labels', 'Header'),
-            'footer' => Yii::t('labels', 'Footer'),
+            'id' => Yii::t('app', 'ID'),
+            'name' => Yii::t('app', 'Name'),
+            'openformat' => Yii::t('app', 'Open Format'),
+            'isdoc' => Yii::t('app', 'Is Document'),
+            'isrecipet' => Yii::t('app', 'Is Recipet'),
+            'iscontract' => Yii::t('app', 'Is Contract'),
+            'stockAction' => Yii::t('app', 'Stock Action'),
+            'account_type' => Yii::t('app', 'Account Type'),
+            'docStatus_id' => Yii::t('app', 'Document Status'),
+            'last_docnum' => Yii::t('app', 'Last Document num'),
+            'header' => Yii::t('app', 'Header'),
+            'footer' => Yii::t('app', 'Footer'),
         );
     }
 
@@ -154,7 +182,7 @@ class Doctype extends basicRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search() {
+    public function search($params) {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
 

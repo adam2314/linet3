@@ -1,7 +1,7 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -14,59 +14,26 @@
  * @property integer $id
  * @property string $name
  */
-class Bankbook extends CActiveRecord {
+namespace app\models;
+
+use Yii;
+class Bankbook extends Record {
     private $dateDBformat = true;
     public $file;
 
-    const table = '{{bankbook}}';
+    const table = '{{%bankbook}}';
 
-    /**
-     * Returns the static model of the specified AR class.
-     * @param string $className active record class name.
-     * @return BankName the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
-    
-    public function beforeSave() {
-        if ($this->isNewRecord) {
-            $this->dateDBformat = false;
-        }
-        if (!$this->dateDBformat) {
-            $this->dateDBformat = true;
-            $this->date = date("Y-m-d H:i:s", CDateTimeParser::parse($this->date, Yii::app()->locale->getDateFormat('yiishort')));
 
-        }
-        
+    public function beforeSave($insert) {
         if($this->extCorrelation===null)
             $this->extCorrelation='0';
-        return parent::beforeSave();
+        return parent::beforeSave($insert);
     }
-
-    public function afterSave() {
-        if ($this->dateDBformat) {
-            $this->dateDBformat = false;
-            $this->date = date(Yii::app()->locale->getDateFormat('phpshort'), strtotime($this->date));
-
-        }
-        return parent::afterSave();
-    }
-
-    public function afterFind() {
-        if ($this->dateDBformat) {
-            $this->dateDBformat = false;
-            $this->date = date(Yii::app()->locale->getDateFormat('phpshort'), strtotime($this->date));
-
-        }
-        return parent::afterFind();
-    }
-    
 
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -75,13 +42,13 @@ class Bankbook extends CActiveRecord {
      */
     public function rules() {
         return array(
-            array('account_id, date, sum', 'required'),
-            array('id, account_id', 'numerical', 'integerOnly' => true),
-            array('details, refnum', 'length', 'max' => 255),
-            array('date', 'safe'),
+            array(['account_id', 'date', 'sum'], 'required'),
+            array(['id', 'account_id'], 'number', 'integerOnly' => true),
+            array(['details', 'refnum'], 'string', 'max' => 255),
+            array(['date'], 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, account_id, date, sum, total, extCorrelation, details, refnum', 'safe', 'on' => 'search'),
+            array(['id', 'account_id', 'date', 'sum', 'total', 'extCorrelation', 'details', 'refnum'], 'safe', 'on' => 'search'),
         );
     }
 
@@ -100,13 +67,13 @@ class Bankbook extends CActiveRecord {
      */
     public function attributeLabels() {
         return array(
-            'id' => Yii::t('labels', 'ID'),
-            'details' => Yii::t('labels', 'Details'), //, , , , , extCorrelation 
-            'account_id' => Yii::t('labels', 'Account id'),
-            'date' => Yii::t('labels', 'Date'),
-            'sum' => Yii::t('labels', 'Sum'),
-            'total' => Yii::t('labels', 'Total'),
-            'refnum' => Yii::t('labels', 'Ref. No.'),
+            'id' => Yii::t('app', 'ID'),
+            'details' => Yii::t('app', 'Details'), //, , , , , extCorrelation 
+            'account_id' => Yii::t('app', 'Account id'),
+            'date' => Yii::t('app', 'Date'),
+            'sum' => Yii::t('app', 'Sum'),
+            'total' => Yii::t('app', 'Total'),
+            'refnum' => Yii::t('app', 'Ref. No.'),
         );
     }
 
@@ -114,29 +81,44 @@ class Bankbook extends CActiveRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search() {
-        $criteria = new CDbCriteria;
-        $criteria->compare('id', $this->id);
-        $criteria->compare('account_id', $this->account_id);
-        $criteria->compare('date', $this->date, true);
-        $criteria->compare('sum', $this->sum, true);
-        $criteria->compare('total', $this->total, true);
-        $criteria->compare('extCorrelation', $this->extCorrelation);
-        $criteria->compare('details', $this->details, true);
-        $criteria->compare('refnum', $this->refnum, true);
-        $criteria->order = 'id';
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
+    public function search($params) {
+        $query = Bankbook::find();
+
+        $dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => $query,
             'pagination' => array('pageSize' => 100),
-        ));
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'account_id' => $this->account_id,
+            'date' => $this->date,
+            'extCorrelation' => $this->extCorrelation,
+            'refnum' => $this->refnum,
+        ]);
+
+        $query->andFilterWhere(['like', 'details', $this->details])
+                ->andFilterWhere(['like', 'sum', $this->sum])
+                ->andFilterWhere(['like', 'total', $this->total])
+                ->andFilterWhere(['like', 'details', $this->details]);
+        return $dataProvider;
+        //$criteria->order = 'id';
+        
+        
     }
 
     /*     * ************************imports************************ */
 
     function import($account) {
-        $file = CUploadedFile::getInstance($this, 'file');
+        $file = \yii\web\UploadedFile::getInstance($this, 'file');
         //echo 'not file';
-        if (is_object($file) && get_class($file) === 'CUploadedFile') {
+        if (is_object($file) && get_class($file) === 'yii\web\UploadedFile') {
             //echo 'is file';
             $filename = Company::getFilePath() . "TNout"; //x
             if ($file->saveAs($filename)) {
@@ -144,7 +126,7 @@ class Bankbook extends CActiveRecord {
                 $fp = fopen($filename, 'r');
                 return $this->readFile($fp,$account);
             } else {
-                throw new CHttpException(500, Yii('app', 'cannot save bankbook'));
+                throw new \Exception(Yii('app', 'cannot save bankbook'));
             }
         }
     }
@@ -174,11 +156,11 @@ class Bankbook extends CActiveRecord {
                         $this->readlineLeumi($line, $account);
                         break;
                 } else {
-                throw new CHttpException(500, Yii('app', 'bankbook Import Unkown file format'));
+                throw new \Exception(Yii('app', 'bankbook Import Unkown file format'));
             }
         }//while end
         //echo 'done';
-        //Yii::app()->end();
+        //Yii::$app->end();
         return true;
     }
 

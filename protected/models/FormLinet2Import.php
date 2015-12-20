@@ -1,19 +1,22 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-class FormLinet2Import extends CFormModel {
+namespace app\models;
+use Yii;
+use yii\base\Model;
+class FormLinet2Import extends Model {
 
     public $file;
 
     public function rules() {
         return array(
-            array('file', 'file', 'allowEmpty' => false, 'types' => 'sql, bak'),
+            //array('file', 'file', 'allowEmpty' => false, 'types' => 'sql, bak'),
             array('file', 'safe')
         );
     }
@@ -21,7 +24,7 @@ class FormLinet2Import extends CFormModel {
     
     public function attributeLabels() {
         return array(
-            'file' => Yii::t('labels', 'File'),
+            'file' => Yii::t('app', 'File'),
             
             
         );
@@ -65,9 +68,7 @@ class FormLinet2Import extends CFormModel {
     }
 
     private function saveSetting($key, $value) {
-        $setting = Settings::model()->findByPk($key);
-        $setting->value = $value;
-        return $setting->save();
+        return \app\helpers\Linet3Helper::setSetting($key, $value);
     }
 
     /*
@@ -116,13 +117,13 @@ class FormLinet2Import extends CFormModel {
      * 
      */
     private function imprtAccounts($accounts, $prefix) {
-        $this->sqlExec('DELETE FROM `' . Yii::app()->db->tablePrefix . "accounts` WHERE 1");
+        $this->sqlExec('DELETE FROM `' . Yii::$app->db->tablePrefix . "accounts` WHERE 1");
         foreach ($accounts as $account) {
             //echo $account."<br />";
             $account = str_replace("'" . $prefix . "',", "'ILS',", $account);
             $keys = "`id`, `currency_id`, `type`, `id6111`, `pay_terms`, `src_tax`, `src_date`, `parent_account_id`, `name`, `contact`, `department`, `vatnum`, `email`, `phone`, `dir_phone`, `cellular`, `fax`, `web`, `address`, `city`, `zip`, `comments`, `owner`";
-            //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."accounts` ($keys) VALUES $account;";
-            $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "accounts` ($keys) VALUES $account;");
+            //echo 'INSERT INTO `'.Yii::$app->db->tablePrefix."accounts` ($keys) VALUES $account;";
+            $this->sqlExec('INSERT INTO `' . Yii::$app->db->tablePrefix . "accounts` ($keys) VALUES $account;");
         }
     }
 
@@ -144,7 +145,7 @@ class FormLinet2Import extends CFormModel {
      * 
      */
     private function imprtItems($items, $prefix) {
-        $this->sqlExec('DELETE FROM `' . Yii::app()->db->tablePrefix . "items` WHERE 1");
+        $this->sqlExec('DELETE FROM `' . Yii::$app->db->tablePrefix . "items` WHERE 1");
         foreach ($items as $item) {
             //echo $item."<br />";
             //$item=  str_replace("'".$prefix."',", "", $item);
@@ -152,8 +153,8 @@ class FormLinet2Import extends CFormModel {
             $keys = "`id`, `name`, `unit_id`, `extcatnum`, `manufacturer`, `saleprice`, `currency_id`, `ammount`, `owner`, `itemVatCat_id`";
 
             $values = "'$item[0]', '$item[3]', '$item[4]', '$item[5]', '$item[6]', '$item[7]', 'ILS', '$item[9]', '$item[10]', '1'"; //itemVatCat
-            $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "items` ($keys) VALUES ($values);");
-            //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
+            $this->sqlExec('INSERT INTO `' . Yii::$app->db->tablePrefix . "items` ($keys) VALUES ($values);");
+            //echo 'INSERT INTO `'.Yii::$app->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
         }
     }
 
@@ -186,7 +187,7 @@ class FormLinet2Import extends CFormModel {
      *      
      */
     private function imprtDocs($docs, $prefix) {
-        $this->sqlExec('DELETE FROM `' . Yii::app()->db->tablePrefix . "docs` WHERE 1");
+        $this->sqlExec('DELETE FROM `' . Yii::$app->db->tablePrefix . "docs` WHERE 1");
         foreach ($docs as $doc) {
             //echo $doc."<br />";
             //$doc = str_replace("'" . $prefix . "',", "", $doc);
@@ -198,8 +199,8 @@ class FormLinet2Import extends CFormModel {
 
             $values = "'$doc[0]', '$doc[2]', '$doc[3]', '$doc[4]', '$doc[5]', '$doc[6]', '$doc[7]', '$doc[8]', '$doc[9]'";
             $values.=", '$doc[11]', '$doc[12]', '$doc[13]', '$doc[14]', '$doc[15]', '$doc[16]', '$doc[17]', '2', '$doc[19]', '$doc[20]', '$doc[21]', 'ILS', '1'";
-            $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "docs` ($keys) VALUES ($values);");
-            //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
+            $this->sqlExec('INSERT INTO `' . Yii::$app->db->tablePrefix . "docs` ($keys) VALUES ($values);");
+            //echo 'INSERT INTO `'.Yii::$app->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
         }
     }
 
@@ -220,7 +221,7 @@ class FormLinet2Import extends CFormModel {
      *  	id                      line   
      */
     private function imprtCheques($cheques, $prefix) {
-        $this->sqlExec('DELETE FROM `' . Yii::app()->db->tablePrefix . "docCheques` WHERE 1");
+        $this->sqlExec('DELETE FROM `' . Yii::$app->db->tablePrefix . "docCheques` WHERE 1");
         foreach ($cheques as $cheque) {
             /*adam: we need to update this crap!*/
             
@@ -234,8 +235,8 @@ class FormLinet2Import extends CFormModel {
             
             $keys = "`doc_id`, `type`, `currency_id`, `sum`, `bank_refnum`, `line`";
 
-            $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "docCheques` ($keys) VALUES ($values);");
-            //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
+            $this->sqlExec('INSERT INTO `' . Yii::$app->db->tablePrefix . "docCheques` ($keys) VALUES ($values);");
+            //echo 'INSERT INTO `'.Yii::$app->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
         }
     }
 
@@ -254,7 +255,7 @@ class FormLinet2Import extends CFormModel {
      */
 
     private function imprtDocdetails($docdetails, $prefix) {
-        $this->sqlExec('DELETE FROM `' . Yii::app()->db->tablePrefix . "docDetails` WHERE 1");
+        $this->sqlExec('DELETE FROM `' . Yii::$app->db->tablePrefix . "docDetails` WHERE 1");
         foreach ($docdetails as $docdetail) {
             //echo $doc."<br />";
             $docdetail = str_replace("'" . $prefix . "',", "", $docdetail);
@@ -262,12 +263,12 @@ class FormLinet2Import extends CFormModel {
             $keys = "`doc_id`, `item_id`, `name`, `qty`, `iItem`, `currency_id`, `iTotal`, `ihTotal`, `line`";
 
             //$values="'$item[0]', '$item[3]', '$item[4]', '$item[5]', '$item[6]', '$item[7]', '$item[8]', '$item[9]', '$item[10]'";
-            $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "docDetails` ($keys) VALUES $docdetail;");
-            //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
+            $this->sqlExec('INSERT INTO `' . Yii::$app->db->tablePrefix . "docDetails` ($keys) VALUES $docdetail;");
+            //echo 'INSERT INTO `'.Yii::$app->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
         }
-        $this->sqlExec('UPDATE `' . Yii::app()->db->tablePrefix . "docDetails` SET `currency_id` = 'ILS', `iVatRate` = '18.00', `iTotalVat`=`iTotal`*1.18 WHERE 1=1;");
+        $this->sqlExec('UPDATE `' . Yii::$app->db->tablePrefix . "docDetails` SET `currency_id` = 'ILS', `iVatRate` = '18.00', `iTotalVat`=`iTotal`*1.18 WHERE 1=1;");
         
-        $this->sqlExec('DELETE FROM `' . Yii::app()->db->tablePrefix . 'docDetails` WHERE `iItem`=0 AND `qty`=0 AND `iTotal`=0 AND `ihTotal`=0');
+        $this->sqlExec('DELETE FROM `' . Yii::$app->db->tablePrefix . 'docDetails` WHERE `iItem`=0 AND `qty`=0 AND `iTotal`=0 AND `ihTotal`=0');
     }
 
     //
@@ -289,7 +290,7 @@ class FormLinet2Import extends CFormModel {
      * 
      */
     private function imprtTransactions($transactions, $prefix) {
-        $this->sqlExec('DELETE FROM `' . Yii::app()->db->tablePrefix . "transactions` WHERE 1");
+        $this->sqlExec('DELETE FROM `' . Yii::$app->db->tablePrefix . "transactions` WHERE 1");
         foreach ($transactions as $transaction) {
             //echo $doc."<br />";
             //$transaction = str_replace("'" . $prefix . "',", "", $transaction);
@@ -301,14 +302,14 @@ class FormLinet2Import extends CFormModel {
               } */
             $values = "'$item[1]', '$item[2]', '$item[3]', '$item[4]', '$item[5]', '$item[6]', '$item[7]', '$item[8]', 'ILS', '$item[8]',"
                     . "'$item[9]', '$item[10]', '$item[11]'";
-            $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "transactions` ($keys) VALUES ($values);");
-            //echo 'INSERT INTO `'.Yii::app()->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
+            $this->sqlExec('INSERT INTO `' . Yii::$app->db->tablePrefix . "transactions` ($keys) VALUES ($values);");
+            //echo 'INSERT INTO `'.Yii::$app->db->tablePrefix."items` ($keys) VALUES ($values);<br />\n";
         }
     }
 
 //bankbook
     private function imprtBankbooks($bankbooks, $prefix) {
-        $this->sqlExec('DELETE FROM `' . Yii::app()->db->tablePrefix . "bankbook` WHERE 1"); //currency_id shul
+        $this->sqlExec('DELETE FROM `' . Yii::$app->db->tablePrefix . "bankbook` WHERE 1"); //currency_id shul
         foreach ($bankbooks as $bankbook) {
             //echo $bankbook."<br />\n";
             //$bankbook = str_replace("'" . $prefix . "',", "", $bankbook);
@@ -316,13 +317,13 @@ class FormLinet2Import extends CFormModel {
             $keys = "`id`, `account_id`, `date`, `details`, `refnum`, `sum`, `total`, `extCorrelation`, `currency_id`";
             //print_r($bankbook);
             $values = "'$bankbook[0]', '$bankbook[2]', '$bankbook[3]', '$bankbook[4]', '$bankbook[5]', '$bankbook[6]', '$bankbook[7]', '$bankbook[8]', 'ILS'";
-            $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "bankbook` ($keys) VALUES ($values);");
+            $this->sqlExec('INSERT INTO `' . Yii::$app->db->tablePrefix . "bankbook` ($keys) VALUES ($values);");
         }
     }
 
     //correlation
     private function imprtCorrelations($correlations, $prefix) {
-        $this->sqlExec('DELETE FROM `' . Yii::app()->db->tablePrefix . "intCorrelation` WHERE 1"); //currency_id shul
+        $this->sqlExec('DELETE FROM `' . Yii::$app->db->tablePrefix . "intCorrelation` WHERE 1"); //currency_id shul
         foreach ($correlations as $correlation) {
             //echo $bankbook."<br />\n";
             //$bankbook = str_replace("'" . $prefix . "',", "", $bankbook);
@@ -340,7 +341,7 @@ class FormLinet2Import extends CFormModel {
                 //$correlation[1]
             } else {
                 //update transactions
-                $this->sqlExec('INSERT INTO `' . Yii::app()->db->tablePrefix . "intCorrelation` ($keys) VALUES ($values);");
+                $this->sqlExec('INSERT INTO `' . Yii::$app->db->tablePrefix . "intCorrelation` ($keys) VALUES ($values);");
                 foreach (explode(',', $correlation[2]) as $transaction) {
                     $this->IntCorr($transaction, $correlation[1], 1);
                 }
@@ -401,10 +402,10 @@ class FormLinet2Import extends CFormModel {
             $this->imprtCorrelations($array['correlation'], $prefix);
 //*/
         //vat rate
-        $acc = Accounts::model()->findByPk(100);
+        $acc = Accounts::findOne(100);
         $acc->src_tax = $company[12];
         $acc->save();
-        $acc = Accounts::model()->findByPk(101);
+        $acc = Accounts::findOne(101);
         $acc->src_tax = $company[12];
         $acc->save();
 
@@ -415,7 +416,7 @@ class FormLinet2Import extends CFormModel {
         //get transaction num
         $this->saveSetting('company.transaction', Transactions::getMax() + 1);
         //get docnums
-        $types = Doctype::model()->findAll();
+        $types = Doctype::find()->All();
         foreach ($types as $type) {
             $type->last_docnum = Docs::getMax($type->id);
             $type->save();
@@ -438,14 +439,14 @@ class FormLinet2Import extends CFormModel {
 
     private function IntCorr($id, $cor_id, $type) {
         $id = explode(":", $id);
-        $this->sqlExec('UPDATE `' . Yii::app()->db->tablePrefix . "transactions` SET `intCorrelation`='$cor_id',`intType`='$type' WHERE `num`='$id[0]' AND `linenum`='$id[1]'");
+        $this->sqlExec('UPDATE `' . Yii::$app->db->tablePrefix . "transactions` SET `intCorrelation`='$cor_id',`intType`='$type' WHERE `num`='$id[0]' AND `linenum`='$id[1]'");
     }
 
     private function sqlExec($sql) {
-        $cmd = Yii::app()->db->createCommand($sql);
+        $cmd = Yii::$app->db->createCommand($sql);
         try {
             $cmd->execute();
-        } catch (CDbException $e) {
+        } catch (\yii\db\Exception $e) {
             $message = $e->getMessage();
             print $message . "<br />\n";
         }

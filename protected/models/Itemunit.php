@@ -1,7 +1,7 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -15,22 +15,16 @@
  * @property string $name
  * @property integer $precision
  */
-class Itemunit extends CActiveRecord{
-     const table='{{itemUnits}}';
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return Itemunit the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
+namespace app\models;
+
+use Yii;
+class Itemunit extends Record{
+     const table='{{%itemUnits}}';
 
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName(){
+	public static function tableName(){
 		return self::table;
 	}
 
@@ -42,12 +36,12 @@ class Itemunit extends CActiveRecord{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, precision', 'required'),
-			array('precision', 'numerical', 'integerOnly'=>true),
-			array('name', 'length', 'max'=>40),
+			array(['name', 'precision'], 'required'),
+			array('precision', 'number', 'integerOnly'=>true),
+			array('name', 'string', 'max'=>40),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, precision', 'safe', 'on'=>'search'),
+			array(['id', 'name', 'precision'], 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -79,12 +73,12 @@ class Itemunit extends CActiveRecord{
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
-	public function search()
+	public function search($params)
 	{
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
 
-		$criteria=new CDbCriteria;
+		$query = Accounts::find();          $dataProvider = new ActiveDataProvider([             'query' => $query,         ]);          $this->load($params);          if (!$this->validate()) {                                     return $dataProvider;         }
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);

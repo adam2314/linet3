@@ -1,38 +1,45 @@
-
-
+<?php
+$this->params["menu"] = array(
+        array('label'=>Yii::t('app','Print'),'url'=>'','linkOptions'=>['id'=>'printThis']),
+        //array('label'=>'Manage AccTemplate','url'=>array('admin')),
+);
+?>
+<?php
+app\widgets\MiniForm::begin(array('header' => Yii::t("app", "Open Format")));
+?>
 <div class="page">
-    <h3><?php echo Yii::t('app','Open Format Files extraction for');?>:</h3>
-    <p><?php echo Yii::t('app','Busness ID No.');?>: <?php echo Yii::app()->user->settings['company.vat.id']; ?></p>
-    <p><?php echo Yii::t('app','Busness Name');?>: <?php echo Yii::app()->user->settings['company.name']; ?></p>
-    <center><p><?php echo Yii::t('app','Open Format extraction succeded');?></p></center>
-    <p><?php echo Yii::t('app','Files are in Following links');?>:
+    <h3><?= Yii::t('app','Open Format Files extraction for');?>:</h3>
+    <p><?= Yii::t('app','Busness ID No.');?>: <?= \app\helpers\Linet3Helper::getSetting('company.vat.id'); ?></p>
+    <p><?= Yii::t('app','Busness Name');?>: <?= \app\helpers\Linet3Helper::getSetting('company.name'); ?></p>
+    <center><p><?= Yii::t('app','Open Format extraction succeded');?></p></center>
+    <p><?= Yii::t('app','Files are in Following links');?>:
 
-    <a href="<?php echo Yii::app()->createAbsoluteUrl('/download/'.$model->iniId);?>">ini.txt</a>,
-    <a href="<?php echo Yii::app()->createAbsoluteUrl('/download/'.$model->bkmvId);?>">bkmvdata.txt</a>
+    <a href="<?= yii\helpers\BaseUrl::base().('/download/'.$model->iniId);?>">ini.txt</a>,
+    <a href="<?= yii\helpers\BaseUrl::base().('/download/'.$model->bkmvId);?>">bkmvdata.txt</a>
     </p>
     <p>
-        <?php echo Yii::t('app','From Date');?>: <?php echo $model->from_date; ?> 
-        <?php echo Yii::t('app','To Date');?>: <?php echo $model->to_date; ?> 
+        <?= Yii::t('app','From Date');?>: <?= $model->from_date; ?> 
+        <?= Yii::t('app','To Date');?>: <?= $model->to_date; ?> 
     </p>
-    <p><?php echo Yii::t('app','Details of Total records in bkmvdata.txt file');?>:</p>
+    <p><?= Yii::t('app','Details of Total records in bkmvdata.txt file');?>:</p>
     <div>
-        <?php $this->widget('EExcelView', array(
+        <?= app\widgets\GridView::widget( array(
             'id'=>'profloss-grid',
             'dataProvider'=>$model->bkmvTable(),
-            'template' => '{items}{pager}',
-            //'filter'=>$model,
+            //'template' => '{items}{pager}',
+            ////'filter'=>$model,
             'columns'=>array(
                     array(
                         'header'=>Yii::t('app','ID'),
-                        'value'=>'$data["id"]',
+                        'attribute'=>'id',
                     ),
                     array(
                         'header'=>Yii::t('app','Name'),
-                        'value'=>'$data["name"]',
+                        'attribute'=>'name',
                     ),
                     array(
                         'header'=>Yii::t('app','Count'),
-                        'value'=>'$data["count"]',
+                        'attribute'=>'count',
                     ),
 
             ),
@@ -40,9 +47,9 @@
     ?>
     </div>
 
-    <p><?php echo Yii::t('app','Data extracted through');?>: <?php echo Yii::app()->user->settings['system.name']; ?></p>
-    <p><?php echo Yii::t('app','Registration Certificate No.');?>: <?php echo Yii::app()->user->settings['system.auth']; ?></p>
-    <p><?php echo Yii::t('app','Extraction date and time');?>: <?php echo date(Yii::app()->locale->getDateFormat('phpdatetime')) ?></p>
+    <p><?= Yii::t('app','Data extracted through');?>: Linet <?= \app\helpers\Linet3Helper::getVersion(); ?></p>
+    <p><?= Yii::t('app','Registration Certificate No.');?>: <?= \app\helpers\Linet3Helper::getSetting('system.auth'); ?></p>
+    <p><?= Yii::t('app','Extraction date and time');?>: <?= Yii::$app->formatter->asDate(time(),(app\models\Docs::DATETIME_FORMAT));?></p>
     <br />
 
 
@@ -51,38 +58,38 @@
 
 
 <div>
-    <h3><?php echo Yii::t('app','Open Format Files extraction for');?>:</h3>
-    <p><?php echo Yii::t('app','Busness ID No.');?>: <?php echo Yii::app()->user->settings['company.vat.id']; ?></p>
-    <p><?php echo Yii::t('app','Busness Name');?>: <?php echo Yii::app()->user->settings['company.name']; ?></p>
+    <h3><?= Yii::t('app','Open Format Files extraction for');?>:</h3>
+    <p><?= Yii::t('app','Busness ID No.');?>: <?= \app\helpers\Linet3Helper::getSetting('company.vat.id'); ?></p>
+    <p><?= Yii::t('app','Busness Name');?>: <?= \app\helpers\Linet3Helper::getSetting('company.name'); ?></p>
     <p>
-        <?php echo Yii::t('app','From Date');?>: <?php echo $model->from_date; ?> 
-        <?php echo Yii::t('app','To Date');?>: <?php echo $model->to_date; ?> 
+        <?= Yii::t('app','From Date');?>: <?= $model->from_date; ?> 
+        <?= Yii::t('app','To Date');?>: <?= $model->to_date; ?> 
     </p>
     <div style=" width: 40%;">
         <?php
 
-        $this->widget('EExcelView', array(
+        echo app\widgets\GridView::widget( array(
             'id'=>'profloss-grid',
             'dataProvider'=>$model->docsTable(),
-            'template' => '{items}{pager}',
-            //'filter'=>$model,
+            //'template' => '{items}{pager}',
+            ////'filter'=>$model,
             'columns'=>array(
                      array(
                         'header'=>Yii::t('app','ID'),
-                        'value'=>'$data["id"]',
+                        'attribute'=>'id',
                     ),
                 
                    array(
                         'header'=>Yii::t('app','Name'),
-                        'value'=>'$data["name"]',
+                        'attribute'=>'name',
                     ),
                 array(
                         'header'=>Yii::t('app','Count'),
-                        'value'=>'$data["count"]',
+                        'attribute'=>'count',
                     ),
                 array(
                         'header'=>Yii::t('app','Sum'),
-                        'value'=>'$data["sum"]',
+                        'attribute'=>'sum',
                     ),
 
             ),
@@ -90,8 +97,15 @@
     ?>
     </div>
 
-    <p><?php echo Yii::t('app','Data extracted through');?>: <?php echo Yii::app()->user->settings['system.name']; ?></p>
-    <p><?php echo Yii::t('app','Registration Certificate No.');?>: <?php echo Yii::app()->user->settings['system.auth']; ?></p>
-    <p><?php echo Yii::t('app','Extraction date and time');?>: <?php echo date(Yii::app()->locale->getDateFormat('phpdatetime')) ?></p>
+    <p><?= Yii::t('app','Data extracted through');?>: Linet <?= \app\helpers\Linet3Helper::getVersion(); ?></p>
+    <p><?= Yii::t('app','Registration Certificate No.');?>: <?= \app\helpers\Linet3Helper::getSetting('system.auth'); ?></p>
+    <p><?= Yii::t('app','Extraction date and time');?>: <?php  echo Yii::$app->formatter->asDate(time(),(app\models\Docs::DATETIME_FORMAT)); ?></p>
     <br />
 </div>
+<?php
+app\widgets\MiniForm::end();
+
+$this->registerJs("var baseAddress='" . yii\helpers\BaseUrl::base() . "';" .
+        '$("#printThis").click(function (e) {e.preventDefault();window.print();});'
+        , \yii\web\View::POS_READY);
+?>

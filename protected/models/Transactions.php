@@ -1,8 +1,8 @@
 <?php
 
 /* * *********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -27,19 +27,24 @@
  * @property integer $owner_id
  * @property integer $linenum
  */
+namespace app\models;
+
+use Yii;
+use app\components\basicRecord;
+use yii\helpers\Html;
 class Transactions extends basicRecord {
 
-    const table = '{{transactions}}';
-
-    public $from_date;
-    public $to_date;
+    const table = '{{%transactions}}';
+    public $from_date;//no-need
+    public $to_date;//no-need
     public $Docs = NULL;
     public $refnum1_ids = '';
+    //public $refnum2='';
     public $maxNum;
     
 
 
-    public function addSingleLine($account_id,$sum){
+    public function addSingleLine($account_id,$sum,$valuedate=null){
 
         $round = new Transactions();
         $round->num = $this->num;
@@ -48,6 +53,9 @@ class Transactions extends basicRecord {
         $round->refnum1 = $this->refnum1;
         $round->refnum2 = $this->refnum2;
         $round->valuedate = $this->valuedate;
+        if($valuedate!=null){
+            $round->valuedate = $valuedate;
+        }
         $round->details = $this->details;
         $round->currency_id = $this->currency_id;
         $round->sum = $sum;
@@ -61,64 +69,22 @@ class Transactions extends basicRecord {
     }
     
     
-    public function addDoubleLine($account_id,$oppt_account_id,$sum) {
-
-        
-        $round = new Transactions();
-        $round->num = $this->num;
-        $round->account_id = $account_id;
-        $round->type = $this->type;
-        $round->refnum1 = $this->refnum1;
-        $round->refnum2 = $this->refnum2;
-        $round->valuedate = $this->valuedate;
-        $round->details = $this->details;
-        $round->currency_id = $this->currency_id;
-        $round->sum = $sum;
-        $round->owner_id = $this->owner_id;
-        $round->linenum = $this->linenum;
-        $this->linenum++;
-        $this->num = $round->save();
-
-        $round = new Transactions();
-        $round->num = $this->num;
-        $round->account_id = $oppt_account_id;
-        $round->type = $this->type;
-        $round->refnum1 = $this->refnum1;
-        $round->refnum2 = $this->refnum2;
-        $round->valuedate = $this->valuedate;
-        $round->details = $this->details;
-        $round->currency_id = $this->currency_id;
-        $round->sum = $sum * -1;
-        $round->owner_id = $this->owner_id;
-        $round->linenum = $this->linenum;
-        $this->linenum++;
-        $this->num = $round->save();
-        
-        return $this;
+    public function addDoubleLine($account_id,$oppt_account_id,$sum,$valuedate=null) {
+        return $this->addSingleLine($oppt_account_id,$sum*-1,$valuedate)->addSingleLine($account_id,$sum,$valuedate);
     }
 
     public function getRef() {
         return array(); //
     }
 
-    /**
-     * Returns the static model of the specified AR class.
-     * @param string $className active record class name.
-     * @return Transactions the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
+
 
     ///*
     public function openfrmt($line) {
         $trans = '';
 
         //get all fields (b110) sort by id
-        $criteria = new CDbCriteria;
-        $criteria->condition = "type_id = :type_id";
-        $criteria->params = array(':type_id' => "B100");
-        $fields = OpenFormat::model()->findAll($criteria);
+        $fields = OpenFormat::find()->where(['type_id'=>'B100'])->All();
 
         //loop strfgy
         foreach ($fields as $field) {
@@ -132,7 +98,7 @@ class Transactions extends basicRecord {
 
     public function numLink() {
 
-        return CHtml::link($this->num, Yii::app()->createAbsoluteUrl("/transaction/view/$this->num"));
+        return Html::a($this->num,  yii\helpers\BaseUrl::base().("/transaction/view/$this->num"));
     }
 
     public function accountLink() {
@@ -140,9 +106,9 @@ class Transactions extends basicRecord {
 
 
 
-        //$account_id = Docs::model()->findByPk($this->account_id);
-        if ($this->Account !== null) {
-            $str.= CHtml::link(CHtml::encode($this->Account->name), Yii::app()->createAbsoluteUrl("/accounts/transaction/$this->account_id"));
+        //$account_id = Docs::findOne($this->account_id);
+        if ($this->account !== null) {
+            $str.= Html::a(Html::encode($this->account->name),  yii\helpers\BaseUrl::base().("/accounts/transaction/$this->account_id"));
         } else {
             $str.=$this->account_id;
         }
@@ -157,9 +123,9 @@ class Transactions extends basicRecord {
         $array = explode(",", $this->refnum1);
 
         foreach ($array as $docid) {
-            $doc = Docs::model()->findByPk($docid);
+            $doc = Docs::findOne($docid);
             if ($doc !== null) {
-                $str.= CHtml::link(CHtml::encode(Yii::t('app', $doc->docType->name) . " #" . $doc->docnum), Yii::app()->createAbsoluteUrl("/docs/view/$docid"));
+                $str.= Html::a(Html::encode(Yii::t('app', $doc->docType->name) . " #" . $doc->docnum), yii\helpers\BaseUrl::base().("/docs/view/$docid"));
             } else {
                 $str.=$docid;
             }
@@ -173,7 +139,7 @@ class Transactions extends basicRecord {
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -185,14 +151,8 @@ class Transactions extends basicRecord {
     }
 
     public function getBalance() {
-        $criteria = new CDbCriteria;
-        $criteria->condition = "num <= :num";
-        $criteria->addCondition("account_id=:account_id");
-        $criteria->params = array(
-            ':num' => $this->num,
-            ':account_id' => $this->account_id,
-        );
-        $models = Transactions::model()->findAll($criteria);
+       
+        $models = Transactions::find()->where("num <= :num AND account_id=:account_id",[':num' => $this->num,':account_id'=>$this->account_id])->All();
         $balance = 0;
         foreach ($models as $model) {
             $balance+=$model->sum;
@@ -212,7 +172,7 @@ class Transactions extends basicRecord {
         );
 
 
-        $models = Transactions::model()->findAll($criteria);
+        $models = Transactions::findAll($criteria);
         $retacc = 0;
         $maxsum = 0;
         foreach ($models as $model) {
@@ -238,7 +198,7 @@ class Transactions extends basicRecord {
 
     public function getOptAccName() {
         $id = $this->getOptAccId();
-        $model = Accounts::model()->findByPk($id);
+        $model = Accounts::findOne($id);
         if ($model === null)
             return $id;
         return $model->name;
@@ -246,32 +206,36 @@ class Transactions extends basicRecord {
 
     private function newNum() {
         if ($this->num == 0) {
-            //$model=Yii::app()->user->settings['company.transaction'];
-            $model = Settings::model()->findByPk('company.transaction');
-            $model->value = (int) $model->value + 1;
-            //Yii::app()->user->settings['company.transaction']=$model->value;
-            $model->save();
-            return (int) $model->value - 1; //adam: has to go
+            
+            
+            //$model=Yii::$app->user->settings['company.transaction'];
+            $transaction=\app\helpers\Linet3Helper::getSetting('company.transaction');
+            \app\helpers\Linet3Helper::setSetting('company.transaction',$transaction+1);
+            
+            //$model = Settings::findOne('company.transaction');
+            //$model->value = (int) $model->value + 1;
+            //Yii::$app->user->settings['company.transaction']=$model->value;
+            //$model->save();
+            return (int) $transaction; //adam: has to go
         } else {
             return (int) $this->num;
         }
     }
 
     public static function getMax() {
-        $model = new Transactions;
-        $criteria = new CDbCriteria;
-        $criteria->select = 'max(num) AS maxNum';
-        $row = $model->model()->find($criteria);
-        return $row['maxNum'];
+        $num = Transactions::find()->select('max(num)')->scalar();
+        
+        return $num;
     }
 
-    public function beforeSave() {
+    public function beforeSave($insert) {
         $this->num = $this->newNum();
         if ($this->reg_date == null)
             $this->reg_date = date("Y-m-d H:i:s");
 
-        $cur = Yii::app()->user->settings['company.cur'];
-        $acc = Accounts::model()->findByPk($this->account_id);
+        
+        $cur =    \app\helpers\Linet3Helper::getSetting('company.cur');
+        $acc = Accounts::findOne($this->account_id);
         if ($acc === null) {
             $acccur = $this->currency_id;
         } else {
@@ -292,7 +256,7 @@ class Transactions extends basicRecord {
         if ($cur == $this->currency_id) {
             $this->leadsum = $this->sum;
         } else {
-            $rate = Currates::model()->GetRate($this->currency_id);
+            $rate = Currates::GetRate($this->currency_id,$this->valuedate);
             $this->leadsum = $this->sum * $rate;
         }
 
@@ -301,23 +265,24 @@ class Transactions extends basicRecord {
         if (!isset($this->sum)) {//adam need to dubl chk
             if ($this->currency_id != $acccur) {
                 $this->currency_id = $acccur;
-                $rate = Currates::model()->GetRate($acccur);
+                $rate = Currates::GetRate($acccur,$this->valuedate);
                 if ($rate == 0) {
-                    throw new CHttpException(404, Yii::t('app', 'The rate for') . $this->currency_id . Yii::t('app', 'is invalid'));
+                    throw new \Exception(Yii::t('app', 'The rate for') . $this->currency_id . Yii::t('app', 'is invalid'));
                 }
                 $this->sum = $this->leadsum / $rate;
             }
         }
 
         //secsum
-        $seccur = Yii::app()->user->settings['company.seccur'];
+        $seccur =    \app\helpers\Linet3Helper::getSetting('company.seccur');
+        //$seccur = Yii::$app->user->settings['company.seccur'];
         if ($seccur != '') {
             if ($seccur == $this->currency_id)
                 $this->secsum = $this->sum;
             else {
-                $rate = Currates::model()->GetRate($this->currency_id);
+                $rate = Currates::GetRate($this->currency_id,$this->valuedate);
                 if ($rate == 0) {
-                    throw new CHttpException(404, Yii::t('app', 'The sec rate for') . $seccur . $this->currency_id . Yii::t('app', 'is invalid'));
+                    throw new \Exception(Yii::t('app', 'The sec rate for') . $seccur . $this->currency_id . Yii::t('app', 'is invalid'));
                 }
                 $this->secsum = $this->leadsum / $rate;
             }
@@ -329,6 +294,9 @@ class Transactions extends basicRecord {
     public function save($runValidation = false, $attributes = NULL) {
 
         parent::save($runValidation, $attributes);
+        
+        if($this->refnum2===null)
+            $this->refnum2='';
         return $this->num;
     }
 
@@ -339,14 +307,13 @@ class Transactions extends basicRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('num, account_id, valuedate, currency_id, sum, owner_id, linenum', 'required'),
-            array('num, account_id, owner_id, linenum', 'numerical', 'integerOnly' => true),
-            array('refnum1, refnum2, details', 'length', 'max' => 255),
-            array('sum, leadsum', 'length', 'max' => 20),
-            array('due_date, reg_date, refnum1_ids', 'safe'),
+            array(['num', 'account_id', 'valuedate', 'currency_id', 'sum', 'owner_id', 'linenum'], 'required','on'=>'default'),
+            array(['num', 'account_id', 'owner_id', 'linenum'], 'number', 'integerOnly' => true),
+            array(['refnum1', 'refnum2', 'details'], 'string', 'max' => 255),
+            array(['valuedate', 'reg_date', 'refnum1_ids'], 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('type, from_date, to_date, id, num, account_id, type, refnum1, refnum2, valuedate, date, details, currency_id, sum, leadsum, owner_id, linenum', 'safe', 'on' => 'search'),
+            array(['type', 'from_date', 'to_date', 'id', 'num', 'account_id', 'type', 'refnum1', 'refnum2', 'valuedate', 'reg_date', 'details', 'currency_id', 'sum', 'leadsum', 'owner_id', 'linenum'], 'safe', 'on' => 'search'),
         );
     }
 
@@ -363,47 +330,55 @@ class Transactions extends basicRecord {
             'Owner' => array(self::BELONGS_TO, 'Users', 'owner_id'),
         );
     }
-
+    
+    
+    public function getTtype(){
+        return $this->hasOne(TransactionType::className(), array('id' => 'type'));
+    }
+    
+     public function getAccount(){
+        return $this->hasOne(Accounts::className(), array('id' => 'account_id'));
+    }
     /**
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels() {
         return array(
-            'id' => Yii::t('labels', 'ID'),
-            'num' => Yii::t('labels', 'Num'),
-            'account_id' => Yii::t('labels', 'Account'),
-            'type' => Yii::t('labels', 'Type'),
-            'refnum1' => Yii::t('labels', 'Refnum 1'),
-            'refnum2' => Yii::t('labels', 'Refnum 2'),
-            'valuedate' => Yii::t('labels', 'Issue Date'),
-            //'due_date' => Yii::t('labels', 'Due Date'),
-            'reg_date' => Yii::t('labels', 'Create Date'),
-            'details' => Yii::t('labels', 'Details'),
-            'currency_id' => Yii::t('labels', 'Currency'),
-            'sum' => Yii::t('labels', 'Sum'),
-            'leadsum' => Yii::t('labels', 'Lead Sum'),
-            'owner_id' => Yii::t('labels', 'Owner'),
-            'linenum' => Yii::t('labels', 'Line No.'),
-            'type' => Yii::t('labels', 'Type'),
+            'id' => Yii::t('app', 'ID'),
+            'num' => Yii::t('app', 'Num'),
+            'account_id' => Yii::t('app', 'Account'),
+            'type' => Yii::t('app', 'Type'),
+            'refnum1' => Yii::t('app', 'Refnum 1'),
+            'refnum2' => Yii::t('app', 'Refnum 2'),
+            'valuedate' => Yii::t('app', 'Value Date'),
+            //'due_date' => Yii::t('app', 'Due Date'),
+            'reg_date' => Yii::t('app', 'Create Date'),
+            'details' => Yii::t('app', 'Details'),
+            'currency_id' => Yii::t('app', 'Currency'),
+            'sum' => Yii::t('app', 'Sum'),
+            'leadsum' => Yii::t('app', 'Lead Sum'),
+            'owner_id' => Yii::t('app', 'Owner'),
+            'linenum' => Yii::t('app', 'Line No.'),
+            'type' => Yii::t('app', 'Type'),
         );
     }
 
     public function searchIn() {
         //account_id,intCorrelation!=0,sum<0
-        $cDataProvider = $this->search();
+        $cDataProvider = $this->search([]);
 
-        $cDataProvider->criteria->addCondition("sum>0");
-        $cDataProvider->criteria->addCondition("intCorrelation=0");
+        $cDataProvider->query->andFilterWhere(['>',"sum",0]);
+        $cDataProvider->query->andFilterWhere(["intCorrelation"=>0]);
 
         return $cDataProvider;
     }
 
     public function searchOut() {
         //account_id,intCorrelation!=0,sum<0
-        $cDataProvider = $this->search();
+        $cDataProvider = $this->search([]);
 
-        $cDataProvider->criteria->addCondition("sum<0");
-        $cDataProvider->criteria->addCondition("intCorrelation=0");
+        $cDataProvider->query->andFilterWhere(['<',"sum",0]);
+        $cDataProvider->query->andFilterWhere(["intCorrelation"=>0]);
 
         return $cDataProvider;
     }
@@ -412,7 +387,7 @@ class Transactions extends basicRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search() {
+    public function search1($params) {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
 
@@ -435,9 +410,9 @@ class Transactions extends basicRecord {
         $criteria->compare('owner_id', $this->owner_id);
         $criteria->compare('linenum', $this->linenum);
 
-        //$yiidatetime=Yii::app()->locale->getDateFormat('yiidatetime');
-        $yiidate = Yii::app()->locale->getDateFormat('yiishort');
-        $phpdbdatetime = Yii::app()->locale->getDateFormat('phpdbdatetime');
+        //$yiidatetime=Yii::$app->locale->getDateFormat('yiidatetime');
+        $yiidate = Yii::$app->locale->getDateFormat('yiishort');
+        $phpdbdatetime = Yii::$app->locale->getDateFormat('phpdbdatetime');
 
         if (!empty($this->from_date) && empty($this->to_date)) {
             $date_from = date($phpdbdatetime, CDateTimeParser::parse($this->from_date, $yiidate));
@@ -461,7 +436,7 @@ class Transactions extends basicRecord {
             $criteria->params[':date_to'] = $date_to;
         }
 
-        //Yii::app()->end();
+        //Yii::$app->end();
         $sort = new CSort();
         $sort->defaultOrder = 'num DESC';
         return new CActiveDataProvider($this, array(
@@ -471,4 +446,81 @@ class Transactions extends basicRecord {
         ));
     }
 
+    
+    public function search($params)
+    {
+        $query = Transactions::find();
+
+        $dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => $query,
+            "sort"=> ['defaultOrder' => [
+                'num'=>SORT_DESC,
+                ]]
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            var_dump($this->errors);
+        //    return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'num' => $this->num,
+            'account_id' => $this->account_id,
+            'type' => $this->type,
+            'refnum1' => $this->refnum1,
+            //'cat_id' => $this->cat_id,
+            //'pay_terms' => $this->pay_terms,
+            //'src_tax' => $this->src_tax,
+            //'src_date' => $this->src_date,
+            //'parent_account_id' => $this->parent_account_id,
+            //'system_acc' => $this->system_acc,
+            //'owner' => $this->owner,
+            //'modified' => $this->modified,
+            //'created' => $this->created,
+        ]);
+        
+        $query->andFilterWhere(['like', 'details', $this->details]);
+/*
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'contact', $this->contact])
+            ->andFilterWhere(['like', 'department', $this->department])
+            ->andFilterWhere(['like', 'vatnum', $this->vatnum])
+            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'phone', $this->phone])
+            ->andFilterWhere(['like', 'dir_phone', $this->dir_phone])
+            ->andFilterWhere(['like', 'cellular', $this->cellular])
+            ->andFilterWhere(['like', 'fax', $this->fax])
+            ->andFilterWhere(['like', 'web', $this->web])
+            ->andFilterWhere(['like', 'address', $this->address])
+            ->andFilterWhere(['like', 'city', $this->city])
+            ->andFilterWhere(['like', 'zip', $this->zip])
+            ->andFilterWhere(['like', 'currency_id', $this->currency_id])
+            ->andFilterWhere(['like', 'comments', $this->comments]);
+*/
+        /*if (!empty($this->from_date) && empty($this->to_date)) {
+            $query->andFilterWhere(['>=', 'valuedate',  $this->from_date]);
+        } elseif (!empty($this->to_date) && empty($this->from_date)) {
+            $query->andFilterWhere(['>=', 'valuedate',  $this->to_date]);
+        } elseif (!empty($this->to_date) && !empty($this->from_date)) {
+            $query->andFilterWhere(['between', 'valuedate', $this->from_date, $this->to_date]);
+        }*/
+        
+        if(!is_null($this->valuedate)){
+            $tmp=  explode(" to ", $this->valuedate);
+            if(isset($tmp[0])&&isset($tmp[1]))        
+                $query->andFilterWhere(['between', 'valuedate', $tmp[0], $tmp[1]]);
+        }
+        
+        if(!is_null($this->reg_date)){
+            $tmp=  explode(" to ", $this->reg_date);
+            if(isset($tmp[0])&&isset($tmp[1]))        
+                $query->andFilterWhere(['between', 'reg_date', $tmp[0], $tmp[1]]);
+        }
+        
+        
+        return $dataProvider;
+    }
 }

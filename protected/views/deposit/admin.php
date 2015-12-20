@@ -1,171 +1,167 @@
 <?php
-$this->menu = array(
+
+use kartik\select2\Select2;
+use kartik\datecontrol\DateControl;
+use app\models\Accounts;
+
+$this->params["menu"] = array(
         //array('label'=>'List Doctype', 'url'=>array('index')),
         //array('label'=>'Create Doctype', 'url'=>array('create')),
 );
 
 
-$this->beginWidget('MiniForm', array(
+app\widgets\MiniForm::begin(array(
     'header' => Yii::t('app', "Create deposit"),
 ));
 ?>
 
 <?php
-$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-    'id' => 'deposit-form',
-    'enableAjaxValidation' => true,
-    'clientOptions' => array(
-        'validateOnSubmit' => true,
-    ),
-        )
+$form = kartik\form\ActiveForm::begin(array(
+            'id' => 'deposit-form',
+            'enableAjaxValidation' => true,
+                )
 );
 
-$temp = CHtml::listData(Accounts::model()->findAllByType(7), 'id', 'name');
+$temp = \yii\helpers\ArrayHelper::map(Accounts::findAllByType(7), 'id', 'name');
 $temp[''] = Yii::t('app', 'Choose Bank');
 //$model->account_id = 0;
 ?>
-<div class='col-md-3'>
-
-    <?php
-    echo $form->dropDownListRow($model, "account_id", $temp, array('class' => ''));
 
 
-    //echo $form->labelEx($model, 'refnum');
-    echo $form->textFieldRow($model, 'refnum', array('size' => 60, 'maxlength' => 100));
-    //echo $form->error($model, 'refnum');
-
-
-    echo $form->labelEx($model, 'date');
-    $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-        'name' => 'FormDeposit[date]',
-        'language' => substr(Yii::app()->language, 0, 2),
-        'value' => $model->date,
-        'defaultOptions' => array(// (#3)
-            'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-        )
-            )
-    );
-    echo $form->error($model, 'date');
-    ?>
-</div>
-<div id ="result">
-
-    <?php
-    $this->widget('EExcelView', array(
-        'id' => 'depsoit-grid',
-        'dataProvider' => $cheques->depositSearch(),
-        'columns' => array(
-            array(
-                'type' => 'raw',
-                'value' => 'CHtml::checkBox("FormDeposit[Deposit][$data->doc_id,$data->line]",null,array("class"=>\'noPrint\', "onchange"=>"CalcSum()"))',
-            ),
-            array(
-                'type' => 'raw',
-                'value' => 'CHtml::hiddenField("FormDeposit[Total][$data->doc_id,$data->line]","$data->sum").CHtml::hiddenField("FormDeposit[Type][$data->doc_id,$data->line]","$data->type")',
-            ),
-            array(
-                'name' => 'type',
-                'type' => 'raw',
-                'value' => 'Yii::t("app",$data->Type->name)',
-            ),
-            array(
-                'name' => 'Details',
-                'header' => Yii::t('labels', 'Details'),
-                'value' => '$data->printDetails()',
-            ),
-            //'bank_refnum',
-            //'bank',
-            //'branch',
-            //'cheque_acct',
-            //'cheque_num',
-            //'cheque_date',
-            //'dep_date',
-            //'account_id',
-            'currency_id',
-            //'refnum',
-            'sum',
-            //'total',
-            array(
-                'class' => 'bootstrap.widgets.TbButtonColumn',
-            ),
-        ),
-    ));
-    ?>
-
-</div>
-<div id="sum">
-</div>
 <div class='row'>
     <div class='col-md-3'>
-        <?php echo $form->textFieldRow($model, 'cheq_sum', array('maxlength' => 100)); ?>
-        <?php echo $form->textFieldRow($model, 'cash_sum', array('maxlength' => 100)); ?>    
+
+        <?= $form->field($model, "account_id")->widget(Select2::className(), ['data' => $temp]); ?>
+        <?= $form->field($model, 'refnum'); ?>
+        <?= $form->field($model, 'date')->widget(DateControl::classname(), ['type' => 'date']); ?>
+
+    </div>
+    <div class='col-md-3'>
+        <?= $form->field($model, 'cheq_sum')->textInput([ 'readonly' => true,]); ?>
+        <?= $form->field($model, 'cash_sum')->textInput([ 'readonly' => true,]); ?>    
+    </div>
+    <div class='col-md-3'>
+        <?= $form->field($model, 'cheq_count')->textInput([ 'readonly' => true,]); ?>
+        <?= $form->field($model, 'cash_count')->textInput([ 'readonly' => true,]); ?>    
     </div>
 </div>
 
 <div class="form-actions">
-    <?php
-    $this->widget('bootstrap.widgets.TbButton', array(
-        'buttonType' => 'submit',
-        'type' => 'primary',
-        'label' => Yii::t('actions', "Deposit"),
-    ));
-    ?>
-</div>
-<?php
-$this->endWidget();
-$this->endWidget();
-?>
+<?= \yii\helpers\Html::submitButton(Yii::t('app', 'Deposit'), ['class' => 'btn btn-success']) ?>
+
+
+    <div id ="result">
+
+        <?php
+        //echo app\widgets\GridView::widget( array(
+        echo yii\grid\GridView::widget(array(
+            'id' => 'depsoit-grid',
+            'dataProvider' => $cheques->depositSearch(),
+            'columns' => array(
+                array(
+                    //'type' => 'raw',
+                    'value' => function ($data) {
+                        return \yii\helpers\Html::checkBox("FormDeposit[Deposit][$data->doc_id,$data->line]", false, ['id' => 'FormDeposit_Deposit-' . $data->doc_id . "_" . $data->line]) .
+                                \yii\helpers\Html::hiddenInput("FormDeposit[Total][$data->doc_id,$data->line]", "$data->sum", ['id' => 'FormDeposit_Total-' . $data->doc_id . "_" . $data->line]) .
+                                \yii\helpers\Html::hiddenInput("FormDeposit[Type][$data->doc_id,$data->line]", "$data->type", ['id' => 'FormDeposit_Type-' . $data->doc_id . "_" . $data->line]);
+                    },
+                            'filter' => '',
+                            'format' => 'raw',
+                        ),
+                        //array(
+                        //'type' => 'raw',
+                        //'value' => '',
+                        //),
+                        array(
+                            'attribute' => 'type',
+                            //'type' => 'raw',
+                            'value' => function($data) {
+                                return Yii::t("app", $data->typeo->name);
+                            },
+                        ),
+                        array(
+                            //'attribute' => 'Details',
+                            //'header' => Yii::t('app', 'Details'),
+                            'value' => function($data) {
+                                return $data->printDetails();
+                            },
+                        ),
+                        //'bank_refnum',
+                        //'bank',
+                        //'branch',
+                        //'cheque_acct',
+                        //'cheque_num',
+                        //'cheque_date',
+                        //'dep_date',
+                        //'account_id',
+                        'currency_id',
+                        //'refnum',
+                        'sum',
+                        //'total',
+                        array(
+                            'class' => 'yii\grid\ActionColumn',
+                        ),
+                    ),
+                ));
+                ?>
+
+            </div>
+            <div id="sum">
+            </div>
+        </div>
+        <?php
+        kartik\form\ActiveForm::end();
+        ?>
+
+        <?php
+        app\widgets\MiniForm::end();
+
+
+        $this->registerJs("var baseAddress='" . yii\helpers\BaseUrl::base() . "';" .
+                '$(document).on("click","input",function () {CalcSum();});'
+                , \yii\web\View::POS_READY);
+        ?>
 
 <script type="text/javascript">
-    /*
-    jQuery(document).ready(function() {
-        $("#FormDeposit_account_id").change(function() {
-            var value = $("#FormDeposit_account_id").val();
 
-            $.post("<?php echo $this->createUrl('/deposit/ajax'); ?>", {Deposit: {account_id: value}}).done(
-                    function(data)
-                    {
-                        $("#result").html(data);
-                    }
-
-            );
-        });
-
-
-
-    });
-    //*/
 
     function CalcSum() {
-        var vals = $("[id^=FormDeposit_Deposit]");
-        var total = $("[id^=FormDeposit_Total]");
-        var types = $("[id^=FormDeposit_Type]");
+        var vals = $("[id^=FormDeposit_Deposit-]");
+        //var total = $("[id^=FormDeposit_Total]");
+        //var types = $("[id^=FormDeposit_Type]");
         size = vals.length;
         //console.log("Length: " + size);
         cashsum = chqsum = sum = parseFloat("0.0");
-
+        cashcount =chqcount=0;
         if (size) {
-            for (x in vals) {
+            vals.each(function (index) {
+                //for (x in vals) {
+
                 //console.log("value: " + x + vals[x].checked);
-                if (vals[x].checked) {
+                if (this.checked) {
 
 
-                    if ($(types[x]).val() == 1) {
-                        cashsum += parseFloat(total[x].value);
-
+                    var total = $(this).next();
+                    var types = $(this).next().next();
+                    if ($(types).val() == 1) {
+                        cashsum += parseFloat($(total).val());
+                        cashcount++;
                     } else {
 
                         //console.log("value: " + total[x].value);
-                        chqsum += parseFloat(total[x].value);
-
+                        chqsum += parseFloat($(total).val());
+                        chqcount++;
                     }
                 }
-            }
+            });
         }
 
-        //console.log("sum: " + sum);
-        $("#FormDeposit_cash_sum").val(cashsum);
-        $("#FormDeposit_cheq_sum").val(chqsum);
+        console.log("sum: " + cashsum);
+        console.log("sum: " + chqsum);
+        $("#formdeposit-cash_sum").val(cashsum);
+        $("#formdeposit-cheq_sum").val(chqsum);
+        $("#formdeposit-cheq_count").val(chqcount);
+        $("#formdeposit-cash_count").val(cashcount);
     }
 
 

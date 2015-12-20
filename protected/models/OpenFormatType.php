@@ -1,35 +1,32 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
+
+namespace app\models;
+
+use Yii;
+use app\components\mainRecord;
 class OpenFormatType extends mainRecord{
          const table='openformattype';
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return Fields the static model class
-	 */
-	public static function model($className=__CLASS__){
-		return parent::model($className);
-	}
 
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName() {
+	public static function tableName() {
             return self::table;
         }
-        public function primaryKey(){
-	    return array('id','type');
+        public static function primaryKey(){
+	    return ['id','type'];
 	}
         
-        public function getDesc($id){
-             $tmp=$this->findByPk(array('id'=>$id,'type'=>'INI'));
+        public static function getDesc($id){
+             $tmp=OpenFormatType::find()->where(array('id'=>$id,'type'=>'INI'))->one();
              if($tmp)
                  return $tmp->description;
              else
@@ -42,13 +39,11 @@ class OpenFormatType extends mainRecord{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, description, type', 'required'),
-			array('id', 'length', 'max'=>30),
-			array('type', 'length', 'max'=>4),
-			array('description', 'length', 'max'=>255),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, description, type', 'safe', 'on'=>'search'),
+			array(['id', 'description', 'type'], 'required'),
+			array(['id'], 'string', 'max'=>30),
+			array(['type'], 'string', 'max'=>4),
+			array(['description'], 'string', 'max'=>255),
+			array(['id', 'description', 'type'], 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -78,11 +73,11 @@ class OpenFormatType extends mainRecord{
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
-	public function search(){
+	public function search($params){
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
 
-		$criteria=new CDbCriteria;
+		$query = Accounts::find();          $dataProvider = new ActiveDataProvider([             'query' => $query,         ]);          $this->load($params);          if (!$this->validate()) {                                     return $dataProvider;         }
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('description',$this->desc,true);

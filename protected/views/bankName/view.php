@@ -1,10 +1,10 @@
 <?php
-$this->breadcrumbs=array(
+$this->params["breadcrumbs"]=array(
 	'Bank Names'=>array('index'),
 	$model->name,
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>'List BankName','url'=>array('index')),
 	array('label'=>'Create BankName','url'=>array('create')),
 	array('label'=>'Update BankName','url'=>array('update','id'=>$model->id)),
@@ -15,8 +15,8 @@ $this->menu=array(
 
 <h1>View BankName #<?php echo $model->id; ?></h1>
 
-<?php $this->widget('bootstrap.widgets.TbDetailView',array(
-	'data'=>$model,
+<?= kartik\detail\DetailView::widget(array(
+	'model'=>$model,
 	'attributes'=>array(
 		'id',
 		'name',

@@ -1,8 +1,8 @@
 <?php
 
 /* * *********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -16,27 +16,32 @@
  * @property string $id
  * @property string $value
  */
+namespace app\models;
+
+use Yii;
+use app\components\basicRecord;
+use app\helpers\Linet3Helper;
 class Settings extends basicRecord {
 
-    const table = '{{config}}';
+    const table = '{{%config}}';
 
-    public static function Tmvalidate($attr) {
+    public function Tmvalidate($attr) {
         //print_r($attr);
         foreach ($attr as $key => $value) {
             if (($key == 'company.name') && ($value['value'] == '')) {
                 //echo 'bla';
-                Settings::model()->addError('company.name', 'Field "company.name" is invalid...');
+                Settings::addError('company.name', 'Field "company.name" is invalid...');
             }
 
             if ($key == 'company.vat.id') {
                 if ($value['value'] == '') {
-                    Settings::model()->addError('company.vat.id', Yii::t('app', 'Not a valid VAT id'));
+                    Settings::addError('company.vat.id', Yii::t('app', 'Not a valid VAT id'));
                 }
-                Settings::model()->vatnumVal($key, $value['value']);
+                Settings::vatnumVal($key, $value['value']);
             }
         }
 
-        echo CJSON::encode(Settings::model()->getErrors());
+        echo \yii\helpers\Json::encode(Settings::getErrors());
         //return parent::validate($attr);
     }
 
@@ -56,19 +61,21 @@ class Settings extends basicRecord {
         }else if ($this->eavType == 'file') {
 
 
-            $configPath = Yii::app()->user->getSetting("company.path");
+            $configPath = Linet3Helper::getSetting("company.path");
 
 
 
-            $a = CUploadedFile::getInstanceByName('Settings[' . $this->id . '][value]');
+            $a = \yii\web\UploadedFile::getInstanceByName('Settings[' . $this->id . '][value]');
+            //var_dump($a);
+            //exit;
             if ($a) {
-                //exit;
+                
                 $this->value = $a;
-                $ext = $this->value->extensionName;
+                $ext = $this->value->extension;
 
                 //$fileName = $yiiBasepath."/files/".$configPath."/settings/".$this->id.".".$ext; 
                 //echo $this->id.get_class($this);
-                $logo = new Files();
+                $logo = new \app\models\Files();
                 $logo->name = $this->id . "." . $ext; //it might be $img_add->name for you, filename is just what I chose to call it in my model
                 $logo->path = "settings/";
                 $logo->parent_type = get_class($this);
@@ -76,30 +83,31 @@ class Settings extends basicRecord {
                 $logo->public = true;
                 $id = $logo->save(); // DONE
                 //echo $logo->id;
-                //Yii::app()->end();
+                //Yii::$app->end();
                 if ($this->value->saveAs($logo->getFullFilePath())) {
                     $this->value = $logo->hash; //"/files/".$configPath."/settings/".$this->id.".".$ext;
                 }
 
 
-                //Yii::app()->end();
+                //Yii::$app->end();
             }
         }
         return parent::save($runValidation, $attributes);
     }
 
-    public function a000($line, $id, $count) {
+    public function getVersion(){
+        return \app\helpers\Linet3Helper::getVersion();
+    }
+            
+    public function a000($line, $id, $count,$begin,$end) {
         $rec = '';
 
-        //get all fields (b110) sort by id
-        $criteria = new CDbCriteria;
-        $criteria->condition = "type_id = :type_id";
-        $criteria->params = array(':type_id' => "A000");
-        $fields = OpenFormat::model()->findAll($criteria);
+        //get all fields (a000) sort by id
+        $fields = OpenFormat::find()->where(['type_id' => "A000"])->all();
 
         //loop strfgy
         foreach ($fields as $field) {
-            //$rec.=basicRecord::model()->openfrmtFieldStr($field,$line);
+            //$rec.=basicRecord::openfrmtFieldStr($field,$line);
             if ($field->id == 1004) {
                 $rec.=sprintf("%015d", $id);
                 continue;
@@ -108,29 +116,26 @@ class Settings extends basicRecord {
                 $rec.=sprintf("%015d", $count);
                 continue;
             }
-            $rec.=$this->openfrmtFieldStr($field, $line);
+            $rec.=$this->openfrmtFieldStr($field, $line,$begin,$end);
         }
         return $rec . "\r\n";
     }
 
-    public function a100($line, $id) {
+    public function a100($line, $id,$begin,$end) {
         $rec = '';
 
         //get all fields (b110) sort by id
-        $criteria = new CDbCriteria;
-        $criteria->condition = "type_id = :type_id";
-        $criteria->params = array(':type_id' => "A100");
-        $fields = OpenFormat::model()->findAll($criteria);
+        $fields = OpenFormat::find()->where(['type_id' => "A100"])->all();
 
         //loop strfgy
         foreach ($fields as $field) {
-            //$rec.=basicRecord::model()->openfrmtFieldStr($field,$line);
+            //$rec.=basicRecord::openfrmtFieldStr($field,$line);
             if ($field->id == 1103) {
                 $rec.=sprintf("%015d", $id);
                 continue;
             }
 
-            $rec.=$this->openfrmtFieldStr($field, $line);
+            $rec.=$this->openfrmtFieldStr($field, $line,$begin,$end);
         }
         return $rec . "\r\n";
     }
@@ -138,11 +143,8 @@ class Settings extends basicRecord {
     public function z900($line, $id, $count) {
         $rec = '';
 
-        //get all fields (b110) sort by id
-        $criteria = new CDbCriteria;
-        $criteria->condition = "type_id = :type_id";
-        $criteria->params = array(':type_id' => "Z900");
-        $fields = OpenFormat::model()->findAll($criteria);
+        //get all fields (z900) sort by id
+        $fields = OpenFormat::find()->where(['type_id' => "Z900"])->all();
 
         //loop strfgy
         foreach ($fields as $field) {
@@ -159,23 +161,15 @@ class Settings extends basicRecord {
         return $rec . "\r\n";
     }
 
-    public function primaryKey() {
-        return 'id';
+    public static function primaryKey() {
+        return ['id'];
     }
 
-    /**
-     * Returns the static model of the specified AR class.
-     * @param string $className active record class name.
-     * @return Config the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
 
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -186,12 +180,12 @@ class Settings extends basicRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('id', 'required'),
-            array('id', 'length', 'max' => 255),
+            array(['id'], 'required'),
+            array(['id'], 'string', 'max' => 255),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('value', 'safe'),
-            array('id, value', 'safe', 'on' => 'search'),
+            array(['value'], 'safe'),
+            array(['id', 'value'], 'safe', 'on' => 'search'),
         );
     }
 
@@ -210,8 +204,8 @@ class Settings extends basicRecord {
      */
     public function attributeLabels() {
         return array(
-            'id' => Yii::t('labels', 'ID'),
-            'value' => Yii::t('labels', 'Value'),
+            'id' => Yii::t('app', 'ID'),
+            'value' => Yii::t('app', 'Value'),
         );
     }
 
@@ -219,7 +213,7 @@ class Settings extends basicRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search() {
+    public function search($params) {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
 

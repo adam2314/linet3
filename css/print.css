@@ -1,0 +1,162 @@
+/***********************************************************************************
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3.0
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3.0
+ * The Original Code is:  Linet 3.0 Open Source
+ * The Initial Developer of the Original Code is Adam Ben Hur.
+ * All portions are Copyright (C) Adam Ben Hur.
+ * All Rights Reserved.
+ ************************************************************************************/
+body {
+
+    width: 100%;
+    line-height:1.5;
+    font-family: "Alef Hebrew",“Helvetica Neue”,Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    color:#000;background:none;
+
+}
+.container {background:none;}
+hr {background:#ccc;color:#ccc;width:100%;}
+hr.space {background:#fff;color:#fff;visibility:hidden;}
+h1, h2, h3, h4, h5, h6 {font-family:"Helvetica Neue", Arial, "Lucida Grande", sans-serif;}
+code {font:.9em "Courier New", Monaco, Courier, monospace;}
+a img {border:none;}
+p img.top {margin-top:0;}
+blockquote {margin:1.5em;padding:1em;font-style:italic;font-size:.9em;}
+.small {font-size:.9em;}
+.large {font-size:1.1em;}
+.quiet {color:#999;}
+.hide {display:none;}
+
+
+.body{
+    padding-right: 20px;
+}
+
+
+
+.docHead{
+    width:100%;
+    
+    
+}
+.fromBox{
+    width:200px;
+    float: left;
+
+}
+.logo{
+    float:right;
+    max-width: 500px;
+    max-height:200px;
+
+}
+.lineHR{
+    float: left;
+    border: 1px solid #b1b1b1;
+}
+.toBox{
+    width:200px;
+    float:left;
+
+}
+.toDate{
+    width:200px;
+    float:right;
+}
+
+.printtbl {
+    margin-top: 20px;
+    float:left;
+    width:100%;
+    
+}
+.bold{
+    
+    font-weight: bolder;
+}
+/*
+.printtbl thead tr th:last-child{border-radius:15px 0px 0px 0px;}
+.printtbl thead tr th:first-child{border-radius:0px 15px 0px 0px;}
+
+/*.printtbl{border-collapse:separate}*/
+
+.printtbl thead tr th{
+    border-top: 2px solid black;
+    border-bottom:  2px solid black;
+    padding: 2px;
+    /*padding:5px;*/
+}
+.newLine td,
+
+.printtbl tfoot tr td{
+    padding: 2px;
+    border-bottom: 1px solid #b1b1b1;
+
+}
+
+.printtbl tfoot tr td.clear{
+    border:none;
+}
+.legalize{
+    float: left;
+    text-align: center;
+    width: 100%;
+} 
+.docTitle{
+    float: left;
+    text-align: center;
+    width: 100%;
+
+
+}
+.comments{
+    float: left;
+
+}
+
+table{
+    width:100%;
+    display: table;
+    
+    border-collapse:collapse;
+}
+
+
+
+.printme{
+    /*background-color:#6077DB;
+   border-radius: 0 0 15px 15px;
+   padding: 4px 10px 10px;*/
+    left: 50%;
+    position: fixed;
+    text-align: center;
+    top: 0;
+}
+
+
+/*,.Description*/
+.line,.Itemid { display: none; }
+.Currency,.VAT,.Line,.Type{
+    width:50px;
+
+}
+.Details{
+    width:67%
+}
+.Name{
+    width:50%
+}
+
+@media(print){
+    #stamp{
+        /*display: none;*/
+    }
+
+}
+@media(screen){
+    #stamp{
+        display: none;
+    }
+
+}

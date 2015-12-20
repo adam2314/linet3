@@ -1,8 +1,8 @@
 <?php
 
 /* * *********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -27,9 +27,14 @@
  * @property string $dep_date
  * @property integer $id
  */
+
+namespace app\models;
+
+use Yii;
+use app\components\basicRecord;
 class Doccheques extends basicRecord {
 
-    const table = '{{docCheques}}';
+    const table = '{{%docCheques}}';
 
     //private $dateDBformat = true;
 
@@ -37,27 +42,23 @@ class Doccheques extends basicRecord {
      * for open format export 
      */
 
-    public function getType() {
-        return isset($this->Doc) ? $this->Doc->getType() : "";
+    public function OpenfrmtType() {
+        return isset($this->doc) ? $this->doc->OpenfrmtType() : "";
     }
 
     public function getNum() {
-        return isset($this->Doc) ? $this->Doc->docnum : "";
+        return isset($this->doc) ? $this->doc->docnum : "";
     }
 
     public function getDate() {
-        return isset($this->Doc) ? $this->Doc->issue_date : "";
+        return isset($this->doc) ? $this->doc->issue_date : "";
     }
 
     public function openfrmt($line) {
         $rcps = '';
 
         //get all fields (D110) sort by id
-        $criteria = new CDbCriteria;
-        $criteria->condition = "type_id = :type_id";
-        $criteria->params = array(':type_id' => "D120");
-        $fields = OpenFormat::model()->findAll($criteria);
-
+        $fields = OpenFormat::find()->where(['type_id' => "D120"])->All();
         //loop strfgy
         foreach ($fields as $field) {
             $rcps.=$this->openfrmtFieldStr($field, $line);
@@ -66,7 +67,7 @@ class Doccheques extends basicRecord {
     }
 
     public function transaction($transaction, $action, $account_id) {
-        $model = PaymentType::model()->findByPk($this->type);
+        $model = PaymentType::findOne($this->type);
         $paymenet = new $model->value;
 
         $in = new Transactions();
@@ -79,7 +80,7 @@ class Doccheques extends basicRecord {
 
         $in->currency_id = $this->currency_id;
         $in->sum = $this->sum * $action;
-        $in->owner_id = Yii::app()->user->id;
+        $in->owner_id = $transaction->owner_id;
         $in->linenum = $transaction->linenum;
 
         $transaction->linenum++;
@@ -87,7 +88,7 @@ class Doccheques extends basicRecord {
         $out = new Transactions();
 
         //if($this->Type->oppt_account_id!=0)
-        $out->account_id = $this->Type->oppt_account_id;
+        $out->account_id = $this->typeo->oppt_account_id;
         $out->type = $transaction->type;
         $out->refnum1 = $transaction->refnum1;
         $out->valuedate = $transaction->valuedate;
@@ -95,7 +96,7 @@ class Doccheques extends basicRecord {
 
         $out->currency_id = $this->currency_id;
         $out->sum = $this->sum * $action * -1;
-        $out->owner_id = Yii::app()->user->id;
+        $out->owner_id = $transaction->owner_id;
         $out->linenum = $transaction->linenum;
 
         $transaction->linenum++;
@@ -103,15 +104,15 @@ class Doccheques extends basicRecord {
 
 
         if (method_exists($paymenet, "transaction")) {
-
             $paymenet->transaction($in, $out, $this);
         } else {
             
         }
 
-        $num = $in->save();
-        $out->num = $num;
-        $num = $out->save();
+        $transaction->num = $in->save();//in the case of recipet we did have a problem:/
+        $out->num = $transaction->num ;
+        $out->save();
+        
         return $transaction;
     }
 
@@ -120,20 +121,17 @@ class Doccheques extends basicRecord {
      * @param string $className active record class name.
      * @return Cheques the static model class
      */
-    public function primaryKey() {
+    public static function primaryKey() {
         return array('doc_id', 'line');
     }
 
 //*/
 
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
-
+   
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -142,17 +140,28 @@ class Doccheques extends basicRecord {
      */
     public function rules() {
         return array(
-            array('type, doc_id, line', 'numerical', 'integerOnly' => true),
-            array('sum', 'length', 'min' => 1),
-            //array('doc_id', 'length', 'max' => 10),
-            array('currency_id', 'length', 'max' => 3),
-            //array('cheque_acct, cheque_num, bank_refnum', 'length', 'max' => 20),
-            array('sum', 'length', 'max' => 8),
-            array('currency_id', 'safe'),
-            array('currency_id, doc_id, type, sum, line, bank_refnum', 'safe', 'on' => 'search'),
+            [['type', 'currency_id', 'sum','doc_id' , 'line'], 'required'],
+            array(['type', 'doc_id', 'line'], 'number', 'min' => 0),
+            array(['sum'], 'number'),
+            
+            //[['type'],'typeVal'],
+            //array('doc_id', 'string', 'max' => 10),
+            array(['currency_id'], 'string', 'max' => 3),
+            //array('cheque_acct, cheque_num, bank_refnum', 'string', 'max' => 20),
+            //array(['sum'], 'string', 'max' => 8),
+            array(['currency_id'], 'safe'),
+            array(['currency_id', 'doc_id', 'type', 'sum', 'line', 'bank_refnum'], 'safe', 'on' => 'search'),
         );
     }
 
+    public function typeVal($attribute, $params){
+        $item=PaymentType::findOne(["id"=>$this->$attribute]);
+        
+        if ($item===null) {
+            $this->addError($attribute, Yii::t('app', 'Type not found'));
+        }
+    }
+    
     /**
      * @return array relational rules.
      */
@@ -164,25 +173,31 @@ class Doccheques extends basicRecord {
             'Type' => array(self::BELONGS_TO, 'PaymentType', 'type'),
         );
     }
+    public function getTypeo() {
+        return $this->hasOne(PaymentType::className(), array('id' => 'type'));
+    }
 
+    public function getDoc() {
+        return $this->hasOne(docs::className(), array('id' => 'doc_id'));
+    }
     /**
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels() {
         return array(
-            'doc_id' => Yii::t('labels', 'Refnum'),
-            'type' => Yii::t('labels', 'Type'),
-            'sum' => Yii::t('labels', 'Sum'),
-            'currency_id' => Yii::t('labels', 'Currency'),
-            'line' => Yii::t('labels', 'Line'),
+            'doc_id' => Yii::t('app', 'Refnum'),
+            'type' => Yii::t('app', 'Type'),
+            'sum' => Yii::t('app', 'Sum'),
+            'currency_id' => Yii::t('app', 'Currency'),
+            'line' => Yii::t('app', 'Line'),
         );
     }
 
     public function printDetails() {
-        $model = PaymentType::model()->findByPk($this->type);
+        $model = PaymentType::findOne($this->type);
         $form = new $model->value;
 
-        $attrs = DocchequesEav::model()->findAllByAttributes(array("doc_id" => $this->doc_id, "line" => $this->line));
+        $attrs = DocchequesEav::find()->where(["doc_id" => $this->doc_id, "line" => $this->line])->All();
         //$text='';
 
         return $form->line($attrs);
@@ -192,7 +207,7 @@ class Doccheques extends basicRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search() {
+    public function search($params) {
 
         $criteria = new CDbCriteria;
 
@@ -213,7 +228,20 @@ class Doccheques extends basicRecord {
     }
 
     public function depositSearch() {
+        $query = Doccheques::find();
 
+          $query->where('bank_refnum is null AND (type=1 OR type=2)');
+
+        $dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        
+        
+        
+        
+        return $dataProvider;
+        
         $criteria = new CDbCriteria;
 
 

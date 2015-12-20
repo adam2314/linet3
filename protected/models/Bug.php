@@ -1,12 +1,13 @@
 <?php
-/***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+
+/* * *********************************************************************************
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
 /**
  * This is the model class for table "bug".
  *
@@ -17,11 +18,17 @@
  * @property string $body
  *
  */
+
+namespace app\models;
+
+use Yii;
+use app\components\mainRecord;
+
 class Bug extends mainRecord {
 
     const table = 'bug';
 
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -45,10 +52,10 @@ class Bug extends mainRecord {
 
     public function attributeLabels() {
         return array(
-            'id' => Yii::t('labels', 'ID'),
-            'title' => Yii::t('labels', 'Title'),
-            'body' => Yii::t('labels', 'Body'),
-            'url' => Yii::t('labels', 'URL'),
+            'id' => Yii::t('app', 'ID'),
+            'title' => Yii::t('app', 'Title'),
+            'body' => Yii::t('app', 'Body'),
+            'url' => Yii::t('app', 'URL'),
         );
     }
 
@@ -64,19 +71,27 @@ class Bug extends mainRecord {
      * @return CActiveDataProvider the data provider that can return the models
      * based on the search/filter conditions.
      */
-    public function search() {
-        // @todo Please modify the following code to remove attributes that should not be searched.
+    public function search($params) {
+        $query = Bug::find();
 
-        $criteria = new CDbCriteria;
+        $dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => $query,
+        ]);
 
-        $criteria->compare('id', $this->id);
-        $criteria->compare('title', $this->account_id, true);
-        $criteria->compare('body', $this->dt, true);
-        $criteria->compare('url', $this->details, true);
+        $this->load($params);
 
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+        ]);
+
+        $query->andFilterWhere(['like', 'title', $this->title])
+                ->andFilterWhere(['like', 'body', $this->body])
+                ->andFilterWhere(['like', 'url', $this->url]);
+        return $dataProvider;
     }
 
     /**
@@ -85,16 +100,12 @@ class Bug extends mainRecord {
      * @param string $className active record class name.
      * @return AccHist the static model class
      */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
-
     public function rules() {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('title, body', 'required'),
-            array('title, body, url', 'safe'),
+            array(['title', 'body'], 'required'),
+            array(['title', 'body', 'url'], 'safe'),
         );
     }
 
@@ -104,26 +115,36 @@ class Bug extends mainRecord {
             'body' => $this->body,
                 //'assignee'=>$this->assignee,
                 //'milestone'=>$this->milestone,
-                //'labels'=>  print_r($this->labels, true),
+                //'app'=>  print_r($this->labels, true),
         );
 
         $url = $this->site . "/" . $this->owner . "/" . $this->project . "/issues";
-        $output = Yii::app()->curl
-                ->addAuth($this->authUser, $this->authPasswd)
-                ->setOptions(array('Content-Type: application/xml'))
+        var_dump($url);
+        var_dump(json_encode($params));
+        $curl= new \app\helpers\Curl;
+        $output=$curl//->addAuth($this->authUser, $this->authPasswd)
+                ->setOptions([  //CURLOPT_HTTPHEADER=> ['Content-Type: application/xml'],
+                                //CURLOPT_HEADER=> true,
+                                CURLOPT_POST=> true,
+                                CURLOPT_USERAGENT=>'Linet3.1',
+                                CURLOPT_USERPWD=> $this->authUser.":".$this->authPasswd,
+                                CURLOPT_RETURNTRANSFER=> true
+                                ])
                 ->post($url, json_encode($params));
+        var_dump($output);
+        
         $output = strstr($output, "\r\n\r\n");
         $output = str_replace("\r\n\r\n", "", $output);
         $output = json_decode($output);
         //print_r($output->html_url);
-        
-        
-        if (isset($output->html_url)){
-            $this->url=$output->html_url;
+
+
+        if (isset($output->html_url)) {
+            $this->url = $output->html_url;
             $this->save();
             return $this->url;
-        }else{
-            
+        } else {
+
             return false;
         }
         //return ;

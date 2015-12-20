@@ -1,100 +1,117 @@
 <?php
-/***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+
+/* * *********************************************************************************
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
-class SiteController extends Controller {
+ * ********************************************************************************** */
 
+namespace app\controllers;
+
+use Yii;
+use yii\filters\AccessControl;
+use app\components\LitController;
+use yii\filters\VerbFilter;
+use app\models\User;
+use app\models\FormLogin;
+
+
+//use app\models\ContactForm;
+
+class SiteController extends LitController {
+
+    public $layout = 'single';
+
+    public function beforeAction($action) {
+        if ($action->id == 'login' && isset($_POST['FormLogin']['hash']) && isset($_POST['FormLogin']['id'])) {
+            Yii::$app->controller->enableCsrfValidation = false;
+        }
+        return parent::beforeAction($action);
+    }
     
-    
-    
-    /**
-     * This is the action to handle external exceptions.
-     */
     public function actionError() {
-        $this->layout = '//layouts/clean';
-        if ($error = Yii::app()->errorHandler->error) {
-            if (Yii::app()->request->isAjaxRequest)
-                echo $error['message'];
-            else
-                $this->render('error', $error);
+        //var_dump (Yii::$app->errorHandler->exception);
+        //exit;
+        $this->layout = 'single';
+        if (isset(Yii::$app->errorHandler->error)&&($error = Yii::$app->errorHandler->error)) {
+            if (strpos(Yii::$app->request->url,'api')!=true) {
+
+                //if (Yii::$app->request->isAjaxRequest)
+                //    return $error['message'];
+                //else
+                    return $this->render('error',['error'=>  $error]);
+            }else {
+                return \app\helpers\Response::send($error->statusCode, $error->getMessage());
+            }
+        } elseif (isset(Yii::$app->errorHandler->exception)&&($exception = Yii::$app->errorHandler->exception)) {
+            if (strpos(Yii::$app->request->url,'api')!=true) {
+
+                //if (Yii::$app->request->isAjaxRequest)
+                //    return $exception['message'];
+                //else
+                    return $this->render('error',['error'=>  $exception]);
+            }else {
+                return \app\helpers\Response::send($exception->statusCode, $exception->getMessage());
+            }
+        } else {
+
+            //if ($error = Yii::$app->errorHandler->error)
+
+            return \app\helpers\Response::send(500, 'Unknown error');
         }
     }
+
+//*/
 
     /**
      * Displays the contact page
      */
     public function actionSupport() {
-        $this->redirect("http://www.linet.org.il/support/paid-support");
-        Yii::app()->end();
+        return $this->redirect("http://www.linet.org.il/support/paid-support");
+        //Yii::$app->end();
     }
 
     /**
      * Displays the login page
      */
     public function actionLogin() {
-
-        if(User::model()->findAll()==null){
-            $this->redirect(Yii::app()->createAbsoluteUrl('install/user'));
-                Yii::app()->end();
-        }
-        
-        
-        $model = new FormLogin;
-        $this->layout = '//layouts/clean';
-        // if it is ajax validation request
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
+        $this->layout = 'clean';
+        if (!\Yii::$app->user->isGuest) {
+            return $this->goHome();
         }
 
-        // collect user input data
-        if (isset($_POST['FormLogin'])) {
-            $model->attributes = $_POST['FormLogin'];
-            // validate user input and redirect to the previous page if valid
-            if ($model->validate() && $model->login())
-                $this->redirect(Yii::app()->user->returnUrl);
+        $model = new FormLogin();
+
+        if (isset($_POST['FormLogin']['hash']) && isset($_POST['FormLogin']['id'])) {
+            $model->scenario = 'api';
+            if ($model->load(Yii::$app->request->post()) && $model->apiLogin()) {
+                return $this->redirect(\yii\helpers\BaseUrl::base() . "/company/index/?auto=1");
+            }
         }
-        
-        if (isset($_POST['login_id'])) {
-            $model->id = $_POST['login_id'];
-            $model->hash = $_POST['login_hash'];
-            //$model->login_company = $_POST['login_company'];
-            // validate user input and redirect to the previous page if valid
-            if ($model->apiLogin())
-                $this->redirect(Yii::app()->user->returnUrl);
+
+
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->redirect(\yii\helpers\BaseUrl::base() . "/company/index/?auto=1");
+        } else {
+            return $this->render('login', [
+                        'model' => $model,
+            ]);
         }
-        
-        // display the login form
-        $this->render('login', array('model' => $model));
     }
 
     public function actionBug() {
-        //$this->layout = '//layouts/clean';
-
-        $model = new Bug();
-        $dataProvider = new CActiveDataProvider('Bug');
-        if (isset($_POST['Bug'])) {
-            $model->attributes = $_POST['Bug'];
-
-            $url = $model->send();
-            //$this->redirect();
-        }
-
-        $this->render('bug', array(
-            'model' => $model,
-            'dataProvider' => $dataProvider,
-        ));
+        //$this->layout = '//layouts/main';
+        return $this->redirect(\yii\helpers\BaseUrl::base() . "/settings/bug");
+        
     }
 
     public function actionAbout() {
-        //$this->layout = '//layouts/clean';
-        $model=new Update;
-        $this->render('pages/about', array('version'=>$model->getSVersion()
+        $this->layout = 'single';
+        $model = new \app\models\Update;
+        return $this->render('pages/about', array('version' => $model->getSVersion()
         ));
     }
 
@@ -102,26 +119,29 @@ class SiteController extends Controller {
      * Logs out the current user and redirect to homepage.
      */
     public function actionLogout() {
-        Yii::app()->user->setState('Company', 0);
-        Yii::app()->user->logout();
-        $this->redirect(Yii::app()->homeUrl);
+        //Yii::$app->user->setState('Company', 0);
+        Yii::$app->user->logout();
+        return $this->redirect(Yii::$app->homeUrl);
     }
 
     public function actionDownload($id) {
-        $model=Download::model()->findByPk($id);
-        if($model==null)
-            throw new CHttpException(404, 'The requested page does not exist.');
-        
-        $comp=  Company::model()->findByPk($model->company_id);
-        $comp->select($model->company_id);
-        
-        $id = (int) $model->file_id;
-        $model = Files::model()->findByPk($id);
-        if ($model === null) {
-            throw new CHttpException(404, 'The requested page does not exist.');
+        $model = \app\models\Download::findOne(['id'=>$id]);
+        if ($model == null){
+            
+        }else{
+            //throw new \yii\web\HttpException(404, 'The requested page does not exist.');
+
+            $comp = \app\models\Company::findOne($model->company_id);
+            $comp->select($model->company_id);
+
+            $id = (int) $model->file_id;
+            $model = \app\models\Files::findOne($id);
+            if ($model === null) {
+                throw new \yii\web\HttpException(404, 'The requested page does not exist.');
+            }
+            $file = $model->getFullPath() . $model->id;
+            return Yii::$app->getResponse()->sendFile($file, $model->name);
         }
-        $file = $model->getFullPath() . $model->id; 
-        return Yii::app()->getRequest()->sendFile($model->name, file_get_contents($file));
     }
 
 }

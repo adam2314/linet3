@@ -1,64 +1,54 @@
 <tr class="rcptContent">
-    <td><b><?php echo $form->labelEx($model, 'type'); ?></b>
-        <?php //echo $form->hiddenField($model, "[$i]id"); ?>
-        <?php echo $form->hiddenField($model, "[$i]doc_id", array('class'=>'rcptdoc_id')); ?>
-        <?php echo $form->hiddenField($model, "[$i]line", array('class'=>'rcptline')); ?>
-        <?php //echo $form->hiddenField($model, "[$i]dep_date");  ?>
-        <b><?php echo $form->labelEx($model, 'type'); ?></b>
+    <td><b><?php //echo $form->labelEx($model, 'type'); ?></b>
+        <?= $form->field($model, "[$i]doc_id")->hiddenInput(); ?>
+        <?= $form->field($model, "[$i]line")->hiddenInput(); ?>
+        <b><?php //echo $form->labelEx($model, 'type'); ?></b>
             
             
             <?php 
-            //Doctype::model()->getList()
-            $temp=PaymentType::model()->getList();
+            //Doctype::getList()
+            $temp=\app\models\PaymentType::getList();
             $temp[0]=Yii::t('app','None');
-                
+            $curr=\yii\helpers\ArrayHelper::map(\app\models\Currates::GetRateList(), 'currency_id', 'name');    
             
-            echo $form->dropDownList($model, "[$i]type", $temp); 
+            echo $form->field($model, "[$i]type")->dropDownList($temp); 
             
             ?>
     </td>
     <td id="Doccheques_<?php echo $i; ?>_text"></td>
 
 
-    <td><b><?php echo $form->labelEx($model, 'currency_id'); ?></b><?php echo $form->dropDownList($model, "[$i]currency_id", CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name'), array('class'=>'currSelect')); ?></td>
-    <td><b><?php echo $form->labelEx($model, 'sum'); ?></b><?php echo $form->textField($model, "[$i]sum", array('class'=>'rcptsum','placeholder' => Yii::t('label', 'sum') )); ?></td>
+    <td><b><?php //echo $form->labelEx($model, 'currency_id'); ?></b><?php echo $form->field($model, "[$i]currency_id")->dropDownList($curr); ?></td>
+    <td><b><?php //echo $form->labelEx($model, 'sum'); ?></b><?php echo $form->field($model, "[$i]sum",['inputOptions'=>['class'=>'rcptsum']]); ?></td>
     
-    <td class="remove">
+    <td class="chqRemove">
         <?php
-                        $this->widget('bootstrap.widgets.TbButton', array(
-                            'label' => Yii::t('app', 'Remove'),
-                            'icon' => 'glyphicon glyphicon-remove',
-                        ));
-                        ?>
+        echo yii\bootstrap\Button::widget([
+            'label' => Yii::t('app', 'Remove'),
+            'options'=>['class'=>'btn btn-danger']
+            //'icon' => 'glyphicon glyphicon-remove',
+        ]);
+        ?>
 
 
     </td>
 <script type="text/javascript">
-    $("#Doccheques_<?php echo $i; ?>_type").select2();
-    $("#Doccheques_<?php echo $i; ?>_currency_id").select2();
+    //$("#doccheques-<?php echo $i; ?>-type").select2();
+    //$("#doccheques-<?php echo $i; ?>-currency_id").select2();
     $( document ).ready(function() {
         rcptSum();
         <?php if($i=='ABC'){?>
-        jQuery('#Doccheques_<?php echo $i; ?>_cheque_date').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['<?php echo substr(Yii::app()->language,0,2) ?>'], {'showAnim':'fold','dateFormat':'<?php echo Yii::app()->locale->getDateFormat('short')?>'}));
+        //jQuery('#doccheques-<?php echo $i; ?>-cheque_date').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['<?php echo substr(Yii::$app->language,0,2) ?>'], {'showAnim':'fold'}));//,'dateFormat':'<?php //echo Yii::$app->locale->getDateFormat('short')?>'
         <?php }?>
             
             
             
-        $("#Doccheques_<?php echo $i; ?>_type").change(function(){
+        $("#doccheques-<?php echo $i; ?>-type").change(function(){
         TypeSelChange(<?php echo $i; ?>);  
     });
     });
 
 
-    $("#Doccheques_<?php echo $i; ?>_sum").change(function(){
-        rcptSum(); 
-    });
-    
-    $(".remove").click(function() {
-            
-            $(this).parents(".rcptContent:first").remove();
-            rcptcalcLines();
-    });
     
 </script>
 

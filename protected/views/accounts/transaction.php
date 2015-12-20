@@ -1,149 +1,133 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-$dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-            // 'model'=>$model,
-            'name' => 'Transactions[from_date]',
-            'language' => substr(Yii::app()->language, 0, 2),
-            'value' => $model->from_date,
-            // additional javascript options for the date picker plugin
-            'options' => array(
-                'showAnim' => 'fold',
-                'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-                'changeMonth' => 'true',
-                'changeYear' => 'true',
-                'constrainInput' => 'false',
-            ),
-            'htmlOptions' => array(
-                //'style' => 'height:20px;width:70px;',
-                'placeholder' => Yii::t('app', 'From Date'),
-            ),
-// DONT FORGET TO ADD TRUE this will create the datepicker return as string
-                ), true) . $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-            // 'model'=>$model,
-            'name' => 'Transactions[to_date]',
-            'language' => substr(Yii::app()->language, 0, 2),
-            'value' => $model->to_date,
-            // additional javascript options for the date picker plugin
-            'options' => array(
-                'showAnim' => 'fold',
-                'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-                'changeMonth' => 'true',
-                'changeYear' => 'true',
-                'constrainInput' => 'false',
-            ),
-            'htmlOptions' => array(
-                //'style' => 'height:20px;width:70px',
-                'placeholder' => Yii::t('app', 'To Date'),
-            ),
-// DONT FORGET TO ADD TRUE this will create the datepicker return as string
-                ), true);
 ?>
 
 <?php
 
-$this->beginWidget('MiniForm', array(
+app\widgets\MiniForm::begin( array(
     'header' => Yii::t('app', "Transactions for Account") . ": " . $account->name,
 ));
 
-$yiidbdatetime = Yii::app()->locale->getDateFormat('yiidbdatetime');
-$phpdatetime = Yii::app()->locale->getDateFormat('phpdatetime');
-$this->widget('EExcelView', array(
+//$yiidbdatetime = Yii::$app->locale->getDateFormat('yiidbdatetime');
+//$phpdatetime = Yii::$app->locale->getDateFormat('phpdatetime');
+echo app\widgets\GridView::widget( array(
     'id' => 'transactions-grid',
-    'dataProvider' => $model->search(),
-    'ajaxUpdate' => true,
-    'ajaxType' => 'POST',
+    'dataProvider' => $model->search([]),
+    //'ajaxUpdate' => true,
+    //'ajaxType' => 'POST',
     //'enablePagination'=> false,
-    'filter' => $model,
+    'filterModel' => $model,
     'columns' => array(
         array(
-            'name' => 'num',
-            'value' => '$data->numLink()',
-            'type' => 'raw',
-            'htmlOptions' => array('style' => 'width:8%;'),
+            'attribute' => 'num',
+            'value' => function($data) {return $data->numLink();},
+            'format' => 'raw',
+            //'options' => array('style' => 'width:8%;'),
         ),
         //'prefix',
         //'company',
         /*
         array(
-            'value' => 'CHtml::link(CHtml::encode($data->getOptAccName()),Yii::app()->createAbsoluteUrl("/accounts/transaction/".$data->getOptAccId()))',
+            'value' => '\yii\helpers\Html::link(\yii\helpers\Html::encode($data->getOptAccName()),yii\helpers\BaseUrl::base().("/accounts/transaction/".$data->getOptAccId()))',
             'type' => 'raw',
         ),
         array(
             'name' => 'type',
-            //'filter'=>CHtml::dropDownList('Transactions[type]', $model->type,CHtml::listData(TransactionType::model()->findAll(), 'id', 'name')),
+            //'filter'=>\yii\helpers\Html::dropDownList('Transactions[type]', $model->type,\yii\helpers\ArrayHelper::map(TransactionType::find()->All(), 'id', 'name')),
             'value' => 'Yii::t("app",$data->Type->name)'
         ),*/
         array(
-            'name' => 'refnum1',
-            'value' => '$data->refnumDocsLink()',
-            'type' => 'raw',
+            'attribute' => 'refnum1',
+            'value' => function($data) {return $data->refnumDocsLink();},
+            'format' => 'raw',
         ),
         array(
-            'name' => 'refnum2',
-            'value' => 'CHtml::encode($data->refnum2)',
-            'type' => 'raw',
+            'attribute' => 'refnum2',
+            //'value' => '\yii\helpers\Html::encode($data->refnum2)',
+            //'format' => 'raw',
         ),
         'details',
-        array(
-            'name' => 'date',
-            'filter' => $dateisOn,
-            'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->valuedate,"' . $yiidbdatetime . '"))'
-        ),
-        array(
-            'name' => 'reg_date',
-            'filter' => '',
-            'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->reg_date,"' . $yiidbdatetime . '"))'
-        ),
+                [
+                    'attribute' => 'valuedate',
+                    
+                    'filterType' => \kartik\grid\GridView::FILTER_DATE_RANGE,
+                    'filterWidgetOptions' => [
+                        'convertFormat' => true,
+                        'useWithAddon' => true,
+                        'pluginOptions' => [
+                            'format' => 'Y-m-d',
+                            'separator'=> ' to ',
+                            ],
+                        'hideInput' => true, // from demo config
+                        'presetDropdown' => false,
+                        
+                    ],
+                    //'filter' => $dateisOn,
+                    //'format' => 'html',
+                    'width' => '150px',
+                    'value' => function($data) {
+                return $data->readDateFormat($data->valuedate);
+            },            
+        ],            
+        [
+                    'attribute' => 'reg_date',
+                    
+                    'filterType' => \kartik\grid\GridView::FILTER_DATE_RANGE,
+                    'filterWidgetOptions' => [
+                        'convertFormat' => true,
+                        'useWithAddon' => true,
+                        'pluginOptions' => [
+                            'format' => 'Y-m-d',
+                            'separator'=> ' to ',
+                            ],
+                        'hideInput' => true, // from demo config
+                        'presetDropdown' => false,
+                        
+                    ],
+                    'width' => '150px',
+                    'value' => function($data) {
+                return $data->readDateFormat($data->reg_date);
+            },            
+        ],       
         array(
             'header' => Yii::t('app', 'Debit'),
-            'name' => 'sum',
-            'filter' => '',
-            'cssClassExpression' => "'number'",
-            'value' => '($data->sum<0)?$data->sum:""'
+            'attribute' => 'sum',
+            //'filter' => '',
+            //'cssClassExpression' => "'number'",
+            'value' => function($data) {
+                return ($data->sum < 0) ? $data->sum : "";
+            },
         ),
         array(
             'header' => Yii::t('app', 'Credit'),
-            'name' => 'sum',
-            'filter' => '',
-            'cssClassExpression' => "'number'",
-            'value' => '($data->sum>0)?$data->sum:""'
+            'attribute' => 'sum',
+            //'filter' => '',
+            //'cssClassExpression' => "'number'",
+            'value' => function($data) {
+                return ($data->sum > 0) ? $data->sum : "";
+            },
         ),
         array(
             'header' => Yii::t('app', 'Balance'),
-            'name' => 'sum',
-            'filter' => '',
-            'cssClassExpression' => "'number'",
-            'value' => '$data->getBalance()'
+            'attribute' => 'sum',
+            //'filter' => '',
+            //'cssClassExpression' => "'number'",
+            'value' => function($data) {
+                return $data->getBalance();
+            },
         ),
     ),
 ));
 ?>
-<div class="row form-actions">
-        
-            <?php
-            $this->widget('bootstrap.widgets.TbButton', array(
-                'type' => 'primary',
-                'buttonType' => 'ajaxButton',
-                "icon" => "glyphicon glyphicon-print",
-                'label' => Yii::t('app', "Print"),
-            ));
-            ?>
-        </div>
+
 
 <?php
-$this->endWidget();
+app\widgets\MiniForm::end();
 ?>
-<script type="text/javascript">
-    jQuery(document).ready(function() {
-        $("#yt0").click(function(e) {
-            window.print();
-        });
-    });
-</script>

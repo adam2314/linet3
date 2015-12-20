@@ -1,34 +1,52 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-$logopath = Yii::app()->createAbsoluteUrl("site/download/" . Yii::app()->user->getSetting('company.logo'));
+use \app\helpers\Linet3Helper;
+use yii\helpers\Html;
+use app\assets\PrintAsset;
+
+
+if(!\app\helpers\Linet3Helper::isConsole()){
+    PrintAsset::register($this);
+    $base=yii\helpers\BaseUrl::base();
+
+}else {   //console
+    $base='';
+
+
+}
+//end if
 $legalize = "";
 if ($model->preview == 2) {
     $legalize = Yii::t('app', 'Computerized Document');
 }
-//$this->beginWidget('MiniForm',array('header' => Yii::t("app","View Document ") ." " .$model->id,));
+//app\widgets\MiniForm::begin(array('header' => Yii::t("app","View Document ") ." " .$model->id,));
 ?>
 <div class="body">
     <div class="docHead">
         <div class="fromBox">
-            <h3><?php echo Yii::app()->user->getSetting('company.name'); ?></h3><br />
-            <?php echo Yii::app()->user->getSetting('company.address'); ?>, <?php echo Yii::app()->user->getSetting('company.city'); ?> ,<?php echo Yii::app()->user->settings['company.zip']; ?><br />
-            <?php echo Yii::t('app', 'Phone'); ?>: <?php echo Yii::app()->user->getSetting('company.phone'); ?><br />
-            <?php echo Yii::t('app', 'Fax'); ?>: <?php echo Yii::app()->user->getSetting('company.fax'); ?><br />
-            <?php echo Yii::app()->user->getSetting('company.website'); ?><br />
+            <h3><?= Linet3Helper::getSetting('company.name'); ?></h3><br />
+            <?= Linet3Helper::getSetting('company.address'); ?>, <?= Linet3Helper::getSetting('company.city'); ?> ,<?= Linet3Helper::getSetting('company.zip'); ?><br />
+            <?= Yii::t('app', 'Phone'); ?>: <?= Linet3Helper::getSetting('company.phone'); ?><br />
+            <?= Yii::t('app', 'Fax'); ?>: <?= Linet3Helper::getSetting('company.fax'); ?><br />
+            <?= Linet3Helper::getSetting('company.website'); ?><br />
 
-            <?php echo Yii::t('app', 'VAT No.'); ?>: <?php echo Yii::app()->user->getSetting('company.vat.id'); ?><br />
+            <?= Yii::t('app', 'VAT No.'); ?>: <?= Linet3Helper::getSetting('company.vat.id'); ?><br />
         </div>
 
 
         <div  class="logo">
-            <img class="logo" alt="logo" src="<?php echo $logopath; ?>" />
+            <?php
+            if(Linet3Helper::hasLogo()){
+                echo yii\helpers\Html::img(Linet3Helper::getLogo(),['class'=>'logo']);
+            }
+            ?>
         </div>
     </div>
 
@@ -36,24 +54,24 @@ if ($model->preview == 2) {
     <div class="toBox">
         <table>	
             <tr>
-                <td><?php echo Yii::t('app', 'To'); ?>:</td>
-                <td><?php echo $model->company; ?></td>
+                <td><?= Yii::t('app', 'To'); ?>:</td>
+                <td><?= $model->company; ?></td>
 
             </tr>
 
             <tr>
                 <td></td>
-                <td><?php echo $model->address; ?></td>
+                <td><?= $model->address; ?></td>
 
             </tr>
             <tr>
                 <td></td>
-                <td><?php echo $model->city; ?> <?php echo $model->zip; ?></td>
+                <td><?= $model->city; ?> <?= $model->zip; ?></td>
 
             </tr>
             <tr>
                 <td></td>
-                <td><?php echo Yii::t('app', 'VAT No.'); ?>:<?php echo $model->vatnum; ?></td>
+                <td><?= Yii::t('app', 'VAT No.'); ?>:<?= $model->vatnum; ?></td>
 
             </tr>
 
@@ -64,52 +82,84 @@ if ($model->preview == 2) {
 
     <div class="toDate">
         <table>	
-            <tr>
-
-                <td><?php echo Yii::t('app', 'Doc. Issued date'); ?>:</td>
-                <td>
-                    <?php echo date(Yii::app()->locale->getDateFormat('phpshort'), CDateTimeParser::parse($model->issue_date, Yii::app()->locale->getDateFormat('yiidatetime'))); ?>
-                </td>
-            </tr>
-
-            <tr>
-
-                <td><?php echo Yii::t('app', 'Due date'); ?>:</td>
-                <td>
-                    <?php echo date(Yii::app()->locale->getDateFormat('phpshort'), CDateTimeParser::parse($model->due_date, Yii::app()->locale->getDateFormat('yiidatetime'))); ?>
-                </td>
-            </tr>
             <?php
-            if (($model->doctype==14)||($model->doctype==13)) {
+            if (($model->docType->issue_label())) {
                 ?>
                 <tr>
 
-                    <td><?php echo Yii::t('app', 'Reference date'); ?>:</td>
+                    <td><?= Html::encode($model->docType->issue_label()); ?>:</td>
                     <td>
-                        <?php echo date(Yii::app()->locale->getDateFormat('phpshort'), CDateTimeParser::parse($model->ref_date, Yii::app()->locale->getDateFormat('yiidatetime'))); ?>
+                        <?= Html::encode($model->readDateFormat($model->issue_date)); ?>
                     </td>
                 </tr> 
                 <?php
             }
             ?>
+            <?php
+            if (($model->docType->due_label())) {
+                ?>
+                <tr>
+
+                    <td><?= Html::encode($model->docType->due_label()); ?>:</td>
+                    <td>
+                        <?= Html::encode($model->readDateFormat($model->due_date)); ?>
+                    </td>
+                </tr> 
+                <?php
+            }
+            ?>
+            
+            <?php
+            if (($model->docType->ref_label())) {
+                ?>
+                <tr>
+
+                    <td><?= Html::encode($model->docType->ref_label()); ?>:</td>
+                    <td>
+                        <?= Html::encode($model->readDateFormat($model->ref_date)); ?>
+                    </td>
+                </tr> 
+                <?php
+            }
+            ?>
+           
+            <?php
+            if ($model->refnum_ext!='') {
+                ?>
+                <tr>
+
+                    <td><?= Yii::t('app', 'External Reference'); ?>:</td>
+                    <td>
+                        <?php echo $model->refnum_ext; ?>
+                    </td>
+                </tr> 
+                <?php
+            }
+            ?>    
+
         </table>
 
     </div>
-    <div class="legalize"><h3><?php echo $legalize ?></h3></div>
-    <div class="docTitle"><h1><?php echo Yii::t('app', $model->docType->name); ?> <span style="font-size:25px;"> <?php echo Yii::t('app', 'No.'); ?> <?php echo $model->docnum; ?> </span>
+    <div class="legalize"><h3><?= $legalize ?></h3></div>
+    <div class="docTitle"><h1><?= Yii::t('app', $model->docType->name); ?> <span style="font-size:25px;"> <?= Yii::t('app', 'No.'); ?> <?= $model->docnum; ?> </span>
             <span id='stamp'> 
                 <?php
                 if ($model->docType->copy) {
-                    if ($model->action == 0) {
-                        echo Yii::t('app', 'Draft');
+                    if ($model->docStatus->num != 2) {
+                        echo $model->docStatus->name;
                     } else {
                         echo ($model->printed == 1) ? Yii::t('app', 'Source') : Yii::t('app', 'Copy');
                     }
                 }
                 ?>
             </span>           
-        </h1></div>
+        </h1>
+    </div>
     <div>
+
+    </div>
+    
+
         <?php
         /*         * *************************************************************************************************************************** */
 
@@ -119,17 +169,17 @@ if ($model->preview == 2) {
             <table class="printtbl table">
                 <thead>
                     <tr>
-                        <!--<th class='line'><?php echo Yii::t('app', 'Line'); ?></th>
-                        <th class='Itemid'><?php echo Yii::t('app', 'Item id'); ?></th>-->
-                        <th class='Name'><?php echo Yii::t('app', 'Name'); ?></th>
-                        <th class='UntPrice'><?php echo Yii::t('app', 'Unt. Price'); ?></th>
-                        <th class='Unit'><?php echo Yii::t('app', 'Unit'); ?></th>
+                        <!--<th class='line'><?= Yii::t('app', 'Line'); ?></th>
+                        <th class='Itemid'><?= Yii::t('app', 'Item id'); ?></th>-->
+                        <th class='Name'><?= Yii::t('app', 'Name'); ?></th>
+                        <th class='UntPrice'><?= Yii::t('app', 'Unt. Price'); ?></th>
+                        <th class='Unit'><?= Yii::t('app', 'Unit'); ?></th>
 
-                        <th class='Qty'><?php echo Yii::t('app', 'Qty.'); ?></th>
-                        <th class='Price'><?php echo Yii::t('app', 'Price'); ?></th>
-                        <th class='Currency'><?php echo Yii::t('app', 'Currency'); ?></th>
-                        <th class='VAT'><?php echo Yii::t('app', 'VAT'); ?></th>
-                        <th class='Total'><?php echo Yii::t('app', 'Total'); ?></th>
+                        <th class='Qty'><?= Yii::t('app', 'Qty.'); ?></th>
+                        <th class='Price'><?= Yii::t('app', 'Price'); ?></th>
+                        <th class='Currency'><?= Yii::t('app', 'Currency'); ?></th>
+                        <th class='VAT'><?= Yii::t('app', 'VAT'); ?></th>
+                        <th class='Total'><?= Yii::t('app', 'Total'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -139,7 +189,7 @@ if ($model->preview == 2) {
 
                     foreach ($model->docDetailes as $docdetail) {
                         //print_r($docdetail);
-                        //echo $this->renderPartial('docdetialview', array('model'=>$docdetail,)); 
+                        //echo $this->render('docdetialview', array('model'=>$docdetail,)); 
 
                         if ($docdetail->description == '')
                             $class = 'class="newLine"';
@@ -152,7 +202,7 @@ if ($model->preview == 2) {
                     <td class='Itemid'>$docdetail->item_id</td>-->
                     <td class='Name'>$docdetail->name</td>
                     <td class='UntPrice'>$docdetail->iItem</td>
-                    <td class='Unit'>" . $docdetail->ItemUnit->name . "</td>
+                    <td class='Unit'>" . $docdetail->itemUnit->name . "</td>
                         
                     <td class='Qty'>$docdetail->qty</td>    
                     <td class='Price'>" . $docdetail->qty * $docdetail->iItem . "</td>
@@ -190,8 +240,8 @@ if ($model->preview == 2) {
                         <td class='Unit clear'></td>
                         <td class='Qty clear'></td>    
                         <td class='Price clear'></td>
-                        <td  colspan='2' class='Qty clear'><?php echo Yii::t('labels', 'Discount'); ?></td>
-                        <td class='Total'><?php echo (($model->disType) ? "%" : "") . $model->discount; ?></td>
+                        <td  colspan='2' class='Qty clear'><?= Yii::t('app', 'Discount'); ?></td>
+                        <td class='Total'><?= (($model->disType) ? "%" : "") . $model->discount; ?></td>
 
                     </tr>
                     
@@ -205,8 +255,8 @@ if ($model->preview == 2) {
                         <td class='Unit clear'></td>
                         <td class='Qty clear'></td>    
                         <td class='Price clear'></td>
-                        <td  colspan='2' class='Qty clear'><?php echo Yii::t('app', 'Subtotal tax excluded'); ?></td>
-                        <td class='Total'><?php echo $model->sub_total; ?></td>
+                        <td  colspan='2' class='Qty clear'><?= Yii::t('app', 'Subtotal tax excluded'); ?></td>
+                        <td class='Total'><?= $model->sub_total; ?></td>
 
                     </tr>
                     <tr>
@@ -218,8 +268,8 @@ if ($model->preview == 2) {
                         <td class='Unit clear'></td>
                         <td class='Qty clear'></td>    
                         <td class='Price clear'></td>
-                        <td  colspan='2' class='Qty clear'><?php echo Yii::t('app', 'Subtotal VAT'); ?></td>
-                        <td class='Total'><?php echo $model->vat; ?></td>
+                        <td  colspan='2' class='Qty clear'><?= Yii::t('app', 'Subtotal VAT'); ?></td>
+                        <td class='Total'><?= $model->vat; ?></td>
 
                     </tr>
                     <tr>
@@ -231,8 +281,8 @@ if ($model->preview == 2) {
                         <td class='Unit clear'></td>
                         <td class='Qty clear'></td>    
                         <td class='Price clear'></td>
-                        <td  colspan='2' class='Qty clear'><?php echo Yii::t('app', 'Subtotal tax exempt'); ?></td>
-                        <td class='Total'><?php echo $model->novat_total; ?></td>
+                        <td  colspan='2' class='Qty clear'><?= Yii::t('app', 'Subtotal tax exempt'); ?></td>
+                        <td class='Total'><?= $model->novat_total; ?></td>
 
                     </tr>
                     
@@ -245,8 +295,8 @@ if ($model->preview == 2) {
                         <td class='Unit clear'></td>
                         <td class='Qty clear'></td>    
                         <td class='Price clear'></td>
-                        <td  colspan='2' class='Qty clear'><?php echo Yii::t('labels', 'Subtotal to pay'); ?></td>
-                        <td class='Total'><?php echo $model->total; ?></td>
+                        <td  colspan='2' class='Qty clear'><?= Yii::t('app', 'Subtotal to pay'); ?></td>
+                        <td class='Total'><?= $model->total; ?></td>
 
                     </tr>	
                 </tfoot>
@@ -264,13 +314,13 @@ if ($model->preview == 2) {
             <table class="printtbl table">
                 <thead>
                     <tr>
-                        <th class='Line'><?php echo Yii::t('labels', 'Line'); ?></th> 
-                        <th class='Type'><?php echo Yii::t('labels', 'Type'); ?></th>   
+                        <th class='Line'><?= Yii::t('app', 'Line'); ?></th> 
+                        <th class='Type'><?= Yii::t('app', 'Type'); ?></th>   
 
-                        <th class='Details'><?php echo Yii::t('labels', 'Details'); ?></th>
+                        <th class='Details'><?= Yii::t('app', 'Details'); ?></th>
 
-                        <th class='Currency'><?php echo Yii::t('labels', 'Currency'); ?></th>
-                        <th class='Sum'><?php echo Yii::t('labels', 'Sum'); ?></th>
+                        <th class='Currency'><?= Yii::t('app', 'Currency'); ?></th>
+                        <th class='Sum'><?= Yii::t('app', 'Sum'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -283,7 +333,7 @@ if ($model->preview == 2) {
                         echo "
                 <tr class='newLine'>
                     <td class='Line'>$rcptdetail->line</td>
-                    <td class='Type'>" . Yii::t("app", $rcptdetail->Type->name) . "</td>
+                    <td class='Type'>" . Yii::t("app", $rcptdetail->typeo->name) . "</td>
                     <td class='Detailes'>" . $rcptdetail->printDetails() . "</td>
                     <td class='Currency'>$rcptdetail->currency_id</td>
                     <td class='Sum'>$rcptdetail->sum</td>
@@ -300,8 +350,8 @@ if ($model->preview == 2) {
                         <td class="clear"></td>
                         <td class="clear"></td>
                         <td class="clear"></td>
-                        <td class="clear"><?php echo Yii::t('labels', 'Total Received'); ?></td>
-                        <td><?php echo $model->total; ?></td>
+                        <td class="clear"><?= Yii::t('app', 'Total Received'); ?></td>
+                        <td><?= $model->total; ?></td>
                     </tr>
                 </tfoot>
             </table>
@@ -313,7 +363,7 @@ if ($model->preview == 2) {
 
 
     <div class="comments">
-        <?php echo Yii::t('app', 'Comments'); ?>: <?php echo $model->description; ?>
+        <?= Yii::t('app', 'Comments'); ?>: <?= $model->description; ?>
     </div>
 
 
@@ -322,16 +372,16 @@ if ($model->preview == 2) {
 
 
 <?php
-//$this->endWidget(); 
+//app\widgets\MiniForm::end(); 
 ?>
 <script type="text/javascript">
     window.onload = function() {
-        preview =<?php echo $model->preview; ?>;
+        preview =<?= $model->preview; ?>;
         //console.log(preview);
         
         if (preview == 0) {
             window.print();
-            window.location = "<?php echo Yii::app()->CreateURL('docs/view/'.$model->id) ?>"
+            window.location = "<?php echo $base.('/docs/view/'.$model->id) ?>"
             //return url
         }
     };

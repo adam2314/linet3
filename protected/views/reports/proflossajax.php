@@ -1,30 +1,37 @@
+    
+<?php
+app\widgets\MiniForm::begin(array('header' => Yii::t("app", "Profit & Loss report")));
+?>
+
 <div style=" width: 40%; display: inline-block; margin-right: 150px; ">
     <?php
-    $this->widget('EExcelView', array(
+    echo app\widgets\GridView::widget( array(
         'id' => 'profloss-grid',
         'dataProvider' => $model->search(),
         'pager' =>false,
-        //'filter'=>$model,
+        ////'filter'=>$model,
         'columns' => array(
             array(
-                'header' => Yii::t('labels', 'ID'),
-                'name' => 'id',
+                'header' => Yii::t('app', 'ID'),
+                'attribute' => 'id',
             ),
             array(
-                'header' => Yii::t('labels', 'Name'),
-                'name' => 'name',
+                'header' => Yii::t('app', 'Name'),
+                'attribute' => 'name',
             ),
             array(
-                'cssClassExpression' => "'number'",
-                'name' => 'sum',
-                'header' => Yii::t('labels', 'Sum'),
+                //'cssClassExpression' => "'number'",
+                'attribute' => 'sum',
+                'header' => Yii::t('app', 'Sum'),
             ),
             array(
-                'header' => Yii::t('labels', 'Id6111'),
-                'name' => 'id6111',
+                'header' => Yii::t('app', 'Id6111'),
+                'attribute' => 'id6111',
             ),
         ),
     ));
     ?>
 </div>
 
+
+<?php app\widgets\MiniForm::end(); ?>

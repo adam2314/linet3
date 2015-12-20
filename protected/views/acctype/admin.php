@@ -1,24 +1,11 @@
 <?php
 
-$this->menu = array(
+$this->params["menu"]= array(
     array('label' => Yii::t('app', 'List Account types'), 'url' => array('index')),
     array('label' => Yii::t('app', 'Create Account types'), 'url' => array('create')),
 );
 
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('acctype-grid', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
-
- $this->beginWidget('MiniForm',array(
+ app\widgets\MiniForm::begin(array(
     'header' => Yii::t('app',"Manage Account types"),
 
 )); 
@@ -26,22 +13,22 @@ $('.search-form form').submit(function(){
 
 ?>
 
-<?php $this->widget('EExcelView',array(
+<?php echo app\widgets\GridView::widget(array(
 	'id'=>'acctype-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
+	'dataProvider'=>$model->dp(),
+	//'filter'=>$model,
 	'columns'=>array(
 		'id',
 		'name',
 		'desc',
 		'openformat',
 		array(
-			'class'=>'bootstrap.widgets.TbButtonColumn',
+			'class'=>'yii\grid\ActionColumn',
 		),
 	),
 )); 
 
- $this->endWidget(); 
+ app\widgets\MiniForm::end(); 
 
 
 ?>

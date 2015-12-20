@@ -1,9 +1,9 @@
 <?php
-$this->breadcrumbs=array(
+$this->params["breadcrumbs"]=array(
 	'Bank Names',
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>'Create BankName','url'=>array('create')),
 	array('label'=>'Manage BankName','url'=>array('admin')),
 );

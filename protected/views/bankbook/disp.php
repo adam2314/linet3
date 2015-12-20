@@ -1,66 +1,29 @@
  <?php
-$this->menu = array(
+$this->params["menu"]= array(
         //array('label'=>'List Doctype', 'url'=>array('index')),
         //array('label'=>'Create Doctype', 'url'=>array('create')),
 );
 
 
-$this->beginWidget('MiniForm', array(
+app\widgets\MiniForm::begin( array(
     'header' => Yii::t('app', "Bankbooks"),
 ));
 ?> 
 
 <?php 
-// this is the date picker
-$dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-					// 'model'=>$model,
-				    'name' => 'ExtCorrelation[date_from]',
-				    'language' => substr(Yii::app()->language,0,2),
-					'value' => $model->date_from,
-				    // additional javascript options for the date picker plugin
-				    'options'=>array(
-					'showAnim'=>'fold',
-					'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
-					'changeMonth' => 'true',
-					'changeYear'=>'true',
-					'constrainInput' => 'false',
-				    ),
-				    'htmlOptions'=>array(
-					//'style'=>'height:20px;width:70px;',
-                                        'placeholder'=>Yii::t('app','From Date'),
-				    ),
-// DONT FORGET TO ADD TRUE this will create the datepicker return as string
-				),true)  . $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-					// 'model'=>$model,
-				    'name' => 'ExtCorrelation[date_to]',
-				    'language' => substr(Yii::app()->language,0,2),
-					'value' => $model->date_to,
-				    // additional javascript options for the date picker plugin
-				    'options'=>array(
-					'showAnim'=>'fold',
-					'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
-					'changeMonth' => 'true',
-					'changeYear'=>'true',
-					'constrainInput' => 'false',
-				    ),
-				    'htmlOptions'=>array(
-					//'style'=>'height:20px;width:70px',
-                                        'placeholder'=>Yii::t('app','To Date'),
-				    ),
-// DONT FORGET TO ADD TRUE this will create the datepicker return as string
-				),true);
-
+$dateisOn = kartik\datecontrol\DateControl::widget(['model' => $model,'attribute' => 'date_from','type' => 'date']) .
+        kartik\datecontrol\DateControl::widget(['model' => $model,'attribute' => 'date_to','type' => 'date']);    
 ?>
 
- <?php $this->widget('EExcelView', array(
+ <?php echo app\widgets\GridView::widget( array(
 	'id'=>'transaction-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
+	'dataProvider'=>$model->dp(),
+	//'filter'=>$model,
      
-      'afterAjaxUpdate'=>"function() {
-						jQuery('#ExtCorrelation_date_from').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['".substr(Yii::app()->language,0,2)."'], {'showAnim':'fold','dateFormat':'".Yii::app()->locale->getDateFormat('short')."','changeMonth':'true','showButtonPanel':'true','changeYear':'true','constrainInput':'false'}));
-						jQuery('#ExtCorrelation_date_to').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['".substr(Yii::app()->language,0,2)."'], {'showAnim':'fold','dateFormat':'".Yii::app()->locale->getDateFormat('short')."','changeMonth':'true','showButtonPanel':'true','changeYear':'true','constrainInput':'false'}));
-                                }",
+      //'afterAjaxUpdate'=>"function() {
+	//					jQuery('#ExtCorrelation_date_from').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['".substr(Yii::$app->language,0,2)."'], {'showAnim':'fold','dateFormat':'".Yii::$app->locale->getDateFormat('short')."','changeMonth':'true','showButtonPanel':'true','changeYear':'true','constrainInput':'false'}));
+	//					jQuery('#ExtCorrelation_date_to').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['".substr(Yii::$app->language,0,2)."'], {'showAnim':'fold','dateFormat':'".Yii::$app->locale->getDateFormat('short')."','changeMonth':'true','showButtonPanel':'true','changeYear':'true','constrainInput':'false'}));
+         //                       }",
      
      
 	'columns'=>array(
@@ -73,52 +36,56 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 		
                 //'currency_id',
                 array(
-                    'name'=>'account_id',
-                    'filter'=>CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => 7)), 'id', 'name'),
-                    'value'=>'$data->getAccountName()'
+                    'attribute'=>'account_id',
+                    'filter'=>\yii\helpers\ArrayHelper::map(app\models\Accounts::find()->where(['type' => 7])->All(), 'id', 'name'),
+                    'value' => function($data){return $data->getAccountName();},
                 ),
                 array(
                     //'name'=>'account_id',
                     //'value'=>'$this->randerPartial("_bank", array("array"=>$data->getBank()))',//num,date,sum
-                    'value'=>array($this,'bankDataColumn'), 
+                    //'value'=>array($this,'bankDataColumn'), 
+                    'value' => function($data){return $this->render('_bank', array('cdata' => $data,'intType'=>0));},
                     
-                    'type'=>'raw',
+                    'format'=>'raw',
                 ),
                 array(
                     //'name'=>'account_id',
                     //'value'=>'$this->randerPartial("_trans", array("array"=>$data->getTrans()))',//num,type,date,sum
-                    'value'=>array($this,'transDataColumn'), 
-                    'type'=>'raw',
+                    //'value'=>array($this,'transDataColumn'), 
+                    'value' => function($data){return $this->render('_trans', array('cdata' => $data,'intType'=>0));},
+                    'format'=>'raw',
                 ),
             
                  array(
-                    'name'=>'date',
+                    'attribute'=>'date',
                     'filter'=>$dateisOn,
-                    'value'=>'$data->date'
+                    'value'=>function($data){return $data->date;},
                 ),
                 array(
-                    'name'=>'owner',
-                        'filter'=>CHtml::listData(User::model()->findAll(), 'id', 'name'),
-                        'value'=>'Yii::t("app",$data->Owner->username)'
+                    'attribute'=>'owner',
+                        'filter'=>\yii\helpers\ArrayHelper::map(app\models\User::find()->All(), 'id', 'username'),
+                        //'value' => function($data){return $data->owner->username;},
+
+                                
                 ),
 		//'total',
 		
 		
 		array(
-			'class'=>'bootstrap.widgets.TbButtonColumn',
-                        'htmlOptions' => array('style'=>'width:80px'),
+			'class'=>'yii\grid\ActionColumn',
+                        //'options' => array('style'=>'width:80px'),
 			'template'=>'{delete}',
 			'buttons'=>array
 		    (
-		        
+		        /*
 		        'delete' => array
 		        (
 		            'label'=>'<i class="glyphicon glyphicon-remove"></i>',
                             'deleteConfirmation'=>true,
 		            'imageUrl'=>false,
-                            'url'=>'Yii::app()->createUrl("bankbook/matchdelete", array("id"=>$data->id))',
+                            'url'=>'yii\helpers\BaseUrl::base().("bankbook/matchdelete", array("id"=>$data->id))',
 		        ),
-                        
+                        */
 		    ),
 		),
 	),
@@ -127,5 +94,5 @@ $dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 
 
 <?php
-$this->endWidget();
+app\widgets\MiniForm::end();
 ?>

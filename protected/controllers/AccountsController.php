@@ -1,12 +1,26 @@
 <?php
-/***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+
+/* * *********************************************************************************
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
+
+namespace app\controllers;
+
+use Yii;
+use yii\filters\AccessControl;
+use yii\web\Controller;
+use yii\filters\VerbFilter;
+use app\components\RightsController;
+use app\models\Transactions;
+use app\models\Acctype;
+use app\models\Accounts;
+use app\models\AccountsSearch;
+
 class AccountsController extends RightsController {
 
     /**
@@ -14,45 +28,46 @@ class AccountsController extends RightsController {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        $this->render('view', array(
-            'model' => $this->loadModel($id),
+        var_dump($this->company);
+        return $this->render('view', array(
+                    'model' => $this->findModel($id),
         ));
     }
 
     public function actionTransaction($id = 200) {
-        $model = new Transactions('search');
-        $model->unsetAttributes();
-        
-        if (isset($_POST['Transactions']))
-            $model->attributes = $_POST['Transactions'];
+        $model = new Transactions();
+        //$model->unsetAttributes();
+        $model->scenario = 'search';
+        $model->load(Yii::$app->request->get());
         $model->account_id = $id;
-        $this->render('transaction', array('model' => $model, 'account' => $this->loadModel($id)));
+        return $this->render('transaction', array('model' => $model, 'account' => $this->findModel($id)));
     }
 
     /**
      * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
-    public function actionCreate($type = 0) {
-        $model = new Accounts;
+        public function actionCreate($type = 0,$parent_account_id=0) {
+        $model = new Accounts(['type' => (int)$type,'parent_account_id'=>(int)$parent_account_id]);
 
 
-        $this->performAjaxValidation($model);
-
-        if (isset($_POST['Accounts'])) {
-            $model->attributes = $_POST['Accounts'];
-            $model->deleteEavAttributes();
-            if (isset($_POST['AccounteavE']) && isset($_POST['AccounteavE'])) {
-                $model->setEavAttributes(array_combine($_POST['AccounteavE'], $_POST['AccounteavV']));
-            }
-            if ($model->save())
-                $this->redirect(array('accounts/index/'. $model->type));
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if(Yii::$app->request->post('ajax')!==null)
+                return \app\helpers\Response::send (200,$model);
+            //$model->deleteEavAttributes();
+            //if (isset($_POST['AccounteavE']) && isset($_POST['AccounteavE'])) {
+            //    $model->setEavAttributes(array_combine($_POST['AccounteavE'], $_POST['AccounteavV']));
+            //}
+            if(!$this->hasCallback())
+                return $this->redirect(array('accounts/admin/' . $model->type));
         }
+        if(Yii::$app->request->post('ajax')!==null)
+            return \app\helpers\Response::send (501,$model->errors);
 
-        $model->accType = Acctype::model()->findByPk((int) $type);
-        $model->type = $type;
-        $this->render('create', array(
-            'model' => $model,
+        //$model->accType = Acctype::findOne((int) $type);
+        //$model->type = $type;
+        return $this->render('create', array(
+                    'model' => $model,
         ));
     }
 
@@ -63,36 +78,39 @@ class AccountsController extends RightsController {
      */
     public function actionUpdate($id) {//$prefix
 //print 'in action';
-//Yii::app()->user->setFlash('error', 'unable to change sys account');
-//Yii::app()->user->setFlash('success', '<strong>Well done!</strong> You successfully read this important alert message.');
-//Yii::app()->user->setFlash('info', '<strong>Heads up!</strong> This alert needs your attention, but it\'s not super important.');
-//Yii::app()->user->setFlash('warning', '<strong>Warning!</strong> Best check yo self, you\'re not looking too good.');
-//Yii::app()->user->setFlash('error', '<strong>Oh snap!</strong> Change a few things up and try submitting again.');
-        $model = $this->loadModel($id);
+//\Yii::$app->getSession()->setFlash('error', 'unable to change sys account');
+//\Yii::$app->getSession()->setFlash('success', '<strong>Well done!</strong> You successfully read this important alert message.');
+//\Yii::$app->getSession()->setFlash('info', '<strong>Heads up!</strong> This alert needs your attention, but it\'s not super important.');
+//\Yii::$app->getSession()->setFlash('warning', '<strong>Warning!</strong> Best check yo self, you\'re not looking too good.');
+//\Yii::$app->getSession()->setFlash('error', '<strong>Oh snap!</strong> Change a few things up and try submitting again.');
+        $model = $this->findModel($id);
         if ($model->system_acc == 1) {
-            Yii::app()->user->setFlash('error', Yii::t('app', 'unable to edit, it is a system account'));
+            \Yii::$app->getSession()->setFlash('error', Yii::t('app', 'unable to edit, it is a system account'));
         }
-        $this->performAjaxValidation($model);
 
-        if (isset($_POST['Accounts'])) {
-            $model->attributes = $_POST['Accounts'];
+
+
+        // && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            //$model->attributes = $_POST['Accounts'];
             if ($model->system_acc == 1) {
-                Yii::app()->user->setFlash('error', Yii::t('app', 'unable to edit, it is a system account'));
+                \Yii::$app->getSession()->setFlash('error', Yii::t('app', 'unable to edit, it is a system account'));
             } else {
-                $model->deleteEavAttributes();
-                if (isset($_POST['AccountseavE']) && isset($_POST['AccountseavE'])) {
-                    $model->setEavAttributes(array_combine($_POST['AccountseavE'], $_POST['AccountseavV']));
+                if (isset($_POST['propertiesE']) && isset($_POST['propertiesV'])) {
+                    $model->properties = array_combine($_POST['propertiesE'], $_POST['propertiesV']); ////saveEavAttributes
+                    $model->save();
                 }
                 if ($model->save()) {
-                    Yii::app()->user->setFlash('success', Yii::t('app', "account saved"));
+                    if(!$this->hasCallback())
+                        \Yii::$app->getSession()->setFlash('success', Yii::t('app', "account saved"));
                 } else {
-                    Yii::app()->user->setFlash('error', Yii::t('app', "unable to save"));
+                    \Yii::$app->getSession()->setFlash('error', Yii::t('app', "unable to save"));
                 }
             }
         }
 
-        $this->render('update', array(
-            'model' => $model,
+        return $this->render('update', array(
+                    'model' => $model,
         ));
     }
 
@@ -104,76 +122,113 @@ class AccountsController extends RightsController {
     public function actionDelete($id) {
 
 
-        $model = $this->loadModel($id);
+        $model = $this->findModel($id);
 
         if ($model->system_acc == 1) {
-            $level = 'error';
-            $text = Yii::t('app', "unable to delete, it is a system account");
+            //$level = 'error';
+            //$text = Yii::t('app', "unable to delete, it is a system account");
+            \Yii::$app->getSession()->setFlash('error', Yii::t('app', "unable to delete, it is a system account"));
         } else {
 
 
-            if ($this->loadModel($id)->delete()) {
-                $level = 'success';
-                $text = Yii::t('app', "unable to delete, the account has transactions");
+            if ($model->delete()) {
+                //$level = 'success';
+                //$text = Yii::t('app', "unable to delete, the account has transactions");
+                \Yii::$app->getSession()->setFlash('success', Yii::t('app', "unable to delete, the account has transactions"));
             } else {
-                $level = 'error';
-                $text = Yii::t('app', "unable to delete, the account has transactions");
+                //$level = 'error';
+                //$text = Yii::t('app', "unable to delete, the account has transactions");
+                \Yii::$app->getSession()->setFlash('error', Yii::t('app', "unable to delete, the account has transactions"));
             }
         }
 
-        echo "<div class='alert in alert-block fade alert-$level'><a data-dismiss='alert' class='close'>×</a>$text</div>"; //flash 
-        Yii::app()->end();
+        //echo "<div class='alert in alert-block fade alert-$level'><a data-dismiss='alert' class='close'>×</a>$text</div>"; //flash 
+        //Yii::$app->end();
+
+        return $this->actionAdmin();
     }
 
-    public function actionAutocomplete($type = 0, $term = '') {
-        $res = Accounts::AutoComplete($term, $type);
-        echo CJSON::encode($res);
-        Yii::app()->end(); //*/
-    }
+    public function actionSearch($q = null, $id = null,$type=0) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $out = ['results' => ['id' => '', 'text' => '']];
+            if (!is_null($q)) {
+                $query = new \yii\db\Query;
+                $query->select('id, name AS text')
+                    ->from('{{%accounts}}')
+                    ->where('name LIKE "%' . $q .'%"')
+                    ->andWhere(['type'=>$type])
+                    ->limit(20);
+                $command = $query->createCommand();
+                $data = $command->queryAll();
+                $out['results'] = array_values($data);
+            }
+            elseif ($id > 0) {
+                $out['results'] = ['id' => $id, 'text' => Accounts::find($id)->name];
+            }
+            return $out;
+        }
 
-    public function actionJSON($id = 0) {
-        $model = Accounts::model()->findByPk($id);
-        echo CJSON::encode($model);
-        Yii::app()->end(); //*/
+    public function actionJson($id = 0) {
+        $model = Accounts::findOne($id);
+        return \yii\helpers\Json::encode($model);
+        //Yii::$app->end(); //*/
     }
 
     /**
      * Lists all models.
      */
-    public function actionIndex($type = 0) {
+    public function actionAjax($type = 0) {
 //$type=isset($_GET['type'])?(int)$_GET['type']:0;
         //$type=(int)$id;
-
-
-        $model = new Accounts('search');
-        $model->unsetAttributes();
-        $model->type = $type;
-        $vl = 'accounts-grid';
-        if (isset($_POST['Accounts'])) {
-            $model->attributes = $_POST['Accounts'];
-        }
-        if (isset($_GET['ajax'])) {
-            $this->renderPartial('ajax', array('model' => $model, ));
-            Yii::app()->end();
-        }
-
-        $this->render('index', array('type' => $type));
+        $searchModel = new \app\models\AccountsSearch();
+        $searchModel->type = $type;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $html = $this->renderPartial('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+        return \yii\helpers\Json::encode($html);
     }
 
     /**
      * Manages all models.
      */
-    public function actionAdmin() {
-        $model = new Accounts('search');
-        $type = isset($_GET['type']) ? (int) $_GET['type'] : 0;
-        $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['Accounts']))
-            $model->attributes = $_GET['Accounts'];
+    public function actionAdmin($id = 0) {
+        $types = Acctype::find()->All();
+        $list = array();
+        $searchModel = new \app\models\AccountsSearch();
+        $searchModel->type = $id;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        
+        if(Yii::$app->request->get('AccountsSearch')){
+            $searchModel->search(Yii::$app->request->get());
+            return $this->renderPartial('index', ['searchModel' => $searchModel,'dataProvider' => $dataProvider]);
+        }
+        
+        foreach ($types as $type1) {
+            $searchModel = new \app\models\AccountsSearch();
+            $searchModel->type = $type1->id;
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $array = [
+                'linkOptions' => ['data-id' => $type1->id],
+                'content'=>$this->renderPartial('index', ['searchModel' => $searchModel,'dataProvider' => $dataProvider]),
+                'label' => Yii::t('app', $type1->desc)
+            ];
+            if ($id == $type1->id)
+                $array['active'] = true;
 
-        $this->render('admin', array(
-            'model' => $model,
-            'type' => $type
-        ));
+            $list[] = $array;
+        }
+        return $this->render('admin', [
+                    'list' => $list,
+                    'type' => $id,
+        ]);
+        /*
+          return $this->render('admin', array(
+          'model' => $model,
+          'type' => $type
+          )); */
     }
 
     /**
@@ -181,23 +236,11 @@ class AccountsController extends RightsController {
      * If the data model is not found, an HTTP exception will be raised.
      * @param integer the ID of the model to be loaded
      */
-    public function loadModel($id) {
-//$model=Accounts::model()->findByPk($id);
-        $model = Accounts::model()->findByPk($id);
-
-        if ($model === null)
-            throw new CHttpException(404, Yii::t('app', 'The requested page does not exist.'));
-        return $model;
-    }
-
-    /**
-     * Performs the AJAX validation.
-     * @param CModel the model to be validated
-     */
-    protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'accounts-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
+    protected function findModel($id) {
+        if (($model = Accounts::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new \yii\web\HttpException(404, 'The requested page does not exist.');
         }
     }
 

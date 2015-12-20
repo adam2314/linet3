@@ -1,9 +1,9 @@
 <?php
-$this->breadcrumbs=array(
+$this->params["breadcrumbs"]=array(
 	'Currates',
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>'Create Currates', 'url'=>array('create')),
 	array('label'=>'Manage Currates', 'url'=>array('admin')),
 );

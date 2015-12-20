@@ -1,58 +1,67 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
+namespace app\controllers;
+
+use Yii;
+use yii\filters\AccessControl;
+use yii\web\Controller;
+use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
+use app\components\RightsController;
+use app\models\Item;
+
 class ItemController extends RightsController {
 
     /**
      * Displays a particular model.
      * @param integer $id the ID of the model to be displayed
      */
-    public function actionView($id) {
-        $model = Item::model()->findByPk($id);
-
-        $this->render('view', array(
-            'model' => $model,
-        ));
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
     }
 
     public function actionTemplate() {
         $model = new Item;
 
-        $cat = CHtml::listData(Itemcategory::model()->findAll(), 'id', 'name');
-        $units = CHtml::listData(Itemunit::model()->findAll(), 'id', 'name');
-        $this->render('create', array(
+        //$cat = Html::listData(Itemcategory::findAll(), 'id', 'name');
+        //$units = Html::listData(Itemunit::findAll(), 'id', 'name');
+        return $this->render('create', array(
             'model' => $model,
-            'cat' => $cat,
-            'units' => $units,
+            //'cat' => $cat,
+            //'units' => $units,
         ));
     }
 
-    public function actionJSON($id = 0) {
-        $model = Item::model()->findByPk($id);
+    public function actionJson($id = 0) {
+        $model = $this->findModel($id);
 
         //adam: there is a bug with the public property vat in the framework  Issue 1385 (WontFix)
-        echo CJSON::encode($model);
-        Yii::app()->end(); //*/
+        return \yii\helpers\Json::encode($model);
+        //Yii::$app->end(); //*/
     }
 
     public function actionVatJSON($id = 0) {
-        $model = Item::model()->findByPk($id);
+        $model = $this->findModel($id);
 
         //adam: there is a bug with the public property vat in the framework  Issue 1385 (WontFix)
-        echo json_encode($model);
-        Yii::app()->end(); //*/
+        return json_encode($model);
+        //Yii::$app->end(); //*/
     }
 
     public function actionAutocomplete($term = '') {
         $res = Item::AutoComplete($term);
-        echo CJSON::encode($res);
-        Yii::app()->end(); //*/
+        return \yii\helpers\Json::encode($res);
+        //Yii::$app->end(); //*/
     }
 
     /**
@@ -61,26 +70,21 @@ class ItemController extends RightsController {
      */
     public function actionCreate() {
         $model = new Item;
-        //$model->unsetAttributes();  // clear any default values
-        //print Yii::app()->user->getState('company');
-        //die;
-        // Uncomment the following line if AJAX validation is needed
-        $this->performAjaxValidation($model);
-
-        if (isset($_POST['Item'])) {
-            $model->attributes = $_POST['Item'];
-            if ($model->save())
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if(Yii::$app->request->post('ajax')!==null)
+                return \app\helpers\Response::send (200,$model);
             //$model->pic->saveAs('/to/localFile');
-                $this->redirect(array('admin', 'id' => $model->id));
+                return $this->redirect(array('admin', 'id' => $model->id));
         }
+        if(Yii::$app->request->post('ajax')!==null)
+            return \app\helpers\Response::send (501,$model->errors);
         $model->sku = $model->maxId() + 1;
-        $cat = CHtml::listData(Itemcategory::model()->findAll(), 'id', 'name');
-        $units = CHtml::listData(Itemunit::model()->findAll(), 'id', 'name');
+        
         $model->parent_item_id = 0;
-        $this->render('create', array(
+        return $this->render('create', array(
             'model' => $model,
-            'cat' => $cat,
-            'units' => $units,
+            //'cat' => $cat,
+            //'units' => $units,
         ));
     }
 
@@ -90,30 +94,30 @@ class ItemController extends RightsController {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
-        $model = $this->loadModel($id);
+        $model = $this->findModel($id);
 
         // Uncomment the following line if AJAX validation is needed
-        $this->performAjaxValidation($model);
+
         //$model->setEavAttributes(array('attribute1' => 'value1', 'attribute2' => 'value2'));
 
-        if (isset($_POST['Item'])) {
-            $model->attributes = $_POST['Item'];
-            $model->deleteEavAttributes();
-            if (isset($_POST['ItemeavE']) && isset($_POST['ItemeavE'])) {
-                $model->setEavAttributes(array_combine($_POST['ItemeavE'], $_POST['ItemeavV'])); ////saveEavAttributes
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            //$model->attributes = $_POST['Item'];
+            //$model->deleteEavAttributes();
+            if (isset($_POST['propertiesE']) && isset($_POST['propertiesV'])) {
+                $model->properties=array_combine($_POST['propertiesE'], $_POST['propertiesV']); ////saveEavAttributes
+                $model->save();
             }
 
-            if ($model->save())
-                $this->redirect(array('view', 'id' => $model->id));
+                return $this->redirect(array('view', 'id' => $model->id));
         }
 
-        $cat = CHtml::listData(Itemcategory::model()->findAll(), 'id', 'name');
-        $units = CHtml::listData(Itemunit::model()->findAll(), 'id', 'name');
+        //$cat = ArrayHelper::toArray(Itemcategory::findAll([]), ['id', 'name']);
+        //$units = ArrayHelper::toArray(Itemunit::findAll([]), ['id', 'name']);
 
-        $this->render('update', array(
+        return $this->render('update', array(
             'model' => $model,
-            'cat' => $cat,
-            'units' => $units,
+            //'cat' => $cat,
+            //'units' => $units,
         ));
     }
 
@@ -123,15 +127,16 @@ class ItemController extends RightsController {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        if (Yii::app()->request->isPostRequest) {
+        //if (Yii::$app->request->isPostRequest) {
+            
             // we only allow deletion via POST request
-            $this->loadModel($id)->delete();
+            $this->findModel($id)->delete();
 
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax']))
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-        } else
-            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+        //} else
+        //    throw new \yii\web\HttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
     /**
@@ -139,7 +144,7 @@ class ItemController extends RightsController {
      */
     public function actionIndex() {
         $dataProvider = new CActiveDataProvider('Item');
-        $this->render('index', array(
+        return $this->render('index', array(
             'dataProvider' => $dataProvider,
         ));
     }
@@ -148,27 +153,13 @@ class ItemController extends RightsController {
      * Manages all models.
      */
     public function actionAdmin() {
-        $model = new Item('search');
-        $model->unsetAttributes();  // clear any default values
+        
+        $model = new Item();
 
-        $vl = 'item-grid';
-        if (isset($_POST['Item']))
-            $model->attributes = $_POST['Item'];
-        if (isset($_GET['ajax'])) {
-            // Render partial file created in Step 1
-            $this->renderPartial('_ajax', array(
-                //'subscriberActiveDataProvider' => $subscriberActiveDataProvider,
-                'model' => $model,
-            ));
-            Yii::app()->end();
-        }
+        $model->scenario="search";
+        $model->load(Yii::$app->request->get());
 
-
-
-        //if(isset($_GET['Item']))
-        //	$model->attributes=$_GET['Item'];
-
-        $this->render('admin', array(
+        return $this->render('admin', array(
             'model' => $model,
         ));
     }
@@ -178,22 +169,11 @@ class ItemController extends RightsController {
      * If the data model is not found, an HTTP exception will be raised.
      * @param integer the ID of the model to be loaded
      */
-    public function loadModel($id) {
-        $model = Item::model()->findByPk($id);
+    public function findModel($id) {
+        $model = Item::findOne($id);
         if ($model === null)
-            throw new CHttpException(404, 'The requested page does not exist.');
+            throw new \yii\web\HttpException(404, 'The requested page does not exist.');
         return $model;
-    }
-
-    /**
-     * Performs the AJAX validation.
-     * @param CModel the model to be validated
-     */
-    protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'item-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
     }
 
 }

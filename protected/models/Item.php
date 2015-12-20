@@ -1,12 +1,13 @@
 <?php
-/***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+
+/* * *********************************************************************************
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
 /**
  * This is the model class for table "items".
  *
@@ -28,30 +29,43 @@
  * @property integer $stockType
  * @property integer $vat
  */
+
+namespace app\models;
+
+use Yii;
+use app\components\fileRecord;
+//use adam2314\EavBehavior;
+use app\models\UserIncomeMap;
+use app\models\Accounts;
+use yii\data\ActiveDataProvider;
 class Item extends fileRecord {
+
+    //public $i;
     const STOCK_NO = 0;
     const STOCK_QTY = 1;
-    const STOCK_INSTANCE=2;
-    
-    const table = '{{items}}';
+    const STOCK_INSTANCE = 2;
+    const table = '{{%items}}';
 
     public $vat; //loads vat from user by cat
 
-    
-    
+    //public $profit=0;
+    //public $purchaseprice=0;
+    //public $saleprice=0;
+
+    public static function primaryKey() {
+        return ["id"];
+    }
+
+//*/
+
     public static function getStocks() {
         return self::getConstants('STOCK', __CLASS__);
     }
-    
-    
+
     public function openfrmt($line) {
         $itms = '';
 
-        //get all fields (m100) sort by id
-        $criteria = new CDbCriteria;
-        $criteria->condition = "type_id = :type_id";
-        $criteria->params = array(':type_id' => "M100");
-        $fields = OpenFormat::model()->findAll($criteria);
+        $fields = OpenFormat::find()->where(['type_id' => 'M100'])->All();
 
         //loop strfgy
         foreach ($fields as $field) {
@@ -60,74 +74,105 @@ class Item extends fileRecord {
         return $itms . "\r\n";
     }
 
-    
-    
-    public function findByPk($id, $condition = '', $params = Array()) {
-        $model = parent::findByPk($id, $condition = '', $params = Array());
+    public static function findByPk($id, $date = null) {
+        $model = self::findOne($id);
+
         if ($model !== null) {
-            $incomeMap = UserIncomeMap::model()->findByPk(array('user_id' => Yii::app()->user->id, 'itemVatCat_id' => $model->itemVatCat_id));
-            if($incomeMap!==null){
-                    
-                $model->vat = Accounts::model()->getSrcTax($incomeMap->account_id);
+            if(isset(Yii::$app->user)){
+                $uid=Yii::$app->user->id;
+                
             }else{
-                $model->vat=0;
+                $uid=Yii::$app->params['uid'];
+            }
+            
+            $incomeMap = UserIncomeMap::findOne(array('user_id' => $uid, 'itemVatCat_id' => $model->itemVatCat_id));
+            if ($incomeMap !== null) {
+
+                $model->vat = Accounts::SrcTax($incomeMap->account_id,$date);
+            } else {
+                $model->vat = 0;
             }
         }
         return $model;
     }
 
-    public function beforeSave() {
+    public function beforeSave($insert) {
+        $this->profit = ((int)$this->profit===0) ? 0 : $this->profit;
+        $this->purchaseprice = ((int)$this->purchaseprice===0) ? 0 : $this->purchaseprice;
+        $this->saleprice = ((int)$this->saleprice===0) ? 0 : $this->saleprice;
+        
         if ($this->isNewRecord)
-            $this->created = new CDbExpression('NOW()');
+            $this->created = new \yii\db\Expression('NOW()');
         else
-            $this->modified = new CDbExpression('NOW()');
-        return parent::beforeSave();
+            $this->modified = new \yii\db\Expression('NOW()');
+        return parent::beforeSave($insert);
     }
 
     function behaviors() {
+
         return array(
-            'eavAttr' => array(
-                //'class' => 'ext.eav.EEavBehavior',
-                'class' => 'application.modules.eav.extensions.EEavBehavior',
-                // Table that stores attributes (required)
-                'tableName' => '{{itemEav}}',
-                // model id column
-                // Default is 'entity'
-                'entityField' => 'entity',
-                // attribute name column
-                // Default is 'attribute'
-                'attributeField' => 'attribute',
-                // attribute value column
-                // Default is 'value'
-                'valueField' => 'value',
-                // Model FK name
-                // By default taken from primaryKey
-                'modelTableFk' => 'primaryKey',
-                // Array of allowed attributes
-                // All attributes are allowed if not specified
-                // Empty by default
-                'safeAttributes' => array(),
-                // Attribute prefix. Useful when storing attributes for multiple models in a single table
-                // Empty by default
-                'attributesPrefix' => '',
-            )//*/
+                ///*
+                  'properties' => array(
+                  //'class' => 'ext.eav.EEavBehavior',
+                  'class' => \adam2314\EavBehavior::className(),
+                  // Table that stores attributes (required)
+                  'tableName' => '{{%itemEav}}',
+                  'entityField' => 'entity',
+                  'attributeField' => 'attribute',
+                  'valueField' => 'value',
+
+                  'modelPrimaryKey' => 'id',
+                  //'safeAttributes' => array(),
+                  //'attributesPrefix' => '',
+                  )// */
         );
     }
 
+    //function behaviors() {
+    //    return array(
+    /*
+      'eavAttr' => array(
+      //'class' => 'ext.eav.EEavBehavior',
+      'class' => 'application.modules.eav.extensions.EEavBehavior',
+      // Table that stores attributes (required)
+      'tableName' => '{{itemEav}}',
+      // model id column
+      // Default is 'entity'
+      'entityField' => 'entity',
+      // attribute name column
+      // Default is 'attribute'
+      'attributeField' => 'attribute',
+      // attribute value column
+      // Default is 'value'
+      'valueField' => 'value',
+      // Model FK name
+      // By default taken from primaryKey
+      'modelTableFk' => 'primaryKey',
+      // Array of allowed attributes
+      // All attributes are allowed if not specified
+      // Empty by default
+      'safeAttributes' => array(),
+      // Attribute prefix. Useful when storing attributes for multiple models in a single table
+      // Empty by default
+      'attributesPrefix' => '',
+      )// */
+    //    );
+    //}
     //*/
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
      * @return Item the static model class
      */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
+    /*
+      public static function model($className = __CLASS__) {
+      return parent::model($className);
+      } */
 
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -138,19 +183,18 @@ class Item extends fileRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('sku, name, currency_id, category_id, parent_item_id, isProduct, stockType, itemVatCat_id, unit_id', 'required'),
-            array('category_id, parent_item_id, isProduct, profit, unit_id, owner, stockType', 'numerical', 'integerOnly' => true),
-            array('itemVatCat_id', 'length', 'max' => 10),
-            array('name', 'length', 'max' => 100),
-            array('purchaseprice, saleprice', 'length', 'max' => 20),
-            array('currency_id', 'length', 'max' => 3),
-            array('sku', 'unique','message'=>'Sku already exists!'),       
-            array('description', 'safe'),
-            //array('src_tax', 'length', 'max'=>5),
-            array('pic', 'file', 'types' => 'jpg, gif, png', 'allowEmpty' => true),
+            [['sku', 'name', 'currency_id', 'category_id', 'parent_item_id', 'isProduct', 'stockType', 'itemVatCat_id', 'unit_id'], 'required','on'=>'default'],
+            [['category_id', 'parent_item_id', 'isProduct', 'profit', 'unit_id', 'owner', 'stockType'], 'number'],
+            array(['itemVatCat_id'], 'number'),
+            array('name', 'string', 'max' => 100),
+            //array('string', 'max' => 20),
+            array('currency_id', 'string', 'max' => 3),
+            array('sku', 'unique', 'message' => 'Sku already exists!'),
+            array(['purchaseprice', 'saleprice', 'description'], 'safe'),
+            //array('pic', 'file', 'types' => 'jpg, gif, png', 'allowEmpty' => true),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, itemVatCat_id, name,description, category_id, parent_item_id, isProduct, profit, unit_id, purchaseprice, saleprice, currency_id, pic, owner, stockType', 'safe', 'on' => 'search'),
+            array(['id', 'itemVatCat_id', 'name','description', 'category_id', 'parent_item_id', 'isProduct', 'profit', 'unit_id', 'purchaseprice', 'saleprice', 'currency_id', 'pic', 'owner', 'stockType'], 'safe', 'on' => 'search'),
         );
     }
 
@@ -175,71 +219,87 @@ class Item extends fileRecord {
      */
     public function attributeLabels() {
         return array(
-            'id' => Yii::t('labels', 'ID'),
-            'itemVatCat_id' => Yii::t('labels', 'Item VAT Catagory'),
-            'name' => Yii::t('labels', 'Name'),
-            'unit_id' => Yii::t('labels', 'Unit'),
-            'extcatnum' => Yii::t('labels', 'Extrnal No.'),
-            'sku' => Yii::t('labels', 'SKU'),
-            'manufacturer' => Yii::t('labels', 'Manufacturer'),
-            'saleprice' => Yii::t('labels', 'Sale Price'),
-            'currency_id' => Yii::t('labels', 'Currency'),
-            'ammount' => Yii::t('labels', 'Ammount'),
-            'owner' => Yii::t('labels', 'Owner'),
-            'category_id' => Yii::t('labels', 'Category'),
-            'parent_item_id' => Yii::t('labels', 'Parent Item'),
-            'isProduct' => Yii::t('labels', 'Is Product'),
-            'profit' => Yii::t('labels', 'Profit'),
-            'purchaseprice' => Yii::t('labels', 'Purchase Price'),
-            'pic' => Yii::t('labels', 'Picture'),
-            'description' => Yii::t('labels', 'Sescription'),
-            'stockType' => Yii::t('labels', 'Stock Type'),
+            'id' => Yii::t('app', 'ID'),
+            'itemVatCat_id' => Yii::t('app', 'Item VAT Catagory'),
+            'name' => Yii::t('app', 'Name'),
+            'unit_id' => Yii::t('app', 'Unit'),
+            'extcatnum' => Yii::t('app', 'Extrnal No.'),
+            'sku' => Yii::t('app', 'SKU'),
+            'manufacturer' => Yii::t('app', 'Manufacturer'),
+            'saleprice' => Yii::t('app', 'Sale Price'),
+            'currency_id' => Yii::t('app', 'Currency'),
+            'ammount' => Yii::t('app', 'Ammount'),
+            'owner' => Yii::t('app', 'Owner'),
+            'category_id' => Yii::t('app', 'Category'),
+            'parent_item_id' => Yii::t('app', 'Parent Item'),
+            'isProduct' => Yii::t('app', 'Is Product'),
+            'profit' => Yii::t('app', 'Profit'),
+            'purchaseprice' => Yii::t('app', 'Purchase Price'),
+            'pic' => Yii::t('app', 'Picture'),
+            'description' => Yii::t('app', 'Sescription'),
+            'stockType' => Yii::t('app', 'Stock Type'),
         );
     }
 
-    /**
-     * Retrieves a list of models based on the current search/filter conditions.
-     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-     */
-    public function search() {
-        // Warning: Please modify the following code to remove attributes that
-        // should not be searched.
+    
+    public function search($params=null)
+    {
+        $query = Item::find();
 
-        $criteria = new CDbCriteria;
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            "sort"=> ['defaultOrder' => [
+                'id'=>SORT_DESC
+                
+                ]]
+        ]);
 
-        $criteria->compare('id', $this->id, true);
-        $criteria->compare('itemVatCat_id', $this->itemVatCat_id, true);
-        $criteria->compare('name', $this->name, true);
-        $criteria->compare('sku', $this->sku, true);
-        $criteria->compare('description', $this->description, true);
-        $criteria->compare('category_id', $this->category_id);
-        $criteria->compare('parent_item_id', $this->parent_item_id);
-        $criteria->compare('isProduct', $this->isProduct);
-        $criteria->compare('profit', $this->profit);
-        $criteria->compare('unit_id', $this->unit_id);
-        $criteria->compare('purchaseprice', $this->purchaseprice, true);
-        $criteria->compare('saleprice', $this->saleprice, true);
-        $criteria->compare('currency_id', $this->currency_id);
-        //$criteria->compare('src_tax',$this->src_tax);
-        $criteria->compare('pic', $this->pic, true);
-        $criteria->compare('owner', $this->owner);
-        $criteria->compare('stockType', $this->stockType);
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
-    }
+        $this->load($params);
 
-    public static function AutoComplete($name = '') {
-        $sql = 'SELECT id as value, name AS label FROM `' . Item::table . '` WHERE name LIKE :name';
-        $name = $name . '%';
-        return Yii::app()->db->createCommand($sql)->queryAll(true, array(':name' => $name));
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            
+        ]);
+
+        $query->andFilterWhere(['like', 'name', $this->name])
+            //->andFilterWhere(['like', 'address', $this->address])
+            //->andFilterWhere(['like', 'city', $this->city])
+            //->andFilterWhere(['like', 'zip', $this->zip])
+            //->andFilterWhere(['like', 'vatnum', $this->vatnum])
+            //->andFilterWhere(['like', 'refnum', $this->refnum])
+            //->andFilterWhere(['like', 'refnum_ext', $this->refnum_ext])
+            //->andFilterWhere(['like', 'currency_id', $this->currency_id])
+            //->andFilterWhere(['like', 'comments', $this->comments])
+            ->andFilterWhere(['like', 'description', $this->description]);
+        
+        /*
+        if(!is_null($this->issue_date)){
+            $tmp=  explode(" to ", $this->issue_date);
+            //var_dump($tmp);
+            if(isset($tmp[0])&&isset($tmp[1]))        
+                $query->andFilterWhere(['between', 'issue_date', $tmp[0], $tmp[1]]);
+            //
+            //$query->andFilterWhere(['>=', 'issue_from', $tmp[1]]);
+        }
+        */
+        
+        
+        return $dataProvider;
     }
     
     
-    public function maxId(){
-        $criteria = new CDbCriteria;
-        $criteria->select = 'max(id)';
-        $id = $this->commandBuilder->createFindCommand($this->tableName(), $criteria)->queryScalar();
+
+
+    public function maxId() {
+        $id = Item::find()->select('max(id)')->scalar();
+
+
         return $id;
     }
 

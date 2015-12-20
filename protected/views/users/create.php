@@ -1,18 +1,18 @@
 <?php
 
 
-$this->menu=array(
+$this->params["menu"]=array(
 	//array('label'=>'List User','url'=>array('index')),
 	array('label'=>'Manage User','url'=>array('admin')),
 );
 
 
- $this->beginWidget('MiniForm',array(
+ app\widgets\MiniForm::begin(array(
     'header' => Yii::t('app',"Create User"),
 )); 
 ?>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php echo $this->render('_form', array('model'=>$model)); ?>
 
 
-<?php $this->endWidget(); ?>
+<?php app\widgets\MiniForm::end(); ?>

@@ -1,23 +1,31 @@
 <?php
 
 /* * *********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  * ********************************************************************************** */
+namespace app\controllers;
 
+use Yii;
+use yii\filters\AccessControl;
+use yii\web\Controller;
+use yii\filters\VerbFilter;
+use app\components\RightsController;
+use app\models\Company;
+use app\models\DatabasesPerm;
 class CompanyController extends RightsController {// //RightsController
 
     public $defaultAction = 'index';
-    public $layout = '//layouts/clean';
+    public $layout = 'clean';
 
     public function init() {
-        if (Yii::app()->params['newInstall']) {
-            $this->redirect(Yii::app()->createAbsoluteUrl('install'));
-            Yii::app()->end();
+        if (Yii::$app->params['newInstall']) {
+            $this->redirect('install');
+            Yii::$app->end();
             //}
         }
         return parent::init();
@@ -28,103 +36,105 @@ class CompanyController extends RightsController {// //RightsController
      * @param integer $id the ID of the model to be displayed
      */
     public function actionIndex() {
-
-        //echo CJSON::encode("ok");
-        //Yii::app()->end();
+        $this->layout = 'clean';
+        //$this->layout='main';
+        //echo \yii\helpers\Json::encode("ok");
+        //Yii::$app->end();
 
         if (isset($_POST['Company'])) {
             $id = (int) $_POST['Company'];
 
             //
             //if has access
-            //$database= Company::model()->findByPk($id);
-            Yii::log($id, 'info', 'app');
-            //Yii::app()->user->setState('Database',$database );
-            //Yii::app()->user->setState('Company',$id);
+            //$database= Company::findOne($id);
+            Yii::info($id);
+            //Yii::$app->user->setState('Database',$database );
+            //Yii::$app->user->setState('Company',$id);
             //echo 'ok';
 
-            Company::model()->select($id);
-
+            //Company::select($id);
+            Yii::$app->session['company']=$id;
 
             //redirect
-            Response::send();
+            return \app\helpers\Response::send(200,$id);
         }
-
-        if (Yii::app()->user->Company != 0) {
-            Yii::app()->user->setState('Company', 0);
-
-            $this->redirect('company');
-
-            Yii::app()->end();
+        if ($this->company != 0) {
+            Yii::$app->session['company']= 0;
+            //unset(Yii::$app->session['company']);
+            return $this->redirect(\yii\helpers\BaseUrl::base().'/company/index');
+            \Yii::$app->end();
         }
-        $model = new Company('search');
-        $model->unsetAttributes();  // clear any default values
-        $this->render('index', array('model' => $model,));
+        
+        
+        
+        $model = new Company;
+        ////$model->unsetAttributes();  // clear any default values
+        return $this->render('index', array('model' => $model,));
     }
 
     public function actionAdmin() {//only admin
         if (isset($_POST['Company'])) {
             //if has access
-            $database = Company::model()->findByPk((int) $_POST['Company']);
-            Yii::log((int) $_POST['Company'], 'info', 'app');
-            Yii::app()->user->setState('Database', $database);
-            Yii::app()->user->setState('Company', $database->id);
+            $database = Company::findByPk((int) $_POST['Company']);
+            Yii::info((int) $_POST['Company']);
+            //Yii::$app->user->setState('Database', $database);
+            $this->company= $database->id;
             //redirect
 
-            Yii::app()->end();
+            Yii::$app->end();
         }
 
-        if (Yii::app()->user->Company != 0) {
-            Yii::app()->user->setState('Company', 0);
-            //Yii::app()->user->Company=0;
+        if ($this->company != 0) {
+            $this->company=0;
+            //Yii::$app->user->Company=0;
             //$this->redirect('company');
-            //Yii::app()->end();
+            //Yii::$app->end();
         }
 
-        $model = new Company('search');
-        $model->unsetAttributes();  // clear any default values
-        $this->render('admin', array('model' => $model,));
+        $model = new Company();
+        //$model->unsetAttributes();  // clear any default values
+        return $this->render('admin', array('model' => $model,));
     }
 
     public function actionDelete($id) {//only admin
-        if (Yii::app()->request->isPostRequest) {
+        //if (Yii::$app->request->isPostRequest) {
             // we only allow deletion via POST request
             $model = $this->loadModel($id);
             
             $model->delete();
-            Yii::app()->user->setState('Company', 0);
+            $this->company=0;
+            $this->redirect(\yii\helpers\BaseUrl::base().'/company/admin');
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             //if(!isset($_GET['ajax']))
             //$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-        } else {
-            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
-        }
+        //} else {
+        //    throw new \yii\web\HttpException(400, 'Invalid request. Please do not repeat this request again.');
+        //}
     }
 
     public function actionCreate() {//only admin
         $model = new Company;
-        $model->string = Yii::app()->dbMain->connectionString;
-        $model->user = Yii::app()->dbMain->username;
-        $model->password = Yii::app()->dbMain->password;
+        $model->string = Yii::$app->dbMain->dsn;
+        $model->user = Yii::$app->dbMain->username;
+        $model->password = Yii::$app->dbMain->password;
         //$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         //$model->prefix=substr(str_shuffle($chars),0,4)."_";
 
 
         if ($model->save()) {
-            $database = Company::model()->findByPk($model->id);
-            Yii::app()->user->setState('Database', $database);
-            Yii::app()->user->setState('Company', $model->id);
+            $database = Company::findOne($model->id);
+            Yii::$app->session['company']=$model->id;
             //redierct to settings.
             $this->redirect(array('settings/admin'));
         }
 
-        $this->render('create', array(
+        return $this->render('create', array(
             'model' => $model,
         ));
     }
 
-    public function actionDeletePermission($id) {//only admin
-        $model = DatabasesPerm::model()->findByPk($id);
+    public function actionDeletepermission($id) {//only admin
+        $model = DatabasesPerm::findOne($id);
         if ($model === null) {
             
         } else {
@@ -135,23 +145,20 @@ class CompanyController extends RightsController {// //RightsController
     }
 
     public function actionPermissions($id) {
-        //$model=  DatabasesPerm::model()->findByPk($id);
-        $model = new DatabasesPerm('search');
-        $model->unsetAttributes();  // clear any default values
+        //$model=  DatabasesPerm::findOne($id);
+        $model = new DatabasesPerm();
+        $model->scenario='search';
+        //$model->unsetAttributes();  // clear any default values
         $model->database_id = $id;
         $user = new DatabasesPerm;
         $user->database_id = $id;
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-        if (isset($_POST['DatabasesPerm'])) {
-            $user->attributes = $_POST['DatabasesPerm'];
+        if ($user->load(Yii::$app->request->post())){
             $user->save();
             //if($model->save())
             //    $this->redirect(array('index'));
         }
 
-        $this->render('permissions', array(
+        return $this->render('permissions', array(
             'model' => $model,
             'user' => $user,
         ));
@@ -160,29 +167,25 @@ class CompanyController extends RightsController {// //RightsController
     public function actionUpdate($id) {//only admin
         $model = $this->loadModel($id);
 
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-        if (isset($_POST['Company'])) {
-            $model->attributes = $_POST['Company'];
+        if ($model->load(Yii::$app->request->post())){
             if ($model->save())
                 $this->redirect(array('index'));
         }
 
-        $this->render('update', array(
+        return $this->render('update', array(
             'model' => $model,
         ));
     }
 
     public function loadModel($id) {
-        $model = Company::model()->findByPk($id);
+        $model = Company::findOne($id);
         if ($model === null)
-            throw new CHttpException(404, 'The requested page does not exist.');
+            throw new \yii\web\HttpException(404, 'The requested page does not exist.');
         return $model;
     }
 
     public function accessDenied($message = null) {
-        Yii::app()->user->setState('Company', 0);
+        Yii::$app->user->setState('Company', 0);
 
         if ($message === null) {
             $message = Rights::t('app', 'User is not asigned a role inside the company!');

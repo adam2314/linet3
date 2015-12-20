@@ -1,12 +1,16 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
+namespace app\controllers;
+
+use Yii;
+use app\components\RightsController;
 class AcctypeController extends RightsController
 {
 	
@@ -17,7 +21,7 @@ class AcctypeController extends RightsController
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
+		return $this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
 	}
@@ -30,17 +34,12 @@ class AcctypeController extends RightsController
 	{
 		$model=new Acctype;
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['Acctype']))
-		{
-			$model->attributes=$_POST['Acctype'];
+		if ($model->load(Yii::$app->request->post())){
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('create',array(
+		return $this->render('create',array(
 			'model'=>$model,
 		));
 	}
@@ -54,17 +53,12 @@ class AcctypeController extends RightsController
 	{
 		$model=$this->loadModel($id);
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['Acctype']))
-		{
-			$model->attributes=$_POST['Acctype'];
+		if ($model->load(Yii::$app->request->post())){
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('update',array(
+		return $this->render('update',array(
 			'model'=>$model,
 		));
 	}
@@ -76,7 +70,7 @@ class AcctypeController extends RightsController
 	 */
 	public function actionDelete($id)
 	{
-		if(Yii::app()->request->isPostRequest)
+		if(Yii::$app->request->isPostRequest)
 		{
 			// we only allow deletion via POST request
 			$this->loadModel($id)->delete();
@@ -86,7 +80,7 @@ class AcctypeController extends RightsController
 				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 		}
 		else
-			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+			throw new \yii\web\HttpException(400,'Invalid request. Please do not repeat this request again.');
 	}
 
 	/**
@@ -95,7 +89,7 @@ class AcctypeController extends RightsController
 	public function actionIndex()
 	{
 		$dataProvider=new CActiveDataProvider('Acctype');
-		$this->render('index',array(
+		return $this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
 	}
@@ -105,12 +99,12 @@ class AcctypeController extends RightsController
 	 */
 	public function actionAdmin()
 	{
-		$model=new Acctype('search');
-		$model->unsetAttributes();  // clear any default values
+		$model=new Acctype();
+		//$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Acctype']))
 			$model->attributes=$_GET['Acctype'];
 
-		$this->render('admin',array(
+		return $this->render('admin',array(
 			'model'=>$model,
 		));
 	}
@@ -122,22 +116,10 @@ class AcctypeController extends RightsController
 	 */
 	public function loadModel($id)
 	{
-		$model=Acctype::model()->findByPk($id);
+		$model=Acctype::findOne($id);
 		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+			throw new \yii\web\HttpException(404,'The requested page does not exist.');
 		return $model;
 	}
 
-	/**
-	 * Performs the AJAX validation.
-	 * @param CModel the model to be validated
-	 */
-	protected function performAjaxValidation($model)
-	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='acctype-form')
-		{
-			echo CActiveForm::validate($model);
-			Yii::app()->end();
-		}
-	}
 }

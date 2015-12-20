@@ -1,20 +1,20 @@
 <?php
-$this->breadcrumbs=array(
+$this->params["breadcrumbs"]=array(
 	Yii::t('app','Bankbooks')=>array('index'),
 	'Create',
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>Yii::t('app','List Bankbooks'),'url'=>array('index')),
 	array('label'=>Yii::t('app','Manage Bankbooks'),'url'=>array('admin')),
 );
 
-$this->beginWidget('MiniForm',array(
+app\widgets\MiniForm::begin(array(
     'header' => Yii::t('app',"Create Bankbooks"),
 )); 
 ?>
 
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php echo $this->render('_form', array('model'=>$model)); ?>
 
-<?php $this->endWidget(); ?>
+<?php app\widgets\MiniForm::end(); ?>

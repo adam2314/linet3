@@ -1,7 +1,7 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -16,27 +16,22 @@
  * @property string $name
  * @property string $symbol
  */
+namespace app\models;
+
+use Yii;
+use app\components\mainRecord;
 class Currecies extends mainRecord{
         const table='currencies';
-        public function primaryKey()     {
-                return 'id';
+        public static function primaryKey()     {
+                return ['id'];
                 // For composite primary key, return an array like the following
                 //return array('prefix', 'num');
             }
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return Currecies the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
 
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
+	public static function tableName()
 	{
 		return self::table;
 	}
@@ -49,12 +44,12 @@ class Currecies extends mainRecord{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, code', 'length', 'max'=>3),
-			array('name', 'length', 'max'=>255),
-			array('symbol', 'length', 'max'=>17),
+			array(['id', 'code'], 'string', 'max'=>3),
+			array('name', 'string', 'max'=>255),
+			array('symbol', 'string', 'max'=>17),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, code, name, symbol', 'safe', 'on'=>'search'),
+			array(['id', 'code', 'name', 'symbol'], 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -83,10 +78,10 @@ class Currecies extends mainRecord{
 	public function attributeLabels()
 	{
 		return array(
-			'id'=>Yii::t('labels','ID'),
-                        'code'=>Yii::t('labels','Code'),
-                        'name'=>Yii::t('labels','Name'),
-                        'symbol'=>Yii::t('labels','Symbol'),
+			'id'=>Yii::t('app','ID'),
+                        'code'=>Yii::t('app','Code'),
+                        'name'=>Yii::t('app','Name'),
+                        'symbol'=>Yii::t('app','Symbol'),
 		);
 	}
 
@@ -94,9 +89,9 @@ class Currecies extends mainRecord{
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
-	public function search(){
+	public function search($params){
 		
-		$criteria=new CDbCriteria;
+		$query = Accounts::find();          $dataProvider = new ActiveDataProvider([             'query' => $query,         ]);          $this->load($params);          if (!$this->validate()) {                                     return $dataProvider;         }
 
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('code',$this->num,true);
@@ -115,7 +110,7 @@ class Currecies extends mainRecord{
 	 
 
             $qtxt ="SELECT id ,name as label FROM `".Self::table."` WHERE name LIKE :term";
-            $command =Yii::app()->db->createCommand($qtxt);
+            $command =Yii::$app->db->createCommand($qtxt);
             $command->bindValue(":term", '%'.$name.'%', PDO::PARAM_STR);
             //$command->bindValue(":prefix", $this->prefix, PDO::PARAM_STR);
            // $command->bindValue(":type", $type, PDO::PARAM_STR);
@@ -123,7 +118,7 @@ class Currecies extends mainRecord{
             return $command->queryAll();
 
 
-	    //return CJSON::encode($res);
-	    //Yii::app()->end();//*/
+	    //return \yii\helpers\Json::encode($res);
+	    //Yii::$app->end();//*/
 	}
 }

@@ -2,7 +2,13 @@
     <div class="row">
         <div class="col-md-3">
             <?php
-            $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+            use app\models\Accounts;
+            use app\models\Currates;
+            use kartik\select2\Select2;
+            use kartik\datecontrol\DateControl;
+            
+            
+            $form = kartik\form\ActiveForm::begin( array(
                 'id' => 'outcome-form',
                 'enableAjaxValidation' => true,
             ));
@@ -17,64 +23,45 @@
 
             <?php
             if ((int) $model->account_id != 0) {
-                echo $form->hiddenField($model, 'account_id');
-                echo "<h2>" . Accounts::model()->findByPk($model->account_id)->name . "</h2>";
+                echo $form->field($model, 'account_id')->hiddenInput();
+                echo "<h2>" . Accounts::findOne($model->account_id)->name . "</h2>";
             } else {
-                echo $form->dropDownListRow($model, 'account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => 1)), 'id', 'name')); //supplieres
+                echo $form->field($model, 'account_id')->widget(Select2::className(),['data'=> \yii\helpers\ArrayHelper::map(Accounts::find()->where(['type' => 1])->all(), 'id', 'name')]); //supplieres
             }
             ?>
 
 
-            <?php echo $form->dropDownListRow($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency  ?>
+            <?php echo $form->field($model, 'currency_id')->widget(Select2::className(),['data'=> \yii\helpers\ArrayHelper::map(Currates::GetRateList(), 'id', 'name')]); ?>
 
             <br />
 
-            <?php echo $form->textFieldRow($model, 'sum'); ?>
-            <?php //echo $form->textFieldRow($model, 'src_tax'); src tax is closed until we will support 854 report?>
-            <?php echo $form->textFieldRow($model, 'details'); ?>
+            <?php echo $form->field($model, 'sum'); ?>
+            <?php //echo $form->field($model, 'src_tax'); src tax is closed until we will support 854 report?>
+            <?php echo $form->field($model, 'details'); ?>
 
 
 
-            <?php //echo $form->textFieldRow($model, 'refnum', array('size' => 5, 'maxlength' => 5)); ?>
+            <?php //echo $form->field($model, 'refnum', array('size' => 5, 'maxlength' => 5)); ?>
             <div>
-                <?php
-                $this->widget('widgetRefnum', array(
-                    'model' => $model, //Model object
-                    'attribute' => 'refnum', //attribute name
-                )); //*/
-                ?>
+                <?= \app\widgets\Refnum::widget(['model' => $model, 'attribute' => 'refnum' ]); ?>
             </div>
 
 
 
-            <?php echo $form->labelEx($model, 'date'); ?>
-            <?php
-            $this->widget('zii.widgets.jui.CJuiDatePicker', array(// you must specify name or model/attribute
-                'name' => 'FormOutcome[date]',
-                'language' => 'en',
-                'options' => array(
-                    'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-                )
-                    )
-            );
-            ?>
-            <?php echo $form->error($model, 'date'); ?>
+            <?= $form->field($model,'date')->widget(DateControl::classname(), ['type' => 'date']);?>
+            
 
-            <?php echo $form->dropDownListRow($model, 'opp_account_id', CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => 7)), 'id', 'name')); //7=banks ?>
+            <?= $form->field($model, 'opp_account_id')->widget(Select2::className(),['data'=>  \yii\helpers\ArrayHelper::map(Accounts::find()->where(array('type' => 7))->all(), 'id', 'name')]); //7=banks ?>
 
 
 
             <div class="form-actions">
-                <?php
-                $this->widget('bootstrap.widgets.TbButton', array(
-                    'buttonType' => 'submit',
-                    'type' => 'primary',
-                    'label' => Yii::t('app', "Create"),
-                ));
-                ?>
+                <?= \yii\helpers\Html::submitButton(Yii::t('app', 'Create') , ['class' =>  'btn btn-success']) ?>
             </div>
 
-            <?php $this->endWidget(); ?>
+            <?php kartik\form\ActiveForm::end(); ?>
+            
+            <?= \app\widgets\RefnumModal::widget(['model' => $model, 'attribute' => 'refnum' ]); ?>
         </div>
     </div>
 </div><!-- form -->
@@ -83,8 +70,11 @@
 <script type="text/javascript">
     function refNum(doc) {//
 
+        $("#popover-FormOutcome_refnum").hide();
 
-        $("#choseFormOutcome_refnum").dialog("close");
+        
+
+        $("#choseFormOutcome_refnum").trigger("close");
 
         $('#FormOutcome_refnum_div').html($('#FormOutcome_refnum_div').html() + ", " + doc.doctype + " #" + doc.docnum);
         $('#FormOutcome_refnum_ids').val($('#FormOutcome_refnum_ids').val() + doc.id + ",");
@@ -101,7 +91,7 @@
      //src tax is closed until we will support 854 report
      $("#FormOutcome_sum").change(function() {
      var sum = $('#FormOutcome_sum').val();
-     $.get("<?php echo $this->createUrl('/'); ?>/index.php", {"r": "/accounts/JSON", "id": $("#FormOutcome_account_id").val()},
+     $.get("<?php echo yii\helpers\BaseUrl::base().('/'); ?>/index.php", {"r": "/accounts/JSON", "id": $("#FormOutcome_account_id").val()},
      function(data) {
      var src_tax=sum*(data.src_tax/100);
      $("#FormOutcome_sum").val(sum-src_tax);

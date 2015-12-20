@@ -1,9 +1,9 @@
 <?php
-$this->breadcrumbs=array(
+$this->params["breadcrumbs"]=array(
 	'Doctypes',
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>'Create Doctype', 'url'=>array('create')),
 	array('label'=>'Manage Doctype', 'url'=>array('admin')),
 );

@@ -699,64 +699,64 @@ INSERT INTO `language` (`id`, `name`) VALUES
 ('he_il', 'עברית');
 
 CREATE TABLE IF NOT EXISTS `log` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `level` varchar(128) DEFAULT NULL,
-  `category` varchar(128) DEFAULT NULL,
-  `logtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `IP_User` varchar(50) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `request_URL` text,
-  `message` text,
-  PRIMARY KEY (`id`)
+  `id`          bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   `level`       integer,
+   `category`    varchar(255),
+   `log_time`    double,
+   `prefix`      text,
+   `message`     text,
+   key `idx_log_level` (`level`),
+   key `idx_log_category` (`category`)
 );
+
 
 CREATE TABLE IF NOT EXISTS `menu` (
   `id` int(12) NOT NULL AUTO_INCREMENT,
-  `label` varchar(255) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `route` varchar(255) DEFAULT NULL,
   `icon` varchar(255) DEFAULT NULL,
   `parent` int(12) NOT NULL DEFAULT '0',
-  `sort` int(12) NOT NULL,
+  `order` int(12) NOT NULL,
+  `module` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
-INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`, `sort`) VALUES
-(1, 'Settings', NULL, 'glyphicon glyphicon-cog', 80, 0),
+INSERT INTO `menu` (`id`, `name`, `route`, `icon`, `parent`, `order`) VALUES
+(1, 'Settings', NULL, 'glyphicon glyphicon-cog', 0, 9),
 (2, 'Business Details', 'settings/admin', NULL, 1, 0),
-(3, 'Manual Journal Voucher', 'transaction/create', NULL, 12, 0),
+(3, 'Manual Journal Voucher', 'transaction/create', NULL, 32, 0),
 (4, 'Business Docs', 'doctype/admin', NULL, 1, 0),
-(5, 'Custom Fields', 'eavFields/admin', NULL, 1, 0),
+(5, 'Custom Fields', 'eavfields/admin', NULL, 1, 0),
 (6, 'Currency Rates', 'currates/admin', NULL, 1, 0),
 (7, 'Opening Balances', 'transaction/openbalance', NULL, 1, 0),
 (8, 'Contact Item', 'rm/admin', NULL, 12, 0),
-(9, 'Tax Category For Items', 'ItemVatCat/admin', NULL, 1, 0),
+(9, 'Tax Category For Items', 'Itemvatcat/admin', NULL, 1, 0),
 (10, 'Manage Users', 'users/admin', NULL, 1, 0),
-(11, 'Manage Groups', 'rights/authItem/roles', NULL, 1, 0),
-(12, 'Manage Accounts', '', 'glyphicon glyphicon-folder-open', 80, 0),
-(13, 'Accounts', 'accounts/index', NULL, 12, 0),
-(14, 'Account Template', 'accTemplate/admin', NULL, 12, 0),
-(16, 'Stock', '', 'glyphicon glyphicon-tag', 0, 7),
+(11, 'Manage Groups', 'admin/role', NULL, 1, 20),
+(12, 'Manage Accounts', '', 'glyphicon glyphicon-folder-open', 0, 3),
+(13, 'Accounts', 'accounts/admin', NULL, 12, 0),
+(16, 'Stock', '', 'glyphicon glyphicon-tag', 0, 6),
 (17, 'Items', 'item/admin', NULL, 16, 0),
-(18, 'Werehouses', 'accounts/index/8', 'type=>8', 16, 0),
+(18, 'Werehouses', 'accounts/admin/8', 'type=>8', 16, 0),
 (19, 'Categories', 'itemcategory/admin', NULL, 16, 0),
 (20, 'Units', 'itemunit/admin', NULL, 16, 0),
-(21, 'Item Template', 'itemTemplate/admin', NULL, 16, 0),
-(22, 'Income', '', 'glyphicon glyphicon-thumbs-up', 0, 2),
-(23, 'Quote', 'docs/create/6', 'type=>6', 22, 0),
-(24, 'Sales Order', 'docs/create/7', 'type=>7', 22, 0),
-(25, 'Delivery Doc', 'docs/create/2', 'type=>2', 22, 0),
-(26, 'Proforma', 'docs/create/1', 'type=>1', 22, 0),
-(27, 'Invoice', 'docs/create/3', 'type=>3', 22, 0),
-(28, 'Invoice Receipt', 'docs/create/9', 'type=>9', 22, 0),
-(29, 'Return Doc.', 'docs/create/5', 'type=>5', 22, 0),
-(30, 'Credit Inv.', 'docs/create/4', 'type=>4', 22, 0),
-(31, 'Print Docs.', 'docs/admin', NULL, 22, 0),
-(32, 'Expense', '', 'glyphicon glyphicon-shopping-cart', 0, 3),
+
+(22, 'Income', '', 'glyphicon glyphicon-thumbs-up', 0, 1),
+(23, 'Quote', 'docs/create/6', 'type=>6', 22, 2),
+(24, 'Sales Order', 'docs/create/7', 'type=>7', 22, 3),
+(25, 'Delivery Doc', 'docs/create/2', 'type=>2', 22, 4),
+(26, 'Proforma', 'docs/create/1', 'type=>1', 22, 5),
+(27, 'Invoice', 'docs/create/3', 'type=>3', 22, 6),
+(28, 'Invoice Receipt', 'docs/create/9', 'type=>9', 22, 7),
+(29, 'Return Doc.', 'docs/create/5', 'type=>5', 22, 8),
+(30, 'Credit Inv.', 'docs/create/4', 'type=>4', 22, 9),
+(31, 'Print Docs.', 'docs/admin', NULL, 22, 10),
+(32, 'Expense', '', 'glyphicon glyphicon-shopping-cart', 0, 4),
 (33, 'Manage Suppliers', 'accounts/index/1', 'type=>1', 32, 0),
 (34, 'Purchase Order', 'docs/create/10', NULL, 16, 0),
 (35, 'Insert Business Expense', 'docs/create/13', NULL, 32, 0),
 (36, 'Insert Assets Expense', 'docs/create/14', NULL, 32, 0),
-(37, 'Cash Register', NULL, 'glyphicon glyphicon-usd', 0, 4),
+(37, 'Cash Register', NULL, 'glyphicon glyphicon-usd', 0, 2),
 (38, 'Receipt', 'docs/create/8', NULL, 37, 0),
 (39, 'Bank Deposits', 'deposit/admin', NULL, 37, 0),
 (40, 'Supplier Payment', 'outcome/create', NULL, 37, 0),
@@ -768,39 +768,47 @@ INSERT INTO `menu` (`id`, `label`, `url`, `icon`, `parent`, `sort`) VALUES
 (46, 'Show Bank Recon', 'bankbook/edispmatch', NULL, 43, 0),
 (47, 'Accounts Recon.', 'match/intmatch', NULL, 43, 0),
 (48, 'Display Recon.', 'match/dispmatch', NULL, 43, 0),
-(49, 'Reports', NULL, 'glyphicon glyphicon-stats', 0, 6),
+(49, 'Reports', NULL, 'glyphicon glyphicon-stats', 0, 7),
 (50, 'Display Transactions', 'reports/journal', NULL, 49, 0),
 (51, 'Customers Debits', 'reports/owe', NULL, 49, 0),
 (52, 'Profit And Loss', 'reports/profloss', NULL, 49, 0),
 (53, 'Monthly Prof. And Loss', 'reports/mprofloss', NULL, 49, 0),
-(54, 'VAT Calculation', 'reports/vat', NULL, 49, 0),
+(54, 'VAT Calculation', 'tax/vat', NULL, 80, 0),
 (55, 'Balance', 'reports/balance', NULL, 49, 0),
-(56, 'In Advance Income Tax Pay', 'reports/taxrep', NULL, 49, 0),
-(57, 'Import Export', NULL, 'glyphicon glyphicon-transfer', 80, 0),
-(58, 'Open Format File', 'data/openfrmt', NULL, 57, 0),
+(56, 'In Advance Income Tax Pay', 'tax/taxrep', NULL, 80, 0),
+(57, 'Maintenance', NULL, 'glyphicon glyphicon-transfer', 0, 10),
+(58, 'Open Format File', 'data/openfrmt', NULL, 80, 0),
 (59, 'Import Open Format', 'data/openfrmtimport', NULL, 57, 0),
 (60, 'General Backup', 'data/backup', NULL, 57, 0),
 (61, 'Restore From Backup', 'data/restore', NULL, 57, 0),
-(62, 'PCN874 Report', 'data/pcn874', NULL, 57, 0),
-(63, 'Support', NULL, 'glyphicon glyphicon-info-sign', 80, 0),
+(62, 'PCN874 Report', 'data/pcn874', NULL, 80, 0),
+(63, 'Support', NULL, 'glyphicon glyphicon-info-sign', 0, 11),
 (64, 'Update', 'newUpdate/', NULL, 63, 0),
 (65, 'Paid Support', 'site/support', NULL, 63, 0),
-(66, 'About', 'site/about', NULL, 63, 0),
-(67, 'Bug Report', 'site/bug', NULL, 63, 0),
+(66, 'About', 'settings/about', NULL, 63, 0),
+(67, 'Bug Report', 'settings/bug', NULL, 63, 0),
 (68, 'Warehouse Transaction', 'docs/create/15', NULL, 16, 0),
-(69, 'Manage Permissons', 'rights/authItem/permissions', NULL, 1, 0),
-(70, 'Stock Transaction', 'reports/stockAction', NULL, 49, 0),
-(71, 'Id6111 Admin', 'accId6111/admin', NULL, 1, 0),
-(72, 'Mail Template', 'mailTemplate/admin', NULL, 1, 0),
+(69, 'Manage Roles', 'admin/route', NULL, 1, 30),
+(70, 'Stock Transaction', 'reports/stockaction', NULL, 49, 0),
+(71, 'Id6111 Admin', 'accid6111/admin', NULL, 1, 40),
+(72, 'Mail Template', 'mailtemplate/admin', NULL, 1, 50),
 (73, 'Stock', 'reports/stock', NULL, 49, 0),
-(74, 'Linet 2 Import', 'data/linet2Import', NULL, 57, 0),
+(74, 'Linet 2 Import', 'data/linet2import', NULL, 57, 0),
 (75, 'Bulk Balance', 'reports/accounts', NULL, 49, 0),
-(76, 'Account Categories', 'accCat/admin', NULL, 12, 0),
-(77, 'Payment Admin', 'payment/admin', NULL, 1, 0),
+(76, 'Account Categories', 'acccat/admin', NULL, 12, 0),
+(77, 'Payment Admin', 'payment/admin', NULL, 1, 60),
 (78, 'Stock entry certificate', 'docs/create/16', NULL, 16, 0),
 (79, 'Stock exit certificate', 'docs/create/17', NULL, 16, 0),
-(80, 'General', NULL, 'glyphicon glyphicon-flag', 0, 1),
-(81, 'Manage Costumers', 'accounts/index/0', NULL, 22, 0);
+(80, 'Taxes', NULL, 'glyphicon glyphicon-flag', 0, 8),
+
+(81, 'Manage Customers', 'accounts/admin/0', NULL, 22, 1),
+(82, 'Manage Assignments', 'admin/assignment', NULL, 1, 19),
+(83, 'Receipt For Donation', 'docs/create/18', NULL, 37, 0),
+
+
+(94, 'Test System', 'test/test', NULL, 80, 10),
+(95, 'In Advance Income Tax payment', 'outcome/create/3', '', 37, 0);
+
 
 
 CREATE TABLE IF NOT EXISTS `openformat` (
@@ -824,7 +832,7 @@ INSERT INTO `openformat` (`id`, `description`, `type`, `size`, `record`, `export
 (1005, 'קבוע מערכת', 's', 8, 1, '&OF1.31&', '&OF1.31&', 'A000'),
 (1006, 'רישום תוכנה', 'n', 8, 1, 'system.auth', 'system.auth', 'A000'),
 (1007, 'שם תוכנה', 's', 20, 1, 'system.name', 'system.name', 'A000'),
-(1008, 'מהדורה', 's', 20, 1, 'system.version', 'system.version', 'A000'),
+(1008, 'מהדורה', 's', 20, 1, 'func.getVersion', 'system.version', 'A000'),
 (1009, 'עמ של יצרן', 'n', 9, 1, 'system.vendor.vatnum', 'system.vendor.vatnum', 'A000'),
 (1010, 'יצרן תוכנה', 's', 20, 1, 'system.vendor.name', 'system.vendor.name', 'A000'),
 (1011, 'סוג תוכנה', 'n', 1, 1, '2', '2', 'A000'),
@@ -870,7 +878,7 @@ INSERT INTO `openformat` (`id`, `description`, `type`, `size`, `record`, `export
 (1200, 'קוד רשימה', 's', 4, 4, 'C100', 'C100', 'C100'),
 (1201, 'רשומה בקובץ', 'n', 9, 4, 'file.line', 'file.line', 'C100'),
 (1202, 'עוסק מורשה', 'n', 9, 4, 'company.vatnum', 'company.vatnum', 'C100'),
-(1203, 'סוג מסמך', 'n', 3, 4, 'func.getType', 'func.getType', 'C100'),
+(1203, 'סוג מסמך', 'n', 3, 4, 'func.OpenfrmtType', 'func.OpenfrmtType', 'C100'),
 (1204, 'מספר מסמך', 's', 20, 4, 'this.docnum', 'this.docnum', 'C100'),
 (1205, 'תאריך הפקה', 'date', 8, 4, 'this.issue_date', 'this.issue_date', 'C100'),
 (1206, 'שעת הפקה', 'hour', 4, 4, 'this.issue_date', 'this.issue_date', 'C100'),
@@ -887,8 +895,8 @@ INSERT INTO `openformat` (`id`, `description`, `type`, `size`, `record`, `export
 (1217, 'סכום סופי של המסמך במט"ח', 'v99', 15, 4, 'NA', 'NA', 'C100'),
 (1218, 'קוד מטח', 's', 3, 4, 'NA', 'NA', 'C100'),
 (1219, 'סכום לפני הנחה', 'v99', 15, 4, 'this.sub_total', 'this.sub_total', 'C100'),
-(1220, 'הנחה', 'v99', 15, 4, 'NA', 'this.discount', 'C100'),
-(1221, 'סכום ללא מעמ', 'v99', 15, 4, 'this.novat_total', 'this.novat_total', 'C100'),
+(1220, 'הנחה', 'v99', 15, 4, 'this.discount', 'this.discount', 'C100'),
+(1221, 'סכום ללא מעמ', 'v99', 15, 4, 'func.OpenfrmtNoVatTotal', 'this.novat_total', 'C100'),
 (1222, 'סכום מעמ', 'v99', 15, 4, 'this.vat', 'this.vat', 'C100'),
 (1223, 'סכום כולל', 'v99', 15, 4, 'this.total', 'this.total', 'C100'),
 (1224, 'סכום ניכוי במקור', 'v99', 12, 4, 'this.src_tax', 'this.src_tax', 'C100'),
@@ -906,7 +914,7 @@ INSERT INTO `openformat` (`id`, `description`, `type`, `size`, `record`, `export
 (1250, 'קוד רשומה', 's', 4, 5, 'D110', 'D110', 'D110'),
 (1251, 'מספר רשומה', 'n', 9, 5, 'file.line', 'file.line', 'D110'),
 (1252, 'עוסק מורשה', 'n', 9, 5, 'company.vatnum', 'company.vatnum', 'D110'),
-(1253, 'סוג מסמך', 'n', 3, 5, 'func.getType', 'func.getType', 'D110'),
+(1253, 'סוג מסמך', 'n', 3, 5, 'func.OpenfrmtType', 'func.OpenfrmtType', 'D110'),
 (1254, 'מספר המסמך', 's', 20, 5, 'func.getNum', 'func.getNum', 'D110'),
 (1255, 'מספר שורה במסמך', 'n', 4, 5, 'this.line', 'this.line', 'D110'),
 (1256, 'סוג מסמך בסיס', 'n', 3, 5, 'NA', 'NA', 'D110'),
@@ -918,10 +926,10 @@ INSERT INTO `openformat` (`id`, `description`, `type`, `size`, `record`, `export
 (1262, 'מספר סידורי של היצרן', 's', 30, 5, 'NA', 'NA', 'D110'),
 (1263, 'תיאור יחידת מידה', 's', 20, 5, 'this.unit_id', 'this.unit_id', 'D110'),
 (1264, 'הכמות', 'v9999', 17, 5, 'this.qty', 'this.qty', 'D110'),
-(1265, 'מחיר ליחידה ללא מעמ', 'v99', 15, 5, 'this.unit_price', 'this.unit_price', 'D110'),
+(1265, 'מחיר ליחידה ללא מעמ', 'v99', 15, 5, 'this.iItem', 'this.iItem', 'D110'),
 (1266, 'הנחת שורה', 'v99', 15, 5, 'NA', 'NA', 'D110'),
-(1267, 'סך סכום לשורה', 'v99', 15, 5, 'this.price', 'this.price', 'D110'),
-(1268, 'שיעור המעמ בשורה', 'n', 4, 5, 'this.vat', 'this.vat', 'D110'),
+(1267, 'סך סכום לשורה', 'v99', 15, 5, 'this.iTotal', 'this.iTotal', 'D110'),
+(1268, 'שיעור המעמ בשורה', '99', 4, 5, 'this.iVatRate', 'this.iVatRate', 'D110'),
 (1269, '', '', 0, 0, '', '', 'D111'),
 (1270, 'מזהה סניף/ענף', 's', 7, 5, 'NA', 'NA', 'D110'),
 (1271, '', '', 0, 0, '', '', 'D111'),
@@ -932,7 +940,7 @@ INSERT INTO `openformat` (`id`, `description`, `type`, `size`, `record`, `export
 (1300, 'קוד רשומה', 's', 4, 6, 'D120', 'D120', 'D120'),
 (1301, 'מספר רשומה', 'n', 9, 6, 'file.line', 'file.line', 'D120'),
 (1302, 'עוסק מורשה', 'n', 9, 6, 'company.vatnum', 'company.vatnum', 'D120'),
-(1303, 'סוג מסמך', 'n', 3, 6, 'func.getType', 'func.getType', 'D120'),
+(1303, 'סוג מסמך', 'n', 3, 6, 'func.OpenfrmtType', 'func.OpenfrmtType', 'D120'),
 (1304, 'מספר מסמך', 's', 20, 6, 'func.getNum', 'func.getNum', 'D120'),
 (1305, 'מספר שורה במסמך', 'n', 4, 6, 'this.line', 'this.line', 'D120'),
 (1306, 'סוג אמצעי תשלום', 'n', 1, 6, 'this.type', 'this.type', 'D120'),
@@ -1060,45 +1068,22 @@ INSERT INTO `Rights` (`itemname`, `type`, `weight`) VALUES
 ('Guest', 3, 2),
 ('User', 2, 1);
 
-CREATE TABLE IF NOT EXISTS `tbl_migration` (
+CREATE TABLE IF NOT EXISTS `migration` (
   `version` varchar(255) NOT NULL,
   `apply_time` int(11) DEFAULT NULL,
   PRIMARY KEY (`version`)
 );
 
-INSERT INTO `tbl_migration` (`version`, `apply_time`) VALUES
+INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m000000_000000_base', 1412110530),
-('m140930_204124_0002', 1412110535),
-('m141105_102024_0003', 1412190020),
-('m141109_102024_0004', 1412197456),
-('m141112_102024_0005', 1412197457),
-('m161112_102024_0006', 1412739122),
-('m171114_102024_0007', 1412896917),
-('m171114_102025_0008', 1412896918),
-('m181114_102025_0009', 1412911613),
-('m231114_102025_0010', 1412911614),
-('m241114_102025_0011', 1416919003),
-('m271114_102025_0012', 1416919004),
-('m271114_102026_0013', 1416919005),
-('m301114_102026_0014', 1416919006),
-('m041214_102026_0015', 1416919007),
-('m071214_102026_0016', 1416919008),
-('m071214_102027_0017', 1416919009),
-('m101214_102027_0018', 1416919010),
-('m301115_301114_0015', 1416919012),
-('m301116_071214_0016', 1416919013),
-('m301116_101214_0018', 1416919014),
-('m301116_131214_0019', 1416919015),
-('m301116_211214_0020', 1416919016),
-('m301117_211214_0021', 1416919017),
-('m301118_211214_0022', 1416919018),
-('m301118_221214_0023', 1416919019),
-('m301118_231214_0024', 1416919020),
-('m301118_301214_0025', 1416919021),
-('m301119_050115_0026', 1416919022),
-('m301119_070115_0027', 1416919023),
-('m301119_210115_0028', 1416919024),
-('m301119_280115_0029', 1416919025);
+('m150422_072907_to3_1', 1412110535),
+('m150430_162555_paypal', 1412190020),
+('m150705_105014_crm', 1412197456),
+('m150713_130147_log', 1412197457),
+('m150722_075656_user', 1412739122),
+('m150803_092728_menu', 1412896917),
+('m150813_141722_tax', 1412896918),
+('m151103_133156_menunew', 1412896918);
 
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1115,6 +1100,70 @@ CREATE TABLE IF NOT EXISTS `user` (
   `language` varchar(10) NOT NULL,
   `theme` varchar(255) NOT NULL,
   `timezone` varchar(255) NOT NULL,
+  `home` varchar(255) NOT NULL,
+  `company` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
 );
+
+
+
+CREATE TABLE `auth_assignment` (
+  `item_name` varchar(64) NOT NULL,
+  `user_id` varchar(64) NOT NULL,
+  `created_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`item_name`,`user_id`)
+);
+INSERT INTO `auth_assignment` (`item_name`, `user_id`, `created_at`) VALUES
+('sysadmin', '1', NULL);
+
+CREATE TABLE `auth_item` (
+  `name` varchar(64) NOT NULL,
+  `type` int(11) NOT NULL,
+  `description` text,
+  `rule_name` varchar(64) DEFAULT NULL,
+  `data` text,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`name`),
+  KEY `rule_name` (`rule_name`),
+  KEY `type` (`type`)
+);
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`) VALUES
+('/*', 2, NULL, NULL, NULL, NULL, NULL),
+('/admin/*', 2, NULL, NULL, NULL, NULL, NULL),
+('/api/*', 2, NULL, NULL, NULL, NULL, NULL),
+('/company/index', 2, NULL, NULL, NULL, NULL, NULL),
+('/site/download', 2, NULL, NULL, NULL, NULL, NULL),
+('/site/logout', 2, NULL, NULL, NULL, NULL, NULL),
+('authenticated', 1, 'authenticated', NULL, NULL, NULL, NULL),
+('guest', 1, 'guest', NULL, NULL, NULL, NULL),
+('sysadmin', 1, 'fff', NULL, NULL, NULL, NULL);
+
+
+CREATE TABLE `auth_item_child` (
+  `parent` varchar(64) NOT NULL,
+  `child` varchar(64) NOT NULL,
+  PRIMARY KEY (`parent`,`child`),
+  KEY `child` (`child`)
+);
+
+INSERT INTO `auth_item_child` (`parent`, `child`) VALUES
+('sysadmin', '/*'),
+('sysadmin', '/admin/*'),
+('guest', '/api/*'),
+('authenticated', '/company/index'),
+('guest', '/site/download'),
+('authenticated', '/site/logout'),
+('guest', '/site/logout');
+
+
+CREATE TABLE `auth_rule` (
+  `name` varchar(64) NOT NULL,
+  `data` text,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

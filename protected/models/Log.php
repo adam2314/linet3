@@ -1,24 +1,22 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
+namespace app\models;
 
-class Log extends mainRecord {
+use Yii;
+class Log extends \app\components\mainRecord {
     const table = 'log';
-
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
 
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -29,13 +27,13 @@ class Log extends mainRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('level, category', 'required'),
-            array('level, category, message', 'length', 'max' => 255),
-            array('IP_User', 'length', 'max' => 255),
-            array('request_URL, message', 'safe'),
+            array(['level', 'category'], 'required'),
+            array(['level', 'category', 'message'], 'string', 'max' => 255),
+            array(['IP_User'], 'string', 'max' => 255),
+            array(['request_URL', 'message'], 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('level, category, message, IP_User, request_URL, user_id, logtime', 'safe', 'on' => 'search'),
+            array(['level', 'category', 'message', 'IP_User', 'request_URL', 'user_id', 'logtime'], 'safe', 'on' => 'search'),
         );
     }
 
@@ -56,14 +54,14 @@ class Log extends mainRecord {
      */
     public function attributeLabels() {
         return array(
-            'id' => Yii::t('labels', 'ID'),
-            'level' => Yii::t('labels', 'Level'),
-            'category' => Yii::t('labels', 'Category'),
-            'logtime' => Yii::t('labels', 'Time'),
-            'IP_User' => Yii::t('labels', 'Src IP'),
-            'user_id' => Yii::t('labels', 'User'),
-            'request_URL' => Yii::t('labels', 'Request'),
-            'message' => Yii::t('labels', 'Message'),
+            'id' => Yii::t('app', 'ID'),
+            'level' => Yii::t('app', 'Level'),
+            'category' => Yii::t('app', 'Category'),
+            'logtime' => Yii::t('app', 'Time'),
+            'IP_User' => Yii::t('app', 'Src IP'),
+            'user_id' => Yii::t('app', 'User'),
+            'request_URL' => Yii::t('app', 'Request'),
+            'message' => Yii::t('app', 'Message'),
             
         );
     }
@@ -72,7 +70,7 @@ class Log extends mainRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search() {
+    public function search($params) {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
 

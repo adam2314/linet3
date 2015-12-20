@@ -3,39 +3,33 @@
 
 
 <?php
-$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+$form = kartik\form\ActiveForm::begin( array(
     'id' => 'bankbook-form',
     // Please note: When you enable ajax validation, make sure the corresponding
     // controller action is handling ajax validation correctly.
     // There is a call to performAjaxValidation() commented in generated controller code.
     // See class documentation of CActiveForm for details on this.
     'enableAjaxValidation' => false,
-    'htmlOptions' => array('enctype' => 'multipart/form-data'),
+    'options' => array('enctype' => 'multipart/form-data'),
         ));
 ?>
-<?php echo $form->fileFieldRow($model, 'file', array('size' => 60, 'maxlength' => 255)); ?>
+<?php echo $form->field($model, 'file')->fileInput(); ?>
 
 <div class="row buttons">
-
-    <?php
-    $this->widget('bootstrap.widgets.TbButton', array(
-        'buttonType' => 'submit',
-        'type' => 'primary',
-        'label' => Yii::t('app', 'Import'),
-    ));
-    ?>
+     <?= \yii\helpers\Html::submitButton( Yii::t('app', 'Import'), ['class' => 'btn btn-success' ]) ?>
+    
 
 </div>
 
-<?php $this->endWidget(); ?>
+<?php kartik\form\ActiveForm::end(); ?>
 
 
 
 <?php
-$this->widget('EExcelView', array(
+echo app\widgets\GridView::widget( array(
     'id' => 'bankbook-grid',
-    'dataProvider' => $model->search(),
-    //'filter'=>$model,
+    'dataProvider' => $model->dp(),
+    ////'filter'=>$model,
     'columns' => array(
         'id',
         'account_id',
@@ -45,7 +39,7 @@ $this->widget('EExcelView', array(
         'sum',
         'total',
         array(
-            'class' => 'bootstrap.widgets.TbButtonColumn',
+            'class' => 'yii\grid\ActionColumn',
         ),
     ),
 ));

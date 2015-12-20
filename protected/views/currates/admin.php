@@ -1,98 +1,62 @@
 <?php
-$this->breadcrumbs=array(
+use app\models\Currecies;
+$this->params["breadcrumbs"]=array(
 	'Currates'=>array('index'),
 	'Manage',
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	//array('label'=>'List Currates', 'url'=>array('index')),
 	array('label'=>Yii::t('app','Create Currency Rate'), 'url'=>array('create')),
 );
 ?>
 
 
-<?php  $this->beginWidget('MiniForm',array('header' => Yii::t('app',"Manage Currencies Rates"),)); ?>
+<?php  app\widgets\MiniForm::begin(array('header' => Yii::t('app',"Manage Currencies Rates"),)); ?>
 
 <?php 
-// this is the date picker
-$dateisOn = $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-					// 'model'=>$model,
-				    'name' => 'Currates[from]',
-				    'language' => substr(Yii::app()->language,0,2),
-					'value' => $model->from,
-				    // additional javascript options for the date picker plugin
-				    'options'=>array(
-					'showAnim'=>'fold',
-					'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
-					'changeMonth' => 'true',
-					'changeYear'=>'true',
-					'constrainInput' => 'false',
-				    ),
-				    'htmlOptions'=>array(
-                                        'placeholder'=>Yii::t('app','From Date'),
-					//'style'=>'width:70px;',
-				    ),
-// DONT FORGET TO ADD TRUE this will create the datepicker return as string
-				),true) . $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-					// 'model'=>$model,
-				    'name' => 'Currates[to]',
-				    'language' => substr(Yii::app()->language,0,2),
-					'value' => $model->to,
-				    // additional javascript options for the date picker plugin
-				    'options'=>array(
-					'showAnim'=>'fold',
-					'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
-					'changeMonth' => 'true',
-					'changeYear'=>'true',
-					'constrainInput' => 'false',
-				    ),
-				    'htmlOptions'=>array(
-                                        'placeholder'=>Yii::t('app','To Date'),
-					//'style'=>'width:70px',
-				    ),
-// DONT FORGET TO ADD TRUE this will create the datepicker return as string
-				),true);
-
+$dateisOn = kartik\datecontrol\DateControl::widget(['model' => $model,'attribute' => 'from','type' => 'date']) .
+        kartik\datecontrol\DateControl::widget(['model' => $model,'attribute' => 'to','type' => 'date']);
 ?>
 
 
 
 <?php 
-$this->widget('EExcelView', array(
+echo app\widgets\GridView::widget( array(
 	'id'=>'currates-grid',
-	'dataProvider'=>$model->search(),
-        'template' => '{items}{pager}',
-	'filter'=>$model,
-        'ajaxUpdate'=>true,
-        'ajaxType'=>'POST',
-     'afterAjaxUpdate'=>"function() {
-						jQuery('#Currates_from').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['".substr(Yii::app()->language,0,2)."'], {'showAnim':'fold','dateFormat':'".Yii::app()->locale->getDateFormat('short')."','changeMonth':'true','showButtonPanel':'true','changeYear':'true','constrainInput':'false'}));
-						jQuery('#Currates_to').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['".substr(Yii::app()->language,0,2)."'], {'showAnim':'fold','dateFormat':'".Yii::app()->locale->getDateFormat('short')."','changeMonth':'true','showButtonPanel':'true','changeYear':'true','constrainInput':'false'}));
-                                }",
+	'dataProvider'=>$model->dp(),
+        //'template' => '{items}{pager}',
+	//'filter'=>$model,
+        //'ajaxUpdate'=>true,
+        //'ajaxType'=>'POST',
+     //'afterAjaxUpdate'=>"function() {
+				//		jQuery('#Currates_from').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['".substr(Yii::$app->language,0,2)."'], {'showAnim':'fold','dateFormat':'".Yii::$app->locale->getDateFormat('short')."','changeMonth':'true','showButtonPanel':'true','changeYear':'true','constrainInput':'false'}));
+				//		jQuery('#Currates_to').datepicker(jQuery.extend({showMonthAfterYear:false}, jQuery.datepicker.regional['".substr(Yii::$app->language,0,2)."'], {'showAnim':'fold','dateFormat':'".Yii::$app->locale->getDateFormat('short')."','changeMonth':'true','showButtonPanel':'true','changeYear':'true','constrainInput':'false'}));
+                                //}",
     
     
 	'columns'=>array(
 		//'id',
 		
                 array(
-                    'name' => 'currency_id',
-                    'filter'=>CHtml::listData(Currecies::model()->findAll(), 'id', 'name'),
-                     'value' => 'isset($data->Currency)?$data->Currency->name:0',   //where name is Client model attribute 
+                    'attribute' => 'currency_id',
+                    'filter'=>\yii\helpers\ArrayHelper::map(Currecies::find()->All(), 'id', 'name'),
+                    // 'value' => 'isset($data->Currency)?$data->Currency->name:0',   //where name is Client model attribute 
                    ),
 		 array(
-                    'name'=>'date',
-                     'filter' => $dateisOn,
-                    'value'=>'$data->date'
+                    'attribute'=>'date',
+                     //'filter' => $dateisOn,
+                    //'value'=>'$data->date'
                 ),
 		'value',
 		/*array(
-			'class'=>'bootstrap.widgets.TbButtonColumn',
+			'class'=>'yii\grid\ActionColumn',
                         'template'=>'{display}',
                         'edit' => array(
                                 
                             'display' => array(
                                 'label'=>'<i class="glyphicon glyphicon-transfer"></i>',
-                                'url'=>'Yii::app()->createUrl("accounts/transaction", array("id"=>$data->id))',
+                                'url'=>'yii\helpers\BaseUrl::base().("accounts/transaction", array("id"=>$data->id))',
                                 //'visible'=>'$data->score > 0',
                                 'click'=>'function(){alert("Going down!");}',
                             ),
@@ -101,6 +65,6 @@ $this->widget('EExcelView', array(
 )); 
 
 
- $this->endWidget(); 
+ app\widgets\MiniForm::end(); 
 
 ?>

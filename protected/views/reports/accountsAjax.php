@@ -1,78 +1,79 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-$yiidbdatetime = Yii::app()->locale->getDateFormat('yiidbdatetime');
-$phpdatetime = Yii::app()->locale->getDateFormat('phpdatetime');
-
-//print_r($model->accounts());
-
-
+use app\models\Accounts;
 foreach ($model->accounts() as $account) {
-    echo "<h3>" . $account . " " . Accounts::model()->findByPk($account)->name . "</h3>";
-    $this->widget('EExcelView', array(
-        'id' => 'transactions-grid' . $account,
-        'dataProvider' => $model->search($account),
+    
+    
+    $dp=$model->search($account);
+    
+    if($dp->getCount()>0){
+        echo "<h3>" . $account["id"] . " " . $account["name"] . "</h3>";
+        echo app\widgets\GridView::widget( array(
+        'id' => 'transactions-grid' . $account["id"],
+        'dataProvider' => $model->search($account["id"]),
         'columns' => array(
             array(
-                'name' => 'num',
-                'value' => '$data->numLink()',
-                'type' => 'raw',
+                'attribute' => 'num',
+                'value' => function($data){return $data->numLink();},
+                'format' => 'raw',
             ),
             
              
             /*
               array(
-              'value' => 'CHtml::link(CHtml::encode($data->getOptAccName()),Yii::app()->createAbsoluteUrl("/accounts/transaction/".$data->getOptAccId()))',
+              'value' => '\yii\helpers\Html::link(\yii\helpers\Html::encode($data->getOptAccName()),yii\helpers\BaseUrl::base().("/accounts/transaction/".$data->getOptAccId()))',
               'type' => 'raw',
               ), */
             array(
-                'name' => 'type',
-                'value' => 'Yii::t("app",$data->Type->name)'
+                'attribute' => 'type',
+                'value' => function($data){return Yii::t("app",$data->ttype->name);},
             ),
             array(
-                'name' => 'refnum1',
-                'value' => '$data->refnumDocsLink()',
-                'type' => 'raw',
+                'attribute' => 'refnum1',
+                'value' => function($data){return $data->refnumDocsLink();},
+                'format' => 'raw',
             ),
-            array(
-                'name' => 'refnum2',
-                'value' => 'CHtml::encode($data->refnum2)',
-                'type' => 'raw',
-            ),
+            //array(
+                'attribute' => 'refnum2',
+                //'value' => '\yii\helpers\Html::encode($data->refnum2)',
+                //'format' => 'raw',
+            //),
             'details',
             array(
-                'name' => 'date',
+                'attribute' => 'valuedate',
                 'filter' => '',
-                'value' => 'date("' . $phpdatetime . '",CDateTimeParser::parse($data->valuedate,"' . $yiidbdatetime . '"))'
+                'value' => function($data){return $data->readDateFormat($data->valuedate);},
             ),
             array(
                 'header' => Yii::t('app', 'Debit'),
-                'name' => 'sum',
+                'attribute' => 'sum',
                 'filter' => '',
-                'cssClassExpression' => "'number'",
-                'value' => '($data->sum<0)?$data->sum:""'
+                //'cssClassExpression' => "'number'",
+                'value' => function($data){return ($data->sum<0)?$data->sum:"";},
             ),
             array(
                 'header' => Yii::t('app', 'Credit'),
-                'name' => 'sum',
+                'attribute' => 'sum',
                 'filter' => '',
-                'cssClassExpression' => "'number'",
-                'value' => '($data->sum>0)?$data->sum:""'
+                //'cssClassExpression' => "'number'",
+                'value' => function($data){return ($data->sum>0)?$data->sum:"";},
             ),
             array(
                 'header' => Yii::t('app', 'Balance'),
-                'name' => 'sum',
+                'attribute' => 'sum',
                 'filter' => '',
-                'cssClassExpression' => "'number'",
-                'value' => '$data->getBalance()'
+                //'cssClassExpression' => "'number'",
+                'value' => function($data){return $data->getBalance();},
             ),
         ),
     ));
+}
 }
 ?>

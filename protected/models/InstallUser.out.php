@@ -1,8 +1,8 @@
 <?php
 
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -21,7 +21,7 @@ class InstallUser extends CFormModel {
         public function make(){
             //make conf file
             //echo $this->dbtype;
-            //Yii::app()->end();
+            //Yii::$app->end();
             
             if($this->dbtype=='sqlite'){
                 $str="'connectionString' => '".$this->dbstring."',"; 
@@ -46,11 +46,11 @@ class InstallUser extends CFormModel {
             $mysql="protected/data/main.sql";
             if (file_exists($mysql)){
                 
-                Yii::app()->db->setActive(false);
-                Yii::app()->db->connectionString = $this->dbstring;
-                Yii::app()->db->username=$this->dbuser;
-                Yii::app()->db->password=$this->dbpassword;
-                Yii::app()->db->setActive(true);
+                Yii::$app->db->close();
+                Yii::$app->db->dsn = $this->dbstring;
+                Yii::$app->db->username=$this->dbuser;
+                Yii::$app->db->password=$this->dbpassword;
+                Yii::$app->db->open();
                 
                 dbMaster::loadFile($mysql);
                 
@@ -59,17 +59,17 @@ class InstallUser extends CFormModel {
 
 
                 //print $sqlArray;
-                $cmd = Yii::app()->db->createCommand($sqlArray);
+                $cmd = Yii::$app->db->createCommand($sqlArray);
                 //$cmd->execute();
                 try{
                         $cmd->execute();
                 }
-                catch(CDbException $e){
+                catch(\yii\db\Exception $e){
                         $message = $e->getMessage();
                         print $message;
                 }*/
             } else{
-                throw new CDbException(Yii::t('app','Cant find Company template file unable to create database'));
+                throw new \yii\db\Exception(Yii::t('app','Cant find Company template file unable to create database'));
                 
             }
             

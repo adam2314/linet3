@@ -1,13 +1,13 @@
 <?php
 
-$this->menu=array(
+$this->params["menu"]=array(
 	//array('label'=>Yii::t('app','List Mail Templates'),'url'=>array('index')),
 	array('label'=>Yii::t('app','Create Mail'),'url'=>array('create')),
 );
 
 
 
- $this->beginWidget('MiniForm',array(
+ app\widgets\MiniForm::begin(array(
     'header' => Yii::t('app',"Manage Mail Templates"),
 
 )); 
@@ -15,10 +15,10 @@ $this->menu=array(
 
 ?>
 
-<?php $this->widget('EExcelView',array(
+<?php echo app\widgets\GridView::widget(array(
 	'id'=>'acctype-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
+	'dataProvider'=>$model->dp(),
+	//'filter'=>$model,
 	'columns'=>array(
 		//'id',
 		'to',
@@ -26,12 +26,12 @@ $this->menu=array(
             'files',
 		'create',
 		array(
-			'class'=>'bootstrap.widgets.TbButtonColumn',
+			'class'=>'yii\grid\ActionColumn',
 		),
 	),
 )); 
 
- $this->endWidget(); 
+ app\widgets\MiniForm::end(); 
 
 
 ?>

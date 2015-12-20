@@ -1,19 +1,19 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-$this->menu=array(
+$this->params["menu"]=array(
 	//array('label'=>'List Config','url'=>array('index')),
 	//array('label'=>'View Config','url'=>array('view','id'=>$model->id)),
 );
-$this->beginWidget('MiniForm',array('header' => Yii::t("app","Monthly Profit & Loss report"))); 
+app\widgets\MiniForm::begin(array('header' => Yii::t("app","Monthly Profit & Loss report"))); 
 ?>
-<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
+<?php $form=kartik\form\ActiveForm::begin(array(
 	'id'=>'profloss-form',
 	'enableAjaxValidation'=>false,
 )); 
@@ -27,7 +27,7 @@ $this->beginWidget('MiniForm',array('header' => Yii::t("app","Monthly Profit & L
                 $years[$min]=$min;
             
             
-            echo $form->dropDownList($model,'year', $years);              
+            echo $form->field($model,'year')->widget(kartik\select2\Select2::className(),['data'=> $years]);              
             
 ?>
 
@@ -39,29 +39,40 @@ $this->beginWidget('MiniForm',array('header' => Yii::t("app","Monthly Profit & L
 
 
 
-<?php $this->endWidget(); ?>
+<?php kartik\form\ActiveForm::end(); ?>
 
 
 
     <?php 
-$this->endWidget(); 
-?>
-
-
-<script type="text/javascript">
-    jQuery(document).ready(function(){
-       
-    });
-    
-    
-    
-    $( "#FormMprofloss_year" ).change(function() {
-            var value=$("#FormMprofloss_year").val();
-            $.post( "<?php echo $this->createUrl('/reports/mproflossajax');?>", { FormMprofloss: {year: value}} ).done(
+app\widgets\MiniForm::end(); 
+$java=<<<JS
+        
+        $( "#formmprofloss-year" ).change(function() {
+            var value=$("#formmprofloss-year").val();
+            $.post( baseAddress+"/reports/mproflossajax", { FormMprofloss: {year: value}} ).done(
                 function( data ){
                     $( "#result" ).html( data );
                 }
             );
             
           });    
+        
+        
+        
+JS;
+
+ $this->registerJs("var baseAddress='" . yii\helpers\BaseUrl::base() . "';" .
+            $java
+            , \yii\web\View::POS_READY);
+   
+
+
+
+
+?>
+
+
+<script type="text/javascript">
+    
+    
 </script>

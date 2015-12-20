@@ -1,13 +1,16 @@
 <?php
 
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
+namespace app\components;
+use app\components\basicRecord;
+
 class mainRecord extends basicRecord{
     private static $dbMain = null;
  
@@ -18,13 +21,13 @@ class mainRecord extends basicRecord{
         else
         {
             self::$dbMain = Yii::app()->dbMain;
-            if (self::$dbMain instanceof CDbConnection)
+            if (self::$dbMain instanceof yii\db\Connection)
             {
-                self::$dbMain->setActive(true);
+                self::$dbMain->close();
                 return self::$dbMain;
             }
             else
-                throw new CDbException(Yii::t('yii','Active Record requires a "db" CDbConnection application component.'));
+                throw new \yii\db\Exception(Yii::t('yii','Active Record requires a "db" CDbConnection application component.'));
         }
     }
     

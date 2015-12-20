@@ -1,12 +1,13 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
+namespace app\components\payments;
 class PelaCreditPaymnts {
     private $fields=array();//needs to have!
     
@@ -30,8 +31,8 @@ class PelaCreditPaymnts {
             "card_no"=>'string',
             'pid'=>'string',//is
             'full_card'=>'temp',//creditCard
-            'valid_month'=>'select([01,02,03,04,05,06,07,08,09,10,11,12])',//mm
-            'valid_year'=>'select([14,15,16,17,18,19,20])',//yy
+            'valid_month'=>'select(["01","02","03","04","05","06","07","08","09","10","11","12"])',//mm
+            'valid_year'=>'select(["14","15","16","17","18","19","20"])',//yy
             'cvv'=>'temp',//cvv2
             'firstPymnt'=>'string',
             'paymentsNo'=>'string',
@@ -58,10 +59,10 @@ class PelaCreditPaymnts {
 
 
         $params = array(
-            'userName' => Yii::app()->user->settings['pelecard.userName'],
-            'password' => Yii::app()->user->settings['pelecard.password'],
-            'termNo' => Yii::app()->user->settings['pelecard.termNo'],
-            'shopNo' => Yii::app()->user->settings['pelecard.shopNo'],
+            'userName' => \Yii::app()->user->settings['pelecard.userName'],
+            'password' => \Yii::app()->user->settings['pelecard.password'],
+            'termNo' => \Yii::app()->user->settings['pelecard.termNo'],
+            'shopNo' => \Yii::app()->user->settings['pelecard.shopNo'],
             'creditCard' => $this->fields["card_no"]["value"], //
             'creditCardDateMmyy' => $this->fields["valid_month"]["value"].$this->fields["valid_year"]["value"], //
             'token' => '', //

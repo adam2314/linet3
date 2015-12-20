@@ -11,7 +11,7 @@
 
 
     <?
-foreach ($cdata->Bankbooks as $bankbook) {
+foreach ($cdata->bankbooks as $bankbook) {
     echo "<tr><td>".$bankbook->id ."</td><td>". $bankbook->date ."</td><td>". $bankbook->sum ."</td></tr>";
 }
 ?>

@@ -9,10 +9,10 @@
 <table>
 
 
-<?
-foreach ($cdata->Transactions as $transaction) {
+<?php
+foreach ($cdata->transactions as $transaction) {
     if($transaction->intType==$intType)
-    echo "<tr><td>".$transaction->num ."</td><td>". Yii::t('app',$transaction->Type->name) ."</td><td>". $transaction->valuedate ."</td><td>". $transaction->sum ."</td></tr>";
+    echo "<tr><td>".$transaction->num ."</td><td>". Yii::t('app',$transaction->ttype->name) ."</td><td>". $transaction->valuedate ."</td><td>". $transaction->sum ."</td></tr>";
 }
 ?>
 </table>

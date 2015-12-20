@@ -1,28 +1,33 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
+namespace app\controllers;
+
+use Yii;
+use app\components\RightsController;
+use app\models\log;
 class LogController extends RightsController {
 
     public $defaultAction = 'admin';
 
     public function actionAdmin() {
-        $model = new Log('search');
-        $model->unsetAttributes();  // clear any default values
+        $model = new Log();
+        //$model->unsetAttributes();  // clear any default values
         if (isset($_GET['Log']))
             $model->attributes = $_GET['Log'];
 
 
-        $this->render('admin', array('model' => $model,));
+        return $this->render('admin', array('model' => $model,));
     }
 
     public function actionDelete($id) {//only admin
-        if (Yii::app()->request->isPostRequest) {
+        if (Yii::$app->request->isPostRequest) {
             $model = $this->loadModel($id);
 
             $model->delete();
@@ -31,30 +36,25 @@ class LogController extends RightsController {
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
         }
         else {
-            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+            throw new \yii\web\HttpException(400, 'Invalid request. Please do not repeat this request again.');
         }
     }
 
     public function actionView($id) {//only admin
         $model = $this->loadModel($id);
 
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-
-
-        $this->render('view', array(
+        return $this->render('view', array(
             'model' => $model,
         ));
     }
 
     public function loadModel($id) {
-        $model = Log::model()->findByPk($id);
+        $model = Log::findOne($id);
 
         if ($model === null)
-            throw new CHttpException(404, 'The requested page does not exist.');
-        // if(!$model->hasAccess(Yii::app()->user->id))
-        //    throw new CHttpException(403,'Access Denaid');
+            throw new \yii\web\HttpException(404, 'The requested page does not exist.');
+        // if(!$model->hasAccess(Yii::$app->user->id))
+        //    throw new \yii\web\HttpException(403,'Access Denaid');
 
         return $model;
     }

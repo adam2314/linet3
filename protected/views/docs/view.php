@@ -1,16 +1,18 @@
 <?php
-/***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+/* * *********************************************************************************
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
+
+use app\models\Language;
+
 $actions = array();
 //$actions[]=array('label'=>Yii::t('app','List Documents'), 'url'=>array('index'));
-$actions[] = array('label' => Yii::t('app', 'Create Document'), 'url' => array('create'));
-$actions[] = array('label' => Yii::t('app', 'View Document'), 'url' => array('view', 'id' => $model->id));
+$actions[] = array('label' => Yii::t('app', 'Create Document'), 'url' => array('create', 'type' => $model->doctype));
 $actions[] = array('label' => Yii::t('app', 'Manage Documents'), 'url' => array('admin'));
 $actions[] = array('label' => Yii::t('app', 'Duplicate Document'), 'url' => array('duplicate', 'id' => $model->id));
 
@@ -49,210 +51,150 @@ if ($model->doctype == 10) {//Purchase Order
 }
 
 if ($model->doctype == 16) {//Stock entry certificate
-        $actions[] = array('label' => Yii::t('app', 'Convert to') . " " . Yii::t('app', 'Stock exit certificate'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 17)); //Stock entry certificate
+    $actions[] = array('label' => Yii::t('app', 'Convert to') . " " . Yii::t('app', 'Stock exit certificate'), 'url' => array('duplicate', 'id' => $model->id, 'type' => 17)); //Stock entry certificate
 }
-$this->menu = $actions;
+$this->params["menu"] = $actions;
 
 
 
-$this->beginWidget('MiniForm', array('header' => Yii::t("app", "View Document") . " " . $model->id,));
+app\widgets\MiniForm::begin(array('header' => Yii::t("app", "View Document") . " " . $model->id,));
 ?>
-
-
-<?php echo $this->renderPartial('print', array('model' => $model)); ?>
-
-<label for="Docs_comments"><?php echo $model->getAttributeLabel('comments'); ?></label>
-
 <?php
-echo $model->comments;
-$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-    'id' => 'docs-form',
-    'action' => Yii::app()->CreateURL('docs/view/' . $model->id),
-    'enableAjaxValidation' => false,
-    'htmlOptions' => array('enctype' => 'multipart/form-data'),
-        ));
-?>
+$id = $model->id;
+$java = <<<JAVA
+         jQuery(document).ready(function () {
 
-
-
-
-<div class="row">
-    <div class="col-md-1">
-        <?php
-        ///*
-        $this->widget('widgetRefnum', array(
-            'model' => $model, //Model object
-            'attribute' => 'refnum', //attribute name
-        )); //*/
-        ?>
-
-    </div>
-    <div class="col-md-5">
-
-
-        <?php
-        $this->widget('CMultiFileUpload', array(
-            'name' => 'Files',
-            'model' => $model,
-            'id' => 'Files',
-            'accept' => '*', // useful for verifying files
-            'duplicate' => 'Duplicate file!', // useful, i think
-            'denied' => 'Invalid file type', // useful, i think
-        ));
-        ?>
-        <?php
-        $files = new Files('search');
-        $files->unsetAttributes();
-        $files->parent_type = get_class($model);
-        $files->parent_id = $model->id;
-        $files->hidden = 0;
-        $this->widget('EExcelView', array(
-            'id' => 'acc-template-grid',
-            'dataProvider' => $files->search(),
-            //'filter'=>$model,
-            'template' => '{items}{pager}',
-            'ajaxUpdate' => true,
-            'columns' => array(
-                array(
-                    'name' => 'name',
-                    'type' => 'raw',
-                    'value' => 'CHtml::link(CHtml::encode($data->name), Yii::app()->createUrl("download/".$data->id))',
-                ),
-                array(
-                    'name' => 'date',
-                    'value' => 'date("' . Yii::app()->locale->getDateFormat('phpdatetime') . '",CDateTimeParser::parse($data->date,"' . Yii::app()->locale->getDateFormat('yiidbdatetime') . '"))'
-                ),
-                array(
-                    'class' => 'CButtonColumn',
-                    'template' => '{delete}',
-                    'buttons' => array(
-                        'delete' => array(
-                            'label' => '<i class="glyphicon glyphicon-trash"></i>',
-                            'deleteConfirmation' => true,
-                            'imageUrl' => false,
-                            'url' => 'Yii::app()->createUrl("files/delete", array("id"=>$data->id))',
-                        ),
-                    ),
-                ),
-            ),
-        ));
-        ?>
-
-    </div>
-</div>
-
-<div class="btn-group">
-    <?php echo CHtml::dropDownList('language', Yii::app()->user->language, CHtml::listData(Language::model()->findAll(), 'id', 'name'));?>
-    <?php
-    echo CHTML::hiddenField("subType", "print");
-    echo CHTML::hiddenField("Docs[id]", $model->id);
-    echo CHTML::hiddenField("Docs[doctype]", $model->doctype);
-    if (($model->doctype != 13) && ($model->doctype != 14)) {
-        $this->widget('bootstrap.widgets.TbButtonGroup', array(
-            'type' => 'primary', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
-            'htmlOptions' => array('class' => 'dropup'),
-            'buttons' => array(
-                array('icon' => 'glyphicon glyphicon-print', 'label' => Yii::t('app', 'Print'), 'htmlOptions' => array('onclick' => 'return sendForm("print");'),),
-                array('items' => array(
-                        array('icon' => 'glyphicon glyphicon-envelope', 'label' => Yii::t('app', 'Email'), 'url' => 'javascript:sendForm("email");',),
-                        array('icon' => 'glyphicon glyphicon-save', 'label' => Yii::t('app', 'PDF'), 'url' => 'javascript:sendForm("pdf");',),
-                        array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save Draft'), 'url' => 'javascript:sendForm("saveDraft");',),
-                    //array('icon' => 'glyphicon glyphicon-cloud-upload', 'label' => Yii::t('app', 'Save'), 'url' => 'javascript:sendForm("save");',),
-                    )),
-            ),
-        ));
-
-        $this->widget('bootstrap.widgets.TbButton', array(
-            'label' => Yii::t('app', 'Change language'),
-            'icon' => 'glyphicon glyphicon-globe',
-            'type' => 'primary',
-            'htmlOptions' => array('id' => 'printLink', 'onclick' => 'return hideMe();'),
-        ));
-        
-    }
-    ?>
-</div>
-
-<?php
-$this->endWidget();
-$this->endWidget();
-
-
-/*
-  $this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
-  'id' => "mailDialog",
-  'options' => array(
-  'title' => Yii::t('app', 'Send Mail'),
-  'autoOpen' => false,
-  'width' => '600px',
-  ),
-  ));
-  ?>
-  <div id="mailForm"></div>
-  <?php
-  $this->endWidget('zii.widgets.jui.CJuiDialog'); */
-
-$this->widget('widgetMail', array(
-    'urlFile' => Yii::app()->createAbsoluteUrl("docs/view/" . $model->id . "?mail=1"),
-    'urlAddress' => Yii::app()->createAbsoluteUrl("accounts/JSON/" . $model->account_id),
-    'urlMailForm' => Yii::app()->createAbsoluteUrl('mail/create'),
-    'urlTemplate' => Yii::app()->createAbsoluteUrl('mailTemplate/json'),
-    'obj' => 'Docs',
-    'type' => $model->doctype,
-    'id' => $model->id
-));
-?>
-
-
-
-<script type="text/javascript">
-    function refNum(doc) {//
-
-
-        $("#choseDocs_refnum").dialog("close");
-
-        $('#Docs_refnum_div').html($('#Docs_refnum_div').html() + ", " + doc.doctype + " #" + doc.docnum);
-        $('#Docs_refnum_ids').val($('#Docs_refnum_ids').val() + doc.id + ",");
-
-
-        return false;
-
-
-    }
-    jQuery(document).ready(function() {
-
-        $('#s2id_language').hide();
-        if ("1" == "<?php echo $mail; ?>") {
+        //$('#langSel').hide();
+        if ("1" == "$mail") {
             $('#subType').val('email');
             showMail();
         }
-    });
-    /*
-     $( document ).on( "pageinit", document, function( event ) {
-     // toastr.info( "Initializing " + this.id );
-     showMail();
-     });*/
-    function hideMe() {
-        $('#printLink').hide(150);
-        $('#s2id_language').show(150);
-        return false;
-    }
-
-
-    function sendForm(value) {//preview,print,mail,pdf,save
-        $('#subType').val(value);
-        if (value == 'preview')
-            $("#docs-form").attr('target', '_BLANK');
-        if (value == 'email') {
-            return showMail();
-
+        
+        
+        if(pdf){
+            console.log(baseAddress+"/docs/pdf/$id");
+            window.location =baseAddress+"/docs/pdf/$id";
         }
-        $('#docs-form').submit();
+        
+    });
+        
+        
+        
+JAVA;
 
-        //return false;
+
+$this->registerJs("var baseAddress='" . \yii\helpers\BaseUrl::base() . "';" .
+        "var oppt_account_type=" . (int) $model->docType->oppt_account_type . ";" .
+        "var pdf=" . $pdf . ";"
+        , \yii\web\View::POS_HEAD);
+$this->registerJs($java
+        , \yii\web\View::POS_READY);
+$this->registerJsFile(yii\helpers\BaseUrl::base() . '/assets/docs.js', ['depends' => [\yii\web\JqueryAsset::className()]]
+        //['position' => \yii\web\View::POS_READY]
+);
+?>
+<div class="row">
+<?= $this->render('print', array('model' => $model)); ?>
+</div>
+
+<?php
+$form = kartik\form\ActiveForm::begin(array(
+            'id' => 'docs-form',
+            'action' => yii\helpers\BaseUrl::base() . ('/docs/view/' . $model->id),
+            'enableAjaxValidation' => false,
+                'options' => array('enctype' => 'multipart/form-data'),
+        ));
+?>
+<div class="row">
+    <?= $form->errorSummary($model); ?>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <?= $form->field($model, 'comments')->textarea(); ?>
+    </div>
+    <div class="col-md-5">
+        <?= \app\widgets\AttachedFiles::widget(['model' => $model, 'attribute' => 'Files']); ?>
+    </div>
+    <div class="col-md-3">
+        <?= app\widgets\Refnum::widget([ 'model' => $model,  'attribute' => 'refnum',]);?>
+    </div>
+    
+</div>
+<div class="row">
+<div class="btn-group">
+<?= \yii\helpers\Html::dropDownList('language', Yii::$app->language, \yii\helpers\ArrayHelper::map(Language::find()->All(), 'id', 'name'), ['id' => 'langSel']); ?>
+    <?php
+    echo \yii\helpers\Html::hiddenInput("subType", "email");
+    echo \yii\helpers\Html::hiddenInput("docs[id]", $model->id);
+    echo \yii\helpers\Html::hiddenInput("docs[doctype]", $model->doctype);
+    if (($model->doctype != 13) && ($model->doctype != 14)) {
+
+        echo \yii\bootstrap\ButtonGroup::widget([
+            'options' => ['class' => 'btn-group dropup'],
+            'buttons' => [
+
+                [
+                    'options' => ['class' => 'btn-success'],
+                    'label' => Yii::t('app', 'Print'),
+                    'clientEvents' => ['click' => 'function(event){sendForm("print");}'],
+                //'url'=>'javascript:sendForm("print");',
+                //'type' => 'success',
+                //'icon' => 'glyphicon glyphicon-globe',
+                //'options' => array('id' => 'printLink', 'onclick' => 'return hideMe();'),
+                ],
+                \yii\bootstrap\ButtonDropdown::widget([
+                    //'icon' => 'glyphicon glyphicon-print',
+                    'label' =>  Yii::t('app', 'Make'),
+                    'options' => ['class' => 'btn-success'],
+                    'dropdown' => [
+                            'items' => array(
+                                "<li>" . \yii\helpers\Html::a( Yii::t('app', 'Print'),'javascript:sendForm("print");') . "</li>",
+                                //'icon' => 'glyphicon glyphicon-cloud-upload',
+                                "<li>" . \yii\helpers\Html::a( Yii::t('app', 'Email'),'javascript:sendForm("email");') . "</li>",
+                                //'icon' => 'glyphicon glyphicon-envelope',
+                                "<li>" . \yii\helpers\Html::a( Yii::t('app', 'PDF'),'javascript:sendForm("pdf");') . "</li>",
+                                //'icon' => 'glyphicon glyphicon-save',
+                                "<li>" . \yii\helpers\Html::a( Yii::t('app', 'Save Draft'),'javascript:sendForm("saveDraft");') . "</li>",
+                                //'icon' => 'glyphicon glyphicon-cloud-upload',
+                            )
+                        ]
+                ]),
+                \yii\bootstrap\Button::widget([
+                    //'icon' => 'glyphicon glyphicon-cloud-upload',
+                    'label' => Yii::t('app', 'Change language'),
+                    'options' => ['class' => 'btn-success'],
+                    'clientEvents' => ['click' => "function(event){event.preventDefault();\$(this).hide(150); $('#langSel').show(150);}"],
+                ]),
+                 \yii\bootstrap\Button::widget([
+                    //'icon' => 'glyphicon glyphicon-cloud-upload',
+                    'label' => Yii::t('app', 'Submit'),
+                    'options' => ['class' => 'btn-success','type'=>'submit' ],
+                     
+                    //'clientEvents' => ['click' => "function(event){event.preventDefault();\$(this).hide(150); $('#langSel').show(150);}"],
+                ])
+                
+            ]
+        ]);
     }
+    ?>
+</div>
+</div>
+    <?php
+    kartik\form\ActiveForm::end();
+    app\widgets\MiniForm::end();
 
 
+    echo app\widgets\Mail::widget(array(
+        'urlFile' => yii\helpers\BaseUrl::base() . ("/docs/view/" . $model->id . "?mail=1"),
+        'urlAddress' => yii\helpers\BaseUrl::base() . ("/accounts/json/" . $model->account_id),
+        'urlMailForm' => yii\helpers\BaseUrl::base() . ('/mail/create'),
+        'urlTemplate' => yii\helpers\BaseUrl::base() . ('/mailtemplate/json'),
+        'obj' => "app\\\\models\\\\Docs",
+        'type' => $model->doctype,
+        'id' => $model->id
+    ));
+    ?>
 
 
-</script>
+<?= \app\widgets\RefnumModal::widget(['model' => $model, 'attribute' => 'refnum']); ?>

@@ -1,8 +1,8 @@
 <?php
 
 /* * *********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -36,14 +36,28 @@
  * @property string $comments
  * @property integer $owner
  */
-class Docs extends fileRecord {
+namespace app\models;
 
-    const table = '{{docs}}';
+use Yii;
+use app\components\fileRecord;
+use app\models\Item;
+use app\models\Doccheques;
+use app\models\Docdetails;
+use app\models\Doctype;
+use app\models\Transactions;
 
+class docs extends fileRecord {
+
+    const table = '{{%docs}}';
     //public $lang;
+    public $oppt_account_id='';
     public $preview=0;
+    //public $discount=0;//overide
     public $docDet = NULL;
+    public $docDetArray = NULL;
+    
     public $docCheq = NULL;
+    public $docCheqArray = NULL;
     public $Docs = NULL;
     public $rcptsum = 0;
     public $issue_from;
@@ -53,19 +67,16 @@ class Docs extends fileRecord {
     private $dateDBformat = true;
     public $maxDocnum;
 
+    public $docAction='';
     const STATUS_OPEN = 0;
     const STATUS_CLOSED = 1;
 
-    //const STATUS_DRAFT=3;
-    /*
-      public function __construct($arg = NULL) {
-      //    public function __construct($type=0) {
-      parent::_construct();
-      //$doctype=Doctype::model()->findByPk($type);
-      //$this->docType=model;
-      //$this->doctype=$type;
-
-      }// */
+    public function fields() {
+        $fields = parent::fields();
+        $fields['rcptsum']='rcptsum';
+        return $fields;
+    }
+  
 
     public function hasAttribute($name) {
         if ($name == "docDet" || $name == "docCheq")
@@ -75,19 +86,19 @@ class Docs extends fileRecord {
     }
 
     public function init() {
-        $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
-        $this->due_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
-        $this->ref_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
+        $this->issue_date = $this->readDate('now');
+        $this->due_date = $this->readDate('now');
+        $this->ref_date = $this->readDate('now');
         return parent::init();
     }
 
     public static function findAllByType($doctype) {
 
-        return Docs::model()->findAllByAttributes(array('doctype' => $doctype));
+        return docs::find()->where(array('doctype' => $doctype))->All();
     }
 
     public function draftSave() {
-        $status = Docstatus::model()->findByAttributes(array('looked' => 0, 'doc_type' => $this->doctype));
+        $status = Docstatus::find()->where(array('looked' => 0, 'doc_type' => $this->doctype))->one();
         if ($status !== null) {
             $this->status = $status->num;
         }
@@ -99,15 +110,15 @@ class Docs extends fileRecord {
 
     public function findByNum($docnum, $doctype) {
 
-        return Docs::model()->findByAttributes(array('docnum' => $docnum, 'doctype' => $doctype));
+        return docs::find()->where(array('docnum' => $docnum, 'doctype' => $doctype))->All();
     }
 
     public function getRef() {
         $this->refnum_ids = '';
-        $this->Docs = Docs::model()->findAllByAttributes(array('refnum' => $this->id));
+        $this->Docs = docs::find()->where(array('refnum' => $this->id))->All();
         if ($this->Docs !== null) {
             foreach ($this->Docs as $doc)
-                $this->refnum_ids.=$doc->id . ", ";
+                $this->refnum_ids.=$doc->id . ",";
         }
     }
 
@@ -122,38 +133,39 @@ class Docs extends fileRecord {
         return Yii::t('app', $list[$this->refstatus]['name']);
     }
 
-    public function getTypeName() {
+    public function TypeName() {
         if ($this->docType)
             return Yii::t("app", $this->docType->name);
         else
             return $this->doctype;
     }
 
-    public function getStatus() {
+    public function StatusName() {
         if ($this->docStatus)
             return Yii::t('app', $this->docStatus->name);
         else
             return $this->status;
     }
 
-    public function getType($type = '') {
+    public function OpenfrmtType($type = '') {
         if ($type == '') {
             return isset($this->docType) ? $this->docType->openformat : "";
         } else {
-            $this->doctype = Doctype::model()->getOType($type);
+            $this->doctype = Doctype::getOType($type);
             return $this->doctype;
         }
+    }
+    
+    public function OpenfrmtNoVatTotal(){
+        return  $this->sub_total + $this->novat_total;
+        
     }
 
     public function openfrmt($line) {
         $docs = '';
 
         //get all fields (m100) sort by id
-        $criteria = new CDbCriteria;
-        $criteria->condition = "type_id = :type_id";
-        $criteria->params = array(':type_id' => "C100");
-        $fields = OpenFormat::model()->findAll($criteria);
-
+        $fields = OpenFormat::find()->where(['type_id' => "C100"])->All();
         //loop strfgy
         foreach ($fields as $field) {
             $docs.=$this->openfrmtFieldStr($field, $line);
@@ -181,10 +193,10 @@ class Docs extends fileRecord {
             $a = "S";
         else if (in_array($this->doctype, array(13, 14)))
             $a = "T";
-        else
+        else//else irelvent!
             echo $this->docnum;
         $opptacc = $this->vatnum;
-        $docdate = date("Ymd", CDateTimeParser::parse($this->issue_date, Yii::app()->locale->getDateFormat('yiidatetimesec')));
+        $docdate = $this->readYmd($this->issue_date);
         $doctype = $this->doctype;
         $docnum = $this->docnum;
         $vatsum = $this->vat;
@@ -193,104 +205,120 @@ class Docs extends fileRecord {
         return sprintf("%1s%09d%08d0000%02d%07d%09d%1s%010d000000000", $a, $opptacc, $docdate, $doctype, $docnum, $vatsum, $plusmin, $docsum);
     }
 
-    public function beforeSave() {
+    public function beforeSave($inseret) {
         if ($this->isNewRecord) {
             $this->dateDBformat = false;
         }
         if ($this->reg_date == null)
-            $this->reg_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
+            $this->reg_date = $this->writeDate('now');
 
-        //echo Yii::app()->locale->getDateFormat('yiishort');
-        //echo $this->due_date;
-        //echo CDateTimeParser::parse($this->due_date,Yii::app()->locale->getDateFormat('yiishort'));
-        //echo date("Y-m-d H:m:s",CDateTimeParser::parse($this->due_date,Yii::app()->locale->getDateFormat('yiishort')));
-        //echo $this->due_date.";".$this->issue_date.";".$this->modified."<br>";
-        if (!$this->dateDBformat) {
-            $this->dateDBformat = true;
-            $this->due_date = date("Y-m-d H:i:s", CDateTimeParser::parse($this->due_date, Yii::app()->locale->getDateFormat('yiidatetime')));
-            $this->issue_date = date("Y-m-d H:i:s", CDateTimeParser::parse($this->issue_date, Yii::app()->locale->getDateFormat('yiidatetime')));
-            $this->reg_date = date("Y-m-d H:i:s", CDateTimeParser::parse($this->reg_date, Yii::app()->locale->getDateFormat('yiidatetime')));
-            $this->ref_date = date("Y-m-d H:i:s", CDateTimeParser::parse($this->ref_date, Yii::app()->locale->getDateFormat('yiidatetime')));
-        }
-        //return true;
-        //echo $this->due_date.";".$this->issue_date.";".$this->modified;
-        //Yii::app()->end();
-        return parent::beforeSave();
+
+        return parent::beforeSave($inseret);
     }
 
-    public function afterSave() {
-        if ($this->dateDBformat) {
-            $this->dateDBformat = false;
-            $this->due_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->due_date));
-            $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->issue_date));
-            $this->reg_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->reg_date));
-            $this->ref_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->ref_date));
-        }
-        return parent::afterSave();
-    }
+ 
 
     public function afterFind() {
-        if ($this->dateDBformat) {
-            $this->dateDBformat = false;
-            $this->due_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->due_date));
-            $this->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->issue_date));
-            $this->reg_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->reg_date));
-            $this->ref_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'), strtotime($this->ref_date));
-        }
-
+        
         $this->getRef();
         return parent::afterFind();
     }
-
+    private function accountLoader(){
+        $account=  Accounts::findOne(['id'=>$this->account_id]);
+        if($account!==null){
+            if($this->company==null)
+                $this->company=$account->name;
+            if($this->address==null)
+                $this->address=$account->address;
+            if($this->city==null)
+                $this->city=$account->city;
+            if($this->zip==null)
+                $this->zip=$account->zip;
+            if($this->vatnum==null)
+                $this->vatnum=$account->vatnum;
+            
+            
+        }
+        if($this->status==null)
+            $this->status = $this->docType->docStatus_id;
+        
+    }
     public function save($runValidation = true, $attributes = NULL) {
-        $this->owner = Yii::app()->user->id;
+        if(isset(Yii::$app->user)){
+            $this->owner = Yii::$app->user->id;
+        }
+        if (is_null($this->discount))
+            $this->discount=0;
         if ($this->total == 0)
             $this->total = $this->rcptsum;
+        
+        
+        $this->accountLoader();
+        
         $a = parent::save($runValidation, $attributes);
 
         if (!$a)
             return $a;
-        if (!is_null($attributes))
-            return $a;
+        
+        //if think we can skip this
+        //if (!is_null($attributes))
+        //    return $a;
 
 
 
 
-
+        //shuld be valid and calced by now
         //if ($a) { //if switch no save
         $this->saveRef(); //load docs and re-save them
         if (!$this->action) {
             if ($this->status === null)
-                throw new CHttpException(500, Yii::t('app', 'No status recived'));
-            $this->docStatus = Docstatus::model()->findByPk(array('num' => $this->status, 'doc_type' => $this->doctype));
+                throw new \Exception(Yii::t('app', 'No status recived'));//500
+            //$this->docStatus = Docstatus::findOne(array('num' => $this->status, 'doc_type' => $this->doctype));
             if ($this->docStatus === null)
-                throw new CHttpException(500, Yii::t('app', 'Status is Invalid'));
+                throw new \Exception(Yii::t('app', 'Status is Invalid'));//500
 
             $this->saveDet();
             $this->saveCheq();
-            $this->calc();
-            $this->validate();
-            if (count($this->getErrors()) != 0)
-                return false;
+                
+            
+            if(count($this->errors)!=0)
+                return $a;
+            //$this->calc();
+            //$this->validate();
+            //if (count($this->getErrors()) != 0)
+            //    return false;
             if (isset($this->docStatus)) {
-                if ($this->docStatus->action != 0) {
+                if ($this->docStatus->action != 0) {//will run only once 
+                    $transaction = Yii::$app->db->beginTransaction(\yii\db\Transaction::READ_UNCOMMITTED);//-shuld start transaction here
+                    try {
                     $this->docnum = $this->newNum(); //get num 
+                    if(!$this->docnum){
+                        $this->addError('docnum', Yii::t('app','Document exists please fix last_num Value'));
+                        return false;
+                    }
                     $this->action = 1;
+                    
                     $a = parent::save($runValidation, $attributes);
-
-
+                    
+                    
                     $this->transaction((int) $this->docStatus->action);
                     if (is_null($this->docType->transactionType_id)) {//only if !transaction stock
                         foreach ($this->docDetailes as $docdetail) {
                             $this->stock($docdetail->item_id, $docdetail->qty);
                         }
                     }
+                    
+                    //commit it here
+                    $transaction->commit();
+                    } catch (\Exception $e) {
+                        $transaction->rollBack();
+                        $message = $e->getMessage();
+                        $this->addError('docnum',  $message );
+                    }
                 }
             }
         }
-        //} //else {
-        // throw new CHttpException(500, Yii::t('app', 'Uneable to save document'));
-        //}
+
         return $a;
     }
 
@@ -298,43 +326,56 @@ class Docs extends fileRecord {
         $str = $this->refnum_ids; //save new values
 
         $this->getRef();    //load old
-        //no skipping is allowed anymore if cur,total change...
-        //if($str==$this->refnum_ids) //if the same skip
-        //    return true;
-        //echo $str;
+        
+        $newIds=explode(",", rtrim($str,','));
+        $oldIds=explode(",", rtrim($this->refnum_ids,','));
+        sort($newIds);
+        sort($oldIds);
+        //var_dump($newIds);
+        //var_dump($oldIds);
+        //        exit;
+        if($newIds==$oldIds)//($this->refnum_ids==$str)
+            return true;//nochange
 
         if ($this->Docs !== null) {//clear!
             foreach ($this->Docs as $doc) {
-                $doc->refstatus = Docs::STATUS_OPEN;
+                $doc->refstatus = docs::STATUS_OPEN;
                 $doc->refnum = '';
                 $doc->save();
             }
         }
+        
+        if($str==''){
+            return true;
+        }
         $sum = 0;
-        $tmp = explode(",", $str);
-        foreach ($tmp as $id) {//lets do this
+        //$tmp = explode(",", rtrim($str,','));
+        
+        foreach ($newIds as $id) {//lets do this
             if ($id == $this->id) {
-                throw new CHttpException(500, Yii::t('app', 'You cannot save doc as a refnum'));
+                throw new \Exception(Yii::t('app', 'You cannot save doc as a refnum'));//500
             }
-            $doc = Docs::model()->findByPk((int) $id);
+            $doc = docs::find()->where(['id'=>(int) $id])->one();
             if ($doc !== null) {
                 $sum+=$doc->total; //adam: need to multi currency!
                 if ($sum <= $this->total) {
-                    $doc->refstatus = Docs::STATUS_CLOSED;
+                    $doc->refstatus = docs::STATUS_CLOSED;
                 } else {
-                    $doc->refstatus = Docs::STATUS_OPEN;
+                    $doc->refstatus = docs::STATUS_OPEN;
                 }
                 $doc->refnum = $this->id;
                 $doc->save();
+                
             }
         }
         $this->refnum_ids = $str;
+        return true;
     }
 
     /*     * *********************doc******************* */
 
     public function calc() {
-        $precision = Yii::app()->user->getSetting('company.precision');
+        $precision = Yii::$app->params['precision'];
 
         $this->vat = 0;
         $this->sub_total = 0;
@@ -390,6 +431,7 @@ class Docs extends fileRecord {
         $docdetail->item_id = 1;
         $docdetail->qty = 1;
         $docdetail->iTotalVat = $this->discount * -1;
+        $docdetail->valuedate=$this->issue_date;
         $docdetail->CalcPriceWithVat();
         return $docdetail;
     }
@@ -399,42 +441,44 @@ class Docs extends fileRecord {
             $line = 1;
             foreach ($this->docDet as $key => $detial) {
                 $fline = isset($detial['line']) ? $detial['line'] : 0;
-                $submodel = Docdetails::model()->findByPk(array('doc_id' => $this->id, 'line' => $fline));
+                $submodel = Docdetails::findOne(array('doc_id' => $this->id, 'line' => $fline));
                 if ($submodel === null) {//new line
                     $submodel = new Docdetails;
                 }
 
                 $submodel->attributes = $detial;
+                $submodel->valuedate=$this->issue_date;
                 $submodel->line = $line;
                 $submodel->doc_id = $this->id;
-                if (Item::model()->findByPk((int) $detial["item_id"]) !== null) {
+                //if (Item::findOne((int) $detial["item_id"]) !== null) {
                     $submodel->iItem=null;
                     if ($submodel->save()) {
-
                         $this->docDet[$key]['iTotalVat'] = $submodel->iTotalVat;
                         $this->docDet[$key]['ihTotal'] = $submodel->ihTotal;
                         $saved = true;
                         $line++;
                     } else {
-                        Yii::log("fatel error cant save docdetial,doc_id:" . $submodel->line . "," . $submodel->doc_id, CLogger::LEVEL_ERROR, __METHOD__);
+                        $this->addError('docDet', $submodel->errors);
+                        Yii::error("fatel error cant save docdetial,doc_id:" . $submodel->line . "," . $submodel->doc_id.":".\yii\helpers\Json::encode($submodel->errors));
                     }
-                }
+                //}
             }
             if (count($this->docDetailes) != $line - 1) {//if more items in $docdetails delete them
                 for ($curLine = $line; $curLine < count($this->docDetailes); $curLine++)
                     $this->docDetailes[$curLine]->delete();
             }
         }
+        return true;
     }
 
     /*     * ***********************rcpt***************************** */
 
     private function saveCheq() {
         if (!is_null($this->docCheq)) {
-            $line = 0;
+            $line = 1;
             foreach ($this->docCheq as $key => $rcpt) {
-                $submodel = Doccheques::model()->findByPk(array('doc_id' => $this->id, 'line' => $rcpt['line']));
-                if (!$submodel) {//new line
+                $submodel = Doccheques::findOne(array('doc_id' => $this->id, 'line' => $rcpt['line']));
+                if ($submodel==null) {//new line
                     $submodel = new Doccheques;
                 }
 
@@ -445,37 +489,39 @@ class Docs extends fileRecord {
                         $submodel->$key = $value;
                     else {
                         $eav = new DocchequesEav;
-                        $eav->line = $rcpt['line'];
+                        $eav->line = $line;
                         $eav->doc_id = $this->id;
                         $eav->attribute = $key;
                         $eav->value = $value['value'];
                         $eav->save();
                     }
                 }
-
+                $submodel->line = $line;
                 $submodel->doc_id = $this->id;
-                if ((int) $rcpt["type"] != 0) {
+                //if ((int) $rcpt["type"] != 0) {
                     if ($submodel->save()) {
-                        $saved = true;
+                        //$saved = true;
                         $line++;
                     } else {
-                        Yii::log("fatel error cant save rcptdetial,doc_id:" . $submodel->line . "," . $submodel->doc_id, CLogger::LEVEL_ERROR, __METHOD__);
+                        $this->addError('docCheq', $submodel->errors);
+                        Yii::error("fatel error cant save rcptdetial,doc_id:" . $submodel->line . "," . $submodel->doc_id);
 
-                        //Yii::app()->end();
+                        //Yii::$app->end();
                     }
-                }
+                //}
 
-                //Yii::app()->end();
+                //Yii::$app->end();
             }
             if (count($this->docCheques) != $line) {//if more items in $docCheques delete them
                 for ($curLine = $line; $curLine < count($this->docCheques); $curLine++)
                     $this->docCheques[$curLine]->delete();
             }
         }
+        return true;
     }
 
     private function stock($item_id, $qty) {
-        if (Yii::app()->user->settings['company.stock']) {// remove from stock.
+        if (\app\helpers\Linet3Helper::getSetting('company.stock')) {// remove from stock.
             $stockAction = $this->docType->stockAction;
             if ($stockAction) {
 
@@ -484,7 +530,7 @@ class Docs extends fileRecord {
                         return;
                 }
 
-                $account_id = Yii::app()->user->warehouse;
+                $account_id = \app\models\User::getWarehouse($this->owner);
                 $oppt_account_id = $this->account_id;
                 if ((int) $this->oppt_account_id != 0) {
                     if ($this->doctype == 15) {//only if transfer //mybe shuld be only if oppt_account_type==8 wherehouse
@@ -502,12 +548,14 @@ class Docs extends fileRecord {
         //income account -
         //vat account +
         //costmer accout +
-        $precision = Yii::app()->user->getSetting('company.precision');
-        $valuedate = date("Y-m-d H:m:s", CDateTimeParser::parse($this->issue_date, Yii::app()->locale->getDateFormat('yiidatetime')));
+        $precision = Yii::$app->params['precision'];
+        $valuedate =  $this->issue_date;
         //$num = 0;
         $tranType = $this->docType->transactionType_id;
         $round = 0;
-
+        if($this->refnum_ext===null){
+            $this->refnum_ext='';
+        }
 
         if (!is_null($tranType)) {//has trans action!
             $docAction = new Transactions();
@@ -531,12 +579,15 @@ class Docs extends fileRecord {
 
 
                 foreach ($this->docDetailes as $docdetail) {
-                    $refnum2 = $this->stock($docdetail->item_id, $docdetail->qty);
+                    
+                    $docdetail->valuedate=$valuedate;
+                    
+                    $stockAction = $this->stock($docdetail->item_id, $docdetail->qty);
                     $docAction = $docdetail->transaction($docAction, $action, $this->oppt_account_id);
                     //$line++;
                     $multi = 1;
                     if (!is_null($this->oppt_account_id))
-                        if ($oppt = Accounts::model()->findByPk($this->oppt_account_id))
+                        if ($oppt = Accounts::findOne($this->oppt_account_id))
                             $multi = ($oppt->src_tax / 100);
 
                     $iVat = $docdetail->iTotalVat- $docdetail->iTotal;
@@ -554,7 +605,7 @@ class Docs extends fileRecord {
                     $docAction = $docdetail->transaction($docAction, $action, $this->oppt_account_id);
                     $multi = 1;
                     if (!is_null($this->oppt_account_id))
-                        if ($oppt = Accounts::model()->findByPk($this->oppt_account_id))
+                        if ($oppt = Accounts::findOne($this->oppt_account_id))
                             $multi = ($oppt->src_tax / 100);
 
                     $iVat = $docdetail->iTotalVat-$docdetail->iTotal;
@@ -593,7 +644,7 @@ class Docs extends fileRecord {
         }
 
 
-        //Yii::app()->end();
+        //Yii::$app->end();
     }
 
     public function delete() {
@@ -610,27 +661,24 @@ class Docs extends fileRecord {
         }
     }
 
-    public function primaryKey() {
-        return 'id';
+    public static function primaryKey() {
+        return ['id'];
     }
 
-    /**
-     * Returns the static model of the specified AR class.
-     * @param string $className active record class name.
-     * @return Docs the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
+   
 
     private function newNum() {
         if ($this->doctype == 0) {
-            return 0;
+            return false;
         }
 
         if (!$this->docnum) {
             $this->docType->last_docnum = $this->docType->last_docnum + 1;
-            $this->docType->save();
+            if($this->getMax($this->docType->id)==$this->docType->last_docnum){
+                return false;
+            }
+            
+            $this->docType->save(false);
             return $this->docType->last_docnum;
         } else {
             return $this->docnum;
@@ -638,19 +686,17 @@ class Docs extends fileRecord {
     }
 
     public static function getMax($type_id) {
-        $model = new Docs;
-        $criteria = new CDbCriteria;
-        $criteria->select = 'max(docnum) AS maxDocnum';
-        $criteria->condition = "doctype = :type_id";
-        $criteria->params = array(':type_id' => $type_id);
-        $row = $model->model()->find($criteria);
-        return $row['maxDocnum'];
+        $num = docs::find()->select('max(docnum)')->where(['doctype'=>$type_id])->scalar();
+        
+        return $num;
+
+        
     }
 
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -661,42 +707,91 @@ class Docs extends fileRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('account_id, currency_id', 'required'),
-            array('stockSwitch, disType, status, printed, owner', 'numerical', 'integerOnly' => true),
-            array('city', 'length', 'max' => 40),
-            array('doctype, docnum, oppt_account_id, account_id, zip, vatnum', 'length', 'max' => 11),
-            array('company, address', 'length', 'max' => 80),
-            array('currency_id', 'length', 'max' => 3),
-            array('refnum', 'length', 'max' => 20),
-            array('vatnum', 'vatnumVal'),
-            array('docDet', 'docDetVal'),
-            array('docCheq', 'docCheqVal'),
-            array('rcptsum, discount, sub_total, novat_total, vat, total, src_tax', 'length', 'max' => 20),
-            array('ref_date, issue_date, due_date, comments, description, refnum_ext, refnum_ids, refstatus', 'safe'),
+            array(['company', 'account_id', 'currency_id'], 'required','on'=>'default'),
+            array(['doctype',  'oppt_account_id', 'account_id', 'docnum', 'stockSwitch', 'disType', 'status', 'printed', 'owner', 'refnum', 'refstatus', 'vatnum'], 'number', 'integerOnly' => true,'on'=>'default'),
+            array(['city'], 'string', 'max' => 40),
+            //array([], 'double'),
+            array(['company', 'address'], 'string', 'max' => 80),
+            array(['currency_id'], 'string', 'max' => 3),
+            array(['zip'], 'string', 'max' => 20),
+            array(['account_id'], 'accountVal'),
+            array(['vatnum'], 'vatnumVal'),
+            array(['docDet'], 'docDetVal'),
+            array(['docCheq'], 'docCheqVal'),
+            array(['rcptsum', 'sub_total', 'novat_total', 'vat', 'total', 'src_tax', 'discount'], 'double','on'=>'default'),
+            array(['ref_date', 'issue_date', 'due_date', 'comments', 'description', 'refnum_ext', 'refnum_ids'], 'safe'),
             //array('oppt_account_id, discount, issue_from, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner', 'safe'),
-            array('total', 'compare', 'compareAttribute' => 'rcptsum', 'on' => 'invrcpt'),
-            array('oppt_account_id', 'required', 'on' => 'opppt_req'),
+            
+
+            array(['rcptsum', 'sub_total', 'novat_total', 'vat', 'total', 'src_tax', 'discount'], 'double','on'=>'opppt_req'),
+            array(['company', 'account_id', 'currency_id'], 'required','on'=>'opppt_req'),
+            array(['doctype',  'oppt_account_id', 'account_id', 'docnum', 'stockSwitch', 'disType', 'status', 'printed', 'owner', 'refnum', 'refstatus', 'vatnum'], 'number', 'integerOnly' => true,'on'=>'opppt_req'),
+            array(['oppt_account_id'], 'required', 'on' => 'opppt_req'),
+            
+            
+            
+            array(['rcptsum', 'sub_total', 'novat_total', 'vat', 'total', 'src_tax', 'discount'], 'double','on'=>'invrcpt'),
+            array(['company', 'account_id', 'currency_id'], 'required','on'=>'invrcpt'),
+            array(['doctype',  'oppt_account_id', 'account_id', 'docnum', 'stockSwitch', 'disType', 'status', 'printed', 'owner', 'refnum', 'refstatus', 'vatnum'], 'number', 'integerOnly' => true,'on'=>'invrcpt'),
+            array(['rcptsum', 'sub_total', 'novat_total', 'vat', 'total', 'src_tax', 'discount'], 'double','on'=>'invrcpt'),
+            array(['total'], 'compare', 'compareAttribute' => 'rcptsum', 'on' => 'invrcpt'),
+            
+            
+            
+            
+            [['status', 'printed', 'refnum', 'refstatus'], 'number', 'integerOnly' => true,'on'=>'vupdate'],
+            [['refnum_ids', 'Files'], 'safe','on'=>'vupdate'],
+            
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('oppt_account_id, discount, issue_from, refnum_ext, issue_to, id, doctype, docnum, account_id, company, address, city, zip, vatnum, refnum, issue_date, due_date, sub_total, novat_total, vat, total, src_tax, status, currency_id, printed, comments, description, owner, refstatus', 'safe', 'on' => 'search'),
+            array(['oppt_account_id', 'issue_from', 'refnum_ext', 'issue_to', 'id', 'doctype', 'docnum', 'account_id', 'company', 'address', 'city', 'zip', 'vatnum', 'refnum', 'issue_date', 'due_date', 'sub_total', 'novat_total', 'vat', 'total', 'src_tax', 'status', 'currency_id', 'printed', 'comments', 'description', 'owner', 'refstatus'], 'safe', 'on' => 'search'),
         );
+    }
+    
+    public function docTypeVal($attribute, $params) {
+        $model=  Doctype::findOne(['id'=>$this->$attribute]);
+        if($model==null){
+            $this->addError($attribute, Yii::t('app', 'Not a valid Doc Type'));
+        }
+    }
+    
+    public function accountVal($attribute, $params) {
+        $doctype=  Doctype::findOne(['id'=>$this->doctype]);
+        $type=null;
+       
+        if($doctype==null){
+            $this->addError($attribute, Yii::t('app', 'Not a valid Doc Type'));
+            
+        }else{
+            if($attribute=='account_id'){
+                $type=$doctype->account_type;
+            }else{
+                $type=$doctype->oppt_account_type;
+            }
+        }
+        
+        $model=Accounts::findOne(['id'=>$this->$attribute,'type'=>$type]);
+        if($model==null){
+            $this->addError($attribute, Yii::t('app', 'Not a valid account id'));
+        }
     }
 
     public function vatnumVal($attribute, $params) {
-        if (Linet3Helper::vatnumVal($this->$attribute)) {
+        if (\app\helpers\Linet3Helper::vatnumVal($this->$attribute)) {
             $this->addError($attribute, Yii::t('app', 'Not a valid VAT id'));
         }
     }
 
     public function docCheqVal($attribute, $params) {
-        $line = 0;
+        $line = 1;
         $sum = 0;
         if (!is_null($this->docCheq)) {
+            $det=[];
             foreach ($this->docCheq as $key => $rcpt) {
-                $line++;
-                if (!is_array($rcpt)) {
-                    return $this->addError($attribute, Yii::t('app', 'Not a valid doc Cheq array'));
-                }
+                
+                //if (!is_array($rcpt)) {
+                //    return $this->addError($attribute, Yii::t('app', 'Not a valid doc Cheq array'));
+                //}
                 $submodel = new Doccheques;
 
                 //go throw attr if no save new
@@ -704,57 +799,60 @@ class Docs extends fileRecord {
                     if ($submodel->hasAttribute($key1))
                         $submodel->$key1 = $value;
                 }
-
+                $submodel->line = $line;
                 $submodel->doc_id = 0;
-                if (PaymentType::model()->findByPk((int) $rcpt["type"]) !== null) {
+                //if (\app\models\PaymentType::findOne((int) $rcpt["type"]) !== null) {
                     if ($submodel->validate()) {
                         $sum+=$submodel->sum;
                     } else {
-                        $this->addError($attribute, Yii::t('app', 'Not a valid doc Cheq'));
+                        $this->addError($attribute, Yii::t('app', 'Not a valid doc Cheq').print_r($submodel->errors,true));
                     }
-                } else {
-                    $this->addError($attribute, Yii::t('app', 'Not a valid paymenet type'));
-                }
+                //} else {
+                //    $this->addError($attribute, Yii::t('app', 'Not a valid paymenet type'));
+                //}
+                    $det[]=$submodel;
+                    $line++;
             }
+            $this->docCheqArray=$det;
         }
         if ($line) {
+
+            if ($this->total==0)
+                $this->total = $this->rcptsum;
             //if (!Linet3Helper::numDiff($sum, (double) $this->rcptsum))
             if ( abs($sum -  $this->total)>0.0001){
-                echo  Yii::t('app', 'Total and recipt does not mach') . " " . $sum . " " . $this->total." ".abs($sum -  $this->total);
-                exit;
-                $this->addError($attribute, Yii::t('app', 'Total and recipt does not mach') . " " . $sum . " " . $this->total);
+                
+                $this->addError($attribute, Yii::t('app', 'Total and recipt does not mach') . " rcpt_sum(calc):" . $sum . " doc_total:" . $this->total);
                 
             }
         }
     }
 
     public function docDetVal($attribute, $params) {
-        $line = 0;
+        $line = 1;
         $sum = 0;
-
+        
         if (!is_null($this->docDet)) {
-            $line++;
+            
+            $det=[];
             foreach ($this->docDet as $key => $detial) {
-                if (!is_array($detial)) {
-                    return $this->addError($attribute, Yii::t('app', 'Not a valid doc Detail array'));
-                }
+
 
                 $submodel = new Docdetails;
-
                 $submodel->attributes = $detial;
                 $submodel->line = $line;
                 $submodel->doc_id = 0;
-                if (Item::model()->findByPk((int) $detial["item_id"]) !== null) {
-                    if ($submodel->validate()) {
-                        
-                    } else {
-                        $this->addError($attribute, Yii::t('app', 'Not a valid doc item'));
-                    }
-                } else {
-                    if ($detial["item_id"] != 0)
-                        $this->addError($attribute, Yii::t('app', 'Not a valid item id'));
+
+                $submodel->valuedate=$this->issue_date;
+
+                if (!$submodel->validate()) {
+                    $this->addError($attribute, $line.": ".Yii::t('app', 'Not a valid doc item').print_r($submodel->errors,true));
                 }
+                $det[]=$submodel;
+                $line++;
             }
+            
+            $this->docDetArray=$det;
         }
     }
 
@@ -776,42 +874,60 @@ class Docs extends fileRecord {
         //
             );
     }
+    public function getAccount() {
+        return $this->hasOne(Accounts::className(), array('id' => 'account_id'));
+    }
+    public function getDocs() {
+        return $this->hasOne(Doctype::className(), array('id' => 'doctype'));
+    }
+    public function getDocType() {
+        return $this->hasOne(Doctype::className(), array('id' => 'doctype'));
+    }
+    public function getDocStatus() {
+        return $this->hasOne(Docstatus::className(),  ['num'=>'status', 'doc_type'=>'doctype']);
+    }
+    public function getDocDetailes(){
+        return $this->hasMany(Docdetails::className(), array('doc_id' => 'id'));
+    }
+    public function getDocCheques(){
+        return $this->hasMany(Doccheques::className(), array('doc_id' => 'id'));
+    }
 
     /**
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels() {
         return array(
-            'id' => Yii::t('labels', 'ID'),
-            'doctype' => Yii::t('labels', 'Document Type'),
-            'docnum' => Yii::t('labels', 'Document No.'),
-            'account_id' => Yii::t('labels', 'Account'),
-            'oppt_account_id' => Yii::t('labels', 'Opposite account'),
-            'company' => Yii::t('labels', 'Company'),
-            'address' => Yii::t('labels', 'Address'),
-            'city' => Yii::t('labels', 'City'),
-            'zip' => Yii::t('labels', 'Zip'),
-            'vatnum' => Yii::t('labels', 'VAT No.'),
-            'refnum' => Yii::t('labels', 'Reference No.'),
-            'refnum_ext' => Yii::t('labels', 'External Reference'),
-            'issue_date' => Yii::t('labels', 'Issue Date'),
-            'due_date' => Yii::t('labels', 'Due Date'),
-            'ref_date' => Yii::t('labels', 'Reference Date'),
-            'reg_date' => Yii::t('labels', 'Create Date'),
-            'sub_total' => Yii::t('labels', 'Sub Total'),
-            'novat_total' => Yii::t('labels', 'No VAT Total'),
-            'vat' => Yii::t('labels', 'VAT'),
-            'total' => Yii::t('labels', 'Subtotal to pay'),
-            'currency_id' => Yii::t('labels', 'Currency'),
-            'src_tax' => Yii::t('labels', 'Src Tax'),
-            'status' => Yii::t('labels', 'Status'),
-            'printed' => Yii::t('labels', 'Printed'),
-            'description' => Yii::t('labels', 'Comments for document'),
-            'comments' => Yii::t('labels', 'Hidden internal comments'),
-            'owner' => Yii::t('labels', 'Owner'),
-            'discount' => Yii::t('labels', 'Discount'),
-            'refstatus' => Yii::t('labels', 'Reference Status'),
-            'stockSwitch' => Yii::t('labels', 'Stock Switch'),
+            'id' => Yii::t('app', 'ID'),
+            'doctype' => Yii::t('app', 'Document Type'),
+            'docnum' => Yii::t('app', 'Document No.'),
+            'account_id' => Yii::t('app', 'Account Id'),
+            'oppt_account_id' => Yii::t('app', 'Opposite account'),
+            'company' => Yii::t('app', 'Name'),
+            'address' => Yii::t('app', 'Address'),
+            'city' => Yii::t('app', 'City'),
+            'zip' => Yii::t('app', 'Zip'),
+            'vatnum' => Yii::t('app', 'VAT No.'),
+            'refnum' => Yii::t('app', 'Reference No.'),
+            'refnum_ext' => Yii::t('app', 'External Reference'),
+            'issue_date' => isset($this->docType)?$this->docType->issue_label(): Yii::t('app','Issue Date'),
+            'due_date' => isset($this->docType)?$this->docType->due_label(): Yii::t('app','Due Date'),
+            'ref_date' => isset($this->docType)?$this->docType->ref_label(): Yii::t('app','Reference Date'),
+            'reg_date' => Yii::t('app', 'Create Date'),
+            'sub_total' => Yii::t('app', 'Sub Total'),
+            'novat_total' => Yii::t('app', 'No VAT Total'),
+            'vat' => Yii::t('app', 'VAT'),
+            'total' => Yii::t('app', 'Subtotal to pay'),
+            'currency_id' => Yii::t('app', 'Currency'),
+            'src_tax' => Yii::t('app', 'Src Tax'),
+            'status' => Yii::t('app', 'Status'),
+            'printed' => Yii::t('app', 'Printed'),
+            'description' => Yii::t('app', 'Comments for document'),
+            'comments' => Yii::t('app', 'Hidden internal comments'),
+            'owner' => Yii::t('app', 'Owner'),
+            'discount' => Yii::t('app', 'Discount'),
+            'refstatus' => Yii::t('app', 'Reference Status'),
+            'stockSwitch' => Yii::t('app', 'Stock Switch'),
         );
     }
 
@@ -819,57 +935,75 @@ class Docs extends fileRecord {
 
         if ($this->action == 1)
             $this->printed = (int) $this->printed + 1;
-        $this->save(false, false);
+        $this->save(false);
     }
 
     /**
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search() {
-        // Warning: Please modify the following code to remove attributes that
-        // should not be searched.
+    public function search($params) {
+        $query = docs::find();
 
-        $criteria = new CDbCriteria;
+        $dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => $query,
+            "sort"=> ['defaultOrder' => [
+                'reg_date'=>SORT_DESC,
+                'docnum'=>SORT_DESC
+                
+                ]]
+        ]);
+        //exit;
+        $this->load($params);
 
-        $criteria->compare('id', $this->id, true);
-        //$criteria->compare('prefix',$this->prefix,true);
-        $criteria->compare('doctype', $this->doctype);
-        $criteria->compare('docnum', $this->docnum, true);
-        $criteria->compare('account_id', $this->account_id, true);
-        $criteria->compare('company', $this->company, true);
-        $criteria->compare('address', $this->address, true);
-        $criteria->compare('city', $this->city, true);
-        $criteria->compare('zip', $this->zip, true);
-        $criteria->compare('vatnum', $this->vatnum, true);
-        $criteria->compare('refnum', $this->refnum, true);
+        if (!$this->validate()) {
+            var_dump($this->getErrors());
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'doctype' => $this->doctype,
+            'docnum' => $this->docnum,
+            'account_id' => $this->account_id,
+            'vatnum' => $this->vatnum,
+            'refnum' => $this->refnum,
+            'sub_total' => $this->sub_total,
+            'novat_total' => $this->novat_total,
+            'vat' => $this->vat,
+            'total' => $this->total,
+            'src_tax' => $this->src_tax,
+            'printed' => $this->printed,
+            'currency_id' => $this->currency_id,
+            'owner' => $this->owner,
+            'refstatus' => $this->refstatus,
+        ]);
+
+        $query->andFilterWhere(['like', 'company', $this->company])
+            ->andFilterWhere(['like', 'address', $this->address])
+            ->andFilterWhere(['like', 'city', $this->city])
+            ->andFilterWhere(['like', 'zip', $this->zip])
+            ->andFilterWhere(['like', 'comments', $this->comments]);
+
+        //$sort->defaultOrder = 'issue_date DESC';
+        return $dataProvider;
+
+        
         $criteria->compare('issue_date', $this->issue_date, true);
         $criteria->compare('due_date', $this->due_date, true);
-        $criteria->compare('sub_total', $this->sub_total, true);
-        $criteria->compare('novat_total', $this->novat_total, true);
-        $criteria->compare('vat', $this->vat, true);
-        $criteria->compare('total', $this->total, true);
-        $criteria->compare('src_tax', $this->src_tax, true);
-        $criteria->compare('status', $this->status);
-        $criteria->compare('printed', $this->printed);
-        $criteria->compare('currency_id', $this->currency_id);
-        $criteria->compare('comments', $this->comments, true);
-        $criteria->compare('owner', $this->owner);
-        $criteria->compare('refstatus', $this->refstatus, true);
-
         if (!empty($this->issue_from) && empty($this->issue_to)) {
-            $this->issue_from = date("Y-m-d", CDateTimeParser::parse($this->issue_from, Yii::app()->locale->getDateFormat('yiishort')));
+            $this->issue_from = date("Y-m-d", CDateTimeParser::parse($this->issue_from, Yii::$app->locale->getDateFormat('yiishort')));
 
             $criteria->addCondition("issue_date>=:date_from");
             $criteria->params[':date_from'] = $this->issue_from;
         } elseif (!empty($this->issue_to) && empty($this->issue_from)) {
-            $this->issue_to = date("Y-m-d", CDateTimeParser::parse($this->issue_to, Yii::app()->locale->getDateFormat('yiishort')));
+            $this->issue_to = date("Y-m-d", CDateTimeParser::parse($this->issue_to, Yii::$app->locale->getDateFormat('yiishort')));
 
             $criteria->addCondition("issue_date>=:date_to");
             $criteria->params[':date_to'] = $this->issue_to;
         } elseif (!empty($this->issue_to) && !empty($this->issue_from)) {
-            $this->issue_from = date("Y-m-d", CDateTimeParser::parse($this->issue_from, Yii::app()->locale->getDateFormat('yiishort')));
-            $this->issue_to = date("Y-m-d", CDateTimeParser::parse($this->issue_to, Yii::app()->locale->getDateFormat('yiishort')));
+            $this->issue_from = date("Y-m-d", CDateTimeParser::parse($this->issue_from, Yii::$app->locale->getDateFormat('yiishort')));
+            $this->issue_to = date("Y-m-d", CDateTimeParser::parse($this->issue_to, Yii::$app->locale->getDateFormat('yiishort')));
 
             $criteria->addCondition("issue_date>=:date_from");
             $criteria->addCondition("issue_date<=:date_to");
@@ -877,13 +1011,8 @@ class Docs extends fileRecord {
             $criteria->params[':date_to'] = $this->issue_to;
         }
 
-        $sort = new CSort();
-        $sort->defaultOrder = 'issue_date DESC';
+        
 
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-            'sort' => $sort,
-        ));
     }
 
     public function printDoc() {
@@ -897,9 +1026,12 @@ class Docs extends fileRecord {
     }
 
     public function pdf() {
-
-
         return PrintDoc::pdfDoc($this);
+    }
+    
+    
+    public function mail() {
+        return PrintDoc::mailDoc($this);
     }
 
 }

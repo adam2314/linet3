@@ -1,20 +1,16 @@
-<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
+<?php $form=kartik\form\ActiveForm::begin(array(
 	'id'=>'company-form',
 	'enableAjaxValidation'=>false,
 )); ?>
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<?php echo $form->textFieldRow($model,'string',array('class'=>'span5','maxlength'=>40)); ?>
+	<?php echo $form->field($model,'string',array('class'=>'span5','maxlength'=>40)); ?>
 
-	<?php echo $form->textFieldRow($model,'prefix',array('class'=>'span5','maxlength'=>40)); ?>
+	<?php echo $form->field($model,'prefix',array('class'=>'span5','maxlength'=>40)); ?>
 
 	<div class="form-actions">
-		<?php $this->widget('bootstrap.widgets.TbButton', array(
-			'buttonType'=>'submit',
-			'type'=>'primary',
-			'label'=>$model->isNewRecord ? Yii::t('app',"Create") : Yii::t('app',"Save"),
-		)); ?>
+            <?= \yii\helpers\Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => 'btn btn-success']) ?>
 	</div>
 
-<?php $this->endWidget(); ?>
+<?php app\widgets\MiniForm::end(); ?>

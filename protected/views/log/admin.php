@@ -1,20 +1,6 @@
 <?php
 
-
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('log-grid', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
-
- $this->beginWidget('MiniForm',array(
+ app\widgets\MiniForm::begin(array(
     'header' => Yii::t('app',"Manage Logs"),
 
 )); 
@@ -24,8 +10,8 @@ $('.search-form form').submit(function(){
 
 <?php $this->widget('bootstrap.widgets.TbGridView',array(
 	'id'=>'tenant-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
+	'dataProvider'=>$model->dp(),
+	//'filter'=>$model,
 	'columns'=>array(
 		'id',
 		'level',
@@ -36,11 +22,11 @@ $('.search-form form').submit(function(){
             'request_URL',
             'message',
 		array(
-			'class'=>'bootstrap.widgets.TbButtonColumn',
+			'class'=>'yii\grid\ActionColumn',
 		),
 	),
 )); 
 
- $this->endWidget(); 
+ app\widgets\MiniForm::end(); 
 
 ?>

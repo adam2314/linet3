@@ -1,14 +1,18 @@
 <?php
 
 /* * *********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  * ********************************************************************************** */
+namespace app\controllers;
 
+use Yii;
+use app\components\RightsController;
+use app\models\User;
 class UsersController extends RightsController {
 
     /**
@@ -16,7 +20,7 @@ class UsersController extends RightsController {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        $this->render('view', array(
+        return $this->render('view', array(
             'model' => $this->loadModel($id),
         ));
     }
@@ -29,11 +33,7 @@ class UsersController extends RightsController {
         $model = new User;
         $model->scenario = 'create';
         $userincomemap = $model->userIncomeMaps;
-        // Uncomment the following line if AJAX validation is needed
-        $this->performAjaxValidation($model);
-
-        if (isset($_POST['User'])) {
-            $model->attributes = $_POST['User'];
+        if ($model->load(Yii::$app->request->post())){
             if (isset($_POST['UserIncomeMap'])) {
                 foreach ($_POST['UserIncomeMap'] as $key => $detial) {
                     $saved = false;
@@ -75,7 +75,7 @@ class UsersController extends RightsController {
                 $this->redirect(array('view', 'id' => $model->id));
         }
 
-        $this->render('create', array(
+        return $this->render('create', array(
             'model' => $model,
         ));
     }
@@ -89,10 +89,7 @@ class UsersController extends RightsController {
         $model = $this->loadModel($id);
         $userincomemap = $model->userIncomeMaps;
         // Uncomment the following line if AJAX validation is needed
-        $this->performAjaxValidation($model);
-
-        if (isset($_POST['User'])) {
-            $model->attributes = $_POST['User'];
+        if ($model->load(Yii::$app->request->post())){
             if (isset($_POST['UserIncomeMap'])) {
                 foreach ($_POST['UserIncomeMap'] as $key => $detial) {
                     $saved = false;
@@ -136,7 +133,7 @@ class UsersController extends RightsController {
                 $this->redirect(array('view', 'id' => $model->id));
         }
 
-        $this->render('update', array(
+        return $this->render('update', array(
             'model' => $model,
         ));
     }
@@ -147,7 +144,7 @@ class UsersController extends RightsController {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        if (Yii::app()->request->isPostRequest) {
+        if (Yii::$app->request->isPostRequest) {
             // we only allow deletion via POST request
             $this->loadModel($id)->delete();
 
@@ -155,7 +152,7 @@ class UsersController extends RightsController {
             if (!isset($_GET['ajax']))
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
         } else
-            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+            throw new \yii\web\HttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
     /**
@@ -163,7 +160,7 @@ class UsersController extends RightsController {
      */
     public function actionIndex() {
         $dataProvider = new CActiveDataProvider('User');
-        $this->render('index', array(
+        return $this->render('index', array(
             'dataProvider' => $dataProvider,
         ));
     }
@@ -172,12 +169,12 @@ class UsersController extends RightsController {
      * Manages all models.
      */
     public function actionAdmin() {
-        $model = new User('search');
-        $model->unsetAttributes();  // clear any default values
+        $model = new User();
+        //$model->unsetAttributes();  // clear any default values
         if (isset($_GET['User']))
             $model->attributes = $_GET['User'];
 
-        $this->render('admin', array(
+        return $this->render('admin', array(
             'model' => $model,
         ));
     }
@@ -188,21 +185,10 @@ class UsersController extends RightsController {
      * @param integer the ID of the model to be loaded
      */
     public function loadModel($id) {
-        $model = User::model()->findByPk($id);
+        $model = User::findOne($id);
         if ($model === null)
-            throw new CHttpException(404, 'The requested page does not exist.');
+            throw new \yii\web\HttpException(404, 'The requested page does not exist.');
         return $model;
-    }
-
-    /**
-     * Performs the AJAX validation.
-     * @param CModel the model to be validated
-     */
-    protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'user-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
     }
 
 }

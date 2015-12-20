@@ -1,64 +1,72 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
 
-class Update extends CFormModel {
+namespace app\models;
+
+use Yii;
+use yii\base\Model;
+
+class Update extends Model {
 
     public $SYSback;
     public $DBback;
     private $_sversion;
 
     public function init() {
-        if (file_exists(Yii::app()->basePath . '/data/version'))
-            $this->_sversion = file_get_contents(Yii::app()->basePath . '/data/version');
+        if (file_exists(Yii::$app->basePath . '/data/version'))
+            $this->_sversion = file_get_contents(Yii::$app->basePath . '/data/version');
         else
             $this->_sversion = "3.0";
         return parent::init();
     }
 
     private function _send($url, $params = array()) {
-        $updatesrv = Yii::app()->params['updatesrv'];
+        $updatesrv = Yii::$app->params['updatesrv'];
 
-        $output = Yii::app()->curl
+        $curl= new \app\helpers\Curl;
+        
+        $output = $curl
                 ->setOptions(array('Content-Type: application/xml',
-                    CURLOPT_CAINFO => Yii::app()->basePath . '/data/rootCA.pem',
+                    CURLOPT_CAINFO => Yii::$app->basePath . '/data/rootCA.pem',
                     CURLOPT_USERAGENT => $this->_sversion,
-                ))
-                //
-                ->post($updatesrv . $url, CJSON::encode($params));
-        $response = CJSON::decode($output);
+                ))->post($updatesrv . $url, \yii\helpers\Json::encode($params));
+        $response = \yii\helpers\Json::decode($output);
 
         if (!isset($response["status"]))
-            throw new CHttpException(500, $output);
+            throw new \Exception($output);
         if ($response["status"] != 200)
-            throw new CHttpException($response["status"], $response["body"]);
+            throw new \Exception($response["status"]."-". $response["body"]);
         return $response["body"];
     }
 
     private function _file($url, $params = array()) {
-        $updatesrv = Yii::app()->params['updatesrv'];
+        $updatesrv = Yii::$app->params['updatesrv'];
 
-        $output = Yii::app()->curl
+        $output = Yii::$app->curl
                 ->setOptions(array('Content-Type: application/xml',
-                    CURLOPT_CAINFO => Yii::app()->basePath . '/data/rootCA.pem',
+                    CURLOPT_CAINFO => Yii::$app->basePath . '/data/rootCA.pem',
                 ))
                 //
-                ->post($updatesrv . $url, CJSON::encode($params));
+                ->post($updatesrv . $url, \yii\helpers\JSON::encode($params));
         return $output;
     }
 
     public function getMessages() {
-	try {
-            return $this->_send("update/msg/?version=" . $this->getSVersion());
+
+        $uid = Yii::$app->params['uid'];
+        try{
+            return $this->_send("update/msg/?version=" . $this->getSVersion()."&uid=".$uid);
         } catch (\Exception $ex) {
-            return [["data" => "No Server!", "title" => "error no update server"]];
+            return [["data"=>"No Server!","title"=>"error no update server"]];
         }
+        
     }
 
     public function getVersionI() {
@@ -76,14 +84,14 @@ class Update extends CFormModel {
 
     public function backupSys() {
 
-        $folder = Yii::app()->basePath . "/../";
+        $folder = Yii::$app->basePath . "/../";
 
-        if (file_exists(Yii::app()->basePath . "/tmp"))
-            unlink(Yii::app()->basePath . "/tmp");
+        if (file_exists(Yii::$app->basePath . "/tmp"))
+            unlink(Yii::$app->basePath . "/tmp");
 
-        Zipper::zip($folder, Yii::app()->basePath . "/tmp");
+        Zipper::zip($folder, Yii::$app->basePath . "/tmp");
 
-        return Yii::app()->basePath . "/tmp";
+        return Yii::$app->basePath . "/tmp";
     }
 
     public function backupDB() {
@@ -103,7 +111,7 @@ class Update extends CFormModel {
         //get list
         $result = $this->_send("update/files/" . $version["id"]);
 
-        $folder = Yii::app()->basePath . "/../";
+        $folder = Yii::$app->basePath . "/../";
         foreach ($result as $file) {
             $content = $this->_file("update/file/" . $file["id"]);
             file_put_contents($folder . $file["name"], $content);
@@ -133,11 +141,11 @@ class Update extends CFormModel {
             'migrate',
                 //'down',
         ));
-        $text = htmlentities(ob_get_clean(), null, Yii::app()->charset);
+        $text = htmlentities(ob_get_clean(), null, Yii::$app->charset);
 
 
         //save version
-        file_put_contents(Yii::app()->basePath . '/data/version', $version["name"]);
+        file_put_contents(Yii::$app->basePath . '/data/version', $version["name"]);
         
         
 

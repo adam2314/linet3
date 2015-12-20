@@ -1,14 +1,17 @@
 <?php
 
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-class UserIdentity extends CUserIdentity {
+namespace app\components;
+use app\models\User;
+//namespace app\components;
+class UserIdentity {
 
     private $_id;
 
@@ -26,7 +29,8 @@ class UserIdentity extends CUserIdentity {
      * @return boolean whether authentication succeeds.
      */
     public function authenticate() {
-        $user = User::model()->find('LOWER(username)=?', array(strtolower($this->username)));
+        
+        $user = User::find('LOWER(username)=?', array(strtolower($this->username)));
         if ($user === null)
             $this->errorCode = self::ERROR_USERNAME_INVALID;
         else if (!$user->validatePassword($this->password))
@@ -47,7 +51,7 @@ class UserIdentity extends CUserIdentity {
     }
 
     public function apiAuthenticate($id, $hash) {
-        $user = User::model()->findByPk($id);
+        $user = User::findOne($id);
         if ($user === null)
             $this->errorCode = self::ERROR_USERNAME_INVALID.";";
         else if (!$user->validateHash($hash))

@@ -1,13 +1,17 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-exit;
+namespace app\controllers;
+
+use Yii;
+use app\components\RightsController;
+//exit;
 class DocchequesController extends RightsController {
 
     /**
@@ -15,7 +19,7 @@ class DocchequesController extends RightsController {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        $this->render('view', array(
+        return $this->render('view', array(
             'model' => $this->loadModel($id),
         ));
     }
@@ -26,25 +30,21 @@ class DocchequesController extends RightsController {
      */
     public function actionAjax($id) {
         $model = new Doccheques;
-        $type = PaymentType::model()->findByPk($id);
+        $type = PaymentType::findOne($id);
         if ($type !== null) {
-            //$this->renderPartial('ajax', array(
-            $this->render('ajax', array(
+            //return $this->renderPartial('ajax', array(
+            return $this->render('ajax', array(
                 'model' => $model,
                 'type' => $type,
             ));
-            Yii::app()->end();
+            Yii::$app->end();
         }
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-        if (isset($_POST['Doccheques'])) {
-            $model->attributes = $_POST['Doccheques'];
+        if ($model->load(Yii::$app->request->post())){
             if ($model->save())
                 $this->redirect(array('view', 'id' => $model->id));
         }
 
-        $this->renderPartial('create', array(
+        return $this->renderPartial('create', array(
             'model' => $model,
         ));
     }
@@ -57,16 +57,12 @@ class DocchequesController extends RightsController {
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
 
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-        if (isset($_POST['Doccheques'])) {
-            $model->attributes = $_POST['Doccheques'];
+        if ($model->load(Yii::$app->request->post())){
             if ($model->save())
                 $this->redirect(array('view', 'id' => $model->id));
         }
 
-        $this->render('update', array(
+        return $this->render('update', array(
             'model' => $model,
         ));
     }
@@ -77,7 +73,7 @@ class DocchequesController extends RightsController {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        if (Yii::app()->request->isPostRequest) {
+        if (Yii::$app->request->isPostRequest) {
             // we only allow deletion via POST request
             $this->loadModel($id)->delete();
 
@@ -85,7 +81,7 @@ class DocchequesController extends RightsController {
             if (!isset($_GET['ajax']))
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
         } else
-            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+            throw new \yii\web\HttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
     /**
@@ -93,7 +89,7 @@ class DocchequesController extends RightsController {
      */
     public function actionIndex() {
         $dataProvider = new CActiveDataProvider('Doccheques');
-        $this->render('index', array(
+        return $this->render('index', array(
             'dataProvider' => $dataProvider,
         ));
     }
@@ -102,12 +98,12 @@ class DocchequesController extends RightsController {
      * Manages all models.
      */
     public function actionAdmin() {
-        $model = new Doccheques('search');
-        $model->unsetAttributes();  // clear any default values
+        $model = new Doccheques();
+        //$model->unsetAttributes();  // clear any default values
         if (isset($_GET['Doccheques']))
             $model->attributes = $_GET['Doccheques'];
 
-        $this->render('admin', array(
+        return $this->render('admin', array(
             'model' => $model,
         ));
     }
@@ -118,21 +114,10 @@ class DocchequesController extends RightsController {
      * @param integer the ID of the model to be loaded
      */
     public function loadModel($id) {
-        $model = Doccheques::model()->findByPk($id);
+        $model = Doccheques::findOne($id);
         if ($model === null)
-            throw new CHttpException(404, 'The requested page does not exist.');
+            throw new \yii\web\HttpException(404, 'The requested page does not exist.');
         return $model;
-    }
-
-    /**
-     * Performs the AJAX validation.
-     * @param CModel the model to be validated
-     */
-    protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'doccheques-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
     }
 
 }

@@ -1,23 +1,23 @@
 <?php
 
-$this->menu = array(
+$this->params["menu"]= array(
     array('label' => Yii::t('app', 'List Manages'), 'url' => array('index')),
     array('label' => Yii::t('app', 'Create Manage'), 'url' => array('create')),
 );
 
- $this->beginWidget('MiniForm',array(
+ app\widgets\MiniForm::begin(array(
     'header' => Yii::t('app',"Manage Menus"),
 
 )); 
 
-$list=CHtml::listData(Menu::model()->findAll(), 'id', 'label');
+$list=\yii\helpers\ArrayHelper::map(app\models\Menu::find()->All(), 'id', 'label');
 $list[0]=Yii::t('app','None');
 ?>
 
-<?php $this->widget('EExcelView',array(
+<?php echo app\widgets\GridView::widget(array(
 	'id'=>'menu-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
+	'dataProvider'=>$model->dp(),
+	//'filter'=>$model,
 	'columns'=>array(
 		'id',
 		'label',
@@ -25,20 +25,20 @@ $list[0]=Yii::t('app','None');
 		'icon',
 		//'parent',
                 array(
-	            'name' => 'parent',
+	            'attribute' => 'parent',
 	            //'type' => 'raw',
-	            'value' => 'CHtml::encode(isset($data->Parent)?$data->Parent->label: "")',
+                    'value' => function($data){return \yii\helpers\Html::encode(isset($data->Parent)?$data->Parent->label: "");},
                     'filter' => $list,
 	        ),
                 
             
-		array(
-			'class'=>'bootstrap.widgets.TbButtonColumn',
-		),
+		[
+			'class'=>'yii\grid\ActionColumn',
+		],
 	),
 )); 
 
- $this->endWidget(); 
+ app\widgets\MiniForm::end(); 
 
 
 ?>

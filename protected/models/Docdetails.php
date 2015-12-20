@@ -1,12 +1,13 @@
 <?php
-/***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+
+/* * *********************************************************************************
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
- ************************************************************************************/
+ * ********************************************************************************** */
 /**
  * This is the model class for table "docDetails".
  *
@@ -22,20 +23,34 @@
  * @property string $invprice
  * @property integer $line
  */
+
+namespace app\models;
+
+use Yii;
+use app\components\basicRecord;
+use app\models\Item;
+
 class Docdetails extends basicRecord {
 
-    const table = '{{docDetails}}';
+    const table = '{{%docDetails}}';
 
     private $ini = false;
     private $_precision;
-    public $iTotalVat = null;
+    //public $iTotalVat = null;
     public $iTotallabel = null;
     public $rate = 1;
     public $doc_rate = 1;
-
+    public $valuedate;
     /*
      * for open format export 
      */
+/*
+    public function fields() {
+        $fields = parent::fields();
+        $fields['iTotallabe']=null;
+        //print_r($fields);
+        return $fields;
+    }//*/
 
     public function save($runValidation = true, $attributes = NULL) {
         //var_dump($this->iTotalVat);
@@ -48,21 +63,34 @@ class Docdetails extends basicRecord {
         }else {
             $this->CalcPrice();
         }
-
+        //adam this is not good for open format at all: 
+        //$this->iVatRate = 0;
         return parent::save($runValidation, $attributes);
     }
 
     private function ini() {
+        if($this->valuedate==null){
+            $this->valuedate=Record::writeDate(time());
+        }
+        
+        
         if (!$this->ini) {
-            $this->_precision=Yii::app()->user->getSetting('company.precision');
-            $this->iVatRate = Item::model()->findByPK($this->item_id)->vat;
-            $this->rate = Currates::model()->GetRate($this->currency_id);
-
-            if ($this->doc_rate == 0){
-                $doc=Docs::model()->findByPk($this->doc_id);
-                $this->doc_rate = Currates::model()->GetRate($doc->currency_id);
+            $this->_precision = Yii::$app->params['precision'];
+            $item=Item::findByPk($this->item_id,$this->valuedate);
+            if(is_null($item))
+                $this->iVatRate = 0;
+            else
+                $this->iVatRate = $item->vat;//for vat resons...
+            //if ($this->rate == 0) {
+            $this->rate = Currates::GetRate($this->currency_id,$this->valuedate);
+            //}
+            if ($this->doc_rate == 0) {
+                $doc = Docs::findOne($this->doc_id);
+                $this->doc_rate = Currates::GetRate($doc->currency_id,$this->valuedate);
             }
-            $this->ini!=$this->ini;
+            $this->ini != $this->ini;
+            
+            
         }
     }
 
@@ -71,13 +99,22 @@ class Docdetails extends basicRecord {
 
         $this->iTotal = round($this->iTotalVat - ($this->iTotalVat * ($this->iVatRate / 100)) / (1 + ($this->iVatRate / 100)), $this->_precision);
 
-        $this->iItem = round(($this->iTotal / $this->qty) * ($this->rate / $this->doc_rate), $this->_precision);
+        if($this->rate<$this->doc_rate){
+            $this->iItem = round(($this->iTotal / $this->qty) * ($this->rate / $this->doc_rate), $this->_precision);
+            $this->iTotal = round(($this->iItem * $this->qty) * ($this->rate / $this->doc_rate), $this->_precision);
+        }else{
+            $this->iItem = round(($this->iTotal / $this->qty) * ($this->doc_rate / $this->rate), $this->_precision);
+            $this->iTotal = round(($this->iItem * $this->qty) * ($this->doc_rate /$this->rate), $this->_precision);
+        }
+        
+        
         $this->ihItem = $this->iItem;
-        $this->iTotal = round(($this->iItem * $this->qty) * ($this->rate / $this->doc_rate), $this->_precision);
+        //$this->iTotal = round(($this->iItem * $this->qty) * ($this->rate / $this->doc_rate), $this->_precision);
+        
         $this->ihTotal = $this->iTotal;
         $this->iTotallabel = $this->iTotal;
-        
-        
+
+
         return $this;
     }
 
@@ -109,26 +146,23 @@ class Docdetails extends basicRecord {
         return $this;
     }
 
-    public function getType() {
-        return isset($this->Doc) ? $this->Doc->getType() : "";
+    public function OpenfrmtType() {
+        return isset($this->doc) ? $this->doc->OpenfrmtType() : "";
     }
 
     public function getNum() {
-        return isset($this->Doc) ? $this->Doc->docnum : "";
+        return isset($this->doc) ? $this->doc->docnum : "";
     }
 
     public function getDate() {
-        return isset($this->Doc) ? $this->Doc->issue_date : "";
+        return isset($this->doc) ? $this->doc->issue_date : "";
     }
 
     public function openfrmt($line) {
         $dets = '';
 
-        //get all fields (D110) sort by id
-        $criteria = new CDbCriteria;
-        $criteria->condition = "type_id = :type_id";
-        $criteria->params = array(':type_id' => "D110");
-        $fields = OpenFormat::model()->findAll($criteria);
+
+        $fields = OpenFormat::find()->where(['type_id'=>"D110"])->All();
 
         //loop strfgy
         foreach ($fields as $field) {
@@ -137,65 +171,57 @@ class Docdetails extends basicRecord {
         return $dets . "\r\n";
     }
 
-    public function transaction($transaction,$action, $optacc) {
+    public function transaction($transaction, $action, $optacc) {
         $this->ini();
 
-        if (is_null($this->Item)) {
-            throw new CHttpException(500, 'The item ' . $this->item_id . ' does not exsits.');
+        if (is_null($this->item)) {
+            throw new \Exception('The item ' . $this->item_id . ' does not exsits.');
         }
-        $vatcat = $this->Item->itemVatCat_id;
-        $vatCatAcc = UserIncomeMap::model()->findByPk(array('user_id' => Yii::app()->user->id, 'itemVatCat_id' => $vatcat));
+        $vatcat = $this->item->itemVatCat_id;
+        $vatCatAcc = UserIncomeMap::findOne(array('user_id' => $transaction->owner_id, 'itemVatCat_id' => $vatcat));
         if ($vatCatAcc === null)
-            throw new CHttpException(500, 'The item ' . $this->item_id . ' does not have a vat catagory.');
+            throw new \Exception('The item ' . $this->item_id . ' does not have a vat catagory.');
 
 
 
-        $sum=0;
+        $sum = 0;
+
         
-
-        if (is_null($optacc)) {
+        if ($optacc=='') {
 
             $incomeacc = $vatCatAcc->account_id;
 
             $sum = ($this->ihTotal * $action);
         } else {
             $incomeacc = $optacc;
-	    $multi=1;
+            $multi=1;
             $vat = $this->iTotalVat- $this->iTotal;
-            if ($oppt = Accounts::model()->findByPk($incomeacc))
+            
+            if ($oppt = Accounts::findOne($incomeacc))//not null?
                 $multi = 1 - ($oppt->src_tax / 100);
             $vat = round($vat * $multi,$this->_precision);
 
 
             //$multi=$this->iTotalVat*$multi;
-            Yii::log($this, CLogger::LEVEL_INFO, __METHOD__);
-            Yii::log($multi, CLogger::LEVEL_INFO, __METHOD__);
+           // Yii::info($this);
+            //Yii::info($multi);
             $sum = (($this->ihTotal + $vat) * $action);
         }
-        if($sum)
-            return $transaction->addSingleLine($incomeacc,round($sum, $this->_precision));
-        
-            
+        if ($sum)
+            return $transaction->addSingleLine($incomeacc, round($sum, $this->_precision));
+
+
         return $transaction;
     }
 
-    /**
-     * Returns the static model of the specified AR class.
-     * @param string $className active record class name.
-     * @return Docdetails the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
-
-    public function primaryKey() {
-        return array('doc_id', 'line');
+    public static function primaryKey() {
+        return ['doc_id', 'line'];
     }
 
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -206,18 +232,33 @@ class Docdetails extends basicRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('name, line', 'required'),
-            array('line, unit_id', 'numerical', 'integerOnly' => true),
-            array('doc_id, item_id, currency_id', 'length', 'max' => 10),
-            array('name', 'length', 'max' => 255),
-            array('ihTotal, ihItem, iItem, iTotal, iVatRate, qty', 'length', 'max' => 20),
-            array('description, iTotalVat, doc_rate', 'safe'),
+            [['item_id', 'name', 'line', 'qty'], 'required'],
+            [['qty','rate'], 'numVal'],
+            [['item_id'], 'itemVal'],
+            array(['item_id','doc_id', 'line', 'unit_id'], 'number', 'integerOnly' => true),
+            array(['currency_id'], 'string', 'max' => 3),
+            array(['name'], 'string', 'max' => 255),
+            array(['ihTotal', 'ihItem', 'iItem', 'iTotal', 'iVatRate', 'qty'], 'number'),
+            array(['description', 'iTotalVat', 'doc_rate','valuedate'], 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('doc_id, item_id, name, description, qty, unit_id, currency_id, ihTotal, ihItem, iItem, iTotal, iVatRate, line', 'safe', 'on' => 'search'),
+            array(['doc_id', 'item_id', 'name', 'description', 'qty', 'unit_id', 'currency_id', 'ihTotal', 'ihItem', 'iItem', 'iTotal', 'iVatRate', 'line'], 'safe', 'on' => 'search'),
         );
     }
 
+    
+    public function numVal($attribute, $params) {
+        if ($this->$attribute==0||$this->$attribute==null||$this->$attribute=='') {
+            $this->addError($attribute, $attribute." ".Yii::t('app', 'cant be zero or empty'));
+        }
+    }
+    public function itemVal($attribute, $params) {
+        $item=Item::findOne(["id"=>$this->$attribute]);
+        
+        if ($item===null) {
+            $this->addError($attribute, Yii::t('app', 'Item id not found'));
+        }
+    }
     /**
      * @return array relational rules.
      */
@@ -230,24 +271,35 @@ class Docdetails extends basicRecord {
             'Item' => array(self::BELONGS_TO, 'Item', 'item_id'),
         );
     }
+    public function getItem() {
+        return $this->hasOne(Item::className(), array('id' => 'item_id'));
+    }
+    public function getDoc() {
+        return $this->hasOne(Docs::className(), array('id' => 'doc_id'));
+    }
+    public function getItemUnit() {
+        return $this->hasOne(Itemunit::className(), array('id' => 'unit_id'));
+    }
+    
 
     /**
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels() {
         return array(
-            'doc_id' => Yii::t('labels', 'Doc'),
-            'item_id' => Yii::t('labels', 'Item'),
-            'name' => Yii::t('labels', 'Name'),
-            'description' => Yii::t('labels', 'Description'),
-            'qty' => Yii::t('labels', 'Qty'),
-            'iItem' => Yii::t('labels', 'Unit Price'),
-            'unit_id' => Yii::t('labels', 'Unit id'),
-            'currency_id' => Yii::t('labels', 'Currency'),
-            'iTotal' => Yii::t('labels', 'Price'),
-            'ihItem' => Yii::t('labels', 'invoice Unit Price'),
-            'ihTotal' => Yii::t('labels', 'invoice Price'),
-            'line' => Yii::t('labels', 'Line'),
+            'doc_id' => Yii::t('app', 'Doc'),
+            'item_id' => Yii::t('app', 'Item'),
+            'name' => Yii::t('app', 'Name'),
+            'description' => Yii::t('app', 'Description'),
+            'qty' => Yii::t('app', 'Qty'),
+            'iItem' => Yii::t('app', 'Unit Price'),
+            'unit_id' => Yii::t('app', 'Unit id'),
+            'currency_id' => Yii::t('app', 'Currency'),
+            'iTotal' => Yii::t('app', 'Price'),
+            'ihItem' => Yii::t('app', 'invoice Unit Price'),
+            'ihTotal' => Yii::t('app', 'invoice Price'),
+            'line' => Yii::t('app', 'Line'),
+            'iTotalVat' => Yii::t('app', 'iTotalVat'),
         );
     }
 
@@ -255,7 +307,7 @@ class Docdetails extends basicRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search() {
+    public function search($params) {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
 

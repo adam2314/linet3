@@ -1,43 +1,60 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
+
+namespace app\controllers;
+
+use Yii;
+use yii\filters\AccessControl;
+use yii\web\Controller;
+use yii\filters\VerbFilter;
+use app\helpers\Response;
+use app\components\RightsController;
+use app\models\Docs;
+use app\models\DocsSearch;
+use app\models\Doctype;
+
 class DocsController extends RightsController {
 
-    public function actionView($id = 0, $docnum = 0, $doctype = 0, $mail = 0) {// used in the refnum selection
+    public function actionView($id = 0, $docnum = 0, $doctype = 0, $mail = 0,$pdf=0) {// used in the refnum selection
         if ((int) $id != 0) {
-            $model = $this->loadModel($id);
+            $model = $this->findModel($id);
         } else {
-            $model = Docs::model()->findByNum($doctype, $docnum);
+            $model = Docs::findByNum($doctype, $docnum);
             if ($model === null) {
-                throw new CHttpException(404, Yii::t('app', 'The requested page does not exist.'));
+                throw new \yii\web\HttpException(404, Yii::t('app', 'The requested page does not exist.'));
             }
         }
-
-
-        if (isset($_POST['subType'])) {
-            $model->refnum_ids = $_POST['Docs']['refnum_ids'];
-            return $this->doc($model, $mail);
+        $model->scenario="vupdate";
+        if ($model->load(Yii::$app->request->post())&&$model->validate()) {
+            $model->save();
+            $this->doc($model,$mail);
+            
+            
         }
-        //$docdetails =$model->docDetailes;
-        //$doctype =$model->docType;
+        
         $model->preview=1;
 
-        $this->render('view', array(
+        return $this->render('view', array(
             'model' => $model,
-            'mail' => $mail
+            'mail' => $mail,
+            'pdf' => $pdf
         ));
     }
 
-    public function actionPdf($model = null, $return = true) {//usd for print*/
+    public function actionPdf($model = null, $return = true,$id=null) {//usd for print*/
         $this->layout = 'print';
+        if($id!==null)
+            $model=$this->findModel($id);
+        //if(!$this->hasCallback())
         if ($return) {
-            return Yii::app()->getRequest()->sendFile($model->docType->name . "-" . "$model->docnum.pdf", $model->pdf()->readFile());
+            return Yii::$app->getResponse()->sendFile($model->pdf()->getFullFilePath(),$model->docType->name . "-" . "$model->docnum.pdf");
         } else {
             Response::send(200, $model->pdf());
         }
@@ -45,12 +62,12 @@ class DocsController extends RightsController {
 
     public function actionPrint($id, $model = null, $return = false) {//usd for print*/
         if (isset($_POST['language']))
-            Yii::app()->language = $_POST['language'];
-        //Yii::app()->language='he_il';
+            Yii::$app->language = $_POST['language'];
+        //Yii::$app->language='he_il';
         $this->layout = 'print';
 
         if (is_null($model))
-            $model = $this->loadModel($id);
+            $model = $this->findModel($id);
 
         $tmp=$model->printDoc();
         if ($return)
@@ -61,14 +78,14 @@ class DocsController extends RightsController {
     
     public function actionCalc(){
         $model = new Docs();
-         if (isset($_POST['Docs'])) {
-            $model->attributes = $_POST['Docs'];
+         if (isset($_POST['docs'])) {
+            $model->attributes = $_POST['docs'];
             if (isset($_POST['Docdetails']))
                 $model->docDet = $_POST['Docdetails'];
             if (isset($_POST['Doccheques']))
                 $model->docCheq = $_POST['Doccheques'];
 
-            return Response::send(200,$model->calc());
+            return \app\helpers\Response::send(200,$model->calc());
         }
     }
     
@@ -77,82 +94,91 @@ class DocsController extends RightsController {
      * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
-    public function actionCreate($type = 1) {
-        $type = (isset($_POST['Docs']['doctype'])) ? (int) $_POST['Docs']['doctype'] : $type;
-        $model = new Docs();
+    public function actionCreate($type = 1,$account_id=0) {
+        $type = (isset($_POST['docs']['doctype'])) ? (int) $_POST['docs']['doctype'] : $type;
+        $model = new Docs(['doctype'=>(int)$type,'account_id'=>(int)$account_id]);
         
-        $model->doctype = $type;
-        $model->docType = Doctype::model()->findByPk($type);
         if(!is_null($model->docType->oppt_account_type))
             $model->scenario="opppt_req";
         
         if($model->docType->id==9)//invrcpt
             $model->scenario="invrcpt";
         
-        
-        // Uncomment the following line if AJAX validation is needed
-        $this->performAjaxValidation($model);
-
-        
-        if (isset($_POST['Docs'])) {
-            $model->attributes = $_POST['Docs'];
-
-
+        if ($model->load(Yii::$app->request->post())) {
             if (isset($_POST['Docdetails']))
                 $model->docDet = $_POST['Docdetails'];
             if (isset($_POST['Doccheques']))
                 $model->docCheq = $_POST['Doccheques'];
-
-            return $this->doc($model);
+            
+            
+            
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\bootstrap\ActiveForm::validate($model);
+            }
+            
+            if($model->validate()){
+                return $this->doc($model);
+            }
         }
 
        
-        
+        $model->discount = 0;
         $model->status = $model->docType->docStatus_id;
         $model->description = $model->docType->footer;
-        $this->render('create', array(
+        return $this->render('create', array(
             'model' => $model, //'type'=>$doctype,
         ));
     }
+    public function actionRefstatus($id) {
+        $model = $this->findModel((int)$id);
+        $model->refstatus=!($model->refstatus);
+        if($model->save(false))
+            return \app\helpers\Response::send(200,true);
+        else
+            return \app\helpers\Response::send(500,$model->errors);
 
+        
+    }
     private function doc($model, $mail = 0) {
-        switch ($_POST['subType']) {
-            case 'calc':
-                Response::send(200,$model->calc());
+        if(isset($_POST['subType'])){
+            $model->docAction=$_POST['subType'];
+        }
+        switch ($model->docAction) {
+            //case 'calc':
+            //    return \app\helpers\Response::send(200,$model->calc());
             case 'save':
                 if ($model->save()){
-                    $this->redirect(array('view', 'id' => $model->id));
+                    return $this->redirect(array('view', 'id' => $model->id));
                 }else {
-                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet').print_r($model->errors,true));
+                    throw new \yii\web\HttpException(400, Yii::t('app', 'Error Saving the documenet').print_r($model->errors,true));
                 }
                 return;
             case 'saveDraft':
                 if ($model->isNewRecord) {
-                    //find status not looked
                     $model->draftSave();
                 } else {
                     if (!$model->docStatus->looked) {//status looked
-                        //      find status not looked
                         $model->draftSave();
                     }
                 }
                 if ($model->save())
-                    $this->redirect(array('admin'));
+                    return $this->redirect(array('admin'));
                 else {
-                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet').print_r($model->errors,true));
+                    throw new \yii\web\HttpException(400,Yii::t('app', 'Error Saving the documenet').print_r($model->errors,true));
                 }
                 return;
             case 'print':
                 if ($model->save())
-                    $this->actionPrint($model->id);
+                    return $this->actionPrint($model->id);
                 else {
-                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet').print_r($model->errors,true));
+                    throw new \yii\web\HttpException(400, Yii::t('app', 'Error Saving the documenet').print_r($model->errors,true));
                 }
                 //$this->redirect(array('update','id'=>$model->id));
                 return;
             case 'preview':
 
-                //$model->loadDet();
+
                 $model->preview=1;
                 $model->draftSave();
                 $model->save();
@@ -162,25 +188,19 @@ class DocsController extends RightsController {
                 return;
             case 'email':
                 $model->save();
-                //if ($model->save())
-                //    $this->actionPdf($model, false);
 
                 if ($mail == 0) {
-                    $this->redirect(array('view', 'id' => $model->id, "mail" => 1));
+                    return $this->redirect(array('view', 'id' => $model->id, "mail" => 1));
                 } else {
-                    $this->actionPdf($model, false);
+                    return $this->actionPdf($model, false);
                 }
-                //$mail=new Mail();
-                //$mail->loadTemplate();
-                //$mail->to=$model->Account->mail;
-                //$mail->files=File::id();
 
                 return;
             case 'pdf':
                 if ($model->save()) {
-                    $this->actionPdf($model);
+                    return $this->redirect(array('view', 'id' => $model->id, "pdf" => 1));
                 } else {
-                    throw new CHttpException(400, Yii::t('app', 'Error Saving the documenet').print_r($model->errors,true));
+                    throw new \yii\web\HttpException(400, Yii::t('app', 'Error Saving the documenet').print_r($model->errors,true));
                 }
 
                 return;
@@ -194,38 +214,48 @@ class DocsController extends RightsController {
      */
     public function actionUpdate($id) {
         $id = (int) $id;
-        $model = $this->loadModel($id);
+        $model = $this->findModel($id);
 
 
         //$docdetails =$model->docDetailes;
         //$doctype =$model->docType;
-        // Uncomment the following line if AJAX validation is needed
-        $this->performAjaxValidation($model);
+
         if (isset($model->docStatus))
             if ($model->docStatus->looked == 1) {
-                Yii::app()->user->setFlash('danger', Yii::t('app','Unable to edit document'));
+                \Yii::$app->getSession()->setFlash('danger', Yii::t('app','Unable to edit document'));
                 $this->redirect(array('admin', 'id' => $model->id));
             }
-        if (isset($_POST['Docs'])) {
-            $model->attributes = $_POST['Docs'];
+        if ($model->load(Yii::$app->request->post())){
             if (isset($_POST['Docdetails']))
                 $model->docDet = $_POST['Docdetails'];
             if (isset($_POST['Doccheques']))
                 $model->docCheq = $_POST['Doccheques'];
 
-            return $this->doc($model);
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\bootstrap\ActiveForm::validate($model);
+            }
+            
+            if($model->validate()){
+                return $this->doc($model);
+            }
+            
+            //return $this->doc($model);
         }
 
+        //$model->issue_date = $model->readDate('now');
+        //$model->due_date = $model->readDate('now');
+        //$model->ref_date = $model->readDate('now');
 
 
-        $this->render('update', array(
+        return $this->render('update', array(
             'model' => $model, //'type'=>$doctype,
         ));
     }
 
     public function actionDuplicate($id, $type = null) {
         $id = (int) $id;
-        $model = $this->loadModel($id);
+        $model = $this->findModel($id);
 
         if (!is_null($type))
             $model->doctype = (int) $type;
@@ -234,18 +264,18 @@ class DocsController extends RightsController {
         $model->refnum_ids = '';
         $model->status = $model->docType->docStatus_id; //switch status back to defult for doc
         
-        $model->issue_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
-        $model->due_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
-        $model->ref_date = date(Yii::app()->locale->getDateFormat('phpdatetimes'));
+        $model->issue_date =  $model->readDate('now');
+        $model->due_date =  $model->readDate('now');
+        $model->ref_date =  $model->readDate('now');
         
-        if (isset($_POST['Docs'])) {
+        if (isset($_POST['docs'])) {
             return $this->actionCreate();
             
         }
 
 
 
-        $this->render('create', array(
+        return $this->render('create', array(
             'model' => $model, 'type' => $model->docType,
         ));
     }
@@ -256,38 +286,39 @@ class DocsController extends RightsController {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
-        if (Yii::app()->request->isPostRequest) {
-            $model = $this->loadModel($id);
+        //if (Yii::$app->request->isPostRequest) {
+            $model = $this->findModel($id);
             if (isset($model->docStatus)) {
                 if ($model->docStatus->looked) {
-                    Yii::app()->user->setFlash('danger', 'unable to delete documenet');
+                    \Yii::$app->getSession()->setFlash('danger', 'unable to delete documenet');
                     $this->redirect(array('admin', 'id' => $model->id));
                     return;
                 } else {
 
                     // we only allow deletion via POST request
-                    $this->loadModel($id)->delete();
+                    $this->findModel($id)->delete();
                 }
             }// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax'])) {
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
             }
-        } else {
+        //} else {
 
-            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
-        }
+        //    throw new \yii\web\HttpException(400, 'Invalid request. Please do not repeat this request again.');
+        //}
     }
 
     /**
      * Lists all models.
      */
+    
     public function actionIndex() {
         //$dataProvider = new CActiveDataProvider('Docs');
-        $model = new Docs('search');
+        $model = new docs();
         if (isset($_POST['Docs']))
             $model->attributes = $_POST['Docs'];
         
-        $this->render('index', array(
+        return $this->renderPartial('index', array(
             'model' => $model,
         ));
     }
@@ -296,27 +327,19 @@ class DocsController extends RightsController {
      * Manages all models.
      */
     public function actionAdmin() {
+        $searchModel = new DocsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        
 
-        $model = new Docs('search');
-        $model->unsetAttributes();  // clear any default values
-
-
-        $vl = 'docs-grid';
-        if (isset($_POST['Docs']))
-            $model->attributes = $_POST['Docs'];
-        if (Yii::app()->request->isAjaxRequest && isset($_POST['ajax']) && $_POST['ajax'] === $vl) {
-            // Render partial file created in Step 1
-            $this->renderPartial('_list', array(
-                //'subscriberActiveDataProvider' => $subscriberActiveDataProvider,
-                'model' => $model,
-            ));
-            Yii::app()->end();
-        }
-
-
-
-        $this->render('admin', array(
-            'model' => $model,
+        $searchModel->scenario="search";
+        
+        $searchModel->load(Yii::$app->request->post());
+        
+        
+        return $this->render('admin', array(
+            'searchModel' => $searchModel,
+            'dataProvider'=>$dataProvider
         ));
     }
 
@@ -325,22 +348,11 @@ class DocsController extends RightsController {
      * If the data model is not found, an HTTP exception will be raised.
      * @param integer the ID of the model to be loaded
      */
-    public function loadModel($id) {
-        $model = Docs::model()->findByPk($id);
+    public function findModel($id) {
+        $model = Docs::findOne($id);
         if ($model === null)
-            throw new CHttpException(404, Yii::t('app', 'The requested page does not exist.'));
+            throw new \yii\web\HttpException(404, Yii::t('app', 'The requested page does not exist.'));
         return $model;
-    }
-
-    /**
-     * Performs the AJAX validation.
-     * @param CModel the model to be validated
-     */
-    protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'docs-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
     }
 
 }

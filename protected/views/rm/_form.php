@@ -1,5 +1,8 @@
 <?php
-$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+use app\models\Accounts;
+use kartik\select2\Select2;
+use kartik\datecontrol\DateControl;
+$form = kartik\form\ActiveForm::begin( array(
     'id' => 'acchist-form',
     'enableAjaxValidation' => false,
         ));
@@ -8,48 +11,31 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 <?php echo $form->errorSummary($model); ?>
 
 <?php
-$temp = CHtml::listData(Accounts::model()->findAll(), 'id', 'name');
+$temp = \yii\helpers\ArrayHelper::map(Accounts::find()->All(), 'id', 'name');
 $temp[0] = Yii::t('app', 'Chose Account');
+
+
+$status=\yii\helpers\ArrayHelper::map($model->getStatuses(), 'id', 'name');
+        $type=\yii\helpers\ArrayHelper::map($model->getTypes(), 'id', 'name');
 ?>
-<?php echo $form->dropDownListRow($model, 'account_id', $temp); ?>	
+<?php echo $form->field($model, 'account_id')->widget(Select2::className(),['data'=>$temp]); ?>	
+<?php echo $form->field($model, 'status')->widget(Select2::className(),['data'=>$status]); ?>	
+<?php echo $form->field($model, 'type')->widget(Select2::className(),['data'=>$type]); ?>	
+<?php echo $form->field($model, 'subject'); ?>	
 <div class="row">
     <div class="col-md-2">
-        <?php echo $form->labelEx($model, 'dt'); ?>
-        <?php
-        $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker', array(
-            'model' => $model, //Model object
-            'attribute' => 'dt', //attribute name
-            'mode' => 'date',
-            'language' => substr(Yii::app()->language, 0, 2),
-            'options' => array(
-                'showAnim' => 'fold',
-                'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-            ) // jquery plugin options
-        ));
-        ?>
-        <?php echo $form->error($model, 'dt'); ?>
+        <?= $form->field($model,'dt')->widget(DateControl::classname(), ['type' => 'date']);?>
+        
     </div>
 </div>
 <div class="row">
     <div class="col-md-12">
-        <?php echo $form->labelEx($model, 'details'); ?>
-        <?php
-        $this->widget('ext.tinymce.TinyMce', array(
-            'model' => $model,
-            'attribute' => 'details',
-            'spellcheckerUrl' => 'http://speller.yandex.net/services/tinyspell',
-        ));
-        ?>
+        <?php echo $form->field($model, 'details')->textarea(); ?>
+        
     </div>
 </div>
 <div class="form-actions">
-    <?php
-    $this->widget('bootstrap.widgets.TbButton', array(
-        'buttonType' => 'submit',
-        'type' => 'primary',
-        'label' => $model->isNewRecord ? Yii::t('app', "Create") : Yii::t('app', "Save"),
-    ));
-    ?>
+    <?= \yii\helpers\Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => 'btn btn-success']) ?>
 </div>
 
-<?php $this->endWidget(); ?>
+<?php kartik\form\ActiveForm::end(); ?>

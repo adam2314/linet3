@@ -1,13 +1,16 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-class FormReportVat extends CFormModel {
+namespace app\models;
+use Yii;
+use yii\base\Model;
+class FormReportVat extends Model {
 
     public $from_month;
     public $year;
@@ -27,23 +30,26 @@ class FormReportVat extends CFormModel {
     public $payvat_total = 0;
     public $payvat_acc;
 
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
+    public function init() {
+        parent::init();
+        // company.tax.vat
+        $this->year = date('Y');
+        $this->from_month = date('m')-1-\app\helpers\Linet3Helper::getSetting('company.tax.vat');
+        $this->to_month = date('m')-1;
     }
-
     
     public function attributeLabels() {
         return array(
-            'from_month' => Yii::t('labels', 'From Month'),
-            'to_month' => Yii::t('labels', 'To Month'),
-            'year' => Yii::t('labels', 'Year'),
+            'from_month' => Yii::t('app', 'From Month'),
+            'to_month' => Yii::t('app', 'To Month'),
+            'year' => Yii::t('app', 'Year'),
             
-            'income_sum_novat' => Yii::t('labels', 'Income Sum no VAT'),
-            'income_sum' => Yii::t('labels', 'Income Sum VAT not Included'),
-            'selvat_total' => Yii::t('labels', 'Sale VAT total'),
-            'buyvat_total' => Yii::t('labels', 'Buy VAT total'),
-            'assetvat_total' => Yii::t('labels', 'Asset VAT total'),
-            'payvat_total' => Yii::t('labels', 'Pay VAT total'),
+            'income_sum_novat' => Yii::t('app', 'Income Sum no VAT'),
+            'income_sum' => Yii::t('app', 'Income Sum VAT not Included'),
+            'selvat_total' => Yii::t('app', 'Sale VAT total'),
+            'buyvat_total' => Yii::t('app', 'Buy VAT total'),
+            'assetvat_total' => Yii::t('app', 'Asset VAT total'),
+            'payvat_total' => Yii::t('app', 'Pay VAT total'),
         );
     }
     
@@ -55,13 +61,11 @@ class FormReportVat extends CFormModel {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('from_month, to_month, year', 'required'),
-            array('from_month', 'compare', 'compareAttribute' => 'to_month', 'operator' => '<='),
-            array('to_month', 'compare', 'compareAttribute' => 'from_month', 'operator' => '>='),
-            array('payvat_total, income_sum, income_sum_novat, buyvat_total, buyvat_acc, assetvat_total, assetvat_acc, selvat_total, selvat_acc, step, to_month, to_date, from_month, from_date, year,', 'safe'),
-            // The following rule is used by search().
-            // Please remove those attributes that should not be searched.
-            array('payvat_total, income_sum, income_sum_novat, buyvat_total, buyvat_acc, assetvat_total, assetvat_acc, selvat_total, selvat_acc, step, to_month, to_date, from_month, from_date, year,', 'safe', 'on' => 'search'),
+            array(['from_month', 'to_month', 'year'], 'required'),
+            array(['from_month'], 'compare', 'compareAttribute' => 'to_month', 'operator' => '<='),
+            array(['to_month'], 'compare', 'compareAttribute' => 'from_month', 'operator' => '>='),
+            array(['payvat_total', 'income_sum', 'income_sum_novat', 'buyvat_total', 'buyvat_acc', 'assetvat_total', 'assetvat_acc', 'selvat_total', 'selvat_acc', 'step', 'to_month', 'to_date', 'from_month', 'from_date', 'year',], 'safe'),
+            array(['payvat_total', 'income_sum', 'income_sum_novat', 'buyvat_total', 'buyvat_acc', 'assetvat_total', 'assetvat_acc', 'selvat_total', 'selvat_acc', 'step', 'to_month', 'to_date', 'from_month', 'from_date', 'year',], 'safe', 'on' => 'search'),
         );
     }
     
@@ -77,8 +81,8 @@ class FormReportVat extends CFormModel {
         if (strlen($this->to_month) == 1)
             $this->to_month = "0{$this->to_month}";
 
-        $this->from_date = "01/{$this->from_month}/{$this->year} 00:00:00";
-        $this->to_date = "$last/{$this->to_month}/{$this->year} 23:59:59";
+        $this->from_date = "{$this->year}-{$this->from_month}-01 00:00:00";
+        $this->to_date = "{$this->year}-{$this->to_month}-$last 23:59:59";
     }
     
 
@@ -88,14 +92,7 @@ class FormReportVat extends CFormModel {
 
 
 
-
-        /* $criteria=new CDbCriteria;
-          $criteria->condition="type = :type";
-          $criteria->params=array(
-          ':type' => 3,//Receipt
-          ); */
-
-        $incomes = Accounts::model()->findAllByType(3); //incomes
+        $incomes = Accounts::findAllByType(3); //incomes
         foreach ($incomes as $account) {
             //echo $transaction->date.','.$transaction->sum.'<br>';
             if ($account->src_tax == 0)
@@ -106,16 +103,16 @@ class FormReportVat extends CFormModel {
 
 
 
-        $this->selvat_acc = Yii::app()->user->settings['company.acc.sellvat'];
-        $selvat = Accounts::model()->findByPk($this->selvat_acc);
+        $this->selvat_acc = \app\helpers\Linet3Helper::getSetting('company.acc.sellvat');
+        $selvat = Accounts::findOne($this->selvat_acc);
         $this->selvat_total = $selvat->getTotal($this->from_date, $this->to_date);
 
-        $this->buyvat_acc = Yii::app()->user->settings['company.acc.buyvat'];
-        $buyvat = Accounts::model()->findByPk($this->buyvat_acc);
+        $this->buyvat_acc = \app\helpers\Linet3Helper::getSetting('company.acc.buyvat');
+        $buyvat = Accounts::findOne($this->buyvat_acc);
         $this->buyvat_total = $buyvat->getTotal($this->from_date, $this->to_date) * -1; //hAS TO INVERT
 
-        $this->assetvat_acc = Yii::app()->user->settings['company.acc.assetvat'];
-        $assetvat = Accounts::model()->findByPk($this->assetvat_acc);
+        $this->assetvat_acc = \app\helpers\Linet3Helper::getSetting('company.acc.assetvat');
+        $assetvat = Accounts::findOne($this->assetvat_acc);
         $this->assetvat_total = $assetvat->getTotal($this->from_date, $this->to_date) * -1;//hAS TO INVERT
 
         $this->payvat_total = $this->selvat_total - ($this->buyvat_total + $this->assetvat_total);
@@ -125,16 +122,13 @@ class FormReportVat extends CFormModel {
     public function pay() {
         $this->dates();
 
-        
-        $yiidatetimesec = Yii::app()->locale->getDateFormat('yiidatetimesec');
-        $phpdbdatetime = Yii::app()->locale->getDateFormat('phpdbdatetime');
 
-        $this->payvat_acc = Yii::app()->user->settings['company.acc.payvat'];
+        $this->payvat_acc = \app\helpers\Linet3Helper::getSetting('company.acc.payvat');
 
-        $date = date($phpdbdatetime, CDateTimeParser::parse($this->to_date, $yiidatetimesec));
+        $date = $this->to_date;
 
-        $cur = Yii::app()->user->settings['company.cur'];
-        $owner = Yii::app()->user->id;
+        $cur = \app\helpers\Linet3Helper::getSetting('company.cur');
+        $owner = Yii::$app->user->id;
         $line = 1;
 
 

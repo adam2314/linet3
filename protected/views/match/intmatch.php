@@ -1,33 +1,29 @@
 <?php
-$this->menu = array(
+$this->params["menu"]= array(
         //array('label'=>'List Doctype', 'url'=>array('index')),
         //array('label'=>'Create Doctype', 'url'=>array('create')),
 );
 
 
-$this->beginWidget('MiniForm', array(
+app\widgets\MiniForm::begin( array(
     'header' => Yii::t('app', "Reconciliations"),
 ));
 ?>
 
 <?php
-$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+$form = kartik\form\ActiveForm::begin( array(
     'id' => 'intmatch-form',
-    'enableAjaxValidation' => false,
-    'clientOptions' => array(
-        'validateOnSubmit' => true,
-    //'submitHandler'=>'js: go()',
-    ),
+    //'enableAjaxValidation' => false,
+    
         )
 );
-//$temp=CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => 1)), 'id', 'name');
-//$temp=CHtml::listData(Accounts::model()->findAllByAttributes(array('type' => 0)), 'id', 'name');
-$temp = array_merge(Accounts::model()->findAllByAttributes(array('type' => 1)), Accounts::model()->findAllByAttributes(array('type' => 0)));
-$temp = CHtml::listData($temp, 'id', 'name');
+//$temp=\yii\helpers\ArrayHelper::map(Accounts::findAllByAttributes(array('type' => 1)), 'id', 'name');
+$temp = array_merge(app\models\Accounts::find()->where(['type' => 1])->All(), app\models\Accounts::find()->where(['type' => 0])->All());
+$temp = \yii\helpers\ArrayHelper::map($temp, 'id', 'name');
 $temp[0] = Yii::t('app', 'Choose Account');
 $model->account_id = 0;
 //echo $form->error($model,'account_id'); 
-echo $form->dropDownListRow($model, "account_id", $temp, array('class' => ''));
+echo $form->field($model, "account_id")->widget(kartik\select2\Select2::className(),['data'=>$temp]);
 //echo $form->error($model,'account_id'); 
 ?>
 <div id ="result">
@@ -36,69 +32,65 @@ echo $form->dropDownListRow($model, "account_id", $temp, array('class' => ''));
     <div class="col-md-3">
 <?php
 //echo $form->labelEx($model, 'in_total');
-echo $form->textFieldRow($model, 'in_total', array('size' => 60, 'maxlength' => 100));
-//echo $form->textFieldRow($model, 'in_total');
+echo $form->field($model, 'in_total');
+//echo $form->field($model, 'in_total');
 //echo $form->labelEx($model, 'out_total');
-echo $form->textFieldRow($model, 'out_total', array('size' => 60, 'maxlength' => 100));
+echo $form->field($model, 'out_total');
 //echo $form->error($model, 'out_total');
 ?>
     </div>  
 </div>
 <div class="form-actions">
-<?php
-$this->widget('bootstrap.widgets.TbButton', array(
-    'buttonType' => 'submit',
-    'type' => 'primary',
-    'label' => Yii::t('app', "Save"),
-));
-?>
+    
+    <?= \yii\helpers\Html::submitButton( Yii::t('app', 'Save'), ['class' =>  'btn btn-success']) ?>
+
 </div>
     <?php
-    $this->endWidget();
-    $this->endWidget();
+    kartik\form\ActiveForm::end();
+    app\widgets\MiniForm::end();
 
 
 
 
-    $this->beginWidget('zii.widgets.jui.CJuiDialog', array(//
+\yii\jui\Dialog::begin(array(//
         'id' => "transactionDiag",
-        'options' => array(
+
+        'clientOptions' => array(
             'title' => Yii::t('app', 'Choose Reference Document'),
             'autoOpen' => false,
-            'width' => '600px',
+            'width' => 900,
         ),
     ));
 
-    echo $this->renderPartial('application.views.transaction.create', array('model' => new Transactions()));
+    echo $this->render('//transaction/create', array('model' => new app\models\FormTransaction()));
 
 
 
-    $this->endWidget('zii.widgets.jui.CJuiDialog');
+    \yii\jui\Dialog::end();
     ?>
-
-
-<script type="text/javascript">
-    jQuery(document).ready(function() {
-        $("#intmatch-form").submit(function(e) {
-            go(e);
-        });
-
-
-
-        $("#FormIntmatch_account_id").change(function() {
-            var value = $("#FormIntmatch_account_id").val();
-            $.post("<?php echo $this->createUrl('/match/intmatchajax'); ?>", {FormIntmatch: {account_id: value}}).done(
+<?php
+$java = <<<JS
+$("#formintmatch-account_id").change(function() {
+            var value = $("#formintmatch-account_id").val();
+            $.post(baseAddress+"/match/intmatchajax", {FormIntmatch: {account_id: value}}).done(
                     function(data) {
                         $("#result").html(data);
                     }
             );
 
         });
-    });
+        $("#intmatch-form").submit(function(e) {
+            go(e);
+        });
+        
+JS;
+$this->registerJs("var baseAddress='" . yii\helpers\BaseUrl::base() . "';".
+    $java
+, \yii\web\View::POS_READY);
+?>
 
-
-
-
+<script type="text/javascript">
+    
     function CalcMatchSum() {
         var insum = CalcInSum();
         var outsum = CalcOutSum();
@@ -118,7 +110,7 @@ $this->widget('bootstrap.widgets.TbButton', array(
         }
 
         total = Math.round(total * 100) / 100;
-        $("#FormIntmatch_in_total").val(total);
+        $("#formintmatch-in_total").val(total);
         return total;
     }
 
@@ -133,7 +125,7 @@ $this->widget('bootstrap.widgets.TbButton', array(
             }
         }
         total = Math.round(total * 100) / 100;
-        $("#FormIntmatch_out_total").val(total);
+        $("#formintmatch-out_total").val(total);
         return total;
     }
 

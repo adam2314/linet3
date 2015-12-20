@@ -1,7 +1,7 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -20,12 +20,12 @@ class InstallConfig extends CFormModel {
     
     public function attributeLabels() {
         return array(
-            'dbtype' => Yii::t('labels', 'Dbtype'),
-            'dbname' => Yii::t('labels', 'Dbname'),
-            'dbuser' => Yii::t('labels', 'Dbuser'),
-            'dbpassword' => Yii::t('labels', 'Dbpassword'),
-            'dbhost' => Yii::t('labels', 'Dbhost'),
-            'dbstring' => Yii::t('labels', 'Dbstring'),
+            'dbtype' => Yii::t('app', 'Dbtype'),
+            'dbname' => Yii::t('app', 'Dbname'),
+            'dbuser' => Yii::t('app', 'Dbuser'),
+            'dbpassword' => Yii::t('app', 'Dbpassword'),
+            'dbhost' => Yii::t('app', 'Dbhost'),
+            'dbstring' => Yii::t('app', 'Dbstring'),
 
         );
     }
@@ -34,7 +34,7 @@ class InstallConfig extends CFormModel {
     public function make() {
         //make conf file
         //echo $this->dbtype;
-        //Yii::app()->end();
+        //Yii::$app->end();
 
         if ($this->dbtype == 'sqlite') {
             $str = "'connectionString' => '" . $this->dbstring . "',";
@@ -62,7 +62,7 @@ class InstallConfig extends CFormModel {
 
             //echo $this->dbstring . "|" . $this->dbuser . "|" . $this->dbpassword;
 
-            Yii::app()->setComponent('dbTemp', array(
+            Yii::$app->setComponent('dbTemp', array(
                 'class' => 'CDbConnection',
                 'connectionString' => $this->dbstring,
                 'username' => $this->dbuser,
@@ -79,7 +79,7 @@ class InstallConfig extends CFormModel {
             $master = new dbMaster();
             $master->loadFile("protected/data/main.sql");
             //$master->loadFile("protected/data/main-data.sql");
-        } catch (CDbException $e) {
+        } catch (\yii\db\Exception $e) {
             $message = $e->getMessage();
             echo "Crash and Burn:";
             echo "<br>" . $message;

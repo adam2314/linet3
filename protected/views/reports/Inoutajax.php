@@ -1,8 +1,8 @@
 <div style=" width: 40%; display: inline-block; margin-right: 150px; ">
-    <?php $this->widget('EExcelView', array(
+    <?php echo app\widgets\GridView::widget( array(
 	'id'=>'profloss-grid',
 	'dataProvider'=>$model->search(),
-	//'filter'=>$model,
+	////'filter'=>$model,
 	'columns'=>array(
                'id' ,
                 'name',

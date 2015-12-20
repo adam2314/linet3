@@ -1,15 +1,18 @@
 <?php
 
 /* * *********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  * ********************************************************************************** */
-
-class FormOutcome extends CFormModel {
+namespace app\models;
+use Yii;
+use yii\base\Model;
+use app\models\Transactions;
+class FormOutcome extends Model {
 
     public $account_id;
     public $currency_id;
@@ -24,14 +27,14 @@ class FormOutcome extends CFormModel {
 
     public function attributeLabels() {
         return array(
-            'account_id' => Yii::t('labels', 'Account'),
-            'currency_id' => Yii::t('labels', 'Currency'),
-            'date' => Yii::t('labels', 'Date'),
-            'sum' => Yii::t('labels', 'Sum'),
-            'refnum' => Yii::t('labels', 'Refnum'),
-            'opp_account_id' => Yii::t('labels', 'Opposite account'),
-            'details' => Yii::t('labels', 'Details'),
-            'src_tax' => Yii::t('labels', 'Source Tax'),
+            'account_id' => Yii::t('app', 'Account'),
+            'currency_id' => Yii::t('app', 'Currency'),
+            'date' => Yii::t('app', 'Date'),
+            'sum' => Yii::t('app', 'Sum'),
+            'refnum' => Yii::t('app', 'Refnum'),
+            'opp_account_id' => Yii::t('app', 'Opposite account'),
+            'details' => Yii::t('app', 'Details'),
+            'src_tax' => Yii::t('app', 'Source Tax'),
         );
     }
 
@@ -39,8 +42,8 @@ class FormOutcome extends CFormModel {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('account_id, currency_id, date, sum, opp_account_id', 'required'),
-            array('account_id, currency_id, date, sum, src_tax, opp_account_id, refnum_ids, details', 'safe'),
+            array(['account_id', 'currency_id', 'date', 'sum', 'opp_account_id'], 'required'),
+            array(['account_id', 'currency_id', 'date', 'sum', 'src_tax', 'opp_account_id', 'refnum_ids', 'details'], 'safe'),
         );
     }
 
@@ -51,72 +54,42 @@ class FormOutcome extends CFormModel {
     public function transaction() {
 
         if ($this->validate()) {
-            $valuedate = date("Y-m-d H:m:s", CDateTimeParser::parse($this->date, Yii::app()->locale->getDateFormat('yiishort')));
             $num = 0;
             $line = 1;
-            $tranType = Yii::app()->user->settings["transactionType.supplierPayment"];
+ 
+            $tranType = \app\helpers\Linet3Helper::getSetting("transactionType.supplierPayment");
             $tran = new Transactions();
-            $opt_tran = new Transactions();
 
             $tran->num = $num;
-            $tran->account_id = $this->account_id;
             $tran->type = $tranType;
             $tran->refnum1 = $this->refnum_ids;
-            $tran->valuedate = $valuedate;
+            $tran->refnum2 = '';
+            $tran->valuedate = $this->date;
             $tran->details = $this->details;
             $tran->currency_id = $this->currency_id;
-            $tran->owner_id = Yii::app()->user->id;
+            $tran->owner_id = Yii::$app->user->id;
             $tran->linenum = $line;
-            $tran->sum = $this->sum * -1;
-            $line++;
-            $num = $tran->save();
 
-            $opt_tran->num = $num;
-            //$vat->account_id=Yii::app()->user->settings['company.acc.vatacc'];
-            $opt_tran->account_id = $this->opp_account_id;
-            $opt_tran->type = $tranType;
-            $opt_tran->refnum1 = $this->refnum_ids;
-            $opt_tran->valuedate = $valuedate;
-            $opt_tran->details = $this->details;
-            $opt_tran->currency_id = $this->currency_id;
-            $opt_tran->owner_id = Yii::app()->user->id;
-            $opt_tran->linenum = $line;
-            $opt_tran->sum = $this->sum * 1;
-            $line++;
-            //print_r($vat->attributes);
-            $num = $opt_tran->save();
+            
+            $trans = Yii::$app->db->beginTransaction(\yii\db\Transaction::READ_UNCOMMITTED);
+            //-shuld start transaction here so lets lock down
+            try {
+                
+                $tran->addSingleLine($this->account_id,$this->sum * -1);
+                $tran->addSingleLine($this->opp_account_id,$this->sum * 1);
 
-            if ((int) $this->src_tax <> 0) {
-                $tran->num = $num;
-                $tran->account_id = $this->account_id;
-                $tran->type = $tranType;
-                $tran->refnum1 = $this->refnum_ids;
-                $tran->valuedate = $valuedate;
-                $tran->details = $this->details;
-                $tran->currency_id = $this->currency_id;
-                $tran->owner_id = Yii::app()->user->id;
-                $tran->linenum = $line;
-                $tran->sum = $this->src_tax * -1;
-                $line++;
-                $num = $tran->save();
+                if ((int) $this->src_tax <> 0) {
+                    $tran->addDoubleLine(5,$this->account_id,$this->src_tax);
+                }
 
-                $opt_tran->num = $num;
-                //$vat->account_id=Yii::app()->user->settings['company.acc.vatacc'];
-                $opt_tran->account_id = 5; //company.acc.supliertax
-                $opt_tran->type = $tranType;
-                $opt_tran->refnum1 = $this->refnum_ids;
-                $opt_tran->valuedate = $valuedate;
-                $opt_tran->details = $this->details;
-                $opt_tran->currency_id = $this->currency_id;
-                $opt_tran->owner_id = Yii::app()->user->id;
-                $opt_tran->linenum = $line;
-                $opt_tran->sum = $this->src_tax * 1;
-                $line++;
-                //print_r($vat->attributes);
-                $num = $opt_tran->save();
+                //commit it here
+                $trans->commit();
+            } catch (\Exception $e) {
+                $trans->rollBack();
+                $message = $e->getMessage();
+                $this->addError('details',  $message );
+                return false;
             }
-
-
 
 
             $this->saveRef($num, $this->sum);
@@ -138,9 +111,9 @@ class FormOutcome extends CFormModel {
         $tmp = explode(",", rtrim($str, ","));
         foreach ($tmp as $id) {//lets do this
             //if($id==$this->id){
-            //    throw new CHttpException(500,Yii::t('app','You cannot save doc as a refnum'));
+            //    throw new \Exception(Yii::t('app','You cannot save doc as a refnum'));
             //}
-            $doc = Docs::model()->findByPk((int) $id);
+            $doc = Docs::findOne((int) $id);
             if ($doc !== null) {
                 $sum+=$doc->total; //adam: need to multi currency!
                 if ($sum <= $total) {

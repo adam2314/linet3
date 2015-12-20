@@ -1,49 +1,32 @@
 <?php 
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('accounts-grid', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
-
-
-
-
-$this->widget('EExcelView', array(
+\yii\widgets\Pjax::begin();
+echo app\widgets\GridView::widget( array(
 	'id'=>'accounts'.$model->type.'-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
-        'template' => '{items}{pager}',
-        'ajaxUpdate'=>true,
-        'ajaxType'=>'POST',
+	'dataProvider'=>$model->dp(),
+	//'filter'=>$model,
+        
 	'columns'=>array(
 		'id',
 		array(
 	            'name' => 'name',
 	            'type' => 'raw',
-	            'value' => 'CHtml::link(CHtml::encode($data->name), Yii::app()->createUrl("accounts/update", array("id"=>$data->id)))',
+	            'value' => '\yii\helpers\Html::link(\yii\helpers\Html::encode($data->name), yii\helpers\BaseUrl::base().("accounts/update", array("id"=>$data->id)))',
 	        ),
-		//'type',
+		'cat_id',
 		'id6111',
             array(
 	            'name' => 'cat_id',
 	            'type' => 'raw',
-	            'value' => 'CHtml::encode(isset($data->Category)?$data->Category->name: "")',
-                    'filter' => CHtml::listData(AccCat::model()->findAllByAttributes(array("type_id"=>$model->type)), 'id', 'name'),
+	            'value' => '\yii\helpers\Html::encode(isset($data->Category)?$data->Category->name: "")',
+                    'filter' => \yii\helpers\ArrayHelper::map(AccCat::findAllByAttributes(array("type_id"=>$model->type)), 'id', 'name'),
 	        ),
 		//'pay_terms',
 		'src_tax',
@@ -66,37 +49,39 @@ $this->widget('EExcelView', array(
 		'comments',
 		'owner',
 		*/
-		array(
-			'class'=>'CButtonColumn',
-			'template'=>'{create}{display}{edit}{delete}',
+		[
+			'class'=>'yii\grid\ActionColumn',
+			'template'=>'{create}{display}{update}{delete}',
 			'buttons'=>array(
                             'create' => array(
                                 'label'=>'<i class="glyphicon glyphicon-file"></i>',
-                                'url'=>'Yii::app()->createUrl("docs/create", array("id"=>$data->id))',
+                                'url'=>'yii\helpers\BaseUrl::base().("docs/create", array("id"=>$data->id))',
 
                             ),
-                            'edit' => array(
+                            'update' => array(
                                 'label'=>'<i class="glyphicon glyphicon-pencil"></i>',
-                                'url'=>'Yii::app()->createUrl("accounts/update", array("id"=>$data->id))',
+                                'url'=>'yii\helpers\BaseUrl::base().("accounts/update", array("id"=>$data->id))',
 
                             ),
                             'delete' => array(
                                 'label'=>'<i class="glyphicon glyphicon-trash"></i>',
                                 //'deleteConfirmation'=>true,
                                 'imageUrl'=>false,
-                                'url'=>'Yii::app()->createUrl("accounts/delete", array("id"=>$data->id))',
-                                //'url'=>'Yii::app()->createUrl("users/email", array("id"=>$data->id))',
+                                'url'=>'yii\helpers\BaseUrl::base().("accounts/delete", array("id"=>$data->id))',
+                                //'url'=>'yii\helpers\BaseUrl::base().("users/email", array("id"=>$data->id))',
                             ),
                             'display' => array(
                                 'label'=>'<i class="glyphicon glyphicon-transfer"></i>',
-                                'url'=>'Yii::app()->createUrl("accounts/transaction/".$data->id)',
+                                'url'=>'yii\helpers\BaseUrl::base().("accounts/transaction/".$data->id)',
                                 //'visible'=>'$data->score > 0',
                                 //'click'=>'function(){alert("Going down!");}',
                             ),
 		    ),
-		),
+		],
 	),
-)); ?>
+)); 
+\yii\widgets\Pjax::end();
+?>
 
 
 <script type="text/javascript">

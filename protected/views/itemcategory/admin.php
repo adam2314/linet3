@@ -1,16 +1,19 @@
 <?php
-$this->breadcrumbs=array(
-	Yii::t('app','Item Categories')=>array('index'),
-	Yii::t('app','Manage'),
+use app\widgets\app\widgets\MiniForm;
+use app\widgets\GridView;
+
+$this->params["breadcrumbs"]=array(
+	['label'=>Yii::t('app','Item Categories'),array('index')],
+	['label'=>Yii::t('app','Manage')],
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>Yii::t('app','List Item Category'), 'url'=>array('index')),
 	array('label'=>Yii::t('app','Create Item Category'), 'url'=>array('create')),
 );
 
 
-$this->beginWidget('MiniForm',array(
+app\widgets\MiniForm::begin(array(
     'header' => Yii::t('app',"Manage Item Categories"),
 )); 
 
@@ -18,20 +21,20 @@ $this->beginWidget('MiniForm',array(
 ?>
 
 
-<?php $this->widget('EExcelView', array(
+<?php echo app\widgets\GridView::widget( array(
 	'id'=>'itemcategory-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
+	'dataProvider'=>$model->dp(),
+	////'filter'=>$model,
 	'columns'=>array(
 		'id',
 		'name',
 		'profit',
 		array(
-			'class'=>'bootstrap.widgets.TbButtonColumn',
+			'class'=>'yii\grid\ActionColumn',
 		),
 	),
 )); 
 
- $this->endWidget(); 
+ app\widgets\MiniForm::end(); 
 
 ?>

@@ -1,23 +1,25 @@
 <?php
+$this->params["menu"] = [
+    ['label' => Yii::t('app','Create Item'),'url' => 'create' ]
+    ];
 
-$this->menu=array(
-	//array('label'=>Yii::t('app','List Item'), 'url'=>array('index')),
-	array('label'=>Yii::t('app','Create Item'), 'url'=>array('create')),
-);
+//*/
 
+echo app\widgets\GridView::widget([
+    'dataProvider' => $model->search(),
+    'filterModel' => $model,
+    'pjax' => true,
 
-
-
-$this->beginWidget('MiniForm',array(
-    'header' => Yii::t('app',"Manage Items"),
-    //'width' => '800',
-)); 
+    'persistResize' => false,
+    'columns' => [
+        'id', 
+        'name',
+        [
+            'class' => 'yii\grid\ActionColumn',
+            // you may configure additional properties here
+        ],
+        
+        
+        ]
+]);
 ?>
-
-
-<?php 
-
-echo $this->renderPartial('_ajax', array('model'=>$model)); 
-                                    
-
- $this->endWidget(); ?>

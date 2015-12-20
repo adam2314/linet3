@@ -1,18 +1,23 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
+
+namespace app\controllers;
+
+use Yii;
+use app\components\RightsController;
 class CurrenciesController extends RightsController
 {
 	
 	public function actionIndex()
 	{
-		$this->render('index');
+		return $this->render('index');
 	}
 
         public function actionAutocomplete() {
@@ -21,8 +26,8 @@ class CurrenciesController extends RightsController
             if($term !='') {
                 // Note: Users::usersAutoComplete is the function you created in Step 2
                 $cur = Currecies::AutoComplete($term);
-                echo CJSON::encode($cur);
-                Yii::app()->end();
+                echo \yii\helpers\Json::encode($cur);
+                Yii::$app->end();
             }
         }
 	// Uncomment the following methods and override them if needed

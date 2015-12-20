@@ -1,10 +1,10 @@
 <?php
-$this->breadcrumbs=array(
+$this->params["breadcrumbs"]=array(
 	Yii::t('app','Bankbooks')=>array('index'),
 	$model->id,
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	//array('label'=>Yii::t('app','List Bankbooks'), 'url'=>array('index')),
 	array('label'=>Yii::t('app','Create Bankbooks'), 'url'=>array('create')),
 	array('label'=>Yii::t('app','Update Bankbooks'), 'url'=>array('update', 'id'=>$model->id)),
@@ -14,12 +14,12 @@ $this->menu=array(
 ?>
 
 <?php 
- $this->beginWidget('MiniForm',array(
+ app\widgets\MiniForm::begin(array(
     'header' => "View Bankbooks",
    // 'width' => '800',
 )); 
- $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
+echo kartik\detail\DetailView::widget( array(
+	'model'=>$model,
 	'attributes'=>array(
 		//'id',
 		'currency_id',
@@ -27,7 +27,7 @@ $this->menu=array(
 		'sum',
 	),
 )); 
-  $this->endWidget(); 
+  app\widgets\MiniForm::end(); 
  
  
  ?>

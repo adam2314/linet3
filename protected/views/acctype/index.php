@@ -1,5 +1,5 @@
 <?php
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>'Create Account Type','url'=>array('create')),
 	array('label'=>'Manage Accounts Type','url'=>array('admin')),
 );

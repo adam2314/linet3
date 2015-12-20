@@ -1,12 +1,12 @@
 <?php
-$this->menu = array(
+$this->params["menu"]= array(
         //array('label'=>'List Config','url'=>array('index')),
         //array('label'=>'View Config','url'=>array('view','id'=>$model->id)),
 );
-$this->beginWidget('MiniForm', array('header' => Yii::t("app", "Create Open Balance")));
+app\widgets\MiniForm::begin( array('header' => Yii::t("app", "Create Open Balance")));
 ?>
 <?php
-$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+$form = kartik\form\ActiveForm::begin( array(
     'id' => 'balance-form',
     'enableAjaxValidation' => false,
         ));
@@ -28,7 +28,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         $years[$min] = $min;
 
 
-    echo CHtml::dropDownList('year', $year, $years,array("style"=>'width:200px;'));
+    echo \yii\helpers\Html::dropDownList('year', $year, $years,array("style"=>'width:200px;'));
     ?>
 </div>    
 
@@ -41,12 +41,12 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     </tr>
 
     <?php
-    $temp = CHtml::listData(Accounts::model()->findAll(), 'id', 'name');
+    $temp = \yii\helpers\ArrayHelper::map(\app\models\Accounts::find()->All(), 'id', 'name');
     $temp[0] = Yii::t('app', 'Chose Account');
 
     for ($i = 0; $i < 10; $i++) {
         echo "<tr>\n<td>\n";
-        echo CHtml::dropDownList('account[]', 0, $temp);
+        echo \yii\helpers\Html::dropDownList('account[]', 0, $temp);
         echo "</td><td>\n";
         echo "<input type=\"text\" class=\"bal\" name=\"bal[]\" dir=\"ltr\" />\n";
         echo "</td>\n</tr>\n";
@@ -59,19 +59,13 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
 
 <div class="form-actions">
-    <?php
-    $this->widget('bootstrap.widgets.TbButton', array(
-        'buttonType' => 'submit',
-        'type' => 'primary',
-        'label' => Yii::t('app', "Save"),
-    ));
-    ?>
+    <?= \yii\helpers\Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => 'btn btn-success']) ?>
 </div>
-<?php $this->endWidget(); ?>
+<?php kartik\form\ActiveForm::end(); ?>
 
 
 
 <?php
-$this->endWidget();
+app\widgets\MiniForm::end();
 ?>
 

@@ -1,16 +1,16 @@
 <?php
 
-$this->beginWidget('MiniForm',array(
+app\widgets\MiniForm::begin(array(
     'header' => Yii::t('app',"Install Wizard"),
 )); 
 
 
 
-$form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+$form=kartik\form\ActiveForm::begin( array(
     'id'=>'install-form',
     
     'enableAjaxValidation'=>false,
-        'htmlOptions'=>array(
+        'options'=>array(
                                'onsubmit'=>"return false;",/* Disable normal form submit */
                                'onkeypress'=>" if(event.keyCode == 13){ send(); } " /* Do ajax call when user presses enter key */
             ),
@@ -21,24 +21,24 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     echo $form->radioButtonList($model,'dbtype',$option,array('separator'=>' '));
 
     
-    echo $form->textFieldRow($model,'dbhost',array('class'=>'span5','maxlength'=>255));
-    echo $form->textFieldRow($model,'dbname',array('class'=>'span5','maxlength'=>255));
-    echo $form->textFieldRow($model,'dbuser',array('class'=>'span5','maxlength'=>255));
-    echo $form->textFieldRow($model,'dbpassword',array('class'=>'span5','maxlength'=>255));
-    echo $form->textFieldRow($model,'dbstring',array('class'=>'span5','maxlength'=>255));
+    echo $form->field($model,'dbhost',array('class'=>'span5','maxlength'=>255));
+    echo $form->field($model,'dbname',array('class'=>'span5','maxlength'=>255));
+    echo $form->field($model,'dbuser',array('class'=>'span5','maxlength'=>255));
+    echo $form->field($model,'dbpassword',array('class'=>'span5','maxlength'=>255));
+    echo $form->field($model,'dbstring',array('class'=>'span5','maxlength'=>255));
     
     
-//echo CHtml::submitButton('Previews',array('onclick'=>'send();')); 
-echo CHtml::submitButton(Yii::t("app",'Next'),array('onclick'=>'send();')); 
+//echo \yii\helpers\Html::submitButton('Previews',array('onclick'=>'send();')); 
+echo \yii\helpers\Html::submitButton(Yii::t("app",'Next'),array('onclick'=>'send();')); 
 
- $this->endWidget(); 
+ app\widgets\MiniForm::end(); 
  
  
  
  
  
  
-$this->endWidget(); 
+app\widgets\MiniForm::end(); 
 ?>
 
 
@@ -51,7 +51,7 @@ function send() {
  
   $.ajax({
         type: 'POST',
-         url: '<?php echo Yii::app()->createAbsoluteUrl("install/3"); ?>',
+         url: '<?php echo yii\helpers\BaseUrl::base().("install/3"); ?>',
         data:data,
      success:function(data){
                      $('.col-lg-12').html(data);

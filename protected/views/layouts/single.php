@@ -1,207 +1,168 @@
+<?php
+
+use yii\helpers\Html;
+use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
+use yii\widgets\Breadcrumbs;
+use app\assets\AppAsset;
+use app\models\Menu;
+
+/* @var $this \yii\web\View */
+/* @var $content string */
+
+AppAsset::register($this);
+?>
+<?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?php echo Yii::app()->language;?>">
-<head>
-	<meta charset="UTF-8">
-        <?php
-        Yii::app()->bootstrap->register();
-        Yii::app()->tinymce->register();
-        
-        $cs = Yii::app()->getClientScript();
-        $path=Yii::app()->createAbsoluteUrl('/assets/css/');
-        
-        $cs->registerCssFile($path . '/main.css');
-        $cs->registerCssFile($path . '/linet.css');
-        if (Yii::app()->language == 'he_il') {
-            $cs->registerCssFile($path . '/linet-rtl.css');
-         } 
-        ?>
-        
-        <link rel="shortcut icon" href="<?php echo Yii::app()->createAbsoluteUrl('/assets/img/favicon.ico'); ?>">
-        <link rel="icon" type="image/ico" href="<?php echo Yii::app()->createAbsoluteUrl('/assets/img/favicon.ico'); ?>">        
-	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
+<html lang="<?= Yii::$app->language ?>">
+    <head>
+        <meta charset="<?= Yii::$app->charset ?>"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <?= Html::csrfMetaTags() ?>
+        <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+	<link href="/assets/img/apple-touch-icon-76x76.png" rel="apple-touch-icon" sizes="76x76" />
+	<link href="/assets/img/apple-touch-icon-120x120.png" rel="apple-touch-icon" sizes="120x120" />
+	<link href="/assets/img/apple-touch-icon-152x152.png" rel="apple-touch-icon" sizes="152x152" />
+	<link href="/assets/img/apple-touch-icon-180x180.png" rel="apple-touch-icon" sizes="180x180" />
+	<link href="/assets/img/icon-hires.png" rel="icon" sizes="192x192" />
+	<link href="/assets/img/icon-normal.png" rel="icon" sizes="128x128" />
+        <link href="/assets/img/icon-normal.png" rel="shortcut icon" >
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+        <title><?= Html::encode($this->title) ?></title>
+        <?php $this->head() ?>
+    </head>
+    <body>
 
-       
-</head>
+        <?php $this->beginBody() ?>
+        <div class="wrap">
+            <?php
+            NavBar::begin([
+                'brandLabel' => '',
+                'brandUrl' => Yii::$app->homeUrl,
+                'options' => [
+                    'class' => 'navbar-inverse navbar-fixed-top',
+                ],
+            ]);
 
-<body>
-    <div id="modal" class="modal hide fade" tabindex="-1" data-width="760">
-        <div id="modal-header" class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3>Modal Heading</h3>
-        </div>
-        <div id="modal-body" class="modal-body">
-            	        
-        </div>
-        <div id="modal-footer" class="modal-footer">
-            <a href="#" class="btn btn-success">Action</a>
-            <a href="#" class="btn" data-dismiss="modal">Close</a>
-        </div>
-    </div>
-<div class="wrapper" id="page">
-    
-<nav class="navbar navbar-inverse navbar-static-top">
+            kartik\icons\Icon::map($this);
+            ?>
+            <a id="changeSidebarPos" class="btn btn-success btn-sm" data-toggle="tooltip" data-original-title="Show / Hide Sidebar" data-placement="bottom">
+                <?= kartik\icons\Icon::show('expand'); ?>
+            </a>
 
-          <!-- Brand and toggle get grouped for better mobile display -->
-          <div class="topnav">
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <a data-placement="bottom" data-original-title="Show / Hide Sidebar" data-toggle="tooltip" class="btn btn-success btn-sm" id="changeSidebarPos">
-                          <i class="fa fa-expand"></i>
-                        </a> 
+            <?php
+            echo Nav::widget([
+                'options' => ['class' => 'navbar-nav navbar-left'],
+                'items' => Menu::buildUserMenu(),
+            ]);
+            ?>
+            
+            
+            <img width="100px" alt="logo" src="<?php echo yii\helpers\BaseUrl::base() . ("/assets/img/logo.png"); ?>">
+            <?php NavBar::end(); ?>
+            <div class="row">
+                <div id='sidebar' class="col-md-2">
+                    <a class='block' href="<?php echo yii\helpers\BaseUrl::base() . ('/settings/dashboard'); ?>">
+                        <?php
+            if(\app\helpers\Linet3Helper::hasLogo()){
+                echo Html::img(\app\helpers\Linet3Helper::getLogo(),['width'=>'100px']);
+            }else{
+                echo Html::tag('h7',\app\helpers\Linet3Helper::getSetting('company.name'));
+            }
+            ?>
+                        
+                        <!--<span class="label user-label">16</span>-->
+                    </a>
+
+
+
+                    <div class="media-body hidden-tablet">
+                        <!--<h5 class="media-heading"><?php //echo Yii::$app->user->fname . " " . Yii::app()->user->lname;  ?></h5>-->
+                        <ul class="unstyled user-info">
+
+
+                            <li>
+                                <a href="<?php echo yii\helpers\BaseUrl::base() . ('/users/update/' . Yii::$app->user->id); ?>"><?= Yii::$app->user->getParam("username"); ?></a>
+                            </li>
+
+
+                            <li>
+                                <a href="<?php echo yii\helpers\BaseUrl::base() . ('/site/logout'); ?>"><?php echo Yii::t('app', 'Logout'); ?></a>
+                            </li>
+                            <li>
+                                <a href="<?php echo yii\helpers\BaseUrl::base() . ('/company/index'); ?>"><?php echo Yii::t('app', 'Change Company'); ?></a>
+                            </li>
+
+                        </ul>
                     </div>
-               </div>
-            </div><!-- /.topnav -->  
-          
-          
-          <header class="navbar-header">
-            
-            
 
-            
-             
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-              <span class="sr-only">Toggle navigation</span> 
-              <span class="icon-bar"></span> 
-              <span class="icon-bar"></span> 
-              <span class="icon-bar"></span> 
-            </button>
-            
-             <div class="navbar-collapse navbar-ex1-collapse collapse" style="height: 1px;">
-                
-                 <?php 
-                 if(!Yii::app()->user->isGuest){
-			$this->widget('bootstrap.widgets.TbMenu', array('items'=>Yii::app()->user->menu,'htmlOptions'=>array('class'=>'navbar-nav')));
-                }
-                 //array('label'=>Yii::t('app','Logout'), 'url'=>array('/site/Logout')),
-                ?>
-                
-            </div>
-          </header>
-          
-          
+                    <?=
+                    Nav::widget([
+                        'items' => isset($this->params['menu']) ? $this->params['menu'] : [],
+                        'options' => ['class' => 'list'],
+                    ])
+                    ?>
+                    <?=
+                    Breadcrumbs::widget([
+                        'links' => []//isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                    ])
+                    ?>
 
-	</nav>
-    <div class="content">
-        <div id="left">
-            <?php if(!Yii::app()->user->isGuest){
-			
-                //array('label'=>Yii::t('app','Logout'), 'url'=>array('/site/Logout')),
-                ?>
-            
-            <div class="media user-media hidden-phone">
-                
-                
-                <div class="topnav">
-                    <div class="btn-toolbar">
-                      <div class="btn-group">
-                        <a data-placement="bottom" data-original-title="Fullscreen" data-toggle="tooltip" class="btn btn-default btn-sm" id="toggleFullScreen">
-                          <i class="glyphicon glyphicon-fullscreen"></i>
-                        </a> 
-                      </div>
-
-
-                      <div class="btn-group">
-
-                        <a data-toggle="modal" data-original-title="Help" data-placement="bottom" class="btn btn-default btn-sm" href="#helpModal">
-                          <i class="fa fa-question"></i>
-                        </a> 
-                      </div>
-                      <div class="btn-group">
-                        <a href="<?php echo Yii::app()->createAbsoluteUrl('/site/Logout');?>" data-toggle="tooltip" data-original-title="Logout" data-placement="bottom" class="btn btn-metis-1 btn-sm">
-                          <i class="fa fa-power-off"></i>
-                        </a> 
-                      </div>
-                    </div>
-                </div><!-- /.topnav -->  
-                <br />
-                <a class='block' href="<?php echo Yii::app()->createAbsoluteUrl('/settings/dashboard');?>">
-                    <img width="100px" alt="<?php echo Yii::app()->user->settings['company.name']; ?>" src="<?php echo Yii::app()->createAbsoluteUrl("site/download/".Yii::app()->user->settings['company.logo']);?>">
-                    <!--<span class="label user-label">16</span>-->
-                </a>
-                
-                
-                
-                <div class="media-body hidden-tablet">
-                    <!--<h5 class="media-heading"><?php echo Yii::app()->user->fname." ".Yii::app()->user->lname; ?></h5>-->
-                    <ul class="unstyled user-info">
-                        
-                        
-                        <li>
-                            <a href="<?php echo Yii::app()->createAbsoluteUrl('/users/update/'.Yii::app()->user->id);?>"><?php echo Yii::app()->user->fname." ".Yii::app()->user->lname; ?></a>
-                        </li>
-                        <!--
-                        
-                        <li>
-                            <a href="<?php echo Yii::app()->createAbsoluteUrl('/site/Logout');?>"><?php echo Yii::t('app','Logout');?></a>
-                        </li>-->
-                        <li>
-                            <a href="<?php echo Yii::app()->createAbsoluteUrl('/company/index');?>"><?php echo Yii::t('app','Change Company');?></a>
-                        </li>
-                        
-                        <!--<li>
-                            Last Access :
-                            <br>
-                            
-                                <i class="icon-calendar"></i>
-                                16 Mar 16:32
-                        </li>-->
-                    </ul>
+                </div>
+                <div id='mainPage' class="col-md-10">
+                    <?php
+                    foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
+                        echo yii\bootstrap\Alert::widget(['options'=>['class' =>"alert alert-".$key],'body'=>$message]);
+                    }
+                    ?>
+                    <?= $content ?>
                 </div>
             </div>
-            
-            <?php 
-            
-		}
-            
-            ?>
-            <?php
-		//$this->beginWidget('zii.widgets.CPortlet', array(
-		//	'title'=>'Operations',
-               //         'htmlOptions'=>array('class'=>'unstyled accordion collapse in'),
-		//));
-                //$this->widget('sideNavBar', array('items'=>$this->menu,'id'=>'menu'));
-            
-            $this->widget('zii.widgets.CMenu', array('items'=>$this->menu,'id'=>'menu','htmlOptions'=>array('class'=>'unstyled accordion collapse in'),));
-            
-		
-		//$this->endWidget();
-	?>
-            
         </div>
-	<div id="content" class="">
-            
 
-            <div class="container-fluid outer">
-                
-                
-            
-                
-     <?php $this->widget('bootstrap.widgets.TbAlert'); ?>           
-                
-                
-            <?php //if(isset($this->breadcrumbs)):?>
-                    <?php //$this->widget('zii.widgets.CBreadcrumbs', array(
-                    //	'links'=>$this->breadcrumbs,
-                    //)); ?><!-- breadcrumbs -->
-            <?php //endif?>
-                    
-                    
-               
-       
-                      <?php echo $content; ?>
-
-                    
-            <?php //echo $content; ?>
+        <footer class="footer">
+            <div class="container">
+                <p class="pull-left">מונע על ידי מחשוב מהיר <?= date('Y') ?></p>
+                <p class="pull-right">נכתב על ידי אדם בן חור</p>
+                <a href="http://www.speedcomp.co.il/">www.speedcomp.co.il</a>
             </div>
-        </div>
-</div>
-	<div id="footer">
-		מונע על ידי מחשוב מהיר<br>
-		נכתב על ידי אדם בן חור<br>
-		<a href="http://www.speedcomp.co.il/">www.speedcomp.co.il</a>
-	</div>
+        </footer>
 
-</div><!-- page -->
+<?php
+$java = <<<JS
+   $('#sidebar').bind('hide',function(){
+       $('#sidebar').hide(1000);
+       $( "#mainPage" ).removeClass("col-md-10");
+       $( "#mainPage" ).toggleClass("col-md-12");
+        
+   
+   });
+        
+   $('#sidebar').bind('show',function(){
+       $( "#mainPage" ).removeClass("col-md-12");
+       $( "#mainPage" ).toggleClass("col-md-10");
+       $('#sidebar').show(1000);
+   
+   });     
+        
+   $('#changeSidebarPos').click(function(){
+       
 
-</body>
+        if($( "#mainPage" ).hasClass("col-md-10")){
+            $('#sidebar').trigger('hide');
+        }else{
+            $('#sidebar').trigger('show');
+        }
+   });
+        
+JS;
+$this->registerJs($java
+        , \yii\web\View::POS_END);
+?>
+
+        <?php $this->endBody() ?>
+    </body>
 </html>
+<?php $this->endPage() ?>
+

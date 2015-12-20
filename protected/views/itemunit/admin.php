@@ -1,50 +1,38 @@
 <?php
-$this->breadcrumbs=array(
-	'Itemunits'=>array('index'),
-	'Manage',
+$this->params["breadcrumbs"]=array(
+	//'Itemunits'=>array('index'),
+	//'Manage',
 );
 
-$this->menu=array(
-	array('label'=>Yii::t('actions','List')." " .Yii::t('models',"Item Units"), 'url'=>array('index')),
-	array('label'=>Yii::t('actions','Create')." " .Yii::t('models',"Item Units"), 'url'=>array('create')),
+$this->params["menu"]=array(
+	array('label'=>Yii::t('app','List')." " .Yii::t('app',"Item Units"), 'url'=>array('index')),
+	array('label'=>Yii::t('app','Create')." " .Yii::t('app',"Item Units"), 'url'=>array('create')),
 );
 
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('itemunit-grid', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
 
- $this->beginWidget('MiniForm',array(
-    'header' => Yii::t('actions','Admin')." " .Yii::t('models',"Item Units"),
+ app\widgets\MiniForm::begin(array(
+    'header' => Yii::t('app','Admin')." " .Yii::t('app',"Item Units"),
     //'width' => '800',
 )); 
 
 ?>
 
 
-<?php $this->widget('EExcelView', array(
+<?php echo app\widgets\GridView::widget( array(
 	'id'=>'itemunit-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
+	'dataProvider'=>$model->dp(),
+	//'filter'=>$model,
 	'columns'=>array(
 		//'id',
 		'name',
 		'precision',
 		array(
-			'class'=>'bootstrap.widgets.TbButtonColumn',
+			'class'=>'yii\grid\ActionColumn',
 		),
 	),
 )); 
 
- $this->endWidget(); 
+ app\widgets\MiniForm::end(); 
 
 
 ?>

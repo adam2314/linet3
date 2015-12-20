@@ -1,7 +1,7 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -14,9 +14,12 @@
  * @property integer $id
  * @property integer $owner
  */
-class ExtCorrelation extends CActiveRecord {
+namespace app\models;
 
-    const table = '{{extCorrelation}}';
+use Yii;
+class ExtCorrelation extends Record {
+
+    const table = '{{%extCorrelation}}';
 
     public $date_from;
     public $date_to;
@@ -24,7 +27,7 @@ class ExtCorrelation extends CActiveRecord {
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -50,10 +53,10 @@ class ExtCorrelation extends CActiveRecord {
         // will receive user inputs.
         return array(
             //array('in, out, owner', 'required'),
-            array('account_id, owner', 'numerical', 'integerOnly' => true),
+            array(['account_id', 'owner'], 'number', 'integerOnly' => true),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, owner', 'safe', 'on' => 'search'),
+            array(['id', 'owner'], 'safe', 'on' => 'search'),
         );
     }
 
@@ -70,14 +73,22 @@ class ExtCorrelation extends CActiveRecord {
             'Owner' => array(self::BELONGS_TO, 'User', 'owner'),
         );
     }
+    
+    
+    public function getBankbooks(){
+        return $this->hasMany(Bankbook::className(), array('extCorrelation' => 'id'));
+    }
 
+    public function getTransactions(){
+        return $this->hasMany(Transactions::className(), array('extCorrelation' => 'id'));
+    }
     /**
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels() {
         return array(
-            'id' => Yii::t('labels', 'ID'),
-            'owner' => Yii::t('labels', 'Owner'),
+            'id' => Yii::t('app', 'ID'),
+            'owner' => Yii::t('app', 'Owner'),
         );
     }
 
@@ -93,7 +104,7 @@ class ExtCorrelation extends CActiveRecord {
      * @return CActiveDataProvider the data provider that can return the models
      * based on the search/filter conditions.
      */
-    public function search() {
+    public function search($params) {
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
@@ -106,15 +117,7 @@ class ExtCorrelation extends CActiveRecord {
         ));
     }
 
-    /**
-     * Returns the static model of the specified AR class.
-     * Please note that you should have this exact method in all your CActiveRecord descendants!
-     * @param string $className active record class name.
-     * @return IntCorrelation the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
+
 
     public function getAccountName() {
         if (isset($this->Account))

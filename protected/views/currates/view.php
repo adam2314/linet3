@@ -1,10 +1,10 @@
 <?php
-$this->breadcrumbs=array(
+$this->params["breadcrumbs"]=array(
 	'Currates'=>array('index'),
 	$model->id,
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>'List Currates', 'url'=>array('index')),
 	array('label'=>'Create Currates', 'url'=>array('create')),
 	array('label'=>'Update Currates', 'url'=>array('update', 'id'=>$model->id)),
@@ -15,12 +15,12 @@ $this->menu=array(
 
 <h1>View Currates #<?php echo $model->id; ?></h1>
 <?php 
- $this->beginWidget('MiniForm',array(
+ app\widgets\MiniForm::begin(array(
     'header' => "Create Accounts",
    // 'width' => '800',
 )); 
- $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
+echo kartik\detail\DetailView::widget( array(
+	'model'=>$model,
 	'attributes'=>array(
 		//'id',
 		'currency_id',
@@ -28,7 +28,7 @@ $this->menu=array(
 		'nisvalue',
 	),
 )); 
-  $this->endWidget(); 
+  app\widgets\MiniForm::end(); 
  
  
  ?>

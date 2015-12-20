@@ -1,59 +1,24 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-$this->beginWidget('MiniForm',array('header' => Yii::t("app","In Out"))); 
+app\widgets\MiniForm::begin(array('header' => Yii::t("app","In Out"))); 
 ?>
-<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
+<?php $form=kartik\form\ActiveForm::begin(array(
 	'id'=>'inout-form',
 	'enableAjaxValidation'=>false,
-)); 
-
-
-
-echo Yii::t('app','From Date');
-
-Yii::import('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker');
-$this->widget('CJuiDateTimePicker',array(
-    'model'=>$model, //Model object
-    'attribute'=>'from_date', //attribute name
-    'mode'=>'datetime', 
-    'language' => substr(Yii::app()->language,0,2),
-    'options'=>array(
-        'showAnim'=>'fold',
-        'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
-    ) // jquery plugin options
-));
-
-
-?>
-
+)); ?>
+<?= $form->field($model, 'from_date')->widget(kartik\datecontrol\DateControl::classname(), ['type' => 'date']); ?>
+<?= $form->field($model, 'to_date')->widget(kartik\datecontrol\DateControl::classname(), ['type' => 'date']); ?>
 <br />
-<?php
-
-echo Yii::t('app','To Date');
-
-$this->widget('CJuiDateTimePicker',array(
-    'model'=>$model, //Model object
-    'attribute'=>'to_date', //attribute name
-    'mode'=>'datetime', //use "time","date" or "datetime" (default)
-    'language' => substr(Yii::app()->language,0,2),
-    'options'=>array(
-        'showAnim'=>'fold',
-        'dateFormat'=>Yii::app()->locale->getDateFormat('short'),
-        
-        
-        
-    ) // jquery plugin options
-));
-echo CHtml::submitButton(Yii::t('app','Search')); 
-?>
-
+    <div class="form-actions">
+            <?= \yii\helpers\Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-success']) ?>
+    </div>
 
 
 
@@ -62,43 +27,36 @@ echo CHtml::submitButton(Yii::t('app','Search'));
 
 
 
-<?php $this->endWidget(); ?>
+<?php kartik\form\ActiveForm::end(); ?>
 
 
 
     <?php 
-$this->endWidget(); 
+app\widgets\MiniForm::end(); 
 ?>
-
-
-<script type="text/javascript">
-    jQuery(document).ready(function(){
-        $("#inout-form").submit(function(e){
-                go(e);
-	   });
-
-    });
-    
-    function go(e){
+<?php
+$java = <<<JS
+        $("#inout-form").submit(function (e) {
+            go(e);
+        });
+        
+            function go(e) {
         e.preventDefault();
-        
-        var from=$("#FormReportInout_from_date").val();
-        var to=$("#FormReportInout_to_date").val();
-            $.post( "<?php echo $this->createUrl('/reports/inoutajax');?>", { FormReportInout: {from_date: from, to_date: to}} ).done(
-                function( data ){
-                    $( "#result" ).html( data );
+
+        var from = $("#formreportinout-from_date").val();
+        var to = $("#formreportinout-to_date").val();
+        $.post(baseAddress+ "/reports/inoutajax", {FormReportInout: {from_date: from, to_date: to}}).done(
+                function (data) {
+                    $("#result").html(data);
                 }
-            );
-        
+        );
+
     }
-    
-    $( "#year" ).change(function() {
-            var value=$("#year").val();
-            $.post( "<?php echo $this->createUrl('/reports/inoutajax');?>", { FormProfloss: {year: value}} ).done(
-                function( data ){
-                    $( "#result" ).html( data );
-                }
-            );
-            
-          });    
-</script>
+
+        
+JS;
+
+$this->registerJs("var baseAddress='" . yii\helpers\BaseUrl::base() . "';" .
+        $java
+        , \yii\web\View::POS_READY);
+?>

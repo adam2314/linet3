@@ -1,7 +1,7 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -15,11 +15,15 @@
  * @property string $apply_time
  *
  */
-class Migration extends mainRecord {
+namespace app\models;
+
+use Yii;
+
+class Migration extends \app\components\mainRecord {
 
     const table = 'tbl_migration';
 
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -32,8 +36,8 @@ class Migration extends mainRecord {
 
     public function attributeLabels() {
         return array(
-            'version' => Yii::t('labels', 'Version'),
-            'apply_time' => Yii::t('labels', 'Apply Time'),
+            'version' => Yii::t('app', 'Version'),
+            'apply_time' => Yii::t('app', 'Apply Time'),
         );
     }
 
@@ -49,7 +53,7 @@ class Migration extends mainRecord {
      * @return CActiveDataProvider the data provider that can return the models
      * based on the search/filter conditions.
      */
-    public function search() {
+    public function search($params) {
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
@@ -62,15 +66,7 @@ class Migration extends mainRecord {
         ));
     }
 
-    /**
-     * Returns the static model of the specified AR class.
-     * Please note that you should have this exact method in all your CActiveRecord descendants!
-     * @param string $className active record class name.
-     * @return AccHist the static model class
-     */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
+
 
     public function rules() {
         // NOTE: you should only define rules for those attributes that

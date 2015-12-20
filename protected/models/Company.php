@@ -1,8 +1,8 @@
 <?php
 
 /* * *********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -17,92 +17,125 @@
  * @property string $string
  * @property string $prefix
  */
+
+namespace app\models;
+
+use Yii;
+use app\components\mainRecord;
+use yii\data\ActiveDataProvider;
+use app\helpers\dbMaster;
+use app\helpers\Zipper;
+use app\models\Accounts;
+
+
 class Company extends mainRecord {
 
     const table = 'databases';
 
+    
+    public static function primaryKey() {
+        return ['id'];
+    }
+    
+    public static function findByPk($id)
+    {
+        return static::findOne( $id);//, 'status' => self::STATUS_ACTIVE
+    }
+    
     public function loadSettings() {
+        echo 'loadSettings(company) exit';
+        exit;
+        
         //load also income maps
         $settings = array();
-        if (Yii::app()->db->schema->getTable('{{config}}') !== null) {
-            $temp = Settings::model()->findAll();
-            
-            foreach ($temp as $key) {
-                $settings[$key->id] = $key->value;
-            }
-            
-            Yii::app()->session['menu']=Menu::model()->buildUserMenu($settings);
+        if (Yii::$app->db->schema->getTableSchema('{{config}}') !== null) {
+            Yii::$app->session['menu'] = Menu::buildUserMenu();
         }
-        
-        Yii::app()->session['settings']=$settings;
-        
 
-        
-        
+        //Yii::$app->session['settings'] = $settings;
     }
 
-    public function loadComp($database = '') {
-        if ($database == '') {
-            $database = Yii::app()->user->Database;
-        } else {
+    public static function loadComp($database = '') {
+        
+        //if ($database == '') {
+        //    throw new \Exception( Yii::t('app', 'The requested page does not exist.'));
+            //$database = Company::findByPk(1);
+        //} else {
             
-        }
+        //}
 
-        Yii::app()->db->setActive(false);
-        Yii::app()->db->connectionString = $database->string;
-        Yii::app()->db->tablePrefix = $database->prefix;
-        Yii::app()->db->username = $database->user;
-        Yii::app()->db->password = $database->password;
-        Yii::app()->db->charset = 'utf8';
-        Yii::app()->db->setActive(true);
-        if (
-                (!isset(Yii::app()->user->settingsID))          ||
-                (Yii::app()->user->settingsID!=$database->id)   ||
-                (!isset(Yii::app()->session['settings']))
-                
-                ) { 
-            $this->loadSettings();
-        }
+        Yii::$app->db->close();
+        Yii::$app->db->dsn = $database->string;
+        Yii::$app->db->tablePrefix = $database->prefix;
+        Yii::$app->db->username = $database->user;
+        Yii::$app->db->password = $database->password;
+        Yii::$app->db->charset = 'utf8';
+        Yii::$app->db->open();
         
-        Yii::app()->user->setState('settings', Yii::app()->session['settings']);
-        Yii::app()->user->setState('menu', Yii::app()->session['menu']);
-        Yii::app()->user->setState('settingsID', $this->id);
         
+        
+        $folder = Yii::$app->params["filePath"] . $database->prefix . DIRECTORY_SEPARATOR;
+        if(!is_dir($folder))
+            mkdir($folder);
+        if(!is_dir($folder . "settings"))
+            mkdir($folder . "settings"); //settings
+        if(!is_dir($folder . "cert"))
+            mkdir($folder . "cert"); //cert
+        if(!is_dir($folder . "docs"))
+            mkdir($folder . "docs"); //docs
+        if(!is_dir($folder . "items"))
+            mkdir($folder . "items"); //items
+        if(!is_dir($folder . "files"))
+            mkdir($folder . "files"); //files
+        if(!is_dir($folder . "openformat"))
+            mkdir($folder . "openformat"); //openformat
+        if(!is_dir($folder . "backup"))
+            mkdir($folder . "backup"); //backup
+        
+        //Yii::$app->user->setState('settings', Yii::$app->session['settings']);
+        //Yii::$app->user->setState('menu', Yii::$app->session['menu']);
+        //Yii::$app->user->setState('settingsID', $this->id);
 
-        //if (!isset(Yii::app()->user->warehouse)) { //adam: shuld be cached in memory
-        $user = User::model()->findByPk(Yii::app()->user->id);
-        if ($user != null){
-            $user->loadUser();
+
+        //if (!isset(Yii::$app->user->warehouse)) { //adam: shuld be cached in memory
+        if(isset(Yii::$app->user)){
+            $user = User::findOne(Yii::$app->user->id);
+            if ($user != null) {
+                $user->loadUser();
+            }
         }
         //}
         //*/
     }
 
-    public function select($id) {
+    public function select($id=null) {
         //echo 'run';
+        if($id==null){
+            $database=$this;
+        }else{
+            $database = Company::findOne($id);
+        }
+        //Yii::$app->user->setState('Database', $database);
+        //Yii::$app->user->setState('Company', $database->id);
 
-        $database = Company::model()->findByPk($id);
-        Yii::app()->user->setState('Database', $database);
-        Yii::app()->user->setState('Company', $database->id);
-        
-        Yii::app()->user->Company=$database->id;
-        unset(Yii::app()->user->settings);
-        $this->loadComp($database);
+        //Yii::$app->user->Company = $database->id;
+        //unset(Yii::$app->user->settings);
+        self::loadComp($database);
 
         //need to chk user income map save
-        $user = User::model()->findByPk(Yii::app()->user->id);
+        $user = User::findOne(Yii::$app->user->id);
         if ($user !== null) {
             $user->loadUser();
             return $user->save();
         }
-        //Yii::app()->end();
+        //Yii::$app->end();
         //exit;
     }
 
     public function delete() {
         //delete tables
 
-        $connection = Yii::app()->db; //get connection
+        $connection = Yii::$app->db; //get connection
         $dbSchema = $connection->schema;
         //or $connection->getSchema();
         $tables = $dbSchema->getTableNames(); //returns array of tbl schema's
@@ -110,7 +143,7 @@ class Company extends mainRecord {
             if (strpos($tbl, $this->prefix) === 0) {
                 //echo $tbl->rawName, ":<br/>", implode(', ', $tbl->columnNames), "<br/>\n";
                 //$dbSchema->dropTable($tbl);
-                $command = $connection->createCommand($dbSchema->dropTable($tbl));
+                $command = $connection->createCommand()->dropTable($tbl);
                 $command->execute(); // execute the non-query SQL
                 //echo "holyshit:". $tbl . "<br/>\n";
             }
@@ -118,7 +151,7 @@ class Company extends mainRecord {
         //delete folders
 
         $folder = $this->getFilePath($this);
-        CFileHelper::removeDirectory($folder);
+        \yii\helpers\FileHelper::removeDirectory($folder);
         //delete db perms
 
         return parent::delete();
@@ -126,19 +159,19 @@ class Company extends mainRecord {
 
     public function backup() {
         $folder = $this->getFilePath($this);
-        $file = $folder . "db.sql";
+        $file = $folder . "db.json";
         $dumper = new dbMaster();
 
         $handle = fopen($file, 'w');
-        fwrite($handle, $dumper->getDump(false, $this->prefix));
+        fwrite($handle, \yii\helpers\Json::encode($dumper->newBackup($this->prefix)));
         fclose($handle);
-        Zipper::zip($folder, $folder . "tenant.zip","backup");
+        Zipper::zip($folder, $folder . "tenant.zip", "backup");
 
 
 
         $file = new Files;
         $file->name = date("d-m-Y_H_i") . ".zip";
-        $file->path = 'backup'.DIRECTORY_SEPARATOR;
+        $file->path = 'backup' . DIRECTORY_SEPARATOR;
         $file->save();
 
 
@@ -155,35 +188,43 @@ class Company extends mainRecord {
 
             Zipper::unzip($file, $folder);
             $db = new dbMaster;
-            $db->loadFile($folder . "db.sql", Yii::app()->db->tablePrefix);
+            //$backup=[];
+            if (file_exists($folder . "db.json")) {
+                $backup = \yii\helpers\Json::decode(file_get_contents($folder . "db.json"));
+                $db->newRestore($backup, Yii::$app->db->tablePrefix);
+            }
+            
         } else {
-            throw new CHttpException(500, 'The backup file does not exist.');
+            throw new \Exception('The backup file does not exist.');
         }
     }
 
-    static public function getFilePath($company=null) {
-        if($company!==null)
-            $configPath=$company->prefix;
+    static public function getFilePath($company = null) {
+        if ($company !== null)
+            $configPath = $company->prefix;
         else
-            $configPath = Yii::app()->user->Database->prefix;
-        return Yii::app()->params["filePath"] . $configPath . DIRECTORY_SEPARATOR;
+            $configPath = Yii::$app->db->tablePrefix;
+        return Yii::$app->params["filePath"] . $configPath . DIRECTORY_SEPARATOR;
     }
 
     private function createDb() {
-        $yiiBasepath = Yii::app()->basePath;
+        $yiiBasepath = Yii::$app->basePath;
         //$mysql=$yiiBasepath."/data/company-lite.sql";
 
 
         $master = new dbMaster();
-        //$master->loadFile($yiiBasepath . "/data/company-lite.sql", Yii::app()->db->tablePrefix);
-        $master->loadFile($yiiBasepath . DIRECTORY_SEPARATOR."data".DIRECTORY_SEPARATOR."company.sql", Yii::app()->db->tablePrefix);
-        $master->loadFile($yiiBasepath . DIRECTORY_SEPARATOR."data".DIRECTORY_SEPARATOR."company-data.sql", Yii::app()->db->tablePrefix);
+        //$master->loadFile($yiiBasepath . "/data/company-lite.sql", Yii::$app->db->tablePrefix);
+        $master->loadFile($yiiBasepath . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . "company.sql", $this->prefix);
+        
+        \app\helpers\Linet3Helper::getOverrides("buildCompany",["dbMaster"=>new $master,'prefix'=>$this->prefix]);
+        
+        
     }
 
     public function save($runValidation = true, $attributes = NULL) {
         $a = parent::save($runValidation, $attributes);
         if ($this->prefix == '') {
-            $this->string = Yii::app()->dbMain->connectionString;
+            $this->string = Yii::$app->dbMain->dsn;
             //$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             $this->prefix = "CA" . $this->id . "_";
             //got prefix
@@ -192,36 +233,27 @@ class Company extends mainRecord {
 
 
         //if tables config notexsits
-        Yii::app()->db->setActive(false);
-        Yii::app()->db->connectionString = $this->string;
-        Yii::app()->db->tablePrefix = $this->prefix;
-        Yii::app()->db->setActive(true);
+        Yii::$app->db->close();
+        Yii::$app->db->dsn = $this->string;
+        Yii::$app->db->tablePrefix = $this->prefix;
+        Yii::$app->db->open();
         //needs to clear accounts
-        if (Yii::app()->db->schema->getTable('{{config}}') === null) {//
+        if (Yii::$app->db->schema->getTableSchema('{{config}}') === null) {//
             //create tables
             $this->createDb();
 
 
-            Yii::app()->db->setActive(false);
-            Yii::app()->db->connectionString = $this->string;
-            Yii::app()->db->tablePrefix = $this->prefix;
-            Yii::app()->db->setActive(true);
+            Yii::$app->db->close();
+            Yii::$app->db->dsn = $this->string;
+            Yii::$app->db->tablePrefix = $this->prefix;
+            Yii::$app->db->open();
 
-            $a = Settings::model()->findByPk('company.path'); //update path by prefix
-            $a->value = $this->prefix;
-            $a->save();
+            \app\helpers\Linet3Helper::setSetting('company.path',$this->prefix);//update path by prefix
+            
 
-            //$yiiBasepath = Yii::app()->basePath;
+            //$yiiBasepath = Yii::$app->basePath;
 
-            $folder = Yii::app()->params["filePath"] . $this->prefix . DIRECTORY_SEPARATOR;
-            mkdir($folder);
-            mkdir($folder . "settings"); //settings
-            mkdir($folder . "cert"); //cert
-            mkdir($folder . "docs"); //docs
-            mkdir($folder . "items"); //items
-            mkdir($folder . "openformat"); //openformat
-            mkdir($folder . "files"); //openformat
-            mkdir($folder . "backup"); //backup
+            
             //add permisstions
         } else {     //else
             //table version
@@ -229,7 +261,7 @@ class Company extends mainRecord {
         }
 
         $perm = new DatabasesPerm;
-        $perm->user_id = Yii::app()->user->id;
+        $perm->user_id = Yii::$app->user->id;
         $perm->database_id = $this->id;
         $perm->level_id = 1;
         $perm->save();
@@ -241,11 +273,11 @@ class Company extends mainRecord {
      * @return string the associated database table name
      */
     public function getLevel() {
-        $level = DatabasesPerm::model()->findByPk(array($this->id, Yii::app()->user->id));
+        $level = DatabasesPerm::findOne(array($this->id, Yii::$app->user->id));
         return $level;
     }
 
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -256,11 +288,11 @@ class Company extends mainRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('string', 'required'),
-            array('string, prefix', 'length', 'max' => 255),
+            array(['string'], 'required'),
+            array(['string', 'prefix'], 'string', 'max' => 255),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, string, prefix', 'safe', 'on' => 'search'),
+            array(['id', 'string', 'prefix'], 'safe', 'on' => 'search'),
         );
     }
 
@@ -270,9 +302,9 @@ class Company extends mainRecord {
     public function relations() {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
-        //$this->user_id=Yii::app()->user->id;
+        //$this->user_id=Yii::$app->user->id;
         //print($this->user_id.$this->id);
-        //Yii::app()->end();
+        //Yii::$app->end();
         return array(
             'level' => array(self::HAS_ONE, 'DatabasesPerm', array('database_id' => 'id')),
         );
@@ -303,23 +335,20 @@ class Company extends mainRecord {
      * @return CActiveDataProvider the data provider that can return the models
      * based on the search/filter conditions.
      */
-    public function search() {
-        // @todo Please modify the following code to remove attributes that should not be searched.
-        //$this->user_id=Yii::app()->user->id;
-        $criteria = new CDbCriteria;
-        $criteria->together = true;
-        $criteria->with = array('level');
-        $criteria->compare('level.database_id_id', $this->id, true);
-        $criteria->compare('level.user_id', Yii::app()->user->id, true);
-        //$criteria->compare('level.level_id', 0);
+    public function search($params) {
+        //$query = new Query();
+        $provider = new ActiveDataProvider([
+            'query' => Company::find(),
+            'sort' => [
+               
+            ],
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
 
-        $criteria->compare('id', $this->id);
-        $criteria->compare('string', $this->string, true);
-        $criteria->compare('prefix', $this->prefix, true);
-        //Yii::app()->user->id
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
+// get the posts in the current page
+        return $provider->getModels();
     }
 
     /**
@@ -328,17 +357,14 @@ class Company extends mainRecord {
      * @param string $className active record class name.
      * @return Company the static model class
      */
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
+
 
     public function getName() {
 
         $this->select($this->id);
 
-        Settings::model()->refreshMetaData();
-        $name = Yii::app()->user->getSetting('company.name');
-        //$name = Settings::model()->findByPk('company.name')->value;
+        //ettings::refresh();
+        $name = \app\helpers\Linet3Helper::getSetting('company.name');
 
         return $name;
     }

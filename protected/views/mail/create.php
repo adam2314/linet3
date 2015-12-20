@@ -1,17 +1,17 @@
 <?php
-$this->menu=array(
+$this->params["menu"]=array(
 	//array('label'=>Yii::t("app",'List Mail Template'),'url'=>array('index')),
 	//array('label'=>Yii::t("app",'Manage Mail Template'),'url'=>array('admin')),
 );
 
 
- $this->beginWidget('MiniForm',array(
+ app\widgets\MiniForm::begin(array(
     'header' => Yii::t("app","Create Mail"),
 )); 
 ?>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); 
+<?php echo $this->render('_form', array('model'=>$model)); 
 
- $this->endWidget();
+ app\widgets\MiniForm::end();
 
 ?>

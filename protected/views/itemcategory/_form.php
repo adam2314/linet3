@@ -1,6 +1,8 @@
 <div class="form">
-
-<?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+<?php
+use yii\helpers\Html;
+?>
+<?php $form=kartik\form\ActiveForm::begin(array(
 	'id'=>'itemcategory-form',
 	'enableAjaxValidation'=>true,
 )); ?>
@@ -8,18 +10,14 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	
-		<?php echo $form->textFieldRow($model,'name',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->textFieldRow($model,'profit'); ?>
+		<?php echo $form->field($model,'name'); ?>
+		<?php echo $form->field($model,'profit'); ?>
 	
 
 	<div class="form-actions">
-		<?php $this->widget('bootstrap.widgets.TbButton', array(
-			'buttonType'=>'submit',
-			'type'=>'primary',
-			'label'=>$model->isNewRecord ? Yii::t('app',"Create") : Yii::t('app',"Save"),
-		)); ?>
+		<?= Html::submitButton($model->isNewRecord ? Yii::t('app', "Create") : Yii::t('app', "Save"), ['class' => 'btn btn-success']) ?>
 	</div>
 
-<?php $this->endWidget(); ?>
+<?php kartik\form\ActiveForm::end(); ?>
 
 </div><!-- form -->

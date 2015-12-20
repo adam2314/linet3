@@ -1,74 +1,74 @@
 <div class="form">
 
     <?php
-    $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-        'id' => 'accounts-form',
-        'enableAjaxValidation' => true,
-        'htmlOptions' => array('enctype' => 'multipart/form-data'),
+
+    use yii\helpers\ArrayHelper;
+    use kartik\select2\Select2;
+
+$form = kartik\form\ActiveForm::begin(array(
+                'id' => 'accounts-form'.$model->type,
+                    //'enableAjaxValidation' => true,
+                    'options' => array('enctype' => 'multipart/form-data'),
     ));
+    $id6111 = ArrayHelper::map(\app\models\AccId6111::find()->All(), 'id', 'name');
+    $id6111[0] = Yii::t('app', 'None');
+
+    $currncies = ArrayHelper::map(\app\models\Currates::GetRateList(), 'currency_id', 'name');
+    $accounts = ArrayHelper::map(\app\models\Accounts::find()->all(), 'id', 'name');
+    $accounts[0] = Yii::t('app', 'None');
+    $acccat = ArrayHelper::map(\app\models\AccCat::find()->where(["type_id" => $model->type])->all(), 'id', 'name');
     ?>
 
-    <?php echo $form->errorSummary($model); ?>
-    <?php echo $form->hiddenField($model, 'type'); ?>
+    <?= $form->errorSummary($model); ?>
+    <?= $form->field($model, 'type', ['template' => '{input}'])->hiddenInput(); ?>
     <div class="col-md-4 col-sm-6">
-        <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Account General Details"),)); ?>
-            <?php echo $form->textFieldRow($model, 'name', array('maxlength' => 200)); ?>
-            <?php echo $form->dropDownListRow($model, 'cat_id', CHtml::listData(AccCat::model()->findAllByAttributes(array("type_id" => $model->type)), 'id', 'name')); ?>
-            <?php echo $form->textFieldRow($model, 'src_tax', array('maxlength' => 40)); ?>
-            <?php echo $form->dropDownListRow($model, 'currency_id', CHtml::listData(Currates::model()->GetRateList(), 'currency_id', 'name')); //currency ?>
-            
-            <?php echo $form->textFieldRow($model, 'vatnum', array('maxlength' => 20)); ?>
-            <?php echo $form->textFieldRow($model, 'pay_terms', array('maxlength' => 40)); ?>
-            <?php echo $form->labelEx($model, 'src_date'); ?>
-            <?php $this->widget('application.extensions.CJuiDateTimePicker.CJuiDateTimePicker', array(
-                'model' => $model, //Model object
-                'attribute' => 'src_date', //attribute name
-                'mode' => 'date',
-                'language' => substr(Yii::app()->language, 0, 2),
-                'options' => array(
-                    'showAnim' => 'fold',
-                    'dateFormat' => Yii::app()->locale->getDateFormat('short'),
-                ) // jquery plugin options
-            ));
-            ?>
-            <?php echo $form->error($model, 'src_date'); ?>
+        <?php app\widgets\TbPanel::begin(array('header' => Yii::t('app', "Account General Details"),)); ?>
+        <?= $form->field($model, 'name'); ?>
+        <?= $form->field($model, 'cat_id')->dropDownList($acccat); ?>      
+        <?= $form->field($model, 'src_tax'); ?>
+        <?= $form->field($model, 'currency_id')->dropDownList($currncies); ?>      
 
-            <?php
-            $id6111 = CHtml::listData(AccId6111::model()->findAll(), 'id', 'name');
-            $id6111[0] = Yii::t('app', 'None');
+        <?= $form->field($model, 'vatnum'); ?>
+        <?= $form->field($model, 'pay_terms'); ?>
+        <?= $form->field($model,'src_date')->widget(kartik\datecontrol\DateControl::classname(), ['type' => 'date']);?>
+        <?= $form->field($model, 'id6111')->dropDownList($id6111); ?>    
 
-            echo $form->dropDownListRow($model, 'id6111', $id6111);
-            ?>
-            
-            
-        <?php $this->endWidget(); ?>
+        <?php 
+        if($model->type==10){//contacts
+           echo $form->field($model, 'parent_account_id')->widget(Select2::classname(), ['data' => $accounts]);  
+        }
         
+        
+        ?>
+
+        <?php app\widgets\TbPanel::end(); ?>
+
     </div>
     <div class="col-md-4 col-sm-6">
-        <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Contact Person Details"),)); ?>
-        <?php echo $form->textFieldRow($model, 'contact', array('maxlength' => 80)); ?>
-        <?php echo $form->textFieldRow($model, 'email', array('maxlength' => 50)); ?>
-        <?php echo $form->textFieldRow($model, 'cellular', array('maxlength' => 20)); ?>
+        <?php app\widgets\TbPanel::begin(array('header' => Yii::t('app', "Contact Person Details"),)); ?>
+        <?= $form->field($model, 'contact'); ?>
+        <?= $form->field($model, 'email'); ?>
+        <?= $form->field($model, 'cellular'); ?>
 
 
-        <?php echo $form->textFieldRow($model, 'dir_phone', array('maxlength' => 20)); ?>
-        <?php echo $form->textFieldRow($model, 'department', array('maxlength' => 60)); ?>
+        <?= $form->field($model, 'dir_phone'); ?>
+        <?= $form->field($model, 'department'); ?>
 
 
 
 
-        <?php $this->endWidget(); ?>
+        <?php app\widgets\TbPanel::end(); ?>
 
-        <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Address & Website"),)); ?>
-        <?php echo $form->textFieldRow($model, 'address', array('maxlength' => 80)); ?>
+        <?php app\widgets\TbPanel::begin(array('header' => Yii::t('app', "Address & Website"),)); ?>
+        <?= $form->field($model, 'address'); ?>
 
-        <?php echo $form->textFieldRow($model, 'web', array('maxlength' => 60)); ?>
-        <?php echo $form->textFieldRow($model, 'fax', array('maxlength' => 20)); ?>
+        <?= $form->field($model, 'web'); ?>
+        <?= $form->field($model, 'fax'); ?>
 
-        <?php echo $form->textFieldRow($model, 'city', array('maxlength' => 40)); ?>
-        <?php echo $form->textFieldRow($model, 'zip', array('maxlength' => 10)); ?>
-        <?php echo $form->textFieldRow($model, 'phone', array('maxlength' => 20)); ?>
-        <?php $this->endWidget(); ?>
+        <?= $form->field($model, 'city'); ?>
+        <?= $form->field($model, 'zip'); ?>
+        <?= $form->field($model, 'phone'); ?>
+        <?php app\widgets\TbPanel::end(); ?>
 
 
 
@@ -80,23 +80,28 @@
         <div>
 
             <?php
-            
-
             if (!$model->isNewRecord) {
-                if (Yii::app()->hasModule('cp'))
-                $this->widget('application.modules.cp.components.widgetCpUser', array(
-                    'model' => $model, //Model object
-                ));
-                
-                
-                $this->beginWidget('TbPanel', array('header' => Yii::t('app', "EAV Fields"),));
-                $this->Widget('application.modules.eav.components.eavProp', array(
-                    'name' => get_class($model),
-                    'attr' => $model->getEavAttributes(),
-                ));
+                ///*
+                if (Yii::$app->hasModule('cp'))
+                    echo adam2314\cp\components\widgetCpUser::widget([
+                        'model' => $model, //Model object
+                    ]);
+                    
+//*/
 
-                //$this->endWidget();
-                $this->endWidget();
+                app\widgets\TbPanel::begin(array('header' => Yii::t('app', "EAV Fields"),));
+                ///*
+            echo app\widgets\eavProp::Widget(array(
+                'name' => get_class($model),
+                'model'=>$model,
+                'attr' => $model->getEavAttributes(),
+                
+            ));//*/
+
+                
+                app\widgets\TbPanel::end();
+                  //*/
+
             }
             ?>
         </div>
@@ -106,78 +111,30 @@
 
         <?php
         if (!$model->isNewRecord) {
-            $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Attached files"),));
-
-            $this->widget('CMultiFileUpload', array(
-                'name' => 'Files',
-                'model' => $model,
-                'id' => 'Files',
-                'accept' => '*', // useful for verifying files
-                'duplicate' => 'Duplicate file!', // useful, i think
-                'denied' => 'Invalid file type', // useful, i think
-            ));
-
-            $files = new Files('search');
-            $files->unsetAttributes();
-            $files->parent_type = get_class($model);
-            $files->parent_id = $model->id;
-            $this->widget('EExcelView', array(
-                'id' => 'acc-template-grid',
-                'dataProvider' => $files->search(),
-                //'filter'=>$model,
-                'template' => '{items}{pager}',
-                'ajaxUpdate' => true,
-                'columns' => array(
-                    array(
-                        'name' => 'name',
-                        'type' => 'raw',
-                        'value' => 'CHtml::link(CHtml::encode($data->name), Yii::app()->createUrl("download/".$data->id))',
-                    ),
-                    array(
-                        'name' => 'date',
-                        'value' => 'date("' . Yii::app()->locale->getDateFormat('phpdatetime') . '",CDateTimeParser::parse($data->date,"' . Yii::app()->locale->getDateFormat('yiidbdatetime') . '"))'
-                    ),
-                    array(
-                        'class' => 'CButtonColumn',
-                        'template' => '{delete}',
-                        'buttons' => array(
-                            'delete' => array(
-                                'label' => '<i class="glyphicon glyphicon-trash"></i>',
-                                'deleteConfirmation' => true,
-                                'imageUrl' => false,
-                                'url' => 'Yii::app()->createUrl("files/delete", array("id"=>$data->id))',
-                            ),
-                        ),
-                    ),
-                ),
-            ));
-            $this->endWidget();
+            app\widgets\TbPanel::begin(array('header' => Yii::t('app', "Attached files"),));
+            echo \app\widgets\AttachedFiles::widget(['model'=>$model,'attribute'=>'Files']);
+            app\widgets\TbPanel::end();
         }
         ?>
         <?php
         ?>
-        <?php $this->beginWidget('TbPanel', array('header' => Yii::t('app', "Remarks"),)); ?>
-        <?php echo $form->textAreaRow($model, 'comments', array('rows' => 6, 'cols' => 50)); ?>
-        <?php $this->endWidget(); ?>
+        <?php app\widgets\TbPanel::begin(array('header' => Yii::t('app', "Remarks"),)); ?>
+        <?= $form->field($model, 'comments')->textArea(); ?>
+        <?php app\widgets\TbPanel::end(); ?>
     </div>
 
-    <?php //echo $form->labelEx($model,'owner');     ?>
-    <?php //adam: echo $form->dropDownList($model,'owner',CHtml::listData(User::model()->findAll(), 'id', 'username'));   ?>
+    <?php //echo $form->labelEx($model,'owner');      ?>
+    <?php //adam: echo $form->dropDownList($model,'owner',\yii\helpers\ArrayHelper::map(User::find()->All(), 'id', 'username'));   ?>
     <?php //echo $form->error($model,'owner');  ?>
 
 
 
 
     <div class="row form-actions">
-        <?php
-        $this->widget('bootstrap.widgets.TbButton', array(
-            'buttonType' => 'submit',
-            'type' => 'primary',
-            'label' => $model->isNewRecord ? Yii::t('app', "Create") : Yii::t('app', "Save"),
-        ));
-        ?>
+        <?= \yii\helpers\Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => 'btn btn-success']) ?>
+
     </div>
 
-    <?php $this->endWidget(); ?>
+    <?php kartik\form\ActiveForm::end(); ?>
 
 </div><!-- form -->

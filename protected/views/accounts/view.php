@@ -1,18 +1,18 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
  * All Rights Reserved.
  ************************************************************************************/
-$this->breadcrumbs=array(
+$this->params["breadcrumbs"]=array(
 	'Accounts'=>array('index'),
 	$model->id,
 );
 
-$this->menu=array(
+$this->params["menu"]=array(
 	array('label'=>Yii::t('app','List Accounts'), 'url'=>array('index')),
 	array('label'=>Yii::t('app','Create Account'), 'url'=>array('create')),
 	array('label'=>Yii::t('app','Update Account'), 'url'=>array('update', 'id'=>$model->id)),
@@ -23,12 +23,12 @@ $this->menu=array(
 
 
 <?php 
- $this->beginWidget('MiniForm',array(
+ app\widgets\MiniForm::begin(array(
     'header' => Yii::t('app',"View Account") ." #$model->id;",
     //'width' => '800',
 )); 
-$this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
+echo kartik\detail\DetailView::widget( array(
+	'model'=>$model,
 	'attributes'=>array(
 		'id',
 		//'prefix',
@@ -55,5 +55,5 @@ $this->widget('zii.widgets.CDetailView', array(
 		'owner',
 	),
 )); 
- $this->endWidget(); 
+ app\widgets\MiniForm::end(); 
  ?>

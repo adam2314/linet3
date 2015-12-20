@@ -1,7 +1,7 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -12,9 +12,13 @@
  *
  * The followings are the available columns in table 'cheques':
  */
+namespace app\models;
+
+use Yii;
+use app\components\basicRecord;
 class DocchequesEav extends basicRecord {
 
-    const table = '{{docChequesAttr}}';
+    const table = '{{%docChequesAttr}}';
 
     //private $dateDBformat = true;
 
@@ -23,20 +27,15 @@ class DocchequesEav extends basicRecord {
      * @param string $className active record class name.
      * @return Cheques the static model class
      */
-    public function primaryKey() {
-        return array('doc_id', 'line','attribute');
+    public static function primaryKey() {
+        return ['doc_id', 'line','attribute'];
     }
 
-//*/
-
-    public static function model($className = __CLASS__) {
-        return parent::model($className);
-    }
 
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public static function tableName() {
         return self::table;
     }
 
@@ -45,8 +44,8 @@ class DocchequesEav extends basicRecord {
      */
     public function rules() {
         return array(
-            array('doc_id, line', 'numerical', 'integerOnly' => true),
-            array('currency_id, refnum, cheque_date, dep_date', 'safe'),
+            array(['doc_id', 'line'], 'number', 'integerOnly' => true),
+            //array(['currency_id', 'refnum', 'cheque_date', 'dep_date'], 'safe'),
         );
     }
 
@@ -67,21 +66,21 @@ class DocchequesEav extends basicRecord {
      */
     public function attributeLabels() {
         return array(
-            'doc_id' => Yii::t('labels', 'Documenet ID'),
-            'line' => Yii::t('labels', 'Line'),
-            'attribute' => Yii::t('labels', 'Attribute'),
-            'value' => Yii::t('labels', 'Value'),
+            'doc_id' => Yii::t('app', 'Documenet ID'),
+            'line' => Yii::t('app', 'Line'),
+            'attribute' => Yii::t('app', 'Attribute'),
+            'value' => Yii::t('app', 'Value'),
         );
     }
 
     
     public function printDetailes(){
-        $model=  PaymentType::model()->findByPk($this->type);
-        //echo CJSON::encode("echo ".$model->value);
+        $model=  PaymentType::findOne($this->type);
+        //echo \yii\helpers\Json::encode("echo ".$model->value);
         
         if($model->value==''){
-            echo CJSON::encode(array($_POST['bill']['line'],false));
-            Yii::app()->end();
+            echo JSON::encode(array($_POST['bill']['line'],false));
+            Yii::$app->end();
         }
         
         
@@ -103,7 +102,7 @@ class DocchequesEav extends basicRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search() {
+    public function search($params) {
 
         $criteria = new CDbCriteria;
 

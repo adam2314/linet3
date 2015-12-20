@@ -1,7 +1,7 @@
 <?php
 /***********************************************************************************
- * The contents of this file are subject to the Mozilla Public License Version 2.0
- * ("License"); You may not use this file except in compliance with the Mozilla Public License Version 2.0
+ * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+ * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * The Original Code is:  Linet 3.0 Open Source
  * The Initial Developer of the Original Code is Adam Ben Hur.
  * All portions are Copyright (C) Adam Ben Hur.
@@ -14,22 +14,17 @@
  * @property integer $id
  * @property string $name
  */
-class BankName extends CActiveRecord{
-        const table='{{bankName}}';
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return BankName the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
+namespace app\models;
+
+use Yii;
+class BankName extends Record{
+        const table='{{%bankName}}';
+	
 
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
+	public static function tableName()
 	{
 		return self::table;
 	}
@@ -43,8 +38,8 @@ class BankName extends CActiveRecord{
 		// will receive user inputs.
 		return array(
 			array('id, name', 'required'),
-			array('id', 'numerical', 'integerOnly'=>true),
-			array('name', 'length', 'max'=>255),
+			array('id', 'number', 'integerOnly'=>true),
+			array('name', 'string', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, name', 'safe', 'on'=>'search'),
@@ -68,8 +63,8 @@ class BankName extends CActiveRecord{
 	public function attributeLabels()
 	{
 		return array(
-						'id'=>Yii::t('labels','ID'),
-						'name'=>Yii::t('labels','Name'),
+						'id'=>Yii::t('app','ID'),
+						'name'=>Yii::t('app','Name'),
 		);
 	}
 
@@ -77,12 +72,12 @@ class BankName extends CActiveRecord{
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
-	public function search()
+	public function search($params)
 	{
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
 
-		$criteria=new CDbCriteria;
+		$query = Accounts::find();          $dataProvider = new ActiveDataProvider([             'query' => $query,         ]);          $this->load($params);          if (!$this->validate()) {                                     return $dataProvider;         }
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
@@ -95,6 +90,6 @@ class BankName extends CActiveRecord{
         public static function AutoComplete($name='') {
 		$sql= 'SELECT id as value, name AS label FROM '.BankName::table.' WHERE name LIKE :name';
 		$name = $name.'%';
-		return Yii::app()->db->createCommand($sql)->queryAll(true,array(':name'=>$name));
+		return Yii::$app->db->createCommand($sql)->queryAll(true,array(':name'=>$name));
 	}
 }

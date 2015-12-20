@@ -1,7 +1,7 @@
 <div class="form">
 
     <?php
-    $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+    $form = kartik\form\ActiveForm::begin( array(
         'id' => 'itemcategory-form',
         'enableAjaxValidation' => true,
     ));
@@ -13,7 +13,7 @@
     <?php
     foreach ($model->getSettings() as $sModel) {
         //if ($sModel->hidden == 0) {
-        echo EAVHelper::addRow($sModel->id, $sModel->value, $sModel);
+        echo \app\helpers\EAVHelper::addRow($sModel->id, $sModel->value, $sModel);
 
         //}
     }
@@ -22,15 +22,9 @@
 
 
     <div class="form-actions">
-        <?php
-        $this->widget('bootstrap.widgets.TbButton', array(
-            'buttonType' => 'submit',
-            'type' => 'primary',
-            'label' => $model->isNewRecord ? Yii::t('app', "Create") : Yii::t('app', "Save"),
-        ));
-        ?>
+        <?= \yii\helpers\Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => 'btn btn-success']) ?>
     </div>
 
-    <?php $this->endWidget(); ?>
+    <?php kartik\form\ActiveForm::end(); ?>
 
 </div><!-- form -->

@@ -1,10 +1,10 @@
 <?php
-$this->menu = array(
+$this->params["menu"]= array(
         //array('label'=>'List AccTemplate','url'=>array('index')),
         //array('label'=>'Manage AccTemplate','url'=>array('admin')),
 );
 
-$this->beginWidget('MiniForm', array(
+app\widgets\MiniForm::begin( array(
     'header' => Yii::t('app', "Import Company From Linet 2.0"),
 ));
 ?>
@@ -12,39 +12,28 @@ $this->beginWidget('MiniForm', array(
 
 
 <?php
-$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+$form = kartik\form\ActiveForm::begin( array(
     'id' => 'upload-form',
-    'enableAjaxValidation' => true,
-    'htmlOptions' => array('enctype' => 'multipart/form-data'),
+    //'enableAjaxValidation' => true,
+    'options' => array('enctype' => 'multipart/form-data'),
         ));
 ?>
     <div class="alert">
-        <h4> <?php echo Yii::t('app', 'Warning') . ": " ?></h4><br>
-        <?php echo Yii::t('app', 'All current compnay data will be removed:'); ?>
+        <h4> <?= Yii::t('app', 'Warning') . ": " ?></h4><br>
+        <?= Yii::t('app', 'All current compnay data will be removed:'); ?>
     </div>
-    <?php echo $form->fileFieldRow($model, 'file'); ?>
+    <?= $form->field($model, 'file')->fileInput(); ?>
 
 
     <div class="form-actions">
-        <?php
-        $this->widget('bootstrap.widgets.TbButton', array(
-            'buttonType' => 'submit',
-            'type' => 'primary',
-            'label' => Yii::t('app', "Upload"),
-        ));
-        ?>
+        <?= \yii\helpers\Html::submitButton(Yii::t('app', 'Upload'), ['class' => 'btn btn-success']) ?>
     </div>
-<?php $this->endWidget(); ?>
+<?php kartik\form\ActiveForm::end(); ?>
 </div><!-- form -->
 
 <div id ="result">
 </div>
 
 <?php
-$this->endWidget();
+app\widgets\MiniForm::end();
 ?>
-
-<script type="text/javascript">
-
-
-</script>
