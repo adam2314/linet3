@@ -709,7 +709,7 @@ return array (
   'Idcode' => 'קוד מזהה',
   'In' => 'ב',
   'Is Product' => 'האם מוצר מדף?',
-  'Issue Date' => 'תאריך רישום',
+  'Issue Date' => 'תאריך הפקה',
   'Item' => 'פריט',
   'Item Category' => 'קטגוריית פריט',
   'Item Template' => 'תבנית פריט',
