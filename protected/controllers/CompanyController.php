@@ -125,7 +125,7 @@ class CompanyController extends RightsController {// //RightsController
             $database = Company::findOne($model->id);
             Yii::$app->session['company']=$model->id;
             //redierct to settings.
-            $this->redirect(array('settings/admin'));
+            return $this->redirect(array('settings/admin'));
         }
 
         return $this->render('create', array(
