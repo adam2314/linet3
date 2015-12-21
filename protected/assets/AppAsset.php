@@ -27,6 +27,8 @@ class AppAsset extends AssetBundle {
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
+        'kartik\datecontrol\DateControlAsset',
+        'kartik\date\DatePickerAsset',
     ];
 
     public function init() {
