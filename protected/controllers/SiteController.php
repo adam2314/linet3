@@ -88,13 +88,13 @@ class SiteController extends LitController {
         if (isset($_POST['FormLogin']['hash']) && isset($_POST['FormLogin']['id'])) {
             $model->scenario = 'api';
             if ($model->load(Yii::$app->request->post()) && $model->apiLogin()) {
-                return $this->redirect(\yii\helpers\BaseUrl::base() . "/company/index/?auto=1");
+                return $this->redirect(\yii\helpers\BaseUrl::base() . "/company/index/");
             }
         }
 
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->redirect(\yii\helpers\BaseUrl::base() . "/company/index/?auto=1");
+            return $this->redirect(\yii\helpers\BaseUrl::base() . "/company/index/");
         } else {
             return $this->render('login', [
                         'model' => $model,

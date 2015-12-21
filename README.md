@@ -11,11 +11,15 @@ linet3
 
 Linet accounting system
 
-to install on linux clone the source
-`git clone https://github.com/adam2314/linet3.git`
+to install from the source clone first clone
+```sh
+git clone https://github.com/adam2314/linet3.git
+```
 
 then cd into the protected folder and run
-`curl -sS https://getcomposer.org/installer | php`
+```sh
+curl -sS https://getcomposer.org/installer | php
+```
 
 the update composer globals
 ```sh
