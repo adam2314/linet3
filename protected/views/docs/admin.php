@@ -67,7 +67,7 @@ echo app\widgets\GridView::widget(array(
 
         array(
             'attribute' => 'doctype',
-            'filter' => \yii\helpers\ArrayHelper::map(\app\models\Doctype::find()->All(), 'id', 'name'),
+            'filter' => \app\models\Doctype::tlist(),
             'value' => function($data) {
                 return $data->TypeName();
             },

@@ -23,7 +23,9 @@ echo app\widgets\GridView::widget( array(
     'columns' => array(
         array(
             'attribute' => 'name',
-            //'value' => 'Yii::t("app",$data->name)'
+            'value' => function($data) {
+                return Yii::t("app",$data->name);
+            },
         ),
 
         array(

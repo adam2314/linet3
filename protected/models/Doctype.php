@@ -203,5 +203,11 @@ class Doctype extends Record {
             'criteria' => $criteria,
         ));
     }
-
+    public static function tlist(){
+        $array=\yii\helpers\ArrayHelper::map(\app\models\Doctype::find()->All(), 'id', 'name');
+        foreach($array as $id=>$name){
+            $array[$id]=Yii::t('app',$name);
+        }
+        return $array;
+    }
 }
