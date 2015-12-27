@@ -22,14 +22,7 @@ then cd into the protected folder and run
 curl -sS https://getcomposer.org/installer | php
 ```
 
-the update composer globals
-```sh
-./composer.phar global require "fxp/composer-asset-plugin:1.0.*@dev"
-```
-
-
 and install missing packages
 ```sh
 ./composer.phar update
-./composer.phar install
 ```
