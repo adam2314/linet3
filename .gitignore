@@ -36,7 +36,7 @@ phpunit.phar
 /phpunit.xml
 
 
-/protected/vendor/adam2314/
+/protected/vendor/adam2314/*
 !/protected/vendor/adam2314/EavBehavior.php
 !/assets/docs.js
 !/assets/java.js
