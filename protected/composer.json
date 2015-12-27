@@ -33,7 +33,9 @@
         "miloschuman/yii2-highcharts-widget": "*",
         "kartik-v/yii2-popover-x": "*",
         "kartik-v/yii2-field-range": "*",
-        "kartik-v/yii2-date-range": "*"
+        "kartik-v/yii2-date-range": "*",
+        
+        "fxp/composer-asset-plugin":"*"
 
     },
     "require-dev": {
