@@ -18,7 +18,13 @@ class Record extends ActiveRecord {
     const DATETIME_DB = 'php:Y-m-d H:i:s';
     const DATE_OPENFRMT = 'php:Ymd';
     const TIME_OPENFRMT = 'php:Hs';
+    const TIME_HOUR = 'php:H:s';
     
+    //from db to hour:muinte
+    public static function readHourFormat($data){
+         return Yii::$app->formatter->asDate($data, self::TIME_HOUR);
+        
+    }
     //from db to openformt hour muinte
     public static function readOFTime($data){
          return Yii::$app->formatter->asDate($data, self::TIME_OPENFRMT);

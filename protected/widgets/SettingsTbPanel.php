@@ -36,7 +36,7 @@ class SettingsTbPanel extends Widget {
                 }
             }
         }
-        echo "<div class='col-xs-6'>$col1</div><div class='col-xs-6'>$col</div>";
+        echo "<div class='col-xs-6'>$col</div><div class='col-xs-6'>$col1</div>";
         TbPanel::end();
     }
 

@@ -35,7 +35,7 @@ class RmController extends RightsController {
         if ($model->load(Yii::$app->request->post())){
             if ($model->save()){
                 if(!$this->hasCallback())
-                    $this->redirect(array('view', 'id' => $model->id));
+                    $this->redirect(array('admin'));
             }
         }
 
@@ -55,7 +55,7 @@ class RmController extends RightsController {
         if ($model->load(Yii::$app->request->post())){
             if ($model->save()){
                 if(!$this->hasCallback())
-                    $this->redirect(array('view', 'id' => $model->id));
+                    $this->redirect(array('admin'));
             }
         }
 

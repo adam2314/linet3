@@ -478,12 +478,12 @@ CREATE TABLE `config` (
 );
 
 INSERT INTO `config` (`id`, `value`, `eavType`, `hidden`, `priority`) VALUES
-('company.logo', '110', 'file', 0, 100),
+('company.logo', '110', 'file', 0, 150),
 ('company.name', '', 'string', 0 ,100),
-('company.vat.id', '', 'integer', 0, 100),
-('company.website', '', 'string', 0, 100),
-('company.en.name', '', 'string', 0, 100),
-('company.stock', 'false', 'boolean', 0, 100),
+('company.vat.id', '', 'integer', 0, 101),
+('company.website', '', 'string', 0, 150),
+('company.en.name', '', 'string', 0, 150),
+('company.stock', 'false', 'boolean', 0, 150),
 ('company.doublebook', 'true', 'boolean', 0, 200),
 ('company.tax.irs', '1', 'select({"1":"monthly","2":"bi-monthly"})', 0, 200),
 ('company.tax.rate', '10', 'integer', 0, 200),

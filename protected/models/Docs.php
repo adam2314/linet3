@@ -1033,5 +1033,14 @@ class docs extends fileRecord {
     public function mail() {
         return PrintDoc::mailDoc($this);
     }
+    
+    public static function linkById($id) {
+        $doc = Docs::findOne(['id' => $id]);
+        if ($doc !== null) {
+            return \yii\helpers\Html::a(\yii\helpers\Html::encode(Yii::t('app', $doc->docType->name) . " #" . $doc->docnum), yii\helpers\BaseUrl::base() . ("/docs/view/$id"));
+        } else {
+            return false;
+        }
+    }
 
 }

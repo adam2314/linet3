@@ -123,14 +123,7 @@ class Transactions extends basicRecord {
         $array = explode(",", $this->refnum1);
 
         foreach ($array as $docid) {
-            $doc = Docs::findOne($docid);
-            if ($doc !== null) {
-                $str.= Html::a(Html::encode(Yii::t('app', $doc->docType->name) . " #" . $doc->docnum), yii\helpers\BaseUrl::base().("/docs/view/$docid"));
-            } else {
-                $str.=$docid;
-            }
-            $str.=",";
-            //echo $docid;
+            $str.=Docs::linkById($docid).",";
         }
 
         return rtrim($str, ",");
