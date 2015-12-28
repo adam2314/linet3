@@ -79,7 +79,7 @@ class EAVHelper {
             $field = "<div class='row'><div class='btn-group '>".
                     Html::fileInput($model . '[' . $key . '][value]', $value,['style'=>'display:none;','id'=>$model."_". $rKey."_input","accept"=>"image/gif,image/jpeg"]) .
                     Html::hiddenInput($model . '[' . $key . '][value]', $value) .
-                    Html::buttonInput(Yii::t('app', 'Chose'), ['id'=>$model ."_". $rKey."_upload"]).
+                    Html::buttonInput(Yii::t('app', 'Choose'), ['id'=>$model ."_". $rKey."_upload"]).
                     Html::buttonInput(Yii::t('app', 'Delete'), ['id'=>$model ."_". $rKey."_remove"]).
                     //"<a href='javascript:del();' class='btn btn-danger'>" . Yii::t('app', 'Delete') . "</a>.
                     "</div></div>";

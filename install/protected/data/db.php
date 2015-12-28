@@ -1,6 +1,5 @@
 <?php
-return "
-<?php
+return "<?php
 return [
     'class' => 'yii\db\Connection',
     <placeholder>
