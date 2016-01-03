@@ -12,7 +12,9 @@ linet3
 www.linet.org.il
 Linet accounting system
 
-to install from the source clone first clone
+you need a PHP, Mysql, Apache servers.
+
+to install from the source clone first(into your web root):
 ```sh
 git clone https://github.com/adam2314/linet3.git
 ```
@@ -26,3 +28,9 @@ and install missing packages
 ```sh
 ./composer.phar update
 ```
+it will sound dumb burt now run(again)
+```sh
+./composer.phar update
+```
+
+you should now be able to access your Linet installtion
