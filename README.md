@@ -28,7 +28,7 @@ and install missing packages
 ```sh
 ./composer.phar update
 ```
-it will sound dumb burt now run(again)
+it will sound dumb but now run(again)
 ```sh
 ./composer.phar update
 ```
