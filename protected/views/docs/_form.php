@@ -22,10 +22,7 @@ $form = kartik\form\ActiveForm::begin(array(
             'options' => array('enctype' => 'multipart/form-data'),
         ));
 
-$docnum=$model->docType->last_docnumVal($model->docType->last_docnum,[]);
-if(!$docnum){
-    \Yii::$app->getSession()->setFlash('danger', Yii::t('app','Document exists please fix last_num Value')." ".Html::a('Here',yii\helpers\BaseUrl::base() .'/doctype/update/'.$model->doctype));
-}
+
 $docstatus = ArrayHelper::map(\app\models\Docstatus::find()->where(['doc_type' => $model->doctype])->all(), 'num', 'name');
 $currncies = ArrayHelper::map(\app\models\Currates::GetRateList(), 'currency_id', 'name');
 $accounts = ArrayHelper::map(\app\models\Accounts::findAllByType($model->docType->account_type), 'id', 'name');
