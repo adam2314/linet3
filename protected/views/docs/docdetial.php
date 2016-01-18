@@ -39,14 +39,14 @@ use kartik\select2\Select2;
         <div class="help-block"></div>
     </td>
 
-    <td><?php echo $form->field($model, "[$i]qty")->input('number',["pattern"=>'\d+(\.\d*)?']); ?></td>
+    <td><?php echo $form->field($model, "[$i]qty")->input('number',['step'=>"any"]); ?></td>
     <td><?php echo $form->field($model, "[$i]unit_id")->dropDownList($itemunit);  ?></td>
-    <td><?php echo $form->field($model, "[$i]iItem")->input('number'); ?></td>
+    <td><?php echo $form->field($model, "[$i]iItem")->input('number',['step'=>"any"]); ?></td>
     <td><?php echo $form->field($model, "[$i]currency_id")->dropDownList($currency);  ?></td>
     <td><div id="docdetails-<?php echo $i; ?>-iTotallabel" ></div></td>
     <td><?php
         echo $form->field($model, "[$i]iVatRate",['template'=>'{input}'])->hiddenInput();
-        echo $form->field($model, "[$i]iTotalVat")->input('number',["pattern"=>'\d+(\.\d*)?']);
+        echo $form->field($model, "[$i]iTotalVat")->input('number',['step'=>"any"]);
         ?>
 
     </td>
