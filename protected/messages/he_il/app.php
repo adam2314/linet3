@@ -8,6 +8,15 @@
  * All Rights Reserved.
  ************************************************************************************/
 return array (
+    'Open'=>'פתוח',
+    'Closed'=>'סגור',
+    'Chose'=>'בחר',
+    'View'=>'הצג',
+    'Delete'=>'מחק',
+    'Make'=>'הפקה',
+    'Deposit'=>'הפקדה',
+    'In Advance Income Tax payment'=>'תשלום מקדמות מס הכנסה',
+    
         'Assets & Debits'=>'חובות ונכסים',
     'Capital & Surplus'=>'עודפים והון',
     'Workers'=>'עובדים',

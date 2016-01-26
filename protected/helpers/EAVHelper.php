@@ -107,7 +107,7 @@ class EAVHelper {
             $id= $name."-".$key;
             $rname = $model."[".$key."][value]";
             $timezone=Yii::$app->timezone;
-            $base=yii\helpers\BaseUrl::base();
+            $base=\yii\helpers\BaseUrl::base();
             $field = <<<java
                     <div class="input-group date">
                         <span class="input-group-addon kv-date-calendar" title="Select date">

@@ -638,7 +638,7 @@ class docs extends fileRecord {
 
                 foreach ($this->docCheques as $docrcpt) {
 
-                    $docAction = $docrcpt->transaction($docAction, $action, $this->account_id);
+                    $docAction = $docrcpt->transaction($docAction, $action, $this->account_id,$this->doctype);
                 }
             }
         }

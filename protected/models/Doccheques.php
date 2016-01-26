@@ -66,7 +66,7 @@ class Doccheques extends basicRecord {
         return $rcps . "\r\n";
     }
 
-    public function transaction($transaction, $action, $account_id) {
+    public function transaction($transaction, $action, $account_id,$doctype) {
         $model = PaymentType::findOne($this->type);
         $paymenet = new $model->value;
 
@@ -109,6 +109,14 @@ class Doccheques extends basicRecord {
             
         }
 
+        
+         if($doctype==18){
+            $in->sum=$this->sum* $action*-1;
+            $out->sum=$this->sum * $action;
+            
+            $out->account_id = 105;//income
+        }
+        
         $transaction->num = $in->save();//in the case of recipet we did have a problem:/
         $out->num = $transaction->num ;
         $out->save();
