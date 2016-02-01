@@ -464,6 +464,7 @@ class Transactions extends basicRecord {
             'account_id' => $this->account_id,
             'type' => $this->type,
             'refnum1' => $this->refnum1,
+            'extCorrelation' => $this->extCorrelation,
             //'cat_id' => $this->cat_id,
             //'pay_terms' => $this->pay_terms,
             //'src_tax' => $this->src_tax,

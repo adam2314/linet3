@@ -14,7 +14,7 @@ Linet accounting system
 
 you need a PHP, Mysql, Apache servers. in ubuntu it will look something like this
 ```sh
-apt-get install git apache2 mysql php5 php5-mysql 
+apt-get install git apache2 mysql php5 php5-mysql php5-curl
 a2enmod rewrite
 ```
 

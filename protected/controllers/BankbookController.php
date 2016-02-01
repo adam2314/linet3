@@ -147,20 +147,15 @@ class BankbookController extends RightsController {
         return $this->renderPartial('_trans', array('cdata' => $data));
     }
 
-    public function actionMatchDelete($id) {
-        if (Yii::$app->request->isPostRequest) {
-            // we only allow deletion via POST request
-            $model = ExtCorrelation::findOne($id);
-            if ($model === null)
-                throw new \yii\web\HttpException(404, 'The requested page does not exist.');
+    public function actionMatchdelete($id) {
 
-            $model->delete();
+        $model = ExtCorrelation::findOne($id);
+        if ($model === null)
+            throw new \yii\web\HttpException(404, 'The requested page does not exist.');
 
-            // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-            if (!isset($_GET['ajax']))
-                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-        } else
-            throw new \yii\web\HttpException(400, 'Invalid request. Please do not repeat this request again.');
+        $model->delete();
+
+        $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('edispmatch'));
     }
 
     public function actionExtmatchajax() {

@@ -32,11 +32,11 @@ class ExtCorrelation extends Record {
     }
 
     public function delete() {
-        foreach ($this->Transactions as $transaction) {
+        foreach ($this->transactions as $transaction) {
             $transaction->extCorrelation = 0;
             $transaction->save();
         }
-        foreach ($this->Bankbooks as $bankbook) {
+        foreach ($this->bankbooks as $bankbook) {
             $bankbook->extCorrelation = 0;
             $bankbook->save();
         }

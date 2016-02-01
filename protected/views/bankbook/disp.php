@@ -72,22 +72,17 @@ $dateisOn = kartik\datecontrol\DateControl::widget(['model' => $model,'attribute
 		
 		
 		array(
-			'class'=>'yii\grid\ActionColumn',
-                        //'options' => array('style'=>'width:80px'),
-			'template'=>'{delete}',
-			'buttons'=>array
-		    (
-		        /*
-		        'delete' => array
-		        (
-		            'label'=>'<i class="glyphicon glyphicon-remove"></i>',
-                            'deleteConfirmation'=>true,
-		            'imageUrl'=>false,
-                            'url'=>'yii\helpers\BaseUrl::base().("bankbook/matchdelete", array("id"=>$data->id))',
-		        ),
-                        */
-		    ),
-		),
+                            'class' => 'yii\grid\ActionColumn',
+                            //'options' => array('style'=>'width:80px'),
+                            'template' => '{delete}',
+                            'buttons' => array(
+                                'delete' => function ($url, $model, $key) {
+
+                                    $url = BaseUrl::base() . ("/bankbook/matchdelete/" . $model->id);
+                                    return Html::a('<i class="glyphicon glyphicon-remove"></i>', $url);
+                                },
+                            ),
+                        ),
 	),
 )); 
 ?>
