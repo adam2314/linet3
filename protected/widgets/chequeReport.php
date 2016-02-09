@@ -1,5 +1,4 @@
 <?php
-
 /* * *********************************************************************************
  * The contents of this file are subject to the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
  * ("License"); You may not use this file except in compliance with the GNU AFFERO GENERAL PUBLIC LICENSE Version 3
@@ -51,10 +50,7 @@ class chequeReport extends DashPanel {
             else
                 $a = $x;
 
-            $last = 31;
-            while (!checkdate($x, $last, date("Y"))) {
-                $last--;
-            }
+            $last=  \app\helpers\Linet3Helper::lastDay($x,date("Y"));
             $result = $this->sum( $type, $yaer . "-$a-01" . " 00:00:00", $yaer . "-$a-$last" . " 23:59:59");
             if ($result == 0) {
                 array_push($sums, "0");
@@ -67,32 +63,6 @@ class chequeReport extends DashPanel {
         return $sums;
     }
 
-    private function search($cheques) {
-
-        $criteria = new CDbCriteria;
-
-
-        $criteria->compare('type', $cheques->type, true);
-
-
-        if ($cheques->bank_refnum == null)
-            $criteria->addCondition('bank_refnum IS NULL');
-        else
-            $criteria->compare('bank_refnum', $cheques->bank_refnum);
-
-
-
-
-        $criteria->compare('dep_date', $cheques->dep_date, true);
-        $criteria->compare('line', $cheques->line);
-
-        $criteria->compare('refnum', $cheques->refnum, true);
-        $criteria->compare('currency_id', $cheques->currency_id, true);
-        return new CActiveDataProvider($cheques, array(
-            'criteria' => $criteria,
-            'pagination' => array('pageSize' => 8),
-        ));
-    }
 
     public function init() {
 

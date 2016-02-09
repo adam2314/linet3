@@ -208,7 +208,7 @@ if ($model->preview == 2) {
                     <td class='Price'>" . $docdetail->qty * $docdetail->iItem . "</td>
                     <td class='Currency'>$docdetail->currency_id</td>
                     <td class='VAT'>" . round($docdetail->iTotalVat  - $docdetail->iTotal,2) . "</td>
-                    <td class='Total'>$docdetail->iTotal</td>
+                    <td class='Total'>$docdetail->iTotalVat</td>
                     
                  </tr>
                  
