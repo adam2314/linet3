@@ -26,7 +26,7 @@ class chequeReport extends DashPanel {
 
         $query->select("sum(`leadsum`) AS lead,{{%transactions}}.type,{{%transactions}}.valuedate")->from('{{%transactions}}');
         $query->join = [['LEFT JOIN', '{{%accounts}}', '{{%accounts}}.id=account_id']];
-        $query->groupBy = "{{%accounts}}.type";
+        $query->groupBy = ["{{%accounts}}.type"];
 
         $query->where("{{%accounts}}.type = :type");
         $query->andWhere("valuedate>=:date_from");
