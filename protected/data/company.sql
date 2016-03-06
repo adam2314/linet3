@@ -577,7 +577,7 @@ CREATE TABLE `docDetails` (
   `item_id` int(11) unsigned DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `description` text,
-  `qty` decimal(5,2) DEFAULT NULL,
+  `qty` decimal(20,2) DEFAULT NULL,
   `iItem` decimal(20,2) DEFAULT NULL,
   `ihItem` decimal(20,2) DEFAULT NULL,
   `unit_id` int(11) NOT NULL,
