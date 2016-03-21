@@ -12,19 +12,28 @@ use yii\helpers\Html;
 use app\assets\PrintAsset;
 
 
+
+$legalize = "";
+
+
 if(!\app\helpers\Linet3Helper::isConsole()){
     PrintAsset::register($this);
     $base=yii\helpers\BaseUrl::base();
-
+    
 }else {   //console
     $base='';
 
 
 }
 //end if
-$legalize = "";
+
 if ($model->preview == 2) {
-    $legalize = Yii::t('app', 'Computerized Document');
+    
+    
+    
+    
+    
+    $legalize = '<img src="' . $base. ('assets/img/sign.png') . '" alt="sign" />';//Yii::t('app', 'Computerized Document');
 }
 //app\widgets\MiniForm::begin(array('header' => Yii::t("app","View Document ") ." " .$model->id,));
 ?>
@@ -140,7 +149,7 @@ if ($model->preview == 2) {
         </table>
 
     </div>
-    <div class="legalize"><h3><?= $legalize ?></h3></div>
+    <div class="legalize"><?= $legalize ?></div>
     <div class="docTitle"><h1><?= Yii::t('app', $model->docType->name); ?> <span style="font-size:25px;"> <?= Yii::t('app', 'No.'); ?> <?= $model->docnum; ?> </span>
             <span id='stamp'> 
                 <?php
