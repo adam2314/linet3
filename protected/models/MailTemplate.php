@@ -44,9 +44,9 @@ class MailTemplate extends Record {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('name', 'required'),
-            array('id', 'number', 'integerOnly' => true),
-            array('name', 'string', 'max' => 255),
+            array(['name'], 'required'),
+            array(['id','rtl'], 'number', 'integerOnly' => true),
+            array(['name'], 'string', 'max' => 255),
             array(['name', 'bcc', 'cc', 'subject', 'body', 'entity_type', 'entity_id'], 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.

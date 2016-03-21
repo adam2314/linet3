@@ -236,7 +236,10 @@ class docs extends fileRecord {
                 $this->zip=$account->zip;
             if($this->vatnum==null)
                 $this->vatnum=$account->vatnum;
-            
+            if($this->phone == null)
+                $this->phone=$account->phone;
+            if($this->email == null)
+                $this->email=$account->email;
             
         }
         if($this->status==null)
@@ -711,6 +714,7 @@ class docs extends fileRecord {
             array(['doctype',  'oppt_account_id', 'account_id', 'docnum', 'stockSwitch', 'disType', 'status', 'printed', 'owner', 'refnum', 'refstatus', 'vatnum'], 'number', 'integerOnly' => true,'on'=>'default'),
             array(['city'], 'string', 'max' => 40),
             //array([], 'double'),
+            [['phone', 'email', 'language'], 'string', 'max' => 255],
             array(['company', 'address'], 'string', 'max' => 80),
             array(['currency_id'], 'string', 'max' => 3),
             array(['zip'], 'string', 'max' => 20),

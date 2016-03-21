@@ -622,6 +622,9 @@ CREATE TABLE `docs` (
   `action` tinyint(1) NOT NULL,
   `refstatus` int(11) NOT NULL,
   `owner` int(11) DEFAULT NULL,
+  `language` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -887,6 +890,7 @@ CREATE TABLE `mailTemplate` (
   `bcc` varchar(255) NOT NULL,
   `entity_type` varchar(255) NOT NULL,
   `entity_id` int(11) NOT NULL,
+  `rtl` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
