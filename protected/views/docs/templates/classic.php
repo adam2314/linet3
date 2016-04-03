@@ -125,7 +125,8 @@ use yii\helpers\Html;
                     if ($model->docStatus->num != 2) {
                         echo $model->docStatus->name;
                     } else {
-                        echo ($model->printed == 1) ? Yii::t('app', 'Source') : Yii::t('app', 'Copy');
+                        if ($model->preview != 1)
+                            echo ($model->printed == 1) ? Yii::t('app', 'Source') : Yii::t('app', 'Copy');
                     }
                 }
                 ?>
