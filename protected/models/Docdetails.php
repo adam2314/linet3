@@ -34,7 +34,8 @@ class Docdetails extends basicRecord {
 
     const table = '{{%docDetails}}';
 
-    private $ini = false;
+    public $initParam = false;
+    public $updateItm=false;
     private $_precision;
     //public $iTotalVat = null;
     public $iTotallabel = null;

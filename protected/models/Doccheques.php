@@ -111,10 +111,11 @@ class Doccheques extends basicRecord {
 
         
          if($doctype==18){
-            $in->sum=$this->sum* $action*-1;
-            $out->sum=$this->sum * $action;
+             //well this was a mistake;)
+            //$in->sum=$this->sum* $action*-1;
+            //$out->sum=$this->sum * $action;
             
-            $out->account_id = 105;//income
+            //$out->account_id = 105;//income
         }
         
         $transaction->num = $in->save();//in the case of recipet we did have a problem:/

@@ -204,19 +204,29 @@ $(".docadd").click(function () {
     $('[name="doc_items"]').val(i + 1);
     // start specific commands
     //jQuery.when(jQuery('#docdetails-'+i+'-item_id')).select2();
-    jQuery.when(jQuery('#docdetails-' + i + '-item_id').select2({"width": "resolve"})).done(initSelect2Loading('docdetails-' + i + '-item_id'));
+    jQuery.when(jQuery('#docdetails-' + i + '-item_id').select2({"width": "resolve"})).done(
+            
+            //initSelect2Loading('docdetails-' + i + '-item_id')
+            
+            );
     jQuery('#docdetails-' + i + '-item_id').on('select2-open', function () {
-        initSelect2DropStyle('docdetails-' + i + '-item_id')
+        //initSelect2DropStyle('docdetails-' + i + '-item_id')
     });
 
-    jQuery.when(jQuery('#docdetails-' + i + '-unit_id').select2({"width": "resolve"})).done(initSelect2Loading('docdetails-' + i + '-unit_id'));
+    jQuery.when(jQuery('#docdetails-' + i + '-unit_id').select2({"width": "resolve"})).done(
+            //initSelect2Loading('docdetails-' + i + '-unit_id')
+            
+            );
     jQuery('#docdetails-' + i + '-unit_id').on('select2-open', function () {
-        initSelect2DropStyle('docdetails-' + i + '-unit_id')
+        //initSelect2DropStyle('docdetails-' + i + '-unit_id')
     });
 
-    jQuery.when(jQuery('#docdetails-' + i + '-currency_id').select2({"width": "resolve"})).done(initSelect2Loading('docdetails-' + i + '-currency_id'));
+    jQuery.when(jQuery('#docdetails-' + i + '-currency_id').select2({"width": "resolve"})).done(
+            //initSelect2Loading('docdetails-' + i + '-currency_id')
+            
+            );
     jQuery('#docdetails-' + i + '-currency_id').on('select2-open', function () {
-        initSelect2DropStyle('docdetails-' + i + '-currency_id')
+        //initSelect2DropStyle('docdetails-' + i + '-currency_id')
     });
     $('#docdetails-' + i + '-item_id').trigger('change');
     calcLines();
