@@ -16,7 +16,7 @@ use app\models\MailTemplate;
 use app\models\Docs;
 use app\models\Accounts;
 
-class MailTemplateController extends RightsController {
+class MailtemplateController extends RightsController {
 
     /**
      * Displays a particular model.
