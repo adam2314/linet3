@@ -12,7 +12,7 @@ namespace app\controllers;
 use Yii;
 use app\components\RightsController;
 use app\models\AccId6111;
-class AccId6111Controller extends RightsController{
+class Accid6111Controller extends RightsController{
 	
 
 	/**

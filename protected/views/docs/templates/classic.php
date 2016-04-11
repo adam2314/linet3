@@ -185,7 +185,7 @@ use yii\helpers\Html;
                     <td class='Qty'>$docdetail->qty</td>    
                     <td class='Price'>" . $docdetail->qty * $docdetail->iItem . "</td>
                     <td class='Currency'>$docdetail->currency_id</td>
-                    <td class='VAT'>" . round($docdetail->iTotalVat  - $docdetail->iTotal,2) . "</td>
+                    <td class='VAT'>" . round($docdetail->iTotalVat  - $docdetail->iTotal,2) .$model->currency_id. "</td>
                     <td class='Total'>$docdetail->iTotalVat$model->currency_id</td>
                     
                  </tr>

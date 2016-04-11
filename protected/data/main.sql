@@ -730,7 +730,7 @@ INSERT INTO `menu` (`id`, `name`, `route`, `icon`, `parent`, `order`) VALUES
 (6, 'Currency Rates', 'currates/admin', NULL, 1, 0),
 (7, 'Opening Balances', 'transaction/openbalance', NULL, 1, 0),
 (8, 'Contact Item', 'rm/admin', NULL, 12, 0),
-(9, 'Tax Category For Items', 'Itemvatcat/admin', NULL, 1, 0),
+(9, 'Tax Category For Items', 'itemvatcat/admin', NULL, 1, 0),
 (10, 'Manage Users', 'users/admin', NULL, 1, 0),
 (11, 'Manage Groups', 'admin/role', NULL, 1, 20),
 (12, 'Manage Accounts', '', 'glyphicon glyphicon-folder-open', 0, 3),
