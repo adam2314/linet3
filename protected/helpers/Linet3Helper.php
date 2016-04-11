@@ -148,6 +148,11 @@ class Linet3Helper {
     }
     
     public static function hasLogo() {
+        if ($logo = Linet3Helper::getSetting('company.logo') == false) {
+            return false;
+        }
+        
+        
         $download = \app\models\Download::findOne(["id" => Linet3Helper::getSetting('company.logo')]);
         if ($download == null)
             return false;
