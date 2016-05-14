@@ -99,8 +99,8 @@ class dbMaster {
 
     /**
      * Dump all tables
-     * @param boolean $download - if the generated data is to be sent to browser 
-     * @return file|strings 
+     * @param boolean $download - if the generated data is to be sent to browser
+     * @return file|strings
      */
     public function getDump($download = TRUE, $prefix = '') {
         ob_start();
@@ -140,7 +140,7 @@ class dbMaster {
 
     /**
      * Generate constraints to all tables
-     * @return string 
+     * @return string
      */
     private function getConstraints() {
         $sql = "--\r\n-- Constraints for dumped tables\r\n--" . PHP_EOL . PHP_EOL;
@@ -169,7 +169,7 @@ class dbMaster {
 
     /**
      * Set sql file header
-     * @return string 
+     * @return string
      */
     private function setHeader() {
         $header = PHP_EOL . "--\n-- foreign key checks, autocomit and start a transaction\n--" . PHP_EOL . PHP_EOL;
@@ -187,7 +187,7 @@ class dbMaster {
 
     /**
      * Set sql file footer
-     * @return string 
+     * @return string
      */
     private function setFooter() {
         $footer = PHP_EOL . "SET FOREIGN_KEY_CHECKS=1" . $this->commandEnd . PHP_EOL;
@@ -280,7 +280,7 @@ class dbMaster {
     }
 
     private static function newGetColumns($tableName, $prefix) {
-        $sql = 'SELECT * FROM ' . $tableName . " LIMIT 1";
+        $sql = 'SELECT * FROM `' . $tableName . "` LIMIT 1";
         $cmd = Yii::$app->db->createCommand($sql);
 
         foreach ($cmd->query() as $data) {
@@ -291,7 +291,7 @@ class dbMaster {
     }
 
     public function newGetData($tableName, $prefix) {
-        $sql = 'SELECT * FROM ' . $tableName ;
+        $sql = 'SELECT * FROM `' . $tableName . '`' ;
         $cmd = Yii::$app->db->createCommand($sql);
         //$dataReader = ;
         $array = [];
@@ -315,9 +315,9 @@ class dbMaster {
         $transaction = $connection->beginTransaction();
         try {
             $connection->createCommand('SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO"')->execute();
-            
+
             foreach ($backup["columns"]as $table => $key) {
-                
+
                 if(Yii::$app->db->schema->getTableSchema($prefix . $table)!==null){
                     $connection->createCommand()->truncateTable($prefix . $table)->execute();
                     Yii::info("restord: " . $prefix . $table);
