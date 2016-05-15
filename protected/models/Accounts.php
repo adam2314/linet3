@@ -67,14 +67,14 @@ class Accounts extends fileRecord {
         return self::table;
     }
 
-    public static function SrcTax($id) {
+    public static function SrcTax($id, $date = null) {
         $model = Accounts::findOne($id);
         if ($model === null) {
             return false;
         } else {
-            $value=\app\helpers\Linet3Helper::getOverride("SrcTax",["account"=>$model]);
-            if ($value!==null)
-                    return $value;
+            $value = \app\helpers\Linet3Helper::getOverride("SrcTax", ["account" => $model, "date" => $date]);
+            if ($value !== null)
+                return $value;
             return $model->src_tax;
         }
     }
@@ -176,10 +176,20 @@ class Accounts extends fileRecord {
 
     ///*
     public function beforeSave($insert) {
-        if ( $insert)
+        if ($insert)
             $this->created = new \yii\db\Expression('NOW()');
         else
             $this->modified = new \yii\db\Expression('NOW()');
+        if ($this->active === null)
+            $this->active = 1;
+
+        if ($this->type === null)
+            $this->type = 0;
+
+        if ($this->currency_id === null)
+            $this->currency_id = \app\helpers\Linet3Helper::getSetting('company.cur');
+
+
         return parent::beforeSave($insert);
     }
 

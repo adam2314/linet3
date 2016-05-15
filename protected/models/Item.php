@@ -85,13 +85,7 @@ class Item extends fileRecord {
                 $uid=Yii::$app->params['uid'];
             }
             
-            $incomeMap = UserIncomeMap::findOne(array('user_id' => $uid, 'itemVatCat_id' => $model->itemVatCat_id));
-            if ($incomeMap !== null) {
-
-                $model->vat = Accounts::SrcTax($incomeMap->account_id,$date);
-            } else {
-                $model->vat = 0;
-            }
+            $model->vat = ItemVatCat::TaxRate($model->itemVatCat_id, $date);
         }
         return $model;
     }

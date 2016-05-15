@@ -560,6 +560,8 @@ CREATE TABLE `docCheques` (
   `sum` decimal(20,2) DEFAULT NULL,
   `line` int(11) NOT NULL DEFAULT '0',
   `bank_refnum` varchar(255) DEFAULT NULL,
+    `doc_sum` decimal(20,2) DEFAULT NULL,
+    `currency_rate` decimal(20,2) DEFAULT NULL,
   PRIMARY KEY (`doc_id`,`line`)
 );
 
@@ -587,6 +589,10 @@ CREATE TABLE `docDetails` (
   `iVatRate` decimal(20,2) NOT NULL,
   `line` int(11) NOT NULL,
   `iTotalVat` decimal(20,2) NOT NULL,
+    `currency_rate` decimal(20,2) DEFAULT NULL,
+    `account_id` int(11) DEFAULT NULL,
+    `warehouse_id` int(11) DEFAULT NULL,
+    `vat_cat_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`doc_id`,`line`)
 );
 
@@ -604,7 +610,7 @@ CREATE TABLE `docs` (
   `refnum_ext` varchar(255) NOT NULL,
   `issue_date` timestamp NULL DEFAULT NULL,
   `due_date` timestamp NULL DEFAULT NULL,
-  `reg_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `reg_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ref_date` timestamp NULL DEFAULT NULL,
   `discount` decimal(20,2) NOT NULL,
   `disType` tinyint(1) NOT NULL,
@@ -625,6 +631,7 @@ CREATE TABLE `docs` (
   `language` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
+    `currency_rate` decimal(20,2) NOT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -703,24 +710,24 @@ CREATE TABLE `docType` (
 );
 
 INSERT INTO `docType` (`id`, `name`, `openformat`, `isdoc`, `isrecipet`, `iscontract`, `looked`, `stockAction`, `account_type`, `docStatus_id`, `last_docnum`, `oppt_account_type`, `transactionType_id`, `vat_acc_id`, `header`, `footer`, `stockSwitch`, `copy`, `issueLabel`, `issueLock`, `dueLabel`, `dueLock`, `refLabel`, `refLock`, `valuedate`) VALUES
-(1, 'Proforma', 300, 1, 0, 0, 1, -1, 0, 2, 0, NULL, NULL, 3, '', '', 0, 1, 'Issue Date', 1, 'Proforma Payment Due Date', 0, NULL, 1, NULL),
-(2, 'Delivery Document', 200, 1, 0, 0, 0, -1, 0, 2, 0, NULL, NULL, 3, '', '', 0, 1, 'Issue Date', 1, 'Delivery Shipment Date', 1, NULL, 1, 'issue_date'),
-(3, 'Invoice', 305, 1, 0, 0, 1, -1, 0, 2, 0, NULL, 1, 3, '', '', 1, 1, 'Issue Date', 1, 'Invoice Payment Due Date', 0, NULL, 1, 'issue_date'),
-(4, 'Credit Invoice', 330, 1, 0, 0, 0, 1, 0, 2, 0, NULL, 17, 3, '', '', 1, 1, 'Issue Date', 1, 'Credit Date', 1, NULL, 1, 'issue_date'),
-(5, 'Return Document', 210, 1, 0, 0, 0, 1, 0, 2, 0, NULL, NULL, 3, '', '', 1, 1, 'Issue Date', 1, 'Return Shipment Date', 1, NULL, 1, 'issue_date'),
-(6, 'Quote', 0, 1, 0, 0, 0, 0, 0, 2, 0, NULL, NULL, 3, '', '', 0, 0, 'Issue Date', 1, 'Quote Valid Untill', 0, NULL, 1, NULL),
-(7, 'Sales Order', 100, 1, 0, 0, 0, 0, 0, 2, 0, NULL, NULL, 3, '', '', 0, 0, 'Issue Date', 1, 'Item Delivery Due Date', 0, NULL, 1, NULL),
-(8, 'Receipt', 400, 0, 1, 0, 1, 0, 0, 2, 0, NULL, 3, 3, '', '', 0, 1, 'Issue Date', 1, NULL, 0, NULL, 1, NULL),
-(9, 'Invoice Receipt', 320, 1, 1, 0, 1, -1, 0, 2, 0, NULL, 18, 3, '', '', 1, 1, 'Issue Date', 1, NULL, 0, NULL, 1, 'issue_date'),
-(10, 'Purchase Order', 500, 1, 0, 0, 0, 0, 1, 2, 0, NULL, NULL, 3, '', '', 0, 1, 'Issue Date', 1, 'Item Delivery Due Date', 0, NULL, 1, NULL),
-(11, 'Manual Invoice', 345, 1, 0, 0, 1, 1, 1, 2, 0, NULL, 11, 3, '', '', 1, 1, 'Issue Date', 1, NULL, 0, NULL, 1, NULL),
-(12, 'Manual Receipt', 0, 1, 0, 0, 1, 1, 1, 2, 0, NULL, 12, 3, '', '', 0, 1, 'Issue Date', 1, NULL, 0, NULL, 1, NULL),
+(1, 'Proforma', 300, 1, 0, 0, 1, -1, 0, 2, 0, NULL, NULL, 3, '', '', 0, 1, 'Date', 1, 'Proforma Payment Due Date', 0, NULL, 1, NULL),
+(2, 'Delivery Document', 200, 1, 0, 0, 0, -1, 0, 2, 0, NULL, NULL, 3, '', '', 0, 1, 'Date', 1, 'Delivery Shipment Date', 1, NULL, 1, 'issue_date'),
+(3, 'Invoice', 305, 1, 0, 0, 1, -1, 0, 2, 0, NULL, 1, 3, '', '', 1, 1, 'Date', 1, 'Invoice Payment Due Date', 0, NULL, 1, 'issue_date'),
+(4, 'Credit Invoice', 330, 1, 0, 0, 0, 1, 0, 2, 0, NULL, 17, 3, '', '', 1, 1, 'Date', 1, 'Credit Date', 1, NULL, 1, 'issue_date'),
+(5, 'Return Document', 210, 1, 0, 0, 0, 1, 0, 2, 0, NULL, NULL, 3, '', '', 1, 1, 'Date', 1, 'Return Shipment Date', 1, NULL, 1, 'issue_date'),
+(6, 'Quote', 0, 1, 0, 0, 0, 0, 0, 2, 0, NULL, NULL, 3, '', '', 0, 0, 'Date', 1, 'Quote Valid Untill', 0, NULL, 1, NULL),
+(7, 'Sales Order', 100, 1, 0, 0, 0, 0, 0, 2, 0, NULL, NULL, 3, '', '', 0, 0, 'Date', 1, 'Item Delivery Due Date', 0, NULL, 1, NULL),
+(8, 'Receipt', 400, 0, 1, 0, 1, 0, 0, 2, 0, NULL, 3, 3, '', '', 0, 1, 'Date', 1, NULL, 0, NULL, 1, NULL),
+(9, 'Invoice Receipt', 320, 1, 1, 0, 1, -1, 0, 2, 0, NULL, 18, 3, '', '', 1, 1, 'Date', 1, NULL, 0, NULL, 1, 'issue_date'),
+(10, 'Purchase Order', 500, 1, 0, 0, 0, 0, 1, 2, 0, NULL, NULL, 3, '', '', 0, 1, 'Date', 1, 'Item Delivery Due Date', 0, NULL, 1, NULL),
+(11, 'Manual Invoice', 345, 1, 0, 0, 1, 1, 1, 2, 0, NULL, 11, 3, '', '', 1, 1, 'Date', 1, NULL, 0, NULL, 1, NULL),
+(12, 'Manual Receipt', 0, 1, 0, 0, 1, 1, 1, 2, 0, NULL, 12, 3, '', '', 0, 1, 'Date', 1, NULL, 0, NULL, 1, NULL),
 (13, 'Current Expense', 0, 1, 0, 0, 0, 1, 1, 2, 0, 2, 20, 1, '', '', 0, 0, 'Report Date', 0, 'Payment To Supplier Due Date', 0, 'Reference date', 0, 'issue_date'),
 (14, 'Asset Expense', 0, 1, 0, 0, 0, 1, 1, 2, 0, 4, 21, 2, '', '', 0, 0, 'Report Date', 0, 'Payment To Supplier Due Date', 0, 'Reference date', 0, 'issue_date'),
-(15, 'Warehouse Transaction', 830, 1, 0, 0, 0, 1, 8, 2, 0, 8, NULL, 0, '', '', 0, 1, 'Issue Date', 1, 'Inventory Transaction Date', 0, NULL, 1, 'due_date'),
-(16, 'Stock entry certificate', 810, 1, 0, 0, 1, 1, 1, 1, 0, NULL, NULL, 0, '', '', 1, 1, 'Issue Date', 1, 'Inventory Entry Date', 0, NULL, 1, 'due_date'),
-(17, 'Stock exit certificate', 820, 1, 0, 0, 1, -1, 1, 1, 0, NULL, NULL, 0, '', '', 1, 1, 'Issue Date', 1, 'Inventory Exit Date', 0, NULL, 1, 'due_date'),
-(18, 'Receipt For Donation', 405, 0, 1, 0, 1, 0, 0, 1, 0, NULL, 3, 3, '', '', 0, 1, 'Issue Date', 1, NULL, 0, NULL, 1, NULL);
+(15, 'Warehouse Transaction', 830, 1, 0, 0, 0, 1, 8, 2, 0, 8, NULL, 0, '', '', 0, 1, 'Date', 1, 'Inventory Transaction Date', 0, NULL, 1, 'due_date'),
+(16, 'Stock entry certificate', 810, 1, 0, 0, 1, 1, 1, 1, 0, NULL, NULL, 0, '', '', 1, 1, 'Date', 1, 'Inventory Entry Date', 0, NULL, 1, 'due_date'),
+(17, 'Stock exit certificate', 820, 1, 0, 0, 1, -1, 1, 1, 0, NULL, NULL, 0, '', '', 1, 1, 'Date', 1, 'Inventory Exit Date', 0, NULL, 1, 'due_date'),
+(18, 'Receipt For Donation', 405, 0, 1, 0, 1, 0, 0, 1, 0, NULL, 3, 3, '', '', 0, 1, 'Date', 1, NULL, 0, NULL, 1, NULL);
 CREATE TABLE `eavAttr` (
   `entity` bigint(20) NOT NULL,
   `attribute` varchar(250) NOT NULL,
@@ -752,7 +759,7 @@ CREATE TABLE `files` (
   `public` tinyint(1) NOT NULL,
   `parent_id` int(255) DEFAULT NULL,
   `parent_type` varchar(255) DEFAULT NULL,
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `expire` int(11) NOT NULL,
   `hash` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
@@ -813,6 +820,7 @@ CREATE TABLE `items` (
   `stockType` int(1) NOT NULL,
   `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `income_acc` int(11) NOT NULL DEFAULT '100',
   PRIMARY KEY (`id`),
   UNIQUE KEY `sku` (`sku`)
 );
@@ -853,12 +861,13 @@ INSERT INTO `itemUnits` (`id`, `name`, `precision`) VALUES
 CREATE TABLE `itemVatCat` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+    `tax_rate` decimal(4,2) NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
 INSERT INTO `itemVatCat` (`id`, `name`) VALUES
-(1, 'חייב מעמ'),
-(2, 'פטור ממעמ');
+(1, 'חייב מעמ',17),
+(2, 'פטור ממעמ',0);
 
 CREATE TABLE `language` (
   `id` varchar(10) NOT NULL,
@@ -878,6 +887,12 @@ CREATE TABLE `mail` (
   `create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` int(11) NOT NULL,
   `sent` int(11) NOT NULL,
+    `parent_type` varchar(255) NOT NULL,
+    `parent_id` varchar(255) NOT NULL,
+    `message_id` varchar(255) NOT NULL,
+    `rtl` tinyint(1) DEFAULT NULL,
+ `delivered` timestamp NULL DEFAULT NULL,
+ `opened` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -932,7 +947,7 @@ CREATE TABLE `stockAction` (
   `qty` int(11) NOT NULL,
   `serial` varchar(255) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `createDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `createDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `doc_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 );
@@ -948,7 +963,7 @@ CREATE TABLE `transactions` (
   `intType` tinyint(1) NOT NULL,
   `extCorrelation` int(11) NOT NULL,
   `valuedate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `reg_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `reg_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `details` varchar(255) NOT NULL,
   `currency_id` varchar(3) NOT NULL,
   `sum` decimal(20,2) NOT NULL,
@@ -956,6 +971,8 @@ CREATE TABLE `transactions` (
   `secsum` decimal(20,2) DEFAULT NULL,
   `owner_id` int(11) NOT NULL,
   `linenum` int(11) NOT NULL,
+    `currency_rate` decimal(20,2) DEFAULT NULL,
+    `storno` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 );
 
@@ -1037,3 +1054,42 @@ CREATE TABLE `auth_item_child` (
 INSERT INTO `auth_item_child` (`parent`, `child`) VALUES
 ('sysadmin', '/*'),
 ('sysadmin', '/admin/*');
+
+
+
+CREATE TABLE `printView` (
+  `id` unsigned NOT NULL AUTO_INCREMENT,
+  `doctype` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `det_line` tinyint(1) DEFAULT NULL,
+  `det_itemId` tinyint(1) DEFAULT NULL,
+  `det_name` tinyint(1) DEFAULT NULL,
+  `det_description` tinyint(1) DEFAULT NULL,
+  `det_qty` tinyint(1) DEFAULT NULL,
+  `det_iItem` tinyint(1) DEFAULT NULL,
+  `det_unit_id` tinyint(1) DEFAULT NULL,
+  `det_currency_id` tinyint(1) DEFAULT NULL,
+  `det_currency_rate` tinyint(1) DEFAULT NULL,
+  `det_iTotal` tinyint(1) DEFAULT NULL,
+  `det_iVatRate` tinyint(1) DEFAULT NULL,
+  `det_iTotalVat` tinyint(1) DEFAULT NULL,
+  `rcpt_line` tinyint(1) DEFAULT NULL,
+  `rcpt_type` tinyint(1) DEFAULT NULL,
+  `rcpt_detail` tinyint(1) DEFAULT NULL,
+  `rcpt_sum` tinyint(1) DEFAULT NULL,
+  `rcpt_doc_sum` tinyint(1) DEFAULT NULL,
+  `rcpt_currency_id` tinyint(1) DEFAULT NULL,
+  `rcpt_currency_rate` tinyint(1) DEFAULT NULL,
+  `doc_refnum` tinyint(1) DEFAULT NULL,
+  `doc_refnum_ext` tinyint(1) DEFAULT NULL,
+  `doc_discount` tinyint(1) DEFAULT NULL,
+  `doc_sub_total` tinyint(1) DEFAULT NULL,
+  `doc_novat_total` tinyint(1) DEFAULT NULL,
+  `doc_vat` tinyint(1) DEFAULT NULL,
+  `doc_total` tinyint(1) DEFAULT NULL,
+  `doc_currency_id` tinyint(1) DEFAULT NULL,
+  `doc_currency_rate` tinyint(1) DEFAULT NULL,
+  `det_collspan` int(11) NOT NULL,
+  `rcpt_collspan` int(11) NOT NULL,
+    PRIMARY KEY (`id`)
+);

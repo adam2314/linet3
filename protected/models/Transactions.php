@@ -58,6 +58,7 @@ class Transactions extends basicRecord {
         }
         $round->details = $this->details;
         $round->currency_id = $this->currency_id;
+        $round->currency_rate = $this->currency_rate;
         $round->sum = $sum;
         $round->owner_id = $this->owner_id;
         $round->linenum = $this->linenum;
@@ -222,66 +223,75 @@ class Transactions extends basicRecord {
     }
 
     public function beforeSave($insert) {
-        $this->num = $this->newNum();
-        if ($this->reg_date == null)
-            $this->reg_date = date("Y-m-d H:i:s");
+        if($this->getIsNewRecord()){
 
-        
-        $cur =    \app\helpers\Linet3Helper::getSetting('company.cur');
-        $acc = Accounts::findOne($this->account_id);
-        if ($acc === null) {
-            $acccur = $this->currency_id;
-        } else {
-            $acccur = $acc->currency_id;
-        }
+            $this->num = $this->newNum();
+            if ($this->reg_date == null)
+                $this->reg_date = date("Y-m-d H:i:s");
+            if ($this->refnum2 == null)
+                $this->refnum2 = '';
 
 
-        if ($this->currency_id == '') {
-            $this->currency_id = $cur;
-            $this->sum = $this->leadsum;
-        }
-
-        //leadsum
-
-
-
-
-        if ($cur == $this->currency_id) {
-            $this->leadsum = $this->sum;
-        } else {
-            $rate = Currates::GetRate($this->currency_id,$this->valuedate);
-            $this->leadsum = $this->sum * $rate;
-        }
+            $cur = \app\helpers\Linet3Helper::getSetting('company.cur');
+            $acc = Accounts::findOne($this->account_id);
+            if ($acc === null) {
+                $acccur = $this->currency_id;
+            } else {
+                $acccur = $acc->currency_id;
+            }
 
 
-        //set sum accourding to acc
-        if (!isset($this->sum)) {//adam need to dubl chk
-            if ($this->currency_id != $acccur) {
-                $this->currency_id = $acccur;
-                $rate = Currates::GetRate($acccur,$this->valuedate);
-                if ($rate == 0) {
-                    throw new \Exception(Yii::t('app', 'The rate for') . $this->currency_id . Yii::t('app', 'is invalid'));
+            if ($this->currency_id == '') {
+                $this->currency_id = $cur;
+                $this->sum = $this->leadsum;
+            }
+
+            //leadsum
+            if ($this->currency_rate == null) {
+                $this->currency_rate = Currates::GetRate($this->currency_id, $this->valuedate);
+            }
+
+
+
+            if ($cur == $this->currency_id) {
+                $this->leadsum = $this->sum;
+            } else {
+
+                $this->leadsum = $this->sum * $this->currency_rate;
+            }
+
+
+
+            //open format import uses this
+            //set sum accourding to acc
+            if (!isset($this->sum)) {//adam need to dubl chk
+                if ($this->currency_id != $acccur) {
+                    $this->currency_id = $acccur;
+                    $rate = Currates::GetRate($acccur, $this->valuedate);
+                    if ($rate == 0) {
+                        throw new \Exception(Yii::t('app', 'The rate for') . $this->currency_id . Yii::t('app', 'is invalid'));
+                    }
+                    $this->sum = $this->leadsum / $rate;
                 }
-                $this->sum = $this->leadsum / $rate;
+            }
+
+            //secsum
+            $seccur = \app\helpers\Linet3Helper::getSetting('company.seccur');
+            //$seccur = Yii::$app->user->settings['company.seccur'];
+            if ($seccur != '') {
+                if ($seccur == $this->currency_id)
+                    $this->secsum = $this->sum;
+                else {
+                    $rate = Currates::GetRate($seccur, $this->valuedate);
+                    if ($rate == 0) {
+                        throw new \Exception(Yii::t('app', 'The sec rate for') . $seccur . $this->currency_id . Yii::t('app', 'is invalid'));
+                    }
+                    $this->secsum = $this->leadsum / $rate;
+                }
             }
         }
 
-        //secsum
-        $seccur =    \app\helpers\Linet3Helper::getSetting('company.seccur');
-        //$seccur = Yii::$app->user->settings['company.seccur'];
-        if ($seccur != '') {
-            if ($seccur == $this->currency_id)
-                $this->secsum = $this->sum;
-            else {
-                $rate = Currates::GetRate($this->currency_id,$this->valuedate);
-                if ($rate == 0) {
-                    throw new \Exception(Yii::t('app', 'The sec rate for') . $seccur . $this->currency_id . Yii::t('app', 'is invalid'));
-                }
-                $this->secsum = $this->leadsum / $rate;
-            }
-        }
-
-        return true;
+        return parent::beforeSave($insert);
     }
 
     public function save($runValidation = false, $attributes = NULL) {
@@ -300,7 +310,7 @@ class Transactions extends basicRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array(['num', 'account_id', 'valuedate', 'currency_id', 'sum', 'owner_id', 'linenum'], 'required','on'=>'default'),
+            array(['num', 'account_id', 'valuedate', 'currency_id', 'currency_rate', 'sum', 'owner_id', 'linenum'], 'required','on'=>'default'),
             array(['num', 'account_id', 'owner_id', 'linenum'], 'number', 'integerOnly' => true),
             array(['refnum1', 'refnum2', 'details'], 'string', 'max' => 255),
             array(['valuedate', 'reg_date', 'refnum1_ids'], 'safe'),

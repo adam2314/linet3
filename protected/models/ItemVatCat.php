@@ -37,6 +37,24 @@ class ItemVatCat extends Record {
     public static function tableName() {
         return self::table;
     }
+    
+    public static function TaxRate($id, $date = null) {
+        //return 8.5;
+        $model = Self::findOne(['id'=>$id]);
+        if ($model != null) {
+        //    return false;
+        //} else {
+            $value = \app\helpers\Linet3Helper::getOverride("TaxRate", ["vat_cat" => $model, "date" => $date]);
+            if ($value != null)
+                return $value;
+            return $model->tax_rate;
+        }
+        
+        return false;
+        
+    }
+    
+    
 
     public function save($runValidation = true, $attributes = NULL) {
         $users = User::find()->All();
