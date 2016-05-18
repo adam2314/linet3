@@ -39,8 +39,7 @@ class Docdetails extends basicRecord {
     private $_precision;
     //public $iTotalVat = null;
     public $iTotallabel = null;
-    public $rate = 1;
-    public $doc_rate = 1;
+
     public $valuedate;
     /*
      * for open format export 
@@ -54,16 +53,18 @@ class Docdetails extends basicRecord {
     }//*/
 
     public function save($runValidation = true, $attributes = NULL) {
-        //var_dump($this->iTotalVat);
-        //exit;
-        if ($this->iItem == null) {
-            if ($this->iTotalVat !== null)
-                $this->CalcPriceWithVat(); //qty,rate,totalwVat
-            else if ($this->iTotal !== null)
-                $this->CalcPriceWithOutVat(); //qty,rate,totalw/oVat
-        }else {
+
+
+        if ($this->iTotalVat !== null)
+            $this->CalcPriceWithVat(); //qty,rate,totalwVat
+        else if ($this->iTotal !== null)
+            $this->CalcPriceWithOutVat(); //qty,rate,totalw/oVat
+        else {
             $this->CalcPrice();
         }
+
+
+
         //adam this is not good for open format at all: 
         //$this->iVatRate = 0;
         return parent::save($runValidation, $attributes);
@@ -77,19 +78,9 @@ class Docdetails extends basicRecord {
 
         if (!$this->initParam) {
             $this->_precision = Yii::$app->params['precision'];
-            $item = Item::findByPk($this->item_id, $this->valuedate);
-            if (is_null($item))
-                $this->iVatRate = 0;
-            else
-                $this->iVatRate = $item->vat; //for vat resons...
-                
 
-            $this->rate = Currates::GetRate($this->currency_id, $this->valuedate);
-
-            if ($this->doc_rate == 0) {
-                $doc = Docs::findOne($this->doc_id);
-                $this->doc_rate = Currates::GetRate($doc->currency_id, $this->valuedate);
-            }
+            $this->iVatRate = ItemVatCat::TaxRate($this->vat_cat_id, $this->valuedate);
+            
             $this->initParam != $this->initParam;
         }
     }
@@ -97,23 +88,23 @@ class Docdetails extends basicRecord {
     public function CalcPriceWithVat() {
         $this->ini();
 
-        $this->iTotal = round(($this->iTotalVat - ($this->iTotalVat * ($this->iVatRate / 100)) / (1 + ($this->iVatRate / 100))), $this->_precision);
+
+        $this->iTotal = round(
+                ($this->iTotalVat -
+                ($this->iTotalVat * ($this->iVatRate / 100)) /
+                (1 + ($this->iVatRate / 100))
+                ), $this->_precision);
+
+
 
         if ($this->qty == 0) {
             return $this;
         }
-        if ($this->doc_rate == 0) {
-            return $this;
-        }
 
-        $this->iItem = $this->aValue(($this->iTotal / $this->qty),1);
-
-
+        $this->iItem = $this->aValue(($this->iTotal / $this->qty), 1);
         $this->ihItem = $this->iItem;
-
         $this->ihTotal = $this->iTotal;
         $this->iTotallabel = $this->iTotal;
-
 
         return $this;
     }
@@ -121,8 +112,7 @@ class Docdetails extends basicRecord {
 //itotal+vat
     public function CalcPriceWithOutVat() {
         $this->ini();
-
-        $this->iItem = $this->aValue(($this->iTotal / $this->qty),-1);
+        $this->iItem = $this->aValue(($this->iTotal / $this->qty), -1);
 
         return $this->CalcPrice();
     }
@@ -130,97 +120,50 @@ class Docdetails extends basicRecord {
 //qty,unit,rate,vat, item
     public function CalcPrice() {
         $this->ini();
-
         $this->ihItem = $this->iItem;
-
-
-        $this->iTotal = $this->aValue(($this->iItem * $this->qty),-1);
-        
-        $this->iTotalVat = round(($this->iTotal * (($this->iVatRate / 100) + 1)), $this->_precision);
-
-
+        $this->iTotal = $this->aValue(($this->iItem * $this->qty), -1);
+        $this->iTotalVat = $this->totalVatCalc();
         $this->ihTotal = $this->iTotal;
         $this->iTotallabel = $this->iTotal;
 
-
         return $this;
     }
-    
-    public function vatCalc($owner, $action, $optacc) {
-        $this->ini();
 
+    private function totalVatCalc() {
+        return round($this->iTotal + $this->vatCalc(), $this->_precision);
+    }
+
+    public function vatCalc() {
+        return round(($this->iTotal * (($this->iVatRate / 100) )), $this->_precision);
+    }
+
+    /*
+     * optacc=outcome acc(knownvat)
+     */
+
+    public function knownVatCalc($optacc) {
+        $this->ini();
+        $this->getItem();
+        
         if (is_null($this->item)) {
             throw new \Exception('The item ' . $this->item_id . ' does not exsits.');
         }
-        $vatcat = $this->item->itemVatCat_id;
-        //echo $vatcat;exit;//
-        $vatCatAcc = UserIncomeMap::findOne(array('user_id' => $owner, 'itemVatCat_id' => $vatcat));
-        if ($vatCatAcc === null)
-            throw new \Exception('The item ' . $this->item_id . ' does not have a vat catagory.');
 
-        $sum = 0;
-
+        $knownVat = 0;
+        
         if ($optacc == '') {
-
-            $this->_incomeacc = $vatCatAcc->account_id;
-
-            $sum = ($this->iTotal * $action);
+            $knownVat = ($this->vatCalc());
         } else {
-            $this->_incomeacc = $optacc;
+            $this->account_id = $optacc;
             $multi = 1;
-            $vat = $this->iTotalVat - $this->iTotal;
-
-            if ($oppt = Accounts::findOne($this->_incomeacc))//not null?
-                $multi = 1 - ($oppt->src_tax / 100);
-            $vat = round($vat * $multi, $this->_precision);
-
-            $sum = (($this->iTotal + $vat) * $action);
+            if ($oppt = Accounts::findOne($this->account_id))//not null?
+                $multi = ($oppt->src_tax / 100);
+            
+            $knownVat = round($this->vatCalc() * $multi, $this->_precision);
         }
 
 
-        return $sum;
-    }
-    
-    
-    
-    //getting item value for calc doc
-    private function aValue($sum, $bridge = -1) {
-
-        if ($this->rate > $this->doc_rate) {
-            $bridge*=-1;
-        }
-
-        if ($bridge != -1) {
-            $sum = $this->cValue($sum);
-        } else {
-            $sum = $this->tValue($sum);
-        }
-
-        return round($sum, $this->_precision);
-    }
-
-    private function cValue($sum) {
-        $ratio = $this->rate / $this->doc_rate;
-        if ($ratio <= 1) {
-            $sum = $sum / $ratio;
-        } else {
-            $sum = $sum * $ratio;
-        }
-
-        return $sum;
-    }
-
-
-    private function tValue($sum) {
-        $ratio = $this->rate / $this->doc_rate;
-
-        if ($ratio >= 1) {
-            $sum = $sum / $ratio;
-        } else {
-            $sum = $sum * $ratio;
-        }
-
-        return $sum;
+        return $knownVat;
     }
     
     
@@ -250,44 +193,53 @@ class Docdetails extends basicRecord {
         return $dets . "\r\n";
     }
 
-    public function transaction($transaction, $action, $optacc) {
-        $this->ini();
+    private function aValue($sum, $bridge = -1) {
 
-        if (is_null($this->item)) {
-            throw new \Exception('The item ' . $this->item_id . ' does not exsits.');
+        if($this->currency_rate==0){
+            return 0;
         }
-        $vatcat = $this->item->itemVatCat_id;
-        $vatCatAcc = UserIncomeMap::findOne(array('user_id' => $transaction->owner_id, 'itemVatCat_id' => $vatcat));
-        if ($vatCatAcc === null)
-            throw new \Exception('The item ' . $this->item_id . ' does not have a vat catagory.');
+
+        if ($this->currency_rate > 1) {
+            $bridge*=-1;
+        }
 
 
-
-        $sum = 0;
-
-        
-        if ($optacc=='') {
-
-            $incomeacc = $vatCatAcc->account_id;
-
-            $sum = ($this->ihTotal * $action);
+        if ($bridge != -1) {
+            $sum = $this->cValue($sum);
         } else {
-            $incomeacc = $optacc;
-            $multi=1;
-            $vat = $this->iTotalVat- $this->iTotal;
-            
-            if ($oppt = Accounts::findOne($incomeacc))//not null?
-                $multi = 1 - ($oppt->src_tax / 100);
-            $vat = round($vat * $multi,$this->_precision);
-
-
-            //$multi=$this->iTotalVat*$multi;
-           // Yii::info($this);
-            //Yii::info($multi);
-            $sum = (($this->ihTotal + $vat) * $action);
+            $sum = $this->tValue($sum);
         }
+
+        return round($sum, $this->_precision); //$sum;//
+    }
+
+    private function cValue($sum) {
+        if ($this->currency_rate <= 1) {
+            $sum = $sum / $this->currency_rate;
+        } else {
+            $sum = $sum * $this->currency_rate;
+        }
+
+        return $sum;
+    }
+
+    private function tValue($sum) {
+        if ($this->currency_rate >= 1) {
+            $sum = $sum / $this->currency_rate;
+        } else {
+            $sum = $sum * $this->currency_rate;
+        }
+
+        return $sum;
+    }
+
+    public function transaction($transaction, $action, $optacc) {
+        $knownVat = $this->vatCalc() - ($this->knownVatCalc($optacc));
+        $sum = $this->iTotal + $knownVat;
+
+
         if ($sum)
-            return $transaction->addSingleLine($incomeacc, round($sum, $this->_precision));
+            return $transaction->addSingleLine($this->account_id, round($sum * $action, $this->_precision));
 
 
         return $transaction;
@@ -312,13 +264,12 @@ class Docdetails extends basicRecord {
         // will receive user inputs.
         return array(
             [['item_id', 'name', 'line', 'qty'], 'required'],
-            [['qty','rate'], 'numVal'],
-            [['item_id'], 'itemVal'],
+            
             array(['item_id','doc_id', 'line', 'unit_id'], 'number', 'integerOnly' => true),
             array(['currency_id'], 'string', 'max' => 3),
             array(['name'], 'string', 'max' => 255),
-            array(['ihTotal', 'ihItem', 'iItem', 'iTotal', 'iVatRate', 'qty'], 'number'),
-            array(['description', 'iTotalVat', 'doc_rate','valuedate'], 'safe'),
+            array(['ihTotal', 'ihItem', 'iItem', 'iTotal', 'iVatRate', 'qty','currency_rate'], 'number'),
+            array(['description', 'iTotalVat', 'valuedate'], 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array(['doc_id', 'item_id', 'name', 'description', 'qty', 'unit_id', 'currency_id', 'ihTotal', 'ihItem', 'iItem', 'iTotal', 'iVatRate', 'line'], 'safe', 'on' => 'search'),
@@ -382,30 +333,5 @@ class Docdetails extends basicRecord {
         );
     }
 
-    /**
-     * Retrieves a list of models based on the current search/filter conditions.
-     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-     */
-    public function search($params) {
-        // Warning: Please modify the following code to remove attributes that
-        // should not be searched.
-
-        $criteria = new CDbCriteria;
-
-        $criteria->compare('doc_id', $this->doc_id, true);
-        $criteria->compare('item_id', $this->item_id, true);
-        $criteria->compare('name', $this->name, true);
-        $criteria->compare('description', $this->description, true);
-        $criteria->compare('qty', $this->qty, true);
-        $criteria->compare('unit_price', $this->unit_price, true);
-        $criteria->compare('currency_id', $this->currency_id, true);
-        $criteria->compare('price', $this->price, true);
-        $criteria->compare('invprice', $this->invprice, true);
-        $criteria->compare('line', $this->line);
-
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
-    }
 
 }

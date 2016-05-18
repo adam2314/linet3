@@ -35,8 +35,8 @@ namespace app\models;
 use Yii;
 use app\components\fileRecord;
 //use adam2314\EavBehavior;
-use app\models\UserIncomeMap;
-use app\models\Accounts;
+//use app\models\UserIncomeMap;
+//use app\models\Accounts;
 use yii\data\ActiveDataProvider;
 class Item extends fileRecord {
 
@@ -45,7 +45,7 @@ class Item extends fileRecord {
     const STOCK_QTY = 1;
     const STOCK_INSTANCE = 2;
     const table = '{{%items}}';
-
+    public $currency_rate;
     public $vat; //loads vat from user by cat
 
     //public $profit=0;
@@ -78,12 +78,6 @@ class Item extends fileRecord {
         $model = self::findOne($id);
 
         if ($model !== null) {
-            if(isset(Yii::$app->user)){
-                $uid=Yii::$app->user->id;
-                
-            }else{
-                $uid=Yii::$app->params['uid'];
-            }
             
             $model->vat = ItemVatCat::TaxRate($model->itemVatCat_id, $date);
         }
@@ -122,46 +116,6 @@ class Item extends fileRecord {
         );
     }
 
-    //function behaviors() {
-    //    return array(
-    /*
-      'eavAttr' => array(
-      //'class' => 'ext.eav.EEavBehavior',
-      'class' => 'application.modules.eav.extensions.EEavBehavior',
-      // Table that stores attributes (required)
-      'tableName' => '{{itemEav}}',
-      // model id column
-      // Default is 'entity'
-      'entityField' => 'entity',
-      // attribute name column
-      // Default is 'attribute'
-      'attributeField' => 'attribute',
-      // attribute value column
-      // Default is 'value'
-      'valueField' => 'value',
-      // Model FK name
-      // By default taken from primaryKey
-      'modelTableFk' => 'primaryKey',
-      // Array of allowed attributes
-      // All attributes are allowed if not specified
-      // Empty by default
-      'safeAttributes' => array(),
-      // Attribute prefix. Useful when storing attributes for multiple models in a single table
-      // Empty by default
-      'attributesPrefix' => '',
-      )// */
-    //    );
-    //}
-    //*/
-    /**
-     * Returns the static model of the specified AR class.
-     * @param string $className active record class name.
-     * @return Item the static model class
-     */
-    /*
-      public static function model($className = __CLASS__) {
-      return parent::model($className);
-      } */
 
     /**
      * @return string the associated database table name
@@ -192,22 +146,7 @@ class Item extends fileRecord {
         );
     }
 
-    /**
-     * @return array relational rules.
-     */
-    public function relations() {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
-        return array(
-            //'author'=>array(self::BELONGS_TO, 'User', 'author_id'),
-            'Unit' => array(self::BELONGS_TO, 'Itemunit', 'unit_id'),
-            'Category' => array(self::BELONGS_TO, 'Itemcategory', 'category_id'),
-            'Account' => array(self::BELONGS_TO, 'Accounts', 'account_id'),
-            'Owner' => array(self::BELONGS_TO, 'Users', 'owner'),
-            'ItemVatCat' => array(self::BELONGS_TO, 'ItemVatCat', 'itemVatCat_id'),
-        );
-    }
-
+   
     /**
      * @return array customized attribute labels (name=>label)
      */
@@ -262,26 +201,9 @@ class Item extends fileRecord {
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            //->andFilterWhere(['like', 'address', $this->address])
-            //->andFilterWhere(['like', 'city', $this->city])
-            //->andFilterWhere(['like', 'zip', $this->zip])
-            //->andFilterWhere(['like', 'vatnum', $this->vatnum])
-            //->andFilterWhere(['like', 'refnum', $this->refnum])
-            //->andFilterWhere(['like', 'refnum_ext', $this->refnum_ext])
-            //->andFilterWhere(['like', 'currency_id', $this->currency_id])
-            //->andFilterWhere(['like', 'comments', $this->comments])
+         
             ->andFilterWhere(['like', 'description', $this->description]);
         
-        /*
-        if(!is_null($this->issue_date)){
-            $tmp=  explode(" to ", $this->issue_date);
-            //var_dump($tmp);
-            if(isset($tmp[0])&&isset($tmp[1]))        
-                $query->andFilterWhere(['between', 'issue_date', $tmp[0], $tmp[1]]);
-            //
-            //$query->andFilterWhere(['>=', 'issue_from', $tmp[1]]);
-        }
-        */
         
         
         return $dataProvider;
