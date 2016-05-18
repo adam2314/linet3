@@ -2,6 +2,7 @@
 
 use yii\db\Migration;
 use app\models\Company;
+use app\helpers\dbMaster;
 
 class m160406_075437_docDisply extends Migration
 {
