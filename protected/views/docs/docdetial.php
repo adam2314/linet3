@@ -18,7 +18,8 @@ use kartik\select2\Select2;
         if ($model->item_id == '')
             $model->item_id = 0;
 
-        $model->income_acc=100;
+        $model->account_id=100;
+        $model->vat_cat_id=1;
         $items=ArrayHelper::map(\app\models\Item::find()->All(), 'id', 'name');
         $itemunit=ArrayHelper::map(\app\models\Itemunit::find()->All(), 'id', 'name');
         $currency=ArrayHelper::map(\app\models\Currates::GetRateList(), 'currency_id', 'name');
@@ -43,7 +44,8 @@ use kartik\select2\Select2;
     <td><?php echo $form->field($model, "[$i]unit_id")->dropDownList($itemunit);  ?></td>
     <td>
         <?php echo $form->field($model, "[$i]iItem")->input('number',['step'=>"any"]); ?>
-        <?php echo $form->field($model, "[$i]income_acc"); ?>
+        <?php echo $form->field($model, "[$i]account_id"); ?>
+        <?php echo $form->field($model, "[$i]vat_cat_id"); ?>
     </td>
     <td>
         <?php echo $form->field($model, "[$i]currency_id")->dropDownList($currency);  ?>

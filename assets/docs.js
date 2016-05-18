@@ -469,6 +469,13 @@ function itemChange(index) {
                 $('#Docdetails-' + index + '-ihItem').val(data.saleprice);
                 $('#docdetails-' + index + '-iitem').val(data.saleprice);
                 $('#docdetails-' + index + '-currency_id').val(data.currency_id);
+                
+                
+                $('#docdetails-' + index + '-currency_rate').val(data.currency_rate);
+                $('#docdetails-' + index + '-vat_cat_id').val(data.itemVatCat_id);
+                $('#docdetails-' + index + '-account_id').val(data.income_acc);
+                
+                
                 //$('#docdetails-' + index + '_currency_id').trigger("liszt:updated");
                 $('#docdetails-' + index + '-currency_id').trigger("change");
                 $('#docdetails-' + index + '-unit_id').val(data.unit_id);
