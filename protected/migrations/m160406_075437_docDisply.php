@@ -1,5 +1,5 @@
 <?php
-
+use yii\db\Schema;
 use yii\db\Migration;
 use app\models\Company;
 use app\helpers\dbMaster;
