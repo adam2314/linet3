@@ -419,6 +419,7 @@ class docs extends fileRecord {
                 }
             }
         }
+        
 
         if (!is_null($this->docCheq)) {
             foreach ($this->docCheq as $key => $rcpt) {
@@ -627,12 +628,13 @@ class docs extends fileRecord {
                 $sum = 0;
                 $rSum=0;
 
-
+                
                 foreach ($this->docDetailes as $docdetail) {
+                //foreach ($this->docDetailes as $docdetail) {
                     $docdetail->valuedate = $valuedate;
 
                     $stockAction = $this->stock($docdetail->item_id, $docdetail->qty);
-
+                    $docAction = $docdetail->transaction($docAction, $action, $this->oppt_account_id);
                     $multi = 1;
                     if (!is_null($this->oppt_account_id))
                         if ($oppt = Accounts::findOne($this->oppt_account_id))
@@ -698,9 +700,6 @@ class docs extends fileRecord {
                 }
             }
         }
-
-
-        //Yii::$app->end();
     }
 
     public function delete() {
