@@ -277,30 +277,6 @@ class Docdetails extends basicRecord {
     }
 
     
-    public function numVal($attribute, $params) {
-        if ($this->$attribute==0||$this->$attribute==null||$this->$attribute=='') {
-            $this->addError($attribute, $attribute." ".Yii::t('app', 'cant be zero or empty'));
-        }
-    }
-    public function itemVal($attribute, $params) {
-        $item=Item::findOne(["id"=>$this->$attribute]);
-        
-        if ($item===null) {
-            $this->addError($attribute, Yii::t('app', 'Item id not found'));
-        }
-    }
-    /**
-     * @return array relational rules.
-     */
-    public function relations() {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
-        return array(
-            'Doc' => array(self::BELONGS_TO, 'Docs', 'doc_id'),
-            'ItemUnit' => array(self::BELONGS_TO, 'Itemunit', 'unit_id'),
-            'Item' => array(self::BELONGS_TO, 'Item', 'item_id'),
-        );
-    }
     public function getItem() {
         return $this->hasOne(Item::className(), array('id' => 'item_id'));
     }

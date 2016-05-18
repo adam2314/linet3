@@ -499,20 +499,19 @@ class docs extends fileRecord {
                 }
 
                 $submodel->attributes = $detial;
-                $submodel->valuedate=$this->issue_date;
+                $submodel->valuedate = $this->{$this->VatDate};
                 $submodel->line = $line;
                 $submodel->doc_id = $this->id;
-                //if (Item::findOne((int) $detial["item_id"]) !== null) {
-                    $submodel->iItem=null;
-                    if ($submodel->save()) {
-                        $this->docDet[$key]['iTotalVat'] = $submodel->iTotalVat;
-                        $this->docDet[$key]['ihTotal'] = $submodel->ihTotal;
-                        $saved = true;
-                        $line++;
-                    } else {
-                        $this->addError('docDet', $submodel->errors);
-                        Yii::error("fatel error cant save docdetial,doc_id:" . $submodel->line . "," . $submodel->doc_id.":".\yii\helpers\Json::encode($submodel->errors));
-                    }
+
+                if ($submodel->save()) {
+                    $this->docDet[$key]['iTotalVat'] = $submodel->iTotalVat;
+                    $this->docDet[$key]['ihTotal'] = $submodel->ihTotal;
+                    $saved = true;
+                    $line++;
+                } else {
+                    $this->addError('docDet', $submodel->errors);
+                    Yii::error("fatel error cant save docdetial,doc_id:" . $submodel->line . "," . $submodel->doc_id . ":" . \yii\helpers\Json::encode($submodel->errors));
+                }
                 //}
             }
             if (count($this->docDetailes) != $line - 1) {//if more items in $docdetails delete them
