@@ -155,61 +155,14 @@ class Transactions extends basicRecord {
         return $balance;
     }
 
-    public function getOptAccId() {
-
-        $criteria = new CDbCriteria;
-        $criteria->condition = "num = :num";
-        $criteria->addCondition("account_id<>:account_id");
-        $criteria->params = array(
-            ':num' => $this->num,
-            ':account_id' => $this->account_id,
-        );
-
-
-        $models = Transactions::findAll($criteria);
-        $retacc = 0;
-        $maxsum = 0;
-        foreach ($models as $model) {
-            if ((!$retacc) && (!$maxsum)) {
-                $maxsum = $model->sum;
-                $retacc = $model->account_id;
-            }
-            if ($this->sum <= 0.0) {//<
-                if ($model->sum > $maxsum) {
-                    $maxsum = $model->sum;
-                    $retacc = $model->account_id;
-                }
-            } else {
-                if ($model->sum < $maxsum) {
-                    $maxsum = $model->sum;
-                    $retacc = $model->account_id;
-                }
-            }
-        }
-
-        return $retacc;
-    }
-
-    public function getOptAccName() {
-        $id = $this->getOptAccId();
-        $model = Accounts::findOne($id);
-        if ($model === null)
-            return $id;
-        return $model->name;
-    }
+   
 
     private function newNum() {
         if ($this->num == 0) {
-            
-            
-            //$model=Yii::$app->user->settings['company.transaction'];
+
             $transaction=\app\helpers\Linet3Helper::getSetting('company.transaction');
             \app\helpers\Linet3Helper::setSetting('company.transaction',$transaction+1);
-            
-            //$model = Settings::findOne('company.transaction');
-            //$model->value = (int) $model->value + 1;
-            //Yii::$app->user->settings['company.transaction']=$model->value;
-            //$model->save();
+        
             return (int) $transaction; //adam: has to go
         } else {
             return (int) $this->num;
@@ -390,64 +343,6 @@ class Transactions extends basicRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search1($params) {
-        // Warning: Please modify the following code to remove attributes that
-        // should not be searched.
-
-        $criteria = new CDbCriteria;
-
-        $criteria->compare('id', $this->id);
-        $criteria->compare('num', $this->num);
-        $criteria->compare('account_id', $this->account_id);
-        $criteria->compare('type', $this->type);
-        $criteria->compare('refnum1', $this->refnum1, true);
-        $criteria->compare('refnum2', $this->refnum2, true);
-        $criteria->compare('valuedate', $this->valuedate, true);
-        $criteria->compare('reg_date', $this->reg_date, true);
-        $criteria->compare('details', $this->details, true);
-        $criteria->compare('currency_id', $this->currency_id);
-        $criteria->compare('sum', $this->sum, true);
-        $criteria->compare('leadsum', $this->leadsum, true);
-        $criteria->compare('extCorrelation', $this->extCorrelation);
-        $criteria->compare('intCorrelation', $this->intCorrelation);
-        $criteria->compare('owner_id', $this->owner_id);
-        $criteria->compare('linenum', $this->linenum);
-
-        //$yiidatetime=Yii::$app->locale->getDateFormat('yiidatetime');
-        $yiidate = Yii::$app->locale->getDateFormat('yiishort');
-        $phpdbdatetime = Yii::$app->locale->getDateFormat('phpdbdatetime');
-
-        if (!empty($this->from_date) && empty($this->to_date)) {
-            $date_from = date($phpdbdatetime, CDateTimeParser::parse($this->from_date, $yiidate));
-
-            $criteria->addCondition("valuedate>=:date_from");
-            $criteria->params[':date_from'] = $date_from;
-        } elseif (!empty($this->to_date) && empty($this->from_date)) {
-            $date_to = date($phpdbdatetime, CDateTimeParser::parse($this->to_date, $yiidate) + 24 * 60 * 60 - 1);
-            //print $this->to_date.";".$date_to;
-
-            $criteria->addCondition("valuedate>=:date_to");
-            $criteria->params[':date_to'] = $date_to;
-        } elseif (!empty($this->to_date) && !empty($this->from_date)) {
-            $date_from = date($phpdbdatetime, CDateTimeParser::parse($this->from_date, $yiidate));
-            $date_to = date($phpdbdatetime, CDateTimeParser::parse($this->to_date, $yiidate) + 24 * 60 * 60 - 1);
-
-
-            $criteria->addCondition("valuedate>=:date_from");
-            $criteria->addCondition("valuedate<=:date_to");
-            $criteria->params[':date_from'] = $date_from;
-            $criteria->params[':date_to'] = $date_to;
-        }
-
-        //Yii::$app->end();
-        $sort = new CSort();
-        $sort->defaultOrder = 'num DESC';
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-            'pagination' => array('pageSize' => 50),
-            'sort' => $sort,
-        ));
-    }
 
     
     public function search($params)
@@ -475,42 +370,11 @@ class Transactions extends basicRecord {
             'type' => $this->type,
             'refnum1' => $this->refnum1,
             'extCorrelation' => $this->extCorrelation,
-            //'cat_id' => $this->cat_id,
-            //'pay_terms' => $this->pay_terms,
-            //'src_tax' => $this->src_tax,
-            //'src_date' => $this->src_date,
-            //'parent_account_id' => $this->parent_account_id,
-            //'system_acc' => $this->system_acc,
-            //'owner' => $this->owner,
-            //'modified' => $this->modified,
-            //'created' => $this->created,
+   
         ]);
         
         $query->andFilterWhere(['like', 'details', $this->details]);
-/*
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'contact', $this->contact])
-            ->andFilterWhere(['like', 'department', $this->department])
-            ->andFilterWhere(['like', 'vatnum', $this->vatnum])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'phone', $this->phone])
-            ->andFilterWhere(['like', 'dir_phone', $this->dir_phone])
-            ->andFilterWhere(['like', 'cellular', $this->cellular])
-            ->andFilterWhere(['like', 'fax', $this->fax])
-            ->andFilterWhere(['like', 'web', $this->web])
-            ->andFilterWhere(['like', 'address', $this->address])
-            ->andFilterWhere(['like', 'city', $this->city])
-            ->andFilterWhere(['like', 'zip', $this->zip])
-            ->andFilterWhere(['like', 'currency_id', $this->currency_id])
-            ->andFilterWhere(['like', 'comments', $this->comments]);
-*/
-        /*if (!empty($this->from_date) && empty($this->to_date)) {
-            $query->andFilterWhere(['>=', 'valuedate',  $this->from_date]);
-        } elseif (!empty($this->to_date) && empty($this->from_date)) {
-            $query->andFilterWhere(['>=', 'valuedate',  $this->to_date]);
-        } elseif (!empty($this->to_date) && !empty($this->from_date)) {
-            $query->andFilterWhere(['between', 'valuedate', $this->from_date, $this->to_date]);
-        }*/
+
         
         if(!is_null($this->valuedate)){
             $tmp=  explode(" to ", $this->valuedate);
