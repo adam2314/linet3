@@ -93,6 +93,7 @@ class docs extends fileRecord {
         $this->due_date = $this->readDate('now');
         $this->ref_date = $this->readDate('now');
         $this->language=Yii::$app->language;
+        $this->VatDate = 'ref_date';
         return parent::init();
     }
 
