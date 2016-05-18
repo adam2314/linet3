@@ -52,6 +52,7 @@ class docs extends fileRecord {
     //public $lang;
     public $oppt_account_id='';
     public $preview=0;
+    public $knownVat;
     //public $discount=0;//overide
     public $docDet = NULL;
     public $docDetArray = NULL;
