@@ -508,8 +508,7 @@ function CalcPrice(index, hChange) {//.org
         hChange = '&CalcPriceWithOutVat=1';
     else
         hChange = '';
-    var doc_rate = $("[name='doc_rate']").val();
-    var parms = '&Docdetails[' + index + '][doc_rate]=' + doc_rate + '&Docdetails[line]=' + index + hChange;
+    var parms = '&Docdetails[line]=' + index + hChange;
     var form = $('[id^=docdetails-' + index + ']').serialize() + parms;
 
     $.post(baseAddress + "/docdetails/calc", form,
@@ -573,7 +572,7 @@ $('#docs-currency_id').change(function () {
 
     $.get(baseAddress + "/currates/getrate/" + currency, //{"r": "Currates/Getrate", "id": currency},
             function (data) {
-                $('#doc_rate').val(data.body);
+                $('#docs-currency_rate').val(data.body);
                 var elements = $('.currSelect');
                 for (var i = 0; i < elements.length; i++) {
                     index = elements[i].id.replace("Docdetails_", '').replace("_currency_id", '');

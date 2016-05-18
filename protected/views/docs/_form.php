@@ -125,6 +125,8 @@ $this->registerJsFile(yii\helpers\BaseUrl::base() . '/assets/docs.js', ['depends
 -->
         <div class="col-md-2">
             <?= $form->field($model, 'currency_id')->widget(Select2::classname(), ['data' => $currncies]); ?>      
+            <?= $form->field($model, 'currency_rate'); ?>      
+            
         </div>
 
         <div class="col-md-2">

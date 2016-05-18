@@ -42,7 +42,11 @@ use kartik\select2\Select2;
     <td><?php echo $form->field($model, "[$i]qty")->input('number',['step'=>"any"]); ?></td>
     <td><?php echo $form->field($model, "[$i]unit_id")->dropDownList($itemunit);  ?></td>
     <td><?php echo $form->field($model, "[$i]iItem")->input('number',['step'=>"any"]); ?></td>
-    <td><?php echo $form->field($model, "[$i]currency_id")->dropDownList($currency);  ?></td>
+    <td>
+        <?php echo $form->field($model, "[$i]currency_id")->dropDownList($currency);  ?>
+        <?php echo $form->field($model, "[$i]currency_rate");  ?>
+    
+    </td>
     <td><div id="docdetails-<?php echo $i; ?>-iTotallabel" ></div></td>
     <td><?php
         echo $form->field($model, "[$i]iVatRate",['template'=>'{input}'])->hiddenInput();
