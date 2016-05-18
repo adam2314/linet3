@@ -26,7 +26,7 @@ class m160406_075437_docDisply extends Migration
             $this->addColumn($company->prefix . 'docs', 'currency_rate', 'DECIMAL(20,2) NULL DEFAULT NULL');
             $this->addColumn($company->prefix . 'docDetails', 'currency_rate', 'DECIMAL(20,2) NULL DEFAULT NULL');
             $this->addColumn($company->prefix . 'docCheques', 'currency_rate', 'DECIMAL(20,2) NULL DEFAULT NULL');
-            $this->addColumn($company->prefix . 'transaction', 'currency_rate', 'DECIMAL(20,2) NULL DEFAULT NULL');
+            $this->addColumn($company->prefix . 'transactions', 'currency_rate', 'DECIMAL(20,2) NULL DEFAULT NULL');
 
             $this->addColumn($company->prefix . 'docCheques', 'doc_sum', 'DECIMAL(20,2) NULL DEFAULT NULL');
             $this->addColumn($company->prefix . 'docDetails', 'account_id', 'INT(11) NULL DEFAULT NULL');
