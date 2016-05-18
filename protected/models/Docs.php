@@ -68,7 +68,9 @@ class docs extends fileRecord {
     private $dateDBformat = true;
     public $maxDocnum;
 
-    public $docAction='';
+    public $docAction = '';
+    private $VatDate = '';
+    
     const STATUS_OPEN = 0;
     const STATUS_CLOSED = 1;
 
