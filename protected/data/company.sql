@@ -865,7 +865,7 @@ CREATE TABLE `itemVatCat` (
   PRIMARY KEY (`id`)
 );
 
-INSERT INTO `itemVatCat` (`id`, `name`) VALUES
+INSERT INTO `itemVatCat` (`id`, `name`, `tax_rate`) VALUES
 (1, 'חייב מעמ',17),
 (2, 'פטור ממעמ',0);
 
