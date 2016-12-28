@@ -223,7 +223,7 @@ class Company extends mainRecord {
 
     public function save($runValidation = true, $attributes = NULL) {
         $a = parent::save($runValidation, $attributes);
-        if ($this->prefix == '') {
+        if ($this->prefix == ''||$this->prefix == null) {
             $this->string = Yii::$app->dbMain->dsn;
             //$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             $this->prefix = "CA" . $this->id . "_";

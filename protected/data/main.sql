@@ -1097,14 +1097,14 @@ CREATE TABLE IF NOT EXISTS `user` (
   `lastlogin` datetime DEFAULT NULL,
   `cookie` char(32) DEFAULT NULL,
   `hash` char(32) DEFAULT NULL,
-  `certpasswd` varchar(255) NOT NULL,
+  `certpasswd` varchar(255) NULL,
   `salt` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `language` varchar(10) NOT NULL,
-  `theme` varchar(255) NOT NULL,
+  `theme` varchar(255) NULL,
   `timezone` varchar(255) NOT NULL,
-  `home` varchar(255) NOT NULL,
-  `company` int(11) NOT NULL,
+  `home` varchar(255) NULL,
+  `company` int(11) NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
 );
