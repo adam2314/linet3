@@ -332,7 +332,7 @@ CREATE TABLE `accounts` (
   PRIMARY KEY (`id`)
 );
 
-INSERT INTO `CA10_accounts` (`id`, `type`, `id6111`, `pay_terms`, `src_tax`, `parent_account_id`, `name`, `contact`, `department`, `vatnum`, `email`, `phone`, `dir_phone`, `cellular`, `fax`, `web`, `address`, `city`, `zip`, `currency_id`, `comments`, `system_acc`, `owner`) VALUES
+INSERT INTO `accounts` (`id`, `type`, `id6111`, `pay_terms`, `src_tax`, `parent_account_id`, `name`, `contact`, `department`, `vatnum`, `email`, `phone`, `dir_phone`, `cellular`, `fax`, `web`, `address`, `city`, `zip`, `currency_id`, `comments`, `system_acc`, `owner`) VALUES
 (1, 6, 0, 0, 0.00,  0, 'מע"מ תשומות', '', '', '', '', '', '', '', '', '', '', '', '', 'ILS', '', 1, 0),
 (2, 6, 0, 0, 0.00,  0, 'מע"מ תשומות ציוד ונכסים', '', '', '', '', '', '', '', '', '', '', '', '', 'ILS', '', 1, 0),
 (3, 6, 0, 0, 0.00,  0, 'מע"מ עסקאות', '', '', '', '', '', '', '', '', '', '', '', '', 'ILS', '', 1, 0),
