@@ -1058,7 +1058,7 @@ INSERT INTO `auth_item_child` (`parent`, `child`) VALUES
 
 
 CREATE TABLE `printView` (
-  `id` unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `doctype` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `det_line` tinyint(1) DEFAULT NULL,
