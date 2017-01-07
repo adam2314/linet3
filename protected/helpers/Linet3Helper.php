@@ -91,7 +91,7 @@ class Linet3Helper {
 
     public static function setTheme() {
         $theme = \Yii::$app->user->getParam('theme');
-        if ($theme !== '') {
+        if ($theme && $theme !== '') {
             Yii::$app->view->theme->pathMap = [
                 '@app/views' => '@webroot/themes/' . $theme,
                 '@app/widgets' => '@webroot/themes/' . $theme . '/widgets',
