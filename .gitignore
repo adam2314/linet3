@@ -35,6 +35,8 @@ phpunit.phar
 # local phpunit config
 /phpunit.xml
 
+#Jetbrains files
+.idea/
 
 /protected/vendor/adam2314/*
 !/protected/vendor/adam2314/EavBehavior.php
