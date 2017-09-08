@@ -17,39 +17,42 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "php": ">=5.4.0",
-        "yiisoft/yii2": "*",
-        "yiisoft/yii2-bootstrap": "*",
-        "yiisoft/yii2-swiftmailer": "*",
+        "php": ">=5.6.0",
+        "yiisoft/yii2": "~2.0.6",
+        "yiisoft/yii2-bootstrap": "~2.0.0",
+        "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
+        "yiisoft/yii2-jui": "~2.0@dev",
         "kartik-v/yii2-widgets": "*",
         "kartik-v/yii2-grid": "*",
         "kartik-v/yii2-mpdf": "dev-master",
         "kartik-v/yii2-detail-view": "*",
-        "yiisoft/yii2-jui": "~2.0@dev",
         "kartik-v/yii2-icons": "dev-master",
         "kartik-v/yii2-datecontrol": "dev-master",
         "kartik-v/yii2-tabs-x": "*",
-        "mdmsoft/yii2-admin": "*",
-        "miloschuman/yii2-highcharts-widget": "*",
         "kartik-v/yii2-popover-x": "*",
         "kartik-v/yii2-field-range": "*",
         "kartik-v/yii2-date-range": "*",
-        
-        "fxp/composer-asset-plugin":"*"
-
+        "mdmsoft/yii2-admin": "*",
+        "miloschuman/yii2-highcharts-widget": "*",
     },
     "require-dev": {
-        "yiisoft/yii2-codeception": "*",
-        "yiisoft/yii2-debug": "*",
-        "yiisoft/yii2-gii": "*",
-        "yiisoft/yii2-faker": "*"
+        "yiisoft/yii2-debug": "~2.0.0",
+        "yiisoft/yii2-gii": "~2.0.0",
+        "yiisoft/yii2-faker": "~2.0.0",
+        "codeception/base": "^2.2.3",
+        "codeception/verify": "~0.3.1"
     },
     "autoload": {
         "psr-4": {
             "adam2314\\": "vendor/adam2314/"
         }
     },
-    
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
     "extra": {
         "yii\\composer\\Installer::postCreateProject": {
             "setPermission": [
@@ -62,13 +65,7 @@
             "generateCookieValidationKey": [
                 "config/web.php"
             ]
-        },
-        "asset-installer-paths": {
-            "npm-asset-library": "vendor/npm",
-            "bower-asset-library": "vendor/bower"
         }
     }
-    
-
 }
 
