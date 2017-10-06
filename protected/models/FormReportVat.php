@@ -62,8 +62,8 @@ class FormReportVat extends Model {
         // will receive user inputs.
         return array(
             array(['from_month', 'to_month', 'year'], 'required'),
-            array(['from_month'], 'compare', 'compareAttribute' => 'to_month', 'operator' => '<='),
-            array(['to_month'], 'compare', 'compareAttribute' => 'from_month', 'operator' => '>='),
+            array(['from_month'], 'compare', 'compareAttribute' => 'to_month', 'operator' => '<=', 'type' => 'number'),
+            array(['to_month'], 'compare', 'compareAttribute' => 'from_month', 'operator' => '>=', 'type' => 'number'),
             array(['payvat_total', 'income_sum', 'income_sum_novat', 'buyvat_total', 'buyvat_acc', 'assetvat_total', 'assetvat_acc', 'selvat_total', 'selvat_acc', 'step', 'to_month', 'to_date', 'from_month', 'from_date', 'year',], 'safe'),
             array(['payvat_total', 'income_sum', 'income_sum_novat', 'buyvat_total', 'buyvat_acc', 'assetvat_total', 'assetvat_acc', 'selvat_total', 'selvat_acc', 'step', 'to_month', 'to_date', 'from_month', 'from_date', 'year',], 'safe', 'on' => 'search'),
         );
