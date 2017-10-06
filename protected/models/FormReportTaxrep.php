@@ -71,8 +71,8 @@ class FormReportTaxrep extends Model {
         // will receive user inputs.
         return array(
             array(['from_month', 'to_month', 'year'], 'required'),
-            array('from_month', 'compare', 'compareAttribute' => 'to_month', 'operator' => '<='),
-            array('to_month', 'compare', 'compareAttribute' => 'from_month', 'operator' => '>='),
+            array('from_month', 'compare', 'compareAttribute' => 'to_month', 'operator' => '<=', 'type' => 'number'),
+            array('to_month', 'compare', 'compareAttribute' => 'from_month', 'operator' => '>=', 'type' => 'number'),
             array(['tax_rate', 'income_sum', 'custtax_sum', 'custtax_total', 'tax_total', 'tax_sum', 'step', 'to_month', 'to_date', 'from_month', 'from_date', 'year',], 'safe'),
             array(['tax_rate', 'income_sum', 'custtax_sum', 'custtax_total', 'tax_total', 'tax_sum', 'step', 'to_month', 'to_date', 'from_month', 'from_date', 'year',], 'safe', 'on' => 'search'),
         );
